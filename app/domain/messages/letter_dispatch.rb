@@ -93,9 +93,9 @@ module Messages
 
     def address_for_letter(person, housemates)
       if send_to_households? && housemates.count > 1
-        Person::Address.new(person).for_household_letter(housemates)
+        Contactable::Address.new(person).for_household_letter(housemates)
       else
-        Person::Address.new(person).for_letter
+        Contactable::Address.new(person).for_letter
       end
     end
 

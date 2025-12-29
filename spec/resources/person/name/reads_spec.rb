@@ -18,7 +18,7 @@ describe Person::NameResource, type: :resource do
 
     it "serializes first and last name" do
       render
-      data = jsonapi_data[0]
+      data = jsonapi_data.find { |d| d.id == person.id }
       expect(data.attributes.symbolize_keys.keys).to match_array [:id, :jsonapi_type] + serialized_attrs
 
       expect(data.id).to eq person.id

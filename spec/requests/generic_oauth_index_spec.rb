@@ -37,7 +37,8 @@ RSpec.describe "OAuth index", type: :request do
       let(:top_events) { [Fabricate(:event, groups: [group]), Fabricate(:event, groups: [group])] }
       let!(:ev_dates) { [Fabricate(:event_date, event: top_events[0]), Fabricate(:event_date, event: top_events[1])] }
       let!(:top_invoices) {
-        [Fabricate(:invoice, group: top_layer, recipient: user), Fabricate(:invoice, group: top_layer, recipient: user)]
+        Fabricate.times(2, :invoice, group: top_layer, recipient: user)
+        top_layer.issued_invoices
       }
       let(:url) { get_url(scope) }
 
@@ -81,8 +82,8 @@ RSpec.describe "OAuth index", type: :request do
           expect(json[scope].size).to eq(2)
           expect(json[scope].pluck("id")).to eq top_events.collect { |ev| ev["id"].to_s }
         when "invoices"
-          expect(json[scope].size).to eq(2)
-          expect(json[scope].pluck("id")).to eq top_invoices.collect { |i| i["id"].to_s }
+          expect(json[scope].size).to eq(3)
+          expect(json[scope].pluck("id")).to match_array top_invoices.collect { |i| i["id"].to_s }
         when "mailing_lists"
           expect(json[scope].size).to eq(2)
           expect(json[scope].pluck("id")).to eq [mailing_lists(:leaders).id.to_s, mailing_lists(:members).id.to_s]

@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if can?(:create, group.layer_group.invoices.new)
+- if can?(:create, group.layer_group.issued_invoices.new)
   = action_button(t('crud.new.title', model: Invoice.model_name.human),
                   new_group_invoice_run_path(group_id: current_ability.user_finance_layer_ids.first, invoice: { recipient_ids: people.collect(&:id).join(',') }),
                   :plus)

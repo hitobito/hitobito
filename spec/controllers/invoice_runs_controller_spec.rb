@@ -200,7 +200,7 @@ describe InvoiceRunsController do
     it "POST#create creates an invoice for single member" do
       expect do
         post :create, params: {group_id: group.id, invoice_run: {recipient_ids: person.id, invoice: invoice_attrs}}
-      end.to change { group.invoices.count }.by(1)
+      end.to change { group.issued_invoices.count }.by(1)
 
       expect(response).to redirect_to group_invoice_run_invoices_path(group, InvoiceRun.last, returning: true)
       expect(flash[:notice]).to include "Rechnung <i>Title</i> wurde erstellt."
@@ -211,7 +211,7 @@ describe InvoiceRunsController do
         post :create,
           params: {group_id: group.id,
                    invoice_run: {recipient_ids: person.id, invoice: invoice_attrs.merge(title: "current_user")}}
-      end.to change { group.invoices.count }.by(1)
+      end.to change { group.issued_invoices.count }.by(1)
 
       expect(Invoice.find_by(title: "current_user").creator).to eq(person)
     end
@@ -223,7 +223,7 @@ describe InvoiceRunsController do
           params: {group_id: group.id,
                    invoice_run: {receiver_id: list.id, receiver_type: list.class,
                                  invoice: invoice_attrs.merge(title: "test")}}
-      end.to change { group.invoices.count }.by(1)
+      end.to change { group.issued_invoices.count }.by(1)
       expect(assigns(:invoice_run).receiver).to eq list
       expect(response).to redirect_to group_invoice_runs_path(group)
     end
@@ -234,7 +234,7 @@ describe InvoiceRunsController do
           params: {group_id: group.id,
                    invoice_run: {receiver_id: group.id, receiver_type: group.class.base_class,
                                  invoice: invoice_attrs.merge(title: "test")}}
-      end.to change { group.invoices.count }.by(1)
+      end.to change { group.issued_invoices.count }.by(1)
       expect(assigns(:invoice_run).receiver).to eq group
       expect(response).to redirect_to group_invoice_runs_path(group)
     end
@@ -250,7 +250,7 @@ describe InvoiceRunsController do
                    invoice_run: {receiver_id: list.id, receiver_type: list.class,
                                  invoice: invoice_attrs.merge(title: "test")}}
         Delayed::Job.last.payload_object.perform
-      end.to change { group.invoices.count }.by(2)
+      end.to change { group.issued_invoices.count }.by(2)
 
       expect(flash[:notice]).to include "Rechnung <i>test</i> wird für 2 Empfänger im Hintergrund erstellt."
       expect(response).to redirect_to group_invoice_runs_path(group)

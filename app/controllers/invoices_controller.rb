@@ -22,10 +22,10 @@ class InvoicesController < CrudController
 
   self.remember_params += [:year, :state, :due_since, :invoice_run_id]
 
-  self.search_columns = [:title, :sequence_number, "people.last_name", "people.first_name",
-    "people.email", "people.company_name"]
+  self.search_columns = [:title, :sequence_number, "groups.name", "groups.email",
+    "people.last_name", "people.first_name", "people.email", "people.company_name"]
   self.permitted_attrs = [:title, :description, :state, :due_at, :issued_at,
-    :recipient_id, :recipient_email, :recipient_company_name, :recipient_name,
+    :recipient_type, :recipient_id, :recipient_email, :recipient_company_name, :recipient_name,
     :recipient_address_care_of, :recipient_street, :recipient_housenumber, :recipient_postbox,
     :recipient_town, :recipient_zip_code, :recipient_country,
     :payment_information, :payment_purpose, :hide_total,
@@ -71,9 +71,9 @@ class InvoicesController < CrudController
   end
 
   def new
-    recipient = model_params && Person.find(model_params[:recipient_id])
+    recipient = find_recipient
     if recipient && can?(:update, recipient)
-      entry.recipient_id = recipient.id
+      entry.recipient = recipient
       entry.send(:set_recipient_fields)
     end
     entry.attributes = {payment_information: entry.invoice_config.payment_information}
@@ -116,6 +116,16 @@ class InvoicesController < CrudController
 
   def permitted_params
     super.merge(creator_id: current_user.id)
+  end
+
+  def recipient_type_param = model_params.try(:[], :recipient_type).presence
+
+  def recipient_id_param = model_params.try(:[], :recipient_id).presence
+
+  def find_recipient
+    return unless recipient_type_param && recipient_id_param
+
+    recipient_type_param.safe_constantize.find_by(id: recipient_id_param)
   end
 
   def generate_pdf(invoices)
@@ -166,12 +176,21 @@ class InvoicesController < CrudController
     redirect_back(fallback_location: group_invoices_path(group), alert: t("people.pdf.cannot_fit"))
   end
 
+  def parent_scope
+    parent.is_a?(InvoiceRun) ? parent.invoices : parent.issued_invoices
+  end
+
   def list_entries
     scope = super.list.with_aggregated_payments
-    scope = scope.includes(:recipient).references(:recipient)
+    scope = scope.joins(
+      <<~SQL
+        LEFT JOIN people ON people.id = invoices.recipient_id AND invoices.recipient_type = 'Person'
+        LEFT JOIN groups ON groups.id = invoices.recipient_id AND invoices.recipient_type = 'Group'
+      SQL
+    )
     scope = scope.standalone unless parents.any?(InvoiceRun)
     scope = scope.page(params[:page]) unless params[:ids]
-    Invoice::Filter.new(params).apply(scope)
+    Invoice::Filter.new(params).apply(scope).with_recipients
   end
 
   def payment_attrs
@@ -195,7 +214,7 @@ class InvoicesController < CrudController
   end
 
   def authorize_class
-    authorize!(:index_invoices, group)
+    authorize!(:index_issued_invoices, group)
   end
 
   def group

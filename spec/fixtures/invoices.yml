@@ -50,9 +50,9 @@
 #
 
 invoice:
-  title: Invoice
+  title: Person Invoice
   group: bottom_layer_one
-  recipient: top_leader
+  recipient: top_leader (Person)
   recipient_email: top_leader@example.com
   recipient_name: "Top Leader"
   recipient_street: Greatstreet
@@ -75,9 +75,9 @@ invoice:
   total: 5.35
 
 sent:
-  title: Sent
+  title: Sent Person Invoice
   group: bottom_layer_one
-  recipient: top_leader
+  recipient: top_leader (Person)
   recipient_email: top_leader@example.com
   recipient_name: "Top Leader"
   recipient_street: Greatstreet
@@ -102,3 +102,29 @@ sent:
   participant_number: <%= ActiveRecord::FixtureSet.identify(:bottom_layer_one) %>-4
   state: sent
   total: 0.50
+
+
+group_invoice:
+  title: Group Invoice
+  group: top_layer
+  recipient: top_group (Group)
+  recipient_email: top_group@example.com
+  recipient_name: Top Group Collective
+  recipient_street: Topstreet
+  recipient_housenumber: 42
+  recipient_zip_code: 3456
+  recipient_town: Toptown
+  recipient_country: CH
+  payee_name: Hitobito AG
+  payee_street: Belpstrasse
+  payee_housenumber: 37
+  payee_zip_code: 3007
+  payee_town: Bern
+  payee_country: CH
+  payment_slip: ch_esr
+  sequence_number: <%= ActiveRecord::FixtureSet.identify(:top_group) %>-1
+  esr_number: "00 00376 80338 90000 00000 00021"
+  reference: 000037680338900000000000021
+  account_number: <%= ActiveRecord::FixtureSet.identify(:top_group) %>-1
+  participant_number: <%= ActiveRecord::FixtureSet.identify(:top_group) %>-1
+  total: 15.75

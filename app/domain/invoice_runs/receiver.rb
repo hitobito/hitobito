@@ -6,17 +6,20 @@
 #  https://github.com/hitobito/hitobito.
 
 module InvoiceRuns
-  Receiver = Data.define(:id, :layer_group_id) do
-    def initialize(id:, layer_group_id: nil)
+  Receiver = Data.define(:id, :type, :layer_group_id) do
+    def initialize(id:, type:, layer_group_id: nil)
       super
+      ensure_valid_type
     end
 
     def self.load(yaml)
       YAML.load(yaml).map do |row|
         case row
-        in { id:, layer_group_id: } then new(id:, layer_group_id:)
-        in Integer then new(id: row)
-        in String then new(id: Integer(row))
+        in { id:, type:, layer_group_id: } then new(id:, type:, layer_group_id:)
+        # TODO The following typeless variants can be removed starting mid 2026
+        in { id:, layer_group_id: } then new(id:, type: "Person", layer_group_id:)
+        in Integer then new(id: row, type: "Person")
+        in String then new(id: Integer(row), type: "Person")
         end
       end
     end
@@ -25,6 +28,15 @@ module InvoiceRuns
       list.map do |row|
         row.is_a?(self) ? row.to_h : row
       end.to_yaml
+    end
+
+    private
+
+    def ensure_valid_type
+      clazz = type.to_s.safe_constantize or raise ArgumentError, "Unknown type #{type.inspect}"
+      return if clazz < Contactable
+
+      raise ArgumentError, "Invalid type #{type.inspect}, must be a Contactable"
     end
   end
 end

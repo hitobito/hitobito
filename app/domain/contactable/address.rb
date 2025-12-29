@@ -5,20 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Person::Address
-  def initialize(person, label: nil)
-    @person = person
+class Contactable::Address
+  def initialize(contactable, label: nil)
+    @contactable = contactable
     @label = label
-    @addressable = additional_addresses.find { |a| a.label == label } || person
+    @addressable = additional_addresses.find { |a| a.label == label } || contactable
   end
 
   def for_letter
-    (person_and_company_name + full_address).compact.join("\n")
+    (contactable_and_company_name + full_address).compact.join("\n")
   end
 
   def for_letter_with_invoice
-    @addressable = additional_addresses.find(&:invoices?) || person
-    for_letter
+    with_invoice_addressable { for_letter }
   end
 
   def for_household_letter(members)
@@ -31,7 +30,7 @@ class Person::Address
     else
       [
         (company_name if print_company?(name)),
-        (person.nickname if print_nickname?(nickname)),
+        (contactable.nickname if print_nickname?(nickname)),
         name.presence
       ]
     end
@@ -41,44 +40,60 @@ class Person::Address
 
   # Used to populate invoices#recipient_* fields, may be overridden in wagons
   def invoice_recipient_address_attributes
-    @addressable = additional_addresses.find(&:invoices?) || person
-
-    {
-      recipient_address_care_of: address_care_of,
-      recipient_company_name: company? ? company_name : nil,
-      recipient_name: addressable.full_name.to_s.squish,
-      recipient_street: street,
-      recipient_housenumber: housenumber,
-      recipient_postbox: postbox,
-      recipient_zip_code: zip_code,
-      recipient_town: town,
-      recipient_country: country || default_country
-    }
+    with_invoice_addressable do
+      {
+        recipient_address_care_of: address_care_of,
+        recipient_company_name: company? ? company_name : nil,
+        recipient_name: full_name.to_s.squish,
+        recipient_street: street,
+        recipient_housenumber: housenumber,
+        recipient_postbox: postbox,
+        recipient_zip_code: zip_code.to_s,
+        recipient_town: town,
+        recipient_country: country || default_country
+      }
+    end
   end
 
   # Used to populate invoices#payee_* fields, may be overridden in wagons
   def invoice_payee_address_attributes
-    @addressable = additional_addresses.find(&:invoices?) || person
-
-    {
-      payee_name: addressable.full_name.to_s.squish,
-      payee_street: street,
-      payee_housenumber: housenumber,
-      payee_zip_code: zip_code,
-      payee_town: town,
-      payee_country: country || default_country
-    }
+    with_invoice_addressable do
+      {
+        payee_name: full_name.to_s.squish,
+        payee_street: street,
+        payee_housenumber: housenumber,
+        payee_zip_code: zip_code,
+        payee_town: town,
+        payee_country: country || default_country
+      }
+    end
   end
 
   private
 
-  attr_reader :person, :addressable
+  attr_reader :contactable, :addressable
 
   delegate :address, :address_care_of, :postbox, :street, :housenumber, :zip_code, :town, :country,
-    :name, :country_label, :ignored_country?, :full_name, to: :addressable
-  delegate :company?, :additional_addresses, :company_name, :company_name?, to: :person
+    :name, :country_label, :ignored_country?, to: :addressable
+  delegate :additional_addresses, :company_name, to: :contactable
 
-  def person_and_company_name
+  def company? = contactable.try(:company?)
+
+  def full_name = addressable.respond_to?(:full_name) ? addressable.full_name : addressable.name
+
+  def with_invoice_addressable
+    original_addressable = @addressable
+    @addressable = invoice_addressable
+    yield
+  ensure
+    @addressable = original_addressable
+  end
+
+  def invoice_addressable
+    @invoice_addressable ||= additional_addresses.find(&:invoices?) || contactable
+  end
+
+  def contactable_and_company_name
     if !addressable.is_a?(AdditionalAddress) && company?
       [company_name.to_s.squish, full_name.to_s.squish].uniq.compact_blank
     else
@@ -108,11 +123,13 @@ class Person::Address
     Settings.countries.prioritized.first
   end
 
+  def company_name? = contactable.try(:company_name?)
+
   def print_company?(name)
-    person.try(:company) && company_name? && company_name != name
+    contactable.try(:company) && company_name? && company_name != name
   end
 
   def print_nickname?(nickname)
-    nickname && person.respond_to?(:nickname) && person.nickname.present?
+    nickname && contactable.respond_to?(:nickname) && contactable.nickname.present?
   end
 end

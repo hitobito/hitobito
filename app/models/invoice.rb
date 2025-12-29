@@ -73,7 +73,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   QR_ID_RANGE = (30_000..31_999)
 
   belongs_to :group
-  belongs_to :recipient, class_name: "Person"
+  belongs_to :recipient, polymorphic: true
   belongs_to :creator, class_name: "Person"
   belongs_to :invoice_run, optional: true
 
@@ -94,6 +94,8 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   validates :due_at, timeliness: {after: :sent_at}, presence: true, if: :sent?
   validates :invoice_items, presence: true, if: -> { (issued? || sent?) && !invoice_run }
   validates :title, presence: true
+  # In external invoices, the recipient type may also be blank
+  validates :recipient_type, inclusion: {in: ["Person", "Group"]}, allow_blank: true
   validate :recipient_name_present?
   validates :recipient_street, :recipient_zip_code, :recipient_town, :recipient_country,
     presence: true
@@ -120,6 +122,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :visible, -> { where.not(state: :cancelled) }
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
   scope :standalone, -> { where(invoice_run_id: nil) }
+  scope :with_recipients, -> { extending(PreloadRecipients) }
 
   class << self
     def with_aggregated_payments
@@ -357,14 +360,14 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def set_recipient_fields!
     self.recipient_email = invoice_email
 
-    attributes = Person::Address.new(recipient).invoice_recipient_address_attributes
+    attributes = Contactable::Address.new(recipient).invoice_recipient_address_attributes
     assign_attributes(attributes)
   end
 
   def set_recipient_fields
     self.recipient_email ||= invoice_email
 
-    attributes = Person::Address.new(recipient).invoice_recipient_address_attributes
+    attributes = Contactable::Address.new(recipient).invoice_recipient_address_attributes
     assign_attributes(attributes.select { |key, _| send(key).nil? })
   end
 

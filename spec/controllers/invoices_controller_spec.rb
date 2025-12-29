@@ -38,71 +38,122 @@ describe InvoicesController do
     end
   end
 
-  context "new" do
-    it "GET#new supports creating invoice for without recipient_id" do
+  context "GET#new" do
+    it "GET#new supports creating invoice for without recipient params" do
       get :new, params: {group_id: group.id}
       expect(response).to be_successful
       expect(assigns(:invoice).recipient_id).to be_nil
       expect(assigns(:invoice).recipient_name).to be_nil
     end
 
-    it "GET#new creating invoice for with recipient_id" do
-      get :new, params: {group_id: group.id, invoice: {recipient_id: person.id}}
+    it "GET#new creating invoice for with Person recipient params" do
+      get :new, params: {group_id: group.id, invoice: {recipient_type: "Person", recipient_id: person.id}}
+      expect(response).to be_successful
+      expect(assigns(:invoice).recipient).to be_present
+      expect(assigns(:invoice).recipient_name).to be_present
+    end
+
+    it "GET#new creating invoice for with Group recipient params" do
+      group = groups(:top_layer)
+      sign_in(people(:top_leader))
+      get :new, params: {group_id: group.id, invoice: {recipient_type: "Group", recipient_id: group.id}}
       expect(response).to be_successful
       expect(assigns(:invoice).recipient).to be_present
       expect(assigns(:invoice).recipient_name).to be_present
     end
   end
 
-  context "index" do
-    it "GET#index finds invoices by title" do
+  context "GET#index" do
+    it "preloads recipients" do
+      invoices(:group_invoice).update!(group_id: group.id)
+
+      get :index, params: {group_id: group.id}
+
+      expect_query_count("Invoice Load": 1, "Person Load": 1, "Group Load": 1) do
+        assigns(:invoices).to_a
+      end
+
+      invoices = assigns(:invoices).to_a
+
+      expect_query_count do
+        invoices.each do |invoice|
+          invoice.recipient.to_s
+        end
+      end.to eq 0 # recipients are preloaded, so no additional queries
+    end
+
+    it "finds invoices by title" do
       update_issued_at_to_current_year
-      get :index, params: {group_id: group.id, q: "Invoice"}
+
+      get :index, params: {group_id: group.id, q: "Sent"}
       expect(assigns(:invoices)).to have(1).item
     end
 
-    it "GET#index finds invoices by sequence_number" do
+    it "finds invoices by sequence_number" do
       get :index, params: {group_id: group.id, q: invoices(:invoice).sequence_number}
       expect(assigns(:invoices)).to have(1).item
     end
 
-    it "GET#index finds invoices by recipient.last_name" do
+    it "finds invoices by recipient people.last_name" do
       update_issued_at_to_current_year
+
       get :index, params: {group_id: group.id, q: people(:top_leader).last_name}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient.first_name" do
+    it "finds invoices by recipient people.first_name" do
       update_issued_at_to_current_year
+
       get :index, params: {group_id: group.id, q: people(:top_leader).first_name}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient.email" do
+    it "finds invoices by recipient people.email" do
       update_issued_at_to_current_year
+
       get :index, params: {group_id: group.id, q: people(:top_leader).email}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds invoices by recipient.company_name" do
+    it "finds invoices by recipient people.company_name" do
       update_issued_at_to_current_year
       people(:top_leader).update!(company_name: "Hitobito Fanclub")
+
       get :index, params: {group_id: group.id, q: "hitobito"}
       expect(assigns(:invoices)).to have(2).item
     end
 
-    it "GET#index finds nothing by owner.company_name" do
+    it "finds nothing by owner.company_name" do
       update_issued_at_to_current_year
       creator = people(:bottom_member)
       creator.update!(company_name: "Greedy Ltd")
       Invoice.update_all(creator_id: creator.id)
+
       get :index, params: {group_id: group.id, q: creator.company_name}
       expect(assigns(:invoices)).to be_empty
     end
 
-    it "GET#index finds nothing for dummy" do
+    it "finds nothing for dummy" do
       get :index, params: {group_id: group.id, q: "dummy"}
       expect(assigns(:invoices)).to be_empty
+    end
+
+    context "group invoices" do
+      let(:group) { groups(:top_layer) }
+      let(:person) { people(:top_leader) }
+
+      it "GET#index finds invoices by recipient groups.name" do
+        update_issued_at_to_current_year
+        get :index, params: {group_id: group.id, q: groups(:top_group).name}
+        expect(assigns(:invoices)).to have(1).item
+      end
+
+      it "GET#index finds invoices by recipient groups.email" do
+        groups(:top_group).update!(email: "top_group@example.com")
+        update_issued_at_to_current_year
+        get :index, params: {group_id: group.id, q: groups(:top_group).email}
+        expect(assigns(:invoices)).to have(1).item
+      end
     end
 
     it "filters invoices by state" do
@@ -261,7 +312,7 @@ describe InvoicesController do
     end
   end
 
-  context "show" do
+  context "GET#show" do
     it "GET#show assigns payment if invoice has been sent" do
       invoice.update(state: :sent)
       get :show, params: {group_id: group.id, id: invoice.id}
@@ -339,7 +390,7 @@ describe InvoicesController do
     it "moves invoice to cancelled state" do
       expect do
         delete :destroy, params: {group_id: group.id, id: invoice.id}
-      end.not_to change { group.invoices.count }
+      end.not_to change { group.issued_invoices.count }
       expect(invoice.reload.state).to eq "cancelled"
       expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice]).to eq "Rechnung wurde storniert."
@@ -356,7 +407,7 @@ describe InvoicesController do
 
       expect do
         delete :destroy, params: {group_id: group.id, invoice_run_id: run.id, id: invoice.id}
-      end.not_to change { group.invoices.count }
+      end.not_to change { group.issued_invoices.count }
       expect(response).to redirect_to(group_invoice_run_invoices_path(group, run, returning: true))
       expect(invoice.reload.state).to eq "cancelled"
 
@@ -367,10 +418,14 @@ describe InvoicesController do
     end
   end
 
-  context "post" do
+  context "POST#create" do
     it "POST#create sets creator_id to current_user" do
       expect do
-        post :create, params: {group_id: group.id, invoice: {title: "current_user", recipient_id: person.id}}
+        post :create, params: {group_id: group.id, invoice: {
+          title: "current_user",
+          recipient_type: "Person",
+          recipient_id: person.id
+        }}
       end.to change { Invoice.count }.by(1)
 
       expect(Invoice.find_by(title: "current_user").creator).to eq(person)
@@ -380,9 +435,14 @@ describe InvoicesController do
       expect do
         post :create,
           params: {group_id: group.id,
-                   invoice: {title: "current_user", recipient_id: person.id, recipient_name: "Tim Testermann",
-                             recipient_street: "Alphastrasse", recipient_housenumber: "1", recipient_zip_code: "8000",
-                             recipient_town: "Zürich"}}
+                   invoice: {
+                     title: "current_user",
+                     recipient_type: "Person",
+                     recipient_id: person.id,
+                     recipient_name: "Tim Testermann",
+                     recipient_street: "Alphastrasse", recipient_housenumber: "1", recipient_zip_code: "8000",
+                     recipient_town: "Zürich"
+                   }}
       end.to change { Invoice.count }.by(1)
 
       expect(Invoice.find_by(title: "current_user").recipient_address_values).to eq [
@@ -394,7 +454,12 @@ describe InvoicesController do
       expect do
         post :create,
           params: {group_id: group.id,
-                   invoice: {title: "current_user", recipient_id: person.id, recipient_email: "test@unit.com"}}
+                   invoice: {
+                     title: "current_user",
+                     recipient_type: "Person",
+                     recipient_id: person.id,
+                     recipient_email: "test@unit.com"
+                   }}
       end.to change { Invoice.count }.by(1)
 
       expect(Invoice.find_by(title: "current_user").recipient_email).to eq("test@unit.com")
@@ -406,6 +471,7 @@ describe InvoicesController do
           group_id: group.id,
           invoice: {
             title: "current_user",
+            recipient_type: "Person",
             recipient_id: person.id,
             invoice_items_attributes: {
               "1": {

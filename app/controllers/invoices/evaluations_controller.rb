@@ -76,6 +76,6 @@ class Invoices::EvaluationsController < ApplicationController
   end
 
   def authorize_action
-    authorize!(:index_invoices, group)
+    authorize!(:index_issued_invoices, group)
   end
 end

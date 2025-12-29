@@ -30,7 +30,7 @@ module People
       merge_contactables(:additional_emails, :email)
       merge_contactables(:phone_numbers, :number)
       merge_contactables(:social_accounts, :name, match_label: true)
-      merge_association(:invoices, :recipient)
+      merge_association(:received_invoices, :recipient)
       merge_association(:notes, :subject)
       merge_association(:authored_notes, :author)
       merge_association(:event_responsibilities, :contact)

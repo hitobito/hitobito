@@ -3,9 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Person::InvoicesController < ListController
+class Contactables::InvoicesController < ListController
   self.sort_mappings = {recipient: "people.order_name ASC"}
   self.search_columns = [:title, :sequence_number]
+
+  self.nesting = Group
+  self.optional_nesting = Person
 
   private
 
@@ -13,21 +16,21 @@ class Person::InvoicesController < ListController
     scope = super.list
       .includes(:group)
       .where(search_conditions)
-      .joins(:recipient).where(recipient: person)
       .page(params[:page]).per(50)
-
     Invoice::Filter.new(params).apply(scope)
   end
 
-  def person
-    @person ||= fetch_person
+  def contactable
+    @contactable ||= parent
   end
 
-  def group
-    @group ||= Group.find(params[:group_id])
-  end
+  def recipient_table_name = contactable.class.table_name
+
+  def recipient_type = contactable.class.sti_name
+
+  def parent_scope = parent.received_invoices
 
   def authorize_class
-    authorize!(:index_invoices, person)
+    authorize!(:index_received_invoices, contactable)
   end
 end

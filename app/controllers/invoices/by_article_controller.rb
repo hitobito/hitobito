@@ -60,6 +60,6 @@ class Invoices::ByArticleController < ListController
   end
 
   def authorize_class
-    authorize!(:index_invoices, group)
+    authorize!(:index_issued_invoices, group)
   end
 end

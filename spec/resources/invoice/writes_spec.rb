@@ -27,7 +27,7 @@ describe InvoiceResource, type: :resource do
       instance = InvoiceResource.find(payload(title: "new title"))
       expect {
         expect(instance.update_attributes).to eq(true)
-      }.to change { invoice.reload.title }.from("Invoice").to("new title")
+      }.to change { invoice.reload.title }.to("new title")
     end
 
     describe "sideposting" do

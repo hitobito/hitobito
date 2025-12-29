@@ -189,7 +189,7 @@ describe Invoice do
 
   it "#to_s returns total amount" do
     invoice = invoices(:invoice)
-    expect(invoice.to_s).to eq "Invoice(#{invoice.sequence_number}): 5.35"
+    expect(invoice.to_s).to eq "Person Invoice(#{invoice.sequence_number}): 5.35"
   end
 
   it "#calculated returns summed fields of invoice_items, rounds to 0.05" do
@@ -302,7 +302,7 @@ describe Invoice do
       account_number: "01-162-5")
 
     Fabricate(:invoice, group: other, recipient: person)
-    expect { other.destroy }.not_to(change { other.invoices.count })
+    expect { other.destroy }.not_to(change { other.issued_invoices.count })
   end
 
   it "hard deleting group does delete invoices" do
@@ -313,7 +313,7 @@ describe Invoice do
       account_number: "01-162-5")
 
     Fabricate(:invoice, group: other, recipient: person)
-    expect { other.really_destroy! }.to(change { other.invoices.count })
+    expect { other.really_destroy! }.to(change { other.issued_invoices.count })
   end
 
   it "#order_by_sequence_number orders invoices correctly by sequence number" do
@@ -371,7 +371,7 @@ describe Invoice do
     end
 
     it "lists invoices sent or drafted in 2019" do
-      expect(Invoice.draft_or_issued_in(2019)).to have(2).items
+      expect(Invoice.draft_or_issued_in(2019)).to have(3).items
     end
 
     it "lists no invoices sent or drafted in other years" do
@@ -381,16 +381,16 @@ describe Invoice do
 
     it "excludes invoice if issued in previous year" do
       issued.update(issued_at: 1.year.ago)
-      expect(Invoice.draft_or_issued_in(2019)).to eq([invoice])
+      expect(Invoice.draft_or_issued_in(2019)).not_to include issued
     end
 
     it "excludes invoice if created in previous year" do
       invoice.update(created_at: 1.year.ago)
-      expect(Invoice.draft_or_issued_in(2019)).to eq([issued])
+      expect(Invoice.draft_or_issued_in(2019)).not_to include invoice
     end
 
     it "keeps scoping for invalid year" do
-      expect(Invoice.draft_or_issued_in("invalid")).to have(2).items
+      expect(Invoice.draft_or_issued_in("invalid")).to have(3).items
     end
   end
 
@@ -412,7 +412,7 @@ describe Invoice do
 
     it "lists invoices sent or drafted in 2019" do
       filter = Invoice.draft_or_issued(from: today.beginning_of_year, to: today.end_of_year)
-      expect(filter).to have(2).items
+      expect(filter).to have(3).items
     end
 
     it "lists no invoices sent or drafted in earlier years" do
@@ -434,19 +434,19 @@ describe Invoice do
     it "excludes invoice if issued in previous year" do
       issued.update(issued_at: 1.year.ago)
       filter = Invoice.draft_or_issued(from: today.beginning_of_year, to: today.end_of_year)
-      expect(filter).to eq([invoice])
+      expect(filter).not_to include issued
     end
 
     it "excludes invoice if created in previous year" do
       invoice.update(created_at: 1.year.ago)
       filter = Invoice.draft_or_issued(from: today.beginning_of_year, to: today.end_of_year)
-      expect(filter).to eq([issued])
+      expect(filter).not_to include invoice
     end
 
     it "does not crash with invalid dates" do
-      expect(Invoice.draft_or_issued(from: "0", to: Date.new(2019, 12, 31))).to have(2).items
-      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: nil)).to have(2).items
-      expect(Invoice.draft_or_issued(from: "blørbaël", to: "Zórgðœ")).to have(2).items
+      expect(Invoice.draft_or_issued(from: "0", to: Date.new(2019, 12, 31))).to have(3).items
+      expect(Invoice.draft_or_issued(from: Date.new(2019, 1, 1), to: nil)).to have(3).items
+      expect(Invoice.draft_or_issued(from: "blørbaël", to: "Zórgðœ")).to have(3).items
     end
   end
 

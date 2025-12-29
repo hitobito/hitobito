@@ -17,6 +17,7 @@ describe :invoices, js: true do
 
   describe "multiselect" do
     let!(:invoices) do
+      group.issued_invoices.destroy_all
       invoice_count.times.map do
         Fabricate(:invoice, creator: user, group: group, recipient: people(:bottom_member), state: :draft,
           invoice_items: [InvoiceItem.new(count: 1, unit_cost: 100, name: "Test")])
@@ -56,7 +57,7 @@ describe :invoices, js: true do
         click_link("Rechnung stellen / mahnen")
         click_link("Status setzen (Gestellt/Gemahnt)")
 
-        expect(group.invoices).to all(be_issued)
+        expect(group.issued_invoices).to all(be_issued)
         expect(page).to have_content("51 Rechnungen wurden gestellt")
       end
 

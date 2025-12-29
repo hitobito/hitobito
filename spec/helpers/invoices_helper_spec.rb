@@ -59,10 +59,16 @@ describe InvoicesHelper do
   end
 
   describe "format_invoice_recipient" do
-    it "returns link to recipient if present" do
+    it "returns link to person if recipient is a person" do
+      expect(invoice.recipient).to be_a(Person)
       dom = Capybara::Node::Simple.new(format_invoice_recipient(invoice))
-
       expect(dom).to have_link "Top Leader", href: person_path(top_leader)
+    end
+
+    it "links to group if recipient is a group" do
+      invoice.recipient = groups(:bottom_group_one_two)
+      dom = Capybara::Node::Simple.new(format_invoice_recipient(invoice))
+      expect(dom).to have_link "Group 12", href: group_path(groups(:bottom_group_one_two))
     end
 
     it "returns person name if present" do

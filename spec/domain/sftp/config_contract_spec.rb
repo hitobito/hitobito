@@ -47,15 +47,14 @@ describe Sftp::ConfigContract do
       {
         host: "sftp.example.com",
         user: "testuser",
-        password: "secret123",
-        remote_path: "/uploads"
+        password: "secret123"
       }
     end
 
     it { is_expected.to be_success }
   end
 
-  %i[host user remote_path].each do |field|
+  %i[host user].each do |field|
     context "when #{field} is missing" do
       let(:params) { valid_params.except(field) }
 

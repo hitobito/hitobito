@@ -12,7 +12,7 @@ class Sftp::ConfigContract < Dry::Validation::Contract
     required(:user).filled(:string)
     optional(:password).maybe(:string)
     optional(:private_key).maybe(:string)
-    required(:remote_path).filled(:string)
+    optional(:remote_path).maybe(:string)
   end
 
   rule(:port) do

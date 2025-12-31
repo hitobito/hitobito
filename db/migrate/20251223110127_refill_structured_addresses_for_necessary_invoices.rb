@@ -13,9 +13,14 @@ class RefillStructuredAddressesForNecessaryInvoices < ActiveRecord::Migration[8.
   end
 
   def relevant_invoices
-    Invoice.where(issued_at: Date.new(2025, 1, 1).all_year,
+    Invoice.where(created_at: year_range,
       recipient_type: Person.sti_name)
       .where("recipient_id IS NOT NULL")
       .includes(:recipient, :invoice_items, :invoice_run, recipient: :additional_addresses)
+  end
+
+  def year_range
+    date = Date.new(2025, 1, 1)
+    date.beginning_of_year.beginning_of_day..date.end_of_year.end_of_day
   end
 end

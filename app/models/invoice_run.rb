@@ -66,8 +66,8 @@ class InvoiceRun < ActiveRecord::Base
     }.compact_blank.uniq.first
   end
 
-  def fixed_fees?(fee = nil)
-    fee ? fixed_fee == fee.to_s : fixed_fee.present?
+  def fixed_fees?
+    fixed_fee.present?
   end
 
   def invoice_parameters

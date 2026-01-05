@@ -29,12 +29,12 @@ module InvoiceRuns
     end
 
     def models
-      scope.then { |scope| layer_group_ids ? with_layer_group(scope) : scope }
+      scope.then { |scope| layer_group_ids ? with_matching_layer_group(scope) : scope }
     end
 
     protected
 
-    def with_layer_group(scope)
+    def with_matching_layer_group(scope)
       scope.where(groups: {layer_group_id: layer_group_ids})
     end
   end

@@ -88,8 +88,8 @@ class InvoiceRunsController < CrudController
     redirect_to group_invoices_path(parent)
   end
 
-  def fixed_fees?(fees = nil)
-    fees ? params[:fixed_fees] == fees.to_s : params.key?(:fixed_fees)
+  def fixed_fees?
+    params.key?(:fixed_fees)
   end
 
   private

@@ -176,5 +176,15 @@ describe Invoice::BatchUpdate do
       expect(sent.payment_reminders.first.title).to eq "title"
       expect(sent.payment_reminders.first.text).to eq "text"
     end
+
+    it "creates reminder for invoice with tolerated deprecated recipient address" do
+      sent.update_columns(state: "sent",
+        deprecated_recipient_address: "Foo Bar\nImbach 96b\n8000 Zürich",
+        recipient_street: nil, recipient_zip_code: nil, recipient_town: nil,
+        recipient_country: nil,
+        created_at: Date.new(2025, 1, 1), issued_at: 2.months.ago, due_at: 1.month.ago)
+
+      expect { update([sent], person) }.to change { sent.state }.to "reminded"
+    end
   end
 end

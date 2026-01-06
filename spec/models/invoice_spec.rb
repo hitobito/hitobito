@@ -88,6 +88,12 @@ describe Invoice do
       .to include("Land muss ausgefüllt werden")
   end
 
+  it "does not validate the structured address if issued_at in 2025 and no recipient, no structured address" do
+    invoice = Invoice.create(title: "invoice", recipient_name: "Max Muster",
+      group: group, created_at: Date.new(2025, 2, 12))
+    expect(invoice).to be_valid
+  end
+
   it "validates that on old invoices, at least one email or an address is specified if no recipient" do
     invoice = create_invoice
     invoice.update_columns(

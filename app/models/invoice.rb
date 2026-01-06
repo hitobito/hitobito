@@ -98,7 +98,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   validates :recipient_type, inclusion: {in: ["Person", "Group"]}, allow_blank: true
   validate :recipient_name_present?
   validates :recipient_street, :recipient_zip_code, :recipient_town, :recipient_country,
-    presence: true
+    presence: true, unless: :tolerate_deprecated_recipient_address?
   validate :assert_sendable?, unless: :recipient_id?
 
   normalizes :recipient_email, with: ->(attribute) { attribute.downcase }
@@ -276,6 +276,12 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     [
       recipient_company_name,
       recipient_name,
+      recipient_address_values_without_name
+    ].flatten.uniq.compact_blank
+  end
+
+  def recipient_address_values_without_name
+    [
       recipient_address_care_of,
       recipient_street_with_housenumber,
       recipient_postbox,
@@ -394,6 +400,10 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     if recipient_name.blank? && recipient_company_name.blank?
       errors.add(:base, :recipient_name_or_company_name_required)
     end
+  end
+
+  def tolerate_deprecated_recipient_address?
+    created_at&.year == 2025 && recipient.nil? && recipient_address_values_without_name.blank?
   end
 
   def qr_id

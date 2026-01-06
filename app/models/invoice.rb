@@ -403,7 +403,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def tolerate_deprecated_recipient_address?
-    issued_at&.year == 2025 && recipient.nil? && recipient_address_values_without_name.blank?
+    created_at&.year == 2025 && recipient.nil? && recipient_address_values_without_name.blank?
   end
 
   def qr_id

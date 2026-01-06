@@ -189,8 +189,8 @@ fr:
     as: "en tant que %{role}"
     register_new_managed: Neues Kind erfassen und anmelden
     disabled_messages:
-      already_exists: "ist bereits angemeldet"
-      cannot_see_event: "darf den Anlass nicht sehen"
+      already_exists: "est déjà annoncé"
+      cannot_see_event: "ne doit pas voir l'événement"
 
   dropdown/event/participation/mail_dispatch:
     title: Envoyer un e-mail
@@ -513,8 +513,8 @@ fr:
       list:
         incomplete: des indications obligatoires manquent
       guest_of_info:
-        with_main_applicant: "(Gast von %{main_applicant_name})"
-        without_main_applicant: "(Gast von abgemeldeter Person)"
+        with_main_applicant: "(Invité de %{main_applicant_name})"
+        without_main_applicant: "(Invité d'une personne désinscrit)"
       cancel_application:
         explanation: Tu es déjà inscrit-e à cet évènement.
         pending: ' 
@@ -524,8 +524,8 @@ fr:
         caption: Désinscrire
         confirmation: "Es-tu sûr/sure de vouloir annuler ton inscription à cet évènement?"
         managed:
-          explanation: "%{person} ist für diesen Anlass angemeldet."
-          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+          explanation: "%{person} est inscrit à cet événement."
+          pending: "%{person} est préinscrit pour cet événement. L'inscription n'est pas encore définitive et doit être confirmée par l'administration de l'événement."
           waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
 
     qualifications:
@@ -631,14 +631,14 @@ fr:
     banner_open_invitation:
       explanation: Tu as été invité à cet évènement.
       managed:
-        explanation: "%{person} wurde zu diesem Anlass eingeladen."
+        explanation: "%{person} a été invité à cet événement."
       buttons:
         accept: Inscription
         decline: Désinscription
     banner_declined_invitation:
       explanation: Tu as été invité·e à cet événement et tu as annulé ton inscription.
       managed:
-        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
+        explanation: "%{person} a été invité à cet événement et s'est désinscrit."
     form:
       caption_external_applications: "Les personnes externes peuvent s'inscrire à cet événement."
       caption_prioritization: "Les participants peuvent indiquer deux autres cours alternatifs lors de l'inscription."
@@ -1113,39 +1113,39 @@ fr:
   invoice_runs:
     destroys:
       show:
-        title: Rechnungslauf löschen
-        non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
-        confirm_delete: Wollen Sie den Rechnungslauf wirklich löschen?
+        title: Supprimer une série de facture
+        non_draft_info: 'La série de facture contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
+        confirm_delete: Voulez-vous vraiment supprimer la série de factures?
     form:
       invoice_articles:
         variable_donation:
-          name: Variabler Spendenaufruf
-          number: Spenden
-          description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
+          name: Demande de dons variable
+          number: Dons
+          description: Demande de dons basée sur les sommes de dons existant déjà
       recipient_info:
-        one: "Rechnung wird für eine Person erstellt."
-        many: "Rechnung wird für %{count} Personen erstellt."
-        other: "Rechnung wird für %{count} Personen erstellt."
+        one: "La facture est établie pour und personne."
+        many: "La facture est établie pour %{count} personnes."
+        other: "La facture est établie pour %{count} personnes."
     create:
-      one: "Rechnung <i>%{title}</i> wurde erstellt."
-      many: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
-      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
-    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
+      one: "Facture <i>%{title}</i> a été établie."
+      many: "Facture <i>%{title}</i> a été établie pour %{count} destinataires."
+      other: "Facture 1%{title}1 a été établie pour %{count} destinataires."
+    create_batch: "La facture <i>%{title}</i>est créée pour %{count} destinataire-s en arrière-plan."
     update:
-      zero: "Es muss mindestens eine Rechnung ausgewählt werden."
-      model_error: "Rechnung %{number} ist ungültig - %{error}."
+      zero: "Choisir au moins une facture."
+      model_error: "La facture %{number} n'est pas valable - %{error}."
       issued:
-        one: "Rechnung %{number} wurde gestellt."
-        many: "%{count} Rechnungen wurden gestellt."
-        other: "%{count} Rechnungen wurden gestellt."
+        one: "%{count} factures ont été établies."
+        many: "%{count} factures ont été établies."
+        other: "%{count} factures ont été établies."
       reminded:
         one: "Rechnung %{number} wurde gemahnt."
         many: "%{count} Rechnungen wurden gemahnt."
         other: "%{count} Rechnungen wurden gemahnt."
       send_notification:
-        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
-        many: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
-        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
+        one: "Facture %{number} est envoyée en arrière-plan par e-mail."
+        many: "%{count} factures sont envoyées en arrière-plan par e-mail."
+        other: "%{count} factures sont envoyées en arrière-plan par e-mail."
       invalid_state:
         one: "Rechnung %{number} wurde bereits gestellt."
         many: "%{count} Rechnungen wurde bereits gestellt."
@@ -1175,12 +1175,12 @@ fr:
         many: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
         other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
     destroy:
-      zero: "Zuerst muss eine Rechnung ausgewählt werden."
-      one: "Rechnung wurde storniert."
-      other: "%{count} Rechnungen wurden storniert."
+      zero: "Choisir d'abord une facture"
+      one: "La facture a été annulée."
+      other: "%{count} factures ont été annulées."
 
   invoice_runs/fixed_fee:
-    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
+    recipient_role_group_mismatch: "Aucun destinataire n'a pu être identifié pour les groupes suivants: %{groups}"
 
   payments:
     export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
@@ -1941,8 +1941,8 @@ fr:
       filters_role_kind:
         active_today: ' Rôle actif actuel'
         active: le rôle était actif.
-        started: gestartete Rollen
-        started_help: Bezieht sich auf das "Von" Datum auf der Rolle
+        started: rôles commencés
+        started_help: Se réfère à la date «De» sur le rôle.
         created: le rôle a été établi.
         deleted: le rôle a été effacé.
         inactive: rôles inactifs ou qui n’existent pas

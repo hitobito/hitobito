@@ -194,7 +194,7 @@ fr:
 
         invoice:
           recipient_address_or_email_required: 'L''adresse ou l''adresse e-mail du destinataire doit être renseignée'
-          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
+          recipient_name_or_company_name_required: 'Le nom de l''entreprise ou le nom doit être rempli.'
           attributes:
             invoice_config:
               invalid: 'n''est pas valable ; adaptez les réglages avant de faire le calcul'
@@ -352,9 +352,9 @@ fr:
         many: Détails de la facture
         other: Détails de la facture
       invoice_run:
-        one: Rechnungslauf
-        many: Rechnungsläufe
-        other: Rechnungsläufe
+        one: Série de factures
+        many: Série de factures
+        other: Série de factures
       label_format:
         one: format d'étiquette
         many: Formats d'étiquettes
@@ -508,7 +508,7 @@ fr:
         town: Lieu
         country: Pays
         postbox: Case postale
-        address_care_of: zusätz. Adresszeile
+        address_care_of: ligne d'adresse supplémentaire
         public: Public
 
       additional_addresses:
@@ -736,7 +736,7 @@ fr:
         teamer_count: Nombre d'équipe de direction
         participant_count: Nombre de participant-e-s
         applicant_count: Nombre d'inscriptions
-        applications_cancelable: Abmeldung
+        applications_cancelable: Désinscription
         display_booking_info: Voir l'état des inscriptions
         participations_visible: Visibilité des participants
         waiting_list: liste d'attente nationale
@@ -1016,7 +1016,7 @@ fr:
               qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux inférieurs.
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
               finance: Création et gestion de factures
-              layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
+              layer_and_below_finance: Création et gestion des factures à ce niveau et à tous les niveaux inférieurs.
               impersonation: Se servir de hitobito comme autre personne.
               see_invisible_from_above: Voit en plus les personnes qui ne peuvent normalement pas être vues par les niveaux supérieurs.
               manual_deletion: Suppression des personnes sans rôle
@@ -1234,14 +1234,14 @@ fr:
           cancelled: Annulé
         recipient: Destinataire
         recipient_email: E-mail du destinataire
-        recipient_company_name: Firmenname
-        recipient_name: Name
-        recipient_address_care_of: zusätz. Adresszeile
-        recipient_postbox: Postfach
-        recipient_country: Land
-        recipient_street: Strasse
-        recipient_zip_code: PLZ
-        recipient_town: Ort
+        recipient_company_name: Nom de l'entreprise
+        recipient_name: Nom
+        recipient_address_care_of: ligne d'adresse supplémentaire
+        recipient_postbox: Case postale
+        recipient_country: Pays
+        recipient_street: Rue
+        recipient_zip_code: NPA
+        recipient_town: Lieu
         recipient_address: Adresse du destinataire
         due_at: Échue le
         issued_at: Établie le
@@ -1256,7 +1256,7 @@ fr:
         payment_purpose: Motif du paiement
         address: Adresse de l'expéditeur
         beneficiary: En faveur de
-        payee: Einzahlung für
+        payee: Paiement à
         account_number: Numéro de compte
         iban: IBAN
         payment_slip: Bulletin de versement
@@ -1326,12 +1326,12 @@ fr:
 
 
       invoice_run:
-        title: Titel
-        receiver: Empfänger
-        recipients_total: Empfänger Insgesamt
-        recipients_paid: Empfänger Bezahlt
-        amount_total: Betrag insgesamt
-        amount_paid: Betrag bezahlt
+        title: Titre
+        receiver: Destinataire
+        recipients_total: Nombre total de destinataires
+        recipients_paid: Destinataire payé
+        amount_total: Montant total
+        amount_paid: Montant payé
 
       # used for nested attributes
       invoice_items:
@@ -1394,7 +1394,7 @@ fr:
           valiant: Valiant
           zkb: Zürcher Kantonalbank
           zugerkb: Zuger Kantonalbank
-          ukb: Urner Kantonalbank
+          ukb: 'Urner Kantonalbank '
           bcn: Banque Cantonale Neuchâteloise
 
       service_token:
@@ -1409,7 +1409,7 @@ fr:
         layer_full: Droits d'écriture et lecture à ce niveau
         layer_and_below_full: Droits d'écriture et lecture à ce niveau et aux niveaux inférieurs
         people: Personnes
-        register_people: Neue Personen registrieren (braucht Schreibrechte)
+        register_people: Enregistrer de nouvelles personnes (nécessite des droits d'écriture)
         groups: Groupes
         events: Événements
         invoices: Factures
@@ -1428,14 +1428,14 @@ fr:
   api:
     errors:
       resources:
-        id_must_not_be_set: ID darf nicht gesetzt sein
+        id_must_not_be_set: ID ne doit pas être défini
         role_resource:
           group_id:
             unwritable_attribute: Ne peut pas être modifié
           person_id:
             unwritable_attribute: kann nicht geändert werden
           type:
-            unwritable_attribute: kann nicht geändert werden
+            unwritable_attribute: ne peut pas être modifié
         self_registration_resource:
           adult_consent:
             must_be_accepted: muss akzeptiert werden

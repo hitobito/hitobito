@@ -33,10 +33,11 @@ describe "TomSelect Stimulus Controller", js: true do
 
       def tom_select_tag
         id = "tom-select-#{Fabrication::Sequencer.sequence(:tom_select)}"
+        options = 10.times.map { |i| "<option value=\"#{i}\">Option #{i}</option>" }.join("\n")
+        data = tom_select_params.map { |k, v| "#{k}=\"#{CGI.escapeHTML(v)}\"" }.join(" ")
         <<~HTML
-          <select name="#{id}" id="#{id}" data-controller="tom-select"
-            #{tom_select_params.map { |k, v| "#{k}=\"#{v}\"" }.join(" ")}>
-            #{1000.times.map { |i| "<option value=\"#{i}\">Option #{i}</option>" }.join("\n")}
+          <select name="#{id}" id="#{id}" data-controller="tom-select" #{data}>
+            #{options}
           </select>
         HTML
       end
@@ -58,13 +59,58 @@ describe "TomSelect Stimulus Controller", js: true do
     # Check that TomSelect's wrapper has been created
     expect(page).to have_selector(".ts-wrapper", visible: true)
 
+    expect(page).to have_selector(".ts-control .item", text: "Option 0")
+
     # Interact with TomSelect
     find(".ts-control").click
     expect(page).to have_selector(".ts-dropdown .option", text: "Option 0")
   end
 
-  describe "Stimulus Values Configuration" do
-    describe "max_options" do
+  context "Stimulus Values Configuration" do
+    context "options" do
+      it "renders custom description" do
+        options = 5.times.map do |i|
+          {id: i, label: "Custom Option #{i}", description: "Description #{i}"}
+        end
+        visit "/tom_select?data-tom-select-options-value=#{ERB::Util.url_encode(options.to_json)}&" \
+          "data-tom-select-selected-value=[2]"
+
+        expect(page).to have_selector(".ts-wrapper", visible: true)
+
+        expect(page).to have_selector(".ts-control .item", text: "Custom Option 2")
+
+        find(".ts-control").click
+        expect(page).to have_selector(".ts-dropdown .option", text: "Custom Option 0")
+        expect(page).to have_selector(".ts-dropdown .option .muted", text: "Description 0")
+        expect(page).to have_selector(".ts-dropdown .option", count: 5)
+      end
+    end
+
+    context "optgroups" do
+      it "renders options in groups" do
+        options = 5.times.map do |i|
+          {id: i, label: "Custom Option #{i}", group: "group#{(i % 3) + 1}"}
+        end
+        optgroups = [
+          {value: "group1", label: "Group 1"},
+          {value: "group2", label: "Group 2"},
+          {value: "group3", label: "Group 3"}
+        ]
+        visit "/tom_select?data-tom-select-options-value=#{ERB::Util.url_encode(options.to_json)}&" \
+          "data-tom-select-optgroups-value=#{ERB::Util.url_encode(optgroups.to_json)}"
+
+        expect(page).to have_selector(".ts-wrapper", visible: true)
+
+        find(".ts-control").click
+        expect(page).to have_selector(".ts-dropdown .optgroup-header", text: "Group 1")
+        expect(page).to have_selector(".ts-dropdown [data-group='group1'] .option", text: "Custom Option 0")
+        expect(page).to have_selector(".ts-dropdown [data-group='group1'] .option", text: "Custom Option 3")
+        expect(page).to have_selector(".ts-dropdown [data-group='group2'] .option", text: "Custom Option 1")
+        expect(page).to have_selector(".ts-dropdown .option", count: 5)
+      end
+    end
+
+    context "max_options" do
       it "when missing it has no limit" do
         visit "/tom_select"
 
@@ -72,20 +118,20 @@ describe "TomSelect Stimulus Controller", js: true do
 
         find(".ts-control").click
         expect(page).to have_selector(".ts-dropdown .option", text: "Option 0")
-        expect(page).to have_selector(".ts-dropdown .option", text: "Option 999")
-        expect(page).to have_selector(".ts-dropdown .option", count: 1000)
+        expect(page).to have_selector(".ts-dropdown .option", text: "Option 9")
+        expect(page).to have_selector(".ts-dropdown .option", count: 10)
       end
 
       it "respects max_options value" do
-        visit "/tom_select?data-tom-select-max-options-value=42"
+        visit "/tom_select?data-tom-select-max-options-value=5"
 
-        expect(page).to have_css("select[data-tom-select-max-options-value='42']", visible: false)
+        expect(page).to have_css("select[data-tom-select-max-options-value='5']", visible: false)
 
         find(".ts-control").click
         expect(page).to have_selector(".ts-dropdown .option", text: "Option 0")
-        expect(page).to have_selector(".ts-dropdown .option", text: "Option 41")
-        expect(page).to have_no_selector(".ts-dropdown .option", text: "Option 42")
-        expect(page).to have_selector(".ts-dropdown .option", count: 42)
+        expect(page).to have_selector(".ts-dropdown .option", text: "Option 4")
+        expect(page).to have_no_selector(".ts-dropdown .option", text: "Option 5")
+        expect(page).to have_selector(".ts-dropdown .option", count: 5)
       end
     end
   end

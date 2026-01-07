@@ -29,8 +29,8 @@ describe InvoiceRuns::FixedFee do
     it "has an invoice item for each configured membership fee item" do
       expect(fee).to have(2).items
       members, leaders = fee.items
-      expect(members).to be_kind_of(InvoiceRuns::RoleItem)
-      expect(leaders).to be_kind_of(InvoiceRuns::RoleItem)
+      expect(members).to be_kind_of(PeriodInvoiceTemplate::RoleCountItem)
+      expect(leaders).to be_kind_of(PeriodInvoiceTemplate::RoleCountItem)
     end
 
     it "builds item with translated name and dynamic_cost_parameter" do

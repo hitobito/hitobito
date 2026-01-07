@@ -7,7 +7,9 @@
 
 require "spec_helper"
 
-describe InvoiceRuns::Item do
+describe PeriodInvoiceTemplate::Item do
+  # TODO migrate this spec after change from domain class to model
+
   let(:attrs) { {fee: :membership, key: :members, unit_cost: 10, layer_group_ids: nil} }
 
   subject(:item) { described_class.new(**attrs) }
@@ -24,7 +26,7 @@ describe InvoiceRuns::Item do
     end
 
     it "can build invoice item" do
-      expect(invoice_item).to be_kind_of(InvoiceItem::FixedFee)
+      expect(invoice_item).to be_kind_of(Invoice::CalculatedItem)
       expect(invoice_item.unit_cost).to eq 10
       expect(invoice_item.count).to eq 2
       expect(invoice_item.cost).to eq 20

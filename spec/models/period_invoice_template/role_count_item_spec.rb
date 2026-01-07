@@ -7,7 +7,9 @@
 
 require "spec_helper"
 
-describe InvoiceRuns::RoleItem do
+describe PeriodInvoiceTemplate::RoleCountItem do
+  # TODO migrate this spec after change from domain class to model
+
   let(:attrs) {
     {fee: :membership, key: :members, unit_cost: 10, roles: [
       Group::BottomLayer::Member.sti_name

@@ -13,8 +13,7 @@ class RefillStructuredAddressesForNecessaryInvoices < ActiveRecord::Migration[8.
   end
 
   def relevant_invoices
-    Invoice.where(created_at: year_range,
-      recipient_type: Person.sti_name)
+    Invoice.where(created_at: year_range)
       .where("recipient_id IS NOT NULL")
       .includes(:recipient, :invoice_items, :invoice_run, recipient: :additional_addresses)
   end

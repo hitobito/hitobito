@@ -10,7 +10,6 @@
 Rails.application.reloader.to_prepare do
   Sentry.init do |config|
     config.dsn = ENV["SENTRY_DSN"]
-    config.rails.report_rescued_exceptions = false
     config.release = Rails.application.class.versions(Rails.root.join("VERSION")).first.chomp
 
     # send sensitive information like ip, cookie, request body and query params

@@ -28,11 +28,17 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
       ],
       application_questions_attributes: [
         :id, :question, :choices, :multiple_choices, :disclosure, :type,
-        :derived_from_question_id, :_destroy
+        :derived_from_question_id, :_destroy,
+        {
+          choices_attributes: [:choice, :_destroy]
+        }
       ],
       admin_questions_attributes: [
         :id, :question, :choices, :multiple_choices, :disclosure, :type,
-        :derived_from_question_id, :_destroy
+        :derived_from_question_id, :_destroy,
+        {
+          choices_attributes: [:choice, :_destroy]
+        }
       ]
     }
   ]
@@ -95,6 +101,17 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
 
   def edit
     entry.init_questions(disclosure: :hidden)
+  end
+
+  def update
+    # This ensures that question choices stay deleted when the form is invalid after
+    # deleting all choices
+    # Otherwise, the choices_attributes key would not present and when the attrs are assigned
+    # to the entry, the choices would be reset to the initial values
+    %i[application_questions_attributes admin_questions_attributes].each do |key|
+      model_params.dig(key)&.each_value { |v| v[:choices_attributes] ||= {} }
+    end
+    super
   end
 
   private

@@ -38,6 +38,55 @@ describe EventsController, js: true do
     page.all(".fields").find { |question_element| question_element.text.start_with?(question.question) }
   end
 
+  describe "application_questions" do
+    before do
+      Event::Question.delete_all
+      sign_in
+    end
+
+    it "should show choices as nested_form" do
+      event_question = event.questions.create!(
+        question: "Testquestion",
+        choices: "Antwort 1, Antwort 2",
+        choices_en: "Choice 1, Choice 2",
+        disclosure: :required
+      )
+
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_link I18n.t("event.participations.application_answers")
+
+      expect(page).to have_field("Antwortmöglichkeit", with: "Antwort 1")
+      expect(page).to have_field("Antwortmöglichkeit", with: "Antwort 2")
+
+      all(".fa-language")[1].click
+
+      expect(page).to have_field(
+        "event[application_questions_attributes][0][choices_attributes][0][choice_en]",
+        with: "Choice 1"
+      )
+      fill_in(
+        "event[application_questions_attributes][0][choices_attributes][0][choice_fr]",
+        with: "Résponse 1"
+      )
+
+      click_link("Antwortmöglichkeit hinzufügen")
+      expect(page).to have_content("Antwortmöglichkeit", count: 4)
+
+      all(".fa-language").last.click
+      input_id = all(".fields").last.first("input")[:id]
+      fill_in(input_id, with: "New choice")
+
+      first(:button, "Speichern").click
+      expect(page).to have_content("Anlass #{event.name} wurde erfolgreich aktualisiert")
+
+      choices = event_question.reload.deserialized_choices
+      expect(choices.count).to eql(3)
+      expect(choices.first.choice_translations).to eql({de: "Antwort 1", en: "Choice 1", fr: "Résponse 1", it: ""})
+      expect(choices.second.choice_translations).to eql({de: "Antwort 2", en: "Choice 2", fr: "", it: ""})
+      expect(choices.third.choice_translations).to eql({de: "New choice", en: "", fr: "", it: ""})
+    end
+  end
+
   describe "global application_questions" do
     subject(:question_fields_element) do
       click_link I18n.t("event.participations.application_answers")

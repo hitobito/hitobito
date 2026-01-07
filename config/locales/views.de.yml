@@ -1177,10 +1177,8 @@ de:
         success: Zahlung über %{amount} wurde erfasst.
 
   period_invoice_templates:
-    attrs:
-      invoice_period: Rechnungsperiode
     new:
-      title: Gruppernrechnung definieren
+      title: Sammelrechnung definieren
     actions_index:
       link:
         add: Neue Sammelrechnung definieren

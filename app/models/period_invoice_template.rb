@@ -6,7 +6,7 @@
 class PeriodInvoiceTemplate < ActiveRecord::Base
   belongs_to :group
 
-  has_many :invoice_runs, dependent: :destroy
+  has_many :invoice_runs, dependent: :nullify
 
   validates :name, :start_on, presence: true
   validates_date :end_on,

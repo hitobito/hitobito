@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Contactables::InvoicesController < ListController
+class Contactables::InvoicesController < InvoicesController
   self.sort_mappings = {recipient: "people.order_name ASC"}
   self.search_columns = [:title, :sequence_number]
 

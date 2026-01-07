@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -124,6 +124,13 @@ Hitobito::Application.routes.draw do
           as: "invoice_runs_destroy"
         resources :invoices
       end
+
+      FeatureGate.if("groups.period_invoice_templates") do
+        resources :period_invoice_templates, except: [:destroy] do
+          resources :invoice_runs, only: [:index], module: :period_invoice_templates
+        end
+      end
+
       resource :payment_process, only: [:new, :show, :create]
 
       resources :notes, only: [:index, :create, :destroy]

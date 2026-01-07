@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,7 +11,8 @@ module NavigationHelper
      url: :groups_path,
      icon_name: "users",
      active_for: %w[groups people],
-     inactive_for: %w[/invoices invoice_articles invoice_config payment_process invoice_runs?]},
+     inactive_for: %w[/invoices invoice_articles invoice_config payment_process
+       period_invoice_templates invoice_runs?]},
 
     {label: :events,
      url: :list_events_path,
@@ -35,6 +36,7 @@ module NavigationHelper
        invoice_articles
        invoice_config
        payment_process
+       period_invoice_templates
        invoice_runs?]},
 
     {label: :admin,

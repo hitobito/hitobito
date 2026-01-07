@@ -288,6 +288,8 @@ groups:
     enabled: true
   nextcloud:
     enabled: false
+  period_invoice_templates:
+    enabled: false
 
 hitobito_log:
   recipient_emails:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_23_110127) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_05_091145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -633,8 +633,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_110127) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "receivers"
+    t.integer "period_invoice_template_id"
     t.index ["creator_id"], name: "index_invoice_runs_on_creator_id"
     t.index ["group_id"], name: "index_invoice_runs_on_group_id"
+    t.index ["period_invoice_template_id"], name: "index_invoice_runs_on_period_invoice_template_id"
     t.index ["receiver_type", "receiver_id"], name: "index_invoice_runs_on_receiver_type_and_receiver_id"
   end
 
@@ -1041,6 +1043,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_23_110127) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["manager_id", "managed_id"], name: "index_people_managers_on_manager_id_and_managed_id", unique: true
+  end
+
+  create_table "period_invoice_templates", force: :cascade do |t|
+    t.string "name", null: false
+    t.date "start_on", null: false
+    t.date "end_on"
+    t.string "recipient_group_type"
+    t.bigint "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_period_invoice_templates_on_group_id"
   end
 
   create_table "person_add_request_ignored_approvers", id: :serial, force: :cascade do |t|

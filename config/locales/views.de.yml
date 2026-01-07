@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -1175,6 +1175,16 @@ de:
     create:
       flash:
         success: Zahlung über %{amount} wurde erfasst.
+
+  period_invoice_templates:
+    new:
+      title: Sammelrechnung definieren
+    actions_index:
+      link:
+        add: Neue Sammelrechnung definieren
+    tabs:
+      info: Info
+      invoice_runs: Rechnungsläufe
 
   label_formats:
     global_labels: "Globale Etikettenformate"

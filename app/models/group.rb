@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -164,6 +164,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :invoice_runs
   has_many :invoice_articles, dependent: :destroy
   has_many :invoice_items, through: :issued_invoices
+  has_many :period_invoice_templates
 
   has_many :service_tokens,
     foreign_key: :layer_group_id,

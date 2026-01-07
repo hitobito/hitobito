@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -12,7 +12,9 @@
       = link_to icon('link'), parent_group, class: 'inline'
     %ul
       = nav t('navigation.invoices/single'), group_invoices_path(layer_id), %w(invoices), %w(invoice_runs evaluations)
-      = nav InvoiceRun.model_name.human(count: 2), group_invoice_runs_path(layer_id), %w(invoice_runs)
+      = nav InvoiceRun.model_name.human(count: 2), group_invoice_runs_path(layer_id), %w(invoice_runs), %w(period_invoice_templates)
+      - if FeatureGate.enabled?("groups.period_invoice_templates")
+        = nav PeriodInvoiceTemplate.model_name.human(count: 2), group_period_invoice_templates_path(layer_id), %w(period_invoice_templates)
       = nav t('navigation.invoices/evaluations'), group_invoices_evaluations_path(layer_id), %w(invoice_evaluations)
       = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(layer_id), %w(invoice_articles)
       = nav t('navigation.admin'), group_invoice_config_path(layer_id), %w(invoice_config)

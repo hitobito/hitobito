@@ -423,7 +423,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def duplicate # rubocop:disable Metrics/AbcSize,Metrics/MethodLength splitting this up does not make it better
-    Event.build(attributes.excluding("id")).tap do |event|
+    Event.build(attributes.excluding("id", "lft", "rgt", "depth", "children_count", "parent_id")).tap do |event|
       event.groups = groups
       event.state = nil
       event.application_opening_at = nil

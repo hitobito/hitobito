@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe InvoiceItem::FixedFee do
+describe Invoice::CalculatedItem do
   subject(:item) { described_class.new }
 
   describe "#name" do

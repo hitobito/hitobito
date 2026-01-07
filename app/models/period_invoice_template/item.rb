@@ -22,7 +22,7 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   def total_cost = count * unit_cost
 
   def to_invoice_item
-    InvoiceItem::FixedFee
+    Invoice::CalculatedItem
       .new(name: key, unit_cost:, count:, dynamic_cost_parameters: {fixed_fees: fee})
       .tap(&:recalculate)
   end

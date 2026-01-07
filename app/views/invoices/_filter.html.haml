@@ -1,3 +1,8 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
 = content_for(:filter) do
   = form_tag(nil, { method: :get, class: 'form-inline-search invoices-filter', role: 'search', remote: true, data: { spin: true } }) do |f|
     = hidden_field_tag :returning, true
@@ -13,8 +18,8 @@
           = direct_filter_select(:due_since, invoice_due_since_options, t('.due_since'))
       .d-lg-inline-flex.gap-3
         .mb-3
-          = direct_filter_date(:from, t('.from'), value: params[:from] || "1.1.#{@year_from || Time.zone.today.year}", data: { submit: true })
+          = direct_filter_date(:from, t('.from'), value: filter_params[:from], data: { submit: true })
         .mb-3
-          = direct_filter_date(:to, t('.to'), value: params[:to] || "31.12.#{Time.zone.today.year}", data: {submit: true })
+          = direct_filter_date(:to, t('.to'), value: filter_params[:to], data: {submit: true })
 
 - params[:q] = nil # Reset param so quicksearch filter does not get populated

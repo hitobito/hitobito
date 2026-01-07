@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class Person < Base
+  module Contactables
     class Invoice < Base
       self.parent_sheet = Sheet::Person
     end

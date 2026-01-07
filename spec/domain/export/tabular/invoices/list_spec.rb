@@ -27,7 +27,22 @@ describe Export::Tabular::Invoices::List do
       :amount_paid,
       :cost_centers,
       :accounts,
-      :payments]
+      :payments,
+      :recipient_company_name,
+      :recipient_name,
+      :recipient_address_care_of,
+      :recipient_street,
+      :recipient_housenumber,
+      :recipient_postbox,
+      :recipient_zip_code,
+      :recipient_town,
+      :recipient_country,
+      :payee_name,
+      :payee_street,
+      :payee_housenumber,
+      :payee_zip_code,
+      :payee_town,
+      :payee_country]
 
     expect(subject.labels).to eq ["Titel",
       "Nummer",
@@ -44,6 +59,21 @@ describe Export::Tabular::Invoices::List do
       "Bezahlt",
       "Kostenstellen",
       "Konten",
-      "Zahlungseingänge"]
+      "Zahlungseingänge",
+      "Empfänger Firmenname",
+      "Empfänger Name",
+      "Empfänger zusätz. Adresszeile",
+      "Empfänger Strasse",
+      "Empfänger Hausnummer",
+      "Empfänger Postfach",
+      "Empfänger PLZ",
+      "Empfänger Ort",
+      "Empfänger Land",
+      "Zahlungsempfänger Name",
+      "Zahlungsempfänger Strasse",
+      "Zahlungsempfänger Hausnummer",
+      "Zahlungsempfänger PLZ",
+      "Zahlungsempfänger Ort",
+      "Zahlungsempfänger Land"]
   end
 end

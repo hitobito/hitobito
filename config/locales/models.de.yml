@@ -1170,16 +1170,23 @@ de:
           reminded: Gemahnt
           cancelled: Storniert
         recipient: Empfänger
-        recipient_email: Empfänger E-Mail
+        recipient_email: E-Mail
         recipient_company_name: Firmenname
         recipient_name: Name
         recipient_address_care_of: zusätz. Adresszeile
         recipient_postbox: Postfach
         recipient_country: Land
         recipient_street: Strasse
+        recipient_housenumber: Hausnummer
         recipient_zip_code: PLZ
         recipient_town: Ort
         recipient_address: Empfänger Adresse
+        payee_name: Zahlungsempfänger Name
+        payee_street: Zahlungsempfänger Strasse
+        payee_housenumber: Zahlungsempfänger Hausnummer
+        payee_zip_code: Zahlungsempfänger PLZ
+        payee_town: Zahlungsempfänger Ort
+        payee_country: Zahlungsempfänger Land
         due_at: Fällig am
         issued_at: Gestellt am
         sent_at: Verschickt am

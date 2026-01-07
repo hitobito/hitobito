@@ -22,7 +22,21 @@ import { Controller } from "@hotwired/stimulus";
     data-tom-select-label-value: The name of the label field in the options. If not set,
       the default is "label".
 
-    data-tom-select-no-results-valu: The message to display when no results are found.
+    data-tom-select-optgroup-field-value: The name of the optgroup value field in the options.
+      If not set, the default is "group".
+
+    data-tom-select-options-value: An array of JSON objects containing the available options.
+      Object should contain an id, label and optional description property.
+      If not set, the options from the HTML are used.
+
+    data-tom-select-optgroups-value: An array of JSON objects containing the available option
+      groups. Objects should contain a value and a label property.
+      If not set, the optgroups from the HTML are used.
+
+    data-tom-select-selected-value: An array of ids containing the selected options.
+      If not set, the selected options from the HTML are used.
+
+    data-tom-select-no-results-value: The message to display when no results are found.
       If not set, the default is "No results found.".
 
     data-tom-select-max-options-value: The maximum number of options to show in the
@@ -40,20 +54,17 @@ export default class extends Controller {
   static values = {
     url: String,
     label: { type: String, default: "label" },
+    optgroupField: { type: String, default: "group" },
+    options: { type: Array },
+    optgroups: { type: Array },
+    selected: { type: Array },
     noResults: { type: String, default: "No results found." },
-    maxOptions: { type: Number, default: null } // no limit by default (null)
+    maxOptions: { type: Number, default: null }, // no limit by default (null)
   };
 
-  initialize() {
-    this.getOptions = this.#getOptions.bind(this);
-    this.clearInput = this.#clearInput.bind(this);
-    this.noResults = this.#noResults.bind(this);
-    this.load = this.#load.bind(this);
-  }
-
   connect() {
-    this.tom = new TomSelect(`#${this.element.id}`, this.getOptions());
-    this.tom.on("item_add", this.clearInput);
+    this.tom = new TomSelect(`#${this.element.id}`, this.#getOptions());
+    this.tom.on("item_add", this.#clearInput.bind(this));
     if (this.element.autofocus) {
       this.tom.focus();
     }
@@ -64,18 +75,25 @@ export default class extends Controller {
       this.element.nodeName === "SELECT" &&
       this.element.getAttribute("multiple");
 
-    return {
+    const options = {
       valueField: "id",
       labelField: this.labelValue,
       searchField: this.labelValue,
+      optgroupField: this.optgroupFieldValue,
       plugins: multiple ? ["remove_button"] : undefined,
       create: false,
-      load: this.urlValue ? this.load : undefined,
+      load: this.urlValue ? this.#load.bind(this) : undefined,
       maxOptions: this.maxOptionsValue,
       render: {
-        no_results: this.noResults,
+        no_results: this.#renderNoResults.bind(this),
+        option: this.#renderOption.bind(this),
       },
     };
+    if (this.optionsValue.length) options.options = this.optionsValue;
+    if (this.optgroupsValue.length) options.optgroups = this.optgroupsValue;
+    if (this.selectedValue.length) options.items = this.selectedValue;
+
+    return options;
   }
 
   #load(query, callback) {
@@ -95,7 +113,16 @@ export default class extends Controller {
     input.value = "";
   }
 
-  #noResults() {
+  #renderNoResults() {
     return `<div class='no-results'>${this.noResultsValue}</div>`;
+  }
+
+  #renderOption(data, escape) {
+    let label = `<div>${escape(data[this.labelValue])}</div>`;
+    if (data.description) {
+      const desc = `<div class="muted small">${escape(data.description)}</div>`;
+      label = `<div>${label}${desc}</div>`;
+    }
+    return label;
   }
 }

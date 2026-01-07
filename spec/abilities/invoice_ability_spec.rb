@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -20,6 +20,7 @@ describe InvoiceAbility do
       let(:article) { InvoiceArticle.new(group: group) }
       let(:reminder) { invoice.payment_reminders.build }
       let(:payment) { invoice.payments.build }
+      let(:period_invoice_template) { Fabricate(:period_invoice_template, group: group) }
 
       it "may index" do
         is_expected.to be_able_to(:index, Invoice)
@@ -66,6 +67,12 @@ describe InvoiceAbility do
             is_expected.to be_able_to(action.to_sym, group.invoice_config)
           end
         end
+
+        %w[show index new create edit update].each do |action|
+          it "may #{action} invoice_config in #{own_group}" do
+            is_expected.to be_able_to(action.to_sym, period_invoice_template)
+          end
+        end
       end
 
       context "in other group" do
@@ -98,6 +105,12 @@ describe InvoiceAbility do
         %w[edit show update destroy].each do |action|
           it "may not #{action} invoice_config in #{other_group}" do
             is_expected.not_to be_able_to(action.to_sym, group.invoice_config)
+          end
+        end
+
+        %w[show index new create edit update].each do |action|
+          it "may not #{action} invoice_config in #{other_group}" do
+            is_expected.not_to be_able_to(action.to_sym, period_invoice_template)
           end
         end
       end
@@ -193,6 +206,16 @@ describe InvoiceAbility do
         [:create].each do |action|
           it "can #{action} in #{layer.name}" do
             is_expected.to be_able_to(action, payment)
+          end
+        end
+      end
+
+      context "on period invoice template" do
+        let(:period_invoice_template) { Fabricate(:period_invoice_template, group: layer) }
+
+        [:index, :show, :new, :create, :edit, :update].each do |action|
+          it "can #{action} in #{layer.name}" do
+            is_expected.to be_able_to(action, period_invoice_template)
           end
         end
       end

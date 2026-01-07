@@ -36,6 +36,7 @@ class InvoiceRun < ActiveRecord::Base
   serialize :receivers, type: Array, coder: InvoiceRuns::Receiver
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
+  belongs_to :period_invoice_template, optional: true
   belongs_to :receiver, polymorphic: true
   belongs_to :creator, class_name: "Person"
   has_one :invoice, dependent: :destroy

@@ -240,6 +240,13 @@ describe InvoicesController do
         expect(assigns(:invoices)).to include sent
       end
 
+      it "does include invoice when viewing invoice run invoices in next year" do
+        travel_to(1.year.from_now) do
+          get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
+          expect(assigns(:invoices)).to include sent
+        end
+      end
+
       it "does render pdf using invoice renderer" do
         expect do
           get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}, format: :pdf
@@ -303,11 +310,27 @@ describe InvoicesController do
     context "rendering view" do
       render_views
       let(:dom) { Capybara::Node::Simple.new(response.body) }
+      let(:current_year) { Time.zone.now.year }
 
       it "renders invoice with title" do
         invoice.update(title: "Testrechnung")
         get :index, params: {group_id: group.id}
         expect(dom).to have_link "Testrechnung", href: group_invoice_path(group_id: group.id, id: invoice.id)
+      end
+
+      it "renders filter with default date values" do
+        get :index, params: {group_id: group.id}
+        expect(dom).to have_field("from", with: "1.1.#{current_year}")
+        expect(dom).to have_field("to", with: "31.12.#{current_year}")
+      end
+
+      it "renders filter with date values from invoice run" do
+        invoice_run = InvoiceRun.create!(title: "test", group:, created_at: Time.zone.local(2025, 10, 12))
+        invoice.update(invoice_run:)
+
+        get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
+        expect(dom).to have_field("from", with: "1.1.2025")
+        expect(dom).to have_field("to", with: "31.12.2025")
       end
     end
   end

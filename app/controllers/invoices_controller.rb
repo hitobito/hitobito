@@ -41,9 +41,7 @@ class InvoicesController < CrudController
       :_destroy
     ]]
 
-  before_render_index :year_from
-
-  helper_method :group, :invoice_run
+  helper_method :group, :invoice_run, :filter_params
 
   after_destroy :update_invoice_run_total
 
@@ -190,7 +188,7 @@ class InvoicesController < CrudController
     )
     scope = scope.standalone unless parents.any?(InvoiceRun)
     scope = scope.page(params[:page]) unless params[:ids]
-    Invoice::Filter.new(params).apply(scope).with_recipients
+    Invoice::Filter.new(params.merge(filter_params)).apply(scope).with_recipients
   end
 
   def payment_attrs
@@ -229,9 +227,8 @@ class InvoicesController < CrudController
     entry.invoice_run&.update_total
   end
 
-  def year_from
-    if invoice_run
-      @year_from ||= invoice_run.created_at.year
-    end
+  def filter_params
+    year = invoice_run&.created_at&.year || Time.zone.today.year
+    {from: params[:from] || "1.1.#{year}", to: params[:to] || "31.12.#{year}"}
   end
 end

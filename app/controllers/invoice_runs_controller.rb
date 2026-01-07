@@ -8,6 +8,8 @@ class InvoiceRunsController < CrudController
 
   LIMIT_CREATE = 100
 
+  self.remember_params = [:year]
+
   self.nesting = Group
   self.permitted_attrs = [
     :receiver_id,

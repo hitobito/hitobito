@@ -33,12 +33,17 @@ class Person::Filter::List
   private
 
   def filtered_accessibles
-    filtered = filter_with_selection.unscope(:select).select(:id).distinct
+    filtered = filter_with_selection.reselect(:id).distinct
+
     accessibles.where(id: filtered)
   end
 
   def filter_with_selection
-    (@ids.present? && @ids != %w[all]) ? filter.where(id: @ids) : filter
+    if @ids.present? && @ids != %w[all]
+      filter.where(id: @ids)
+    else
+      filter
+    end
   end
 
   def filter
@@ -66,8 +71,11 @@ class Person::Filter::List
   end
 
   def accessibles
-    ability = accessibles_class.new(user, group_range? ? @group : nil,
-      include_ended_roles: chain.include_ended_roles?)
+    ability = accessibles_class.new(
+      user,
+      (group_range? ? @group : nil),
+      include_ended_roles: chain.include_ended_roles?
+    )
     Person.accessible_by(ability).select(:contact_data_visible)
   end
 

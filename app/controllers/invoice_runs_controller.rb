@@ -110,8 +110,9 @@ class InvoiceRunsController < CrudController
     invoice_run_id = params[:invoice_run_id].presence
     if params[:singular]
       if invoice_run_id
-        group_invoice_run_invoice_path(parent, invoice_run_id: invoice_run_id,
-          id: invoices.first.id)
+        group_invoice_run_invoice_path(
+          parent, invoice_run_id: invoice_run_id, id: invoices.first.id
+        )
       else
         group_invoice_path(parent, invoices.first)
       end
@@ -129,7 +130,7 @@ class InvoiceRunsController < CrudController
   end
 
   def invoices
-  Invoice::Filter.new(params).apply(parent.issued_invoices)
+    Invoice::Filter.new(params).apply(parent.issued_invoices)
   end
 
   def flash_message(action: action_name, count: nil, title: nil)

@@ -51,9 +51,9 @@ class InvoicesController < CrudController
       format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
       format.csv { render_invoices_csv(list_entries.includes(:invoice_items)) }
       format.json {
-        render_entries_json(list_entries.includes(:invoice_items,
-          :payments,
-          :payment_reminders))
+        render_entries_json(
+          list_entries.includes(:invoice_items, :payments, :payment_reminders)
+        )
       }
     end
   end

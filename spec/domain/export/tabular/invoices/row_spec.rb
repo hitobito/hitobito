@@ -27,7 +27,8 @@ describe Export::Tabular::Invoices::Row do
   end
 
   it "reads a set of attributes from invoice" do
-    values = Export::Tabular::Invoices::List::INCLUDED_ATTRS.collect { |x| [x, subject.fetch(x)] }.to_h
+    values = (Export::Tabular::Invoices::List::INCLUDED_ATTRS +
+             Export::Tabular::Invoices::List::ADDRESS_ATTRS).collect { |x| [x, subject.fetch(x)] }.to_h
     expect(values).to match(
       {"title" => "Invoice",
        "sequence_number" => "376803389-2",
@@ -41,7 +42,22 @@ describe Export::Tabular::Invoices::Row do
        "cost" => "5.00",
        "vat" => "0.35",
        "total" => "5.35",
-       "amount_paid" => "0.00"}
+       "amount_paid" => "0.00",
+       "recipient_company_name" => nil,
+       "recipient_name" => "Top Leader",
+       "recipient_address_care_of" => nil,
+       "recipient_street" => "Greatstreet",
+       "recipient_housenumber" => "345",
+       "recipient_postbox" => nil,
+       "recipient_zip_code" => "3456",
+       "recipient_town" => "Greattown",
+       "recipient_country" => "CH",
+       "payee_name" => "Hitobito AG",
+       "payee_street" => "Belpstrasse",
+       "payee_housenumber" => "37",
+       "payee_zip_code" => "3007",
+       "payee_town" => "Bern",
+       "payee_country" => "CH"}
     )
   end
 

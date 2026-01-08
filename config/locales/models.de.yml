@@ -1170,9 +1170,16 @@ de:
         recipient_postbox: Postfach
         recipient_country: Land
         recipient_street: Strasse
+        recipient_housenumber: Hausnummer
         recipient_zip_code: PLZ
         recipient_town: Ort
         recipient_address: Empfänger Adresse
+        payee_name: Zahlungsempfänger Name
+        payee_street: Zahlungsempfänger Strasse
+        payee_housenumber: Zahlungsempfänger Hausnummer
+        payee_zip_code: Zahlungsempfänger PLZ
+        payee_town: Zahlungsempfänger Ort
+        payee_country: Zahlungsempfänger Land
         due_at: Fällig am
         issued_at: Gestellt am
         sent_at: Verschickt am

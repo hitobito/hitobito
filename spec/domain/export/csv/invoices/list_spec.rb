@@ -21,7 +21,12 @@ describe Export::Tabular::Invoices::List do
       "Titel", "Nummer", "Status", "Referenz Nummer", "Text", "Empfänger E-Mail",
       "Empfänger Adresse", "Verschickt am", "Fällig am", "Betrag",
       "MwSt.", "Rechnungsbetrag", "Bezahlt",
-      "Kostenstellen", "Konten", "Zahlungseingänge"
+      "Kostenstellen", "Konten", "Zahlungseingänge",
+      "Empfänger Firmenname", "Empfänger Name", "Empfänger zusätz. Adresszeile",
+      "Empfänger Strasse", "Empfänger Hausnummer", "Empfänger Postfach", "Empfänger PLZ",
+      "Empfänger Ort", "Empfänger Land", "Zahlungsempfänger Name", "Zahlungsempfänger Strasse",
+      "Zahlungsempfänger Hausnummer", "Zahlungsempfänger PLZ", "Zahlungsempfänger Ort",
+      "Zahlungsempfänger Land"
     ]
   end
 
@@ -45,6 +50,21 @@ describe Export::Tabular::Invoices::List do
     its(["Empfänger Adresse"]) { should.nil? }
     its(["Verschickt am"]) { should.nil? }
     its(["Fällig am"]) { should.nil? }
+    its(["Empfänger Firmenname"]) { should == invoices(:invoice).recipient_company_name }
+    its(["Empfänger Name"]) { should == invoices(:invoice).recipient_name }
+    its(["Empfänger zusätz. Adresszeile"]) { should == invoices(:invoice).recipient_address_care_of }
+    its(["Empfänger Strasse"]) { should == invoices(:invoice).recipient_street }
+    its(["Empfänger Hausnummer"]) { should == invoices(:invoice).recipient_housenumber }
+    its(["Empfänger Postfach"]) { should == invoices(:invoice).recipient_postbox }
+    its(["Empfänger PLZ"]) { should == invoices(:invoice).recipient_zip_code }
+    its(["Empfänger Ort"]) { should == invoices(:invoice).recipient_town }
+    its(["Empfänger Land"]) { should == invoices(:invoice).recipient_country }
+    its(["Zahlungsempfänger Name"]) { should == invoices(:invoice).payee_name }
+    its(["Zahlungsempfänger Strasse"]) { should == invoices(:invoice).payee_street }
+    its(["Zahlungsempfänger Hausnummer"]) { should == invoices(:invoice).payee_housenumber }
+    its(["Zahlungsempfänger PLZ"]) { should == invoices(:invoice).payee_zip_code }
+    its(["Zahlungsempfänger Ort"]) { should == invoices(:invoice).payee_town }
+    its(["Zahlungsempfänger Land"]) { should == invoices(:invoice).payee_country }
   end
 
   context "second row" do
@@ -65,5 +85,20 @@ describe Export::Tabular::Invoices::List do
     its(["Empfänger E-Mail"]) { should == "top_leader@example.com" }
     its(["Beschreibung"]) { should.nil? }
     its(["Empfänger Adresse"]) { should.nil? }
+    its(["Empfänger Firmenname"]) { should == invoice.recipient_company_name }
+    its(["Empfänger Name"]) { should == invoice.recipient_name }
+    its(["Empfänger zusätz. Adresszeile"]) { should == invoice.recipient_address_care_of }
+    its(["Empfänger Strasse"]) { should == invoice.recipient_street }
+    its(["Empfänger Hausnummer"]) { should == invoice.recipient_housenumber }
+    its(["Empfänger Postfach"]) { should == invoice.recipient_postbox }
+    its(["Empfänger PLZ"]) { should == invoice.recipient_zip_code }
+    its(["Empfänger Ort"]) { should == invoice.recipient_town }
+    its(["Empfänger Land"]) { should == invoice.recipient_country }
+    its(["Zahlungsempfänger Name"]) { should == invoice.payee_name }
+    its(["Zahlungsempfänger Strasse"]) { should == invoice.payee_street }
+    its(["Zahlungsempfänger Hausnummer"]) { should == invoice.payee_housenumber }
+    its(["Zahlungsempfänger PLZ"]) { should == invoice.payee_zip_code }
+    its(["Zahlungsempfänger Ort"]) { should == invoice.payee_town }
+    its(["Zahlungsempfänger Land"]) { should == invoice.payee_country }
   end
 end

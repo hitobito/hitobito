@@ -11,11 +11,42 @@ module Export::Tabular::Invoices
 
     CUSTOM_METHODS = %w[cost_centers accounts payments]
 
+    ADDRESS_ATTRS = %w[recipient_company_name recipient_name
+      recipient_address_care_of recipient_street recipient_housenumber
+      recipient_postbox recipient_zip_code recipient_town recipient_country
+      payee_name payee_street payee_housenumber payee_zip_code payee_town
+      payee_country]
+
     self.model_class = Invoice
     self.row_class = Export::Tabular::Invoices::Row
 
     def attributes
-      (INCLUDED_ATTRS + CUSTOM_METHODS).collect(&:to_sym)
+      (INCLUDED_ATTRS + CUSTOM_METHODS + ADDRESS_ATTRS).collect(&:to_sym)
+    end
+
+    def recipient_company_name_label = recipient_label(:company_name)
+
+    def recipient_name_label = recipient_label(:name)
+
+    def recipient_address_care_of_label = recipient_label(:address_care_of)
+
+    def recipient_street_label = recipient_label(:street)
+
+    def recipient_housenumber_label = recipient_label(:housenumber)
+
+    def recipient_postbox_label = recipient_label(:postbox)
+
+    def recipient_zip_code_label = recipient_label(:zip_code)
+
+    def recipient_town_label = recipient_label(:town)
+
+    def recipient_country_label = recipient_label(:country)
+
+    private
+
+    def recipient_label(attribute)
+      [I18n.t("activerecord.attributes.invoice.recipient"),
+        I18n.t("activerecord.attributes.invoice.recipient_#{attribute}")].join(" ")
     end
   end
 end

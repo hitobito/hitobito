@@ -1239,9 +1239,16 @@ it:
         recipient_postbox: Postfach
         recipient_country: Land
         recipient_street: Strasse
+        recipient_housenumber: Hausnummer
         recipient_zip_code: PLZ
         recipient_town: Ort
         recipient_address: Indirizzo del destinatario
+        payee_name: Zahlungsempfänger Name
+        payee_street: Zahlungsempfänger Strasse
+        payee_housenumber: Zahlungsempfänger Hausnummer
+        payee_zip_code: Zahlungsempfänger PLZ
+        payee_town: Zahlungsempfänger Ort
+        payee_country: Zahlungsempfänger Land
         due_at: Scade il
         issued_at: Emesso il
         sent_at: 'Spedito il '

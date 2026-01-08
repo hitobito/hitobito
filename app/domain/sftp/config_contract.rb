@@ -25,4 +25,6 @@ class Sftp::ConfigContract < Dry::Validation::Contract
       key.failure("must be present if private_key is not given")
     end
   end
+
+  def self.keys = schema.key_map.map { _1.name.to_sym }
 end

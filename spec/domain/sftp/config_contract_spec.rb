@@ -13,12 +13,15 @@ describe Sftp::ConfigContract do
       host: "sftp.example.com",
       port: 22,
       user: "testuser",
-      password: "secret123",
-      remote_path: "/uploads"
+      password: "secret123"
     }
   end
 
   subject { described_class.new.call(params) }
+
+  it "::keys returns the correct keys" do
+    expect(described_class.keys).to match_array(%i[host port user password private_key])
+  end
 
   context "with valid params" do
     let(:params) { valid_params }
@@ -101,6 +104,14 @@ describe Sftp::ConfigContract do
 
     it "has the correct error message" do
       expect(subject.errors[:password]).to include("must be present if private_key is not given")
+    end
+  end
+
+  context "when having extra unknown params" do
+    let(:params) { valid_params.merge(extra_param: "should be ignored") }
+
+    it "ignores extra unknown params" do
+      is_expected.to be_success
     end
   end
 end

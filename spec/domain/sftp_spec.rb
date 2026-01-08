@@ -9,23 +9,23 @@ require "spec_helper"
 
 describe Sftp do
   let(:config) do
-    Config::Options.new(
+    {
       host: "sftp.local",
       port: 22,
       user: "hitobito",
       password: "password",
       private_key: "private key",
       remote_path: "upload/path"
-    )
+    }
   end
   let(:session) { instance_double("Net::SFTP::Session", connect!: true) }
 
   subject(:sftp) { Sftp.new(config) }
 
-  before { allow(sftp).to receive(:server_version).and_return("unknown") }
+  before { allow_any_instance_of(Sftp).to receive(:server_version).and_return("unknown") }
 
   context "with password" do
-    before { config.delete_field!(:private_key) }
+    before { config.delete(:private_key) }
 
     it "creates connection with password credential" do
       expect(::Net::SFTP).to receive(:start)
@@ -41,7 +41,7 @@ describe Sftp do
   end
 
   context "with private key" do
-    before { config.delete_field!(:password) }
+    before { config.delete(:password) }
 
     it "creates connection with private key" do
       expect(::Net::SFTP).to receive(:start)

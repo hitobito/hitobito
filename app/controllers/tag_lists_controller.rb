@@ -14,7 +14,7 @@ class TagListsController < ListController
     manageable_people_ids = manageable_people.map(&:id)
 
     Bulk::TagAddJob.new(manageable_people_ids, tag_names).enqueue!
-    count = manageable_people_ids.size
+    count = manageable_people.size
 
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
@@ -23,13 +23,13 @@ class TagListsController < ListController
     manageable_people_ids = manageable_people.map(&:id)
 
     Bulk::TagRemoveJob.new(manageable_people_ids, tag_names).enqueue!
-    count = manageable_people_ids.size
+    count = manageable_people.size
 
     redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
   end
 
   def new
-    @people_count = manageable_people_ids.count
+    @people_count = manageable_people.count
   end
 
   def deletable

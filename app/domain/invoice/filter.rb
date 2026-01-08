@@ -13,17 +13,24 @@ class Invoice::Filter
   end
 
   def apply(scope)
+    return scope.none if no_params_set?
+
     scope = apply_scope(scope, params[:state], Invoice::STATES)
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
     scope = filter_by_ids(scope)
     scope = filter_by_invoice_run_id(scope)
-    scope = scope.draft_or_issued(from: params[:from],
-      to: params[:to])
+    scope = scope.draft_or_issued(from: params[:from], to: params[:to])
 
     cancelled? ? scope : scope.visible
   end
 
   private
+
+  def no_params_set?
+    possible_keys = %w[state due_since ids invoice_run_id from to]
+
+    (params.keys & possible_keys).none?
+  end
 
   def apply_scope(relation, scope, valid_scopes)
     return relation unless valid_scopes.include?(scope)
@@ -42,13 +49,17 @@ class Invoice::Filter
   end
 
   def filter_by_ids(relation)
-    return relation if invoice_ids.blank?
+    return relation if params[:ids].nil? || all_invoices?
 
     relation.where(id: invoice_ids)
   end
 
+  def all_invoices?
+    params[:ids] == "all"
+  end
+
   def invoice_ids
-    return [] if params[:ids] == "all"
+    # return [] if all_invoices?
 
     @invoice_ids = params[:ids].to_s.split(",")
   end

@@ -10,13 +10,13 @@ require "net/sftp"
 class Sftp
   Error = Class.new(StandardError)
   ConnectionError = Class.new(StandardError)
+  Config = Struct.new(*ConfigContract.keys, keyword_init: true)
 
   def initialize(config)
-    ConfigContract.new.call(config.to_h).tap do |result|
-      raise ArgumentError, format_config_errors(result) if result.failure?
-    end
+    result = ConfigContract.new.call(config.to_h)
+    raise ArgumentError, format_config_errors(result) if result.failure?
 
-    @config = config
+    @config = Config.new(**result.to_h)
   end
 
   def upload_file(data, file_path)

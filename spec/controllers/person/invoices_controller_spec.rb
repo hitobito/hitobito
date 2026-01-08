@@ -29,9 +29,20 @@ describe Person::InvoicesController do
     end
 
     it "may sort invoices" do
-      sign_in(top_leader)
       get :index, params: {group_id: group.id, id: top_leader.id, sort: :state, sort_dir: :desc}
       expect(assigns(:invoices)[0].title).to eq "Sent"
+    end
+
+    describe "rendering views" do
+      render_views
+
+      it "renders filter with default date values" do
+        get :index, params: {group_id: group.id, id: top_leader.id}
+        dom = Capybara::Node::Simple.new(response.body)
+        current_year = Time.zone.today.year
+        expect(dom).to have_field("from", with: "1.1.#{current_year}")
+        expect(dom).to have_field("to", with: "31.12.#{current_year}")
+      end
     end
   end
 end

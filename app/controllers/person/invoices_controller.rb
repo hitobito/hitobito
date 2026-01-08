@@ -7,6 +7,8 @@ class Person::InvoicesController < ListController
   self.sort_mappings = {recipient: "people.order_name ASC"}
   self.search_columns = [:title, :sequence_number]
 
+  helper_method :filter_params
+
   private
 
   def list_entries
@@ -29,5 +31,10 @@ class Person::InvoicesController < ListController
 
   def authorize_class
     authorize!(:index_invoices, person)
+  end
+
+  def filter_params
+    year = Time.zone.today.year
+    {from: params[:from] || "1.1.#{year}", to: params[:to] || "31.12.#{year}"}
   end
 end

@@ -10,6 +10,8 @@ class Contactables::InvoicesController < ListController
   self.nesting = Group
   self.optional_nesting = Person
 
+  helper_method :filter_params
+
   private
 
   def list_entries
@@ -32,5 +34,10 @@ class Contactables::InvoicesController < ListController
 
   def authorize_class
     authorize!(:index_received_invoices, contactable)
+  end
+
+  def filter_params
+    year = Time.zone.today.year
+    {from: params[:from] || "1.1.#{year}", to: params[:to] || "31.12.#{year}"}
   end
 end

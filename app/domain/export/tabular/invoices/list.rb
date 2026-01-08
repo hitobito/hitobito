@@ -24,8 +24,6 @@ module Export::Tabular::Invoices
       (INCLUDED_ATTRS + CUSTOM_METHODS + ADDRESS_ATTRS).collect(&:to_sym)
     end
 
-    def recipient_email_label = recipient_label(:email)
-
     def recipient_company_name_label = recipient_label(:company_name)
 
     def recipient_name_label = recipient_label(:name)

@@ -1170,7 +1170,7 @@ de:
           reminded: Gemahnt
           cancelled: Storniert
         recipient: Empfänger
-        recipient_email: E-Mail
+        recipient_email: Empfänger E-Mail
         recipient_company_name: Firmenname
         recipient_name: Name
         recipient_address_care_of: zusätz. Adresszeile

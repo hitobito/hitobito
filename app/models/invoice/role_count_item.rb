@@ -33,15 +33,18 @@ class Invoice::RoleCountItem < InvoiceItem
   private
 
   def group_scope
-    # If the recipient is a person, we count roles in all groups of that person.
-    return recipient.groups.select(:id) if recipient.is_a? Person
-    # If the recipient is a group, we count roles in all descendants of this group.
-    # If the recipient is nil, we count roles in all descendants of the invoice's sender group.
-    Group.find(recipient&.id || group_id).self_and_descendants.select(:id)
+    group_for_role_search.self_and_descendants.select(:id)
+  end
+
+  def group_for_role_search
+    # If the recipient is a group, we only count roles in that group's descendants.
+    return recipient if recipient&.is_a?(Group)
+    # Otherwise, we count roles in any descendant of the invoice's sender group.
+    Group.find(group_id)
   end
 
   def person_scope
-    # If the recipient is a person, we count all matching roles of that person.
+    # If the recipient is a person, we count all matching roles of that person only.
     return recipient.id if recipient.is_a? Person
     # Otherwise, we aggregate all roles regardless of the person they belong to.
     Person.all.select(:id)

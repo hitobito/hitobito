@@ -219,3 +219,9 @@ a.anchor {
   -webkit-animation: highlight 2.5s;
   animation: highlight 2.5s;
 }
+
+.with-tooltip {
+  color: darken($link-color, 20%);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}

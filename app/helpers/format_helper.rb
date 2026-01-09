@@ -172,6 +172,17 @@ module FormatHelper
       method: method)
   end
 
+  def with_tooltip(text, tooltip)
+    content_tag(
+      :a,
+      text,
+      href: "#",
+      title: tooltip,
+      class: "with-tooltip",
+      data: {bs_toggle: "tooltip", bs_placement: "bottom"}
+    )
+  end
+
   private
 
   # Helper methods that are not directly called from templates.

@@ -4,16 +4,18 @@
 //  https://github.com/hitobito/hitobito.
 
 function registerTooltips() {
-  const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  tooltipTriggerList.forEach(el => {
+  const tooltipTriggerList = Array.from(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  tooltipTriggerList.forEach((el) => {
     new Tooltip(el, {
-      placement: 'right',
-    })
-  })
+      placement: el.dataset.bsPlacement || "right",
+    });
+  });
 }
 
-document.addEventListener('DOMContentLoaded', registerTooltips);
+document.addEventListener("DOMContentLoaded", registerTooltips);
 // enable tooltip on turbo render (e.g. form submits)
-document.addEventListener('turbo:render', registerTooltips);
+document.addEventListener("turbo:render", registerTooltips);
 // enable tooltip on popover open event
 document.addEventListener("shown.bs.popover", registerTooltips);

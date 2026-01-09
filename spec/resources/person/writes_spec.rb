@@ -9,11 +9,12 @@ require "spec_helper"
 
 describe PersonResource, type: :resource do
   let(:user) { user_role.person }
+  let(:ability) { Ability.new(user) }
 
   around do |example|
     RSpec::Mocks.with_temporary_scope do
       Graphiti.with_context(double({
-        current_ability: Ability.new(user),
+        current_ability: ability,
         entry: try(:person)
       })) { example.run }
     end
@@ -127,9 +128,7 @@ describe PersonResource, type: :resource do
 
     context "without show_details permission, it" do
       before do
-        # rubocop:todo Layout/LineLength
-        skip "We currently have no roles (and indeed no permissions which we could give to roles), which grant update ability without also granting show_details ability."
-        # rubocop:enable Layout/LineLength
+        allow(ability).to receive(:can?).with(:show_details, person).and_return(false)
       end
 
       it "does not update restricted attrs" do
@@ -137,7 +136,7 @@ describe PersonResource, type: :resource do
         payload[:data][:attributes][:gender] = "w"
         payload[:data][:attributes][:birthday] = new_birthday.to_json
 
-        expect { instance.update_attributes }.to raise_error(CanCan::AccessDenied)
+        expect { instance.update_attributes }.to raise_error(Graphiti::Errors::InvalidRequest)
       end
     end
 

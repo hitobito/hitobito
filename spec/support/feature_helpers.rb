@@ -27,16 +27,6 @@ module FeatureHelpers
     fail e
   end
 
-  # catch some errors occuring now and then in capybara tests
-  def obsolete_node_safe
-    yield
-  rescue Errno::ECONNREFUSED,
-    Timeout::Error,
-    Capybara::FrozenInTime,
-    Capybara::ElementNotFound => e
-    skip e.message
-  end
-
   # due to concurrent requests in js specs, it happens that
   # stdout is not reset after silencing and thus completely disappears.
   # This method asserts the stdout is reset again after every test.

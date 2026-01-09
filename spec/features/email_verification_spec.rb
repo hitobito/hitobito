@@ -254,7 +254,6 @@ describe "Email verification", js: true do
     let(:group) { groups(:bottom_group_one_one) }
 
     before do
-      allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
       group.update!(self_registration_role_type: Role::External.sti_name)
     end
 
@@ -264,9 +263,8 @@ describe "Email verification", js: true do
       fill_in "Nachname", with: "Guy"
       fill_in "Haupt-E-Mail", with: "newguy@example.com"
       first(:button, "Registrieren").click
-      # rubocop:todo Layout/LineLength
-      is_expected.to have_text "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
-      # rubocop:enable Layout/LineLength
+      is_expected.to have_text "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der " \
+        "Anleitung, wie Du Deinen Account freischalten kannst."
       expect(Person.find_by(email: "newguy@example.com").confirmed?).to be_falsey
 
       mail = find_mail_to("newguy@example.com")

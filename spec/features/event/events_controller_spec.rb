@@ -40,35 +40,33 @@ describe EventsController, js: true do
     end
 
     it "may set and remove contact from event" do
-      obsolete_node_safe do
-        sign_in
-        visit edit_path
+      sign_in
+      visit edit_path
 
-        hidden_contact_fields_visible(false)
+      hidden_contact_fields_visible(false)
 
-        # set contact
-        fill_in "Kontaktperson", with: "Top"
-        expect(find('ul[role="listbox"] li[role="option"]')).to have_content "Top Leader"
-        find('ul[role="listbox"] li[role="option"]').click
-        find("body").send_keys(:tab) # unfocus input field
-        hidden_contact_fields_visible(true)
-        click_save
+      # set contact
+      fill_in "Kontaktperson", with: "Top"
+      expect(find('ul[role="listbox"] li[role="option"]')).to have_content "Top Leader"
+      find('ul[role="listbox"] li[role="option"]').click
+      find("body").send_keys(:tab) # unfocus input field
+      hidden_contact_fields_visible(true)
+      click_save
 
-        # show event
-        expect(find("aside")).to have_content "Kontakt"
-        expect(find("aside")).to have_content "Top Leader"
-        click_link "Bearbeiten"
-        hidden_contact_fields_visible(true)
+      # show event
+      expect(find("aside")).to have_content "Kontakt"
+      expect(find("aside")).to have_content "Top Leader"
+      click_link "Bearbeiten"
+      hidden_contact_fields_visible(true)
 
-        # remove contact
-        expect(find("#event_contact").value).to eq("Top Leader")
-        fill_in "Kontaktperson", with: ""
-        hidden_contact_fields_visible(false)
-        click_save
+      # remove contact
+      expect(find("#event_contact").value).to eq("Top Leader")
+      fill_in "Kontaktperson", with: ""
+      hidden_contact_fields_visible(false)
+      click_save
 
-        # show event again
-        expect(page).to have_no_selector(".contactable")
-      end
+      # show event again
+      expect(page).to have_no_selector(".contactable")
     end
 
     it "shows no results message for contact and does not interact with message click" do
@@ -94,8 +92,7 @@ describe EventsController, js: true do
       expect(notification_checkbox).not_to be_checked
       notification_checkbox.click
       click_save
-
-      visit edit_path
+      click_on "Bearbeiten"
       expect(notification_checkbox).to be_checked
     end
   end
@@ -112,18 +109,14 @@ describe EventsController, js: true do
     end
 
     it "fills default description if empty" do
-      obsolete_node_safe do
-        select "SLK (Scharleiterkurs)", from: "event_kind_id"
-        expect(find("#event_description").value).to eq event.kind.general_information
-      end
+      select "SLK (Scharleiterkurs)", from: "event_kind_id"
+      expect(find("#event_description").value).to eq event.kind.general_information
     end
 
     it "does not fill textarea" do
-      obsolete_node_safe do
-        fill_in "event_description", with: prefill_description
-        select "SLK (Scharleiterkurs)", from: "event_kind_id"
-        expect(find("#event_description").value).to eq prefill_description
-      end
+      fill_in "event_description", with: prefill_description
+      select "SLK (Scharleiterkurs)", from: "event_kind_id"
+      expect(find("#event_description").value).to eq prefill_description
     end
   end
 

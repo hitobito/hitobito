@@ -80,69 +80,63 @@ describe RolesController, js: true do
   end
 
   it "toggles people fields" do
-    obsolete_node_safe do
-      sign_in
-      visit new_group_role_path(group_id: group.id)
-      is_expected.to have_content("Person hinzufügen")
-      is_expected.to have_selector("#role_person", visible: true)
-      is_expected.to have_selector("#role_new_person_first_name", visible: false)
+    sign_in
+    visit new_group_role_path(group_id: group.id)
+    is_expected.to have_content("Person hinzufügen")
+    is_expected.to have_selector("#role_person", visible: true)
+    is_expected.to have_selector("#role_new_person_first_name", visible: false)
 
-      click_link("Neue Person erfassen")
-      is_expected.to have_selector("#role_person", visible: false)
-      is_expected.to have_selector("#role_new_person_first_name", visible: true)
+    click_link("Neue Person erfassen")
+    is_expected.to have_selector("#role_person", visible: false)
+    is_expected.to have_selector("#role_new_person_first_name", visible: true)
 
-      click_link("Bestehende Person suchen")
-      is_expected.to have_selector("#role_person", visible: true)
-      is_expected.to have_selector("#role_new_person_first_name", visible: false)
-    end
+    click_link("Bestehende Person suchen")
+    is_expected.to have_selector("#role_person", visible: true)
+    is_expected.to have_selector("#role_new_person_first_name", visible: false)
   end
 
   it "uses existing person when given" do
-    obsolete_node_safe do
-      sign_in
-      visit new_group_role_path(group_id: group.id)
+    sign_in
+    visit new_group_role_path(group_id: group.id)
 
-      expect(page).to have_css("#role_type_select #role_type")
-      find("#role_type_select #role_type").click
-      find("#role_type_select #role_type").find("option", text: "Leader").click
+    expect(page).to have_css("#role_type_select #role_type")
+    find("#role_type_select #role_type").click
+    find("#role_type_select #role_type").find("option", text: "Leader").click
 
-      # test user clicking around first
-      click_link("Neue Person erfassen")
-      fill_in("Vorname", with: "Tester")
+    # test user clicking around first
+    click_link("Neue Person erfassen")
+    fill_in("Vorname", with: "Tester")
 
-      # now search existing person
-      click_link("Bestehende Person suchen")
-      fill_in "Person", with: "Top"
-      page.find('ul[role="listbox"] li[role="option"]').click
+    # now search existing person
+    click_link("Bestehende Person suchen")
+    fill_in "Person", with: "Top"
+    page.find('ul[role="listbox"] li[role="option"]').click
 
-      all("form .btn-group").first.click_button "Speichern"
-      is_expected.to have_content "Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt."
-      expect(current_path).to eq(group_people_path(group))
-    end
+    all("form .btn-group").first.click_button "Speichern"
+    is_expected.to have_content "Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt."
+    expect(current_path).to eq(group_people_path(group))
   end
 
   def create_new_person(company: false) # rubocop:todo Metrics/AbcSize
-    obsolete_node_safe do
-      sign_in
-      visit new_group_role_path(group_id: group.id)
+    sign_in
+    visit new_group_role_path(group_id: group.id)
 
-      find("#role_type_select #role_type").click
-      find("#role_type_select #role_type").find("option", text: "Leader").click
+    find("#role_type_select #role_type").click
+    find("#role_type_select #role_type").find("option", text: "Leader").click
 
-      # test user clicking around first
-      fill_in "Person", with: "Top"
-      sleep(0.5)
-      find('ul[role="listbox"] li[role="option"]').click
+    # test user clicking around first
+    fill_in "Person", with: "Top"
+    sleep(0.5)
+    find('ul[role="listbox"] li[role="option"]').click
 
-      # now define new person
-      click_link("Neue Person erfassen")
-      fill_in("Vorname", with: "Tester")
-      check("Firma") if company
+    # now define new person
+    click_link("Neue Person erfassen")
+    fill_in("Vorname", with: "Tester")
+    check("Firma") if company
 
-      all("form .btn-group").first.click_button "Speichern"
+    all("form .btn-group").first.click_button "Speichern"
 
-      expect(current_path).not_to eq(group_people_path(group))
-    end
+    expect(current_path).not_to eq(group_people_path(group))
   end
 
   it "creates new person when fields filled" do
@@ -156,111 +150,104 @@ describe RolesController, js: true do
   end
 
   it "updates info when type changes" do
-    obsolete_node_safe do
-      sign_in
-      visit new_group_role_path(group_id: group.id)
+    sign_in
+    visit new_group_role_path(group_id: group.id)
 
-      find("#role_type_select #role_type").click
-      find("#role_type_select #role_type").find("option", text: "Leader").click
+    find("#role_type_select #role_type").click
+    find("#role_type_select #role_type").find("option", text: "Leader").click
 
-      expect(find("#role_info")).to have_content("Die Rolle Leader in der Gruppe TopGroup")
+    expect(find("#role_info")).to have_content("Die Rolle Leader in der Gruppe TopGroup")
 
-      find("#role_type_select #role_type").click
-      find("#role_type_select #role_type").find("option", text: "Member").click
+    find("#role_type_select #role_type").click
+    find("#role_type_select #role_type").find("option", text: "Member").click
 
-      expect(find("#role_info")).to have_content("Die Rolle Member in der Gruppe TopGroup")
-    end
+    expect(find("#role_info")).to have_content("Die Rolle Member in der Gruppe TopGroup")
   end
 
   it "updates role types when group changes" do
     allow_any_instance_of(GroupDecorator).to receive(:can?).and_return(true)
 
-    obsolete_node_safe do
-      sign_in
-      visit new_group_role_path(group_id: group.id)
+    sign_in
+    visit new_group_role_path(group_id: group.id)
 
-      # fill person
-      fill_in "Person", with: "Top"
-      page.find('ul[role="listbox"] li[role="option"]').click
+    # fill person
+    fill_in "Person", with: "Top"
+    page.find('ul[role="listbox"] li[role="option"]').click
 
-      expect(all("#role_group_id option", visible: false).size).to eq(3)
-      expect(all("#role_type option", visible: false).size).to eq(9)
+    expect(all("#role_group_id option", visible: false).size).to eq(3)
+    expect(all("#role_type option", visible: false).size).to eq(9)
 
-      # select role that will be discarded
-      find("#role_type_select #role_type").click
-      find("#role_type_select #role_type").find("option", text: "Leader").click
+    # select role that will be discarded
+    find("#role_type_select #role_type").click
+    find("#role_type_select #role_type").find("option", text: "Leader").click
+    expect(page).to have_css "#role_info .well"
 
-      # select group
-      find("#role_group_id").click
-      find("#role_group_id").find("option", text: "Toppers").click
+    # change group
+    find("#role_group_id").click
+    find("#role_group_id").find("option", text: "Toppers").click
 
-      expect(find("#role_type-ts-control")["placeholder"]).to eq("Bitte auswählen")
-      expect(all("#role_type option", visible: false).size).to eq(4)
+    expect(page).not_to have_css "#role_info .well"
+    expect(all("#role_type option", visible: false).size).to eq(4)
 
-      # select roleactiv
-      find(".ts-control").click
-      find("#role_type_select #role_type").find("option", text: "Member").click
+    # select roleactiv
+    find("#role_type_select #role_type").find("option", text: "Member").click
 
-      expect(find("#role_info")).to have_content("Die Rolle Member in der Gruppe Toppers")
+    expect(find("#role_info")).to have_content("Die Rolle Member in der Gruppe Toppers")
 
-      # save
-      all("form .btn-group").first.click_button "Speichern"
+    # save
+    all("form .btn-group").first.click_button "Speichern"
 
-      is_expected.to have_content "Rolle Member für Top Leader in Toppers wurde erfolgreich erstellt."
-      expect(current_path).to eq(group_people_path(groups(:toppers)))
-    end
+    is_expected.to have_content "Rolle Member für Top Leader in Toppers wurde erfolgreich erstellt."
+    expect(current_path).to eq(group_people_path(groups(:toppers)))
   end
 
   it "updates person role with popupmenu" do
-    obsolete_node_safe do
-      sign_in
+    sign_in
 
-      # Add additional role to first person
-      visit group_people_path(group_id: group.id)
-      find(:css, "#ids_[value='#{role1.person.id}']").set(true)
-      find(:css, "#ids_[value='#{role2.person.id}']").set(true)
+    # Add additional role to first person
+    visit group_people_path(group_id: group.id)
+    find(:css, "#ids_[value='#{role1.person.id}']").set(true)
+    find(:css, "#ids_[value='#{role2.person.id}']").set(true)
 
-      find(".dropdown-toggle", text: "Rollen").click
-      find("a.dropdown-item", text: "Rolle hinzufügen").click
+    find(".dropdown-toggle", text: "Rollen").click
+    find("a.dropdown-item", text: "Rolle hinzufügen").click
 
-      select("Leader", from: "role_type")
-      expect(page).to have_button "2 Rollen erstellen"
-      find("button", text: "2 Rollen erstellen").click
+    select("Leader", from: "role_type")
+    expect(page).to have_button "2 Rollen erstellen"
+    find("button", text: "2 Rollen erstellen").click
 
-      is_expected.to have_content("2 Rollen wurden erstellt")
-      is_expected.to have_css("tr#person_#{role1.person.id} td p", text: "Leader")
-      is_expected.to have_css("tr#person_#{role2.person.id} td p", text: "Leader")
+    is_expected.to have_content("2 Rollen wurden erstellt")
+    is_expected.to have_css("tr#person_#{role1.person.id} td p", text: "Leader")
+    is_expected.to have_css("tr#person_#{role2.person.id} td p", text: "Leader")
 
-      person_with_two_roles = role1.person
-      person_with_two_roles_row = find("tr#person_#{person_with_two_roles.id}")
+    person_with_two_roles = role1.person
+    person_with_two_roles_row = find("tr#person_#{person_with_two_roles.id}")
 
-      # Expect to have people table with person above
-      is_expected.to have_selector("div.table-responsive")
-      is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: "Leader")
-      is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: "Member")
+    # Expect to have people table with person above
+    is_expected.to have_selector("div.table-responsive")
+    is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: "Leader")
+    is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: "Member")
 
-      # Click person row to alter role of person and expect role popup
-      person_with_two_roles_row.find_all('a[title="Bearbeiten"]').first.click
-      is_expected.to have_css("div.popover")
+    # Click person row to alter role of person and expect role popup
+    person_with_two_roles_row.find_all('a[title="Bearbeiten"]').first.click
+    is_expected.to have_css("div.popover")
 
-      # Change role
-      find("div.popover div#role_type_select").click
-      is_expected.to have_css("div.popover option", visible: true)
+    # Change role
+    find("div.popover div#role_type_select").click
+    is_expected.to have_css("div.popover option", visible: true)
 
-      find("div.popover select#role_type").click
-      all("div.popover option").last.click
+    find("div.popover select#role_type").click
+    select "External"
 
-      # Click save
-      find('button[data-disable-with="Speichern"]').click
+    within(".popover") { click_on "Speichern" }
 
-      # Expect role Leader and External
-      is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: "Leader")
-      is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: "External")
+    # Expect role Leader and External
+    is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: "Leader")
+    is_expected.to have_css("tr#person_#{person_with_two_roles.id} td p", text: "External")
 
-      # Expect role field to have no more roles than person has in db
-      person_db_role_count = person_with_two_roles.roles.count
-      expect(person_with_two_roles_row.find_all("td > p > span").count).to eq(person_db_role_count)
-    end
+    # Expect role field to have no more roles than person has in db
+    person_db_role_count = person_with_two_roles.roles.count
+    expect(person_with_two_roles_row.find_all("td > p > span").count).to eq(person_db_role_count)
   end
 
   context "with privacy policies in hierarchy" do
@@ -278,23 +265,21 @@ describe RolesController, js: true do
     end
 
     it "creates person if privacy policy is accepted" do
-      obsolete_node_safe do
-        sign_in
-        visit new_group_role_path(group_id: bottom_layer.id)
+      sign_in
+      visit new_group_role_path(group_id: bottom_layer.id)
 
-        click_link("Neue Person erfassen")
-        fill_in("Vorname", with: "Tester")
+      click_link("Neue Person erfassen")
+      fill_in("Vorname", with: "Tester")
 
-        is_expected.to have_content("Privacy Policy Top Layer")
-        is_expected.to have_content("Additional Policies Bottom Layer")
+      is_expected.to have_content("Privacy Policy Top Layer")
+      is_expected.to have_content("Additional Policies Bottom Layer")
 
-        find("input#role_new_person_privacy_policy_accepted").click
+      find("input#role_new_person_privacy_policy_accepted").click
 
-        all("form .btn-group").first.click_button "Speichern"
+      all("form .btn-group").first.click_button "Speichern"
 
-        expect(current_path).not_to eq(group_people_path(bottom_layer))
-        is_expected.to have_content "Rolle Leader für Tester in Bottom One wurde erfolgreich erstellt."
-      end
+      expect(current_path).not_to eq(group_people_path(bottom_layer))
+      is_expected.to have_content "Rolle Leader für Tester in Bottom One wurde erfolgreich erstellt."
     end
   end
 end

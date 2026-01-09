@@ -106,12 +106,13 @@ class InvoiceRunsController < CrudController
     super.includes(:receiver).list.where(created_at: year_filter)
   end
 
-  def return_path # rubocop:todo Metrics/AbcSize
+  def return_path # rubocop:todo Metrics/AbcSize,Metrics/MethodLength
     invoice_run_id = params[:invoice_run_id].presence
     if params[:singular]
       if invoice_run_id
-        group_invoice_run_invoice_path(parent, invoice_run_id: invoice_run_id,
-          id: invoices.first.id)
+        group_invoice_run_invoice_path(
+          parent, invoice_run_id: invoice_run_id, id: invoices.first.id
+        )
       else
         group_invoice_path(parent, invoices.first)
       end
@@ -129,7 +130,7 @@ class InvoiceRunsController < CrudController
   end
 
   def invoices
-    parent.issued_invoices.where(id: list_param(:ids))
+    Invoice::Filter.new(params).apply_or_none(parent.issued_invoices)
   end
 
   def flash_message(action: action_name, count: nil, title: nil)
@@ -149,7 +150,7 @@ class InvoiceRunsController < CrudController
   # rubocop:todo Metrics/CyclomaticComplexity
   # rubocop:todo Metrics/MethodLength
   def assign_attributes # rubocop:disable Metrics/AbcSize # rubocop:todo Metrics/MethodLength
-    if params[:ids].present?
+    if params[:ids].present? && params[:ids] != :all
       entry.recipient_ids = params[:ids]
     elsif params[:filter].present?
       entry.recipient_ids = recipient_ids_from_people_filter

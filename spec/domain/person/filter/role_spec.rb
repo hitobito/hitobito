@@ -37,12 +37,12 @@ describe Person::Filter::Role do
 
   context "filtering" do
     let(:list_filter) do
-      Person::Filter::List.new(group,
-        user,
+      Person::Filter::List.new(group, user, {
         range: range,
         filters: {
           role: {role_type_ids: role_type_ids_string}
-        })
+        }
+      })
     end
 
     let(:entries) { list_filter.entries }

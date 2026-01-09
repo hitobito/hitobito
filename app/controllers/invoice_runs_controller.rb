@@ -106,7 +106,7 @@ class InvoiceRunsController < CrudController
     super.includes(:receiver).list.where(created_at: year_filter)
   end
 
-  def return_path # rubocop:todo Metrics/AbcSize
+  def return_path # rubocop:todo Metrics/AbcSize,Metrics/MethodLength
     invoice_run_id = params[:invoice_run_id].presence
     if params[:singular]
       if invoice_run_id

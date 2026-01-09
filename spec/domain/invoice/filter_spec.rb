@@ -18,8 +18,12 @@ describe Invoice::Filter do
 
   it "filters by daterange" do
     invoice.update(issued_at: 1.year.ago)
-    filtered = Invoice::Filter.new(from: today.last_year.beginning_of_year,
-      to: today.last_year.end_of_year).apply(Invoice)
+
+    filtered = Invoice::Filter.new(
+      from: today.last_year.beginning_of_year,
+      to: today.last_year.end_of_year
+    ).apply(Invoice)
+
     expect(filtered.count).to eq 1
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_05_091145) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_08_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1043,6 +1043,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_05_091145) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["manager_id", "managed_id"], name: "index_people_managers_on_manager_id_and_managed_id", unique: true
+  end
+
+  create_table "period_invoice_template_items", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "type", null: false
+    t.string "cost_center"
+    t.string "account"
+    t.text "dynamic_cost_parameters"
+    t.bigint "period_invoice_template_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["period_invoice_template_id"], name: "idx_on_period_invoice_template_id_ffb9250706"
   end
 
   create_table "period_invoice_templates", force: :cascade do |t|

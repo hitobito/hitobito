@@ -6,10 +6,18 @@
 #  https://github.com/hitobito/hitobito.
 
 class PeriodInvoiceTemplate::RoleCountItem < PeriodInvoiceTemplate::Item
-  def initialize(fee:, key:, unit_cost:, roles:, layer_group_ids: nil)
-    super(fee:, key:, unit_cost:, layer_group_ids:)
-    @roles = roles
+  validates :role_types, presence: true
+  validates :unit_cost, money: true
+
+  def invoice_item_class
+    Invoice::RoleCountItem
   end
 
-  def scope = Role.joins(:group).where(type: @roles)
+  def role_types
+    dynamic_cost_parameters[:role_types] || []
+  end
+
+  def unit_cost
+    dynamic_cost_parameters[:unit_cost]
+  end
 end

@@ -37,7 +37,6 @@ class InvoiceItem < ActiveRecord::Base
 
   # Used to mark as dynamically calculated.
   class_attribute :dynamic
-
   self.dynamic = false
 
   # Allows to define the parameters for dynamic cost calculation.

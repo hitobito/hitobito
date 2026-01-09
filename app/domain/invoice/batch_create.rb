@@ -72,6 +72,10 @@ class Invoice::BatchCreate
     if invoice_run.fixed_fee
       invoice.invoice_items = InvoiceRuns::FixedFee.for(invoice_run.fixed_fee,
         recipient.layer_group_id).invoice_items
+      invoice.invoice_items.each do |item|
+        item.invoice = invoice
+        item.recalculate
+      end
     else
       invoice.invoice_items_attributes = invoice_items_attributes(recipient.id)
     end

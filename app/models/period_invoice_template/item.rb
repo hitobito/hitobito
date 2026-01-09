@@ -35,7 +35,6 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
           period_start_on: period_invoice_template.period_start_on,
           period_end_on: period_invoice_template.period_end_on,
         }))
-      .tap(&:recalculate)
   end
 
   def invoice_item_class

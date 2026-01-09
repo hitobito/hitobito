@@ -180,12 +180,10 @@ class InvoicesController < CrudController
 
   def list_entries
     scope = super.list.with_aggregated_payments
-    scope = scope.joins(
-      <<~SQL
-        LEFT JOIN people ON people.id = invoices.recipient_id AND invoices.recipient_type = 'Person'
-        LEFT JOIN groups ON groups.id = invoices.recipient_id AND invoices.recipient_type = 'Group'
-      SQL
-    )
+    scope = scope.joins(<<~SQL)
+      LEFT JOIN people ON people.id = invoices.recipient_id AND invoices.recipient_type = 'Person'
+      LEFT JOIN groups ON groups.id = invoices.recipient_id AND invoices.recipient_type = 'Group'
+    SQL
     scope = scope.standalone unless parents.any?(InvoiceRun)
     scope = scope.page(params[:page]) unless params[:ids]
     Invoice::Filter.new(params.merge(filter_params)).apply(scope).with_recipients

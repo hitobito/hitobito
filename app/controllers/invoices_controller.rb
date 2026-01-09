@@ -179,8 +179,7 @@ class InvoicesController < CrudController
   end
 
   def list_entries
-    # scope = super.list.with_aggregated_payments # NOTE: removing this scope resolves problems with scope.count in MultiselectHelper#extended_all_checkbox
-    scope = super.list
+    scope = super.list.with_aggregated_payments
     scope = scope.joins(
       <<~SQL
         LEFT JOIN people ON people.id = invoices.recipient_id AND invoices.recipient_type = 'Person'

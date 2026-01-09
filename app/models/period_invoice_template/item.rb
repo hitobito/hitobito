@@ -13,22 +13,15 @@
 # The invoice item templates are mostly wrappers for configuration which
 # will be passed to actual concrete invoice items when generating an invoice
 # run containing actual invoices.
-# As such, they have mostly the same columns as invoice items, and delegate
-# logic such as count and cost calculation to the invoice item class.
+# As such, they have mostly the same columns as invoice items.
+# In order to actually calculate counts and prices, the #to_invoice_item method
+# is used to get an invoice item that can perform the calculation.
 class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   serialize :dynamic_cost_parameters, type: Hash, coder: YAML
   belongs_to :period_invoice_template
 
   # This base class may not be instantiated
   validates :type, exclusion: { in: %w(PeriodInvoiceTemplate::Item) }
-
-  def count(recipient = nil)
-    to_invoice_item(recipient).count
-  end
-
-  def total_cost(recipient = nil)
-    to_invoice_item(recipient).dynamic_cost
-  end
 
   def dynamic_cost_parameter_definitions
     invoice_item_class.dynamic_cost_parameter_definitions

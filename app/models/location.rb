@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: locations
@@ -16,7 +15,6 @@
 #
 #  index_locations_on_zip_code_and_canton_and_name  (zip_code,canton,name) UNIQUE
 #
-
 class Location < ActiveRecord::Base
   validates_by_schema
   validates :name, uniqueness: {scope: [:zip_code, :canton], case_sensitive: true}

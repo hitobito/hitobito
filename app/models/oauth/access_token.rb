@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: oauth_access_tokens
@@ -28,7 +27,6 @@
 #
 #  fk_rails_...  (application_id => oauth_applications.id)
 #
-
 module Oauth
   class AccessToken < Doorkeeper::AccessToken
     belongs_to :person, foreign_key: :resource_owner_id, inverse_of: :access_tokens

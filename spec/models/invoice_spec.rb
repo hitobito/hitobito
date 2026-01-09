@@ -4,47 +4,62 @@
 #
 # Table name: invoices
 #
-#  id                  :integer          not null, primary key
-#  account_number      :string
-#  address             :text
-#  beneficiary         :text
-#  currency            :string           default("CHF"), not null
-#  description         :text
-#  due_at              :date
-#  esr_number          :string           not null
-#  hide_total          :boolean          default(FALSE), not null
-#  iban                :string
-#  issued_at           :date
-#  participant_number  :string
-#  payee               :text
-#  payment_information :text
-#  payment_purpose     :text
-#  payment_slip        :string           default("ch_es"), not null
-#  recipient_address   :text
-#  recipient_email     :string
-#  reference           :string           not null
-#  sent_at             :date
-#  sequence_number     :string           not null
-#  state               :string           default("draft"), not null
-#  title               :string           not null
-#  total               :decimal(12, 2)
-#  vat_number          :string
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  creator_id          :integer
-#  group_id            :integer          not null
-#  invoice_run_id     :bigint
-#  recipient_id        :integer
+#  id                           :integer          not null, primary key
+#  account_number               :string
+#  address                      :text
+#  beneficiary                  :text
+#  currency                     :string           default("CHF"), not null
+#  deprecated_payee             :text
+#  deprecated_recipient_address :text
+#  description                  :text
+#  due_at                       :date
+#  esr_number                   :string           not null
+#  hide_total                   :boolean          default(FALSE), not null
+#  iban                         :string
+#  issued_at                    :date
+#  participant_number           :string
+#  payee_country                :string
+#  payee_housenumber            :string
+#  payee_name                   :string
+#  payee_street                 :string
+#  payee_town                   :string
+#  payee_zip_code               :string
+#  payment_information          :text
+#  payment_purpose              :text
+#  payment_slip                 :string           default("ch_es"), not null
+#  recipient_address_care_of    :string
+#  recipient_company_name       :string
+#  recipient_country            :string
+#  recipient_email              :string
+#  recipient_housenumber        :string
+#  recipient_name               :string
+#  recipient_postbox            :string
+#  recipient_street             :string
+#  recipient_town               :string
+#  recipient_type               :string
+#  recipient_zip_code           :string
+#  reference                    :string           not null
+#  sent_at                      :date
+#  sequence_number              :string           not null
+#  state                        :string           default("draft"), not null
+#  title                        :string           not null
+#  total                        :decimal(12, 2)
+#  vat_number                   :string
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  creator_id                   :integer
+#  group_id                     :integer          not null
+#  invoice_run_id               :bigint
+#  recipient_id                 :integer
 #
 # Indexes
 #
-#  index_invoices_on_esr_number       (esr_number)
-#  index_invoices_on_group_id         (group_id)
-#  index_invoices_on_invoice_run_id  (invoice_run_id)
-#  index_invoices_on_recipient_id     (recipient_id)
-#  index_invoices_on_sequence_number  (sequence_number)
+#  index_invoices_on_esr_number                       (esr_number)
+#  index_invoices_on_group_id                         (group_id)
+#  index_invoices_on_invoice_run_id                   (invoice_run_id)
+#  index_invoices_on_recipient_type_and_recipient_id  (recipient_type,recipient_id)
+#  index_invoices_on_sequence_number                  (sequence_number)
 #
-
 require "spec_helper"
 
 describe Invoice do

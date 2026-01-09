@@ -4,14 +4,12 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: people
 #
 #  id                                   :integer          not null, primary key
 #  additional_information               :text
-#  address                              :string(1024)
 #  address_care_of                      :string
 #  authentication_token                 :string
 #  birthday                             :date
@@ -79,13 +77,11 @@
 #  index_people_on_reset_password_token         (reset_password_token) UNIQUE
 #  index_people_on_self_registration_reason_id  (self_registration_reason_id)
 #  index_people_on_unlock_token                 (unlock_token) UNIQUE
-#  people_search_column_gin_idx                 (search_column) USING gin
 #
 # Foreign Keys
 #
 #  fk_rails_...  (self_registration_reason_id => self_registration_reasons.id)
 #
-
 require "spec_helper"
 
 describe PeopleSerializer do

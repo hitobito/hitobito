@@ -19,7 +19,6 @@
 #
 #  index_invoice_articles_on_number_and_group_id  (number,group_id) UNIQUE
 #
-
 require "spec_helper"
 
 RSpec.describe InvoiceArticle, type: :model do

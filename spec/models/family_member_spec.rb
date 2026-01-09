@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+#
 # == Schema Information
 #
 # Table name: family_members
@@ -17,7 +18,6 @@
 #  index_family_members_on_person_id               (person_id)
 #  index_family_members_on_person_id_and_other_id  (person_id,other_id) UNIQUE
 #
-
 require "spec_helper"
 
 describe FamilyMember do

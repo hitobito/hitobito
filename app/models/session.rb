@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: sessions
@@ -11,14 +10,15 @@
 #  data       :text
 #  created_at :datetime
 #  updated_at :datetime
+#  person_id  :bigint
 #  session_id :string           not null
 #
 # Indexes
 #
+#  index_sessions_on_person_id   (person_id)
 #  index_sessions_on_session_id  (session_id)
 #  index_sessions_on_updated_at  (updated_at)
 #
-
 class Session < ActiveRecord::SessionStore::Session
   before_save :set_person_id
 

@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_dates
@@ -19,7 +18,6 @@
 #  index_event_dates_on_event_id               (event_id)
 #  index_event_dates_on_event_id_and_start_at  (event_id,start_at)
 #
-
 class Event::Date < ActiveRecord::Base
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at

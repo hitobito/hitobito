@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: invoice_articles
@@ -24,7 +23,6 @@
 #
 #  index_invoice_articles_on_number_and_group_id  (number,group_id) UNIQUE
 #
-
 class InvoiceArticle < ActiveRecord::Base
   belongs_to :group
 

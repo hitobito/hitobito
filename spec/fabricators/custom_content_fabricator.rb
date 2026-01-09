@@ -7,7 +7,7 @@
 #  id                    :integer          not null, primary key
 #  context_type          :string
 #  key                   :string           not null
-#  label                 :string           not null
+#  label                 :string
 #  placeholders_optional :string
 #  placeholders_required :string
 #  subject               :string
@@ -17,7 +17,6 @@
 #
 #  index_custom_contents_on_context  (context_type,context_id)
 #
-
 Fabricator(:custom_content) do
   key { sequence(:key) { |i| "key#{i}" } }
   label { sequence(:label) { |i| "label#{i}" } }

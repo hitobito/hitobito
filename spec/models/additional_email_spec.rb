@@ -17,12 +17,9 @@
 #
 # Indexes
 #
-# rubocop:todo Layout/LineLength
-#  idx_on_invoices_contactable_id_contactable_type_9f308c8a16      (invoices,contactable_id,contactable_type) WHERE (((contactable_type)::text = 'AdditionalEmail'::text) AND (invoices = true))
-# rubocop:enable Layout/LineLength
 #  index_additional_emails_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
+#  index_additional_emails_on_contactable_where_invoices_true      (contactable_id,contactable_type) UNIQUE WHERE (invoices = true)
 #
-
 require "spec_helper"
 
 describe AdditionalEmail do

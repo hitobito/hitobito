@@ -33,6 +33,12 @@ module Sheet
           view.can?(:"index_event/courses", group)
       end)
 
+    FeatureGate.if("groups.period_invoice_templates") do
+      tab "activerecord.models.invoice.other",
+        :group_received_invoices_path,
+        params: {returning: true}
+    end
+
     tab "activerecord.models.mailing_list.other",
       :group_mailing_lists_path,
       params: {returning: true},

@@ -8,34 +8,61 @@
 require "spec_helper"
 
 describe PeriodInvoiceTemplate::RoleCountItem do
-  # TODO migrate this spec after change from domain class to model
-
-  let(:attrs) {
-    {fee: :membership, key: :members, unit_cost: 10, roles: [
-      Group::BottomLayer::Member.sti_name
-    ]}
-  }
-
-  subject(:item) { described_class.new(**attrs) }
-
-  it "#to_invoice_item has translated name and key for fixed fees" do
-    expect(item.to_invoice_item.name).to eq "Mitgliedsbeitrag - Members"
-    expect(item.to_invoice_item.dynamic_cost_parameters[:fixed_fees]).to eq :membership
+  let(:period_invoice_template) { Fabricate(:period_invoice_template) }
+  subject(:item) do
+    described_class.new(
+      period_invoice_template:,
+      account: "1234",
+      cost_center: "5678",
+      name: "invoice item",
+      dynamic_cost_parameters: {
+        role_types: [Group::TopGroup::Leader.name],
+        unit_cost: 10.50
+      }
+    )
   end
 
-  describe "#models" do
-    it "finds only configured models" do
-      expect(item.models).to eq [roles(:bottom_member)]
+  context "validation" do
+    it "is valid" do
+      expect(item).to be_valid
     end
 
-    it "includes models inside layer" do
-      item = described_class.new(**attrs.merge(layer_group_ids: [groups(:bottom_layer_one).id]))
-      expect(item.models).to eq [roles(:bottom_member)]
+    it "is invalid without role types" do
+      item.dynamic_cost_parameters[:role_types] = nil
+      expect(item).not_to be_valid
     end
 
-    it "exludes models outside of layer" do
-      item = described_class.new(**attrs.merge(layer_group_ids: [groups(:bottom_layer_two).id]))
-      expect(item.models).to be_empty
+    it "is invalid with wrong unit_cost value" do
+      item.dynamic_cost_parameters[:unit_cost] = "foobar"
+      expect(item).not_to be_valid
+    end
+
+    it "is invalid with nil unit_cost" do
+      item.dynamic_cost_parameters[:unit_cost] = nil
+      expect(item).not_to be_valid
+    end
+  end
+
+  context "to_invoice_item" do
+    it "passes on params" do
+      result = item.to_invoice_item
+      expect(result).to be_an_instance_of(Invoice::RoleCountItem)
+      expect(result.attributes.with_indifferent_access).to include({
+        dynamic_cost_parameters: {
+          group_id: period_invoice_template.group_id,
+          period_start_on: period_invoice_template.start_on,
+          period_end_on: period_invoice_template.end_on,
+          role_types: [Group::TopGroup::Leader.name],
+          unit_cost: 10.50,
+        },
+      })
+      expect(result.attributes).to include(item.attributes.slice(:account, :cost_center, :name))
+    end
+  end
+
+  context "invoice_item_class" do
+    it "returns the invoice item class" do
+      expect(item.invoice_item_class).to eq(Invoice::RoleCountItem)
     end
   end
 end

@@ -8,38 +8,44 @@
 require "spec_helper"
 
 describe PeriodInvoiceTemplate::Item do
-  # TODO migrate this spec after change from domain class to model
+  let(:period_invoice_template) { Fabricate(:period_invoice_template) }
+  subject(:item) do
+    described_class.new(
+      period_invoice_template:,
+      type: "PeriodInvoiceTemplate::Item",
+      account: "1234",
+      cost_center: "5678",
+      name: "invoice item"
+    )
+  end
 
-  let(:attrs) { {fee: :membership, key: :members, unit_cost: 10, layer_group_ids: nil} }
-
-  subject(:item) { described_class.new(**attrs) }
-
-  describe "with models" do
-    subject(:invoice_item) { item.to_invoice_item }
-
-    before { allow(item).to receive(:models).and_return(Role.joins(:group)) }
-
-    it "uses models for counts, presence and total_cost" do
-      expect(item.count).to eq 2
-      expect(item).to be_present
-      expect(item.total_cost).to eq 20
-    end
-
-    it "can build invoice item" do
-      expect(invoice_item).to be_kind_of(Invoice::RoleCountItem)
-      expect(invoice_item.unit_cost).to eq 10
-      expect(invoice_item.count).to eq 2
-      expect(invoice_item.cost).to eq 20
-      expect(invoice_item.dynamic_cost_parameters[:fixed_fees]).to eq :membership
-      expect(invoice_item.read_attribute(:name)).to eq "members"
-      expect(invoice_item.name).to eq "Mitgliedsbeitrag - Members"
+  context "validation" do
+    it "is invalid if instantiated as the abstract base class" do
+      expect(item).not_to be_valid
     end
   end
 
-  it "is not present with empty count" do
-    allow(item).to receive(:models).and_return(Role.none)
-    expect(item).not_to be_present
-    expect(item.count).to eq 0
-    expect(item.total_cost).to eq 0
+  context "to_invoice_item" do
+    it "passes on params by default" do
+      expect(item).to receive(:invoice_item_class).and_return(InvoiceItem)
+      result = item.to_invoice_item
+      expect(result).to be_an_instance_of(InvoiceItem)
+      expect(result.attributes.with_indifferent_access).to include({
+        dynamic_cost_parameters: {
+          group_id: period_invoice_template.group_id,
+          period_start_on: period_invoice_template.start_on,
+          period_end_on: period_invoice_template.end_on
+        },
+      })
+      expect(result.attributes).to include(item.attributes.slice(:account, :cost_center, :name))
+    end
+  end
+
+  context "invoice_item_class" do
+    it "calculates the invoice item class automatically" do
+      expect { item.invoice_item_class }.to raise_error(
+        NameError, "uninitialized constant Invoice::Item"
+      )
+    end
   end
 end

@@ -7,7 +7,8 @@
 
 require "spec_helper"
 
-describe Invoice::CalculatedItem do
+describe Invoice::DynamicItem do
+  # TODO move what's useful from this obsolete spec to another place
   subject(:item) { described_class.new }
 
   describe "#name" do

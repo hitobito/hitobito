@@ -156,12 +156,12 @@ describe Invoice::BatchCreate do
       end.to change { group.invoice_items.count }.by(2)
       leaders, members = run.invoices.last.invoice_items.order(:name)
 
-      expect(leaders).to be_kind_of(Invoice::CalculatedItem)
+      expect(leaders).to be_kind_of(Invoice::RoleCountItem)
       expect(leaders.count).to eq 1
       expect(leaders.cost).to eq 15
       expect(leaders.dynamic_cost_parameters[:fixed_fees]).to eq "membership"
 
-      expect(members).to be_kind_of(Invoice::CalculatedItem)
+      expect(members).to be_kind_of(Invoice::RoleCountItem)
       expect(members.count).to eq 2
       expect(members.cost).to eq 20
       expect(members.dynamic_cost_parameters[:fixed_fees]).to eq "membership"

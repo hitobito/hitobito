@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Invoice::RoleCountItem < Invoice::CalculatedItem
+class Invoice::RoleCountItem < InvoiceItem
   attr_accessor :roles
 
   has_many :billed_models,

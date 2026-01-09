@@ -19,6 +19,10 @@ module Person::DeviseOverrides
     end
   end
 
+  def send_unlock_instructions
+    super if email?
+  end
+
   # from lib/devise/models/recoverable.rb
   def send_reset_password_instructions
     persisted? && super

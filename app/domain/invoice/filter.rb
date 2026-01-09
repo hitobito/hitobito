@@ -13,7 +13,7 @@ class Invoice::Filter
   end
 
   def apply(scope)
-    return scope.none if no_params_set?
+    return scope if no_params_set?
 
     scope = apply_scope(scope, params[:state], Invoice::STATES)
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
@@ -22,6 +22,14 @@ class Invoice::Filter
     scope = scope.draft_or_issued(from: params[:from], to: params[:to])
 
     cancelled? ? scope : scope.visible
+  end
+
+  def apply_or_none(scope)
+    if no_params_set?
+      scope.none
+    else
+      apply(scope)
+    end
   end
 
   private

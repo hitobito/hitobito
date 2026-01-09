@@ -26,7 +26,7 @@ describe PeriodInvoiceTemplate::Item do
     end
 
     it "can build invoice item" do
-      expect(invoice_item).to be_kind_of(Invoice::CalculatedItem)
+      expect(invoice_item).to be_kind_of(Invoice::RoleCountItem)
       expect(invoice_item.unit_cost).to eq 10
       expect(invoice_item.count).to eq 2
       expect(invoice_item.cost).to eq 20

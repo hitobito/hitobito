@@ -37,7 +37,7 @@ class Invoice::Filter
   def no_params_set?
     possible_keys = %w[state due_since ids invoice_run_id from to]
 
-    (params.keys & possible_keys).none?
+    (params.keys.map(&:to_s) & possible_keys).none?
   end
 
   def apply_scope(relation, scope, valid_scopes)

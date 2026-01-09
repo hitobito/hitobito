@@ -32,8 +32,8 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
       .new(name:, cost_center:, account:,
         dynamic_cost_parameters: dynamic_cost_parameters.merge({
           group_id: period_invoice_template.group_id,
-          period_start_on: period_invoice_template.period_start_on,
-          period_end_on: period_invoice_template.period_end_on,
+          period_start_on: period_invoice_template.start_on,
+          period_end_on: period_invoice_template.end_on,
         }))
   end
 

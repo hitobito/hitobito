@@ -17,6 +17,7 @@
         = nav PeriodInvoiceTemplate.model_name.human(count: 2), group_period_invoice_templates_path(layer_id), %w(period_invoice_templates)
       = nav t('navigation.invoices/evaluations'), group_invoices_evaluations_path(layer_id), %w(invoice_evaluations)
       = nav InvoiceArticle.model_name.human(count: 2), group_invoice_articles_path(layer_id), %w(invoice_articles)
+      = render_extensions :nav_left, locals: { layer_id: layer_id }
       = nav t('navigation.admin'), group_invoice_config_path(layer_id), %w(invoice_config)
     .divider
 

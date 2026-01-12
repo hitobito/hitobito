@@ -19,7 +19,7 @@
 - Es können jetzt Hilfetexte für Radio Buttons, Dropdowns, Personenfelder und weitere Arten von Feldern angezeigt werden (#967)
 - Neue Berechtigung `layer_and_below_finance` für die Rechnungsverwaltung auf mehreren Ebenen (hitobito_sww#311)
 - Es können jetzt Sammelrechnungen erfasst werden (#3748)
-- Gruppen haben neu ein Tab für erhaltenen Rechnungen (#3856)
+- Gruppen haben neu ein Tab welches alle Rechnungen anzeigt, die direkt an diese Gruppe gesendet wurden (#3856)
 
 ## Version 2.7
 

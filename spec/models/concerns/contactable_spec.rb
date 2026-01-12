@@ -62,9 +62,9 @@ describe Contactable do
       expect(group.invoice_email).to eq "foo@bar.com"
     end
 
-    it "returns nil when no additional_email with invoice_flag" do
+    it "returns group primary email when no additional_email with invoice_flag" do
       group.additional_emails.create!(email: "foo@bar.com", contactable: group, label: "Privat", invoices: false)
-      expect(group.invoice_email).to be_nil
+      expect(group.invoice_email).to eq group.email
     end
   end
 end

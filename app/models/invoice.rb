@@ -364,14 +364,14 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def set_recipient_fields!
-    self.recipient_email = recipient.invoice_email || recipient.email
+    self.recipient_email = recipient.invoice_email
 
     attributes = Contactable::Address.new(recipient).invoice_recipient_address_attributes
     assign_attributes(attributes)
   end
 
   def set_recipient_fields
-    self.recipient_email ||= recipient.invoice_email || recipient.email
+    self.recipient_email ||= recipient.invoice_email
 
     attributes = Contactable::Address.new(recipient).invoice_recipient_address_attributes
     assign_attributes(attributes.select { |key, _| send(key).nil? })

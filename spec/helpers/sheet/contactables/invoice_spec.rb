@@ -13,8 +13,8 @@ describe Sheet::Contactables::Invoice do
       allow(view_context).to receive(:parent).and_return(people(:top_leader))
     end
 
-    it "#parent_sheet_class does return Sheet::Person" do
-      expect(described_class.parent_sheet_class(view_context)).to eq Sheet::Person
+    it "#parent_sheet_for does return Sheet::Person" do
+      expect(described_class.parent_sheet_for(view_context)).to eq Sheet::Person
     end
   end
 
@@ -23,8 +23,8 @@ describe Sheet::Contactables::Invoice do
       allow(view_context).to receive(:parent).and_return(groups(:top_layer))
     end
 
-    it "#parent_sheet_class does return Sheet::Group" do
-      expect(described_class.parent_sheet_class(view_context)).to eq Sheet::Group
+    it "#parent_sheet_for does return Sheet::Group" do
+      expect(described_class.parent_sheet_for(view_context)).to eq Sheet::Group
     end
   end
 end

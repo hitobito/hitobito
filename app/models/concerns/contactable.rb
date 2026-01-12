@@ -68,7 +68,7 @@ module Contactable
   end
 
   def invoice_email
-    additional_emails.find(&:invoices?)&.email
+    additional_emails.find(&:invoices?)&.email || email
   end
 
   private

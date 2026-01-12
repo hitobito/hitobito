@@ -108,6 +108,6 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def invoice_email(person)
-    person.invoice_email || person.email
+    person.invoice_email
   end
 end

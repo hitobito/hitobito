@@ -30,8 +30,12 @@ module Sheet
       end
 
       def current(view_context)
-        sheet_class = current_sheet_class(view_context)
-        sheet_class.new(view_context)
+        current_sheet_class(view_context).new(view_context)
+      end
+
+      # meant to be overridden to determine parent_sheet_class based on view_context
+      def parent_sheet_class(view_context)
+        parent_sheet
       end
 
       private
@@ -41,11 +45,10 @@ module Sheet
       end
 
       def sheet_for_controller(view_context)
-        sheet_class = controller_sheet_class(view_context.controller)
-        if view_context.action_name == "index" && sheet_class.parent_sheet
-          sheet_class = sheet_class.parent_sheet
+        controller_sheet_class(view_context.controller).then do |sheet|
+          parent = sheet.parent_sheet_class(view_context)
+          (view_context.action_name == "index" && parent) ? parent : sheet
         end
-        sheet_class
       end
 
       def controller_sheet_class(controller)

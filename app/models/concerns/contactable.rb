@@ -67,6 +67,10 @@ module Contactable
     validate :assert_additional_address_labels_are_unique, if: -> { additional_addresses.any? }
   end
 
+  def invoice_email
+    additional_emails.find(&:invoices?)&.email
+  end
+
   private
 
   def set_self_in_nested

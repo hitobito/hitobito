@@ -11,11 +11,12 @@ describe Export::Pdf::Invoice do
   let(:invoice) { invoices(:invoice) }
   let(:sent) { invoices(:sent) }
   let(:person) { people(:top_leader) }
+  let(:group) { groups(:top_layer) }
 
   let(:pdf) { described_class.render(invoice, payment_slip: true, articles: true, reminders: false) }
 
   def build_invoice(attrs)
-    Invoice.new(attrs.reverse_merge(group: groups(:top_layer)))
+    Invoice.new(attrs.reverse_merge(group: group))
   end
 
   context "with articles" do
@@ -41,7 +42,7 @@ describe Export::Pdf::Invoice do
         creator: person,
         vat_number: "CH 1234",
         sequence_number: "1-10",
-        group: groups(:top_layer)
+        group: group
       )
     end
 
@@ -708,6 +709,93 @@ describe Export::Pdf::Invoice do
         invoice_text.each_with_index do |text, i|
           expect(text_with_position[i]).to eq(text)
         end
+      end
+    end
+  end
+
+  context "group invoices" do
+    let(:invoice) do
+      Invoice.create!(
+        payment_slip: :qr,
+        total: 1500,
+        iban: "CH93 0076 2011 6238 5295 7",
+        reference: "RF561A",
+        esr_number: "00 00834 96356 70000 00000 00019",
+        issued_at: Date.new(2022, 9, 26),
+        due_at: Date.new(2022, 10, 26),
+        creator: person,
+        vat_number: "CH 1234",
+        sequence_number: "1-10",
+        group: group,
+        recipient: group,
+        title: "Group Invoice"
+      )
+    end
+
+    before do
+      group.update!(street: "Groupstreet", housenumber: 13, zip_code: 6767, town: "Grouptown", country: "CH")
+    end
+
+    it "renders invoice with group address" do
+      invoice_text = [
+        [57, 806, "top layer address"],
+        [347, 685, "Rechnungsnummer:"],
+        [453, 685, "834963567-1"],
+        [347, 672, "Rechnungsdatum:"],
+        [453, 672, "26.09.2022"],
+        [347, 659, "Fällig bis:"],
+        [453, 659, "26.10.2022"],
+        [347, 646, "Rechnungssteller:"],
+        [453, 646, "Top Leader"],
+        [347, 632, "MwSt. Nummer:"],
+        [453, 632, "CH 1234"],
+        [57, 686, "Top"],
+        [57, 674, "Groupstreet 13"],
+        [57, 662, "6767 Grouptown"],
+        [57, 554, "Group Invoice"],
+        [57, 521, "Rechnungsartikel"],
+        [412, 521, "Anzahl"],
+        [469, 521, "Preis"],
+        [512, 521, "Betrag"],
+        [405, 506, "Zwischenbetrag"],
+        [506, 506, "0.00 CHF"],
+        [405, 488, "Gesamtbetrag"],
+        [506, 488, "0.00 CHF"],
+        [14, 275, "Empfangsschein"],
+        [14, 251, "Konto / Zahlbar an"],
+        [14, 242, "CH93 0076 2011 6238 5295 7"],
+        [14, 233, "Hitobito AG"],
+        [14, 225, "Belpstrasse 37"],
+        [14, 216, "3007 Bern"],
+        [14, 197, "Referenznummer"],
+        [14, 189, "00 00834 96356 70000 00000 00019"],
+        [14, 170, "Zahlbar durch"],
+        [14, 161, "Top"],
+        [14, 152, "Groupstreet 13"],
+        [14, 144, "6767 Grouptown"],
+        [14, 89, "Währung"],
+        [71, 89, "Betrag"],
+        [14, 77, "CHF"],
+        [105, 39, "Annahmestelle"],
+        [190, 275, "Zahlteil"],
+        [190, 88, "Währung"],
+        [247, 88, "Betrag"],
+        [190, 76, "CHF"],
+        [346, 276, "Konto / Zahlbar an"],
+        [346, 265, "CH93 0076 2011 6238 5295 7"],
+        [346, 254, "Hitobito AG"],
+        [346, 244, "Belpstrasse 37"],
+        [346, 233, "3007 Bern"],
+        [346, 212, "Referenznummer"],
+        [346, 201, "00 00834 96356 70000 00000 00019"],
+        [346, 180, "Zahlbar durch"],
+        [346, 169, "Top"],
+        [346, 158, "Groupstreet 13"],
+        [346, 147, "6767 Grouptown"]
+      ]
+
+      invoice_text.each_with_index do |text, i|
+        expect(text_with_position[i]).to eq(text)
       end
     end
   end

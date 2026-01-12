@@ -100,7 +100,7 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def manager_emails(except: [])
-    return [] if @invoice.recipient.blank?
+    return [] if @invoice.recipient.blank? || !@invoice.recipient.is_a?(Person)
     @invoice.recipient.managers.to_a
       .map { |manager| invoice_email(manager) }
       .compact
@@ -108,6 +108,6 @@ class InvoiceMailer < ApplicationMailer
   end
 
   def invoice_email(person)
-    person.additional_emails.find(&:invoices?)&.email || person.email
+    person.invoice_email || person.email
   end
 end

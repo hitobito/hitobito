@@ -17,9 +17,9 @@
       %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_mailings')}
         = t(:"activerecord.attributes.additional_emails.mailings")
         %i.fas.fa-info
-    = f.label(:invoices, class: 'checkbox me-3') do
-      = f.check_box(:invoices)
-      %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_invoices')}
-        = t(:"activerecord.attributes.additional_emails.invoices")
-        %i.fas.fa-info
+  = f.label(:invoices, class: 'checkbox me-3') do
+    = f.check_box(:invoices)
+    %span{'data-bs-toggle': 'tooltip', title: t('.tooltip_invoices')}
+      = t(:"activerecord.attributes.additional_emails.invoices")
+      %i.fas.fa-info
   = render 'contactable/public_check_box', f: f

@@ -30,7 +30,7 @@ describe MailingLists::BulkMail::SenderRejectedMessageJob do
     expect(last_email.from).to eq(["noreply@hitobito.example.com"])
     expect(last_email.subject).to eq("Re: Testflight from 24.4.2021")
     # rubocop:todo Layout/LineLength
-    expect(last_email.body.decoded).to eq("Du bist leider nicht berechtigt auf die Liste leaders@hitobito.example.com zu schreiben.")
+    expect(last_email.body.decoded).to eq("Du bist leider nicht berechtigt, auf die Liste leaders@hitobito.example.com zu schreiben.")
     # rubocop:enable Layout/LineLength
     expect(bulk_mail.reload.raw_source).to be_nil
   end

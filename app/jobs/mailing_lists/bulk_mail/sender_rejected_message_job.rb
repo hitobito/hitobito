@@ -9,7 +9,7 @@ module MailingLists
   module BulkMail
     class SenderRejectedMessageJob < BaseMailMessageJob
       def perform
-        return unless reply_message.to.present?
+        return if reply_message.to.blank?
 
         send(reply_message)
       end

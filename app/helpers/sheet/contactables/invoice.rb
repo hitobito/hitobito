@@ -6,7 +6,11 @@
 module Sheet
   module Contactables
     class Invoice < Base
-      self.parent_sheet = Sheet::Person
+      class << self
+        def parent_sheet_for(view_context)
+          view_context.parent.is_a?(::Person) ? Sheet::Person : Sheet::Group
+        end
+      end
     end
   end
 end

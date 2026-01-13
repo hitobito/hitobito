@@ -364,14 +364,14 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def set_recipient_fields!
-    self.recipient_email = invoice_email
+    self.recipient_email = recipient.invoice_email
 
     attributes = Contactable::Address.new(recipient).invoice_recipient_address_attributes
     assign_attributes(attributes)
   end
 
   def set_recipient_fields
-    self.recipient_email ||= invoice_email
+    self.recipient_email ||= recipient.invoice_email
 
     attributes = Contactable::Address.new(recipient).invoice_recipient_address_attributes
     assign_attributes(attributes.select { |key, _| send(key).nil? })
@@ -408,9 +408,5 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def qr_id
     iban.delete(" ")[4..8].to_i
-  end
-
-  def invoice_email
-    recipient.additional_emails.find(&:invoices?)&.email || recipient.email
   end
 end

@@ -29,7 +29,9 @@ module Export::Pdf
         pdf = Export::Pdf::Document.new(margin: MARGIN).pdf
         customize(pdf)
         @invoices.each_with_index do |invoice, position|
-          LocaleSetter.with_locale(person: invoice.recipient) do
+          LocaleSetter.with_locale(person: invoice.recipient.then {
+            _1.is_a?(Person) ? _1 : nil
+          }) do
             reporter&.report(position)
             invoice_page(pdf, invoice, options)
             pdf.start_new_page unless invoice == @invoices.last

@@ -3,7 +3,9 @@ name: 'Rails Lint and Test'
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches:
+      - master
+      - stable
     paths-ignore:
       - 'doc/**'
       - '**.md'
@@ -136,7 +138,7 @@ jobs:
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
     needs: [ rubocop, main-specs, feature-specs ]
-    if: ( success() || failure() ) && ( github.ref_name == 'master' )
+    if: ( success() || failure() ) && ( github.ref_name == 'master' || github.ref_name == 'stable' )
     with:
       repository: 'hitobito'
       test_result: ${{ needs.rubocop.result == 'success' && needs.main-specs.result == 'success' && needs.feature-specs.result == 'success' }}

@@ -9,6 +9,8 @@ module MailingLists
   module BulkMail
     class SenderRejectedMessageJob < BaseMailMessageJob
       def perform
+        return unless reply_message.to.present?
+
         send(reply_message)
       end
 
@@ -27,7 +29,7 @@ module MailingLists
         list = list_address
         from = no_reply_address
         source_mail.reply do
-          body "Du bist leider nicht berechtigt auf die Liste #{list} zu schreiben."
+          body "Du bist leider nicht berechtigt, auf die Liste #{list} zu schreiben."
           from from
         end
       end

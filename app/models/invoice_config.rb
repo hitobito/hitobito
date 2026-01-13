@@ -119,6 +119,10 @@ class InvoiceConfig < ActiveRecord::Base
     ].compact_blank.join("\n")
   end
 
+  def logo_enabled?
+    logo_position.present? && %w[left right].include?(logo_position)
+  end
+
   private
 
   def correct_check_digit
@@ -131,10 +135,5 @@ class InvoiceConfig < ActiveRecord::Base
     return if payment_slip.check_digit(splitted.join) == check_digit.to_i
 
     errors.add(:account_number, :invalid_check_digit)
-  end
-
-  def logo_enabled?
-    logo_position.present? &&
-      logo_position != "disabled"
   end
 end

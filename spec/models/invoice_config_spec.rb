@@ -164,6 +164,11 @@ describe InvoiceConfig do
         invoice_config.logo_position = nil
         expect(invoice_config.send(:logo_enabled?)).to be(false)
       end
+
+      it "returns false when logo_position is invalid position" do
+        invoice_config.logo_position = "thispositiondoesntexist"
+        expect(invoice_config.send(:logo_enabled?)).to be(false)
+      end
     end
   end
 end

@@ -2,6 +2,11 @@
 
 ## unreleased
 
+- Es können jetzt Sammelrechnungen erfasst werden (#3748)
+- Gruppen haben neu ein Tab welches alle Rechnungen anzeigt, die direkt an diese Gruppe gesendet wurden (#3856)
+
+## Version 2.8
+
 - Die Banken Urner Kantonalbank und Banque Cantonale Neuchâteloise wurden als Ebics Zahlungsschnittstellen hinzugefügt (#3782)
 - Die Option "Automatische Zuteilung" war auf einfachen Anlässen wirkungslos und wurde dort entfernt (#2706)
 - Die Labels von Telefonnummern, E-Mails und Social Medias werden in der JSON API sprachabhängig zurückgegeben (hitobito_sac_cas#2066)
@@ -18,8 +23,6 @@
 - Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
 - Es können jetzt Hilfetexte für Radio Buttons, Dropdowns, Personenfelder und weitere Arten von Feldern angezeigt werden (#967)
 - Neue Berechtigung `layer_and_below_finance` für die Rechnungsverwaltung auf mehreren Ebenen (hitobito_sww#311)
-- Es können jetzt Sammelrechnungen erfasst werden (#3748)
-- Gruppen haben neu ein Tab welches alle Rechnungen anzeigt, die direkt an diese Gruppe gesendet wurden (#3856)
 
 ## Version 2.7
 

@@ -106,6 +106,15 @@ describe Role do
         expect(Role.active(Date.current)).not_to include(role)
         expect(Role.active(Date.current.tomorrow)).to include(role)
       end
+
+      it "can query with custom reference date range" do
+        role.update!(start_on: Date.current.tomorrow, end_on: 1.week.from_now)
+        expect(Role.active(Date.current.yesterday..Date.current)).not_to include(role)
+        expect(Role.active(Date.current.yesterday..Date.current.tomorrow)).to include(role)
+        expect(Role.active(1.week.from_now..1.week.from_now.tomorrow)).to include(role)
+        expect(Role.active(2.weeks.from_now..2.weeks.from_now.tomorrow)).not_to include(role)
+        expect(Role.active(3.days.from_now..4.days.from_now)).to include(role)
+      end
     end
 
     describe ":with_inactive" do

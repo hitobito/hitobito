@@ -186,18 +186,21 @@ reset-test-database)
   setup_test_db
   ;;
 
-gemfile)
-  bundle check || bundle
-  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
-    cp -v Gemfile.lock "../hitobito_%/"
-  ;;
-
 configs)
   shift # loose the "configs" argument
   configs_to_copy=${@:-.rspec}
 
   echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
     cp -v $configs_to_copy "../hitobito_%/"
+  ;;
+
+gemfile)
+  bundle check || bundle
+  $0 configs Gemfile.lock
+
+  if [ -n "${BUNDLE_GEMFILE}" ]; then
+    $0 configs "${BUNDLE_GEMFILE}.lock"
+  fi
   ;;
 
 binstubs)

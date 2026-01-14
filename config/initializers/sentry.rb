@@ -15,16 +15,7 @@ Rails.application.reloader.to_prepare do
     # send sensitive information like ip, cookie, request body and query params
     config.send_default_pii = true
 
-    analyzer = [
-      ENV["OPENSHIFT_BUILD_NAMESPACE"], # hit-jubla-int
-      "hitobito-#{ENV["HITOBITO_PROJECT"]}-#{ENV["HITOBITO_STAGE"]}", # hitobito-jubla-production
-      ((ENV["RAILS_DB_NAME"] != "database") ? ENV["RAILS_DB_NAME"] : nil), # hit_jubla_development
-      "hitobito-#{Rails.env}"           # hitobito-development
-    ].compact.first.yield_self do |name|
-      ProjectAnalyzer.new(name)
-    end
-
-    config.environment = analyzer.stage if ENV["SENTRY_CURRENT_ENV"].blank?
+    config.environment = ENV.fetch("HITOBITO_STAGE", Rails.env) if ENV["SENTRY_CURRENT_ENV"].blank?
 
     config.app_dirs_pattern = /(app|config|lib|db|bin|spec|vendor\/wagons)/
 
@@ -74,7 +65,7 @@ Rails.application.reloader.to_prepare do
       end
 
       # Add project tag
-      event.tags[:project] = analyzer.project
+      event.tags[:project] = ENV.fetch("HITOBITO_PROJECT", "hitobito")
 
       # Return the sanitized event object
       event

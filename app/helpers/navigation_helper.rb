@@ -11,7 +11,7 @@ module NavigationHelper
      url: :groups_path,
      icon_name: "users",
      active_for: %w[groups people],
-     inactive_for: %w[/invoices invoice_articles invoice_config payment_process
+     inactive_for: %w[invoices invoice_articles invoice_config payment_process
        period_invoice_templates invoice_runs?]},
 
     {label: :events,
@@ -30,7 +30,7 @@ module NavigationHelper
      url: :first_group_invoices_or_root_path,
      icon_name: "money-bill-alt",
      if: ->(_) { can?(:index, Invoice) },
-     active_for: %w[/invoices
+     active_for: %w[invoices
        invoices/evaluations
        invoices/by_article
        invoice_articles
@@ -92,8 +92,8 @@ module NavigationHelper
   # link url equals the request url.
   def section_active?(url, active_for = [], inactive_for = [])
     current_page?(url) ||
-      (Array(active_for).any? { |p| request.path =~ %r{/?#{p}/?} } &&
-      Array(inactive_for).none? { |p| request.path =~ %r{/?#{p}/?} })
+      (Array(active_for).any? { |p| request.path =~ %r{/#{p}/?} } &&
+      Array(inactive_for).none? { |p| request.path =~ %r{/#{p}/?} })
   end
 
   def first_group_invoices_or_root_path

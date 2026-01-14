@@ -2080,12 +2080,12 @@ en:
       success:
         zero: No tags removed
         one: One tag has been removed
-        other: "%{count} tags have been removed"
+        other: "%{count} Tags wurden entfernt"
     create:
       success:
         zero: No tags created
         one: One tag has been created
-        other: "%{count} tags have been created"
+        other: "%{count} Tags wurden erstellt"
     deletable:
       title: Which tags should be deleted?
       no_entries: Tags cannot be removed

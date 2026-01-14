@@ -2132,12 +2132,12 @@ it:
       success:
         zero: Non sono stati eliminati tags
         one: È stato eliminato un tag
-        other: "Sono stati elimintati  %{count} tags"
+        other: "%{count} Tags wurden entfernt"
     create:
       success:
         zero: Non sono stati creati tags
         one: È stato creato un tag
-        other: "Sono stati creati %{count} tags"
+        other: "%{count} Tags wurden erstellt"
     deletable:
       title: Quali tags devono venir cancellati?
       no_entries: Da nessuna delle persone scelte possono venir cancellati tags.

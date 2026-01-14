@@ -11,7 +11,7 @@ Folgende Umsysteme müssen vorgängig eingerichtet werden:
 * Memcached
 * Eine Catch-All E-Mail Adresse einer bestimmte Domain für die Mailinglisten (optional)
 * SSL Zertifikat (optional)
-* Sentry (optional)
+* Sentry oder Glitchtip (optional)
 
 ### Konfiguration
 
@@ -35,8 +35,8 @@ gesetzt werden. Werte ohne Default müssen in der Regel definiert werden.
 | RAILS_MAIL_RETRIEVER_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Empfangseinstellungen des gewählten Typs, z.B. `address: mailhost.local, port: 995, enable_ssl: true`. Siehe [Mail](https://github.com/mikel/mail#getting-emails-from-a-pop-server) für gültige Optionen. Wenn diese Variable nicht gesetzt ist, funktionieren die Mailinglisten nicht. | -                        |
 | MEMCACHE_SERVERS | Komme-getrennte Liste von Memcache Servern in der Form `host:port` | localhost:11211          |
 | SENTRY_DSN | Configuration der Sentry Instanz, an welche Fehler gesendet werden sollen. Falls diese Variable nicht gesetzt ist, werden keine Fehlermeldungen verschickt. | -                        |
-
-
+| HITOBITO_STAGE | Für das "Environment" in Sentry und, um einen Info-Header zu konfigurieren | Rails.env |
+| HITOBITO_PROJECT | Für das "Project"-Tag in Sentry | hitobito |
 
 ### Inbetriebnahme
 

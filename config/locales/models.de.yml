@@ -82,7 +82,7 @@ de:
         at_least_one_present: Mindestens eine %{model_name} muss aufgefüllt werden
         type_not_allowed: kann hier nicht erstellt werden
         must_be_after_opening: muss nach dem Anmeldebeginn sein
-        must_have_same_type: müssen von denselbem Typ sein
+        must_have_same_type: müssen von demselben Typ sein
         greater_than: muss grösser als %{count} sein
         greater_than_or_equal_to: muss grösser oder gleich %{count} sein
         must_exist: müssen vorhanden sein

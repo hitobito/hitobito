@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -207,6 +207,10 @@ it:
               invalid_check_digit: 'non valido; cifra di controllo non corretta'
             logo:
               attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
+        period_invoice_template:
+          attributes:
+            end_on:
+              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
           attributes:
             end_on:
@@ -398,6 +402,10 @@ it:
         one: Pagamento
         many: Pagamenti
         other: Pagamenti
+      period_invoice_template:
+        one: Sammelrechnung
+        many: Sammelrechnungen
+        other: Sammelrechnungen
       oauth/application:
         one: Applicazioni OAuth
         many: Applicazioni OAuth
@@ -1239,9 +1247,16 @@ it:
         recipient_postbox: Postfach
         recipient_country: Land
         recipient_street: Strasse
+        recipient_housenumber: Hausnummer
         recipient_zip_code: PLZ
         recipient_town: Ort
         recipient_address: Indirizzo del destinatario
+        payee_name: Zahlungsempfänger Name
+        payee_street: Zahlungsempfänger Strasse
+        payee_housenumber: Zahlungsempfänger Hausnummer
+        payee_zip_code: Zahlungsempfänger PLZ
+        payee_town: Zahlungsempfänger Ort
+        payee_country: Zahlungsempfänger Land
         due_at: Scade il
         issued_at: Emesso il
         sent_at: 'Spedito il '
@@ -1395,6 +1410,12 @@ it:
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise
+
+      period_invoice_template:
+        name: Bezeichnung
+        start_on: Rechnungsperiode Start
+        end_on: Rechnungsperiode Ende
+        recipient_group_type: Empfängergruppen
 
       service_token:
         name: Cognome

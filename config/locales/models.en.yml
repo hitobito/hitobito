@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -204,6 +204,10 @@ en:
               invalid_check_digit: 'is not valid; Incorrect check digit'
             logo:
               attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
+        period_invoice_template:
+          attributes:
+            end_on:
+              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
           attributes:
             end_on:
@@ -349,6 +353,9 @@ en:
       payment:
         one: Payment
         other: Payments
+      period_invoice_template:
+        one: Sammelrechnung
+        other: Sammelrechnungen
       oauth/application:
         one: OAuth application
         other: OAuth applications
@@ -1165,9 +1172,16 @@ en:
         recipient_postbox: Postfach
         recipient_country: Land
         recipient_street: Strasse
+        recipient_housenumber: Hausnummer
         recipient_zip_code: PLZ
         recipient_town: Ort
         recipient_address: Recipient address
+        payee_name: Zahlungsempfänger Name
+        payee_street: Zahlungsempfänger Strasse
+        payee_housenumber: Zahlungsempfänger Hausnummer
+        payee_zip_code: Zahlungsempfänger PLZ
+        payee_town: Zahlungsempfänger Ort
+        payee_country: Zahlungsempfänger Land
         due_at: Due at
         issued_at: Issued at
         sent_at: Sent at
@@ -1321,6 +1335,12 @@ en:
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise
+
+      period_invoice_template:
+        name: Bezeichnung
+        start_on: Rechnungsperiode Start
+        end_on: Rechnungsperiode Ende
+        recipient_group_type: Empfängergruppen
 
       service_token:
         name: Name

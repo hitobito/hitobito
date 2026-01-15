@@ -97,16 +97,6 @@ class FeatureGate
     config
   end
 
-  def person_language_enabled?
-    # some rake tasks run without db present, so make sure
-    # this doesn't fail in those cases
-    connection = ActiveRecord::Base.connection
-    connection.table_exists?("people") && !connection.column_exists?(:people,
-      :correspondence_language)
-  rescue ActiveRecord::NoDatabaseError
-    false
-  end
-
   # Avoid excessive requerying on people list
   def self_registration_reason_enabled?
     return @@self_registration_enabled if defined?(@@self_registration_enabled)

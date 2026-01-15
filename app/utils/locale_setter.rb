@@ -6,23 +6,13 @@
 module LocaleSetter
   class << self
     def with_locale(locale: nil, person: nil)
-      preferred_locale = locale || locale_from_person(person)
+      preferred_locale = locale || person&.language
 
       # rubocop:todo Layout/LineLength
       I18n.with_locale(I18n.available_locales.include?(preferred_locale&.to_sym) ? preferred_locale : nil) do
         # rubocop:enable Layout/LineLength
         yield
       end
-    end
-
-    private
-
-    def locale_from_person(person)
-      return unless person
-
-      # rubocop:todo Layout/LineLength
-      person.respond_to?(:correspondence_language) ? person.correspondence_language : person.language
-      # rubocop:enable Layout/LineLength
     end
   end
 end

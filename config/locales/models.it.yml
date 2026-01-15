@@ -603,7 +603,6 @@ it:
         roles: Ruoli
         tags: Tags
         title: titolo
-        correspondence_language: lingua per la corrispondenza
         household_key: ID domestico
         created_at: Salvato
         updated_at: Modificato

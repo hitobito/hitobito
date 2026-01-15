@@ -16,12 +16,9 @@ class PeopleController < CrudController # rubocop:todo Metrics/ClassLength
   self.remember_params += [:name, :range, :filters, :filter_id]
 
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
-    :gender, :birthday, :additional_information, :picture, :remove_picture] +
+    :gender, :birthday, :language, :additional_information, :picture, :remove_picture] +
     Contactable::ACCESSIBLE_ATTRS +
     [family_members_attributes: [:id, :kind, :other_id, :_destroy]]
-  FeatureGate.if(:person_language) do
-    permitted_attrs << :language
-  end
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]

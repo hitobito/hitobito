@@ -537,12 +537,15 @@ de:
         roles: Rollen
         tags: Tags
         title: Titel
-        correspondence_language: Korrespondenzsprache
         household_key: Haushalts-ID
         created_at: Erstellt
         updated_at: Geändert
         login_status: Login
         language: Sprache
+        languages:
+          de: Deutsch
+          en: Englisch
+          fr: Französisch
         primary_group_id: Hauptgruppe
         layer_group_label: Hauptebene
         self_registration_reason: Eintrittsgrund

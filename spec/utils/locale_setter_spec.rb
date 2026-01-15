@@ -22,14 +22,6 @@ describe LocaleSetter do
     end
   end
 
-  it "sets locale to person correspondence_language when correspondence_language is a thing" do
-    allow(person).to receive(:respond_to?).and_return(true)
-    allow(person).to receive(:correspondence_language).and_return("fr")
-    subject.with_locale(person: person) do
-      expect(I18n.locale).to eq(:fr)
-    end
-  end
-
   it "sets locale to person language when person with language is passed" do
     person.update!(language: :it)
     subject.with_locale(person: person) do

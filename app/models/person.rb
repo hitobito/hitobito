@@ -89,7 +89,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
-    :gender, :birthday, :primary_group_id
+    :gender, :birthday, :language, :primary_group_id
   ]
 
   INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -173,6 +173,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_enum :gender, GENDERS
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
+  i18n_enum :language, Person::LANGUAGES.keys.map(&:to_s)
 
   has_one_attached :picture do |attachable|
     attachable.variant :thumb, resize_to_fill: [32, 32]

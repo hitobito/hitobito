@@ -542,7 +542,6 @@ en:
         roles: Roles
         tags: Tags
         title: Title
-        correspondence_language: Correspondence Language
         household_key: Household-ID
         created_at: Created
         updated_at: Changed

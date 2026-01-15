@@ -36,13 +36,7 @@
                             help_inline: t('people.fields.format_birthday'),
                             class: 'col-2 d-inline')
 
-  - FeatureGate.if(:person_language) do
-    = f.labeled_collection_select(:language,
-                                  Person::LANGUAGES,
-                                  :first,
-                                  :last,
-                                  { prompt: true },
-                                  class: 'form-select form-select-sm')
+  = f.labeled_i18n_enum_field :language, Person.language_labels.to_a, class: 'form-select form-select-sm'
 
 - if entry.is_a?(Event::ParticipationContactData)
   = field_set_tag do

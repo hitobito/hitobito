@@ -17,8 +17,8 @@
           = render_attrs(entry, :created_info, :updated_info, :login_status)
         - else
           = render_attrs(entry, :created_info, :updated_info)
-        - FeatureGate.if(:person_language) do
-          = render_attrs(entry, :language)
+          
+        = render_attrs(entry, :language)
 
         - FeatureGate.if(:self_registration_reason) do
           = render_present_attrs(entry, :self_registration_reason_text)

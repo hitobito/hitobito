@@ -34,15 +34,12 @@ class PersonResource < ApplicationResource
   attribute :primary_group_id, :integer, writable: false
   attribute :gender, :string, readable: :show_details?, writable: :write_details?
   attribute :birthday, :date, readable: :show_details?, writable: :write_details?
+  attribute :language, :string
   attribute :picture, :string do
     @object.decorate.picture_full_url
   end
   attribute :updated_at, :datetime
   attribute :additional_information, :string
-
-  FeatureGate.if :person_language do
-    attribute :language, :string
-  end
 
   belongs_to :primary_group, resource: GroupResource, writable: false
 

@@ -14,6 +14,10 @@ describe EventsController, js: true do
     event
   end
 
+  def click_save
+    all("form .btn-group").first.click_button "Speichern"
+  end
+
   context "contacts" do
     NOTIFICATION_CHECKBOX_SELECTOR = "#event_notify_contact_on_participations"
 
@@ -33,10 +37,6 @@ describe EventsController, js: true do
 
     def notification_checkbox
       find(NOTIFICATION_CHECKBOX_SELECTOR)
-    end
-
-    def click_save
-      all("form .btn-group").first.click_button "Speichern"
     end
 
     it "may set and remove contact from event" do
@@ -94,6 +94,32 @@ describe EventsController, js: true do
       click_save
       click_on "Bearbeiten"
       expect(notification_checkbox).to be_checked
+    end
+  end
+
+  context "group_ids" do
+    let(:group1) { groups(:bottom_layer_one) }
+    let(:group2) { groups(:bottom_layer_two) }
+    let(:event) do
+      event = Fabricate(:course, kind: event_kinds(:slk), groups: [group1])
+      event.dates.create!(start_at: 10.days.from_now, finish_at: 15.days.from_now)
+      event
+    end
+
+    let(:edit_path) { edit_group_event_path(event.group_ids.first, event.id) }
+
+    it "may change master organizer groups of course" do
+      sign_in
+      visit edit_path
+
+      # change organizer group
+      uncheck group1.name
+      check group2.name
+      click_save
+
+      expect(page).to have_current_path(group_event_path(group2, event.id))
+      expect(page).to have_content("Durchgeführt von\n#{group2.name}")
+      expect(page).not_to have_content(group1.name)
     end
   end
 

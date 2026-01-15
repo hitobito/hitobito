@@ -242,7 +242,7 @@ describe EventsController do
 
         get :new, params: {group_id: group.id, event: {type: "Event"}}
 
-        expect(assigns(:groups)).to eq([group3, group2])
+        expect(assigns(:groups)).to eq([group3, group2, group])
       end
 
       it "does not load deleted kinds" do

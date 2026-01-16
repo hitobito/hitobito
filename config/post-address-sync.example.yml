@@ -7,3 +7,4 @@ post-address-sync:
   batch_key:
   person_constraints:
   role_types:
+  excluded_tags:

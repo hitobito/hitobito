@@ -52,6 +52,7 @@ config/environments/*.local.yml
 config/*.sphinx.conf
 Wagonfile
 config/mail.yml
+config/post-address-sync.yml
 
 # uploaded pictures
 public/uploads

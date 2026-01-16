@@ -6,8 +6,6 @@
 module Export::Pdf
   module Invoice
     MARGIN = 2.cm
-    LOGO_WIDTH = 150.mm
-    LOGO_HEIGHT = 16.mm
 
     class Runner
       def initialize(invoices, async_download_file)
@@ -56,11 +54,6 @@ module Export::Pdf
 
         @metadata[:first_pages_of_invoices] += [pdf.page_count]
 
-        # render logo if logo_position is set to left or right
-        if %w[left right].include?(invoice.logo_position)
-          render_logo(pdf, invoice, **section_options)
-        end
-
         if options[:articles]
           sections.each do |section|
             section.new(pdf, invoice, section_options).render
@@ -80,17 +73,6 @@ module Export::Pdf
       # the default payment_slip_qr_class can be overwritten in wagon
       def payment_slip_qr_class
         PaymentSlipQr
-      end
-
-      def render_logo(pdf, invoice, **section_options)
-        Logo.new(
-          pdf,
-          invoice.invoice_config.logo,
-          image_width: LOGO_WIDTH,
-          image_height: LOGO_HEIGHT,
-          position: invoice.logo_position.to_sym,
-          **section_options
-        ).render
       end
 
       def customize(pdf)

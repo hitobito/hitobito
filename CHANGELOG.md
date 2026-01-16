@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
+
 ## Version 2.8
 
 - Die Banken Urner Kantonalbank und Banque Cantonale Neuchâteloise wurden als Ebics Zahlungsschnittstellen hinzugefügt (#3782)

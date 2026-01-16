@@ -13,7 +13,8 @@ module Synchronize::Addresses::SwissPost
     LOG_CATEGORY = "cleanup"
 
     FILE_PATH = Rails.root.join("config", "post-address-sync.yml")
-    KEYS = %w[host path username password query_key batch_key person_constraints role_types].freeze
+    KEYS = %w[host path username password query_key batch_key
+      person_constraints role_types excluded_tags].freeze
 
     class << self
       def exist?

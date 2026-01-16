@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: versions
@@ -28,7 +27,6 @@
 #  index_versions_on_main_id_and_main_type  (main_id,main_type)
 #  index_versions_on_mutation_id            (mutation_id)
 #
-
 module PaperTrail
   class Version < ActiveRecord::Base
     include PaperTrail::VersionConcern

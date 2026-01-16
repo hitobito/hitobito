@@ -2,7 +2,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
+# Hilfsleiter
 # == Schema Information
 #
 # Table name: event_roles
@@ -17,8 +17,6 @@
 #  index_event_roles_on_participation_id  (participation_id)
 #  index_event_roles_on_type              (type)
 #
-
-# Hilfsleiter
 class Event::Role::AssistantLeader < Event::Role
   self.permissions = [:event_full, :participations_full]
 

@@ -31,6 +31,7 @@ Layout/LineLength:
   Max: 100
   Severity: warning
   IgnoreCopDirectives: true
+  AllowedPatterns: ['\A#'] # Ignore for commented lines (annotate)
 
 Metrics/MethodLength:
   Enabled: true

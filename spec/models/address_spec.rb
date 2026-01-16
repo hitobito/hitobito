@@ -21,10 +21,8 @@
 #
 # Indexes
 #
-#  addresses_search_column_gin_idx               (search_column) USING gin
 #  index_addresses_on_zip_code_and_street_short  (zip_code,street_short)
 #
-
 require "spec_helper"
 
 describe Address do

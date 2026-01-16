@@ -24,7 +24,6 @@
 #  index_invoice_runs_on_group_id                       (group_id)
 #  index_invoice_runs_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
 #
-
 require "spec_helper"
 
 describe InvoiceRun do

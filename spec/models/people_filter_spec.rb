@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: people_filters
@@ -20,7 +19,6 @@
 #
 #  index_people_filters_on_group_id_and_group_type  (group_id,group_type)
 #
-
 require "spec_helper"
 
 describe PeopleFilter do

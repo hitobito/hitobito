@@ -1,3 +1,8 @@
+#  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 # == Schema Information
 #
 # Table name: event_kinds
@@ -11,14 +16,9 @@
 #  short_name             :string
 #  created_at             :datetime
 #  updated_at             :datetime
+#  event_kind_id          :integer          not null
 #  kind_category_id       :integer
 #
-
-#  Copyright (c) 2012-2014, Pfadibewegung Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
-
 require "spec_helper"
 
 describe Event::Kind do

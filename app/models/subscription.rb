@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: subscriptions
@@ -18,7 +17,6 @@
 #  index_subscriptions_on_mailing_list_id                    (mailing_list_id)
 #  index_subscriptions_on_subscriber_id_and_subscriber_type  (subscriber_id,subscriber_type)
 #
-
 class Subscription < ActiveRecord::Base
   include RelatedRoleType::Assigners
 

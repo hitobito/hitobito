@@ -4,7 +4,6 @@
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: assignments
@@ -25,7 +24,6 @@
 #  index_assignments_on_creator_id  (creator_id)
 #  index_assignments_on_person_id   (person_id)
 #
-
 class Assignment < ActiveRecord::Base
   ATTACHMENT_TYPES = [Message::Letter, Message::LetterWithInvoice].freeze
   include I18nEnums

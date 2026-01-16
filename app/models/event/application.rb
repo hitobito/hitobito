@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_applications
@@ -18,7 +17,6 @@
 #  priority_2_id        :integer
 #  priority_3_id        :integer
 #
-
 class Event::Application < ActiveRecord::Base
   self.demodulized_route_keys = true
 

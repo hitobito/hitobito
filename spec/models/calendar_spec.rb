@@ -12,7 +12,6 @@
 #
 #  index_calendars_on_group_id  (group_id)
 #
-
 require "spec_helper"
 
 describe Calendar do

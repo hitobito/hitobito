@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: people
@@ -83,7 +82,6 @@
 #
 #  fk_rails_...  (self_registration_reason_id => self_registration_reasons.id)
 #
-
 require "spec_helper"
 
 describe Person do

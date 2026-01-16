@@ -9,7 +9,7 @@ module Export::Pdf::Invoice
 
     LOGO_WIDTH = 150.mm
     LOGO_HEIGHT = 16.mm
-    HEADER_MARGIN = 20
+    HEADER_MARGIN = 30
 
     def render
       prepare_header_space

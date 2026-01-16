@@ -129,7 +129,7 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   ### SCOPES
 
-  def self.active_scope(reference_date = Date.current)
+  def self.active_scope(reference_date = Date.current) # rubocop:disable Metrics/AbcSize
     range = reference_date.is_a?(Range) ? reference_date : reference_date..reference_date
     start_on = range.first.to_date
     end_on = range.last.to_date

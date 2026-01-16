@@ -9,6 +9,7 @@ require "spec_helper"
 
 describe PeriodInvoiceTemplate::Item do
   let(:period_invoice_template) { Fabricate(:period_invoice_template) }
+
   subject(:item) do
     described_class.new(
       period_invoice_template:,
@@ -35,7 +36,7 @@ describe PeriodInvoiceTemplate::Item do
           group_id: period_invoice_template.group_id,
           period_start_on: period_invoice_template.start_on,
           period_end_on: period_invoice_template.end_on
-        },
+        }
       })
       expect(result.attributes).to include(item.attributes.slice(:account, :cost_center, :name))
     end

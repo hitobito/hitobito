@@ -10,14 +10,14 @@ class Invoice::RoleCountItem < InvoiceItem
 
   self.dynamic_cost_parameter_definitions = {
     role_types: :array,
-    unit_cost: :decimal,
+    unit_cost: :decimal
   }
 
   validates :role_types, :group_id, :period_start_on, presence: true
   validates :unit_cost, money: true
 
   def count
-    @count ||= Role.joins(:group)
+    @count ||= base_scope
       .active(period_start_on..period_end_on)
       .where(group_id: group_scope)
       .where(person_id: person_scope)
@@ -31,6 +31,10 @@ class Invoice::RoleCountItem < InvoiceItem
   def dynamic_cost = unit_cost * count
 
   private
+
+  def base_scope
+    Role.joins(:group)
+  end
 
   def group_scope
     group_for_role_search.self_and_descendants.select(:id)
@@ -62,7 +66,7 @@ class Invoice::RoleCountItem < InvoiceItem
     BigDecimal(dynamic_cost_parameters[:unit_cost])
   rescue ArgumentError, TypeError
     errors.add(:unit_cost, :is_not_a_decimal_number)
-    BigDecimal("0")
+    BigDecimal(0)
   end
 
   def group_id

@@ -23,7 +23,7 @@ describe Invoice::RoleCountItem do
         role_types:,
         unit_cost: 10.50,
         period_start_on: 1.month.ago,
-        period_end_on: 1.month.from_now,
+        period_end_on: 1.month.from_now
       }
     )
   end
@@ -89,7 +89,7 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group:)
-        item.instance_variable_set("@count", nil)
+        item.instance_variable_set(:@count, nil)
 
         expect(item.count).to eq(1)
       end

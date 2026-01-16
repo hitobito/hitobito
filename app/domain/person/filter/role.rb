@@ -10,8 +10,14 @@ class Person::Filter::Role < Person::Filter::Base
 
   include ParamConverters
 
-  self.permitted_args = [:role_type_ids, :role_types, :kind,
-    :start_at, :finish_at, :include_archived]
+  self.permitted_args = [
+    :role_type_ids,
+    :role_types,
+    :kind,
+    :start_at,
+    :finish_at,
+    :include_archived
+  ]
 
   def initialize(attr, args)
     super

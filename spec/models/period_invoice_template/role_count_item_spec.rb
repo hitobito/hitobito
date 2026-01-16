@@ -9,6 +9,7 @@ require "spec_helper"
 
 describe PeriodInvoiceTemplate::RoleCountItem do
   let(:period_invoice_template) { Fabricate(:period_invoice_template) }
+
   subject(:item) do
     described_class.new(
       period_invoice_template:,
@@ -53,8 +54,8 @@ describe PeriodInvoiceTemplate::RoleCountItem do
           period_start_on: period_invoice_template.start_on,
           period_end_on: period_invoice_template.end_on,
           role_types: [Group::TopGroup::Leader.name],
-          unit_cost: 10.50,
-        },
+          unit_cost: 10.50
+        }
       })
       expect(result.attributes).to include(item.attributes.slice(:account, :cost_center, :name))
     end

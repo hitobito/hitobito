@@ -21,7 +21,7 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   belongs_to :period_invoice_template
 
   # This base class may not be instantiated
-  validates :type, exclusion: { in: %w(PeriodInvoiceTemplate::Item) }
+  validates :type, exclusion: {in: %w[PeriodInvoiceTemplate::Item]}
 
   def dynamic_cost_parameter_definitions
     invoice_item_class.dynamic_cost_parameter_definitions
@@ -33,11 +33,11 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
         dynamic_cost_parameters: dynamic_cost_parameters.merge({
           group_id: period_invoice_template.group_id,
           period_start_on: period_invoice_template.start_on,
-          period_end_on: period_invoice_template.end_on,
+          period_end_on: period_invoice_template.end_on
         }))
   end
 
   def invoice_item_class
-    "Invoice::#{self.class.name.gsub(/^PeriodInvoiceTemplate::/, '')}".constantize
+    "Invoice::#{self.class.name.gsub(/^PeriodInvoiceTemplate::/, "")}".constantize
   end
 end

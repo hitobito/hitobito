@@ -21,6 +21,6 @@ class PeriodInvoiceTemplate::RoleCountItem < PeriodInvoiceTemplate::Item
     BigDecimal(dynamic_cost_parameters[:unit_cost])
   rescue ArgumentError, TypeError
     errors.add(:unit_cost, :is_not_a_decimal_number)
-    BigDecimal("0")
+    BigDecimal(0)
   end
 end

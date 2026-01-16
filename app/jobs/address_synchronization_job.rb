@@ -30,7 +30,10 @@ class AddressSynchronizationJob < CursorBasedPagingJob
 
   private
 
-  def reschedule(attrs = {batch_token:, upload_token:, result_token:, cursor:, processed_count:, processing_count:}) = super # rubocop:disable Layout/LineLength
+  def reschedule(attrs = {batch_token:, upload_token:, result_token:, cursor:,
+                          processed_count:, processing_count:})
+    super
+  end
 
   def process_next_batch
     super do
@@ -63,8 +66,16 @@ class AddressSynchronizationJob < CursorBasedPagingJob
       .joins(:roles)
       .where(config.role_types ? {roles: {type: config.role_types}} : {})
       .where(Synchronize::Addresses::SwissPost::Config.person_constraints)
+      .where.not(id: people_with_excluded_tags.select(:id))
       .order(:id)
       .distinct
+  end
+
+  def people_with_excluded_tags
+    excluded_tags = Synchronize::Addresses::SwissPost::Config.excluded_tags
+    return Person.none if excluded_tags.blank?
+
+    Person.joins(:tags).where(tags: {name: excluded_tags})
   end
 
   def check_batch

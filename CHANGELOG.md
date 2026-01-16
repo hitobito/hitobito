@@ -4,6 +4,7 @@
 
 - Es können jetzt Sammelrechnungen erfasst werden (#3748)
 - Gruppen haben neu ein Tab welches alle Rechnungen anzeigt, die direkt an diese Gruppe gesendet wurden (#3856)
+- Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
 
 ## Version 2.8
 

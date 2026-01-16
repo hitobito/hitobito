@@ -1163,6 +1163,7 @@ describe Export::Pdf::Invoice do
 
     context "when invoice_config has a logo" do
       before do
+        invoice.update!(address: "Absender Adresse 5")
         invoice.invoice_config.logo.attach fixture_file_upload("images/logo.png")
         expect(invoice.invoice_config.logo).to be_attached
       end
@@ -1172,7 +1173,7 @@ describe Export::Pdf::Invoice do
         expect(image_positions).to be_empty
       end
 
-      it "with logo_position=left it renders logo on the left" do
+      it "with logo_position=left it renders logo on the left and address on the right" do
         invoice.invoice_config.update(logo_position: :left)
         expect(image_positions).to have(1).item
         expect(image_positions.first).to match(
@@ -1181,11 +1182,12 @@ describe Export::Pdf::Invoice do
           height: 30,
           width: 230,
           x: 56.69291,
-          y: 755.19709
+          y: 785.19709
         )
+        expect(text_with_position).to include [347, 806, "Absender Adresse 5"]
       end
 
-      it "with logo_position=right it renders logo on the right" do
+      it "with logo_position=right it renders logo on the right and address on the left" do
         invoice.invoice_config.update(logo_position: :right)
         expect(image_positions).to have(1).item
         expect(image_positions.first).to match(
@@ -1194,8 +1196,9 @@ describe Export::Pdf::Invoice do
           height: 30,
           width: 230,
           x: 308.58709,
-          y: 755.19709
+          y: 785.19709
         )
+        expect(text_with_position).to include [57, 806, "Absender Adresse 5"]
       end
     end
   end

@@ -189,7 +189,7 @@ module FilterNavigation
       when :future
         start_at = Date.current.tomorrow
         finish_at = "9999-12-31"
-        path(name:, filters: {role: {start_at:, finish_at:, kind: :created}})
+        path(name:, filters: {role: {start_at:, finish_at:, kind: :started}})
       else
         fixed_types_path(name, role_types)
       end

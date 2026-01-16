@@ -17,10 +17,12 @@ describe AddressSynchronizationJob do
       query_key: "Q1",
       batch_key: "B1",
       role_types: role_types,
-      person_constraints: person_constraints
+      person_constraints: person_constraints,
+      excluded_tags: excluded_tags
     }
   }
   let(:person_constraints) { nil }
+  let(:excluded_tags) { nil }
 
   before do
     Synchronize::Addresses::SwissPost::Config.instance_variable_set(:@config, config.stringify_keys)
@@ -64,6 +66,14 @@ describe AddressSynchronizationJob do
       CSV.parse(req.body, headers: true, row_sep: "\r\n", col_sep: "\t")
     end
 
+    def expect_uploaded_entries(count)
+      expect(job.send(:client)).to receive(:upload_file).and_call_original
+      stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
+        expect(parse_upload(req).entries.size).to eq(count)
+      end
+      job.perform
+    end
+
     it "uploads TSV file with both people" do
       stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
         data = parse_upload(req)
@@ -80,10 +90,7 @@ describe AddressSynchronizationJob do
 
     it "only uploads person once" do
       Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: people(:bottom_member))
-      stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
-        expect(parse_upload(req).entries.size).to eq 2
-      end
-      job.perform
+      expect_uploaded_entries(2)
     end
 
     it "does create log entry" do
@@ -106,16 +113,25 @@ describe AddressSynchronizationJob do
     end
 
     describe "constraints" do
-      context "with person_constraints given" do
+      context "with person_constraints given as hash" do
         let(:person_constraints) { {first_name: "Max", town: "Bern"} }
 
         it "only uploads person in constraint" do
           Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group),
             person: Fabricate(:person, first_name: "Max", town: "Bern"))
-          stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
-            expect(parse_upload(req).entries.size).to eq 1
-          end
-          job.perform
+          expect_uploaded_entries(1)
+        end
+      end
+
+      context "with person_constraints given as string" do
+        let(:person_constraints) { "people.country = 'DE' AND roles.label = 'foo'" }
+
+        it "only uploads person in constraint" do
+          Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group),
+            person: Fabricate(:person, country: "DE"))
+          Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), label: "foo",
+            person: Fabricate(:person, country: "DE"))
+          expect_uploaded_entries(1)
         end
       end
 
@@ -123,10 +139,35 @@ describe AddressSynchronizationJob do
         let(:role_types) { %w[Group::TopGroup::Leader] }
 
         it "only uploads person in constraint" do
-          stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
-            expect(parse_upload(req).entries.size).to eq 1
+          expect_uploaded_entries(1)
+        end
+      end
+
+      context "with excluded tags" do
+        context "as single string" do
+          let(:excluded_tags) { "inaktiv" }
+
+          it "excludes person with tag" do
+            role = Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
+            role.person.tags.create!(name: "inaktiv")
+            role.person.tags.create!(name: "sonst was")
+            expect_uploaded_entries(2)
           end
-          job.perform
+        end
+
+        context "as array" do
+          let(:excluded_tags) { ["inaktiv", "ausgeschlossen"] }
+
+          it "excludes person with tag" do
+            role = Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
+            role.person.tags.create!(name: "inaktiv")
+            role.person.tags.create!(name: "sonst was")
+            role = Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
+            role.person.tags.create!(name: "ausgeschlossen")
+            role = Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
+            role.person.tags.create!(name: "whatever")
+            expect_uploaded_entries(3)
+          end
         end
       end
     end

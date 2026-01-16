@@ -120,7 +120,7 @@ class InvoiceConfig < ActiveRecord::Base
   end
 
   def logo_enabled?
-    logo_position.present? && %w[left right].include?(logo_position)
+    %w[left right].include?(logo_position.presence)
   end
 
   private

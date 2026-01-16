@@ -80,6 +80,8 @@ describe People::Merger do
       target_invoice_1 = Fabricate(:invoice, group: group, recipient: person)
       source_invoice_1 = Fabricate(:invoice, group: group, recipient: duplicate)
       source_invoice_2 = Fabricate(:invoice, group: group, recipient: duplicate)
+      source_invoice_invalid = Fabricate(:invoice, group: group, recipient: duplicate)
+      source_invoice_invalid.update_attribute(:recipient_zip_code, nil)
 
       expect do
         merger.merge!
@@ -87,10 +89,11 @@ describe People::Merger do
         .and not_change { Invoice.count }
 
       person.reload
-      expect(person.received_invoices.count).to eq 3
+      expect(person.received_invoices.count).to eq 4
       expect(target_invoice_1.reload.recipient).to eq person
       expect(source_invoice_1.reload.recipient).to eq person
       expect(source_invoice_2.reload.recipient).to eq person
+      expect(source_invoice_invalid.reload.recipient).to eq person
     end
 
     context "notes" do

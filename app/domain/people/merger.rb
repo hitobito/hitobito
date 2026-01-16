@@ -30,7 +30,7 @@ module People
       merge_contactables(:additional_emails, :email)
       merge_contactables(:phone_numbers, :number)
       merge_contactables(:social_accounts, :name, match_label: true)
-      merge_association(:received_invoices, :recipient)
+      merge_association(:received_invoices, :recipient, validate: false)
       merge_association(:notes, :subject)
       merge_association(:authored_notes, :author)
       merge_association(:event_responsibilities, :contact)
@@ -73,11 +73,15 @@ module People
       end
     end
 
-    def merge_association(assoc, key, unique_attr: nil)
+    def merge_association(assoc, key, unique_attr: nil, validate: true)
       @source.send(assoc).each do |a|
         next if unique_attr && @target.send(assoc).pluck(unique_attr).include?(a.send(unique_attr))
 
-        a.update!(key => @target)
+        if validate
+          a.update!(key => @target)
+        else
+          a.update_attribute!(key, @target)
+        end
       end
     end
 

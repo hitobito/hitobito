@@ -55,6 +55,6 @@ class InvoiceRuns::FixedFee
   end
 
   def item_class_for(attrs)
-    InvoiceRuns::RoleItem
+    PeriodInvoiceTemplate::RoleCountItem
   end
 end

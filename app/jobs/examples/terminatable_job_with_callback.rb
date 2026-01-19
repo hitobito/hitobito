@@ -7,6 +7,6 @@ class Examples::TerminatableJobWithCallback < BaseJob
       Rails.logger.debug "Doing work..."
     end
   rescue JobManuallyTerminated
-    Person.first.update!(name: "changed after job termination")
+    Person.first.update!(first_name: "changed after job termination")
   end
 end

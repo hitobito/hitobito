@@ -23,6 +23,6 @@ describe Examples::TerminatableJobWithCallback do
       worker.work_off
     end.to change(Delayed::Job, :count).by(-1)
 
-    expect(Person.first.name).to eql("changed after job termination")
+    expect(Person.first.first_name).to eql("changed after job termination")
   end
 end

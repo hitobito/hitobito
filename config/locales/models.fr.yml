@@ -609,6 +609,10 @@ fr:
         updated_at: Modifié
         login_status: Login
         language: Langue
+        languages:
+          de: Deutsch
+          en: Englisch
+          fr: Französisch
         primary_group_id: Groupe principal
         layer_group_label: Niveau
         self_registration_reason: Motif d'entrée

@@ -540,6 +540,10 @@ en:
         updated_at: Changed
         login_status: Login
         language: Language
+        languages:
+          de: Deutsch
+          en: Englisch
+          fr: Französisch
         primary_group_id: Main group
         layer_group_label: Main layer
         self_registration_reason: Eintrittsgrund

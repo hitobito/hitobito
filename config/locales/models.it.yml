@@ -608,6 +608,10 @@ it:
         updated_at: Modificato
         login_status: Login
         language: Lingua
+        languages:
+          de: Deutsch
+          en: Englisch
+          fr: Französisch
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale
         self_registration_reason: Motivo dell'ingresso

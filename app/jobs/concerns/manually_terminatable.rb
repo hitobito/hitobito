@@ -12,9 +12,8 @@ module ManuallyTerminatable
   def perform
     super
   rescue JobManuallyTerminated
-    nil
-  ensure
     Rails.logger.debug { "Job #{self.class.name} was manually terminated" }
+  ensure
     @status_check_thread.exit if @status_check_thread.alive?
   end
 

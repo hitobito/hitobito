@@ -28,19 +28,19 @@
 
 class Event::Question::Default < Event::Question
   def choice_items
-    choices.to_s.split(",").collect(&:strip)
-  end
-
-  def one_answer_available?
-    choice_items.compact.one?
+    deserialized_choices.map(&:choice)
   end
 
   def with_choices?
-    choice_items.present?
+    deserialized_choices.present?
   end
 
   def with_checkboxes?
-    multiple_choices? || one_answer_available?
+    multiple_choices? || deserialized_choices.one?
+  end
+
+  def with_radio_buttons?
+    with_choices? && !with_checkboxes?
   end
 
   def translation_class
@@ -59,14 +59,20 @@ class Event::Question::Default < Event::Question
     end
   end
 
-  # override to handle array values submitted from checkboxes
+  # Override to handle array values submitted from checkboxes and escape commas in multiple
+  # choice and single choice questions but not in free text questions.
+  # The escaping is necessary because we serialize and deserialize multiple choice
+  # questions as comma separated string. The escaping allows the usage of commas (the separator)
+  # in the answers and therefore also in the questions themselves.
   def before_validate_answer(answer) # rubocop:todo Metrics/CyclomaticComplexity
     raw_answer = answer.raw_answer.presence || answer.answer
-    return unless with_choices? && with_checkboxes? && raw_answer.is_a?(Array)
-
-    # have submit index + 1 and handle reset via index 0
-    index_array = raw_answer.map { |i| i.to_i - 1 }
-    answer.answer = valid_index_based_values(index_array, 0...choice_items.size) || nil
+    if with_choices? && with_checkboxes? && raw_answer.is_a?(Array)
+      # have submit index + 1 and handle reset via index 0
+      index_array = raw_answer.map { |i| i.to_i - 1 }
+      answer.answer = valid_index_based_values(index_array, 0...deserialized_choices.size) || nil
+    elsif with_radio_buttons? && raw_answer.is_a?(String)
+      answer.answer = raw_answer.gsub(",", Choice::ESCAPED_SEPARATOR)
+    end
   end
 
   def valid_index_based_values(index_array, valid_range)
@@ -76,6 +82,6 @@ class Event::Question::Default < Event::Question
       end
     end.compact
 
-    indexes.present? ? indexes.join(", ") : nil
+    indexes.present? ? indexes.map { |i| i.gsub(",", Choice::ESCAPED_SEPARATOR) }.join(", ") : nil
   end
 end

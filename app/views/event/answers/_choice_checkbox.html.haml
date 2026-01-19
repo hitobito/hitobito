@@ -1,6 +1,5 @@
 - name = f.object_name + "[answer][]"
 - sanitized_id = "#{f.object_name}_#{index}".delete("]").gsub(/[^-a-zA-Z0-9:.]/, "_")
-- checked = f.object.answer.to_s.split(", ").include?(value)
 - invalid = f.object.errors.key?(:answer) ? " is-invalid" : ""
 
 .form-check

@@ -179,4 +179,173 @@ describe Event::Question do
       expect(derived_question.event).to eq(event)
     end
   end
+
+  describe "#deserialized_choices" do
+    let(:event) { events(:top_course) }
+    let(:question) { event.application_questions.first }
+
+    it "should return choices if only one translation is filled out and others are empty strings" do
+      question.choices_translations = {de: "Ja, Nein", en: "", fr: "", it: ""}
+
+      choices = question.deserialized_choices
+
+      expect(choices.length).to eql(2)
+      expect(choices.first.choice_translations).to eql({de: "Ja", en: "", fr: "", it: ""})
+      expect(choices.second.choice_translations).to eql({de: "Nein", en: "", fr: "", it: ""})
+    end
+
+    it "should return choices if only one translation is filled out and others are nil" do
+      question.choices_translations = {de: nil, en: "Yes, No", fr: nil, it: nil}
+
+      choices = question.deserialized_choices
+
+      expect(choices.length).to eql(2)
+      expect(choices.first.choice_translations).to eql({de: "", en: "Yes", fr: "", it: ""})
+      expect(choices.second.choice_translations).to eql({de: "", en: "No", fr: "", it: ""})
+    end
+
+    it "should return all translations" do
+      question.choices_translations = {
+        de: "Ja, Nein, Vielleicht",
+        en: "Yes,No,Maybe",
+        fr: "Oui, Non, Peut-être",
+        it: "Sì, No, Forse"
+      }
+
+      choices = question.deserialized_choices
+
+      expect(choices.length).to eql(3)
+      expect(choices.first.choice_translations).to eql({de: "Ja", en: "Yes", fr: "Oui", it: "Sì"})
+      expect(choices.second.choice_translations).to eql({de: "Nein", en: "No", fr: "Non", it: "No"})
+      expect(choices.third.choice_translations).to eql({de: "Vielleicht", en: "Maybe", fr: "Peut-être", it: "Forse"})
+    end
+
+    it "should return all translations if number of questions is not the same in all languages" do
+      question.choices_translations = {
+        de: "Ja, Nein, Vielleicht",
+        en: "Yes,No",
+        fr: "Oui,,Peut-être",
+        it: ",No"
+      }
+
+      choices = question.deserialized_choices
+
+      expect(choices.length).to eql(3)
+      expect(choices.first.choice_translations).to eql({de: "Ja", en: "Yes", fr: "Oui", it: ""})
+      expect(choices.second.choice_translations).to eql({de: "Nein", en: "No", fr: "", it: "No"})
+      expect(choices.third.choice_translations).to eql({de: "Vielleicht", en: "", fr: "Peut-être", it: ""})
+    end
+
+    it "should return escaped commas as comma" do
+      question.choices_translations = {
+        de: "Wahl 1,Wahl\\u002C 2",
+        en: "Choice 1,Choice\\u002C 2"
+      }
+
+      choices = question.deserialized_choices
+
+      expect(choices.length).to eql(2)
+      expect(choices.first.choice_translations).to eql({de: "Wahl 1", en: "Choice 1", fr: "", it: ""})
+      expect(choices.second.choice_translations).to eql(
+        {de: "Wahl, 2", en: "Choice, 2", fr: "", it: ""}
+      )
+    end
+
+    it "should return empty array if all translations are empty strings" do
+      Globalized.languages.each do |lang|
+        question.send(:"choices_#{lang}=", "")
+      end
+
+      expect(question.deserialized_choices).to eql([])
+    end
+
+    it "should return empty array if all translations are nil" do
+      Globalized.languages.each do |lang|
+        question.send(:"choices_#{lang}=", nil)
+      end
+
+      expect(question.deserialized_choices).to eql([])
+    end
+  end
+
+  describe "#choices_attributes=" do
+    let(:event) { events(:top_course) }
+    let(:question) { event.application_questions.first }
+
+    it "should correctly serialize choices" do
+      choices_attributes = {"100": {choice: "Ja", choice_en: "Yes", choice_fr: "Oui", choice_it: "Sì", _destroy: ""},
+                            "101": {choice: "", choice_en: "", choice_fr: "", choice_it: "", _destroy: ""},
+                            "102": {choice: "Nein", choice_en: "No", choice_fr: "Non", choice_it: "No", _destroy: ""}}
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      expect(question.reload.deserialized_choices.length).to eql(2)
+
+      expect(question.choices_translations).to eql(
+        {de: "Ja,Nein", en: "Yes,No", fr: "Oui,Non", it: "Sì,No"}.stringify_keys
+      )
+    end
+
+    it "should correctly serialize choices when locale is changed" do
+      I18n.locale = :fr
+      choices_attributes = {"100": {choice: "Oui", choice_de: "Ja", choice_en: "Yes", choice_it: "Sì", _destroy: ""},
+                            "101": {choice: "", choice_en: "", choice_fr: "", choice_it: "", _destroy: ""},
+                            "102": {choice: "Non", choice_de: "Nein", choice_en: "No", choice_it: "No", _destroy: ""}}
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      expect(question.reload.deserialized_choices.length).to eql(2)
+
+      expect(question.choices_translations).to eql(
+        {de: "Ja,Nein", en: "Yes,No", fr: "Oui,Non", it: "Sì,No"}.stringify_keys
+      )
+    end
+
+    it "should escape commas in choices" do
+      choices_attributes = {
+        "100": {choice: "Wahl 1", choice_en: "Choice 1", choice_fr: "", choice_it: "", _destroy: ""},
+        "101": {choice: "Wahl, 2", choice_en: "Choice, 2", choice_fr: "", choice_it: "", _destroy: ""}
+      }
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      expect(question.reload.deserialized_choices.length).to eql(2)
+
+      expect(question.choices_translations).to eql(
+        {de: "Wahl 1,Wahl\\u002C 2", en: "Choice 1,Choice\\u002C 2", fr: ",", it: ","}.stringify_keys
+      )
+    end
+
+    it "should save choices as empty strings if all choices are empty" do
+      choices_attributes = {"100": {choice: "", choice_en: "", choice_fr: "", choice_it: "", _destroy: ""},
+                            "101": {choice: nil, choice_en: nil, choice_fr: nil, choice_it: nil, _destroy: nil}}
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      expect(question.reload.deserialized_choices).to eql([])
+
+      expect(question.choices_translations).to eql({de: "", en: "", fr: "", it: ""}.stringify_keys)
+    end
+
+    it "should delete choices that are marked for deletion" do
+      choices_attributes = {"100": {choice: "Del", choice_en: "Del", choice_fr: "Del", choice_it: "Del", _destroy: "1"},
+                            "101": {choice: "Ja", choice_en: "Yes", choice_fr: "Oui", choice_it: "Sì", _destroy: ""}}
+      choices_attributes.deep_stringify_keys!
+
+      question.choices_attributes = choices_attributes
+      question.save!
+
+      expect(question.reload.deserialized_choices.length).to eql(1)
+
+      expect(question.choices_translations).to eql({de: "Ja", en: "Yes", fr: "Oui", it: "Sì"}.stringify_keys)
+    end
+  end
 end

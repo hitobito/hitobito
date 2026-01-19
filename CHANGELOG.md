@@ -5,6 +5,7 @@
 - Es können jetzt Sammelrechnungen erfasst werden (#3748)
 - Gruppen haben neu ein Tab welches alle Rechnungen anzeigt, die direkt an diese Gruppe gesendet wurden (#3856)
 - Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
+- Bei Eventfragen können nun die Antwortmöglichkeiten wie die Fragen selbst in einem dynamischen Formular hinzugefügt und entfernt werden. Bisher wurden diese als kommaseparierter String erfasst (#3563)
 
 ## Version 2.8
 
@@ -24,6 +25,7 @@
 - Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
 - Es können jetzt Hilfetexte für Radio Buttons, Dropdowns, Personenfelder und weitere Arten von Feldern angezeigt werden (#967)
 - Neue Berechtigung `layer_and_below_finance` für die Rechnungsverwaltung auf mehreren Ebenen (hitobito_sww#311)
+- Bei Eventfragen können nun die Antwortmöglichkeiten wie die Fragen selbst in einem dynamischen Formular hinzugefügt und entfernt werden. Bisher wurden diese als kommaseparierter String erfasst (#3563)
 
 ## Version 2.7
 

@@ -3,13 +3,16 @@
   = f.labeled(:question) do
     = f.hidden_field(:question)
     %p.py-2= question.question
-  - if question.choice_items.any?
-    = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2')) 
-    = f.labeled(:multiple_choices) do 
+  - if question.deserialized_choices.any?
+    = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2'))
+    = f.labeled(:multiple_choices) do
       %p.py-2
         = question.multiple_choices ? icon(:check) : icon(:times)
 
 - else
   = f.labeled_input_field(:question)
-  = f.labeled_input_field(:choices, help: t('events.form.explain_choices'))
+  = f.nested_fields_for(:choices, nil, question.deserialized_choices, {model_object: [Choice.new], link_to_add_title: t("event.questions.add_choice")}) do |choices_form|
+    .mb-2
+      = choices_form.labeled_input_field(:choice)
+      .controls.align-with-form.mt-n2= choices_form.link_to_remove(ta(:remove))
   = f.labeled_boolean_field(:multiple_choices)

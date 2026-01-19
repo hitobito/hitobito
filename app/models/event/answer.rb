@@ -43,6 +43,14 @@ class Event::Answer < ActiveRecord::Base
       .select("event_answers.*")
   }
 
+  def answer
+    super&.gsub(Choice::ESCAPED_SEPARATOR, ",")
+  end
+
+  def escaped_answer
+    self[:answer]
+  end
+
   def answer=(value)
     @raw_answer = value
     super

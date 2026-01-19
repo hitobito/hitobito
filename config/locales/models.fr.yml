@@ -617,6 +617,10 @@ fr:
         updated_at: Modifié
         login_status: Login
         language: Langue
+        languages:
+          de: Deutsch
+          en: Englisch
+          fr: Französisch
         primary_group_id: Groupe principal
         layer_group_label: Niveau
         self_registration_reason: Motif d'entrée
@@ -754,7 +758,7 @@ fr:
         admin_questions: Données administratives
         no_name: "[Sans nom]"
         visible_contact_attributes: "Options d'affichage (personne de contact)"
-        guest_limit: Maximale Anzahl Gäste pro Person
+        guest_limit: Nombre maximum d'invités par personne
 
       event/contact_attrs:
         required: Obligatoire

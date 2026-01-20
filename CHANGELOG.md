@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.8
 
 - Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
 

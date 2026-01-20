@@ -247,7 +247,7 @@ describe PeopleController, type: :controller do
       it "lists event label, link and dates" do
         create_participation(date, active_participation: true)
         get :show, params: params
-        expect(header).to eq "Meine nächsten Anlässe"
+        expect(header).to eq "Meine nächsten Kurse"
         expect(label_link[:href]).to eq group_event_path(course.groups.first, course)
         expect(label_link.text).to eq "Eventus"
         expect(label.text).to match(/Top/)

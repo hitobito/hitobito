@@ -49,6 +49,8 @@ en:
         terminate_on: Austrittsdatum
       household:
         members: Haushaltsmitglieder
+      choice:
+        choice: Antwortmöglichkeit
 
     errors:
       messages:

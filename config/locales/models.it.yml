@@ -51,6 +51,8 @@ it:
         terminate_on: Data d'uscita
       household:
         members: Componenti del nucleo familiare
+      choice:
+        choice: Antwortmöglichkeit
 
     errors:
       messages:

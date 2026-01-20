@@ -577,6 +577,9 @@ en:
         event_search: Search event...
         submit: add
 
+    questions:
+      add_choice: "Antwortmöglichkeit hinzufügen"
+
   assignments:
     attachment: "Show attachment"
     form:

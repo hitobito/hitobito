@@ -51,6 +51,8 @@ fr:
         terminate_on: Date de sortie
       household:
         members: Membres du foyer
+      choice:
+        choice: Antwortmöglichkeit
 
     errors:
       messages:

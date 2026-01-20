@@ -583,6 +583,9 @@ fr:
         event_search: Chercher un événement
         submit: Ajouter
 
+    questions:
+      add_choice: "Antwortmöglichkeit hinzufügen"
+
   assignments:
     attachment: "afficher les pièces jointes"
     form:

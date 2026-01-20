@@ -581,6 +581,9 @@ it:
         event_search: Cercare evento
         submit: Aggiungere
 
+    questions:
+      add_choice: "Antwortmöglichkeit hinzufügen"
+
   assignments:
     attachment: "Mostrare l'allegato."
     form:

@@ -37,10 +37,10 @@ class Invoice::RoleCountItem < InvoiceItem
   end
 
   def group_scope
-    group_for_role_search.self_and_descendants.select(:id)
+    within_group.self_and_descendants.select(:id)
   end
 
-  def group_for_role_search
+  def within_group
     # If the recipient is a group, we only count roles in that group's descendants.
     return recipient if recipient&.is_a?(Group)
     # Otherwise, we count roles in any descendant of the invoice's sender group.

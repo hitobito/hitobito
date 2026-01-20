@@ -195,6 +195,19 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     attribute.downcase
   }
 
+  def self.active_scope(reference_date = Date.current) # rubocop:disable Metrics/AbcSize
+    range = reference_date.is_a?(Range) ? reference_date : reference_date..reference_date
+    start_on = range.first.to_date
+    end_on = range.last.to_date.end_of_day
+
+    # we must use arel_table instead of custom sql,
+    # otherwise `unscope` with a column name does not work
+    where(arel_table[:created_at].lteq(end_on))
+      .where(arel_table[:archived_at].gteq(start_on).or(arel_table[:archived_at].eq(nil)))
+      .where(arel_table[:deleted_at].gteq(start_on).or(arel_table[:deleted_at].eq(nil)))
+  end
+
+  scope :active, ->(reference_date = Date.current) { active_scope(reference_date) }
   scope :without_archived, -> { where(archived_at: nil) }
   scope :without_deleted, -> { where(deleted_at: nil) }
   scope :without_archived_or_deleted, -> { without_archived.without_deleted }

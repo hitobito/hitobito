@@ -9,10 +9,6 @@ class PeriodInvoiceTemplate::RoleCountItem < PeriodInvoiceTemplate::Item
   validates :role_types, presence: true
   validates :unit_cost, money: true
 
-  def invoice_item_class
-    Invoice::RoleCountItem
-  end
-
   def role_types
     dynamic_cost_parameters[:role_types] || []
   end

@@ -8,10 +8,9 @@ describe "people/_attrs.html.haml" do
   let(:top_group) { groups(:top_group) }
   let(:group) { groups(:bottom_layer_one) }
   let(:person) { people(:bottom_member) }
+  let(:current_user) { people(:top_leader) }
 
   subject do
-    allow(view).to receive_messages(current_user: current_user)
-    allow(controller).to receive_messages(current_user: current_user)
     render
     Capybara::Node::Simple.new(@rendered)
   end
@@ -23,6 +22,8 @@ describe "people/_attrs.html.haml" do
     person.phone_numbers.create(label: "private phone", public: false)
     allow(view).to receive_messages(parent: top_group)
     allow(view).to receive_messages(entry: PersonDecorator.decorate(person))
+    allow(controller).to receive(:current_user).and_return(current_user)
+    allow(view).to receive(:current_user).and_return(current_user)
   end
 
   context "viewed by top leader" do
@@ -62,5 +63,20 @@ describe "people/_attrs.html.haml" do
       expect(person.phone_numbers.first.public?).to be_falsey
       is_expected.not_to have_content "private phone"
     end
+  end
+
+  it "renders participation_aside partial for each participation event type" do
+    travel_to "2012-01-01"
+    Event::Participation.create!(event: events(:top_event), person: person, active: true)
+
+    allow(view).to receive(:render).and_call_original
+    render
+
+    expect(view).to have_received(:render).with("participation_aside",
+      anything).twice
+    expect(view).to have_received(:render).with("participation_aside",
+      hash_including(title: "Meine nächsten Kurse")).once
+    expect(view).to have_received(:render).with("participation_aside",
+      hash_including(title: "Meine nächsten Anlässe")).once
   end
 end

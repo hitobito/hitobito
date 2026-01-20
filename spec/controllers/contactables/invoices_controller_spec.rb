@@ -39,12 +39,34 @@ describe Contactables::InvoicesController do
       expect(assigns(:invoices)).to match_array(invoices(:group_invoice))
     end
 
-    it "may sort invoices" do
+    it "may sort invoices by state" do
       get :index, params: {group_id: group.id, person_id: top_leader.id, sort: :state, sort_dir: :desc}
       expect(assigns(:invoices).first).to eq invoices(:sent)
 
       get :index, params: {group_id: group.id, person_id: top_leader.id, sort: :state, sort_dir: :asc}
       expect(assigns(:invoices).first).to eq invoices(:invoice)
+    end
+
+    it "may sort invoices by last_payment" do
+      invoices(:invoice).payments.create!(amount: 1, received_at: 1.day.ago)
+      invoices(:sent).payments.create!(amount: 1, received_at: 2.days.ago)
+
+      get :index, params: {group_id: group.id, person_id: top_leader.id, sort: :last_payment_at, sort_dir: :desc}
+      expect(assigns(:invoices).first).to eq invoices(:invoice)
+
+      get :index, params: {group_id: group.id, person_id: top_leader.id, sort: :last_payment_at, sort_dir: :asc}
+      expect(assigns(:invoices).first).to eq invoices(:sent)
+    end
+
+    it "may sort invoices by amount_paid" do
+      invoices(:invoice).payments.create!(amount: 4)
+      invoices(:sent).payments.create!(amount: 2)
+
+      get :index, params: {group_id: group.id, person_id: top_leader.id, sort: :amount_paid, sort_dir: :desc}
+      expect(assigns(:invoices).first).to eq invoices(:invoice)
+
+      get :index, params: {group_id: group.id, person_id: top_leader.id, sort: :amount_paid, sort_dir: :asc}
+      expect(assigns(:invoices).first).to eq invoices(:sent)
     end
 
     describe "rendering views" do

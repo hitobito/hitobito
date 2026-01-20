@@ -4,7 +4,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class Contactables::InvoicesController < ListController
-  self.sort_mappings = {recipient: "people.order_name ASC"}
+  self.sort_mappings = {
+    last_payment_at: Invoice.order_by_payment_statement,
+    amount_paid: Invoice.order_by_amount_paid_statement,
+    recipient: "people.order_name ASC"
+  }
   self.search_columns = [:title, :sequence_number]
 
   self.nesting = Group
@@ -30,7 +34,7 @@ class Contactables::InvoicesController < ListController
 
   def recipient_type = contactable.class.sti_name
 
-  def parent_scope = parent.received_invoices
+  def parent_scope = parent.received_invoices.with_aggregated_payments
 
   def authorize_class
     authorize!(:index_received_invoices, contactable)

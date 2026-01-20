@@ -6,6 +6,7 @@
 - Gruppen haben neu ein Tab welches alle Rechnungen anzeigt, die direkt an diese Gruppe gesendet wurden (#3856)
 - Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
 - Bei Eventfragen können nun die Antwortmöglichkeiten wie die Fragen selbst in einem dynamischen Formular hinzugefügt und entfernt werden. Bisher wurden diese als kommaseparierter String erfasst (#3563)
+- Im Text "Anlass: E-Mail Voranmeldung" kann nun auch der Platzhalter "event-details" verwendet werden, damit der Text analog zur Anmeldebestätigung formuliert werden kann. (hitobito_sww#280)
 
 ## Version 2.8
 

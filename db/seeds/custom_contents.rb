@@ -52,7 +52,7 @@ CustomContent.seed_once(
     placeholders_optional: 'recipient-name' },
   { key: Event::ParticipationMailer::CONTENT_NOTIFICATION,
     placeholders_required: 'event-name, participant-name',
-    placeholders_optional: 'application-url, participation-details' },
+    placeholders_optional: 'event-details, application-url, participation-details' },
   { key: Event::ParticipationMailer::CONTENT_APPROVAL,
     placeholders_required: 'participant-name, event-details, application-url',
     placeholders_optional: 'recipient-names' },

@@ -1,6 +1,6 @@
 # User
 
-For a person to be able to use the invoice feature, they must have a role with `:finance` permission on a layer/group. In some wagons this role is called ‘cashier’. A permission `:complete_finance` exists, that grant this right for all layers.
+For a person to be able to use the invoice feature, they must have a role with `:finance` permission on a layer/group. In some wagons this role is called ‘cashier’. A permission `:complete_finance` exists, that grants this right for all layers.
 
 List of invoices](_diagrams/invoices-list.png)
 

@@ -28,11 +28,12 @@ class ApplicationMailer < ActionMailer::Base
     custom_content_mail(recipients, content_key, values) if recipients.present?
   end
 
-  def custom_content_mail(recipients, content_key, values, headers = {}, context: nil)
+  def custom_content_mail(recipients, content_key, values, headers = {}, context: nil) # rubocop:disable Metrics/AbcSize
     content = CustomContent.get(content_key, context:)
-    return if Array(use_mailing_emails(recipients)).all? { |email| Bounce.blocked?(email) }
+    emails = Array(use_mailing_emails(recipients)).reject { |email| Bounce.blocked?(email) }
+    return if emails.none? && message.cc.blank? && message.bcc.blank?
 
-    headers[:to] = Array(use_mailing_emails(recipients)).reject { |email| Bounce.blocked?(email) }
+    headers[:to] = emails
     headers[:subject] ||= unescape_html(content.subject_with_values(values))
     mail(headers) do |format|
       format.html { render html: content.body_with_values(values), layout: true }

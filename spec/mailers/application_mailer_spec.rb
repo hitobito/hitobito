@@ -7,8 +7,8 @@
 
 require "spec_helper"
 
-RSpec.describe ApplicationMailer, type: :mailer do
-  before do
+describe ApplicationMailer do
+  def load_seeds
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
   end
@@ -128,6 +128,7 @@ RSpec.describe ApplicationMailer, type: :mailer do
       let(:event) { Fabricate(:event) }
 
       it "has the sender per locale defined in the translation" do
+        load_seeds
         check_sender { Event::ParticipationMailer.cancel(event, person) }
       end
     end
@@ -158,6 +159,7 @@ RSpec.describe ApplicationMailer, type: :mailer do
       let(:person) { Fabricate(:person, email: "fooo@example.com", reset_password_token: "abc") }
 
       it "has the sender per locale defined in the translation" do
+        load_seeds
         check_sender { Event::RegisterMailer.register_login(person, group, event, "abcdef") }
       end
     end

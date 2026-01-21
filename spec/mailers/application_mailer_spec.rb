@@ -40,7 +40,11 @@ describe ApplicationMailer do
         subject: "Hello {test-placeholder}")
 
       @mailer = Class.new(described_class) do
-        def test_mail(*emails) = compose(emails, "test-content")
+        def test_mail(*emails, cc: nil, bcc: nil)
+          headers[:cc] = cc
+          headers[:bcc] = bcc
+          compose(emails, "test-content")
+        end
 
         def placeholder_test_placeholder = "<a>World</a>"
       end
@@ -72,6 +76,26 @@ describe ApplicationMailer do
         @mailer.test_mail("test@example.com", "test2@example.com").deliver
       end.to change { ActionMailer::Base.deliveries.count }.by(1)
       expect(ActionMailer::Base.deliveries.last.to).to eq ["test2@example.com"]
+    end
+
+    it "still delivers if to is blocked but cc is set" do
+      Bounce.create!(email: "test@example.com", count: 3)
+      expect do
+        @mailer.test_mail("test@example.com", cc: %w[foo@example.com bar@example.com]).deliver
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      mail = ActionMailer::Base.deliveries.last
+      expect(mail[:to].to_s).to be_blank
+      expect(mail[:cc].to_s).to eq "foo@example.com, bar@example.com"
+    end
+
+    it "still delivers if to is blocked but bcc is set" do
+      Bounce.create!(email: "test@example.com", count: 3)
+      expect do
+        @mailer.test_mail("test@example.com", bcc: %w[foo@example.com bar@example.com]).deliver
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      mail = ActionMailer::Base.deliveries.last
+      expect(mail[:to].to_s).to be_blank
+      expect(mail[:bcc].to_s).to eq "foo@example.com, bar@example.com"
     end
   end
 

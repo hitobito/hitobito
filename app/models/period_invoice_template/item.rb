@@ -22,6 +22,7 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
 
   # This base class may not be instantiated
   validates :type, exclusion: {in: %w[PeriodInvoiceTemplate::Item]}
+  validates :unit_cost, money: true
 
   def dynamic_cost_parameter_definitions
     invoice_item_class.dynamic_cost_parameter_definitions
@@ -39,5 +40,12 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
 
   def invoice_item_class
     "Invoice::#{self.class.name.gsub(/^PeriodInvoiceTemplate::/, "")}".constantize
+  end
+
+  def unit_cost
+    BigDecimal(dynamic_cost_parameters[:unit_cost])
+  rescue ArgumentError, TypeError
+    errors.add(:unit_cost, :is_not_a_decimal_number)
+    BigDecimal(0)
   end
 end

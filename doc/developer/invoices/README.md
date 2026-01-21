@@ -6,3 +6,4 @@
 * [Invoices](invoices.md)
 * [Ebics Connection](ebics.md)
 * [Dynamic Invoice](dynamic_invoice_items.md)
+* [Payments](payments.md)

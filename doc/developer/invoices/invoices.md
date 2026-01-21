@@ -25,4 +25,3 @@ Invoice runs are used to create an invoice for several people. The invoice runs 
 ### `Message::LetterWithInvoice`
 
 In addition to letters, [invoice letters](../messages/README.md#messageletterwithinvoice) can be created for recipients for subscriptions (MailingList). The `Message::LetterWithInvoice` entry is linked to a collective invoice `InvoiceRun`.
-

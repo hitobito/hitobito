@@ -8,26 +8,34 @@
 # Abstract base class for dynamic invoice items which calculate their cost
 # by counting some models within an invoice period and multiplying this count
 # with a unit cost.
-# Such items can be used in three separate contexts, and are expected to calculate
-# the price for each of these contexts:
-# 1. When not attached to an invoice: The item calculates a broad count of the relevant
-#    models within some parent group. This is used for previewing the total amount on
-#    an invoice form.
-# 2. When attached to an invoice with a group as recipient: The item calculates the count
-#    of models related to that specific recipient group. This is e.g. used for aggregated
-#    membership fees which the recipient group has to pay to the root group.
-# 3. When attached to an invoice with a persion as recipient: The item calculates the
-#    count of models related to that specific person. This is e.g. used when sending
-#    individual membership invoices to the individual members of a group.
+# Such items can be used in invoices addressed to groups or to people, or with a list
+# or scope of groups or people, and are expected to calculate the price as follows:
+# 1. When addressed to a single group: The item calculates the count of models related
+#    to that specific recipient group. This is e.g. used for aggregated membership fees
+#    which the recipient group has to pay to the root group.
+# 2. When addressed to a single person: The item calculates the count of models related
+#    to that specific recipient person. This is e.g. used when sending membership
+#    invoices to the individual members of a group.
+# 3. With a list of groups or a list of people: The item calculates the sum of counts
+#    for each of these individual recipients. This is used for previewing the total
+#    amount on an invoice form.
 #
 # In all cases, a period item takes a period start date and an optional period end date,
-# and only counts models which were "alive" or "active" some time in that period.
+# and only counts models which were "alive" or "active" some time during that period.
 class Invoice::PeriodItem < InvoiceItem
   self.dynamic = true
 
-  self.dynamic_cost_parameter_definitions = {
-    unit_cost: :decimal
-  }
+  def self.for_groups(groups, **params)
+    new(**params).tap do |item|
+      item.instance_variable_set(:@groups, groups)
+    end
+  end
+
+  def self.for_people(people, **params)
+    new(**params).tap do |item|
+      item.instance_variable_set(:@people, people)
+    end
+  end
 
   validates :period_start_on, presence: true
   validates :unit_cost, money: true
@@ -36,8 +44,9 @@ class Invoice::PeriodItem < InvoiceItem
     # This is only a sample implementation. Subclasses may as well
     # redefine this method entirely.
     @count ||= base_scope # Count models...
-      .active(period_start_on..period_end_on) # ... which were active in the period...
-      .where(group_id: group_scope) # ... and which belong to relevant groups
+      .merge(group_condition) # ... which belong to relevant groups...
+      .merge(people_condition) # ... which belong to relevant people...
+      .active(period_start_on..period_end_on) # ... and which were active in the period
       .count
   end
 
@@ -49,19 +58,26 @@ class Invoice::PeriodItem < InvoiceItem
     raise "implement in subclass"
   end
 
-  def group_scope
-    within_group.self_and_descendants.select(:id)
+  def group_condition
+    # Assumes the base_scope is already joined to the :group which the counted models belong to
+    Group.joins(
+      "INNER JOIN groups ancestor ON ancestor.lft <= groups.lft AND ancestor.rgt > groups.lft "
+    ).where(ancestor: {id: groups})
   end
 
-  def within_group
-    # If the recipient is a group, we limit the model search to that group's descendants.
-    return recipient if recipient&.is_a?(Group)
-    # Otherwise, we consider models in any descendant of the invoice's sender group.
-    Group.find(group_id)
+  def people_condition
+    # Assumes the base_scope is already joined to the :person which the counted models belong to
+    Person.where(id: people)
   end
 
-  def recipient
-    invoice&.recipient
+  def groups
+    # If no specific groups are given, fall back to the invoice recipient or invoice layer
+    @groups ||= invoice&.recipient&.is_a?(Group) ? invoice.recipient_id : invoice&.group_id
+  end
+
+  def people
+    # If no specific people are given, fall back to the invoice recipient or no people condition
+    @people ||= invoice&.recipient&.is_a?(Person) ? invoice.recipient_id : Person.select(:id)
   end
 
   def unit_cost
@@ -69,10 +85,6 @@ class Invoice::PeriodItem < InvoiceItem
   rescue ArgumentError, TypeError
     errors.add(:unit_cost, :is_not_a_decimal_number)
     BigDecimal(0)
-  end
-
-  def group_id
-    dynamic_cost_parameters[:group_id] || invoice&.group_id
   end
 
   def period_start_on

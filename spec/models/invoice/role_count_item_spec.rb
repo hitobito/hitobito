@@ -11,22 +11,22 @@ describe Invoice::RoleCountItem do
   let(:group) { groups(:top_group) }
   let(:role_types) { [Group::TopGroup::Leader.name] }
   let(:invoice) { Fabricate(:invoice, group:) }
-
-  subject(:item) do
-    described_class.new(
+  let(:attrs) {
+    {
       invoice:,
       account: "1234",
       cost_center: "5678",
       name: "invoice item",
       dynamic_cost_parameters: {
-        group_id: group.id,
         role_types:,
         unit_cost: 10.50,
         period_start_on: 1.month.ago,
         period_end_on: 1.month.from_now
       }
-    )
-  end
+    }
+  }
+
+  subject(:item) { described_class.new(**attrs) }
 
   context "validation" do
     it "is valid" do
@@ -35,22 +35,6 @@ describe Invoice::RoleCountItem do
 
     it "is invalid without role types" do
       item.dynamic_cost_parameters[:role_types] = nil
-      expect(item).not_to be_valid
-    end
-
-    it "can work with group id dynamic cost parameters" do
-      invoice.group_id = nil
-      expect(item).to be_valid
-    end
-
-    it "can fallback to group id from invoice" do
-      item.dynamic_cost_parameters[:group_id] = nil
-      expect(item).to be_valid
-    end
-
-    it "is invalid without group id" do
-      item.dynamic_cost_parameters[:group_id] = nil
-      item.invoice.group_id = nil
       expect(item).not_to be_valid
     end
 
@@ -83,14 +67,19 @@ describe Invoice::RoleCountItem do
       Group::BottomGroup::Leader.destroy_all
     end
 
-    context "with no specific recipient, calculating preview values for a whole invoice run" do
+    context "with a list of group recipients, calculating preview values for a whole invoice run" do
+      let(:recipient_groups) { Group.where(id: [group.id, groups(:bottom_group_two_one).id]) }
+
+      subject(:item) { described_class.for_groups(recipient_groups, **attrs) }
+
       it "counts matching roles" do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group:)
+        Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_two_one))
         item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.count).to eq(2)
       end
 
       it "ignores inactive role" do
@@ -113,7 +102,7 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(1)
       end
 
-      it "ignores roles outside of the group" do
+      it "ignores roles outside of the specified groups" do
         Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_two))
         expect(item.count).to eq(0)
       end
@@ -123,25 +112,18 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(1)
       end
 
+      context "with nested recipient groups" do
+        let(:recipient_groups) { Group.where(id: [group.id, groups(:bottom_group_one_one_one).id]) }
+
+        it "counts the same role once for each of the specified groups" do
+          Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
+          expect(item.count).to eq(2)
+        end
+      end
+
       it "ignores role of the wrong type" do
         Fabricate(Group::BottomGroup::Member.name, group:)
         expect(item.count).to eq(0)
-      end
-
-      it "falls back to group_id of the invoice" do
-        group2 = groups(:bottom_group_one_two)
-        item.dynamic_cost_parameters[:group_id] = nil
-        invoice.group_id = group2.id
-        Fabricate(Group::BottomGroup::Leader.name, group: group2)
-        expect(item.count).to eq(1)
-      end
-
-      it "prefers the group_id from the params" do
-        group2 = groups(:bottom_group_one_two)
-        item.dynamic_cost_parameters[:group_id] = group2.id
-        invoice.group_id = group.id
-        Fabricate(Group::BottomGroup::Leader.name, group: group2)
-        expect(item.count).to eq(1)
       end
 
       it "counts multiple roles of the same person and same group as one" do
@@ -180,12 +162,13 @@ describe Invoice::RoleCountItem do
       end
     end
 
-    context "with group recipient" do
+    context "with single group recipient" do
       let(:group) { groups(:bottom_layer_one) }
       let(:recipient_group) { groups(:bottom_group_one_one) }
 
+      subject(:item) { described_class.for_groups(recipient_group.id, **attrs) }
+
       before do
-        item.dynamic_cost_parameters[:group_id] = nil
         item.invoice.recipient = recipient_group
       end
 
@@ -233,9 +216,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
       end
 
-      it "ignores group_id in the dynamic cost params and on the invoice" do
+      it "ignores group_id on the invoice" do
         group2 = groups(:bottom_group_one_two)
-        item.dynamic_cost_parameters[:group_id] = group2
         item.invoice.group_id = group2.id
         Fabricate(Group::BottomGroup::Leader.name, group: group2)
         expect(item.count).to eq(0)
@@ -282,12 +264,106 @@ describe Invoice::RoleCountItem do
       end
     end
 
-    context "with person recipient" do
+    context "with a list of person recipients, calculating preview values for a whole invoice run" do
+      let(:person) { people(:bottom_member) }
+      let(:person2) { people(:top_leader) }
+      let(:recipient_people) { Person.where(id: [person.id, person2.id]) }
+
+      subject(:item) { described_class.for_people(recipient_people, **attrs) }
+
+      it "counts matching roles" do
+        expect(item.count).to eq(0)
+
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:)
+        item.instance_variable_set(:@count, nil)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "ignores inactive role" do
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:,
+          start_on: 1.year.ago, end_on: 10.months.ago)
+        expect(item.count).to eq(0)
+      end
+
+      it "ignores future role" do
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:,
+          start_on: 10.months.from_now, end_on: 1.year.from_now)
+        expect(item.count).to eq(0)
+      end
+
+      it "considers past role which overlaps the period" do
+        item.dynamic_cost_parameters[:period_start_on] = 11.months.ago
+        item.dynamic_cost_parameters[:period_end_on] = 9.months.ago
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:,
+          start_on: 12.months.ago, end_on: 10.months.ago)
+        expect(item.count).to eq(1)
+      end
+
+      it "ignores roles outside of the specified groups" do
+        Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_two), person:)
+        expect(item.count).to eq(0)
+      end
+
+      it "ignores roles of unrelated person" do
+        Fabricate(Group::BottomGroup::Leader.name, group:, person: people(:root))
+        expect(item.count).to eq(0)
+      end
+
+      it "searches deep within the group" do
+        Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one),
+          person:)
+        expect(item.count).to eq(1)
+      end
+
+      it "ignores role of the wrong type" do
+        Fabricate(Group::BottomGroup::Member.name, group:, person:)
+        expect(item.count).to eq(0)
+      end
+
+      it "counts multiple roles of the same person and same group as one" do
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.count).to eq(1)
+      end
+
+      it "counts multiple roles of separate people separately" do
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        Fabricate(Group::BottomGroup::Leader.name, group:, person: person2,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.count).to eq(2)
+      end
+
+      it "counts multiple roles of the same person in separate groups separately" do
+        group2 = groups(:bottom_group_one_one_one)
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        Fabricate(Group::BottomGroup::Leader.name, group: group2, person:,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.count).to eq(2)
+      end
+
+      it "counts multiple roles with separate types of the same person and same group as one" do
+        item.dynamic_cost_parameters[:role_types] =
+          [Group::BottomGroup::Leader.name, Group::BottomGroup::Member.name]
+        Fabricate(Group::BottomGroup::Leader.name, group:, person:,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        Fabricate(Group::BottomGroup::Member.name, group:, person:,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.count).to eq(1)
+      end
+    end
+
+    context "with single person recipient" do
       let(:group) { groups(:bottom_group_one_one) }
       let(:recipient_person) { people(:bottom_member) }
 
+      subject(:item) { described_class.for_people(recipient_person.id, **attrs) }
+
       before do
-        item.dynamic_cost_parameters[:group_id] = nil
         item.invoice.recipient = recipient_person
       end
 
@@ -335,22 +411,6 @@ describe Invoice::RoleCountItem do
       it "ignores role of the wrong type" do
         Fabricate(Group::BottomGroup::Member.name, group:, person: recipient_person)
         expect(item.count).to eq(0)
-      end
-
-      it "falls back to group_id of the invoice" do
-        group2 = groups(:bottom_group_one_two)
-        item.dynamic_cost_parameters[:group_id] = nil
-        invoice.group_id = group2.id
-        Fabricate(Group::BottomGroup::Leader.name, group: group2, person: recipient_person)
-        expect(item.count).to eq(1)
-      end
-
-      it "prefers the group_id from the params" do
-        group2 = groups(:bottom_group_one_two)
-        item.dynamic_cost_parameters[:group_id] = group2.id
-        invoice.group_id = group.id
-        Fabricate(Group::BottomGroup::Leader.name, group: group2, person: recipient_person)
-        expect(item.count).to eq(1)
       end
 
       it "counts multiple roles of the same person and same group as one" do

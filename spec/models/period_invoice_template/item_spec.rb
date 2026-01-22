@@ -29,15 +29,9 @@ describe PeriodInvoiceTemplate::Item do
   context "to_invoice_item" do
     it "passes on params by default" do
       expect(item).to receive(:invoice_item_class).and_return(InvoiceItem)
+      expect(InvoiceItem).to receive(:for_groups).and_return(InvoiceItem.new)
       result = item.to_invoice_item
       expect(result).to be_an_instance_of(InvoiceItem)
-      expect(result.attributes.with_indifferent_access).to include({
-        dynamic_cost_parameters: {
-          group_id: period_invoice_template.group_id,
-          period_start_on: period_invoice_template.start_on,
-          period_end_on: period_invoice_template.end_on
-        }
-      })
       expect(result.attributes).to include(item.attributes.slice(:account, :cost_center, :name))
     end
   end

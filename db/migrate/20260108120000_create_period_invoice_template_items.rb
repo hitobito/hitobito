@@ -14,9 +14,5 @@ class CreatePeriodInvoiceTemplateItems < ActiveRecord::Migration[8.0]
       t.belongs_to :period_invoice_template, null: false
       t.timestamps
     end
-
-    # TODO:
-    #  migrate invoice_items#type values from InvoiceItem::FixedFee to the correct class
-    #  migrate invoice_items#unit_cost
   end
 end

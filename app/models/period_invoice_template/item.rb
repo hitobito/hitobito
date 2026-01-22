@@ -28,14 +28,15 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
     invoice_item_class.dynamic_cost_parameter_definitions
   end
 
-  def to_invoice_item
-    invoice_item_class
-      .new(name:, cost_center:, account:,
-        dynamic_cost_parameters: dynamic_cost_parameters.merge({
-          group_id: period_invoice_template.group_id,
-          period_start_on: period_invoice_template.start_on,
-          period_end_on: period_invoice_template.end_on
-        }))
+  def to_invoice_item(invoice: nil)
+    invoice_item_class.for_groups(
+      period_invoice_template.group_id, # TODO pass the groups from recipient_source in here, #3752
+      name:, cost_center:, account:, invoice:,
+      dynamic_cost_parameters: dynamic_cost_parameters.merge({
+        period_start_on: period_invoice_template.start_on,
+        period_end_on: period_invoice_template.end_on
+      })
+    )
   end
 
   def invoice_item_class

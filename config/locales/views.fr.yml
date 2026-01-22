@@ -187,7 +187,7 @@ fr:
 
   dropdown/event/participant_add:
     as: "en tant que %{role}"
-    register_new_managed: Neues Kind erfassen und anmelden
+    register_new_managed: Saisir et inscrire un nouvel enfant
     disabled_messages:
       already_exists: "est déjà annoncé"
       cannot_see_event: "ne doit pas voir l'événement"
@@ -526,7 +526,7 @@ fr:
         managed:
           explanation: "%{person} est inscrit à cet événement."
           pending: "%{person} est préinscrit pour cet événement. L'inscription n'est pas encore définitive et doit être confirmée par l'administration de l'événement."
-          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
+          waiting_list: "%{person} est sur la liste d'attente pour cet événement."
 
     qualifications:
       index:
@@ -538,8 +538,8 @@ fr:
     register:
       register:
         title:
-          participant: Kontaktdaten der teilnehmenden Person erfassen
-          manager: Kontaktdaten der erziehungsberechtigten Person
+          participant: Saisir les coordonnées de la personne participante
+          manager: Coordonnées du parent ou du tuteur légal
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
         email_check:
@@ -551,10 +551,10 @@ fr:
       email_check:
         next: Continuer
         enter_email: S'il te plaît, indique ton adresse e-mail pour t'inscrire à cet événement.
-        next_for_manager: Mein Kind anmelden
+        next_for_manager: Inscrire mon enfant
       manager_fields:
-        manager_first_name: Vorname erziehungsberechtigte Person
-        manager_last_name: Nachname erziehungsberechtigte Person
+        manager_first_name: Prénom du parent ou tuteur légal
+        manager_last_name: Nom de famille du parent ou tuteur légal
 
     invitation_lists:
       create:
@@ -708,7 +708,7 @@ fr:
   event/participations:
     full_entry_label: "%{model_label} de <i>%{person}</i> dans <i>%{event}</i>"
     success: "%{full_entry_label} a été ajouté avec succès."
-    success_for_external_manager: "%{full_entry_label} wurde erfolgreich erstellt."
+    success_for_external_manager: "%{full_entry_label} a été créé avec succès."
     instructions: "Pour l'inscription définitive, tu dois imprimer cette page en utilisant l'option <i>imprimer</i>, puis la signer et l'envoyer par poste à l'adresse indiquée."
     export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
     waiting_list: "Toutes les places sont actuellement prises, l'inscription est sur la liste d'attente."
@@ -2359,9 +2359,9 @@ fr:
   people_managers:
     section:
       manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
-    common_heading: Kinder / Verwalter*innen
-    managers_heading: Verwalter*innen
-    manageds_heading: Kinder
-    create_managed_person_button: Kind erfassen
+    common_heading: Enfants / Administrateurs
+    managers_heading: Administrateurs
+    manageds_heading: Enfants
+    create_managed_person_button: Saisir un enfant
     assign_managed_person_button: Kind zuweisen
     assign_manager_person_button: Verwalter*in zuweisen

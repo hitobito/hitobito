@@ -435,9 +435,9 @@ it:
         many: Filtri
         other: Filtri
       people_manager:
-        one: Verwalter*in
-        many: Verwalter*innen
-        other: Verwalter*innen
+        one: Amministratore
+        many: Amministratori
+        other: Amministratori/amministratrici
       phone_number:
         one: numero di telefono
         many: Numeri di telefono
@@ -507,7 +507,7 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: zusätz. Adresszeile
+        address_care_of: Riga dell'indirizzo aggiuntiva
         public: Pubblico
 
       additional_addresses:
@@ -609,9 +609,9 @@ it:
         login_status: Login
         language: Lingua
         languages:
-          de: Deutsch
-          en: Englisch
-          fr: Französisch
+          de: Tedesco
+          en: Inglese
+          fr: Francese
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale
         self_registration_reason: Motivo dell'ingresso
@@ -738,7 +738,7 @@ it:
         teamer_count: Numero di organizzatori
         participant_count: Numero di partecipanti
         applicant_count: Numero di iscrizioni
-        applications_cancelable: Abmeldung
+        applications_cancelable: Cancellazione
         display_booking_info: Visualizza stato iscrizioni
         participations_visible: Visibilità dei partecipanti
         waiting_list: Lista d'attesa nazionale
@@ -1236,15 +1236,15 @@ it:
           cancelled: Cancellato
         recipient: Destinatario
         recipient_email: Email del destinatario
-        recipient_company_name: Firmenname
-        recipient_name: Name
-        recipient_address_care_of: zusätz. Adresszeile
-        recipient_postbox: Postfach
+        recipient_company_name: Nome della ditta
+        recipient_name: Nome
+        recipient_address_care_of: Riga dell'indirizzo aggiuntiva
+        recipient_postbox: Casella postale
         recipient_country: Land
-        recipient_street: Strasse
-        recipient_housenumber: Hausnummer
-        recipient_zip_code: PLZ
-        recipient_town: Ort
+        recipient_street: Strada
+        recipient_housenumber: Numero civico
+        recipient_zip_code: CAP
+        recipient_town: Luogo
         recipient_address: Indirizzo del destinatario
         payee_name: Zahlungsempfänger Name
         payee_street: Zahlungsempfänger Strasse

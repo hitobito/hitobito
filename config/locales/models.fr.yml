@@ -436,9 +436,9 @@ fr:
         many: Filtres
         other: Filtres
       people_manager:
-        one: Verwalter*in
-        many: Verwalter*innen
-        other: Verwalter*innen
+        one: Administrateur* de la société
+        many: Administrateurs
+        other: Administrateurs
       phone_number:
         one: Numéro de téléphone
         many: Numéros de téléphone
@@ -610,33 +610,33 @@ fr:
         login_status: Login
         language: Langue
         languages:
-          de: Deutsch
-          en: Englisch
-          fr: Französisch
+          de: Allemand
+          en: Anglais
+          fr: Français
         primary_group_id: Groupe principal
         layer_group_label: Niveau
         self_registration_reason: Motif d'entrée
         self_registration_reason_text: Motif d'entrée
         self_registration_reason_custom_text: Motif d'entrée prédéfini
-        managers: Verwalter*innen
-        manageds: Kinder
-        people_managers: Verwalter*innen
-        people_manageds: Kinder
-        people_managers_attributes: Verwalter*innen
-        people_manageds_attributes: Kinder
-        readable_manageds: Kinder
+        managers: Administrateurs
+        manageds: Enfants
+        people_managers: Administrateurs
+        people_manageds: Enfants
+        people_managers_attributes: Administrateurs
+        people_manageds_attributes: Enfants
+        readable_manageds: Enfants
 
       people_manager:
-        manager_id: Verwalter*in
-        managed_id: Kind
+        manager_id: Administrateur
+        managed_id: Enfant
 
       people_managers:
-        manager_id: Verwalter*in
+        manager_id: Administrateur
         managed_id: Enfant
 
       people_manageds:
         manager_id: Enfant
-        managed_id: Verwalter*in
+        managed_id: Administrateur
 
       person_duplicate:
         birth_year: Année de naissance

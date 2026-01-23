@@ -165,7 +165,7 @@ group :console do
 end
 
 group :metrics do
-  gem "annotate"
+  gem "annotaterb"
   gem "brakeman"
   gem "ci_reporter_rspec"
   gem "rails-erd"

@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: person_duplicates
@@ -20,7 +19,6 @@
 #
 #  index_person_duplicates_on_person_1_id_and_person_2_id  (person_1_id,person_2_id) UNIQUE
 #
-
 Fabricator(:person_duplicate) do
   person_1 { Fabricate(:person) }
   before_create do |d, _t|

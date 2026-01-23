@@ -4,12 +4,12 @@
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
-
 # == Schema Information
 #
 # Table name: messages
 #
 #  id                    :bigint           not null, primary key
+#  blocked_count         :integer          default(0)
 #  date_location_text    :string
 #  donation_confirmation :boolean          default(FALSE), not null
 #  failed_count          :integer          default(0)
@@ -30,17 +30,16 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  bounce_parent_id      :integer
-#  invoice_run_id       :bigint
+#  invoice_run_id        :bigint
 #  mailing_list_id       :bigint
 #  sender_id             :bigint
 #
 # Indexes
 #
-#  index_messages_on_invoice_run_id  (invoice_run_id)
+#  index_messages_on_invoice_run_id   (invoice_run_id)
 #  index_messages_on_mailing_list_id  (mailing_list_id)
 #  index_messages_on_sender_id        (sender_id)
 #
-
 class Message::BulkMail < Message
   delegate :mail_from, to: :mail_log
 

@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: person_add_request_ignored_approvers
@@ -15,7 +14,6 @@
 #
 #  person_add_request_ignored_approvers_index  (group_id,person_id) UNIQUE
 #
-
 class Person::AddRequest::IgnoredApprover < ActiveRecord::Base
   belongs_to :group, class_name: "::Group"
   belongs_to :person

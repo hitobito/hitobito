@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: events
@@ -19,6 +18,7 @@
 #  display_booking_info             :boolean          default(TRUE), not null
 #  external_applications            :boolean          default(FALSE)
 #  globally_visible                 :boolean
+#  guest_limit                      :integer          default(0), not null
 #  hidden_contact_attrs             :text
 #  location                         :text
 #  maximum_participants             :integer
@@ -32,7 +32,6 @@
 #  priorization                     :boolean          default(FALSE), not null
 #  required_contact_attrs           :text
 #  requires_approval                :boolean          default(FALSE), not null
-#  search_column                    :tsvector
 #  shared_access_token              :string
 #  signature                        :boolean
 #  signature_confirmation           :boolean
@@ -41,6 +40,7 @@
 #  teamer_count                     :integer          default(0)
 #  training_days                    :decimal(5, 2)
 #  type                             :string
+#  visible_contact_attributes       :string           default(["name", "address", "phone_number", "email", "social_account"])
 #  waiting_list                     :boolean          default(TRUE), not null
 #  created_at                       :datetime
 #  updated_at                       :datetime
@@ -52,11 +52,9 @@
 #
 # Indexes
 #
-#  events_search_column_gin_idx         (search_column) USING gin
 #  index_events_on_kind_id              (kind_id)
 #  index_events_on_shared_access_token  (shared_access_token)
 #
-
 Fabricator(:event) do
   name { "Eventus" }
   groups { [Group.all_types.detect { |t| t.event_types.include?(Event) }.first] }

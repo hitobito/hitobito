@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: payments
@@ -21,7 +20,6 @@
 #  index_payments_on_invoice_id              (invoice_id)
 #  index_payments_on_transaction_identifier  (transaction_identifier) UNIQUE
 #
-
 class PaymentSerializer < ApplicationSerializer
   schema do
     json_api_properties

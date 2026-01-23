@@ -5,6 +5,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: bounces
+#
+#  id               :bigint           not null, primary key
+#  blocked_at       :datetime
+#  count            :integer          default(0), not null
+#  email            :string           not null
+#  mailing_list_ids :integer          is an Array
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#
+# Indexes
+#
+#  index_bounces_on_email  (email) UNIQUE
+#
 class Bounce < ApplicationRecord
   class UnexpectedBlock < StandardError
     def initialize(mail, msg = nil)

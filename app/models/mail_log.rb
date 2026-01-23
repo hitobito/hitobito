@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: mail_logs
@@ -23,7 +22,6 @@
 #  index_mail_logs_on_mail_hash   (mail_hash)
 #  index_mail_logs_on_message_id  (message_id)
 #
-
 class MailLog < ActiveRecord::Base
   belongs_to :message
 

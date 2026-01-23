@@ -4,6 +4,15 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+# The different kinds could be a "type" and be solved with STI-classes. Once
+# we support multiple types of FamilyMembers, we should think about using STI
+# to isolate the differences.
+#
+# FamilyMember::Sibling
+#   - has same parents as other siblings (once they have parents)
+#   - are not modeled to cover halfsiblings
+#   - is sibling to all siblings of the same family
+#   - can leave family if all siblings are removed (to correct wrong assignment)
 
 # == Schema Information
 #
@@ -22,17 +31,6 @@
 #  index_family_members_on_person_id               (person_id)
 #  index_family_members_on_person_id_and_other_id  (person_id,other_id) UNIQUE
 #
-
-# The different kinds could be a "type" and be solved with STI-classes. Once
-# we support multiple types of FamilyMembers, we should think about using STI
-# to isolate the differences.
-#
-# FamilyMember::Sibling
-#   - has same parents as other siblings (once they have parents)
-#   - are not modeled to cover halfsiblings
-#   - is sibling to all siblings of the same family
-#   - can leave family if all siblings are removed (to correct wrong assignment)
-
 class FamilyMember < ApplicationRecord
   # TODO: extract exception to its own file
   class FamilyKeyMismatch < StandardError

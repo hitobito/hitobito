@@ -18,7 +18,6 @@
 #  index_event_dates_on_event_id               (event_id)
 #  index_event_dates_on_event_id_and_start_at  (event_id,start_at)
 #
-
 first:
   label: Kurs
   event: top_course

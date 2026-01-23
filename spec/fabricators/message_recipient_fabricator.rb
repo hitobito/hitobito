@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: message_recipients
@@ -31,7 +30,6 @@
 #  index_message_recipients_on_person_message_email         (person_id,message_id,email) UNIQUE
 #  index_message_recipients_on_person_message_phone_number  (person_id,message_id,phone_number) UNIQUE
 #
-
 Fabricator(:message_recipient) do
   message { Fabricate(:letter) }
   person { Fabricate(:person) }

@@ -2,25 +2,24 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: payment_reminders
 #
-#  id         :integer          not null, primary key
-#  due_at     :date             not null
-#  level      :integer
-#  text       :string
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  invoice_id :integer          not null
+#  id                       :integer          not null, primary key
+#  due_at                   :date             not null
+#  level                    :integer
+#  show_invoice_description :boolean          default(TRUE), not null
+#  text                     :string
+#  title                    :string
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  invoice_id               :integer          not null
 #
 # Indexes
 #
 #  index_payment_reminders_on_invoice_id  (invoice_id)
 #
-
 class PaymentReminderSerializer < ApplicationSerializer
   schema do
     json_api_properties

@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: roles
@@ -26,7 +25,6 @@
 #  index_roles_on_person_id_and_group_id  (person_id,group_id)
 #  index_roles_on_type                    (type)
 #
-
 class RoleSerializer < ApplicationSerializer
   schema do
     json_api_properties

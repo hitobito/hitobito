@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: family_members
@@ -22,7 +21,6 @@
 #  index_family_members_on_person_id               (person_id)
 #  index_family_members_on_person_id_and_other_id  (person_id,other_id) UNIQUE
 #
-
 Fabricator(:family_member) do
   person { Fabricate(:person) }
   kind { "sibling" }

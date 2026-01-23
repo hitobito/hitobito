@@ -4,7 +4,6 @@
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: hitobito_log_entries
@@ -25,7 +24,6 @@
 #  index_hitobito_log_entries_on_multiple_columns  (category,level,subject_id,subject_type,message)
 #  index_hitobito_log_entries_on_subject           (subject_type,subject_id)
 #
-
 debug_webhook:
   created_at: <%= 5.day.ago.midday.to_fs(:db) %>
   category: "webhook"

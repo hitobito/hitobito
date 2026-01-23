@@ -4,7 +4,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
+# Kursteilnehmer
 # == Schema Information
 #
 # Table name: event_roles
@@ -19,8 +19,6 @@
 #  index_event_roles_on_participation_id  (participation_id)
 #  index_event_roles_on_type              (type)
 #
-
-# Kursteilnehmer
 module Event::Course::Role
   class Participant < ::Event::Role::Participant
     class << self

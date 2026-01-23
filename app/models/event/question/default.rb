@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_questions
@@ -19,13 +18,13 @@
 #  type                     :string           not null
 #  derived_from_question_id :integer
 #  event_id                 :integer
+#  event_question_id        :integer          not null
 #
 # Indexes
 #
 #  index_event_questions_on_derived_from_question_id  (derived_from_question_id)
 #  index_event_questions_on_event_id                  (event_id)
 #
-
 class Event::Question::Default < Event::Question
   def choice_items
     deserialized_choices.map(&:choice)

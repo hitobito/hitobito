@@ -13,12 +13,12 @@
 #  name                 :string           not null
 #  people               :boolean          default(FALSE)
 #  permission           :string           default("layer_read"), not null
+#  register_people      :boolean          default(FALSE), not null
 #  token                :string           not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  layer_group_id       :integer          not null
 #
-
 require "spec_helper"
 
 describe ServiceToken do

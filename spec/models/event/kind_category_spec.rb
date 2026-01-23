@@ -2,14 +2,14 @@
 #
 # Table name: event_kind_categories
 #
-#  id         :bigint           not null, primary key
-#  deleted_at :datetime
-#  label      :string
-#  order      :integer
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                     :bigint           not null, primary key
+#  deleted_at             :datetime
+#  label                  :string
+#  order                  :integer
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  event_kind_category_id :bigint           not null
 #
-
 require "spec_helper"
 
 describe Event::KindCategory do

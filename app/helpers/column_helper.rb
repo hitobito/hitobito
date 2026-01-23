@@ -8,7 +8,11 @@ module ColumnHelper
   def column_type(obj, attr)
     return obj.send(:"#{attr}_type") if obj.respond_to?(:"#{attr}_type")
 
-    attribute_type_enum(obj, attr) || column_property(obj, attr, :type)
+    if obj.class.respond_to?(:type_for_attribute)
+      attribute_type = obj.class.type_for_attribute(attr.to_sym).type
+    end
+
+    attribute_type_enum(obj, attr) || column_property(obj, attr, :type) || attribute_type
   end
 
   def attribute_type_enum(obj, attr)

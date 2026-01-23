@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -51,8 +51,6 @@ fr:
         terminate_on: Date de sortie
       household:
         members: Membres du foyer
-      choice:
-        choice: Antwortmöglichkeit
 
     errors:
       messages:
@@ -210,10 +208,6 @@ fr:
               invalid_check_digit: 'n''est pas valable ; code de vérification incorrect'
             logo:
               attached_unless_disabled: 'doit être indiqué si une position de logo est sélectionnée'
-        period_invoice_template:
-          attributes:
-            end_on:
-              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
           attributes:
             end_on:
@@ -405,10 +399,6 @@ fr:
         one: paiements
         many: Paiements
         other: Paiements
-      period_invoice_template:
-        one: Sammelrechnung
-        many: Sammelrechnungen
-        other: Sammelrechnungen
       oauth/application:
         one: Application OAuth
         many: Applications OAuth
@@ -1416,12 +1406,6 @@ fr:
           zugerkb: Zuger Kantonalbank
           ukb: 'Urner Kantonalbank '
           bcn: Banque Cantonale Neuchâteloise
-
-      period_invoice_template:
-        name: Bezeichnung
-        start_on: Rechnungsperiode Start
-        end_on: Rechnungsperiode Ende
-        recipient_group_type: Empfängergruppen
 
       service_token:
         name: Nom

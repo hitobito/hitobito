@@ -25,17 +25,6 @@ body {
     background-color: $logo-background-color;
     border-radius: 6px;
   }
-
-  .container-fluid {
-    min-width: 70%;
-    max-width: 100%;
-    padding-right: 5px;
-    padding-left: 5px;
-    @include responsive(mediaTablet){
-      padding-right: 20px;  // needs these paddings to accomodate further sheets
-      padding-left: 15px;
-    }
-  }
 }
 
 #logo-container {
@@ -85,6 +74,19 @@ body {
   max-width: 25rem;
 }
 
+#page .container-fluid, .main-header .container-fluid {
+  min-width: 70%;
+  max-width: 100%;
+  padding: 0 5px 0 5px;
+  z-index: 2;
+  overflow-x: visible;
+  overflow-y: visible;
+  @include responsive(mediaTablet){
+    padding-right: 20px;  // needs these paddings to accomodate further sheets
+    padding-left: 15px;
+  }
+}
+
 /* Content */
 #page {
   padding: 3px 0 60px;
@@ -104,22 +106,12 @@ body {
 
   .nav-left {
     z-index: 1;
-    margin-top: $logo-height + 40px;
+    margin-top: 15px;
   }
 
   .container-fluid {
-    z-index: 2;
-    min-width: 70%;
-    max-width: 100%;
-    overflow-x: visible;
-    overflow-y: visible;
-    padding-bottom: 0px;
-    padding-right: 5px;
-    padding-left: 5px;
     @include responsive(mediaTablet){
       padding-bottom: 60px; // needs these paddings to accomodate further sheets
-      padding-right: 20px;  // needs these paddings to accomodate further sheets
-      padding-left: 15px;
     }
   }
 

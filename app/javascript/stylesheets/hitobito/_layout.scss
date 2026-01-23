@@ -89,7 +89,7 @@ body {
 
 /* Content */
 #page {
-  padding: 3px 0 60px;
+  padding: 5px 0 60px;
   @include responsive(mediaTablet){
     padding: 0 1rem 90px;
   }
@@ -280,6 +280,14 @@ body {
     .is-logged-out & {
       display: block;
     }
+  }
+
+  .main-header {
+    padding: 3px 0 0;
+  }
+
+  #page-header {
+    margin: 0;
   }
 
   #page {

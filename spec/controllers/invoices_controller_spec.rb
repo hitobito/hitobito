@@ -278,11 +278,18 @@ describe InvoicesController do
       expect(response.media_type).to eq("application/pdf")
     end
 
-    it "exports pdf" do
+    it "exports csv" do
       update_issued_at_to_current_year
       get :index, params: {group_id: group.id}, format: :csv
       expect(response.header["Content-Disposition"]).to match(/rechnungen.csv/)
       expect(response.media_type).to eq("text/csv")
+    end
+
+    it "exports xlsx" do
+      update_issued_at_to_current_year
+      get :index, params: {group_id: group.id}, format: :xlsx
+      expect(response.header["Content-Disposition"]).to match(/rechnungen.xlsx/)
+      expect(response.media_type).to eq("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     end
 
     it "renders json" do
@@ -390,6 +397,13 @@ describe InvoicesController do
 
       expect(response.header["Content-Disposition"]).to match(/Rechnung-#{invoice.sequence_number}.csv/)
       expect(response.media_type).to eq("text/csv")
+    end
+
+    it "exports xlsx" do
+      get :show, params: {group_id: group.id, id: invoice.id}, format: :xlsx
+
+      expect(response.header["Content-Disposition"]).to match(/Rechnung-#{invoice.sequence_number}.xlsx/)
+      expect(response.media_type).to eq("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     end
 
     it "renders json" do

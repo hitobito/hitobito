@@ -41,6 +41,7 @@ module Dropdown
 
     def csv_links
       add_item(translate(:csv), export_path(:csv), **item_options)
+      add_item(translate(:xlsx), export_path(:xlsx), **item_options)
       add_item(translate(:payments_without_invoice_csv),
         payment_export_path(:csv, {state: :without_invoice}))
     end

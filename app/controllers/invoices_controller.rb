@@ -49,7 +49,8 @@ class InvoicesController < CrudController
     respond_to do |format|
       format.html { super }
       format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
-      format.csv { render_invoices_csv(list_entries.includes(:invoice_items)) }
+      format.csv { render_invoices_tabular(:csv, list_entries.includes(:invoice_items)) }
+      format.xlsx { render_invoices_tabular(:xlsx, list_entries.includes(:invoice_items)) }
       format.json {
         render_entries_json(
           list_entries.includes(:invoice_items, :payments, :payment_reminders)
@@ -63,7 +64,8 @@ class InvoicesController < CrudController
     respond_to do |format|
       format.html { build_payment }
       format.pdf { generate_pdf([entry]) }
-      format.csv { render_invoices_csv([entry]) }
+      format.csv { render_invoices_tabular(:csv, [entry]) }
+      format.xlsx { render_invoices_tabular(:xlsx, [entry]) }
       format.json { render_entry_json }
     end
   end
@@ -134,9 +136,9 @@ class InvoicesController < CrudController
     end
   end
 
-  def render_invoices_csv(invoices)
-    csv = Export::Tabular::Invoices::List.csv(invoices)
-    send_data csv, type: :csv, filename: filename(:csv, invoices)
+  def render_invoices_tabular(format, invoices)
+    exporter = Export::Tabular::Invoices::List
+    send_data exporter.export(format, invoices), type: format, filename: filename(format, invoices)
   end
 
   def render_invoices_pdf(invoices)

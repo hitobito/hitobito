@@ -33,10 +33,10 @@
       - if origin_user
         = render 'layouts/user_impersonation'
 
-    - if render_header_logo?
       %header.main-header
-        #logo-container
-          = link_to(header_logo, root_path, class: 'logo-image')
+        - if render_header_logo?
+          #logo-container
+            = link_to(header_logo, root_path, class: 'logo-image')
 
         .container-fluid
           #page-header

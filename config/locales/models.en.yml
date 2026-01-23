@@ -39,22 +39,22 @@ en:
   activemodel:
     models:
       roles/termination:
-        one: Austritt
-        other: Austritte
+        one: Exit
+        other: Resignations
       household:
-        one: Haushalt
-        other: Haushalte
+        one: Household
+        other: Households
     attributes:
       roles/termination:
-        terminate_on: Austrittsdatum
+        terminate_on: Leaving date
       household:
-        members: Haushaltsmitglieder
+        members: Household members
       choice:
         choice: Antwortmöglichkeit
 
     errors:
       messages:
-        record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
+        record_invalid: 'Validity check has failed: %{errors}'
       models:
         event/participation_contact_datas/managed:
           attributes:
@@ -66,21 +66,21 @@ en:
               too_early: "has to be in the future"
               too_late: "must not be after %{date}"
             role:
-              not_terminatable: "ist nicht kündbar"
+              not_terminatable: "cannot be terminated"
         household:
           attributes:
             members:
-              minimum_members: Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.
-              household_address: "Die Adresse '%{address}' wird für alle Personen in diesem Haushalt übernommen."
+              minimum_members: The household is dissolved because there are fewer than 2 people.
+              household_address: "The address '%{address}' is adopted for all persons in this household."
 
         household_member:
           attributes:
             base:
-              in_other_household_present: "%{person_name} ist bereits Mitglied eines anderen Haushalts."
+              in_other_household_present: "%{person_name} is already a member of another household."
   activerecord:
     errors:
       messages:
-        at_least_one_present: Mindestens eine %{model_name} muss aufgefüllt werden
+        at_least_one_present: At least one %{model_name} must be replenished
         type_not_allowed: can't be created here
         must_be_after_opening: must be after the start of the application period
         must_have_same_type: must be of the same type
@@ -88,7 +88,7 @@ en:
         greater_than_or_equal_to: 'must be bigger or equal to '
         must_exist: must exist
         readonly: can't be changed
-        cannot_be_later_than_today: kann nicht später als heute sein
+        cannot_be_later_than_today: cannot be later than today
       models:
         cors_origin:
           attributes:
@@ -96,7 +96,7 @@ en:
               invalid_host: contains an invalid host
               missing_hostname: has to contain hostname
               missing_scheme: has to contain a protocol-scheme (http:// or https://)
-              suffix_present: darf keinen Pfad und keinen Slash am Ende haben
+              suffix_present: must not have a path or slash at the end
         custom_content:
           placeholder_missing: 'must contain the placeholder %{placeholder}'
         event:
@@ -115,8 +115,8 @@ en:
               requires_more_than_one_choice: 'needs at least two picks'
               requires_exactly_one_choice: 'must contain exactly one answer'
             question:
-              application_blank: für Anmeldeangabe muss ausgefüllt werden
-              admin_blank: für Administationsangabe muss ausgefüllt werden
+              application_blank: must be filled in for registration information
+              admin_blank: must be filled in for administration information
         event/participation:
           attributes:
             person_id:
@@ -124,30 +124,30 @@ en:
         group:
           attributes:
             self_registration_role_type:
-              blank: 'muss ausgefüllt werden wenn "Anzeige auf Loginseite" ausgewählt ist'
+              blank: 'must be filled in if "Display on login page" is selected'
         mailing_list:
           attributes:
             mail_name:
-              not_allowed: "'%{mail_name}' darf nicht verwendet werden"
+              not_allowed: "'%{mail_name}' must not be used"
             mail_name_not_allowed:
             additional_sender:
               invalid: "must contain mail addresses of the format abcd@ee.ch or *@ee.ch. Multiple addresses must be separated with ',' or ';'."
         message/letter_with_invoice:
           attributes:
             base:
-              invoice_items_required: Mindestens ein Rechnungsposten ist erforderlich
-              invoice_items_invalid: Mindestens ein Rechnungsposten ist ungültig
+              invoice_items_required: At least one invoice item is required
+              invoice_items_invalid: At least one invoice item is invalid
         oauth/application:
           attributes:
             scopes:
-              not_match_configured: "stimmen nicht mit den auf dem Server hinterlegten überein."
+              not_match_configured: "do not match the ones configured on the server"
         person:
           name_missing: 'Please enter a name'
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
           attributes:
             base:
-              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
-              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
+              max_one_additional_invoice_address: Only one address can be selected as the billing address.
+              additional_address_labels_must_be_unique: The names of the other addresses must be unique.
               cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
               managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
@@ -158,13 +158,13 @@ en:
                   specify addresses, which are assigned to other people as main e-mail
                   (the main e-mail can be left blank).
             self_registration_reason_custom_text:
-              either_preset_or_custom: kann nicht gesetzt werden, wenn ein vordefinierter Eintrittsgrund ausgewählt wurde.
+              either_preset_or_custom: cannot be set if a predefined reason for entry has been selected.
         person/add_request:
           attributes:
             person_id:
               taken: was already confirmed
         person_duplicates:
-          invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
+          invalid_role: "Role %{role} from %{person} is not valid for merging, as the other person may already have a role that no longer allows this role, which must be corrected/removed manually. Info: %{message}"
         people_manager:
           manager_and_managed_the_same: Verwalter*in und Kind müssen unterschiedliche Personen sein.
 
@@ -197,7 +197,7 @@ en:
             invoice_config:
               invalid: 'is not valid; adjust the settings before creating an invoice'
         invoice_config:
-          not_valid: 'Rechnungseinstellungen sind ungültig. Passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
+          not_valid: 'Invoice settings are invalid. Adjust the settings before you create an invoice'
           attributes:
             iban:
               required: 'is required'
@@ -205,7 +205,7 @@ en:
               required: 'is required'
               invalid_check_digit: 'is not valid; Incorrect check digit'
             logo:
-              attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
+              attached_unless_disabled: 'must be specified if a logo position is selected'
         period_invoice_template:
           attributes:
             end_on:
@@ -213,7 +213,7 @@ en:
         role:
           attributes:
             end_on:
-              must_be_later_than_start_on: kann nicht vor Von sein
+              must_be_later_than_start_on: cannot be before From
 
 
     models:
@@ -224,8 +224,8 @@ en:
         one: Further e-mail
         other: Further e-mails
       additional_address:
-        one: Weitere Adresse
-        other: Weitere Adressen
+        one: Further address
+        other: Further addresses
       assignment:
         one: Order
         other: Orders
@@ -233,8 +233,8 @@ en:
         one: Bounce
         other: Bounces
       calendar:
-        one: Kalender-Feed
-        other: Kalender-Feeds
+        one: Calendar feed
+        other: Calendar feeds
       custom_content:
         one: Text
         other: Texts
@@ -341,8 +341,8 @@ en:
         one: SMS
         other: SMS
       message_template:
-        one: Rechnungsvorlage
-        other: Rechnungsvorlagen
+        one: Invoice template
+        other: Invoice templates
       mail_log:
         one: Log
         other: Logs
@@ -386,8 +386,8 @@ en:
         one: Filter
         other: Filters
       people_manager:
-        one: Verwalter*in
-        other: Verwalter*innen
+        one: Administrator
+        other: Administrators
       phone_number:
         one: Phone number
         other: Phone numbers
@@ -419,8 +419,8 @@ en:
               w: Dear %{first_name}
               other: Dear %{first_name}
       self_registration_reason:
-        one: Vordefinierter Eintrittsgrund
-        other: Vordefinierte Eintrittsgründe
+        one: Predefined reason for entry
+        other: Predefined reasons for entry
       service_token:
         one: API-Key
         other: API-Keys
@@ -444,26 +444,26 @@ en:
         street_and_number: Strasse/Nummer
         housenumber: Number
         postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        postbox: Postfach
-        address_care_of: zusätz. Adresszeile
-        public: Öffentlich
+        zip_code: Postal Code
+        town: Place
+        country: Country
+        postbox: P.O. Box
+        address_care_of: additional address line
+        public: Public
 
       additional_addresses:
-        label: Bezeichnung
-        street: Strasse
+        label: Description
+        street: Street
         postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        postbox: Postfach
+        zip_code: Postal Code
+        town: Place
+        country: Country
+        postbox: P.O. Box
 
       bounces:
         email: E-Mail
-        count: Anzahl Bounces
-        blocked_at: Sperrzeitpunkt
+        count: Number of bounces
+        blocked_at: Blocking time
         mailing_list_ids: Abo-IDs
 
       cantons:
@@ -519,9 +519,9 @@ en:
         current_password: Old password
         address_care_of: additional address line
         address: Address
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
+        street: Street
+        housenumber: House number
+        postbox: P.O. Box
         zip_code: Postal Code
         town: Place
         country: Country
@@ -537,7 +537,7 @@ en:
         phone_numbers: Phone numbers
         social_accounts: Social Media
         additional_emails: Further e-mails
-        additional_addresses: Weitere Adressen
+        additional_addresses: Further addresses
         family_members: Family Members
         picture: Upload new picture
         remove_picture: Remove current image
@@ -550,40 +550,40 @@ en:
         login_status: Login
         language: Language
         languages:
-          de: Deutsch
-          en: Englisch
-          fr: Französisch
+          de: German
+          en: English
+          fr: French
         primary_group_id: Main group
         layer_group_label: Main layer
-        self_registration_reason: Eintrittsgrund
-        self_registration_reason_text: Eintrittsgrund
-        self_registration_reason_custom_text: Benutzerdefinierter Eintrittsgrund
-        managers: Verwalter*innen
-        manageds: Kinder
-        people_managers: Verwalter*innen
-        people_manageds: Kinder
-        people_managers_attributes: Verwalter*innen
-        people_manageds_attributes: Kinder
-        readable_manageds: Kinder
+        self_registration_reason: Reason for entry
+        self_registration_reason_text: Reason for entry
+        self_registration_reason_custom_text: User-defined reason for entry
+        managers: Administrators
+        manageds: Children
+        people_managers: Administrators
+        people_manageds: Children
+        people_managers_attributes: Administrators
+        people_manageds_attributes: Children
+        readable_manageds: Children
 
       people_manager:
-        manager_id: Verwalter*in
-        managed_id: Kind
+        manager_id: Administrator
+        managed_id: Child
 
       people_managers:
-        manager_id: Verwalter*in
-        managed_id: Kind
+        manager_id: Administrator
+        managed_id: Child
 
       people_manageds:
-        manager_id: Kind
-        managed_id: Verwalter*in
+        manager_id: Child
+        managed_id: Administrator
 
       person_duplicate:
         birth_year: Year
         roles_list: Roles
         person_name: Prename / Name / Nickname
-        company_name: Firmenname
-        town: Ort
+        company_name: Company name
+        town: Place
 
       person/add_request:
         person: Person
@@ -604,9 +604,9 @@ en:
         email: Main e-mail
         address: Address
         address_care_of: additional address line
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
+        street: Street
+        housenumber: House number
+        postbox: P.O. Box
         zip_code: Postal Code
         town: Place
         country: Country
@@ -622,32 +622,32 @@ en:
         type: Group type
         type_name: Group type
         description: Description
-        member_count: Anzahl Mitglieder
+        member_count: Number of members
         updated_at: Changed
-        self_registration: Externe Registrierung
+        self_registration: External registration
         self_registration_role_type: role type
-        self_registration_link: Externe Registrierung
-        self_registration_notification_email: Benachrichtigungs-E-Mail
-        self_registration_require_adult_consent: Einverständnis von Erziehungsberechtigten
-        main_self_registration_group: Anzeige auf Loginseite
-        custom_self_registration_title: Titel bei der Registrierung
+        self_registration_link: External registration
+        self_registration_notification_email: Notification e-mail
+        self_registration_require_adult_consent: Consent of legal guardians
+        main_self_registration_group: Display on login page
+        custom_self_registration_title: Title during registration
         nextcloud_url: NextCloud-URL
         remove_logo: remove current group-logo
-        privacy_policy_title: DSE/Datenschutzerklärung Titel
-        privacy_policy: DSE/Datenschutzerklärung
-        remove_privacy_policy: DSE/Datenschutzerklärung entfernen
+        privacy_policy_title: DSE/Data protection declaration Title
+        privacy_policy: DSE/Data protection declaration
+        remove_privacy_policy: Remove DSE/Data protection declaration
         letter_logo: Brieflogo
         remove_letter_logo: Brieflogo entfernen
-        letter_address_position: Adressposition
+        letter_address_position: Address position
         letter_address_positions:
           left: Left
           right: Right
-        text_message_provider: SMS Anbieter
+        text_message_provider: SMS provider
         text_message_providers:
           aspsms: Aspsms
-        text_message_username: SMS Benutzername
+        text_message_username: SMS username
         text_message_password: SMS Password
-        text_message_originator: SMS Absender
+        text_message_originator: SMS sender
 
       event:
         group_ids: Groups
@@ -658,9 +658,9 @@ en:
         motto: Motto
         cost: Costs
         contact: Contact Person
-        notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
+        notify_contact_on_participations: Notify contact person of new registration by e-mail
         maximum_participants: Maximum number of participants
-        minimum_participants: Minimale Teilnehmerzahl
+        minimum_participants: Minimum number of participants
         contact_id: Contact Person
         description: Description
         location: Place/Address
@@ -679,18 +679,18 @@ en:
         teamer_count: Leaders count
         participant_count: Participants count
         applicant_count: Registrations count
-        applications_cancelable: Abmeldung
+        applications_cancelable: Deregistration
         display_booking_info: Display number of registrations
         participations_visible: Visibility of participants
         waiting_list: national waiting list
         requires_approval: Approval required
         globally_visible: Visibility
-        automatic_assignment: Automatische Zuteilung
-        application_questions: Anmeldeangaben
-        admin_questions: Administrationsangaben
-        no_name: "[Kein Name]"
-        visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
-        guest_limit: Maximale Anzahl Gäste pro Person
+        automatic_assignment: Automatic allocation
+        application_questions: Registration details
+        admin_questions: Administration details
+        no_name: "[No name]"
+        visible_contact_attributes: "Display options (contact person)"
+        guest_limit: Maximum number of guests per person
 
       event/contact_attrs:
         required: Mandatory
@@ -698,52 +698,52 @@ en:
         hidden: Do not display
 
       event/guest:
-        first_name: Vorname
-        last_name: Nachname
-        nickname: Übername
-        company_name: Firmenname
-        email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        gender: Geschlecht
+        first_name: First name
+        last_name: Last name
+        nickname: Nickname
+        company_name: Company name
+        email: Main e-mail
+        address_care_of: additional address line
+        street: Street
+        housenumber: House number
+        postbox: P.O. Box
+        zip_code: Postal Code
+        town: Place
+        country: Country
+        gender: Gender
         genders:
-          m: männlich
-          w: weiblich
-          _nil: unbekannt
-        birthday: Geburtstag
-        phone_number: Telefonnummer
-        language: Sprache
+          m: male
+          w: female
+          _nil: unknown
+        birthday: Birthday
+        phone_number: Phone number
+        language: Language
         main_applicant: Hauptperson
 
       participant:
-        first_name: Vorname
-        last_name: Nachname
-        nickname: Übername
-        company_name: Firmenname
-        email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
-        street: Strasse
-        housenumber: Hausnummer
-        postbox: Postfach
-        zip_code: PLZ
-        town: Ort
-        country: Land
-        gender: Geschlecht
+        first_name: First name
+        last_name: Last name
+        nickname: Nickname
+        company_name: Company name
+        email: Main e-mail
+        address_care_of: additional address line
+        street: Street
+        housenumber: House number
+        postbox: P.O. Box
+        zip_code: Postal Code
+        town: Place
+        country: Country
+        gender: Gender
         genders:
-          m: männlich
-          w: weiblich
-          _nil: unbekannt
-        birthday: Geburtstag
-        phone_number: Telefonnummer
-        language: Sprache
+          m: male
+          w: female
+          _nil: unknown
+        birthday: Birthday
+        phone_number: Phone number
+        language: Language
         main_applicant: Hauptperson
-        additional_information: Zusätzliche Angaben
-        phone_numbers: Telefonnummern
+        additional_information: Additional information
+        phone_numbers: Phone numbers
 
       event/answer:
         answer: Reply
@@ -759,12 +759,12 @@ en:
 
       event/attachment:
         file: File
-        visibility: Sichtbarkeit
+        visibility: Visibility
         visibilities:
-          _nil: Unsichtbar
-          team: Nur für Leitungsteam sichtbar
-          participants: Für Leitungsteam und Teilnehmende sichtbar
-          global: Global sichtbar
+          _nil: Invisible
+          team: Only visible to the leadership team
+          participants: Visible to the leadership team and participants
+          global: Globally visible
 
       event/course:
         kind_id: Course type
@@ -773,7 +773,7 @@ en:
         state_translated: State
         priorization: Priorization
         requires_approval: Approval
-        training_days: Ausbildungstage
+        training_days: Training days
 
       event/date:
         label: Description
@@ -811,22 +811,22 @@ en:
 
       event/kind_qualification_kinds:
         validities:
-          valid: Muss gültig sein
+          valid: Must be valid
           valid_or_expired: Muss gültig oder weggefallen sein
-          valid_or_reactivatable: Muss gültig oder reaktivierbar sein
+          valid_or_reactivatable: Must be valid or reactivatable
 
       event/invitation:
-        participation_type: Teilnahmerolle
+        participation_type: Participation role
         created_at: Erstellungsdatum
-        declined_at: Ablehnungsdatum
+        declined_at: Rejection date
         status: Status
         statuses:
-          open: Eingeladen
-          accepted: Angenommen
+          open: Invited
+          accepted: Accepted
           declined: Declined
 
       event/participation:
-        participant_id: Teilnehmer
+        participant_id: Participants
         event_id: Event
         additional_information: Comments
         answers: Questions
@@ -862,7 +862,7 @@ en:
         person: Person
         type: Role
         participation: Person
-        remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
+        remove_participant_role: Remove any participant role
 
 
       family_member:
@@ -878,8 +878,8 @@ en:
         uid: Client ID
         secret: Client secret
         redirect_uri: Redirect URIs
-        additional_audiences: Weitere Audiences
-        skip_consent_screen: Einwilligung überspringen
+        additional_audiences: Further audiences
+        skip_consent_screen: Skip consent
 
       phone_number:
         number: Number
@@ -891,13 +891,13 @@ en:
         qualification_kind_id: Qualification
         start_at: Since
         origin: Origin
-        finish_at: Bis
-        reactivateable_until: Reaktivierbar bis
+        finish_at: Until
+        reactivateable_until: Reactivatable until
         string: '%{kind}'
         string_with_origin: '%{kind} (from %{origin})'
         string_with_finish_at: '%{kind} (until %{finish_at})'
         string_with_finish_at_and_origin: '%{kind} (until %{finish_at}, from %{origin})'
-        open_training_days: Offene Ausbildungstage
+        open_training_days: Open training days
 
       qualification_kind:
         label: Description
@@ -907,7 +907,7 @@ en:
         updated_at: Changed
         deleted_at: Deleted
         reactivateable: Reactivateable
-        required_training_days: Erforderliche Ausbildungstage
+        required_training_days: Required training days
 
       # used for nested phone_numbers
       phone_numbers:
@@ -927,8 +927,8 @@ en:
         picture: Logo
         address_position: Adressposition
         address_positions:
-          left: Links
-          right: Rechts
+          left: Left
+          right: Right
 
       role:
         label: Description
@@ -938,12 +938,12 @@ en:
         person_id: Person
         string_long: '%{role} in %{group}'
         dates: Dates
-        created_at: Erstellt um
-        start_on: Von
-        end_on: Bis
-        end_on_in_name: bis
+        created_at: Created at
+        start_on: From
+        end_on: Until
+        end_on_in_name: to
         class:
-          archived: '%{role_kind} (archiviert)'
+          archived: '%{role_kind} (archived)'
           permission:
             description:
               admin: Administration of application-wide settings such as types of courses or label formats.
@@ -961,8 +961,8 @@ en:
               finance: Create and manage invoices
               layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
               impersonation: Use Hitobito as another person
-              see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
-              manual_deletion: Löschen von Personen ohne Rollen
+              see_invisible_from_above: Also sees people who are otherwise not allowed to be seen by higher levels.
+              manual_deletion: Deleting persons without roles
           kind:
             member:
               one: Member
@@ -974,8 +974,8 @@ en:
               one: External
               other: Externals
             future:
-              one: Zukünftig
-              other: Zukünftige
+              one: In the future
+              other: Future
       contact_account:
         predefined_labels:
           privat: Private
@@ -986,7 +986,7 @@ en:
           fax: Fax
           andere: Other
           webseite: Website
-          rechnung: Rechnung
+          rechnung: Invoice
 
       social_account:
         name: Name
@@ -1002,33 +1002,33 @@ en:
       additional_email:
         email: E-Mail
         name: Further e-mail
-        label: Weitere E-Mail Typ
+        label: Further e-mail type
         public: Public
         mailings: Mailing
-        invoices: Rechnung
+        invoices: Invoice
 
       additional_emails:
         email: E-Mail
-        name: Weitere E-Mail
-        label: Weitere E-Mail Typ
-        public: Öffentlich
+        name: Further e-mail
+        label: Further e-mail type
+        public: Public
         mailings: Versand
-        invoices: Rechnung
+        invoices: Invoice
 
       mailing_list:
         name: Name
         description: Description
         publisher: Publisher
-        subscribable: Selbst an/abmelden
-        subscribable_mode: Personen sind standardmässig
+        subscribable: Log on/off yourself
+        subscribable_mode: Persons are by default
         subscribable_modes:
-          opt_out: Angemeldet (opt-out)
+          opt_out: Logged in (opt-out)
           opt_in: Abgemeldet (opt-in)
-        subscribable_for: Selbst an/abmelden
+        subscribable_for: Log on/off yourself
         subscribable_fors:
-          anyone: Alle
-          configured: Nur konfigurierte Abonnenten
-          nobody: Niemand
+          anyone: All
+          configured: Only configured subscribers
+          nobody: Nobody
         mail_name: Mailing list address
         mail_address: Mailing list
         mail_address_link: Mailing list
@@ -1079,21 +1079,21 @@ en:
       message/letter:
         body: Content
         salutation: Salutation
-        pp_post: PP-Zeile
-        donation_confirmation: Spendenbestätigung
-        shipping_method: Liefermethode
+        pp_post: PP-Line
+        donation_confirmation: Donation confirmation
+        shipping_method: Delivery method
         shipping_methods:
-          own: Eigener Versand
+          own: Own shipping
           normal: B-Post
           priority: A-Post
-        send_to_households: Haushalte
+        send_to_households: Households
         date_location_text: Date and location
 
       message_recipient:
         address: Address
         country: Country
-        printed_address: Briefadresse
-        salutation: Briefanrede
+        printed_address: Letter address
+        salutation: Letter salutation
         town: Place
         zip_code: Postal Code
 
@@ -1119,11 +1119,11 @@ en:
           one: Page
           other: Pages
       hitobito_log_entry:
-        created_at: Aufgezeichnet um
+        created_at: Recorded at
         level: Level
-        category: Kategorie
-        subject: Subjekt
-        message: Meldung
+        category: Category
+        subject: Subject
+        message: Message
 
       label_format:
         name: Description
@@ -1152,7 +1152,7 @@ en:
         esr_number: Reference number
         reference: Reference
         amount_paid: Paid
-        hide_total: Ohne Total
+        hide_total: Without total
         payment_slips:
           ch_es: Red payment slip Post (CH)
           ch_bes: Red payment slip Bank (CH)
@@ -1164,22 +1164,22 @@ en:
           draft: Draft
           issued: Issued
           sent: Sent per e-mail
-          partial: Teilzahlung
+          partial: Partial payment
           payed: Paid
-          excess: Überzahlung
+          excess: Overpayment
           reminded: Reminded
           cancelled: Cancelled
         recipient: Recipient
         recipient_email: Recipient e-mail
-        recipient_company_name: Firmenname
+        recipient_company_name: Company name
         recipient_name: Name
-        recipient_address_care_of: zusätz. Adresszeile
-        recipient_postbox: Postfach
-        recipient_country: Land
-        recipient_street: Strasse
-        recipient_housenumber: Hausnummer
-        recipient_zip_code: PLZ
-        recipient_town: Ort
+        recipient_address_care_of: additional address line
+        recipient_postbox: P.O. Box
+        recipient_country: Country
+        recipient_street: Street
+        recipient_housenumber: House number
+        recipient_zip_code: Postal Code
+        recipient_town: Place
         recipient_address: Recipient address
         payee_name: Zahlungsempfänger Name
         payee_street: Zahlungsempfänger Strasse
@@ -1190,7 +1190,7 @@ en:
         due_at: Due at
         issued_at: Issued at
         sent_at: Sent at
-        last_payment_at: Zahlung am
+        last_payment_at: Payment on
         cost: Invoice
         total: Invoice amount
         total_inkl_vat: Total incl. VAT
@@ -1200,7 +1200,7 @@ en:
         payment_purpose: Payment purpose
         address: Sender address
         beneficiary: Beneficiary
-        payee: Einzahlung für
+        payee: Deposit for
         account_number: Account Number
         iban: IBAN
         payment_slip: Payment slip
@@ -1231,19 +1231,19 @@ en:
         contact_id: Conctact
         beneficiary: Beneficiary
         email: Reply to email-address
-        logo_position: Logo Position
+        logo_position: Logo position
         logo_positions:
-          disabled: Kein Logo
-          left: Links
-          right: Rechts
-        payee: Alter Zahlungsempfänger
-        payee_address: Einzahlung für
+          disabled: No logo
+          left: Left
+          right: Right
+        payee: Old payee
+        payee_address: Deposit for
         payee_name: Name
-        payee_street: Strasse
-        payee_housenumber: Hausnummer
-        payee_zip_code: PLZ
-        payee_town: Ort
-        payee_country: Land
+        payee_street: Street
+        payee_housenumber: House number
+        payee_zip_code: Postal Code
+        payee_town: Place
+        payee_country: Country
         payment_slip: Payment slip
         payment_slips:
           qr: QR invoice
@@ -1251,12 +1251,12 @@ en:
         reference_prefix: QR-Referenz
         participant_number: Participant Nr
         payment_reminder_configs: Reminder
-        remove_logo: Aktuelles Logo entfernen
+        remove_logo: Remove current logo
         vat_number: VAT Nr
         donation_increase_percentage: Increase in %
         donation_calculation_year_amount: Number of years
-        sender_name: E-Mail Absendername
-        custom_content: E-Mail Vorlage
+        sender_name: E-mail sender name
+        custom_content: E-mail template
 
       invoice_item:
         name: Name
@@ -1270,12 +1270,12 @@ en:
 
 
       invoice_run:
-        title: Titel
+        title: Title
         receiver: Empfänger
         recipients_total: Empfänger Insgesamt
         recipients_paid: Empfänger Bezahlt
         amount_total: Betrag insgesamt
-        amount_paid: Betrag bezahlt
+        amount_paid: Amount paid
 
       # used for nested attributes
       invoice_items:
@@ -1289,7 +1289,7 @@ en:
         account: Account
 
       message_template:
-        title: Titel
+        title: Title
         body: Text
 
       payment:
@@ -1311,7 +1311,7 @@ en:
         title: Title
         text: Text
         due_days: Due days
-        show_invoice_description: Ursprünglichen Rechnungstext vor Mahnungstext anzeigen
+        show_invoice_description: Display original invoice text before reminder text
 
       payment_reminder_configs:
         title: Reminder title
@@ -1363,17 +1363,17 @@ en:
         groups: Groups
         events: Events
         invoices: Invoices
-        event_participations: Teilnehmende von Anlässen
-        mailing_lists: Abonnent/-innen von Mailinglisten
+        event_participations: Participants in events
+        mailing_lists: Subscribers to mailing lists
         cors_origins: Hosts with API access
 
       calendar:
         name: Name
         description: Description
-        included_calendar_groups: Aus den Gruppen
-        excluded_calendar_groups: Ausgeschlossene Gruppen
-        included_calendar_tags: Nur mit Tags
-        excluded_calendar_tags: Ausgeschlossene Tags
+        included_calendar_groups: From the groups
+        excluded_calendar_groups: Excluded groups
+        included_calendar_tags: Only with tags
+        excluded_calendar_tags: Excluded tags
 
   api:
     errors:
@@ -1381,11 +1381,11 @@ en:
         id_must_not_be_set: ID darf nicht gesetzt sein
         role_resource:
           group_id:
-            unwritable_attribute: kann nicht geändert werden
+            unwritable_attribute: can't be changed
           person_id:
-            unwritable_attribute: kann nicht geändert werden
+            unwritable_attribute: can't be changed
           type:
-            unwritable_attribute: kann nicht geändert werden
+            unwritable_attribute: can't be changed
         self_registration_resource:
           adult_consent:
             must_be_accepted: muss akzeptiert werden
@@ -1398,26 +1398,26 @@ en:
       name: Read your e-mail address and name
       with_roles: Read your base data and roles
       openid: Read your OIDC Identity Token
-      api: Lesen aller Personen, Gruppen, Events, Abos und Rechnungen auf die du Zugriff hast, via die JSON-Schnittstellen
-      events: Lesen aller Events, auf die du Zugriff hast
-      groups: Lesen aller Gruppen, auf die du Zugriff hast
-      people: Lesen aller Personen, auf die du Zugriff hast
-      invoices: Lesen aller Rechnungen, auf die du Zugriff hast
-      mailing_lists: Lesen aller Abos, auf die du Zugriff hast
-      nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
+      api: Read all persons, groups, events, subscriptions and invoices to which you have access via the JSON interfaces
+      events: Read all events that you have access to
+      groups: Read all groups that you have access to
+      people: Read all the people you have access to
+      invoices: Read all invoices that you have access to
+      mailing_lists: Read all subscriptions to which you have access
+      nextcloud: Reading your Nextcloud groups and your display name
 
   fixed_fees:
     membership:
-      members: Mitglieder
+      members: Members
 
   errors:
     messages:
-      invalid_zipcode: ist nicht gültig
+      invalid_zipcode: is not valid
       attachments_not_allowed: "Attachments not allowed"
       invalid_money: "must be rounded to 5 centimes"
-      invalid_iban: "ist nicht gültig"
-      invalid_decimal_format: "ist nicht gültig, maximal %{precision} Zeichen erlaubt mit %{scale} Nachkommastellen"
-      no_permission: "Zugriff verweigert"
+      invalid_iban: "is not valid"
+      invalid_decimal_format: "is not valid, maximum %{precision} characters allowed with %{scale} decimal places"
+      no_permission: "Access denied"
       # timeliness
       invalid_date: "is not a valid date"
       invalid_time: "is not a valid time"
@@ -1436,10 +1436,10 @@ en:
         one: "Could not save %{resource}: one error."
         other: "Could not save %{resource}: %{count} errors."
       # active_storage_validations
-      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
-      file_size_out_of_range: "darf nicht grösser als %{max_size} sein"
-      limit_out_of_range: "Anzahl ist ausserhalb des gültigen Bereichs (%{min} - %{max})"
-      image_metadata_missing: "ist kein gültiges Bild"
+      content_type_invalid: "only accepts the following file types: %{authorized_human_content_types}"
+      file_size_out_of_range: "must not be larger than %{max_size} "
+      limit_out_of_range: "Number is outside the valid range (%{min} - %{max})"
+      image_metadata_missing: "is not a valid image"
       dimension_min_inclusion: "muss grösser oder gleich %{width} x %{height} Pixel sein"
       dimension_max_inclusion: "muss kleiner oder gleich %{width} x %{height} Pixel sein"
       dimension_width_inclusion: "Bildbreite muss zwischen %{min} und %{max} Pixel liegen"
@@ -1450,7 +1450,7 @@ en:
       dimension_height_less_than_or_equal_to: "Höhe muss kleiner oder gleich %{length} Pixel sein"
       dimension_width_equal_to: "Bildbreite muss genau %{length} Pixel sein"
       dimension_height_equal_to: "Bildhöhe muss genau %{length} Pixel sein"
-      aspect_ratio_not_square: "muss quadratisch sein"
+      aspect_ratio_not_square: "must be square"
       aspect_ratio_not_portrait: "muss Hochformat sein"
       aspect_ratio_not_landscape: "muss Querformat sein"
       aspect_ratio_is_not: "muss ein Bildseitenverhältnis von %{aspect_ratio} haben"

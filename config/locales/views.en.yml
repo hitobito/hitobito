@@ -186,9 +186,9 @@ en:
 
   dropdown/event/participant_add:
     as: "as %{role}"
-    register_new_managed: Neues Kind erfassen und anmelden
+    register_new_managed: Enter and register a new child
     disabled_messages:
-      already_exists: "ist bereits angemeldet"
+      already_exists: "is already registered"
       cannot_see_event: "darf den Anlass nicht sehen"
 
   dropdown/event/participation/mail_dispatch:
@@ -460,11 +460,11 @@ en:
       managed:
         update:
           flash:
-            privacy_policy_not_accepted: "Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
+            privacy_policy_not_accepted: "To complete the registration, you must agree to the privacy policy."
 
         edit:
           title: Neues Kind registrieren und am Anlass anmelden
-          save: Weiter
+          save: Continue
 
     participations:
       edit:
@@ -493,7 +493,7 @@ en:
         title_edit: "Edit registration from %{person}"
         apply: "Register"
       new:
-        add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
+        add_guests: "Log in and add guest (max. %{limit})"
       application_fields:
         alternative_dates_info: "Please enter more suitable courses."
         course_information: "Information about the courses"
@@ -512,8 +512,8 @@ en:
       list:
         incomplete: Required data is missing
       guest_of_info:
-        with_main_applicant: "(Gast von %{main_applicant_name})"
-        without_main_applicant: "(Gast von abgemeldeter Person)"
+        with_main_applicant: "(Guest of %{main_applicant_name})"
+        without_main_applicant: "(Guest of deregistered person)"
       cancel_application:
         explanation: You are registered for this event.
         pending: You are pre-registered for this event. The registration is not yet final and must be confirmed by the organizer.
@@ -521,9 +521,9 @@ en:
         caption: Cancel registration
         confirmation: "Are you sure, that you want to cancel your registration?"
         managed:
-          explanation: "%{person} ist für diesen Anlass angemeldet."
-          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
-          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
+          explanation: "%{person} is registered for this event."
+          pending: "%{person} is pre-registered for this event. Registration is not yet definitive and must be confirmed by the organizer."
+          waiting_list: "%{person} is on the waiting list for this event."
 
     qualifications:
       index:
@@ -535,12 +535,12 @@ en:
     register:
       register:
         title:
-          participant: Kontaktdaten der teilnehmenden Person erfassen
-          manager: Kontaktdaten der erziehungsberechtigten Person
+          participant: Enter the contact details of the participating person
+          manager: Contact details of the legal guardian
         flash:
           privacy_policy_not_accepted: To complete the registration, you must agree to the data protection declaration.
         email_check:
-          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
+          enter_email: Please enter the e-mail address with which you would like to register.
       index:
         sign_in: Register
         login: Login
@@ -548,10 +548,10 @@ en:
       email_check:
         next: Continue
         enter_email: Please enter your email address so you can register for the event.
-        next_for_manager: Mein Kind anmelden
+        next_for_manager: Register my child
       manager_fields:
-        manager_first_name: Vorname erziehungsberechtigte Person
-        manager_last_name: Nachname erziehungsberechtigte Person
+        manager_first_name: First name of legal guardian
+        manager_last_name: Last name of legal guardian
 
     invitation_lists:
       create:
@@ -628,14 +628,14 @@ en:
     banner_open_invitation:
       explanation: You've been invited to this event.
       managed:
-        explanation: "%{person} wurde zu diesem Anlass eingeladen."
+        explanation: "%{person} was invited to this event."
       buttons:
         accept: Register
         decline: Cancel registration
     banner_declined_invitation:
       explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
       managed:
-        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
+        explanation: "%{person} was invited to this event and was deregistered."
     form:
       caption_external_applications: "Externals can sign up for this event"
       caption_prioritization: "Participants may set two additional courses as alternatives."
@@ -705,7 +705,7 @@ en:
   event/participations:
     full_entry_label: "%{model_label} from <i>%{person}</i> in <i>%{event}</i>"
     success: "%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary."
-    success_for_external_manager: "%{full_entry_label} wurde erfolgreich erstellt."
+    success_for_external_manager: "%{full_entry_label} was successfully created."
     instructions: "For the definite registration you have to print the confirmation of participation by<i>printing</i>, sign it and send it by mail to the corresponding address."
     export_enqueued: "Export is started in the background and downloaded after completion."
     waiting_list: "All places are currently taken, registration is on the waiting list."
@@ -743,8 +743,8 @@ en:
     registered: "Your personal data are recorded. Please set now the information for the application."
     application_window_closed: "The login window for this event is closed."
     no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
-    email_sent_manager: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst."
-    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
+    email_sent_manager: "We have sent you an e-mail with a link where you can register yourself or your child directly for the event."
+    registered_manager: 'Your personal data has been recorded. You can now register your children via the "Register" button'
 
   event/roles:
     full_entry_label: "Role <i>%{role}</i> for <i>%{person}</i>"
@@ -898,7 +898,7 @@ en:
       distribution: Distribution
     self_registration:
       alert:
-        not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
+        not_active: Self-registration is not possible in this group.
       show:
         meta_description: Self-registration page for Hitobito
       form:
@@ -1108,30 +1108,30 @@ en:
       invoice_articles:
         variable_donation:
           name: Variabler Spendenaufruf
-          number: Spenden
+          number: Donations
           description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
       recipient_info:
-        one: "Rechnung wird für eine Person erstellt."
-        other: "Rechnung wird für %{count} Personen erstellt."
+        one: "Invoice is created for one person."
+        other: "Invoice is created for %{count} persons."
     create:
-      one: "Rechnung <i>%{title}</i> wurde erstellt."
-      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
-    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
+      one: "Invoice <i>%{title}</i> was created."
+      other: "Invoice <i>%{title}</i> was created for %{count} recipient."
+    create_batch: "Invoice <i>%{title}</i> is created in the background for %{count} recipients."
     update:
-      zero: "Es muss mindestens eine Rechnung ausgewählt werden."
-      model_error: "Rechnung %{number} ist ungültig - %{error}."
+      zero: "At least one invoice must be selected."
+      model_error: "Invoice %{number} is invalid - %{error}."
       issued:
-        one: "Rechnung %{number} wurde gestellt."
-        other: "%{count} Rechnungen wurden gestellt."
+        one: "Invoice %{number} has been issued."
+        other: "%{count} Invoices have been issued."
       reminded:
-        one: "Rechnung %{number} wurde gemahnt."
-        other: "%{count} Rechnungen wurden gemahnt."
+        one: "Invoice %{number} was sent a reminder."
+        other: "%{count} Invoices have been reminded."
       send_notification:
-        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
-        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
+        one: "Invoice %{number} is sent by e-mail in the background."
+        other: "%{count} Invoices are sent by e-mail in the background."
       invalid_state:
-        one: "Rechnung %{number} wurde bereits gestellt."
-        other: "%{count} Rechnungen wurde bereits gestellt."
+        one: "Invoice %{number} has already been issued."
+        other: "%{count} Invoices have already been issued."
       issued_invalid:
         one: "Rechnung %{number} wurde bereits gestellt."
         other: "%{count} Rechnungen wurde bereits gestellt."
@@ -1152,7 +1152,7 @@ en:
         other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
-      one: "Rechnung wurde storniert."
+      one: "Invoice cancelled"
       other: "%{count} Rechnungen wurden storniert."
 
   invoice_runs/fixed_fee:
@@ -1238,7 +1238,7 @@ en:
       email: Mailing-Liste (E-Mail)
       mailchimp: MailChimp
     imap_mails:
-      manage: Postfach
+      manage: P.O. Box
       mailboxes:
         inbox: Inbox
         spam: Spam
@@ -2208,9 +2208,9 @@ en:
     export_enqueued: "Export is started in the background and downloaded after completion."
 
   taggable:
-    add_tag: Tag hinzufügen
-    cannot_create: Bitte wähle einen bestehenden Tag aus
-    no_entry: (keine)
+    add_tag: Add tag
+    cannot_create: Please select an existing tag
+    no_entry: (none)
 
   version:
     attribute_change:
@@ -2228,14 +2228,14 @@ en:
         update: "Update of request for <i>%{label}</i>: %{changeset}"
         destroy: "Request for <i>%{label}</i> has been answered."
 
-      deleted_person: "Gelöschte Person"
+      deleted_person: "Deleted person"
       people_manager:
         create:
-          manager: "<i>%{label}</i> wurde als Verwalter*in hinzugefügt."
-          managed: "<i>%{label}</i> wurde als Kind hinzugefügt."
+          manager: "<i>%{label}</i> was added as administrator."
+          managed: "<i>%{label}</i> was added as a child."
         destroy:
-          manager: "<i>%{label}</i> wurde als Verwalter*in entfernt."
-          managed: "<i>%{label}</i> wurde als Kind entfernt."
+          manager: "<i>%{label}</i> was removed as administrator."
+          managed: "<i>%{label}</i> was removed as a child."
 
     impersonate: "Account took over from %{user}"
     impersonation_done: "Account impersonation from %{user} ended."
@@ -2317,10 +2317,10 @@ en:
 
   people_managers:
     section:
-      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
-    common_heading: Kinder / Verwalter*innen
-    managers_heading: Verwalter*innen
-    manageds_heading: Kinder
-    create_managed_person_button: Kind erfassen
-    assign_managed_person_button: Kind zuweisen
-    assign_manager_person_button: Verwalter*in zuweisen
+      manageds_help: You can only add people as children to whom you have write access.
+    common_heading: Children / Administrators
+    managers_heading: Administrators
+    manageds_heading: Children
+    create_managed_person_button: Enter child
+    assign_managed_person_button: Assign child
+    assign_manager_person_button: Assign administrator

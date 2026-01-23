@@ -19,15 +19,15 @@ body {
   padding: 0 1rem 1rem;
   background: $page-background;
   z-index: 80;
+}
+
+#logo-container {
   // for a box around the logo, if the Logo cannot be directly on the page background:
   @if ($logo-background-color != none) {
     padding: 10px;
     background-color: $logo-background-color;
     border-radius: 6px;
   }
-}
-
-#logo-container {
   margin-top: 1.5rem;
 }
 

@@ -18,7 +18,7 @@ body {
   z-index: 80;
 }
 
-#logo {
+.logo {
   position: absolute;
   margin: 1rem 0 0 1rem;
   padding: 0.5rem;
@@ -281,7 +281,7 @@ body {
 
 
 @include responsive(phone, $media-tablet) {
-  #logo {
+  .logo {
     display: none;
     .is-logged-out & {
       display: block;

@@ -195,7 +195,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     attribute.downcase
   }
 
-  def self.active_scope(reference_date = DateTime.now) # rubocop:disable Metrics/AbcSize
+  def self.active_scope(reference_date = DateTime.current) # rubocop:disable Metrics/AbcSize
     range = reference_date.is_a?(Range) ? reference_date : reference_date..reference_date
     start_on = range.first
     end_on = range.last
@@ -207,7 +207,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       .where(arel_table[:deleted_at].gteq(start_on).or(arel_table[:deleted_at].eq(nil)))
   end
 
-  scope :active, ->(reference_date = DateTime.now) { active_scope(reference_date) }
+  scope :active, ->(reference_date = DateTime.current) { active_scope(reference_date) }
   scope :without_archived, -> { where(archived_at: nil) }
   scope :without_deleted, -> { where(deleted_at: nil) }
   scope :without_archived_or_deleted, -> { without_archived.without_deleted }

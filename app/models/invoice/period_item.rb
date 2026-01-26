@@ -27,15 +27,21 @@ class Invoice::PeriodItem < InvoiceItem
 
   def self.for_groups(groups, **params)
     new(**params).tap do |item|
-      item.instance_variable_set(:@groups, groups)
+      item.groups = groups
     end
   end
 
   def self.for_people(people, **params)
     new(**params).tap do |item|
-      item.instance_variable_set(:@people, people)
+      item.people = people
     end
   end
+
+  attr_writer :groups, :people
+
+  # Forbid saving instances of this abstract class in the DB.
+  # AR cannot handle abstract_class in the middle of an STI hierarchy, so we leave it at this.
+  validates :type, exclusion: {in: %w[Invoice::PeriodItem]}
 
   validates :period_start_on, presence: true
   validates :unit_cost, money: true

@@ -96,7 +96,6 @@ body {
   .container-fluid {
     z-index: 2;
     flex: 1;
-    min-width: 70%;
     max-width: 100%;
     overflow-x: visible;
     overflow-y: visible;
@@ -288,7 +287,6 @@ body {
       display: block;
     }
   }
-
 
   #page {
     .nav-left {

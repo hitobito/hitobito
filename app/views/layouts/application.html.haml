@@ -33,8 +33,8 @@
       - if origin_user
         = render 'layouts/user_impersonation'
 
-    #logo
-      - if render_header_logo?
+    - if render_header_logo?
+      #logo
         = link_to(header_logo, root_path, class: 'logo-image')
 
     #page{class: ('is-nav-not-rendered' unless render_nav?)}

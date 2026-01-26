@@ -15,7 +15,7 @@ namespace :hitobito do
       [label, klass.children.map(&:label)]
     }.to_h
 
-    Role::TypeList.new(Group.root_types.first).each do |layer, groups|
+    Role::TypeList.new(Group.root_types.first, include_empty: true).each do |layer, groups|
       super_layers = group_tree.select { |_key, list| list.include?(layer) }.keys
       super_layer_tag = " < #{super_layers.join(", ")}" if super_layers.any?
 

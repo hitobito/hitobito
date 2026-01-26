@@ -8,8 +8,9 @@ class Role
   class TypeList
     attr_reader :root, :role_types
 
-    def initialize(root_type)
+    def initialize(root_type, include_empty: false)
       @root = root_type
+      @include_empty = include_empty
       compose
     end
 
@@ -61,7 +62,7 @@ class Role
     def set_role_types(layer, group)
       layer_types = @role_types[layer.label]
       types = layer_types.delete(group.label).presence || local_role_types(group)
-      layer_types[group.label] = types if types.present?
+      layer_types[group.label] = types if types.present? || @include_empty
     end
 
     def compose_global_role_list

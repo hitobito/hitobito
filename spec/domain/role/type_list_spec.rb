@@ -30,6 +30,33 @@ describe Role::TypeList do
     ])
   end
 
+  it "contains all roles and empty groups for top layer" do
+    list = Role::TypeList.new(Group::TopLayer, include_empty: true)
+    expect(list.to_enum.to_a).to eq([
+      ["Top Layer",
+        {"Top Layer" => [Group::TopLayer::TopAdmin],
+         "Top Group" => [Group::TopGroup::Leader, Group::TopGroup::LocalGuide,
+           Group::TopGroup::Secretary, Group::TopGroup::LocalSecretary,
+           Group::TopGroup::GroupManager, Group::TopGroup::Member,
+           Group::TopGroup::InvisiblePeopleManager]}],
+
+      ["Bottom Layer",
+        {"Bottom Layer" => [Group::BottomLayer::Leader, Group::BottomLayer::LocalGuide,
+          Group::BottomLayer::Member, Group::BottomLayer::BasicPermissionsOnly],
+         "A De" => [],
+         "B De" => [],
+         "Bottom Group" => [Group::BottomGroup::Leader, Group::BottomGroup::Member,
+           Group::BottomGroup::NoPermissions],
+         "Mounted Attrs Group" => []}],
+
+      ["Global",
+        {
+          "Global Group" => [Group::GlobalGroup::Leader, Group::GlobalGroup::Member],
+          "Global" => [Role::External]
+        }]
+    ])
+  end
+
   it "contains all roles for bottom layer" do
     list = Role::TypeList.new(Group::BottomLayer)
     expect(list.to_enum.to_a).to eq([

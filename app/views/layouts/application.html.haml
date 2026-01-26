@@ -33,11 +33,13 @@
       - if origin_user
         = render 'layouts/user_impersonation'
 
-      %header.main-header
-        - if render_header_logo?
-          #logo-container
-            = link_to(header_logo, root_path, class: 'logo-image')
+    #logo
+      - if render_header_logo?
+        = link_to(header_logo, root_path, class: 'logo-image')
 
+    #page{class: ('is-nav-not-rendered' unless render_nav?)}
+      %header.main-header
+        .nav-left
         .container-fluid
           #page-header
             - if current_user
@@ -52,7 +54,6 @@
             - elsif current_user.nil? # nil without login, false on error
               = render 'layouts/unauthorized'
 
-    #page{class: ('is-nav-not-rendered' unless render_nav?)}
       - if render_nav?
         %nav.nav-left
           = render 'layouts/nav'

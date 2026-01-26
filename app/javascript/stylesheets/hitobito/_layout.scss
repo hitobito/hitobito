@@ -15,20 +15,20 @@ body {
 .main-header {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  padding: 0 1rem 1rem;
-  background: $page-background;
   z-index: 80;
 }
 
-#logo-container {
+#logo {
+  position: absolute;
+  margin: 1rem 0 0 1rem;
+  padding: 0.5rem;
+  z-index: 80;
   // for a box around the logo, if the Logo cannot be directly on the page background:
   @if ($logo-background-color != none) {
     padding: 10px;
     background-color: $logo-background-color;
     border-radius: 6px;
   }
-  margin-top: 1.5rem;
 }
 
 .logo-image {
@@ -63,35 +63,11 @@ body {
   background-color: $danger;
 }
 
-#page .nav-left, #logo-container {
-  margin-right: -1.5rem;
-  @if $logo-width < 200px {
-    min-width: 280px;
-  } @else {
-    min-width: ($logo-width+40px);
-  }
-  width: 30%;
-  max-width: 25rem;
-}
-
-#page .container-fluid, .main-header .container-fluid {
-  min-width: 70%;
-  max-width: 100%;
-  padding: 0 5px 0 5px;
-  z-index: 2;
-  overflow-x: visible;
-  overflow-y: visible;
-  @include responsive(mediaTablet){
-    padding-right: 20px;  // needs these paddings to accomodate further sheets
-    padding-left: 15px;
-  }
-}
-
 /* Content */
 #page {
-  padding: 5px 0 60px;
+  padding: 3px 0 60px;
   @include responsive(mediaTablet){
-    padding: 0 1rem 90px;
+    padding: 20px 1rem 90px;
   }
   margin: 0;
   width: 100%;
@@ -100,18 +76,46 @@ body {
 
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: flex-start;
   align-content: space-around;
 
   .nav-left {
+    @if $logo-width < 200px {
+      min-width: 280px;
+    } @else {
+      min-width: ($logo-width+40px);
+    }
+    width: 30%;
+    max-width: 25rem;
     z-index: 1;
-    margin-top: 15px;
+    margin-top: calc($logo-height - 1rem);
+    margin-right: -1.5rem;
   }
 
   .container-fluid {
+    z-index: 2;
+    flex: 1;
+    min-width: 70%;
+    max-width: 100%;
+    overflow-x: visible;
+    overflow-y: visible;
+    padding: 0 5px;
     @include responsive(mediaTablet){
       padding-bottom: 60px; // needs these paddings to accomodate further sheets
+      padding-right: 20px;  // needs these paddings to accomodate further sheets
+      padding-left: 15px;
+    }
+  }
+
+  .main-header {
+    .container-fluid {
+      padding-bottom: 0;
+    }
+
+    .nav-left {
+      visibility: hidden;
+      margin-top: 0;
     }
   }
 
@@ -125,7 +129,10 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 20px;
+  margin-bottom: 5px;
+  @include responsive(mediaTablet){
+    margin-bottom: 1rem;
+  }
 
   .toggle-nav {
     margin: -0.5rem 1rem -0.5rem 0rem;
@@ -275,20 +282,13 @@ body {
 
 
 @include responsive(phone, $media-tablet) {
-  #logo-container {
+  #logo {
     display: none;
     .is-logged-out & {
       display: block;
     }
   }
 
-  .main-header {
-    padding: 3px 0 0;
-  }
-
-  #page-header {
-    margin: 0;
-  }
 
   #page {
     .nav-left {

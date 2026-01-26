@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -129,11 +129,15 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   ### SCOPES
 
-  def self.active_scope(reference_date = Date.current)
+  def self.active_scope(reference_date = Date.current) # rubocop:disable Metrics/AbcSize
+    range = reference_date.is_a?(Range) ? reference_date : reference_date..reference_date
+    start_on = range.first.to_date
+    end_on = range.last.to_date
+
     # we must use arel_table instead of custom sql,
     # otherwise `unscope` with a column name does not work
-    where(arel_table[:start_on].lteq(reference_date.to_date).or(arel_table[:start_on].eq(nil)))
-      .where(arel_table[:end_on].gteq(reference_date.to_date).or(arel_table[:end_on].eq(nil)))
+    where(arel_table[:start_on].lteq(end_on).or(arel_table[:start_on].eq(nil)))
+      .where(arel_table[:end_on].gteq(start_on).or(arel_table[:end_on].eq(nil)))
   end
 
   default_scope { active_scope }

@@ -169,11 +169,12 @@ class InvoiceRunsController < CrudController
       end
     end
 
-    if fixed_fees?
-      InvoiceRuns::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
-        flash.now[key] = text
-      end
-    end
+    # TODO in #3752, move this logic out of here into the period_invoice_templates
+    # if fixed_fees?
+    #   InvoiceRuns::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
+    #     flash.now[key] = text
+    #   end
+    # end
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/CyclomaticComplexity

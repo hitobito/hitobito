@@ -101,6 +101,65 @@ describe Group do
     end
   end
 
+  describe ":active scope" do
+    let(:group) { groups(:bottom_group_one_one) }
+
+    it "includes groups with created_at in the past" do
+      group.update!(created_at: DateTime.current.yesterday)
+      expect(Group.active).to include(group)
+    end
+
+    it "includes groups with created_at now" do
+      group.update!(created_at: DateTime.current)
+      expect(Group.active).to include(group)
+    end
+
+    it "excludes groups with archived_at in the past" do
+      group.update!(archived_at: DateTime.current.yesterday)
+      expect(Group.active).not_to include(group)
+    end
+
+    it "excludes groups with archived_at now" do
+      group.update!(archived_at: DateTime.current)
+      expect(Group.active).not_to include(group)
+    end
+
+    it "includes groups with archived_at tomorrow" do
+      group.update!(archived_at: DateTime.current.tomorrow)
+      expect(Group.active).to include(group)
+    end
+
+    it "excludes groups with deleted_at in the past" do
+      group.update!(deleted_at: DateTime.current.yesterday)
+      expect(Group.active).not_to include(group)
+    end
+
+    it "excludes groups with deleted_at now" do
+      group.update!(deleted_at: DateTime.current)
+      expect(Group.active).not_to include(group)
+    end
+
+    it "includes groups with deleted_at tomorrow" do
+      group.update!(deleted_at: DateTime.current.tomorrow)
+      expect(Group.active).to include(group)
+    end
+
+    it "can query with custom reference date" do
+      group.update!(created_at: DateTime.current.tomorrow)
+      expect(Group.active(DateTime.current)).not_to include(group)
+      expect(Group.active(DateTime.current.tomorrow)).to include(group)
+    end
+
+    it "can query with custom reference date range" do
+      group.update_columns(created_at: DateTime.current.tomorrow, archived_at: 1.week.from_now)
+      expect(Group.active(DateTime.current.yesterday..DateTime.current)).not_to include(group)
+      expect(Group.active(DateTime.current.yesterday..DateTime.current.tomorrow)).to include(group)
+      expect(Group.active(6.days.from_now..8.days.from_now)).to include(group)
+      expect(Group.active(2.weeks.from_now..2.weeks.from_now.tomorrow)).not_to include(group)
+      expect(Group.active(3.days.from_now..4.days.from_now)).to include(group)
+    end
+  end
+
   context "#roles" do
     let(:group) { groups(:top_group) }
 

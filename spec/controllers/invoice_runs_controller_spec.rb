@@ -185,18 +185,6 @@ describe InvoiceRunsController do
       expect(assigns(:invoice_run).invoice.payment_information).to eq "Bitte schnellstmöglich einzahlen"
     end
 
-    it "GET#new prepares membership invoice" do
-      Fabricate(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one))
-      get :new, params: {group_id: group.id, fixed_fees: :membership}
-      expect(response).to render_template("crud/new")
-
-      members, leaders = assigns(:invoice_run).invoice.invoice_items
-      expect(members.name).to eq "Mitgliedsbeitrag - Members"
-      expect(leaders.name).to eq "Mitgliedsbeitrag - Leaders"
-      expect(members.count).to eq 1
-      expect(leaders.count).to eq 1
-    end
-
     it "POST#create creates an invoice for single member" do
       expect do
         post :create, params: {group_id: group.id, invoice_run: {recipient_ids: person.id, invoice: invoice_attrs}}

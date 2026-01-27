@@ -13,6 +13,11 @@ describe Export::Tabular::People::ContactAccounts do
       expect(subject.key(PhoneNumber, "foo")).to eq :phone_number_foo
       expect(subject.human(PhoneNumber, "foo")).to eq "Telefonnummer foo"
     end
+
+    it "uses first predefined_label if label is nil" do
+      expect(subject.key(PhoneNumber, nil)).to eq :phone_number_privat
+      expect(subject.human(PhoneNumber, nil)).to eq "Telefonnummer Privat"
+    end
   end
 
   context "social_accounts" do

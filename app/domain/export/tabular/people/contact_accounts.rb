@@ -7,11 +7,17 @@ module Export::Tabular::People
   module ContactAccounts
     class << self
       def key(model, label)
-        :"#{model.model_name.to_s.underscore}_#{label.downcase}"
+        :"#{model.model_name.to_s.underscore}_#{label_or_default(label, model).downcase}"
       end
 
       def human(model, label)
-        "#{model.model_name.human} #{label}"
+        "#{model.model_name.human} #{label_or_default(label, model)}"
+      end
+
+      private
+
+      def label_or_default(label, model)
+        label || Settings.send(model.table_name.singularize).predefined_labels.first
       end
     end
   end

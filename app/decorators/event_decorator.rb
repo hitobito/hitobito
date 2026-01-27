@@ -129,4 +129,10 @@ class EventDecorator < ApplicationDecorator
 
     safe_join(contact_attributes.values_at(*visible_contact_attributes.map(&:to_sym)))
   end
+
+  def organizer_group(group = nil)
+    group ||= event.groups.first
+    return group if groups.include?(group)
+    groups.where(id: group.descendants).first || groups.first
+  end
 end

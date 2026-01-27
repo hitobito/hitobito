@@ -513,8 +513,8 @@ it:
       list:
         incomplete: mancano dei campi obbligatori
       guest_of_info:
-        with_main_applicant: "(Gast von %{main_applicant_name})"
-        without_main_applicant: "(Gast von abgemeldeter Person)"
+        with_main_applicant: "(Ospite di %{main_applicant_name})"
+        without_main_applicant: "(Ospite della persona cancellata)"
       cancel_application:
         explanation: Sei iscritto/a a questo evento.
         pending: Siete pre-iscritti a questo evento. L'iscrizione non è ancora definitiva e deve essere confermata dall'amministrazione dell'evento.
@@ -629,14 +629,14 @@ it:
     banner_open_invitation:
       explanation: Sei stato invitato a questo evento
       managed:
-        explanation: "%{person} wurde zu diesem Anlass eingeladen."
+        explanation: "%{person} è stato invitato a questo evento."
       buttons:
         accept: log in
         decline: log out
     banner_declined_invitation:
       explanation: Siete stati invitati a questo evento e avete disdetto.
       managed:
-        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
+        explanation: "%{person} è stato invitato a questo evento ed è stato cancellato dalla lista degli invitati."
     form:
       caption_external_applications: "Esterni possono iscriversi a questo evento."
       caption_prioritization: "I partecipanti possono dare durante l'iscrizione due ulteriori corsi come alternative."
@@ -706,7 +706,7 @@ it:
   event/participations:
     full_entry_label: "%{model_label} da <i>%{person}</i> a <i>%{event}</i>"
     success: "%{full_entry_label} è stato creato con successo."
-    success_for_external_manager: "%{full_entry_label} wurde erfolgreich erstellt."
+    success_for_external_manager: "%{full_entry_label} è stato salvato con successo."
     instructions: "per l'iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all'indirizzo corrispondente"
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     waiting_list: "Tutti i posti sono attualmente occupati, l'iscrizione è in lista d'attesa."
@@ -742,10 +742,10 @@ it:
     email_invalid: "Inserisci un'e-mail valevole"
     form_data_missing: "Compila per favore il formulario seguente prima di iscriverti all'evento."
     registered: "I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l'iscrizione."
-    application_window_closed: "il periodo per l'iscrizione per questo evento è terminato."
+    application_window_closed: "La finestra di registrazione per questo evento non è aperta."
     no_places_available: "Il numero massimo di partecipanti per questo evento è già stato raggiunto."
-    email_sent_manager: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst."
-    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
+    email_sent_manager: "Ti abbiamo inviato un'e-mail con un link dove puoi iscrivere te stesso o tuo figlio direttamente all'evento."
+    registered_manager: 'I tuoi dati personali sono stati registrati. Ora puoi registrare i tuoi figli cliccando sul pulsante “Registrati”'
 
   event/roles:
     full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"
@@ -905,7 +905,7 @@ it:
       distribution: Distribuzione
     self_registration:
       alert:
-        not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
+        not_active: In questo gruppo non è possibile effettuare l'autoregistrazione.
       show:
         meta_description: Pagina di autoregistrazione per Hitobito
       form:
@@ -1047,7 +1047,7 @@ it:
     recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
     evaluations:
       show:
-        title: Ricevuta della prenotazione
+        title: Estratto conto
         deficit: Pagamento parziale
         excess: Pagamento in eccesso
         table:
@@ -1111,31 +1111,31 @@ it:
   invoice_runs:
     destroys:
       show:
-        title: Rechnungslauf löschen
-        non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
-        confirm_delete: Wollen Sie den Rechnungslauf wirklich löschen?
+        title: Cancellare fattura collettiva
+        non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato “Bozza” né “Annullata”. Pertanto, la fattura collettiva non può essere cancellata.'
+        confirm_delete: Vuoi davvero eliminare la fattura collettiva?
     form:
       invoice_articles:
         variable_donation:
-          name: Variabler Spendenaufruf
+          name: Appello per donazioni variabili
           number: Donazioni
-          description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
+          description: Appello per donazioni sulla base di donazioni esistenti
       recipient_info:
-        one: "Rechnung wird für eine Person erstellt."
-        many: "Rechnung wird für %{count} Personen erstellt."
-        other: "Rechnung wird für %{count} Personen erstellt."
+        one: "La fattura viene emessa per una sola persona."
+        many: "La fattura viene emessa per %{count} persone."
+        other: "La fattura viene emessa per %{count} persone."
     create:
-      one: "Rechnung <i>%{title}</i> wurde erstellt."
-      many: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
-      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
-    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
+      one: "Fattura 1%{title}1 creata."
+      many: "La fattura<i>%{title}</i> è stata creata per %{count} destinatari."
+      other: "La fattura<i>%{title}</i> è stata creata per %{count} destinatari."
+    create_batch: "La fattura <i>%{title}</i> viene creata in background per %{count} destinatari."
     update:
-      zero: "Es muss mindestens eine Rechnung ausgewählt werden."
-      model_error: "Rechnung %{number} ist ungültig - %{error}."
+      zero: "Deve venir selezionata almeno una fattura."
+      model_error: "La fattura %{number} non è valida - %{error}"
       issued:
-        one: "Rechnung %{number} wurde gestellt."
-        many: "%{count} Rechnungen wurden gestellt."
-        other: "%{count} Rechnungen wurden gestellt."
+        one: "La fattura %{number} è stata emessa."
+        many: "%{count} fattura sono state emesse."
+        other: "%{count} fattura sono state emesse."
       reminded:
         one: "Rechnung %{number} wurde gemahnt."
         many: "%{count} Rechnungen wurden gemahnt."
@@ -1174,7 +1174,7 @@ it:
         other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
-      one: "Rechnung wurde storniert."
+      one: "La fattura è stata annullata"
       other: "%{count} Rechnungen wurden storniert."
 
   invoice_runs/fixed_fee:
@@ -1421,7 +1421,7 @@ it:
     imap_mails: "Mail e rimbalzi"
     invoices: "Fatture"
     invoices/single: "Singole fatture"
-    invoices/evaluations: "Ricevuta della prenotazione"
+    invoices/evaluations: "Estratto conto"
 
   notes:
     new_note: Nuova nota
@@ -1940,7 +1940,7 @@ it:
       filters_role_kind:
         active_today: Ruoli attualmente attivi
         active: il ruolo era attivo.
-        started: gestartete Rollen
+        started: ruoli avviati
         started_help: Bezieht sich auf das "Von" Datum auf der Rolle
         created: il ruolo è stato creato.
         deleted: il ruolo è stato cancellato.
@@ -2248,9 +2248,9 @@ it:
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
 
   taggable:
-    add_tag: Tag hinzufügen
+    add_tag: Aggiungere tag
     cannot_create: Bitte wähle einen bestehenden Tag aus
-    no_entry: (keine)
+    no_entry: (nessuno)
 
   version:
     attribute_change:
@@ -2268,7 +2268,7 @@ it:
         update: "La richiesta d'accesso per <i>%{label}</i> è stata aggiornata: %{changeset}"
         destroy: "La richiesta d'accesso per <i>%{label}</i> è stata evasa."
 
-      deleted_person: "Gelöschte Person"
+      deleted_person: "Persona cancellata"
       people_manager:
         create:
           manager: "<i>%{label}</i> wurde als Verwalter*in hinzugefügt."
@@ -2357,10 +2357,10 @@ it:
 
   people_managers:
     section:
-      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
-    common_heading: Kinder / Verwalter*innen
+      manageds_help: Puoi aggiungere come figli solo le persone di cui hai l'accesso in scrittura.
+    common_heading: Bambini / Amministratori
     managers_heading: Amministratori/amministratrici
     manageds_heading: Bambini
     create_managed_person_button: Registrazione del bambino
-    assign_managed_person_button: Kind zuweisen
-    assign_manager_person_button: Verwalter*in zuweisen
+    assign_managed_person_button: Assegnare un bambino
+    assign_manager_person_button: Assegnare amministratore/trice

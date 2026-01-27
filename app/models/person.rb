@@ -374,6 +374,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       find_by(email: Settings.root_email)
     end
 
+    def language_labels
+      Person::LANGUAGES.keys.map do |key|
+        [key, I18n.t("activerecord.attributes.person.languages.#{key}")]
+      end
+    end
+
     private
 
     def company_case_column(if_company, otherwise)

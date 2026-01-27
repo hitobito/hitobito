@@ -139,6 +139,16 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     p.permit(globalized_permitted_attrs)
   end
 
+  def return_path
+    super.then do |r|
+      next r if r.present? || entry.id.nil?
+      group_event_path(
+        entry.groups.find { |g| can?(:create, g.events.build) } || entry.groups.first,
+        entry
+      )
+    end
+  end
+
   def group
     parent
   end
@@ -151,7 +161,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     master = @event.groups.first
     @groups = master.self_and_sister_groups.reorder(:name)
     # union to include assigned deleted events
-    @groups = (@groups | @event.groups) - [group]
+    @groups = (@groups | @event.groups)
   end
 
   def load_kinds

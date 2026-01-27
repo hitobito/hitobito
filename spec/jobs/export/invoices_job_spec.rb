@@ -25,7 +25,7 @@ describe Export::InvoicesJob do
     invoice_ids.map { |id| Invoice.find(id) }
   end
 
-  context "creates a PDF export" do
+  context "creates a PDF export, it" do
     let(:format) { :pdf }
 
     it "calls render_multiple with invoices in the same order as invoice_ids" do

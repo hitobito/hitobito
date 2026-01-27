@@ -154,6 +154,23 @@ describe PersonDecorator, :draper_with_helpers do
     end
   end
 
+  describe "#upcoming_participations_grouped" do
+    subject(:upcoming_participations_grouped) { decorator.upcoming_participations_grouped }
+
+    it "returns #upcoming_participations grouped by event class" do
+      participation1 = Event::Participation.new(event: EventDecorator.new(Event.new))
+      participation2 = Event::Participation.new(event: EventDecorator.new(Event::Course.new))
+      participation3 = Event::Participation.new(event: EventDecorator.new(Event.new))
+      allow(decorator).to receive(:upcoming_participations)
+        .and_return([participation1, participation2, participation3])
+
+      is_expected.to match({
+        Event => [participation1, participation3],
+        Event::Course => [participation2]
+      })
+    end
+  end
+
   context "layer group" do
     let(:label) { decorator.layer_group_label }
 

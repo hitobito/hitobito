@@ -17,7 +17,7 @@
           = render_attrs(entry, :created_info, :updated_info, :login_status)
         - else
           = render_attrs(entry, :created_info, :updated_info)
-          
+
         = render_attrs(entry, :language)
 
         - FeatureGate.if(:self_registration_reason) do
@@ -39,7 +39,8 @@
       = render 'roles'
       = render 'add_requests'
       = render 'event_aside', title: Event::Application.model_name.human(count: 2), collection: entry.pending_applications
-      = render 'participation_aside', title: upcoming_events_title, collection: entry.upcoming_participations
+      - entry.upcoming_participations_grouped.each do |event_class, participations|
+        = render 'participation_aside', title: upcoming_events_title(event_class), collection: participations
 
       = render_extensions :show_event
 

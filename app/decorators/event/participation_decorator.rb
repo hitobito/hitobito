@@ -20,9 +20,9 @@ class Event::ParticipationDecorator < ApplicationDecorator
     h.tag(:br) + h.muted(person.additional_name) + incomplete_label
   end
 
-  def labeled_link
+  def labeled_link(label = nil)
+    label = label.presence || model.model_name.human
     url = h.group_event_participation_path(event.groups.first, event, model)
-    label = model.model_name.human
     h.link_to_if(can?(:show, model), label, url)
   end
 

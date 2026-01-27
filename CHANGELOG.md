@@ -8,6 +8,7 @@
 - Bei Eventfragen können nun die Antwortmöglichkeiten wie die Fragen selbst in einem dynamischen Formular hinzugefügt und entfernt werden. Bisher wurden diese als kommaseparierter String erfasst (#3563)
 - Im Text "Anlass: E-Mail Voranmeldung" kann nun auch der Platzhalter "event-details" verwendet werden, damit der Text analog zur Anmeldebestätigung formuliert werden kann. (hitobito_sww#280)
 - Die Rechnungsübersicht einer Person enthält nun auch pro Rechnung die Informationen der letzten Zahlung und des insgesamt bezahlten Betrages (hitobito_sww#290)
+- Eventteilnahmen werden auf dem Personenprofil neu nach Eventtyp gruppiert angezeigt und zeigen die Teilnahmerolle(n) (#hitobito_dsj#44)
 
 ## Version 2.8
 

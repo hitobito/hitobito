@@ -141,6 +141,11 @@ class PersonDecorator < ApplicationDecorator
       Event::ParticipationDecorator.decorate_collection(event_queries.upcoming_participations)
   end
 
+  def upcoming_participations_grouped
+    @upcoming_participations_grouped ||=
+      upcoming_participations.group_by { |p| p.event.object.class }
+  end
+
   def last_role_new_link(group)
     path = h.new_group_role_path(restored_group(group), role_id: last_role.id)
     role_popover_link(path, "role_#{last_role.id}", "popover_toggler ps-1")

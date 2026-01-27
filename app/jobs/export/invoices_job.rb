@@ -13,15 +13,24 @@ class Export::InvoicesJob < Export::ExportBaseJob
     @invoice_ids = invoice_ids
   end
 
-  private
+  def format_supported?
+    %i[pdf csv].include? @format
+  end
 
-  def data
-    invoices = Invoice.where(id: @invoice_ids).order(Arel.sql(
+  def entries
+    Invoice.where(id: @invoice_ids).order(Arel.sql(
       "array_position(ARRAY[?]::int[], invoices.id)", @invoice_ids
     ))
+  end
 
-    Export::Pdf::Invoice.render_multiple(invoices, @options.merge({
-      async_download_file: async_download_file
-    }))
+  def data
+    case @format
+    when :pdf
+      Export::Pdf::Invoice.render_multiple(entries, @options.merge({
+        async_download_file: async_download_file
+      }))
+    when :csv
+      Export::Tabular::Invoices::List.csv(entries)
+    end
   end
 end

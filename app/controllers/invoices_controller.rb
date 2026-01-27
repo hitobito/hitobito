@@ -135,8 +135,16 @@ class InvoicesController < CrudController
   end
 
   def render_invoices_csv(invoices)
-    csv = Export::Tabular::Invoices::List.csv(invoices)
-    send_data csv, type: :csv, filename: filename(:csv, invoices)
+    format = :csv
+
+    with_async_download_cookie(format, filename(format, invoices)) do |filename|
+      Export::InvoicesJob.new(
+        format,
+        current_person.id,
+        invoices.map(&:id),
+        filename: filename
+      ).enqueue!
+    end
   end
 
   def render_invoices_pdf(invoices)

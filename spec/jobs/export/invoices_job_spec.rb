@@ -33,4 +33,13 @@ describe Export::InvoicesJob do
       subject.perform
     end
   end
+
+  context "creates a CSV export, it" do
+    let(:format) { :csv }
+
+    it "export tabular CSV with invoices in the same order as invoice_ids" do
+      expect(Export::Tabular::Invoices::List).to receive(:csv).with(invoices_in_order)
+      subject.perform
+    end
+  end
 end

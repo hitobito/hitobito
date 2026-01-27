@@ -18,12 +18,18 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def perform
+    raise "Unsupported Format '#{@format}'." unless format_supported?
+
     set_locale
     export_file
   end
 
   def entries
-    # override in sub class
+    # override in subclass
+  end
+
+  def format_supported?
+    true # maybe override in subclass
   end
 
   def ability

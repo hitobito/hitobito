@@ -208,7 +208,7 @@ describe InvoicesController do
       update_issued_at_to_current_year
 
       expected_ids = [invoices(:sent).id, invoice.id]
-      expect(Export::InvoicesJob).to receive(:new).with(anything, anything, expected_ids, anything).and_call_original
+      expect(Export::InvoicesJob).to receive(:new).with(:pdf, anything, expected_ids, anything).and_call_original
 
       expect do
         get :index, params: {

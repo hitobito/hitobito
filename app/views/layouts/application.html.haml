@@ -39,7 +39,8 @@
 
     #page{class: ('is-nav-not-rendered' unless render_nav?)}
       %header.main-header
-        .nav-left
+        - if render_nav?
+          .nav-left
         .container-fluid
           #page-header
             - if current_user

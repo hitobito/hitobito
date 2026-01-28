@@ -125,8 +125,16 @@ class InvoicesController < CrudController
   end
 
   def render_invoices_csv(invoices)
-    csv = Export::Tabular::Invoices::List.csv(invoices)
-    send_data csv, type: :csv, filename: filename(:csv, invoices)
+    format = :csv
+
+    with_async_download_cookie(format, filename(format, invoices)) do |filename|
+      Export::InvoicesJob.new(
+        format,
+        current_person.id,
+        invoices.map(&:id),
+        filename: filename
+      ).enqueue!
+    end
   end
 
   def render_invoices_pdf(invoices)
@@ -136,10 +144,12 @@ class InvoicesController < CrudController
     else
       format = :pdf
       with_async_download_cookie(format, filename(format, invoices)) do |filename|
-        Export::InvoicesJob.new(format,
+        Export::InvoicesJob.new(
+          format,
           current_person.id,
-          invoices.map(&:id), # pluck would replace the whole select, removing a DISTINCT as well
-          pdf_options.merge({filename: filename})).enqueue!
+          invoices.map(&:id),
+          pdf_options.merge({filename: filename})
+        ).enqueue!
       end
     end
   end

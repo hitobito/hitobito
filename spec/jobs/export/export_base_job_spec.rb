@@ -8,6 +8,10 @@ require "spec_helper"
 describe Export::ExportBaseJob do
   class MyJob < described_class
     self.parameters = PARAMETERS
+
+    def format_supported?
+      %i[csv xslx pdf].include? @format
+    end
   end
 
   let(:subject) { MyJob.new(:csv, people(:top_leader).id) }
@@ -19,5 +23,14 @@ describe Export::ExportBaseJob do
 
     job = subject.delayed_jobs.last.payload_object
     expect(job.instance_variable_get(:@locale)).to eq "fr"
+  end
+
+  it "knows to abort if the requested format is not supported" do
+    expect do
+      job = MyJob.new(:jpeg, people(:top_leader).id)
+      expect(job).to_not be_format_supported
+
+      job.perform
+    end.to raise_error(RuntimeError, "Unsupported Format 'jpeg'.")
   end
 end

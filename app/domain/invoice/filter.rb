@@ -42,7 +42,7 @@ class Invoice::Filter
   end
 
   def filter_by_ids(relation)
-    return relation if invoice_ids.blank?
+    return relation if params[:ids].blank? || all_invoices?
 
     relation.where(id: invoice_ids)
   end

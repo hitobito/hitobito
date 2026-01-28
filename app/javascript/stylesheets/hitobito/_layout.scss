@@ -272,8 +272,15 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
   .quicksearch-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     flex: 1 0 auto;
     -webkit-appearance: none;
+  }
+
+  .quicksearch-button {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
   }
 }
 

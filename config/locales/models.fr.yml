@@ -83,7 +83,7 @@ fr:
         at_least_one_present: Au moins %{model_name} doit être remplie
         type_not_allowed: ne peut pas être créé ici
         must_be_after_opening: doit être ultérieur à l'inscription
-        must_have_same_type: doivent être de type identique
+        must_have_same_type: müssen von denselbem Typ sein
         greater_than: doit être supérieur à %{count}.
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
         must_exist: doivent être présents

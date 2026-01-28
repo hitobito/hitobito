@@ -81,7 +81,7 @@ en:
         at_least_one_present: At least one %{model_name} must be replenished
         type_not_allowed: can't be created here
         must_be_after_opening: must be after the start of the application period
-        must_have_same_type: must be of the same type
+        must_have_same_type: müssen von denselbem Typ sein
         greater_than: must be bigger than %{count}
         greater_than_or_equal_to: 'must be bigger or equal to '
         must_exist: must exist

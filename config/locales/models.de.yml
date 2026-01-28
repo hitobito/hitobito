@@ -546,6 +546,9 @@ de:
           de: Deutsch
           en: Englisch
           fr: Französisch
+          it: Italienisch
+          rm: Rätoromanisch
+          
         primary_group_id: Hauptgruppe
         layer_group_label: Hauptebene
         self_registration_reason: Eintrittsgrund

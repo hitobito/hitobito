@@ -90,7 +90,7 @@ body {
     max-width: 25rem;
     height: 100%;
     z-index: 1;
-    margin-top: calc($logo-height - 1rem);
+    margin-top: calc($logo-height + 2px - 1rem);
     margin-right: -1.5rem;
   }
 

@@ -7,10 +7,6 @@ module Dropdown
   class PeriodInvoiceTemplates::AddItem < Base
     attr_reader :form
 
-    AVAILABLE_ITEMS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
-      PeriodInvoiceTemplate::RoleCountItem
-    ]
-
     def initialize(template, form, *args)
       super(template, translate(:add_item), :plus)
       @form = form
@@ -27,8 +23,8 @@ module Dropdown
     private
 
     def init_items
-      AVAILABLE_ITEMS.each do |item_class|
-        add_item(translate(item_class.name.demodulize.underscore), item_class)
+      Settings.groups.period_invoice_templates.item_classes.each do |item_class|
+        add_item(translate(item_class.demodulize.underscore), item_class.constantize)
       end
     end
 

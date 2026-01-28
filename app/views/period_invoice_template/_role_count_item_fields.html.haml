@@ -1,0 +1,11 @@
+-#  Copyright (c) 2026, BdP and DPSG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.nested-form-wrapper{ data: { new_record: f.object.new_record? } }
+  = f.hidden_field(:type, value: f.object.class.name)
+  = f.labeled_input_fields :name, :cost_center, :account
+  %button.controls.align-with-form{ type: "button", data: { action: "nested-form#remove" } }
+    Remove item
+  = f.hidden_field(:_destroy)

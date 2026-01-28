@@ -13,6 +13,7 @@
     "@popperjs/core": "^2.11.6",
     "@rails/actiontext": "^6.0.3-3",
     "@rails/webpacker": "5.4.3",
+    "@stimulus-components/rails-nested-form": "^5.0.0",
     "@tarekraafat/autocomplete.js": "^10.2.7",
     "bootstrap": "^5.2.0",
     "coffee-loader": "^1.0.0",

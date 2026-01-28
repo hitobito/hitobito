@@ -399,7 +399,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def indented(content = nil, &block)
     content = capture(&block) if block
     content_tag(:div, class: "row mb-2") do
-      content_tag(:div, content, class: "offset-md-3 offset-xl-2")
+      content_tag(:div, content, class: "offset-md-3 offset-xl-2 col-md-9 col-xl-10")
     end
   end
 

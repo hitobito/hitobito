@@ -87,6 +87,7 @@ body {
       min-width: ($logo-width+40px);
     }
     width: 30%;
+    flex: 0.3;
     max-width: 25rem;
     z-index: 1;
     margin-top: calc($logo-height - 1rem);

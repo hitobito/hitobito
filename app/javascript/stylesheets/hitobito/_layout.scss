@@ -87,8 +87,8 @@ body {
       min-width: ($logo-width+40px);
     }
     width: 30%;
-    flex: 0.3;
     max-width: 25rem;
+    height: 100%;
     z-index: 1;
     margin-top: calc($logo-height - 1rem);
     margin-right: -1.5rem;
@@ -96,7 +96,7 @@ body {
 
   .container-fluid {
     z-index: 2;
-    flex: 1;
+    min-width: 70%;
     max-width: 100%;
     overflow-x: visible;
     overflow-y: visible;

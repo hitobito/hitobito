@@ -208,7 +208,7 @@ describe InvoicesController do
       update_issued_at_to_current_year
 
       expected_ids = [invoices(:sent).id, invoice.id]
-      expect(Export::InvoicesJob).to receive(:new).with(anything, anything, expected_ids, anything).and_call_original
+      expect(Export::InvoicesJob).to receive(:new).with(:pdf, anything, expected_ids, anything).and_call_original
 
       expect do
         get :index, params: {
@@ -278,11 +278,15 @@ describe InvoicesController do
       expect(response.media_type).to eq("application/pdf")
     end
 
-    it "exports pdf" do
+    it "exports csv" do
       update_issued_at_to_current_year
-      get :index, params: {group_id: group.id}, format: :csv
-      expect(response.header["Content-Disposition"]).to match(/rechnungen.csv/)
-      expect(response.media_type).to eq("text/csv")
+
+      expected_ids = [invoice.id, invoices(:sent).id]
+      expect(Export::InvoicesJob).to receive(:new).with(:csv, anything, expected_ids, anything).and_call_original
+
+      expect do
+        get :index, params: {group_id: group.id}, format: :csv
+      end.to change { Delayed::Job.count }.by(1)
     end
 
     it "renders json" do
@@ -386,10 +390,11 @@ describe InvoicesController do
     end
 
     it "exports csv" do
-      get :show, params: {group_id: group.id, id: invoice.id}, format: :csv
+      expect(Export::InvoicesJob).to receive(:new).with(:csv, anything, [invoice.id], anything).and_call_original
 
-      expect(response.header["Content-Disposition"]).to match(/Rechnung-#{invoice.sequence_number}.csv/)
-      expect(response.media_type).to eq("text/csv")
+      expect do
+        get :show, params: {group_id: group.id, id: invoice.id}, format: :csv
+      end.to change { Delayed::Job.count }.by(1)
     end
 
     it "renders json" do

@@ -1,4 +1,4 @@
-#  Copyright (c) 2026, Hitobito AG. This file is part of
+#  Copyright (c) 2026, BdP and DPSG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -7,6 +7,10 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
   belongs_to :group
 
   has_many :invoice_runs, dependent: :nullify
+
+  has_many :items, dependent: :destroy, class_name: 'PeriodInvoiceTemplate::Item',
+    inverse_of: :period_invoice_template
+  accepts_nested_attributes_for :items, allow_destroy: true, reject_if: :all_blank
 
   validates :name, :start_on, presence: true
   validates_date :end_on,

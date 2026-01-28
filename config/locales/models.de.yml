@@ -1351,6 +1351,12 @@ de:
         start_on: Rechnungsperiode Start
         end_on: Rechnungsperiode Ende
         recipient_group_type: Empfängergruppen
+        items: Rechnungsposten
+
+      period_invoice_template/role_count_item:
+        name: Name
+        cost_center: Kostenstelle
+        account: Konto
 
       service_token:
         name: Name

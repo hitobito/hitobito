@@ -263,6 +263,10 @@ de:
     csv: "CSV"
     xlsx: "XLSX"
 
+  dropdown/period_invoice_templates/add_item:
+    role_count_item: Rollen-Zählung
+    add_item: Rechnungsposten hinzufügen
+
   devise:
     failure:
       already_authenticated: "Du bist bereits angemeldet."

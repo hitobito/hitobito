@@ -1,7 +1,20 @@
--#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  Copyright (c) 2026, BdP and DPSG. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form(buttons_top: false) do |f|
-    = f.labeled_input_fields :name, :start_on, :end_on
+  = f.labeled_input_fields :name, :start_on, :end_on
+
+  = f.labeled t("activerecord.attributes.period_invoice_template.items") do
+    #items_fields{ data: { association: :items } }
+      = f.fields_for :items do |ff|
+        = ff.hidden_field(:type, value: ff.object.class.name)
+        = ff.labeled_input_fields :name, :cost_center, :account
+        -# TODO render a different partial depending on the item type
+        .controls.align-with-form= ff.link_to_remove(ta(:remove))
+    .controls
+      -# TODO dropdown menu or button containing link_to_add(link_title, :items, options.merge(class: "text w-100 align-with-form"))
+      -#   which selects the correct field blueprints to add to the form - this is where the
+      -#   classic nested_form gem probably can't be used anymore.
+      = Dropdown::PeriodInvoiceTemplates::AddItem.new(self, f, class: "text align-with-form")

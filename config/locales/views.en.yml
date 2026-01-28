@@ -1757,7 +1757,7 @@ en:
 
     attrs:
       additional_data: More information
-      events: My next events
+      events: Meine nächsten %{event_type_label}
 
     contact_data:
       lives_in_household_with: Lives in household with

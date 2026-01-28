@@ -1806,7 +1806,7 @@ fr:
 
     attrs:
       additional_data: Indications supplémentaires
-      events: Mes prochains événements
+      events: Meine nächsten %{event_type_label}
 
     contact_data:
       lives_in_household_with: Habite dans le foyer avec

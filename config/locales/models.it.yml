@@ -85,7 +85,7 @@ it:
         at_least_one_present: È necessario compilare almeno una %{model_name}
         type_not_allowed: non può essere salvato
         must_be_after_opening: deve essere dopo l'inizio dell'annuncio
-        must_have_same_type: devono essere dello stesso tipo
+        must_have_same_type: müssen von demselben Typ sein
         greater_than: deve essere più grande di %{count}
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
@@ -150,9 +150,9 @@ it:
             base:
               max_one_additional_invoice_address: È possibile selezionare un solo indirizzo come indirizzo di fatturazione.
               additional_address_labels_must_be_unique: Le denominazioni degli altri indirizzi devono essere univoche.
-              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
-              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
-              managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
+              cannot_have_managers_and_manageds: '%{name} non può avere sia amministratori che figli.'
+              manager_already_managed: Non è stato possibile aggiungere l'amministratore perché è già gestito.
+              managed_already_manager: Impossibile aggiungere il bambino perché è già amministratore.
             email:
               taken: >
                   è già stato assegnato. Questo indirizzo deve essere univoco, visto
@@ -173,8 +173,8 @@ it:
 
           attributes:
             manager_id:
-              taken: ist bereits gesetzt.
-          manager_and_managed_the_same: kann sich nicht selber verwalten.
+              taken: è già impostato.
+          manager_and_managed_the_same: non può amministrarsi da solo.
         qualification:
           attributes:
             qualification_kind_id:
@@ -195,7 +195,7 @@ it:
 
         invoice:
           recipient_address_or_email_required: 'deve essere riempito l''indirizzo del ricevente oppure l''e-mail'
-          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
+          recipient_name_or_company_name_required: 'Il nome dell''azienda o il nome devono essere compilati'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
@@ -357,9 +357,9 @@ it:
         many: Voci contabili
         other: Voci contabili
       invoice_run:
-        one: Rechnungslauf
-        many: Rechnungsläufe
-        other: Rechnungsläufe
+        one: Fatture collettive
+        many: Fatture collettive
+        other: Fatture collettive
       label_format:
         one: formato delle etichette
         many: Formati delle etichette
@@ -1028,7 +1028,7 @@ it:
               qualify: Creare le qualifiche per le persone su questo livello e su quelli inferiori.
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
               finance: Emettere e amministrare fatture
-              layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
+              layer_and_below_finance: Creazione e gestione delle fatture a questo livello e a tutti i livelli sottostanti.
               impersonation: Utilizza Hitobito come altra persona.
               see_invisible_from_above: Vedere altre persone che altrimenti non possono essere viste dai livelli superiori.
               manual_deletion: Eliminazione di persone senza ruoli
@@ -1250,18 +1250,18 @@ it:
         recipient_name: Nome
         recipient_address_care_of: Riga dell'indirizzo aggiuntiva
         recipient_postbox: Casella postale
-        recipient_country: Land
+        recipient_country: Nazione
         recipient_street: Strada
         recipient_housenumber: Numero civico
         recipient_zip_code: CAP
         recipient_town: Luogo
         recipient_address: Indirizzo del destinatario
-        payee_name: Zahlungsempfänger Name
-        payee_street: Zahlungsempfänger Strasse
-        payee_housenumber: Zahlungsempfänger Hausnummer
-        payee_zip_code: Zahlungsempfänger PLZ
-        payee_town: Zahlungsempfänger Ort
-        payee_country: Zahlungsempfänger Land
+        payee_name: Nome del beneficiario
+        payee_street: Via del beneficiario
+        payee_housenumber: Numero civico del beneficiario
+        payee_zip_code: 'Codice postale del beneficiario '
+        payee_town: Luogo del beneficiario
+        payee_country: Paese del beneficiario
         due_at: Scade il
         issued_at: Emesso il
         sent_at: 'Spedito il '
@@ -1275,7 +1275,7 @@ it:
         payment_purpose: Motivo del pagamento
         address: Indirizzo del mittente
         beneficiary: A favore di
-        payee: Einzahlung für
+        payee: Versamento per
         account_number: Numero di conto
         iban: IBAN
         payment_slip: Polizza di versamento
@@ -1345,12 +1345,12 @@ it:
 
 
       invoice_run:
-        title: Titel
-        receiver: Empfänger
-        recipients_total: Empfänger Insgesamt
-        recipients_paid: Empfänger Bezahlt
-        amount_total: Betrag insgesamt
-        amount_paid: Betrag bezahlt
+        title: Titolo
+        receiver: Destinatario
+        recipients_total: Destinatario complessivo
+        recipients_paid: Destinatario pagato
+        amount_total: Importo complessivo
+        amount_paid: Importo pagato
 
       # used for nested attributes
       invoice_items:

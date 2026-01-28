@@ -12,6 +12,12 @@ body {
 }
 
 /* Header */
+.main-header {
+  width: 100%;
+  display: flex;
+  z-index: 2;
+}
+
 .logo {
   position: absolute;
   margin: 1rem 0 0 1rem;
@@ -70,7 +76,7 @@ body {
 
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: flex-start;
   align-content: space-around;
 
@@ -82,8 +88,9 @@ body {
     }
     width: 30%;
     max-width: 25rem;
+    height: 100%;
     z-index: 1;
-    margin-top: $logo-height + 40px;
+    margin-top: calc($logo-height + 2px - 1rem);
     margin-right: -1.5rem;
   }
 
@@ -93,13 +100,22 @@ body {
     max-width: 100%;
     overflow-x: visible;
     overflow-y: visible;
-    padding-bottom: 0px;
-    padding-right: 5px;
-    padding-left: 5px;
+    padding: 0 5px;
     @include responsive(mediaTablet){
       padding-bottom: 60px; // needs these paddings to accomodate further sheets
       padding-right: 20px;  // needs these paddings to accomodate further sheets
       padding-left: 15px;
+    }
+  }
+
+  .main-header {
+    .container-fluid {
+      padding-bottom: 0;
+    }
+
+    .nav-left {
+      visibility: hidden;
+      margin-top: 0;
     }
   }
 
@@ -256,8 +272,15 @@ body {
   flex-direction: row;
   flex-wrap: nowrap;
   .quicksearch-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     flex: 1 0 auto;
     -webkit-appearance: none;
+  }
+
+  .quicksearch-button {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
   }
 }
 

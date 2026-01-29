@@ -97,7 +97,8 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   # In external invoices, the recipient type may also be blank
   validates :recipient_type, inclusion: {in: ["Person", "Group"]}, allow_blank: true
   validate :recipient_name_present?
-  validates :recipient_street, :recipient_zip_code, :recipient_town, :recipient_country,
+  validate :recipient_address_line_present?, unless: :tolerate_deprecated_recipient_address?
+  validates :recipient_zip_code, :recipient_town, :recipient_country,
     presence: true, unless: :tolerate_deprecated_recipient_address?
   validate :assert_sendable?, unless: :recipient_id?
 
@@ -399,6 +400,12 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def recipient_name_present?
     if recipient_name.blank? && recipient_company_name.blank?
       errors.add(:base, :recipient_name_or_company_name_required)
+    end
+  end
+
+  def recipient_address_line_present?
+    if recipient_street.blank? && recipient_postbox.blank?
+      errors.add(:base, :recipient_street_or_postbox_required)
     end
   end
 

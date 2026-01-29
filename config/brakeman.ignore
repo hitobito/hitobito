@@ -30,7 +30,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/concerns/globalized.rb",
-      "line": 49,
+      "line": 112,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "joins(\"          LEFT JOIN #{translations_table_name} ON\\n          #{translations_table_name}.#{reflect_on_association(:translations).foreign_key} = #{table_name}.id\\n          AND #{translations_table_name}.locale = #{connection.quote(I18n.locale)}\\n\")",
       "render_path": null,
@@ -155,7 +155,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/event/participations_controller.rb",
-      "line": 241,
+      "line": 245,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"CASE id\\n#{*ids.map.with_index do\n \"WHEN #{id} THEN #{index}\"\n end}\\nEND\")",
       "render_path": null,
@@ -216,6 +216,29 @@
         89
       ],
       "note": "The parameter is a return value from a method and will always be one of two fixed strings"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "a3a8780a9cffe5eba18b8070c4a27b4a632513352632244aaaa4c9d242e4fd04",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/event/participation_filter/list.rb",
+      "line": 70,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"CASE event_participations.participant_type\\n  WHEN 'Person' THEN #{Person.order_by_name_statement}\\n  WHEN 'Event::Guest' THEN #{Event::Guest.order_by_name_statement}\\n  ELSE ''\\nEND\\n\".squish)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Event::ParticipationFilter::List",
+        "method": "polymorphic_order_by_name_statement"
+      },
+      "user_input": "Person.order_by_name_statement",
+      "confidence": "High",
+      "cwe_id": [
+        89
+      ],
+      "note": "No SQL Injection possible here, because no user data is handled"
     },
     {
       "warning_type": "SQL Injection",
@@ -289,29 +312,6 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "ded82ee58355274099c6c8c85e7b5a33900d1c9ace0eccb8227dadc93649ff02",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/domain/event/participation_filter.rb",
-      "line": 62,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql(\"CASE event_participations.participant_type\\n  WHEN 'Person' THEN #{Person.order_by_name_statement}\\n  WHEN 'Event::Guest' THEN #{Event::Guest.order_by_name_statement}\\n  ELSE ''\\nEND\\n\".squish)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Event::ParticipationFilter",
-        "method": "polymorphic_order_by_name_statement"
-      },
-      "user_input": "Person.order_by_name_statement",
-      "confidence": "High",
-      "cwe_id": [
-        89
-      ],
-      "note": "No SQL Injection possible here, because no user data is handled"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
       "fingerprint": "f01681cc519400d5ecf1a9daa5fff0deceb0d7540d558c889452271597a7436f",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -356,5 +356,5 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "brakeman_version": "7.1.0"
+  "brakeman_version": "7.1.2"
 }

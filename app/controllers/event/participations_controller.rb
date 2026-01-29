@@ -491,7 +491,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def event_participation_filter
-    @participation_filter ||= Event::ParticipationFilter.new(event, current_user, params)
+    @participation_filter ||= Event::ParticipationFilter::List.new(event, current_user, params)
   end
 
   def send_email?

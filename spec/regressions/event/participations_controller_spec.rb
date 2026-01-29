@@ -142,7 +142,7 @@ describe Event::ParticipationsController, type: :controller do
     end
 
     it "filters by event role label" do
-      get :index, params: {group_id: event.groups.first.id, event_id: event.id, filter: "Foolabel"}
+      get :index, params: {group_id: event.groups.first.id, event_id: event.id, filters: {participant_type: "Foolabel"}}
 
       expect(dom).to have_selector("a.dropdown-toggle", text: "Foolabel")
       expect(dom).to have_selector(".dropdown a", text: "Foolabel")

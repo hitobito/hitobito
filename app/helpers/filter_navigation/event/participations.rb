@@ -6,15 +6,15 @@
 module FilterNavigation
   module Event
     class Participations < FilterNavigation::Base
-      attr_reader :group, :event, :filter
+      attr_reader :group, :event, :filters
 
       delegate :can?, to: :template
 
-      def initialize(template, group, event, filter, query)
+      def initialize(template, group, event, filters, query)
         super(template)
         @group = group
         @event = event
-        @filter = filter.to_s
+        @filters = filters || {}
         @query = query
         init_labels
         init_items
@@ -26,12 +26,12 @@ module FilterNavigation
       def init_labels # rubocop:todo Metrics/AbcSize
         if @query && !@query.blank?
           @active_label = @query
-        elsif role_labels.include?(filter)
-          dropdown.label = filter
+        elsif role_labels.include?(filters[:participant_type])
+          dropdown.label = filters
           dropdown.active = true
-        elsif predefined_filters.include?(filter)
-          @active_label = predefined_filter_label(filter)
-        elsif filter.blank?
+        elsif predefined_filters.include?(filters[:participant_type])
+          @active_label = predefined_filter_label(filters[:participant_type])
+        elsif filters[:participant_type].blank?
           @active_label = predefined_filter_label(predefined_filters.first)
         end
       end
@@ -61,8 +61,9 @@ module FilterNavigation
         @role_labels ||= event.participation_role_labels
       end
 
-      def event_participation_filter_link(filter)
-        template.group_event_participations_path(group, event, filter: filter)
+      def event_participation_filter_link(participant_type)
+        template.group_event_participations_path(group, event,
+          filters: {participant_type: participant_type})
       end
 
       def predefined_filters
@@ -71,7 +72,7 @@ module FilterNavigation
 
       def participation_filter
         @participation_filter ||=
-          ::Event::ParticipationFilter.new(event, template.current_user, template.params)
+          ::Event::ParticipationFilter::List.new(event, template.current_user, template.params)
       end
     end
   end

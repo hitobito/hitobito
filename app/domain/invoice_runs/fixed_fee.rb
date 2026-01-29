@@ -20,22 +20,24 @@ class InvoiceRuns::FixedFee
   end
 
   def prepare(invoice_run)
-    invoice_run.receivers = receivers.build
+    invoice_run.recipient_source = PeopleFilter.create!(filter_chain: {
+                                                          role: Person::Filter::Role.new(
+                                                            :role,
+                                                            role_types: config.receivers.roles
+                                                          ).to_params
+                                                        },
+      group: invoice_run.group, range: "deep")
     invoice_run.invoice.invoice_items = invoice_items
 
-    if block_given? && receivers.layers_with_missing_receiver.any?
+    if block_given? && layers_with_missing_receiver.any?
       yield [:warning, missing_receivers_message]
     end
-  end
-
-  def receivers
-    @receivers ||= InvoiceRuns::Receivers.new(config.receivers, layer_group_ids)
   end
 
   def items
     @items ||= config.items.map(&:to_h).map do |attrs|
       item_class_for(attrs).new(**attrs.merge(fee:,
-        layer_group_ids: receivers.addressable_layer_group_ids))
+        layer_group_ids: addressable_layer_group_ids))
     end
   end
 
@@ -43,11 +45,32 @@ class InvoiceRuns::FixedFee
     items.map(&:to_invoice_item)
   end
 
+  def roles
+    @roles ||= roles_scope.where(type: config.receivers.roles)
+      .order(:layer_group_id, Arel.sql(order_by_roles_statement))
+      .select("DISTINCT ON (groups.layer_group_id) roles.*, groups.layer_group_id")
+  end
+
   private
+
+  def addressable_layer_group_ids
+    @addressable_layer_group_ids ||= roles.map { |r| r.group.layer_group_id }
+  end
+
+  def roles_scope
+    Role.joins(:group).then do |scope|
+      next scope unless layer_group_ids
+      scope.where(groups: {layer_group_id: layer_group_ids})
+    end
+  end
+
+  def layers_with_missing_receiver
+    Group.where(type: config.layer).where.not(id: roles.map { |r| r.group.layer_group_id })
+  end
 
   def missing_receivers_message
     t(".recipient_role_group_mismatch",
-      groups: receivers.layers_with_missing_receiver.map(&:name).join(", "))
+      groups: layers_with_missing_receiver.map(&:name).join(", "))
   end
 
   def t(key, options = {})
@@ -56,5 +79,11 @@ class InvoiceRuns::FixedFee
 
   def item_class_for(attrs)
     PeriodInvoiceTemplate::RoleCountItem
+  end
+
+  def order_by_roles_statement
+    config.receivers.roles.map.with_index do |role, index|
+      " WHEN roles.type = '#{role}' THEN #{index}"
+    end.prepend("CASE").append("END").join("\n")
   end
 end

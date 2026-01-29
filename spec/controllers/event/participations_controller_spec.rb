@@ -76,12 +76,12 @@ describe Event::ParticipationsController do
     end
 
     it "lists only leader_group" do
-      get :index, params: {group_id: group.id, event_id: course.id, filter: :teamers}
+      get :index, params: {group_id: group.id, event_id: course.id, filters: {participant_type: :teamers}}
       expect(assigns(:participations)).to eq [@leader]
     end
 
     it "lists only participant_group" do
-      get :index, params: {group_id: group.id, event_id: course.id, filter: :participants}
+      get :index, params: {group_id: group.id, event_id: course.id, filters: {participant_type: :participants}}
       expect(assigns(:participations)).to eq [@participant]
     end
 

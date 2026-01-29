@@ -33,11 +33,10 @@
 #
 
 class InvoiceRun < ActiveRecord::Base
-  serialize :receivers, type: Array, coder: InvoiceRuns::Receiver
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :period_invoice_template, optional: true
-  belongs_to :receiver, polymorphic: true
+  belongs_to :recipient_source, polymorphic: true
   belongs_to :creator, class_name: "Person"
   has_one :invoice, dependent: :destroy
   has_one :message, dependent: :nullify
@@ -47,7 +46,9 @@ class InvoiceRun < ActiveRecord::Base
   # when persisting actual invoices
   attr_accessor :invoice
 
-  validates :receiver_type, inclusion: %w[MailingList Group], allow_blank: true
+  RECIPIENT_TYPES = %w[MailingList PeopleFilter GroupsFilter Event::ParticipationsFilter].freeze
+
+  validates :recipient_source_type, inclusion: {in: RECIPIENT_TYPES}
 
   scope :list, -> { order(:created_at) }
 
@@ -87,32 +88,30 @@ class InvoiceRun < ActiveRecord::Base
     update(amount_total: total_sum, recipients_total: total_count)
   end
 
-  def receiver_label
-    "#{receiver} (#{receiver.model_name.human})"
+  def recipient_source_label
+    return unless recipient_source_type == MailingList.sti_name
+
+    "#{recipient_source} (#{recipient_source.model_name.human})"
   end
 
-  def recipient_ids_count
-    receiver ? receiver_people.unscope(:select).count : recipient_ids.count
-  end
+  # rubocop:disable Metrics/AbcSize
+  def recipients(current_user)
+    return [] if recipient_source_type.nil?
 
-  def recipients
-    receiver ? receiver_people : Person.where(id: recipient_ids)
+    case recipient_source_type
+    when MailingList.sti_name
+      recipient_source.people.distinct
+    when PeopleFilter.sti_name
+      Person::Filter::List.new(recipient_source.group, current_user,
+        recipient_source.to_params).entries
+    when Event::ParticipationsFilter.sti_name
+      Event::ParticipationFilter::List.new(recipient_source.event, current_user,
+        recipient_source.to_params).list_people
+    end
   end
-
-  def receiver_people
-    receiver.people.distinct
-  end
+  # rubocop:enable Metrics/AbcSize
 
   def invoice_config
     group.layer_group.invoice_config
-  end
-
-  def recipient_ids
-    self[:receivers].to_a.map(&:id)
-  end
-
-  def recipient_ids=(ids)
-    value = ids.is_a?(Array) ? ids : ids.to_s.scan(/\d+/).map(&:to_i).select(&:positive?)
-    self[:receivers] = value
   end
 end

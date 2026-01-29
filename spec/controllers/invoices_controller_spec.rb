@@ -222,7 +222,10 @@ describe InvoicesController do
     context "invoice run" do
       let(:sent) { invoices(:sent) }
       let(:letter) { messages(:with_invoice) }
-      let(:invoice_run) { messages(:with_invoice).create_invoice_run(title: "test", group_id: group.id) }
+      let(:invoice_run) {
+        messages(:with_invoice).create_invoice_run(title: "test", group_id: group.id,
+          recipient_source: PeopleFilter.new)
+      }
       let(:top_leader) { people(:top_leader) }
 
       before do
@@ -329,7 +332,8 @@ describe InvoicesController do
       end
 
       it "renders filter with date values from invoice run" do
-        invoice_run = InvoiceRun.create!(title: "test", group:, created_at: Time.zone.local(2025, 10, 12))
+        invoice_run = InvoiceRun.create!(title: "test", group:, created_at: Time.zone.local(2025, 10, 12),
+          recipient_source: PeopleFilter.new)
         invoice.update(invoice_run:)
 
         get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
@@ -425,7 +429,8 @@ describe InvoicesController do
     end
 
     it "updates and redirects to invoice_run" do
-      run = InvoiceRun.create(title: "List", group: group, invoices: [invoice, invoices(:sent)])
+      run = InvoiceRun.create(title: "List", group: group, invoices: [invoice, invoices(:sent)],
+        recipient_source: PeopleFilter.new)
 
       run.update_total
       expect(run.recipients_total).to eq(2)

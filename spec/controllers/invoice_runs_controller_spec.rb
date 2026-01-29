@@ -8,87 +8,79 @@ require "spec_helper"
 #  https://github.com/hitobito/hitobito.
 
 describe InvoiceRunsController do
-  let(:group) { groups(:bottom_layer_one) }
-  let(:person) { people(:bottom_member) }
   let(:list) { mailing_lists(:leaders) }
 
   context "authorization" do
+    let(:group) { groups(:bottom_layer_one) }
+    let(:person) { people(:bottom_member) }
+
     before { sign_in(person) }
 
     it "may new when person has finance permission on layer group" do
-      get :new, params: {group_id: group.id, invoice_run: {recipient_ids: person.id}}
+      get :new, params: {group_id: group.id, ids: person.id}
       expect(response).to be_successful
-      expect(assigns(:invoice_run)).to have(1).recipient
+      expect(assigns(:invoice_run)).to have(1).recipient(person)
     end
 
     it "may update when person has finance permission on layer group" do
-      put :update, params: {group_id: group.id, invoice_run: {recipient_ids: ""}}
+      put :update, params: {group_id: group.id}
       expect(response).to redirect_to group_invoices_path(group, returning: true)
     end
 
     it "may not index when person has no finance permission on layer group" do
       expect do
-        get :new, params: {group_id: groups(:top_layer).id, invoice_run: {recipient_ids: ""}}
+        get :new, params: {group_id: groups(:top_layer).id}
       end.to raise_error(CanCan::AccessDenied)
     end
 
     it "may not edit when person has finance permission on layer group" do
       expect do
-        put :update, params: {group_id: groups(:top_layer).id, invoice_run: {recipient_ids: ""}}
+        put :update, params: {group_id: groups(:top_layer).id}
       end.to raise_error(CanCan::AccessDenied)
     end
   end
 
   context "index" do
-    render_views
     let(:group) { groups(:top_layer) }
+    let(:person) { people(:top_leader) }
+    render_views
     let(:node) { Capybara::Node::Simple.new(response.body) }
     let(:column) { node.find("#main table tbody tr td:eq(3)") }
 
-    before { sign_in(people(:top_leader)) }
+    before { sign_in(person) }
 
     it "renders final Empfänger count" do
-      InvoiceRun.create!(group: group, title: "title", recipients_processed: 20, recipients_total: 20)
+      InvoiceRun.create!(group: group, title: "title", recipients_processed: 20, recipients_total: 20,
+        recipient_source: PeopleFilter.new)
       get :index, params: {group_id: group.id}
       expect(column).to have_text("20")
     end
   end
 
   context "parameter handling" do
+    let(:group) { groups(:top_layer) }
+    let(:person) { people(:top_leader) }
+
     before { sign_in(person) }
 
-    it "ignores empty ids param" do
+    it "values from ids is built into people filter" do
       get :new,
         params: {
           group_id: group.id,
-          invoice_run: {recipient_ids: person.id},
-          ids: ""
+          ids: "#{person.id},#{people(:bottom_member).id}"
         }
 
       expect(response).to be_successful
-      expect(assigns(:invoice_run)).to have(1).recipients
-    end
-
-    it "values from ids param as passed by checkable override recipient_ids" do
-      get :new,
-        params: {
-          group_id: group.id,
-          invoice_run: {recipient_ids: person.id},
-          ids: "#{person.id},#{people(:top_leader).id}"
-        }
-
-      expect(response).to be_successful
-      expect(assigns(:invoice_run)).to have(2).recipients
+      expect(assigns(:invoice_run)).to have(2).recipients(person)
     end
 
     it "values from filter param" do
-      leader = Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person
-      role_types = [Group::BottomLayer::Leader]
+      leader = Fabricate(Group::TopLayer::TopAdmin.sti_name, group: group).person
+      role_types = [Group::TopLayer::TopAdmin]
 
       get :new,
         params: {
           group_id: group.id,
-          invoice_run: {recipient_ids: person.id},
           filter: {
             group_id: group.id,
             range: "deep",
@@ -99,17 +91,17 @@ describe InvoiceRunsController do
         }
 
       expect(response).to be_successful
-      expect(assigns(:invoice_run)).to have(1).recipients
-      expect(assigns(:invoice_run).recipients).to eq([leader])
+      expect(assigns(:invoice_run)).to have(1).recipients(person)
+      expect(assigns(:invoice_run).recipients(person)).to eq([leader])
     end
 
     it "handles blank filter params" do
-      Fabricate(Group::BottomLayer::Leader.sti_name, group: group)
+      Fabricate(Group::TopLayer::TopAdmin.sti_name, group: group)
 
       get :new,
         params: {
           group_id: group.id,
-          invoice_run: {recipient_ids: person.id},
+          ids: people(:bottom_member).id,
           filter: {
             group_id: group.id,
             range: "",
@@ -118,11 +110,14 @@ describe InvoiceRunsController do
         }
 
       expect(response).to be_successful
-      expect(assigns(:invoice_run)).to have(2).recipients
+      expect(assigns(:invoice_run)).to have(1).recipients(person)
     end
   end
 
   context "sheet title" do
+    let(:group) { groups(:top_layer) }
+    let(:person) { people(:top_leader) }
+
     before { sign_in(person) }
 
     let(:sheet_title) { Capybara::Node::Simple.new(response.body).find(".content-header") }
@@ -133,8 +128,7 @@ describe InvoiceRunsController do
       get :new,
         params: {
           group_id: group.id,
-          invoice_run: {recipient_ids: person.id},
-          ids: ""
+          ids: person.id.to_s
         }
 
       expect(sheet_title).to have_text "Rechnungslauf"
@@ -144,8 +138,7 @@ describe InvoiceRunsController do
       get :new,
         params: {
           group_id: group.id,
-          invoice_run: {recipient_ids: "#{person.id},#{people(:top_leader).id}"},
-          ids: ""
+          ids: "#{person.id},#{people(:top_leader).id}"
         }
 
       expect(sheet_title).to have_text "Rechnungslauf"
@@ -155,7 +148,7 @@ describe InvoiceRunsController do
       get :new,
         params: {
           group_id: group.id,
-          invoice_run: {receiver_id: list.id, receiver_type: list.class}
+          invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class}
         }
 
       expect(sheet_title).to have_text "Rechnungslauf"
@@ -163,31 +156,36 @@ describe InvoiceRunsController do
   end
 
   context "authorized" do
+    let(:group) { groups(:top_layer) }
+    let(:person) { people(:top_leader) }
+
     before { sign_in(person) }
 
     it "GET#new assigns_attributes and renders crud/new template" do
-      get :new, params: {group_id: group.id, invoice_run: {recipient_ids: person.id}}
+      get :new, params: {group_id: group.id, ids: person.id}
       expect(response).to render_template("crud/new")
-      expect(assigns(:invoice_run).recipients).to eq [person]
+      expect(assigns(:invoice_run).recipients(person)).to eq [person]
     end
 
-    it "GET#new assigns invoice_run from receiver" do
-      get :new, params: {group_id: group.id, invoice_run: {receiver_id: list.id, receiver_type: list.class}}
+    it "GET#new assigns invoice_run from recipient_source" do
+      get :new,
+        params: {group_id: group.id, invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class}}
       expect(response).to render_template("crud/new")
-      expect(assigns(:invoice_run).receiver).to eq list
+      expect(assigns(:invoice_run).recipient_source).to eq list
     end
 
     it "GET#new assigns payment_information from invoice_config" do
       group.invoice_config.update(payment_information: "Bitte schnellstmöglich einzahlen")
 
-      get :new, params: {group_id: group.id, invoice_run: {receiver_id: list.id, receiver_type: list.class}}
+      get :new,
+        params: {group_id: group.id, invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class}}
       expect(response).to render_template("crud/new")
       expect(assigns(:invoice_run).invoice.payment_information).to eq "Bitte schnellstmöglich einzahlen"
     end
 
     it "POST#create creates an invoice for single member" do
       expect do
-        post :create, params: {group_id: group.id, invoice_run: {recipient_ids: person.id, invoice: invoice_attrs}}
+        post :create, params: {group_id: group.id, ids: person.id, invoice_run: {invoice: invoice_attrs}}
       end.to change { group.issued_invoices.count }.by(1)
 
       expect(response).to redirect_to group_invoice_run_invoices_path(group, InvoiceRun.last, returning: true)
@@ -198,33 +196,38 @@ describe InvoiceRunsController do
       expect do
         post :create,
           params: {group_id: group.id,
-                   invoice_run: {recipient_ids: person.id, invoice: invoice_attrs.merge(title: "current_user")}}
+                   ids: person.id,
+                   invoice_run: {invoice: invoice_attrs.merge(title: "current_user")}}
       end.to change { group.issued_invoices.count }.by(1)
 
       expect(Invoice.find_by(title: "current_user").creator).to eq(person)
     end
 
-    it "POST#create for mailing list receiver redirects to invoice_runs page" do
+    it "POST#create for mailing list recipient_source redirects to invoice_runs page" do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
       expect do
         post :create,
           params: {group_id: group.id,
-                   invoice_run: {receiver_id: list.id, receiver_type: list.class,
+                   invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class,
                                  invoice: invoice_attrs.merge(title: "test")}}
       end.to change { group.issued_invoices.count }.by(1)
-      expect(assigns(:invoice_run).receiver).to eq list
+      expect(assigns(:invoice_run).recipient_source).to eq list
       expect(response).to redirect_to group_invoice_runs_path(group)
     end
 
-    it "POST#create for group receiver redirects to invoice_runs page" do
+    it "POST#create for people filter recipient_source redirects to invoice_runs page" do
       expect do
         post :create,
           params: {group_id: group.id,
-                   invoice_run: {receiver_id: group.id, receiver_type: group.class.base_class,
-                                 invoice: invoice_attrs.merge(title: "test")}}
+                   invoice_run: {invoice: invoice_attrs.merge(title: "test")},
+                   filter: {
+                     group_id: group.id,
+                     range: "layer",
+                     filters: {}
+                   }}
       end.to change { group.issued_invoices.count }.by(1)
-      expect(assigns(:invoice_run).receiver).to eq group
-      expect(response).to redirect_to group_invoice_runs_path(group)
+      expect(assigns(:invoice_run).recipient_source_type).to eq PeopleFilter.sti_name
+      expect(response).to redirect_to group_invoice_run_invoices_path(group, assigns(:invoice_run), returning: true)
     end
 
     it "POST#create an invoice in background" do
@@ -235,7 +238,7 @@ describe InvoiceRunsController do
       expect do
         post :create,
           params: {group_id: group.id,
-                   invoice_run: {receiver_id: list.id, receiver_type: list.class,
+                   invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class,
                                  invoice: invoice_attrs.merge(title: "test")}}
         Delayed::Job.last.payload_object.perform
       end.to change { group.issued_invoices.count }.by(2)
@@ -269,23 +272,23 @@ describe InvoiceRunsController do
     end
 
     it "PUT#update redirects to invoice_run_invoices path if invoice_run is set" do
-      list = InvoiceRun.create!(title: :title, group: group)
+      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new)
       invoice = Invoice.create!(group: group, title: "test", recipient: person,
-        invoice_run: list,
+        invoice_run: invoice_run,
         invoice_items_attributes:
           {"1" => {name: "item1", unit_cost: 1, count: 1}})
-      post :update, params: {group_id: group.id, invoice_run_id: list.id, ids: invoice.id}
-      expect(response).to redirect_to group_invoice_run_invoices_path(group, list, returning: true)
+      post :update, params: {group_id: group.id, invoice_run_id: invoice_run.id, ids: invoice.id}
+      expect(response).to redirect_to group_invoice_run_invoices_path(group, invoice_run, returning: true)
     end
 
     it "PUT#update redirects to invoice_run_invoice path if invoice_run is set and singular is true" do
-      list = InvoiceRun.create!(title: :title, group: group)
+      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new)
       invoice = Invoice.create!(group: group, title: "test", recipient: person,
-        invoice_run: list,
+        invoice_run: invoice_run,
         invoice_items_attributes:
           {"1" => {name: "item1", unit_cost: 1, count: 1}})
-      post :update, params: {group_id: group.id, invoice_run_id: list.id, ids: invoice.id, singular: true}
-      expect(response).to redirect_to group_invoice_run_invoice_path(group, list, invoice)
+      post :update, params: {group_id: group.id, invoice_run_id: invoice_run.id, ids: invoice.id, singular: true}
+      expect(response).to redirect_to group_invoice_run_invoice_path(group, invoice_run, invoice)
     end
 
     it "PUT#update can move multiple invoices at once" do
@@ -350,7 +353,7 @@ describe InvoiceRunsController do
       end
 
       it "redirects to list and updates total" do
-        invoice_run = InvoiceRun.create!(title: "test", group: group)
+        invoice_run = InvoiceRun.create!(title: "test", group: group, recipient_source: PeopleFilter.new)
         invoice = Invoice.create!(group: group, title: "test", recipient: person, invoice_run: invoice_run)
         invoice.invoice_items.create!(name: :pens, count: 2, unit_cost: 10)
 

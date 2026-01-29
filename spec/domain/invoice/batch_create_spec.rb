@@ -18,25 +18,25 @@ describe Invoice::BatchCreate do
       subscriber: group,
       role_types: [Group::TopGroup::Leader])
 
-    run = InvoiceRun.create!(receiver: mailing_list, group: group, title: :title)
+    run = InvoiceRun.create!(recipient_source: mailing_list, group: group, title: :title)
 
     invoice = Fabricate.build(:invoice, title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
     invoice.invoice_items.build(name: "pins", unit_cost: 0.5, count: 2)
     run.invoice = invoice
     expect do
-      Invoice::BatchCreate.call(run)
+      Invoice::BatchCreate.call(run, person)
     end.to change { group.issued_invoices.count }.by(1)
       .and change { group.invoice_items.count }.by(2)
     expect(run.reload).to have(1).invoices
-    expect(run.receiver).to eq mailing_list
+    expect(run.recipient_source).to eq mailing_list
     expect(run.recipients_total).to eq 1
     expect(run.recipients_paid).to eq 0
     expect(run.amount_total).to eq 2.5
     expect(run.amount_paid).to eq 0
   end
 
-  it "#call creates invoices for group distinct people regardless of role count" do
+  it "#call creates invoices for people in group distinct people regardless of role count" do
     group = groups(:bottom_layer_one)
     group.issued_invoices.destroy_all
 
@@ -49,7 +49,8 @@ describe Invoice::BatchCreate do
     expect(group.roles.size).to eq(4)
     expect(group.people.size).to eq(4) # people relation goes via roles and are currently not distinct
 
-    run = InvoiceRun.create!(receiver: group, group: group, title: :title)
+    filter = PeopleFilter.create!(group: group, range: :group)
+    run = InvoiceRun.create!(recipient_source: filter, group: group, title: :title)
 
     invoice = Fabricate.build(:invoice, title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
@@ -57,11 +58,11 @@ describe Invoice::BatchCreate do
     run.invoice = invoice
 
     expect do
-      Invoice::BatchCreate.call(run)
+      Invoice::BatchCreate.call(run, person)
     end.to change { group.issued_invoices.count }.by(3)
       .and change { group.invoice_items.count }.by(6)
     expect(run.reload).to have(3).invoices
-    expect(run.receiver).to eq group
+    expect(run.recipient_source).to eq filter
     expect(run.recipients_total).to eq 3
     expect(run.recipients_paid).to eq 0
     expect(run.amount_total).to eq 7.5
@@ -74,7 +75,7 @@ describe Invoice::BatchCreate do
       subscriber: group,
       role_types: [Group::TopGroup::Leader])
 
-    run = InvoiceRun.create!(receiver: mailing_list, group: group, title: :title)
+    run = InvoiceRun.create!(recipient_source: mailing_list, group: group, title: :title)
 
     invoice = Fabricate.build(:invoice, title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
@@ -82,12 +83,12 @@ describe Invoice::BatchCreate do
     run.invoice = invoice
 
     expect do
-      Invoice::BatchCreate.call(run, 1)
+      Invoice::BatchCreate.call(run, person, 1)
       Delayed::Job.last.payload_object.perform
     end.to change { group.issued_invoices.count }.by(2)
       .and change { group.invoice_items.count }.by(4)
     expect(run.reload).to have(2).invoices
-    expect(run.receiver).to eq mailing_list
+    expect(run.recipient_source).to eq mailing_list
     expect(run.recipients_total).to eq 2
     expect(run.recipients_paid).to eq 0
     expect(run.amount_total).to eq 5
@@ -97,7 +98,8 @@ describe Invoice::BatchCreate do
 
   it "#call does not create any run model for recipient_ids" do
     run = InvoiceRun.new(group: group)
-    run.recipient_ids = [person.id, other_person.id].join(",")
+    run.recipient_source = InvoiceRuns::RecipientSourceBuilder.new({ids: [person.id, other_person.id].join(",")},
+      group).recipient_source
 
     invoice = Fabricate.build(:invoice, title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
@@ -105,7 +107,7 @@ describe Invoice::BatchCreate do
     run.invoice = invoice
 
     expect do
-      Invoice::BatchCreate.call(run)
+      Invoice::BatchCreate.call(run, person)
     end.to change { group.issued_invoices.count }.by(2)
       .and change { group.invoice_items.count }.by(4)
     expect(run).not_to be_persisted
@@ -117,7 +119,7 @@ describe Invoice::BatchCreate do
       subscriber: group,
       role_types: [Group::TopGroup::Leader])
 
-    run = InvoiceRun.new(receiver: mailing_list, group: group, title: :title)
+    run = InvoiceRun.new(recipient_source: mailing_list, group: group, title: :title)
     invoice = Fabricate.build(:invoice, title: "invoice", group: group)
     invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
     run.invoice = invoice
@@ -127,7 +129,7 @@ describe Invoice::BatchCreate do
     end
 
     expect do
-      Invoice::BatchCreate.new(run).call
+      Invoice::BatchCreate.new(run, person).call
     end.to change { group.issued_invoices.count }.by(1)
       .and change { group.invoice_items.count }.by(1)
     expect(run.invalid_recipient_ids).to have(1).item

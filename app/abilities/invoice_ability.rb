@@ -19,8 +19,8 @@ class InvoiceAbility < AbilityDsl::Base
 
   on(InvoiceRun) do
     permission(:finance).may(:update, :destroy).in_layer_if_active
-    permission(:finance).may(:create).in_layer_with_receiver
-    permission(:finance).may(:index_invoices).in_layer_with_receiver_if_active
+    permission(:finance).may(:create).in_layer_with_recipient_source
+    permission(:finance).may(:index_invoices).in_layer_with_recipient_source_if_active
   end
 
   on(InvoiceArticle) do
@@ -55,21 +55,19 @@ class InvoiceAbility < AbilityDsl::Base
     user_finance_layer_ids.include?(group.layer_group_id)
   end
 
-  def in_layer_with_receiver
-    return in_layer unless subject.receiver
+  def in_layer_with_recipient_source
+    return in_layer unless subject.recipient_source
 
-    group = subject.receiver.is_a?(Group) ? subject.receiver : subject.receiver.group
-    in_layer && in_layer(group.layer_group)
+    in_layer && in_layer(subject.recipient_source.group.layer_group)
   end
 
   def in_layer_if_active
     in_layer && !subject.group&.archived?
   end
 
-  def in_layer_with_receiver_if_active
-    if in_layer_with_receiver
-      group = subject.receiver.is_a?(Group) ? subject.receiver : subject.receiver.group
-      !group.archived?
+  def in_layer_with_recipient_source_if_active
+    if in_layer_with_recipient_source
+      !subject.recipient_source.group.archived?
     end
   end
 end

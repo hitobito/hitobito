@@ -61,8 +61,9 @@ class Invoice::Qrcode
     {
       address_type: "S",
       name: @invoice.recipient_company_name.presence || @invoice.recipient_name,
-      street: @invoice.recipient_street,
-      housenumber: @invoice.recipient_housenumber,
+      street: @invoice.recipient_street.presence || @invoice.recipient_postbox,
+      # Only show housenumber if recipient_street is present
+      housenumber: @invoice.recipient_street.present? ? @invoice.recipient_housenumber : nil,
       zip_code: @invoice.recipient_zip_code,
       town: @invoice.recipient_town,
       country: @invoice.recipient_country

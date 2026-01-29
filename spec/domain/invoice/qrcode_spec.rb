@@ -227,6 +227,17 @@ describe Invoice::Qrcode do
       TEXT
     end
 
+    it "uses postbox of debitor when no street" do
+      invoice.recipient_street = nil
+      invoice.recipient_postbox = "Postfach von Max Mustermann oder so"
+
+      expect(subject).to eq <<~TEXT.chomp
+        Max Mustermann
+        Postfach von Max Mustermann oder so
+        8000 Alt Tylerland
+      TEXT
+    end
+
     context "with deprecated attributes" do
       let(:invoice) do
         Invoice.new(

@@ -12,9 +12,8 @@ class InvoiceRunsController < CrudController
 
   self.nesting = Group
   self.permitted_attrs = [
-    :receiver_id,
-    :receiver_type,
-    :recipient_ids,
+    :recipient_source_id,
+    :recipient_source_type,
     invoice: [
       :title,
       :description,
@@ -52,8 +51,9 @@ class InvoiceRunsController < CrudController
     entry.title = entry.invoice.title
 
     if entry.valid? && entry.save
-      Invoice::BatchCreate.call(entry, LIMIT_CREATE)
-      message = flash_message_create(count: entry.recipient_ids_count, title: entry.title)
+      Invoice::BatchCreate.call(entry, current_user, LIMIT_CREATE)
+      message = flash_message_create(count: entry.recipients(current_user).count,
+        title: entry.title)
       params[:invoice_run_id] = entry.id  # NOTE: make return_path behave as expected
       redirect_to return_path, notice: message
       session.delete :invoice_referer
@@ -103,7 +103,7 @@ class InvoiceRunsController < CrudController
   end
 
   def list_entries
-    super.includes(:receiver).list.where(created_at: year_filter)
+    super.includes(:recipient_source).list.where(created_at: year_filter)
   end
 
   def return_path # rubocop:todo Metrics/AbcSize,Metrics/MethodLength
@@ -116,7 +116,7 @@ class InvoiceRunsController < CrudController
       else
         group_invoice_path(parent, invoices.first)
       end
-    elsif params.dig(:invoice_run, :receiver_id)
+    elsif params.dig(:invoice_run, :recipient_source_id)
       group_invoice_runs_path(parent)
     elsif invoice_run_id
       group_invoice_run_invoices_path(parent, invoice_run_id: invoice_run_id, returning: true)
@@ -150,16 +150,17 @@ class InvoiceRunsController < CrudController
   # rubocop:todo Metrics/CyclomaticComplexity
   # rubocop:todo Metrics/MethodLength
   def assign_attributes # rubocop:disable Metrics/AbcSize # rubocop:todo Metrics/MethodLength
-    if params[:ids].present? && params[:ids] != :all
-      entry.recipient_ids = params[:ids]
-    elsif params[:filter].present?
-      entry.recipient_ids = recipient_ids_from_people_filter
-    elsif model_params
-      entry.attributes = permitted_params.slice(:receiver_id, :receiver_type, :recipient_ids)
-    end
     entry.creator = current_user
     entry.invoice = parent.issued_invoices
       .build(model_params.present? ? permitted_params[:invoice] : {})
+    entry.recipient_source = InvoiceRuns::RecipientSourceBuilder.new(params,
+      @group).recipient_source
+
+    # TODO in #3752, move this logic out of here into the period_invoice_templates
+    # if fixed_fees?
+    #   InvoiceRuns::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
+    #     flash.now[key] = text
+    #   end
 
     if params[:invoice_items].present?
       entry.invoice.invoice_items = params[:invoice_items].map do |type|
@@ -178,13 +179,6 @@ class InvoiceRunsController < CrudController
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/CyclomaticComplexity
-
-  def recipient_ids_from_people_filter
-    group = Group.find(params.dig(:filter, :group_id))
-    filter_params = params[:filter].to_unsafe_h.transform_values(&:presence)
-    filter = Person::Filter::List.new(group, current_user, filter_params)
-    filter.entries.unscope(:order).pluck(:id)
-  end
 
   def authorize_class
     authorize!(:index_issued_invoices, parent)

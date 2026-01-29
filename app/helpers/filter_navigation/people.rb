@@ -110,7 +110,7 @@ module FilterNavigation
     end
 
     def add_people_filter_links
-      filters = PeopleFilter.for_group(group).list
+      filters = PeopleFilter.for_group(group).where(visible: true).list
       filters.each { |filter| people_filter_link(filter) }
     end
 

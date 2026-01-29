@@ -21,6 +21,7 @@ class PeopleFiltersController < CrudController
 
   def create
     if params[:button] == "save"
+      entry.visible = true
       authorize!(:create, entry)
       super
     else
@@ -69,6 +70,7 @@ class PeopleFiltersController < CrudController
     entry.name = params[:name] || params.dig(:people_filter, :name)
     entry.range = params[:range]
     entry.filter_chain = params.fetch(:filters, nil)&.except(:host)&.to_unsafe_hash
+    entry.visible = true
   end
 
   def people_list_path(options = {})

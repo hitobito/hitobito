@@ -88,7 +88,7 @@ describe Message::LetterWithInvoice do
 
     context "with invoice run" do
       before do
-        run = InvoiceRun.create(group: group, title: "title")
+        run = InvoiceRun.create(group: group, title: "title", recipient_source: PeopleFilter.new)
         run.invoices.create!(title: :title, recipient: recipient, total: 10, group: group)
         subject.invoice_run_id = run.id
       end

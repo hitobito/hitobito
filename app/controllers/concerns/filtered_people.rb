@@ -41,7 +41,7 @@ module FilteredPeople
   def list_filter_args
     if params[:filter_id].present?
       # DB-Stored filter with prepared params
-      PeopleFilter.for_group(group).find(params[:filter_id]).to_params
+      PeopleFilter.for_group(group).where(visible: true).find(params[:filter_id]).to_params
     else
       # ad-hoc/unsaved filter or nothing
       params

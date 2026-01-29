@@ -68,7 +68,7 @@ describe Invoice::PaymentProcessor do
   end
 
   it "creates payment and marks invoice as payed and updates invoice_run" do
-    list = InvoiceRun.create!(title: :title, group: invoice.group)
+    list = InvoiceRun.create!(title: :title, group: invoice.group, recipient_source: PeopleFilter.new)
     invoice.update_columns(reference: "000000000000100000000000905",
       invoice_run_id: list.id,
       total: 710.82)
@@ -86,7 +86,7 @@ describe Invoice::PaymentProcessor do
   end
 
   it "creates payment, saves transaction xml and payee" do
-    list = InvoiceRun.create!(title: :title, group: invoice.group)
+    list = InvoiceRun.create!(title: :title, group: invoice.group, recipient_source: PeopleFilter.new)
     invoice.update_columns(reference: "000000000000100000000000905",
       invoice_run_id: list.id,
       total: 710.82)

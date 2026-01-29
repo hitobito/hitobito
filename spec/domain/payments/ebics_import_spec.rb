@@ -46,7 +46,7 @@ describe Payments::EbicsImport do
 
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
       recipient: people(:bottom_member), group: groups(:top_layer))
-    list = InvoiceRun.create(title: "membership fee", invoices: [invoice])
+    list = InvoiceRun.create(title: "membership fee", invoices: [invoice], recipient_source: PeopleFilter.new)
 
     invoice.update(reference: "000000000000100000000000800")
     expect(list.amount_paid).to eq(0)
@@ -66,7 +66,7 @@ describe Payments::EbicsImport do
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
       recipient: people(:bottom_member), group: groups(:bottom_layer_one))
 
-    list = InvoiceRun.create(title: "membership fee", invoices: [invoice])
+    list = InvoiceRun.create(title: "membership fee", invoices: [invoice], recipient_source: PeopleFilter.new)
 
     invoice.update(reference: "000000000000100000000000800")
     expect(list.amount_paid).to eq(0)
@@ -98,7 +98,7 @@ describe Payments::EbicsImport do
     invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
       recipient: people(:bottom_member), group: groups(:bottom_layer_one))
 
-    list = InvoiceRun.create(title: "membership fee", invoices: [invoice])
+    list = InvoiceRun.create(title: "membership fee", invoices: [invoice], recipient_source: PeopleFilter.new)
 
     invoice.update(reference: Invoice::ScorReference.create("000000100000000000800"),
       esr_number: "00 00000 00000 10000 00000 00800")

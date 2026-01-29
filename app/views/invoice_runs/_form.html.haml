@@ -7,16 +7,19 @@
              cancel_url: cancel_url,
              data: { group: group_path(parent) }) do |f|
 
-  - if entry.receiver
-    = f.hidden_field :receiver_id
-    = f.hidden_field :receiver_type
+  = hidden_field_tag "ids", params[:ids]
+  = hidden_field_tag "filter", params[:filter] ? params[:filter].to_json : nil
 
-  - if entry.recipient_ids
-    = f.hidden_field :recipient_ids
+  - if entry.recipient_source
+    = f.hidden_field :recipient_source_id
+    = f.hidden_field :recipient_source_type
+
+  .alert.alert-warning.align-with-form
+    Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Personen zutreffen, kann die finale Liste der Rechnungsempfänger noch ändern.
 
   = f.fields_for :invoice, entry.invoice do |fi|
     = render "invoices/message_template", f: fi, group: entry
-    = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipient_ids_count), data: { message_template_target: :title }
+    = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipients(current_user).count), data: { message_template_target: :title }
     = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
     = fi.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose

@@ -622,6 +622,9 @@ it:
           de: Tedesco
           en: Inglese
           fr: Francese
+          it: Italienisch
+          rm: Rätoromanisch
+          
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale
         self_registration_reason: Motivo dell'ingresso

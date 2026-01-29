@@ -42,4 +42,14 @@ describe Export::InvoicesJob do
       subject.perform
     end
   end
+
+  context "no invoices" do
+    let(:format) { :pdf }
+    let(:invoice_ids) { [] }
+
+    it "does nothing" do
+      expect(Export::Pdf::Invoice).not_to receive(:render_multiple).with(invoices_in_order, anything)
+      subject.perform
+    end
+  end
 end

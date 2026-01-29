@@ -24,6 +24,8 @@ class Export::InvoicesJob < Export::ExportBaseJob
   end
 
   def data
+    return if entries.blank?
+
     case @format
     when :pdf
       Export::Pdf::Invoice.render_multiple(entries, @options.merge({

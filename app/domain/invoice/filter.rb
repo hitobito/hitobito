@@ -47,6 +47,10 @@ class Invoice::Filter
     relation.where(id: invoice_ids)
   end
 
+  def all_invoices?
+    params[:ids] == "all"
+  end
+
   def invoice_ids
     @invoice_ids = params[:ids].to_s.split(",")
   end

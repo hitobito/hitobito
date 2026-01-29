@@ -52,7 +52,7 @@ class Message::LetterWithInvoice < Message::Letter
     @invoice_run ||= InvoiceRun.create!(
       title: subject,
       group: group.layer_group,
-      receiver: mailing_list,
+      recipient_source: mailing_list,
       invoice: invoice
     )
   end

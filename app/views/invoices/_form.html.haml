@@ -5,6 +5,7 @@
 
 = entry_form(data: { group: group_path(parent) }, class: 'form') do |f|
   = f.hidden_field :recipient_id
+  = f.hidden_field :recipient_type
 
   = field_set_tag do
     = render "message_template", f: f, group: parent

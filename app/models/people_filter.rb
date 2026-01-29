@@ -29,7 +29,9 @@ class PeopleFilter < ActiveRecord::Base
   belongs_to :group
 
   validates_by_schema
-  validates :name, uniqueness: {scope: [:group_id, :group_type], case_sensitive: false}
+  validates :name, uniqueness: {scope: [:group_id, :group_type], case_sensitive: false},
+    allow_blank: true
+  validates :name, presence: true, if: :visible?
   validates :range, inclusion: {in: RANGES}
 
   scope :list, -> { order(:name) }

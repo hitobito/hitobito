@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::ParticipationFilter
+class Event::ParticipationFilter::List
   PREDEFINED_FILTERS = %w[all teamers participants]
   SEARCH_COLUMNS = [
     {
@@ -33,6 +33,12 @@ class Event::ParticipationFilter
       @counts = populate_counts(records)
       apply_default_sort(apply_filter_scope(records))
     end
+  end
+
+  def list_people
+    Person.where(id: list_entries.unscope(:order)
+                                 .where(participant_type: Person.sti_name)
+                                 .pluck(:participant_id))
   end
 
   def predefined_filters
@@ -71,7 +77,7 @@ class Event::ParticipationFilter
 
   def populate_counts(records)
     predefined_filters.each_with_object({}) do |name, memo|
-      memo[name] = apply_filter_scope(records, name).count
+      memo[name] = apply_filter_scope(records, {participant_type: name}).count
     end
   end
 
@@ -83,8 +89,10 @@ class Event::ParticipationFilter
   end
 
   # rubocop:todo Metrics/CyclomaticComplexity
-  def apply_filter_scope(records, kind = params[:filter])
-    case kind
+  def apply_filter_scope(records, filters = params[:filters] || {})
+    participant_type = filters[:participant_type]
+
+    case participant_type
     when "all"
       records
     when "teamers"
@@ -92,8 +100,8 @@ class Event::ParticipationFilter
     when "participants"
       records.where("event_roles.type" => event.participant_types.collect(&:sti_name))
     else
-      if event.participation_role_labels.include?(kind)
-        records.where("event_roles.label" => kind)
+      if event.participation_role_labels.include?(participant_type)
+        records.where("event_roles.label" => participant_type)
       else
         records
       end

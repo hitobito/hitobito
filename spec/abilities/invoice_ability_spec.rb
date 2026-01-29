@@ -119,7 +119,7 @@ describe InvoiceAbility do
 
   context "InvoiceRun" do
     def invoice_run(group, abo_group)
-      InvoiceRun.new(group: groups(group), receiver: groups(abo_group).mailing_lists.build)
+      InvoiceRun.new(group: groups(group), recipient_source: groups(abo_group).mailing_lists.build)
     end
 
     def ability(role)
@@ -168,7 +168,7 @@ describe InvoiceAbility do
       end
 
       context "on invoice run" do
-        let(:invoice_run) { InvoiceRun.create(group: layer, receiver: layer) }
+        let(:invoice_run) { InvoiceRun.create(group: layer, recipient_source: layer.mailing_lists.build) }
 
         [:update, :destroy, :create, :index_invoices].each do |action|
           it "can #{action} in #{layer.name}" do

@@ -15,7 +15,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
   private
 
   def entries
-    Event::ParticipationFilter
+    Event::ParticipationFilter::List
       .new(event, user, @options)
       .list_entries
       .select(Event::Participation.column_names)

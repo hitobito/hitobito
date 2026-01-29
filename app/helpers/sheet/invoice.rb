@@ -10,9 +10,9 @@ module Sheet
     def title
       return ::Invoice.model_name.human(count: 2) unless invoice_run
       if entry
-        [entry.title, title_from_receiver].compact.join(" - ")
+        [entry.title, invoice_run.recipient_source_label].compact.join(" - ")
       else
-        [invoice_run.title, title_from_receiver].compact.join(" - ")
+        [invoice_run.title, invoice_run.recipient_source_label].compact.join(" - ")
       end
     end
 
@@ -35,10 +35,6 @@ module Sheet
 
     def invoice_run
       @invoice_run ||= ::InvoiceRun.find_by(id: view.params[:invoice_run_id])
-    end
-
-    def title_from_receiver
-      invoice_run.receiver_label if invoice_run.receiver
     end
   end
 end

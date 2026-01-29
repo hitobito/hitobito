@@ -87,10 +87,13 @@ class Person::Filter::Attributes < Person::Filter::Base
     end
   end
 
+  # include is not a selectable constraint in the current version of the filter view,
+  # it is implemented to filter by id's internally for invoice_runs
   def persisted_attribute_condition_sql(key, value, constraint)
     sql_string = case constraint
     when /match/ then match_search_sql(key, value, constraint)
     when /blank/ then "COALESCE(TRIM(people.#{key}::text), '') #{sql_comparator(constraint)} ?"
+    when /include/ then "people.#{key} IN (?)"
     else "people.#{key} #{sql_comparator(constraint)} ?"
     end
 
@@ -121,6 +124,7 @@ class Person::Filter::Attributes < Person::Filter::Base
     when "match", "not_match"
       "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
     when "blank" then ""
+    when "include" then value
     # rubocop:todo Layout/LineLength
     when "equal", "greater", "smaller", "before", "after" then (key == "email") ? value.downcase : value
     # rubocop:enable Layout/LineLength

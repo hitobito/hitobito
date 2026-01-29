@@ -24,16 +24,16 @@ describe PaymentsController do
     end
 
     it "valid arguments create payment and updates invoice_run" do
-      list = InvoiceRun.create(title: :title, group: invoice.group)
-      invoice.update(state: :sent, invoice_run: list)
+      invoice_run = InvoiceRun.create(title: :title, group: invoice.group, recipient_source: PeopleFilter.new)
+      invoice.update(state: :sent, invoice_run: invoice_run)
       expect do
         post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: invoice.total}}
       end.to change { invoice.payments.count }.by(1)
 
       expect(flash[:notice]).to be_present
-      expect(response).to redirect_to(group_invoice_run_invoice_path(group, list, invoice))
-      expect(list.reload.recipients_paid).to eq 1
-      expect(list.amount_paid).to eq invoice.total
+      expect(response).to redirect_to(group_invoice_run_invoice_path(group, invoice_run, invoice))
+      expect(invoice_run.reload.recipients_paid).to eq 1
+      expect(invoice_run.amount_paid).to eq invoice.total
     end
 
     it "invalid arguments redirect back" do

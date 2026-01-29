@@ -25,16 +25,18 @@ describe Sheet::Invoice do
     let(:mailing_list) { mailing_lists(:leaders) }
 
     let(:sheet) { Sheet::Invoice.new(self, invoice_run, invoice) }
-    let(:invoice_run) { InvoiceRun.create(title: "Mitgliedsbeiträge", group_id: group.id, receiver: mailing_list) }
+    let(:invoice_run) {
+      InvoiceRun.create(title: "Mitgliedsbeiträge", group_id: group.id, recipient_source: mailing_list)
+    }
 
-    it "uses title of invoice with receiver" do
+    it "uses title of invoice with recipient_source mailing_list" do
       view.params[:invoice_run_id] = invoice_run.id
       expect(sheet.title).to eq "Testrechnung - Leaders (Abo)"
     end
 
-    it "uses title of invoice without reciever" do
+    it "uses title of invoice without recipient_source name when people_filter" do
+      invoice_run.update!(recipient_source: PeopleFilter.new)
       view.params[:invoice_run_id] = invoice_run.id
-      invoice_run.update!(receiver_id: nil, receiver_type: nil)
       expect(sheet.title).to eq "Testrechnung"
     end
   end

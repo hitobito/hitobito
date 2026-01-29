@@ -9,26 +9,28 @@
 # The Invoice-List ist updated with success/failure counts
 # Failures are invoices without invoice-items or any other more specific validation error.
 class Invoice::BatchCreate
-  attr_reader :invoice_run, :invoice, :results, :invalid
+  attr_reader :invoice_run, :current_user, :invoice, :results, :invalid
 
-  def self.call(invoice_run, limit = InvoiceRunsController::LIMIT_CREATE)
-    if invoice_run.recipient_ids_count < limit
-      create(invoice_run)
+  def self.call(invoice_run, current_user, limit = InvoiceRunsController::LIMIT_CREATE)
+    if invoice_run.recipients(current_user).count < limit
+      create(invoice_run, current_user)
     else
-      create_async(invoice_run)
+      create_async(invoice_run, current_user)
     end
   end
 
-  def self.create(invoice_run)
-    Invoice::BatchCreate.new(invoice_run).call
+  def self.create(invoice_run, current_user)
+    Invoice::BatchCreate.new(invoice_run, current_user).call
   end
 
-  def self.create_async(invoice_run)
-    Invoice::BatchCreateJob.new(invoice_run.id, invoice_run.invoice_parameters).enqueue!
+  def self.create_async(invoice_run, current_user)
+    Invoice::BatchCreateJob.new(invoice_run.id, current_user.id,
+      invoice_run.invoice_parameters).enqueue!
   end
 
-  def initialize(invoice_run, people = nil)
+  def initialize(invoice_run, current_user, people = nil)
     @invoice_run = invoice_run
+    @current_user = current_user
     @invoice = invoice_run.invoice
     @people = people # used by Messages::LetterWithInvoiceDispatch#batch_create
     @results = []
@@ -43,7 +45,7 @@ class Invoice::BatchCreate
   private
 
   def create_invoices
-    receivers.each_slice(1000) do |slice|
+    invoice_run.recipients(current_user).each_slice(1000) do |slice|
       slice.each do |receiver|
         success = create_invoice(receiver)
         invalid << receiver.id unless success
@@ -56,11 +58,10 @@ class Invoice::BatchCreate
 
   def create_invoice(recipient) # rubocop:todo Metrics/AbcSize
     invoice_attrs = invoice.attributes.merge(
-      title: invoice_run.fixed_fee ? title_with_layer(recipient.layer_group_id) : invoice.title,
+      title: invoice_run.fixed_fee ? title_with_layer(recipient) : invoice.title,
       creator_id: invoice_run.creator_id,
       invoice_run_id: invoice_run.id,
-      recipient_id: recipient.id,
-      recipient_type: recipient.type
+      recipient: recipient
     )
     invoice = invoice_run.group.issued_invoices.build(invoice_attrs)
 
@@ -71,7 +72,7 @@ class Invoice::BatchCreate
   def add_invoice_items(invoice, recipient)
     if invoice_run.fixed_fee
       invoice.invoice_items = InvoiceRuns::FixedFee.for(invoice_run.fixed_fee,
-        recipient.layer_group_id).invoice_items
+        recipient.layer_group.id).invoice_items
       invoice.invoice_items.each do |item|
         item.invoice = invoice
         item.recalculate
@@ -98,21 +99,10 @@ class Invoice::BatchCreate
     end.compact
   end
 
-  def title_with_layer(layer_group_id)
-    return invoice.title unless layer_group_id
+  def title_with_layer(recipient)
+    return invoice.title unless recipient
 
-    [invoice.title, Group.find(layer_group_id).name].join(" - ")
-  end
-
-  def receivers
-    return invoice_run.receivers if invoice_run.receivers.present?
-
-    invoice_run.recipients.find_each.lazy.map do |recipient|
-      InvoiceRuns::Receiver.new(
-        id: recipient.id,
-        type: recipient.class.sti_name
-      )
-    end
+    [invoice.title, recipient.layer_group.name].join(" - ")
   end
 
   def group_id

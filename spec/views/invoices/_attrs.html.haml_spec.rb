@@ -35,7 +35,7 @@ describe "invoices/_attrs.html.haml" do
     end
 
     it "renders correct path for invoice run invoice" do
-      invoice_run = InvoiceRun.create!(title: "test", group:)
+      invoice_run = InvoiceRun.create!(title: "test", group:, recipient_source: PeopleFilter.new)
       invoice.update!(invoice_run:)
       expect(payment_form["action"]).to eq group_invoice_payments_path(group, invoice)
       expect(payment_form.find("a.cancel")["href"]).to eq group_invoice_run_invoice_path(group, invoice_run, invoice)

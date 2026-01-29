@@ -134,7 +134,7 @@ describe Invoice do
 
   it "accepts that an invoice in state issued or sent has no items if  part of an invoice_run" do
     invoice = create_invoice
-    invoice.update(invoice_run: InvoiceRun.create!(group: group, title: "list"))
+    invoice.update(invoice_run: InvoiceRun.create!(group: group, title: "list", recipient_source: PeopleFilter.new))
     invoice.update(state: :issued)
     expect(invoice).to be_valid
     invoice.reload.update(state: :sent)

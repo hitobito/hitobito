@@ -29,111 +29,63 @@ require "spec_helper"
 
 describe InvoiceRun do
   let(:list) { mailing_lists(:leaders) }
+  let(:people_filter) { nil }
   let(:group) { groups(:top_layer) }
   let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
 
-  describe "recipient_ids" do
-    describe "writing" do
-      it "accepts an array" do
-        subject.recipient_ids = [1, 2, 3]
-        expect(subject.recipient_ids).to eq [1, 2, 3]
-      end
-
-      it "accepts comma separated value string array" do
-        subject.recipient_ids = "1,2,3"
-        expect(subject.recipient_ids).to eq [1, 2, 3]
-      end
-
-      it "accepts space separated value string array" do
-        subject.recipient_ids = "1 2 3"
-        expect(subject.recipient_ids).to eq [1, 2, 3]
-      end
-
-      it "ignores invalid ids" do
-        subject.recipient_ids = "1,asdf,3"
-        expect(subject.recipient_ids).to eq [1, 3]
-      end
-
-      it "does default to empty array for nil" do
-        subject.recipient_ids = nil
-        expect(subject.recipient_ids).to eq []
-      end
-
-      it "accepts recipient_ids as attributes" do
-        subject.attributes = {recipient_ids: "#{person.id},#{other_person.id}"}
-        expect(subject.recipient_ids_count).to eq 2
-      end
-    end
-  end
-
-  describe "receivers" do
+  describe "recipients" do
     let(:leader) { people(:top_leader) }
     let(:member) { people(:bottom_member) }
 
-    it "reads people from receiver" do
-      subject.receiver = list
+    it "reads people from recipients when mailing list" do
+      subject.recipient_source = list
       list.subscriptions.first.update!(role_types: [Group::TopGroup::Leader])
       expect(list.people).to be_present
-      expect(subject.recipients).to eq [leader]
+      expect(subject.recipients(person)).to eq [leader]
     end
 
-    it "reads people from receivers" do
-      subject.receivers = [member.id]
-      expect(subject.recipients).to eq [member]
+    it "reads people from recipients when people filter" do
+      subject.group = group
+      subject.creator_id = leader.id
+      subject.recipient_source = InvoiceRuns::RecipientSourceBuilder.new({ids: [member.id].join(",")},
+        group).recipient_source
+      expect(subject.recipients(leader)).to eq [member]
     end
 
-    it "prefers people from receiver model over what is set on receivers" do
-      subject.receivers = [member.id]
-      subject.receiver = list
-      list.subscriptions.first.update!(role_types: [Group::TopGroup::Leader])
-      expect(subject.recipients).to eq [leader]
+    it "reads people from recipients when event participations filter" do
+      subject.recipient_source = Event::ParticipationsFilter.new(event: events(:top_course))
+      expect(subject.recipients(leader)).to eq [member]
     end
   end
 
-  describe "receiver" do
-    it "accepts receiver as id and type" do
+  describe "recipient_source" do
+    it "accepts recipient_source as id and type" do
       Subscription.create!(mailing_list: list,
         subscriber: group,
         role_types: [Group::TopGroup::Leader])
-      subject.attributes = {receiver_type: "MailingList", receiver_id: list.id}
-      expect(subject.recipient_ids_count).to eq 1
+      subject.attributes = {recipient_source_type: "MailingList", recipient_source_id: list.id}
+      expect(subject.recipients(person).count).to eq 1
     end
 
-    it "accepts mailing list as receiver" do
-      subject.attributes = {title: :test, receiver: list}
+    it "accepts mailing list as recipient_source" do
+      subject.attributes = {title: :test, recipient_source: list}
       expect(subject).to be_valid
     end
 
-    it "accepts group as receiver" do
-      subject.attributes = {title: :test, receiver: group}
+    it "accepts people_filter as recipient_source" do
+      subject.attributes = {title: :test, recipient_source: PeopleFilter.new}
       expect(subject).to be_valid
     end
-  end
 
-  describe "receivers" do
-    it "accepts receivers as integers" do
-      subject.receivers = [1, 2]
-      expect(subject.receivers).to eq [
-        InvoiceRuns::Receiver.new(id: 1, type: "Person"),
-        InvoiceRuns::Receiver.new(id: 2, type: "Person")
-      ]
-    end
-
-    it "accepts receivers as models" do
-      subject.receivers = [
-        InvoiceRuns::Receiver.new(id: 1, type: "Person"),
-        InvoiceRuns::Receiver.new(id: 2, type: "Person")
-      ]
-      expect(subject.receivers).to eq [
-        InvoiceRuns::Receiver.new(id: 1, type: "Person"),
-        InvoiceRuns::Receiver.new(id: 2, type: "Person")
-      ]
+    it "does not accept group as recipient_source" do
+      subject.attributes = {title: :test, recipient_source: group}
+      expect(subject).not_to be_valid
     end
   end
 
   it "#update_paid updates payment informations" do
-    subject.update(group: group, title: :title)
+    subject.update(group: group, title: :title, recipient_source: PeopleFilter.new)
 
     invoice = subject.invoices.create!(title: :title, recipient: person, total: 10, group: group)
     subject.invoices.create!(title: :title, recipient: other_person, total: 20, group: group)

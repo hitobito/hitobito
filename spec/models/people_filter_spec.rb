@@ -24,6 +24,18 @@
 require "spec_helper"
 
 describe PeopleFilter do
+  let(:people_filter) { PeopleFilter.new(visible: true) }
+
+  it "validates presence of name when visible" do
+    expect(people_filter).not_to be_valid
+  end
+
+  it "does not validate presence of name when not visible" do
+    people_filter.visible = false
+
+    expect(people_filter).to be_valid
+  end
+
   context "#filter_chain=" do
     it "assigns hash to filter_chain" do
       filter = PeopleFilter.new(

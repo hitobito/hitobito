@@ -21,7 +21,6 @@ class PeopleFiltersController < CrudController
 
   def create
     if params[:button] == "save"
-      entry.visible = true
       authorize!(:create, entry)
       super
     else

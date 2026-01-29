@@ -27,7 +27,7 @@ describe Group::Merger do
 
       Fabricate(:invoice, group: group2, recipient: @person)
       Fabricate(:invoice_article, group: group2)
-      InvoiceRun.create!(title: "Rechnungslauf", group_id: group2.id)
+      InvoiceRun.create!(title: "Rechnungslauf", group_id: group2.id, recipient_source: PeopleFilter.new)
     end
 
     it "creates a new group and merges roles, events" do
@@ -226,7 +226,7 @@ describe Group::Merger do
     it "moves even invalid invoice runs" do
       expect(group1.invoice_runs.count).to eq 0
       expect(group2.invoice_runs.count).to eq 1
-      group2.invoice_runs[0].update_attribute(:receiver_type, "foobar")
+      group2.invoice_runs[0].update_attribute(:recipient_source_type, "foobar")
       expect(group2.invoice_runs[0]).not_to be_valid
 
       merger.merge!

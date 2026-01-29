@@ -9,11 +9,12 @@ module Dropdown
   class InvoiceNew < Base
     delegate :current_ability, to: :template
     def initialize(template, people: [], mailing_list: nil, filter: nil, # rubocop:disable Metrics/ParameterLists
-      group: nil, invoice_items: nil, label: nil)
+      group: nil, event: nil, invoice_items: nil, label: nil)
       super(template, label, :plus)
       @people = people
       @group = group
       @mailing_list = mailing_list
+      @event = event
       @label = label
       filter = filter.to_unsafe_h if filter.is_a?(ActionController::Parameters)
       @filter = filter.to_h.symbolize_keys.slice(:range, :filters).compact.presence
@@ -44,23 +45,31 @@ module Dropdown
     end
 
     # rubocop:todo Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
     def path(finance_group, invoice_items = []) # rubocop:disable Metrics/MethodLength
       if @mailing_list
         template.new_group_invoice_run_path(
           finance_group,
-          invoice_run: {receiver_id: @mailing_list.id, receiver_type: @mailing_list.class},
+          invoice_run: {recipient_source_id: @mailing_list.id,
+                        recipient_source_type: @mailing_list.class},
+          invoice_items: invoice_items
+        )
+      elsif @event
+        template.new_group_invoice_run_path(
+          finance_group,
+          filter: (@filter || {}).merge(event_id: @event.id),
           invoice_items: invoice_items
         )
       elsif @filter
         template.new_group_invoice_run_path(
           finance_group,
-          filter: @filter.merge(group_id: @group.id), invoice_run: {recipient_ids: ""},
+          filter: @filter.merge(group_id: @group.id),
           invoice_items: invoice_items
         )
       elsif @group
         template.new_group_invoice_run_path(
           finance_group,
-          invoice_run: {receiver_id: @group.id, receiver_type: @group.class.base_class},
+          filter: {group_id: @group.id, range: "group"},
           invoice_items: invoice_items
         )
       elsif @people.one?
@@ -75,12 +84,13 @@ module Dropdown
       else
         template.new_group_invoice_run_path(
           finance_group,
-          invoice_run: {recipient_ids: @people.collect(&:id).join(",")},
+          ids: @people.collect(&:id).join(","),
           invoice_items: invoice_items
         )
       end
     end
     # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def init_items # rubocop:todo Metrics/AbcSize
       if additional_sub_links.none?

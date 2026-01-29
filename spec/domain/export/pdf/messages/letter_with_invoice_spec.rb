@@ -120,7 +120,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
       end
 
       it "renders iban from invoice when persisted invoice exists" do
-        run = InvoiceRun.create(group: group, title: "title")
+        run = InvoiceRun.create(group: group, title: "title", recipient_source: PeopleFilter.new)
         run.invoices.create!(title: :title, recipient: bottom_member, total: 10, group: group)
         letter.invoice_run_id = run.id
 
@@ -129,7 +129,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
       end
 
       it "mixes person and invoice address" do
-        run = InvoiceRun.create!(group: group, title: "title")
+        run = InvoiceRun.create!(group: group, title: "title", recipient_source: PeopleFilter.new)
         run.invoices.create!(title: :title, recipient: bottom_member, total: 10, group: group)
         letter.invoice_run_id = run.id
 

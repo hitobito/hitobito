@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_08_120000) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_28_121453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -356,6 +356,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_08_120000) do
     t.index ["participant_type", "participant_id"], name: "idx_on_participant_type_participant_id_bfb6fab1d7"
   end
 
+  create_table "event_participations_filters", force: :cascade do |t|
+    t.bigint "event_id"
+    t.string "participant_type"
+    t.index ["event_id"], name: "index_event_participations_filters_on_event_id"
+  end
+
   create_table "event_question_translations", force: :cascade do |t|
     t.integer "event_question_id", null: false
     t.string "locale", null: false
@@ -528,6 +534,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_08_120000) do
     t.index ["type"], name: "index_groups_on_type"
   end
 
+  create_table "groups_filters", force: :cascade do |t|
+    t.string "group_type"
+    t.date "active_at"
+    t.bigint "parent_id"
+    t.index ["parent_id"], name: "index_groups_filters_on_parent_id"
+  end
+
   create_table "help_text_translations", force: :cascade do |t|
     t.integer "help_text_id", null: false
     t.string "locale", null: false
@@ -619,8 +632,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_08_120000) do
   end
 
   create_table "invoice_runs", force: :cascade do |t|
-    t.string "receiver_type"
-    t.bigint "receiver_id"
+    t.string "recipient_source_type"
+    t.bigint "recipient_source_id"
     t.bigint "group_id"
     t.bigint "creator_id"
     t.string "title", null: false
@@ -632,12 +645,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_08_120000) do
     t.text "invalid_recipient_ids"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "receivers"
     t.integer "period_invoice_template_id"
     t.index ["creator_id"], name: "index_invoice_runs_on_creator_id"
     t.index ["group_id"], name: "index_invoice_runs_on_group_id"
     t.index ["period_invoice_template_id"], name: "index_invoice_runs_on_period_invoice_template_id"
-    t.index ["receiver_type", "receiver_id"], name: "index_invoice_runs_on_receiver_type_and_receiver_id"
+    t.index ["recipient_source_type", "recipient_source_id"], name: "idx_on_recipient_source_type_recipient_source_id_17d425237e"
   end
 
   create_table "invoices", id: :serial, force: :cascade do |t|
@@ -1027,13 +1039,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_08_120000) do
   end
 
   create_table "people_filters", id: :serial, force: :cascade do |t|
-    t.string "name", null: false
+    t.string "name"
     t.integer "group_id"
     t.string "group_type"
     t.text "filter_chain"
     t.string "range", default: "deep"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.boolean "visible", default: false
     t.index ["group_id", "group_type"], name: "index_people_filters_on_group_id_and_group_type"
   end
 

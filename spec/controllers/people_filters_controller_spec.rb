@@ -85,6 +85,7 @@ describe PeopleFiltersController do
         expect(assigns(:people_filter)).to be_valid
         is_expected.to redirect_to(group_people_path(group, filter_id: assigns(:people_filter).id))
       end.to change { PeopleFilter.count }.by(1)
+      expect(PeopleFilter.last.visible).to be_truthy
     end
 
     context "with read only permissions" do

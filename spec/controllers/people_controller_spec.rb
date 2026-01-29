@@ -342,6 +342,7 @@ describe PeopleController do
           filter = PeopleFilter.create!(
             name: "My Filter",
             range: "deep",
+            visible: true,
             filter_chain: {
               role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}
             }
@@ -372,6 +373,7 @@ describe PeopleController do
             filter = PeopleFilter.create!(
               name: "My Filter",
               range: "deep",
+              visible: true,
               filter_chain: {
                 role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}
               }

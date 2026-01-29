@@ -35,6 +35,17 @@ describe "FilterNavigation::People" do
         Group::BottomLayer::Leader]
     end
 
+    context "visible false" do
+      before do
+        group.people_filters.create!(name: "2_Members",
+          filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: false)
+        group.people_filters.create!(name: "1_Leaders",
+          filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: false)
+      end
+
+      its("dropdown.items") { should have(3).items }
+    end
+
     context "without params" do
       its(:main_items) { should have(2).item }
       its(:active_label) { should == "Mitglieder" }
@@ -64,9 +75,9 @@ describe "FilterNavigation::People" do
       context "with custom filters" do
         before do
           group.people_filters.create!(name: "2_Members",
-            filter_chain: {role: {role_types: role_types.map(&:id)}})
+            filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: true)
           group.people_filters.create!(name: "1_Leaders",
-            filter_chain: {role: {role_types: role_types.map(&:id)}})
+            filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: true)
         end
 
         its("dropdown.active") { should be_falsey }
@@ -94,7 +105,7 @@ describe "FilterNavigation::People" do
     context "with selected filter" do
       before do
         group.people_filters.create!(name: "Leaders",
-          filter_chain: {role: {role_types: role_types.map(&:id)}})
+          filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: true)
       end
 
       subject do

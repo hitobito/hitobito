@@ -79,7 +79,7 @@ describe Invoice do
     expect(invoice.errors.full_messages)
       .to include("Firmenname oder Name muss ausgefüllt werden")
     expect(invoice.errors.full_messages)
-      .to include("Strasse muss ausgefüllt werden")
+      .to include("Strasse oder Postfach muss ausgefüllt werden")
     expect(invoice.errors.full_messages)
       .to include("PLZ muss ausgefüllt werden")
     expect(invoice.errors.full_messages)

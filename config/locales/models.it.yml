@@ -83,7 +83,7 @@ it:
         at_least_one_present: È necessario compilare almeno una %{model_name}
         type_not_allowed: non può essere salvato
         must_be_after_opening: deve essere dopo l'inizio dell'annuncio
-        must_have_same_type: müssen von denselbem Typ sein
+        must_have_same_type: devono essere dello stesso tipo
         greater_than: deve essere più grande di %{count}
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
@@ -612,8 +612,8 @@ it:
           de: Tedesco
           en: Inglese
           fr: Francese
-          it: Italienisch
-          rm: Rätoromanisch
+          it: Italiano
+          rm: Romancio
           
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale

@@ -53,7 +53,7 @@ describe QualificationsController, type: :controller do
         expect(sheet.find_link("Personen")[:href]).to eq group_people_path(top_group, returning: true)
         expect(sheet.find_link("Top Leader")[:href]).to eq group_person_path(top_group, top_leader)
 
-        nav = page.find(".nav-left")
+        nav = page.find("nav.nav-left")
         expect(nav.find_link("Top")[:href]).to eq group_people_path(groups(:top_layer), returning: true)
         expect(nav.find_link("TopGroup")[:href]).to eq group_people_path(top_group, returning: true)
         expect(nav.find_link("Bottom One")[:href]).to eq group_people_path(groups(:bottom_layer_one), returning: true)

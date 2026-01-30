@@ -26,6 +26,29 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "3a4aa5477a1a1e079bb24001f19c237f1075d2c547f3f814dcef0fa113de2d23",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/qualification.rb",
+      "line": 106,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "where(\"qualifications.finish_at <= :date AND NOT EXISTS (#{\"SELECT 1 FROM qualifications q2\\nINNER JOIN qualification_kinds qk ON qk.id = q2.qualification_kind_id\\nWHERE q2.person_id = qualifications.person_id\\nAND #{subselect_kind_condition(qualification_kind_ids)}\\nAND (\\n  (q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date)) OR\\n  (q2.finish_at < :date AND q2.finish_at + INTERVAL '1 YEAR' * qk.reactivateable >= :date)\\n)\\n\"})\", :date => Time.zone.today, :qualification_kind_ids => qualification_kind_ids)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Qualification",
+        "method": "self.only_expired"
+      },
+      "user_input": "subselect_kind_condition(qualification_kind_ids)",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "All external/user-input is being escaped"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "3a5aaf326511e7b8e7dba84588da0d878fbf09889c61c354cb4f21fe10e042a8",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -82,6 +105,29 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "47199546b5f194a214b8b478c8e5639c808086f95e5c918e7bc4e3a8923e13bd",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/models/qualification.rb",
+      "line": 88,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "where(\"NOT EXISTS (SELECT 1 FROM qualifications q2 WHERE q2.person_id = qualifications.person_id AND #{subselect_kind_condition(qualification_kind_ids)} AND q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date))\", :qualification_kind_ids => qualification_kind_ids, :date => Time.zone.today)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Qualification",
+        "method": "self.not_active"
+      },
+      "user_input": "subselect_kind_condition(qualification_kind_ids)",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "All external/user-input is being escaped"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "51a0fc73f01eff155e5bad80f1bfab2f2977136561cf012e97d72a7a622362f8",
       "check_name": "SQL",
       "message": "Possible SQL injection",
@@ -101,6 +147,52 @@
         89
       ],
       "note": "String concatination using .sti_name"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "537275770ce55149a0c189840897c5b61042b69dd713b61b1558753945e4cbc3",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/sequence.rb",
+      "line": 11,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.select_value(\"SELECT currval('#{sequence_name}')\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Sequence",
+        "method": "self.current_value"
+      },
+      "user_input": "sequence_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "only used internally"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "602a086abecc64139c2f1f202037e8ce8bbb3e2792e1238eb3a0d568a8fba37d",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/sequence.rb",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "ActiveRecord::Base.connection.select_value(\"SELECT nextval('#{sequence_name}')\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Sequence",
+        "method": "self.increment!"
+      },
+      "user_input": "sequence_name",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "only used internally"
     },
     {
       "warning_type": "SQL Injection",
@@ -147,6 +239,25 @@
         89
       ],
       "note": "Safe as built without user input"
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 123,
+      "fingerprint": "715ee6d743a8af33c7b930d728708ce19c765fb40e2ad9d2b974db04d92dc7d1",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 3.2.6 ends on 2026-03-31",
+      "file": ".ruby-version",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        1104
+      ],
+      "note": "Ticket exists and is planned for this quarter, see https://github.com/hitobito/hitobito/issues/3689"
     },
     {
       "warning_type": "SQL Injection",

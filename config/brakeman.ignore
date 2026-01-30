@@ -44,7 +44,7 @@
       "cwe_id": [
         89
       ],
-      "note": "All external/user-input is being escaped"
+      "note": "Input is under control"
     },
     {
       "warning_type": "SQL Injection",
@@ -123,7 +123,7 @@
       "cwe_id": [
         89
       ],
-      "note": "All external/user-input is being escaped"
+      "note": "The parameter is a return value from a method and will always be one of two fixed strings"
     },
     {
       "warning_type": "SQL Injection",

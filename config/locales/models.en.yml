@@ -191,6 +191,7 @@ en:
         invoice:
           recipient_address_or_email_required: 'Recipient address or email must be provided'
           recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
+          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'is not valid; adjust the settings before creating an invoice'

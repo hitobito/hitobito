@@ -195,6 +195,7 @@ fr:
         invoice:
           recipient_address_or_email_required: 'L''adresse ou l''adresse e-mail du destinataire doit être renseignée'
           recipient_name_or_company_name_required: 'Le nom de l''entreprise ou le nom doit être rempli.'
+          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'n''est pas valable ; adaptez les réglages avant de faire le calcul'

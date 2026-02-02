@@ -1340,7 +1340,7 @@ it:
 
       invoice_run:
         title: Titolo
-        receiver: Destinatario
+        receiver: Empfänger
         recipients_total: Destinatario complessivo
         recipients_paid: Destinatario pagato
         amount_total: Importo complessivo

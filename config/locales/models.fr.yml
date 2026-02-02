@@ -1341,7 +1341,7 @@ fr:
 
       invoice_run:
         title: Titre
-        receiver: Destinataire
+        receiver: Empfänger
         recipients_total: Nombre total de destinataires
         recipients_paid: Destinataire payé
         amount_total: Montant total

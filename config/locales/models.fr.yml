@@ -575,6 +575,7 @@ fr:
         origin: Serveur avec accès via API
 
       person:
+        id: Personennummer
         salutation: Titre
         first_name: Prénom
         last_name: Nom
@@ -1351,7 +1352,7 @@ fr:
 
       invoice_run:
         title: Titre
-        receiver: Destinataire
+        recipient_source: Empfänger
         recipients_total: Nombre total de destinataires
         recipients_paid: Destinataire payé
         amount_total: Montant total

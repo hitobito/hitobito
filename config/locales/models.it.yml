@@ -574,6 +574,7 @@ it:
         origin: host con accesso API
 
       person:
+        id: Personennummer
         salutation: Appellativo
         first_name: Nome
         last_name: Cognome
@@ -1350,7 +1351,7 @@ it:
 
       invoice_run:
         title: Titolo
-        receiver: Destinatario
+        recipient_source: Empfänger
         recipients_total: Destinatario complessivo
         recipients_paid: Destinatario pagato
         amount_total: Importo complessivo

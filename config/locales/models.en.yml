@@ -505,6 +505,7 @@ en:
         origin: Host with API access
 
       person:
+        id: Personennummer
         salutation: Salutation
         first_name: First name
         last_name: Last name
@@ -1275,7 +1276,7 @@ en:
 
       invoice_run:
         title: Title
-        receiver: Empfänger
+        recipient_source: Empfänger
         recipients_total: Empfänger Insgesamt
         recipients_paid: Empfänger Bezahlt
         amount_total: Betrag insgesamt

@@ -358,6 +358,20 @@ describe Person do
     end
   end
 
+  context "devise confirmable" do
+    let(:group) { groups(:bottom_group_one_one) }
+    let(:person) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: group).person.reload }
+
+    it "does send confirmation instructions via email" do
+      expect { person.send_confirmation_instructions }.to change { ActionMailer::Base.deliveries.size }.by(1)
+    end
+
+    it "does not send confirmation instructions if email is blank" do
+      person.update!(email: nil)
+      expect { person.send_confirmation_instructions }.not_to change { ActionMailer::Base.deliveries.size }
+    end
+  end
+
   context "#ignored_country?" do
     it "ignores ch, empty" do
       person = Person.new(country: nil)

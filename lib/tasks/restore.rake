@@ -258,7 +258,7 @@ namespace :restore do
         values = attrs.map do |_key, val|
           case val
           when NilClass then "NULL"
-          when String, Time
+          when String, Time, Date
             object.class.connection.quote(
               val.inspect.delete_prefix('"').delete_suffix('"')
             )
@@ -300,6 +300,8 @@ namespace :restore do
         sql_result << dumper[participation]
         sql_result << dumper[participation.application] if participation.application.present?
         participation.roles.each { sql_result << dumper[_1] }
+        guests = Event::Guest.where(main_applicant_id: participation.id)
+        guests.find_each { sql_result << dumper[_1] }
       end
 
       # TODO: export subscriptions and their relations

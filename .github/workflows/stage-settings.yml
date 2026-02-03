@@ -95,7 +95,8 @@ jobs:
 
           echo "repo_url=https://github.com/${REPO}.git" >> "$GITHUB_OUTPUT"
 
-          project="${REPO##hitobito/ose_composition_}"
+          instance_identifier="${REPO##hitobito/ose_composition_}"
+          project="${instance_identifier//_/-}"
           echo "project=${project}" >> "$GITHUB_OUTPUT"
 
           if [[ "${DRY_RUN}" = 'true' ]]; then
@@ -119,13 +120,13 @@ jobs:
               echo "branch=production" >> "$GITHUB_OUTPUT"
               echo "target_branch=${TARGET_BRANCH:-stable}" >> "$GITHUB_OUTPUT"
               echo "release_type=${RELEASE_TYPE}" >> "$GITHUB_OUTPUT"
-              echo "namespace_name=hit-${project//_/-}-prod" >> "$GITHUB_OUTPUT"
+              echo "namespace_name=hit-${project}-prod" >> "$GITHUB_OUTPUT"
             ;;
 
             integration)
               echo "branch=devel" >> "$GITHUB_OUTPUT"
               echo "target_branch=${TARGET_BRANCH:-${INTEGRATION_DEPLOY_BRANCH:-master}}" >> "$GITHUB_OUTPUT"
               echo "release_type=integration" >> "$GITHUB_OUTPUT"
-              echo "namespace_name=hit-${project//_/-}-int" >> "$GITHUB_OUTPUT"
+              echo "namespace_name=hit-${project}-int" >> "$GITHUB_OUTPUT"
             ;;
           esac;

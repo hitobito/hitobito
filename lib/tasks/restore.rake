@@ -258,7 +258,7 @@ namespace :restore do
         values = attrs.map do |_key, val|
           case val
           when NilClass then "NULL"
-          when String, Time
+          when String, Time, Date
             object.class.connection.quote(
               val.inspect.delete_prefix('"').delete_suffix('"')
             )

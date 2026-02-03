@@ -745,7 +745,7 @@ it:
     email_invalid: "Inserisci un'e-mail valevole"
     form_data_missing: "Compila per favore il formulario seguente prima di iscriverti all'evento."
     registered: "I tuoi dati personali sono stati registrati. Completa ancora solo i dati per l'iscrizione."
-    application_window_closed: "La finestra di registrazione per questo evento non è aperta."
+    application_window_closed: "L’iscrizione a questo evento non è ancora aperta."
     no_places_available: "Il numero massimo di partecipanti per questo evento è già stato raggiunto."
     email_sent_manager: "Ti abbiamo inviato un'e-mail con un link dove puoi iscrivere te stesso o tuo figlio direttamente all'evento."
     registered_manager: 'I tuoi dati personali sono stati registrati. Ora puoi registrare i tuoi figli cliccando sul pulsante “Registrati”'

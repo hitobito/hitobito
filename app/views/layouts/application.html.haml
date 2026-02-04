@@ -25,6 +25,7 @@
     = yield(:head)
 
   %body{class: ('is-logged-out' unless person_signed_in?), data: { controller: 'remote-autocomplete' } }
+    %a#jump-to-content.bg-dark.text-light.mt-5.ml-5.p-2{href: "#main-content"}= t("global.jump_to_main_content")
     = render 'layouts/environment_header'
     #modal-placeholder
     %main
@@ -59,7 +60,7 @@
         - if render_nav?
           %nav.nav-left
             = render 'layouts/nav'
-        .container-fluid
+        .container-fluid#main-content
           - if (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
             = render_sheets do
               .content-header

@@ -1793,7 +1793,7 @@ it:
 
     attrs:
       additional_data: Informazioni supplementari
-      events: Meine nächsten Anlässe
+      events: I miei prossimi eventi
 
     contact_data:
       lives_in_household_with: Vive nello stesso nucleo famigliare di
@@ -2132,12 +2132,12 @@ it:
       success:
         zero: Non sono stati eliminati tags
         one: È stato eliminato un tag
-        other: "%{count} Tags wurden entfernt"
+        other: "Sono stati elimintati  %{count} tags"
     create:
       success:
         zero: Non sono stati creati tags
         one: È stato creato un tag
-        other: "%{count} Tags wurden erstellt"
+        other: "Sono stati creati %{count} tags"
     deletable:
       title: Quali tags devono venir cancellati?
       no_entries: Da nessuna delle persone scelte possono venir cancellati tags.

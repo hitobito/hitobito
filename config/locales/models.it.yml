@@ -83,7 +83,7 @@ it:
         at_least_one_present: È necessario compilare almeno una %{model_name}
         type_not_allowed: non può essere salvato
         must_be_after_opening: deve essere dopo l'inizio dell'annuncio
-        must_have_same_type: müssen von denselbem Typ sein
+        must_have_same_type: devono essere dello stesso tipo
         greater_than: deve essere più grande di %{count}
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
@@ -194,7 +194,7 @@ it:
         invoice:
           recipient_address_or_email_required: 'deve essere riempito l''indirizzo del ricevente oppure l''e-mail'
           recipient_name_or_company_name_required: 'Il nome dell''azienda o il nome devono essere compilati'
-          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
+          recipient_street_or_postbox_required: 'Via o casella postale devono essere compilati'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
@@ -1340,7 +1340,7 @@ it:
 
       invoice_run:
         title: Titolo
-        receiver: Empfänger
+        receiver: Destinatario
         recipients_total: Destinatario complessivo
         recipients_paid: Destinatario pagato
         amount_total: Importo complessivo

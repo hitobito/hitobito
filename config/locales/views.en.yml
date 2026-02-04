@@ -343,7 +343,7 @@ en:
           greeting: "%{name}Hello !"
           reset_instructions:
             with_password: "You can reset your %{application_name} password using the following link."
-            without_password_html: "Willkommen bei %{application_name}! Du wurdest neu erfasst und hast ein Login erhalten.<br>Bitte setze ein Passwort unter dem folgenden Link."
+            without_password_html: "Welcome to %{application_name}! You have been newly registered and have received a login.<br>Please set a password using the following link."
           ignore_information_html: "Wenn du dein Passwort nicht ändern willst, kannst du dieses E-Mail ignorieren.<br><br>Dein Passwort ändert sich nicht ohne dass du auf dem obigen Link gehst und dort ein neues Passwort vergibst."
       unlock_instructions:
         subject: "Instruction for unlocking your account."
@@ -544,7 +544,7 @@ en:
       index:
         sign_in: Register
         login: Login
-        no_login: Do not have a Login?
+        no_login: You don’t have a login yet?
       email_check:
         next: Continue
         enter_email: Please enter your email address so you can register for the event.
@@ -1650,12 +1650,12 @@ en:
         groups_and_roles_that_see_me: Roles that have access to me
         load_roles_that_see_me: "Gruppen und Rollen laden"
         load_roles_that_see_me_hint: "This may take a few seconds"
-        block_person: Login sperren
+        block_person: Lock login
         confirm_block_person: "Achtung: Damit kann sich diese Person nicht mehr einloggen. Willst du das wirklich?"
-        unblock_person: Login entsperren
+        unblock_person: Unlock login
         confirm_unblock_person: "Achtung: Damit kann ist die Person nicht mehr blockiert. Willst du das wirklich?"
-        person_blocked: Login ist gesperrt
-        person_not_blocked: Login ist nicht gesperrt
+        person_blocked: Login is locked
+        person_not_blocked: Login is not locked
 
       password_override:
         flashes:
@@ -1663,13 +1663,13 @@ en:
 
       block_person:
         flashes:
-          success: Login wurde erfolgreich gesperrt.
-          error: Du kannst dein eigenes Login nicht sperren.
+          success: Login has been successfully blocked.
+          error: You cannot block your own login.
 
       unblock_person:
         flashes:
-          success: Login wurde erfolgreich entsperrt.
-          error: Du kannst dein eigenes Login nicht entsperren.
+          success: Login has been successfully unlocked.
+          error: You cannot unlock your own login.
 
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
@@ -1829,7 +1829,7 @@ en:
 
     totp_reset:
       flashes:
-        success: Du wirst beim nächsten Login aufgefordert, Zwei-Faktor-Authentifizierung erneut einzurichten
+        success: You will be asked to set up two-factor authentication again the next time you log in
 
     totp_disable:
       flashes:
@@ -1839,7 +1839,7 @@ en:
       no_login: No Login
       password_email_sent: Einladung wurde verschickt
       login: Login is active
-      two_factors: Login mit 2FA ist aktiv
+      two_factors: Login with 2FA is active
       status_off: Nicht vorhanden
       blocked: blocked
       not_blocked: Not blocked
@@ -2080,12 +2080,12 @@ en:
       success:
         zero: No tags removed
         one: One tag has been removed
-        other: "%{count} Tags wurden entfernt"
+        other: "%{count} Tags have been removed"
     create:
       success:
         zero: No tags created
         one: One tag has been created
-        other: "%{count} Tags wurden erstellt"
+        other: "%{count} tags have been created"
     deletable:
       title: Which tags should be deleted?
       no_entries: Tags cannot be removed
@@ -2226,7 +2226,7 @@ en:
 
     impersonate: "Account took over from %{user}"
     impersonation_done: "Account impersonation from %{user} ended."
-    password_override: "Passwort wurde von %{user} auf null gesetzt und das Login verhindert, bis ein neues Passwort gesetzt wird."
+    password_override: "Password has been set to zero by %{user} and login is prevented until a new password is set."
 
     household_created: "Haushalt (%{object_changes}) wurde neu erstellt."
     household_person_appended: "%{object_name} wurde zum Haushalt (%{object_changes}) hinzugefügt."

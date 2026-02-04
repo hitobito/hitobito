@@ -196,7 +196,7 @@ it:
         invoice:
           recipient_address_or_email_required: 'deve essere riempito l''indirizzo del ricevente oppure l''e-mail'
           recipient_name_or_company_name_required: 'Il nome dell''azienda o il nome devono essere compilati'
-          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
+          recipient_street_or_postbox_required: 'Via o casella postale devono essere compilati'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'

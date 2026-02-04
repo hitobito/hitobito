@@ -25,7 +25,7 @@
     = yield(:head)
 
   %body{class: ('is-logged-out' unless person_signed_in?), data: { controller: 'remote-autocomplete' } }
-    %a#jump-to-content.bg-dark.text-light.mt-5.ml-5.p-2{href: "#main-content"}= t("global.jump_to_main_content")
+    %a#jump-to-content.bg-dark.text-light.mt-5.ml-5.p-2{href: "#main-content"}= t("global.jump_to_content")
     = render 'layouts/environment_header'
     #modal-placeholder
     %main

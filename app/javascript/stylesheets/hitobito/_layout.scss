@@ -414,22 +414,23 @@ strong.bigger-title div.trix-content {
 }
 
 #jump-to-content {
+  opacity: 0;
   position: absolute;
-  z-index: 100;
   display: flex;
   text-align: center;
   align-items: center;
+  font-size: medium;
+  text-decoration: underline;
+  z-index: 100;
   width: 130px;
   min-height: 50px;
   height: fit-content;
-  opacity: 0;
-  font-size: medium;
   pointer-events: none;
   cursor: default;
 }
 
 #jump-to-content:focus {
+  opacity: 100;
   pointer-events: auto;
   cursor: pointer;
-  opacity: 100;
 }

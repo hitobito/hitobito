@@ -60,10 +60,10 @@
         - if render_nav?
           %nav.nav-left
             = render 'layouts/nav'
-        .container-fluid#main-content
+        .container-fluid
           - if (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
             = render_sheets do
-              .content-header
+              .content-header#main-content
                 %h1
                   = title
                   = help_text_renderer.action_trigger
@@ -82,7 +82,7 @@
               = content_for?(:content) ? yield(:content) : yield
           - else
             = render_current_sheet do
-              .content-header
+              .content-header#main-content
                 %h1
                   = title
 

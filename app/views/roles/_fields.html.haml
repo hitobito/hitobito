@@ -20,6 +20,8 @@
   #role_type_select.col-6
     = render 'roles/type_select'
 
+= render_extensions :type_fields, locals: { f: f }
+
 = render 'roles/label', f: f
 
 = render 'roles/duration_fields', f: f

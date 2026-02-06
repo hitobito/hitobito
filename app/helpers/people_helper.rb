@@ -95,7 +95,7 @@ module PeopleHelper
   def link_to_address(person)
     if [person.address, person.zip_code, person.town].all?(&:present?)
       link_to(icon("map-marker-alt", class: "fa-2x"), person_address_url(person), target: "_blank",
-        rel: "noopener")
+        rel: "noopener", "aria-label": t(".address_link_aria_label"))
     end
   end
 

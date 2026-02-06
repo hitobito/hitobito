@@ -6,8 +6,9 @@
 
 = paginate @versions
 
+- binding.pry
 - if @versions.present?
-  - @versions.group_by(&:created_at).each do |created_at, versions|
+  - @versions.group_by { _1.first.attributes.values_at("created_at", "whodunnit", "whodunnit_type") }.each do |_, versions|
     .row.mb-3
       .col-4
         = versions.first.header

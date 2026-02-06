@@ -6,18 +6,18 @@
 require "spec_helper"
 
 describe "event/participations/_actions_show.html.haml" do
+  let(:group) { groups(:bottom_layer_one) }
+  let(:event) { Fabricate(:event, groups: [group]) }
   let(:participant) { people(:top_leader) }
-  let(:participation) { Fabricate(:event_participation, participant: participant) }
+  let(:participation) { Fabricate(:event_participation, participant:, event:) }
   let(:user) { participant }
-  let(:event) { participation.event }
-  let(:group) { event.groups.first }
 
   before do
     CustomContent.create!(key: "event_application_confirmation", label: "Custom Content Label 1", body: "")
     CustomContent.create!(key: "event_application_approval", label: "Custom Content Label 2", body: "")
     allow(view).to receive_messages(path_args: [group, event])
     allow(view).to receive_messages(entry: participation)
-    allow(controller).to receive_messages(current_user: user)
+    allow(controller).to receive(:current_user) { user }
     allow(view).to receive(:current_user) { user }
     controller.request.path_parameters[:action] = "show"
     controller.request.path_parameters[:group_id] = 42
@@ -45,5 +45,60 @@ describe "event/participations/_actions_show.html.haml" do
 
     its([:href]) { should eq group_person_path(user.groups.first, user) }
     its(:text) { should eq " Personenprofil anzeigen" } # space because of icon
+  end
+
+  context "invoice button" do
+    def person_with_role(role_class, group)
+      Fabricate(role_class.sti_name, group:).person
+    end
+
+    def user_finance_layer_ids
+      controller.current_ability.user_finance_layer_ids
+    end
+
+    subject do
+      render
+      Capybara::Node::Simple.new(@rendered)
+    end
+
+    context "when user lacks finance permission" do
+      let(:user) { person_with_role(Group::BottomLayer::Leader, event.groups.first) }
+      let(:participant) { person_with_role(Group::BottomLayer::LocalGuide, event.groups.first) }
+
+      it "is not shown" do
+        expect(user_finance_layer_ids).to be_empty
+        is_expected.not_to have_link("Rechnung erstellen")
+      end
+    end
+
+    context "when user has finance permission in same layer" do
+      let(:user) { person_with_role(Group::BottomLayer::Member, event.groups.first) }
+      let(:participant) { person_with_role(Group::BottomLayer::LocalGuide, event.groups.first) }
+
+      it "is shown" do
+        expect(user_finance_layer_ids).to include(group.layer_group_id)
+        is_expected.to have_link("Rechnung erstellen")
+      end
+    end
+
+    context "when user has finance permission in upper layer" do
+      let(:user) { people(:top_leader) }
+      let(:participant) { person_with_role(Group::BottomLayer::LocalGuide, event.groups.first) }
+
+      it "is shown" do
+        expect(user_finance_layer_ids).to include(groups(:top_layer).id)
+        is_expected.to have_link("Rechnung erstellen")
+      end
+    end
+
+    context "when user has finance permission in sibling layer" do
+      let(:user) { person_with_role(Group::BottomLayer::Member, groups(:bottom_layer_two)) }
+      let(:participant) { person_with_role(Group::BottomLayer::LocalGuide, event.groups.first) }
+
+      it "is not shown" do
+        expect(user_finance_layer_ids).to include(groups(:bottom_layer_two).id)
+        is_expected.not_to have_link("Rechnung erstellen")
+      end
+    end
   end
 end

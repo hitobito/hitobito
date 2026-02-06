@@ -6,7 +6,7 @@
 - if can?(:edit, entry)
   = button_action_edit
 
-- if can?(:create_invoice, entry.person)
+- if can?(:create_received_invoice, entry.person)
   = invoice_button(people: [entry.person])
 
 - if can?(:print, entry)

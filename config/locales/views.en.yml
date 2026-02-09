@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -576,6 +576,9 @@ en:
         title: Assign persons to %{event_label}
         event_search: Search event...
         submit: add
+
+    questions:
+      add_choice: "Antwortmöglichkeit hinzufügen"
 
   assignments:
     attachment: "Show attachment"
@@ -1161,6 +1164,16 @@ en:
       flash:
         success: Payment of %{amount}has been registered.
 
+  period_invoice_templates:
+    new:
+      title: Sammelrechnung definieren
+    actions_index:
+      link:
+        add: Neue Sammelrechnung definieren
+    tabs:
+      info: Info
+      invoice_runs: Rechnungsläufe
+
   label_formats:
     global_labels: "Global label formats"
     own_labels: My label formats
@@ -1744,7 +1757,7 @@ en:
 
     attrs:
       additional_data: More information
-      events: Meine nächsten Anlässe
+      events: Meine nächsten %{event_type_label}
 
     contact_data:
       lives_in_household_with: Lives in household with
@@ -2080,12 +2093,12 @@ en:
       success:
         zero: No tags removed
         one: One tag has been removed
-        other: "%{count} Tags wurden entfernt"
+        other: "Tags auf %{count} Personen werden im Hintergrund entfernt"
     create:
       success:
         zero: No tags created
         one: One tag has been created
-        other: "%{count} Tags wurden erstellt"
+        other: "Tags auf %{count} Personen werden im Hintergrund erstellt"
     deletable:
       title: Which tags should be deleted?
       no_entries: Tags cannot be removed

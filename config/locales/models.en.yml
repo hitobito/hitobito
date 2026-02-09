@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -49,6 +49,8 @@ en:
         terminate_on: Leaving date
       household:
         members: Household members
+      choice:
+        choice: Antwortmöglichkeit
 
     errors:
       messages:
@@ -81,7 +83,7 @@ en:
         at_least_one_present: At least one %{model_name} must be replenished
         type_not_allowed: can't be created here
         must_be_after_opening: must be after the start of the application period
-        must_have_same_type: müssen von denselbem Typ sein
+        must_have_same_type: müssen von demselben Typ sein
         greater_than: must be bigger than %{count}
         greater_than_or_equal_to: 'must be bigger or equal to '
         must_exist: must exist
@@ -205,6 +207,10 @@ en:
               invalid_check_digit: 'is not valid; Incorrect check digit'
             logo:
               attached_unless_disabled: 'must be specified if a logo position is selected'
+        period_invoice_template:
+          attributes:
+            end_on:
+              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
           attributes:
             end_on:
@@ -350,6 +356,9 @@ en:
       payment:
         one: Payment
         other: Payments
+      period_invoice_template:
+        one: Sammelrechnung
+        other: Sammelrechnungen
       oauth/application:
         one: OAuth application
         other: OAuth applications
@@ -496,6 +505,7 @@ en:
         origin: Host with API access
 
       person:
+        id: Personennummer
         salutation: Salutation
         first_name: First name
         last_name: Last name
@@ -1266,7 +1276,7 @@ en:
 
       invoice_run:
         title: Title
-        receiver: Empfänger
+        recipient_source: Empfänger
         recipients_total: Empfänger Insgesamt
         recipients_paid: Empfänger Bezahlt
         amount_total: Betrag insgesamt
@@ -1335,6 +1345,12 @@ en:
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise
+
+      period_invoice_template:
+        name: Bezeichnung
+        start_on: Rechnungsperiode Start
+        end_on: Rechnungsperiode Ende
+        recipient_group_type: Empfängergruppen
 
       service_token:
         name: Name

@@ -28,8 +28,7 @@ namespace :wagon do
       migrations_paths["core"] = Rails.application.paths["db/migrate"].to_a
       wagon_names_width = migrations_paths.keys.map(&:length).max
 
-      context = ActiveRecord::MigrationContext.new(migrations_paths.values.flatten,
-        ActiveRecord::SchemaMigration)
+      context = ActiveRecord::MigrationContext.new(migrations_paths.values.flatten)
 
       context.migrations_status.each do |status, version, name|
         migration_file = context.migrations.find { |m| m.version == version.to_i }&.filename

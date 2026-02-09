@@ -39,8 +39,8 @@ module WebpackHelper
   #
   # Example:
   #   gem_file_path(
-  #     'nested_form',
-  #     File.join('vendor', 'assets', 'javascripts', 'jquery_nested_form.js')
+  #     'remotipart',
+  #     File.join('vendor', 'assets', 'javascripts', 'jquery.iframe-transport.js')
   #   )
   def gem_file_path(gem_name, relative_file_path)
     raise "Gem '#{gem_name}' not present" unless Gem.loaded_specs[gem_name]

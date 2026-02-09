@@ -13,7 +13,6 @@
 # All field methods may be prefixed with 'labeled_' in order to render
 # a standard label with them.
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
-  include NestedForm::BuilderMixin
   include Globalized::GlobalizedInputFieldHelpers
 
   REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
@@ -328,7 +327,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
             content = block ? capture(fields, &block) : render(partial, f: fields)
             content = content_tag(:div, content, class: "col-md-10")
 
-            content << content_tag(:div, fields.link_to_remove(icon(:times)), class: "col-md-2")
+            content << content_tag(:div,
+              template.link_to(icon(:times), "javascript:void(0)", class: "remove_nested_fields", data: { action: "nested-form#remove" }),
+              class: "col-md-2")
             content_tag(:div, content, html_options)
           end
         end
@@ -337,16 +338,27 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil,
     &block)
-    content_tag(:div, id: "#{assoc}_fields", data: {association: assoc, limit: limit}) do
-      fields_for(assoc, record_object) do |fields|
-        block ? capture(fields, &block) : render(partial_name, f: fields)
-      end
-    end +
-      content_tag(:div, class: "controls") do
-        options = options.to_h.merge(class: "text w-100 align-with-form")
-        link_title = options.delete(:link_to_add_title) || I18n.t("global.associations.add")
-        content_tag(:p, link_to_add(link_title, assoc, options))
-      end
+    content_tag(:div, data: {controller: "nested-form", nested_form_assoc_value: assoc, nested_form_limit_value: limit}) do
+      content_tag(:div, id: "#{assoc}_fields") do
+        fields_for(assoc, record_object) do |fields|
+          content_tag(:div, class: "fields") do
+            (block ? capture(fields, &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
+          end
+        end.to_s.html_safe + content_tag(:div, nil, data: { nested_form_target: "target" })
+      end +
+        content_tag(:div, class: "controls") do
+          options = options.to_h.merge(class: "text w-100 align-with-form")
+          link_title = options.delete(:link_to_add_title) || I18n.t("global.associations.add")
+          content_tag(:p, template.link_to(link_title, "javascript:void(0)", class: "text w-100 align-with-form", data: { action: "nested-form#add" })) +
+            content_tag(:template, data: { nested_form_target: "template" }) do
+              content_tag(:div, class: "fields", data: { new_record: true }) do
+                fields_for(assoc, object.send(assoc).try(:new) || options[:model_object], child_index: "NEW_RECORD") do |fields|
+                  (block ? capture(fields, &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
+                end
+              end
+            end
+        end
+    end
   end
 
   def readonly_value(attr, html_options = {})

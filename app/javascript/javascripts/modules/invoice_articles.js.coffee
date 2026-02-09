@@ -2,14 +2,14 @@ app = window.App ||= {}
 
 app.InvoiceArticles = {
   add: (e) ->
-    url = $('form[data-group').data('group')
+    url = e.target.closest('form').dataset['group']
     if e.target.value
       articleAction = "#{url}/invoice_articles/#{e.target.value}.json"
       $.ajax(url: articleAction, dataType: 'json', success: app.InvoiceArticles.updateForm)
     e.target.value = undefined # reset field as preparation for next addition
 
   updateForm: (data, status, req) ->
-    $('.add_nested_fields').first().click() # add new lineitem
+    document.querySelector('[data-action="nested-form#add"]').click() # add new lineitem
     fields = $('#invoice_items_fields .fields').last().find('input, textarea')
     fields.each (idx, elm) ->
       name = elm.name.match(/\d\]\[(.*)\]$/)[1]

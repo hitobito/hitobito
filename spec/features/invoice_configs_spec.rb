@@ -125,7 +125,7 @@ describe :invoice_configs, js: true do
       expect(page).to have_no_text "Eintrag hinzufügen"
     end
 
-    it "link_to_add appears again when removing custom content" do
+    it "link to add appears again when removing custom content" do
       click_link "Eintrag hinzufügen"
       expect(page).to have_no_text "Eintrag hinzufügen"
       click_link "E-Mail Vorlage entfernen"

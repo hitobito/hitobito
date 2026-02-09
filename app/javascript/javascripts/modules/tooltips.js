@@ -20,5 +20,5 @@ document.addEventListener("turbo:render", registerTooltips);
 // enable tooltip on popover open event
 document.addEventListener("shown.bs.popover", registerTooltips);
 // enable tooltip when new nested form field is inserted
-// this event is dispatched in the insertFields method in remote_autocomplete.js
+// this event is dispatched in nested_form_controller.js
 document.addEventListener("activateTooltips", registerTooltips);

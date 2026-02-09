@@ -8,8 +8,9 @@
 = f.nested_fields_for :message_templates do |tf|
   = field_set_tag MessageTemplate.model_name.human do
     = tf.labeled_input_field :title
-    = tf.labeled_input_field :body, rows: 4 
-    .controls.align-with-form= tf.link_to_remove(ta(:remove))
+    = tf.labeled_input_field :body, rows: 4
+    .controls.align-with-form
+      = link_to(ta(:remove), "javascript:void(0)", data: { action: "nested-form#remove" })
 
     .controls.fields-separation
       %hr

@@ -9,6 +9,6 @@
 = f.labeled_input_field :email, help: t('.email_help')
 = field_set_tag do
     = f.labeled(:custom_content) do
-        = f.nested_fields_for :custom_content, nil, nil, {class: "controls"}, 1 do |fields|
+        = f.nested_fields_for :custom_content, nil, nil, {class: "controls", model_object: CustomContent.build(context: f.object)}, 1 do |fields|
             = render "custom_content_fields", f: fields
         = f.help_block(t(".custom_content_help"))

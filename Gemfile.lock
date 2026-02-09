@@ -441,7 +441,6 @@ GEM
     minitest (5.26.0)
     msgpack (1.8.0)
     multi_json (1.17.0)
-    nested_form (0.3.2)
     net-http (0.9.1)
       uri (>= 0.11.1)
     net-imap (0.5.12)
@@ -903,7 +902,6 @@ DEPENDENCIES
   matrix
   mime-types
   mini_magick
-  nested_form
   net-sftp
   net-ssh
   nokogiri

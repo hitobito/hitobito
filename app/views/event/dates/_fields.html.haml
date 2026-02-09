@@ -8,8 +8,8 @@
 = f.labeled_datetime_field(:start_at)
 = f.labeled_datetime_field(:finish_at)
 
-.controls.align-with-form= f.link_to_remove(ta(:remove))
+.controls.align-with-form
+  = link_to(ta(:remove), "javascript:void(0)", class: "remove_nested_fields", data: { action: "nested-form#remove" })
 
 .controls.fields-separation
   %hr
-

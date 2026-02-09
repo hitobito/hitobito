@@ -64,16 +64,13 @@ https://tarekraafat.github.io/autoComplete.js/#/
 
 Die Konfigurationzu autocomplete.js ist hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/javascripts/modules/remote_autocomplete.js
 
-### nested_form gem
+### Stimulus Rails Nested Form
 
-For nested forms we use the [nested_form](https://github.com/ryanb/nested_form) gem.
+For nested forms we use the [Stimulus Rails Nested Form](https://github.com/stimulus-components/stimulus-components/tree/master/components/rails-nested-form) package.
 
 Nested forms are forms where the user can add and remove entries dynamically e.g. the event questions or the further e-mails of a user. 
 
 To implement nested forms you can use the `nested_fields_for` form helper defined in https://github.com/hitobito/hitobito/blob/master/app/helpers/standard_form_builder.rb
-
-For the autocomplete and tooltips to work with the nested forms we override the insertFields function of the gem here:
-https://github.com/hitobito/hitobito/blob/master/app/javascript/javascripts/modules/remote_autocomplete.js
 
 ## Jquery
 

@@ -13,7 +13,7 @@ module FormHelper
     add_css_class options[:html], "form-horizontal" unless options.delete(:stacked)
     add_css_class options[:html], "form-noindent" if options.delete(:noindent)
 
-    form_for(object, options, &block) + send(:after_nested_form_callbacks)
+    form_for(object, options, &block)
   end
 
   # Render a generic form for the current entry

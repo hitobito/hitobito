@@ -187,22 +187,6 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
     return selector.replace(/\]_|\]\[|\[|\]/g, '_')
   }
 
-  // set insertFields function for nested-form gem
-  window.nestedFormEvents.insertFields = function(content, assoc, link) {
-    const target = $(link).data('target');
-    let newElement;
-    if (target) {
-      newElement = $(target).append($(content));
-    } else {
-      newElement = $(link).closest('.controls').parent().find(`#${assoc}_fields`).append($(content));
-    }
-    newElement.find("[data-provide=entity]").each(app.setupEntityTypeahead);
-    // Needed to activate the tooltips of the newly inserted fields.
-    // The eventListener for this event is in tooltips.js.
-    document.dispatchEvent(new CustomEvent("activateTooltips"));
-    return newElement;
-  };
-
   app.setupRemoteAutocomplete = function() {
     app.setupQuicksearch();
     $("[data-provide=entity]").each(app.setupEntityTypeahead);

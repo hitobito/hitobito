@@ -20,7 +20,8 @@
 = render_extensions :fields, locals: { f: f }
 
 - unless f.object.derived?
-  .controls.align-with-form= f.link_to_remove(ta(:remove))
+  .controls.align-with-form
+    = link_to(ta(:remove), "javascript:void(0)", data: { action: "nested-form#remove" })
 
 .controls.fields-separation
   %hr

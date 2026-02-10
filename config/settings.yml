@@ -290,6 +290,8 @@ groups:
     enabled: false
   period_invoice_templates:
     enabled: false
+    item_classes:
+      - "PeriodInvoiceTemplate::RoleCountItem"
 
 hitobito_log:
   recipient_emails:

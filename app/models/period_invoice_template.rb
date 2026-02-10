@@ -10,9 +10,9 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
 
   has_many :items, dependent: :destroy, class_name: 'PeriodInvoiceTemplate::Item',
     inverse_of: :period_invoice_template
-  accepts_nested_attributes_for :items, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :items, allow_destroy: true
 
-  validates :name, :start_on, presence: true
+  validates :name, :start_on, :items, presence: true
   validates_date :end_on,
     allow_blank: true,
     on_or_after: :start_on,

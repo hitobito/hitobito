@@ -10,6 +10,7 @@ export default class extends Controller {
 
   connect() {
     this.modalTarget.addEventListener("hide.bs.modal", () => this.#updateSummary())
+    this.#updateSummary()
   }
 
   disconnect() {

@@ -6,13 +6,13 @@
 = entry_form(buttons_top: false, data: { controller: "period-invoice-template-form", period_invoice_template_form_wrapper_selector_value: "#items_fields .fields" }) do |f|
   = f.labeled_input_fields :name, :start_on, :end_on
 
-  = f.labeled t("activerecord.attributes.period_invoice_template.items") do
+  = f.labeled t("activerecord.attributes.period_invoice_template.items"), mark_as_required: true do
     #items_fields
-      = render "item_fields", f: f, item_class: f.object.class.name, new_record: false
+      = render "item_fields", f: f, item_class: nil, new_record: false
       %div{ data: { period_invoice_template_form_target: "target" } }
 
     = Dropdown::PeriodInvoiceTemplates::AddItem.new(self)
 
-    - Settings.groups.period_invoice_templates.item_classes.each do |item_class|
+    - Settings.groups.period_invoice_templates.item_classes.keys.map(&:to_s).each do |item_class|
       %template{ data: { period_invoice_template_form: { target: "template", item_type: item_class } } }
         = render "item_fields", f: f, item_class: item_class, new_record: true

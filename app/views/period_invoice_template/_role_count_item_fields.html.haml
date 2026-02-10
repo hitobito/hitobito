@@ -3,11 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= f.labeled :role_types, required: true, data: { controller: "role-types" } do
-  %p
-    %span.role-types-summary{ data: { role_types_target: "summary" } }
-    %button.btn.btn-sm.btn-link{ type: :button, data: { bs_toggle: "modal", bs_target: "#role-types-#{f.object.id || "NEW_RECORD"}" } }
-      = t(".choose_role_types")
+= f.label :role_types, class: "col-form-label pb-1 required"
+%div{ data: { controller: "role-types" } }
+  .role-types-summary{ data: { role_types_target: "summary" } }
+  %button.btn.btn-sm.btn-link.px-0.mb-4{ type: :button, data: { bs_toggle: "modal", bs_target: "#role-types-#{f.object.id || "NEW_RECORD"}" } }
+    = t(".choose_role_types")
 
   .modal.fade{ id: "role-types-#{f.object.id || "NEW_RECORD"}", data: { role_types_target: "modal" } }
     .modal-dialog.modal-xl

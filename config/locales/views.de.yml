@@ -2370,3 +2370,7 @@ de:
     create_managed_person_button: Kind erfassen
     assign_managed_person_button: Kind zuweisen
     assign_manager_person_button: Verwalter*in zuweisen
+
+  period_invoice_template:
+    role_count_item_fields:
+      choose_role_types: Rollentypen auswählen

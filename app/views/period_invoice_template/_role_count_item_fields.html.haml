@@ -24,7 +24,7 @@
                 .controls
                   - role_types.each do |role_type|
                     = label_tag(nil, class: 'checkbox inline') do
-                      = f.check_box_tag(f.object_name + "[role_types][]", role_type.sti_name,
+                      = f.check_box_tag(f.object_name + "[dynamic_cost_parameters][role_types][]", role_type.sti_name,
                                       f.object.role_types.include?(role_type.sti_name),
                                       data: { role_types_target: "checkbox", role_types_label: role_type.label })
                       = role_type.label

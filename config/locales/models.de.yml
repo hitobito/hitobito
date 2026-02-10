@@ -90,6 +90,7 @@ de:
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
         cannot_be_later_than_today: kann nicht später als heute sein
+        is_not_a_decimal_number: muss eine Dezimalzahl sein
       models:
         cors_origin:
           attributes:
@@ -1360,6 +1361,7 @@ de:
 
       period_invoice_template/item:
         name: Name
+        unit_cost: Preis
         cost_center: Kostenstelle
         account: Konto
 

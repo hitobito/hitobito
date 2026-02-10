@@ -8,8 +8,10 @@ class PeriodInvoiceTemplatesController < CrudController
 
   self.permitted_attrs = [:name, :start_on, :end_on,
     {
-      items: [
-        :id, :name, :type, :cost_center, :account, :dynamic_cost_params, :_destroy
+      items_attributes: [
+        :id, :type, :name, :cost_center, :account, :_destroy,
+        dynamic_cost_parameters: [:unit_cost] +
+          Settings.groups.period_invoice_templates.item_classes.to_h.values.flatten
       ]
     }]
 end

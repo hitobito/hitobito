@@ -15,7 +15,7 @@ module Dropdown
     private
 
     def init_items
-      Settings.groups.period_invoice_templates.item_classes.each do |item_class|
+      Settings.groups.period_invoice_templates.item_classes.keys.map(&:to_s).each do |item_class|
         add_item(translate(item_class.demodulize.underscore), item_class.constantize)
       end
     end

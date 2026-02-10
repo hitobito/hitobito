@@ -17,7 +17,6 @@
 # In order to actually calculate counts and prices, the #to_invoice_item method
 # is used to get an invoice item that can perform the calculation.
 class PeriodInvoiceTemplate::Item < ActiveRecord::Base
-  self.abstract_class = true
   self.table_name = "period_invoice_template_items"
 
   serialize :dynamic_cost_parameters, type: Hash, coder: YAML

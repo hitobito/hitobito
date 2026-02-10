@@ -8,7 +8,9 @@
     = item_fields.hidden_field(:type, value: item_fields.object.class.name)
     .d-flex.flex-row.gap-2
       = item_fields.input_field :name, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:name) + "*", class: "mb-2"
-      = item_fields.input_field :unit_cost, name: item_fields.object_name + "[dynamic_cost_parameters][unit_cost]", placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:unit_cost) + "*", class: "mb-2 text-end", style: "flex-basis: 30%"
+      .input-group.input-group-sm.mb-2{ style: "flex-basis: 50%" }
+        = item_fields.input_field :unit_cost, name: item_fields.object_name + "[dynamic_cost_parameters][unit_cost]", placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:unit_cost) + "*", class: "text-end"
+        .input-group-text= f.object.group.invoice_config.currency
     .d-flex.flex-row.gap-2
       = item_fields.input_field :cost_center, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:cost_center), class: "mb-2"
       = item_fields.input_field :account, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:account), class: "mb-2"

@@ -1358,10 +1358,13 @@ de:
         recipient_group_type: Empfängergruppen
         items: Rechnungsposten
 
-      period_invoice_template/role_count_item:
+      period_invoice_template/item:
         name: Name
         cost_center: Kostenstelle
         account: Konto
+
+      period_invoice_template/role_count_item:
+        role_types: Rollentypen
 
       service_token:
         name: Name

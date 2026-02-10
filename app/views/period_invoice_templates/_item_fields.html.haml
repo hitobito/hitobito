@@ -1,0 +1,17 @@
+-#  Copyright (c) 2026, BdP and DPSG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= f.fields_for :items, (new_record ? item_class.constantize.new : nil), (new_record ? { child_index: "NEW_RECORD" } : nil) do |item_fields|
+  .fields{ data: { new_record: new_record } }
+    = item_fields.hidden_field(:type, value: item_class)
+    = item_fields.labeled_input_field :name, label: captionize(:name, PeriodInvoiceTemplate::Item)
+    = item_fields.labeled_input_field :cost_center, label: captionize(:cost_center, PeriodInvoiceTemplate::Item)
+    = item_fields.labeled_input_field :account, label: captionize(:account, PeriodInvoiceTemplate::Item)
+    = render "#{item_class.underscore}_fields", f: item_fields
+    .controls.align-with-form
+      = link_to(ta(:remove), "javascript:void(0)", class: "remove_nested_fields", data: { action: "period-invoice-template-form#remove" })
+    = item_fields.hidden_field(:_destroy)
+    .controls.fields-separation
+      %hr

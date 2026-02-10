@@ -11,8 +11,8 @@
       = render "item_fields", f: f, item_class: f.object.class.name, new_record: false
       %div{ data: { period_invoice_template_form_target: "target" } }
 
-    - Settings.groups.period_invoice_templates.item_classes.each do |item_class|
-      %button{ type: "button", data: { action: "period-invoice-template-form#add", period_invoice_template_form_item_class_param: item_class } }= "Add #{item_class}"
+    = Dropdown::PeriodInvoiceTemplates::AddItem.new(self)
 
+    - Settings.groups.period_invoice_templates.item_classes.each do |item_class|
       %template{ data: { period_invoice_template_form: { target: "template", item_type: item_class } } }
         = render "item_fields", f: f, item_class: item_class, new_record: true

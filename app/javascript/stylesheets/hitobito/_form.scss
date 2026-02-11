@@ -774,7 +774,7 @@ input.switcher {
 
 // New rules since Bootstrap 5 upgrade
 
-.labeled .form-check {
+.labeled .form-check, .labeled .nested-form .controls > p {
   padding-top: calc(0.375rem + 1px);
 }
 

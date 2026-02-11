@@ -8,6 +8,15 @@ import {Controller} from '@hotwired/stimulus';
 export default class extends Controller {
   static targets = [ "modal", "summary", "checkbox" ]
 
+  get modalTarget() {
+    if (this._modalTarget) return this._modalTarget
+    return this.element.querySelector("[data-role-types-target=modal]")
+  }
+
+  get checkboxTargets() {
+    return Array.from(this.modalTarget.querySelectorAll("[data-role-types-target=checkbox]"))
+  }
+
   connect() {
     this.modalTarget.addEventListener("hide.bs.modal", () => this.#updateSummary())
     this.#updateSummary()

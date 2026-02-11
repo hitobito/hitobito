@@ -55,11 +55,11 @@
             - elsif current_user.nil? # nil without login, false on error
               = render 'layouts/unauthorized'
 
-      %div.d-flex.w-100
+      .container-fluid.d-flex
         - if render_nav?
           %nav.nav-left
             = render 'layouts/nav'
-        .container-fluid
+        .w-100
           - if (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
             = render_sheets do
               .content-header

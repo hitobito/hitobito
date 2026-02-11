@@ -23,4 +23,9 @@ describe "invoices/_table.html.haml" do
   it "shows current invoice count" do
     expect(dom).to have_text("2 Rechnungen angezeigt.")
   end
+
+  it "renders extension partials" do
+    expect(view).to receive(:render_extensions).with(:table_columns, locals: {t: anything})
+    render
+  end
 end

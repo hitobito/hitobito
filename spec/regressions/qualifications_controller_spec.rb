@@ -47,7 +47,7 @@ describe QualificationsController, type: :controller do
       # rubocop:disable Layout/LineLength
       it "renders sheets and form" do
         expect(page).to have_css(".sheet", count: 3)
-        sheet = page.find(".container-fluid > .sheet.parent")
+        sheet = page.find(".container-fluid > .w-100 > .sheet.parent")
         expect(sheet.find(".breadcrumb").find_link("Top")[:href]).to eq group_path(groups(:top_layer))
         expect(sheet.find_link("TopGroup")[:href]).to eq group_people_path(top_group, returning: true)
         expect(sheet.find_link("Personen")[:href]).to eq group_people_path(top_group, returning: true)

@@ -8,7 +8,11 @@ require "spec_helper"
 describe "contactable/_fields.html.haml" do
   let(:group) { groups(:top_layer) }
   let(:current_user) { people(:top_leader) }
-  let(:form_builder) { StandardFormBuilder.new(:group, group, view, {}) }
+  let(:form_builder) {
+    StandardFormBuilder.new(:group, group, view, {
+      builder: StandardFormBuilder
+    })
+  }
 
   subject { Capybara::Node::Simple.new(@rendered).find("fieldset.info", visible: false) }
 
@@ -26,7 +30,7 @@ describe "contactable/_fields.html.haml" do
       else
         render_method.call(*args)
       end
-    }.exactly(4).times
+    }.exactly(10).times
   end
 
   context "standard" do

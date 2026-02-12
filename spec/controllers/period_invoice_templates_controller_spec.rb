@@ -33,7 +33,17 @@ describe PeriodInvoiceTemplatesController do
           group_id: Group.root.id,
           period_invoice_template: {
             name: "Test",
-            start_on: Time.zone.now
+            start_on: Time.zone.now,
+            items_attributes: {
+              "0": {
+                name: "Invoice item",
+                type: PeriodInvoiceTemplate::RoleCountItem.name,
+                dynamic_cost_parameters: {
+                  unit_cost: 10,
+                  role_types: [Group::BottomLayer::Member.name]
+                }
+              }
+            }
           }
         }
       end.to change { PeriodInvoiceTemplate.count }.by 1

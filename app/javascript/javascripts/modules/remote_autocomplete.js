@@ -199,4 +199,8 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
   document.addEventListener('turbo:frame-load', (event) => {
     app.setupRemoteAutocomplete();
   });
+  // enable autocompletes when new nested form fields are inserted
+  document.addEventListener("rails-nested-form:add", (event) => {
+    app.setupRemoteAutocomplete();
+  });
 }).call(this);

@@ -26,7 +26,6 @@ export default class extends NestedForm {
     super.add(event)
     this.#setFocusOnFirstFieldInLastWrapper()
     this.#handleAddButtonVisibility()
-    this.#activateTooltipsInNewInputs()
   }
 
   remove(event) {
@@ -57,11 +56,6 @@ export default class extends NestedForm {
     } else {
       addButton.classList.remove("hidden")
     }
-  }
-
-  #activateTooltipsInNewInputs() {
-    // The eventListener for this event is in tooltips.js.
-    document.dispatchEvent(new CustomEvent("activateTooltips"));
   }
 
   #removeRequiredAttributeFromRemovedInputs(wrapper) {

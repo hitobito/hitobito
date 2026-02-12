@@ -19,6 +19,5 @@ document.addEventListener("DOMContentLoaded", registerTooltips);
 document.addEventListener("turbo:render", registerTooltips);
 // enable tooltip on popover open event
 document.addEventListener("shown.bs.popover", registerTooltips);
-// enable tooltip when new nested form field is inserted
-// this event is dispatched in nested_form_controller.js
-document.addEventListener("activateTooltips", registerTooltips);
+// enable tooltip when new nested form fields are inserted
+document.addEventListener("rails-nested-form:add", registerTooltips);

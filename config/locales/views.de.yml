@@ -264,8 +264,6 @@ de:
     xlsx: "XLSX"
 
   dropdown/period_invoice_templates/add_item:
-    foobar_item: Foobar-Zählung
-    role_count_item: Rollen-Zählung
     add_item: Rechnungsposten hinzufügen
 
   devise:

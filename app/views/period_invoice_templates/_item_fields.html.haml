@@ -5,6 +5,7 @@
 
 = f.fields_for :items, (new_record ? item_class.constantize.new : nil), (new_record ? { child_index: "NEW_RECORD" } : nil) do |item_fields|
   .fields{ data: { new_record: new_record } }
+    %h3= item_fields.object.class.model_name.human
     = item_fields.hidden_field(:type, value: item_fields.object.class.name)
     .d-flex.flex-row.gap-2
       = item_fields.input_field :name, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:name) + "*", class: "mb-2"

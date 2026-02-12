@@ -8,6 +8,10 @@
 class Invoice::RoleCountItem < Invoice::PeriodItem
   validates :role_types, presence: true
 
+  def role_types
+    dynamic_cost_parameters[:role_types]
+  end
+
   private
 
   def base_scope
@@ -18,9 +22,5 @@ class Invoice::RoleCountItem < Invoice::PeriodItem
       # However, if counting the roles for multiple recipients (ancestors) at the same time,
       # count occurrences for each ancestor separately.
       .select("DISTINCT(person_id, group_id, ancestor.id)")
-  end
-
-  def role_types
-    dynamic_cost_parameters[:role_types]
   end
 end

@@ -6,15 +6,16 @@
 - question = f.object.question
 - question_label = safe_auto_link(question.question, html: { target: '_blank' })
 - question_label += StandardFormBuilder::REQUIRED_MARK if question.required?
-= f.hidden_field(:question_id)
-.mb-2
-  = f.label(:answer, question_label)
-  - if question.choices?
-    - question.deserialized_choices.each_with_index do |choice, index|
-      - checked = choice.checked?(f.object.escaped_answer)
-      - if question.with_checkboxes?
-        = render 'event/answers/choice_checkbox', f: f, value: choice.choice, index: index, checked:
-      - else
-        = f.inline_radio_button(:answer, choice.choice, choice.choice, false, {checked:})
-  - else
-    = f.input_field(:answer)
+.fields
+  = f.hidden_field(:question_id)
+  .mb-2
+    = f.label(:answer, question_label)
+    - if question.choices?
+      - question.deserialized_choices.each_with_index do |choice, index|
+        - checked = choice.checked?(f.object.escaped_answer)
+        - if question.with_checkboxes?
+          = render 'event/answers/choice_checkbox', f: f, value: choice.choice, index: index, checked:
+        - else
+          = f.inline_radio_button(:answer, choice.choice, choice.choice, false, {checked:})
+    - else
+      = f.input_field(:answer)

@@ -35,7 +35,7 @@ describe MessageTemplate, js: true do
     it "allows to add new templates" do
       click_link "Eintrag hinzufügen"
 
-      within "#message_templates_fields .fields:last-child" do
+      within "#message_templates_fields .fields:nth-last-child(2)" do
         fill_in "Titel", with: title
         fill_in "Text", with: body
       end
@@ -49,7 +49,7 @@ describe MessageTemplate, js: true do
 
     it "allows to remove templates" do
       expect do
-        find("#message_templates_fields .fields:last-child a.remove_nested_fields").click
+        find("#message_templates_fields .fields:nth-last-child(3) a[data-action=\"nested-form#remove\"]").click
         click_save
         expect(page).to have_content("Rechnungseinstellungen wurden erfolgreich aktualisiert")
       end.to change { invoice_config.reload.message_templates.count }.from(2).to(1)

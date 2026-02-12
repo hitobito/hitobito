@@ -314,7 +314,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         ))
   end
 
-  def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, &block) # rubocop:disable Metrics/MethodLength
+  def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, limit = nil, &block) # rubocop:disable Metrics/MethodLength
     html_options = {class: "labeled controls mb-3 d-flex " \
                             "justify-content-start align-items-baseline"}
     css_classes = {row: true, "mb-2": true, required: required}
@@ -323,7 +323,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(" ")) do
       label(assoc, class: label_classes) +
         content_tag(:div, class: "labeled col-md") do
-          nested_fields_for(assoc, partial, record) do |fields|
+          nested_fields_for(assoc, partial, record, nil, limit) do |fields|
             content = block ? capture(fields, &block) : render(partial, f: fields)
             content = content_tag(:div, content, class: "col-md-10")
 

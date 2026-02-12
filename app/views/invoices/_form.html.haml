@@ -3,12 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(data: { group: group_path(parent) }, class: 'form') do |f|
+= entry_form(data: { group: group_path(group) }, class: 'form') do |f|
   = f.hidden_field :recipient_id
   = f.hidden_field :recipient_type
 
   = field_set_tag do
-    = render "message_template", f: f, group: parent
+    = render "message_template", f: f, group: group
     = f.labeled_input_field :title, data: { message_template_target: :title }
     = f.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
 

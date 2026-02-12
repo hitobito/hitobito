@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 = f.fields_for :items, (new_record ? item_class.constantize.new : nil), (new_record ? { child_index: "NEW_RECORD" } : nil) do |item_fields|
-  .fields{ data: { new_record: new_record } }
+  .fields{ data: { new_record: new_record }, style: ("display: none" if item_fields.object._destroy) }
     %h3= item_fields.object.class.model_name.human
     = item_fields.hidden_field(:type, value: item_fields.object.class.name)
     .d-flex.flex-row.gap-2

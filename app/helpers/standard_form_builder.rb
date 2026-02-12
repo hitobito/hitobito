@@ -345,7 +345,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     }) do
       content_tag(:div, id: "#{assoc}_fields") do
         fields_for(assoc, record_object) do |fields|
-          content_tag(:div, class: "fields") do
+          content_tag(:div, class: "fields", style: ("display: none" if fields.object._destroy)) do
             (block ? capture(fields,
               &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
           end

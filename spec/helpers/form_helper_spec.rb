@@ -14,7 +14,6 @@ describe FormHelper do
   include LayoutHelper
   include FormatHelper
   include CrudTestHelper
-  include NestedForm::ViewHelper
   include HelpTextsHelper
 
   before(:all) do

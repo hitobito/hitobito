@@ -10,7 +10,6 @@ describe FormatHelper do
   include UtilityHelper
   include ColumnHelper
   include CrudTestHelper
-  include NestedForm::ViewHelper
 
   before(:all) do
     reset_db

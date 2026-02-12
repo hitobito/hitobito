@@ -8,7 +8,7 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
 
   has_many :invoice_runs, dependent: :nullify
 
-  has_many :items, dependent: :destroy, class_name: 'PeriodInvoiceTemplate::Item',
+  has_many :items, dependent: :destroy, class_name: "PeriodInvoiceTemplate::Item",
     inverse_of: :period_invoice_template
   accepts_nested_attributes_for :items, allow_destroy: true
 

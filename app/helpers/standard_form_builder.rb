@@ -314,7 +314,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
         ))
   end
 
-  def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, limit = nil, &block) # rubocop:disable Metrics/MethodLength
+  def labeled_inline_fields_for(assoc, partial = nil, record = nil, required = false, limit = nil, # rubocop:disable Metrics/MethodLength
+    &block)
     html_options = {class: "labeled controls mb-3 d-flex " \
                             "justify-content-start align-items-baseline"}
     css_classes = {row: true, "mb-2": true, required: required}
@@ -328,7 +329,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
             content = content_tag(:div, content, class: "col-md-10")
 
             content << content_tag(:div,
-              template.link_to(icon(:times), "javascript:void(0)", class: "remove_nested_fields", data: { action: "nested-form#remove" }),
+              template.link_to(icon(:times), "javascript:void(0)", class: "remove_nested_fields",
+                data: {action: "nested-form#remove"}),
               class: "col-md-2")
             content_tag(:div, content, html_options)
           end
@@ -336,24 +338,31 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil,
+  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     &block)
-    content_tag(:div, class: "nested-form", data: {controller: "nested-form", nested_form_assoc_value: assoc, nested_form_limit_value: limit}) do
+    content_tag(:div, class: "nested-form", data: {
+      controller: "nested-form", nested_form_assoc_value: assoc, nested_form_limit_value: limit
+    }) do
       content_tag(:div, id: "#{assoc}_fields") do
         fields_for(assoc, record_object) do |fields|
           content_tag(:div, class: "fields") do
-            (block ? capture(fields, &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
+            (block ? capture(fields,
+              &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
           end
-        end.to_s.html_safe + content_tag(:div, nil, data: { nested_form_target: "target" })
+        end.to_s.html_safe + content_tag(:div, nil, data: {nested_form_target: "target"})
       end +
         content_tag(:div, class: "controls") do
           options = options.to_h.merge(class: "text w-100 align-with-form")
           link_title = options.delete(:link_to_add_title) || I18n.t("global.associations.add")
-          content_tag(:p, template.link_to(link_title, "javascript:void(0)", class: "text w-100 align-with-form", data: { action: "nested-form#add" })) +
-            content_tag(:template, data: { nested_form_target: "template" }) do
-              content_tag(:div, class: "fields", data: { new_record: true }) do
-                fields_for(assoc, object.send(assoc).try(:new) || options[:model_object], child_index: "NEW_RECORD") do |fields|
-                  (block ? capture(fields, &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
+          content_tag(:p,
+            template.link_to(link_title, "javascript:void(0)", class: "text w-100 align-with-form",
+              data: {action: "nested-form#add"})) +
+            content_tag(:template, data: {nested_form_target: "template"}) do
+              content_tag(:div, class: "fields", data: {new_record: true}) do
+                fields_for(assoc, object.send(assoc).try(:new) || options[:model_object],
+                  child_index: "NEW_RECORD") do |fields|
+                  (block ? capture(fields,
+                    &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
                 end
               end
             end

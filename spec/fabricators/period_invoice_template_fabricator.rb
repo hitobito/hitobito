@@ -11,7 +11,7 @@ Fabricator(:period_invoice_template) do
   before_create do |period_invoice_template|
     if period_invoice_template.items.empty?
       period_invoice_template.items.build(type: PeriodInvoiceTemplate::RoleCountItem.name, name: "Mitgliedsbeitrag",
-        dynamic_cost_parameters: {unit_cost: 10, role_types: [Group::BottomLayer::Member.name]})
+        dynamic_cost_parameters: {unit_cost: "5", role_types: [Group::BottomLayer::LocalGuide.name]})
     end
   end
 end

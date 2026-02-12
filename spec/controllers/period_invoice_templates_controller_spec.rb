@@ -50,6 +50,37 @@ describe PeriodInvoiceTemplatesController do
       expect(flash[:notice]).to eq "Sammelrechnung <i>Test</i> wurde erfolgreich erstellt."
     end
 
+    it "POST#create validates inputs" do
+      expect do
+        post :create, params: {
+          group_id: Group.root.id,
+          period_invoice_template: {
+            # name: "Test",
+            # start_on: Time.zone.now,
+            items_attributes: {
+              "0": {
+                # name: "Invoice item",
+                type: PeriodInvoiceTemplate::RoleCountItem.name,
+                dynamic_cost_parameters: {
+                  # unit_cost: 10,
+                  # role_types: [Group::BottomLayer::Member.name]
+                }
+              }
+            }
+          }
+        }
+      end.not_to change { PeriodInvoiceTemplate.count }
+      period_invoice_template = assigns(:period_invoice_template)
+      expect(period_invoice_template).not_to be_valid
+      expect(period_invoice_template.errors.messages).to eq({
+        name: ["muss ausgefüllt werden"],
+        start_on: ["muss ausgefüllt werden"],
+        "items.name": ["muss ausgefüllt werden"],
+        "items.unit_cost": ["muss ausgefüllt werden"],
+        "items.role_types": ["muss ausgefüllt werden"]
+      })
+    end
+
     it "PUT#update updates period invoice template" do
       expect do
         post :update,

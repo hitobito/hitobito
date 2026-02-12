@@ -10,6 +10,7 @@ describe "invoices/_form.html.haml" do
     allow(view).to receive_messages({
       current_user: person,
       parent: group,
+      group: group,
       cancel_url: "",
       model_class: Invoice,
       entry: invoice.decorate,

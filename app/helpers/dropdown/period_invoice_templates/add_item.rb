@@ -16,7 +16,7 @@ module Dropdown
 
     def init_items
       Settings.groups.period_invoice_templates.item_classes.keys.map(&:to_s).each do |item_class|
-        add_item(translate(item_class.demodulize.underscore), item_class.constantize)
+        add_item(item_class.constantize.model_name.human, item_class.constantize)
       end
     end
 

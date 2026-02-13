@@ -650,10 +650,7 @@ input.switcher {
   }
 
   &:focus-visible + label {
-    outline-style: auto;
-
-    // Firefox already seems to use the correct ring color by default and webkit browsers dont
-    outline-color: -webkit-focus-ring-color;
+    outline: 3px solid #98cbcb;
   }
 }
 

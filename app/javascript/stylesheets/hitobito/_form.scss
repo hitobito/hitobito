@@ -590,8 +590,9 @@ td.revoke {
 }
 
 input.switcher {
-  max-height: 0;
-  max-width: 0;
+  // Cant be 0 pixels because then the nvda screen reader would read "blank" instead of the aria-label in firefox
+  height: 1px;
+  width: 1px;
   opacity: 0;
 
   & + label {
@@ -649,10 +650,9 @@ input.switcher {
   }
 
   &:focus-visible + label {
-    outline: auto;
+    outline-style: auto;
 
-    // We dont use the shorthand here since firefox already seems to use the correct ring color by default and webkit browsers dont
-    // If we would use the shorthand the whole statement would be ignored in firefox since -webkit-focus-ring-color doesnt exist there
+    // Firefox already seems to use the correct ring color by default and webkit browsers dont
     outline-color: -webkit-focus-ring-color;
   }
 }

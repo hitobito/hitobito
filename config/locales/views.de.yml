@@ -1196,6 +1196,7 @@ de:
 
   label_formats:
     global_labels: "Globale Etikettenformate"
+    global_labels_activated: "Globale Etikettenformate anzeigen"
     own_labels: Meine Etikettenformate
     see_global_labels: "Globale Etikettenformate anzeigen"
     form:

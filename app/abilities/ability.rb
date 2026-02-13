@@ -9,8 +9,7 @@ class Ability
   include CanCan::Ability
   prepend Draper::CanCanCan
 
-  cattr_reader :store
-  @@store = AbilityDsl::Store.new
+  class_attribute :store, default: AbilityDsl::Store.new
 
   store.register AssignmentAbility,
     CalendarAbility,
@@ -104,10 +103,21 @@ class Ability
 
   def define_instance_side(current_store, current_user_context)
     current_store.configs_for_permissions(user_context.all_permissions) do |c|
+      attr_config = current_store.attribute_config(c.permission, c.subject_class, c.action)
+      # For :permit configs, pass attrs to the can rule (whitelist attributes).
+      # For :except configs or no attribute config, the can rule does not restrict
+      # attributes; a separate cannot rule is generated below for :except configs.
+      attrs = (attr_config&.kind == :permit) ? attr_config.attrs : nil
+
       if c.constraint == :all
-        general_can(c, current_store, current_user_context)
+        general_can(c, current_store, current_user_context, attrs)
       elsif c.constraint != :none
-        constrained_can(c, current_store, current_user_context)
+        constrained_can(c, current_store, current_user_context, attrs)
+      end
+
+      # Generate cannot rule for :except attribute configs
+      if attr_config&.kind == :except
+        cannot_for_attrs(attr_config, current_user_context)
       end
     end
   end
@@ -120,21 +130,21 @@ class Ability
     end
   end
 
-  def general_can(c, current_store, current_user_context)
+  def general_can(c, current_store, current_user_context, attrs = nil)
     general = general_constraints(c, current_store)
     if general.present?
-      can_with_block(general, c, current_user_context)
+      can_with_block(general, c, current_user_context, attrs)
     else
-      can c.action, c.subject_class
+      can c.action, c.subject_class, *attrs
     end
   end
 
-  def constrained_can(c, current_store, current_user_context)
-    can_with_block(all_constraints(c, current_store), c, current_user_context)
+  def constrained_can(c, current_store, current_user_context, attrs = nil)
+    can_with_block(all_constraints(c, current_store), c, current_user_context, attrs)
   end
 
-  def can_with_block(constraints, c, current_user_context)
-    can c.action, c.subject_class do |subject|
+  def can_with_block(constraints, c, current_user_context, attrs = nil)
+    can c.action, c.subject_class, *attrs do |subject|
       action_allowed?(constraints, c.permission, subject, current_user_context)
     end
   end
@@ -167,6 +177,17 @@ class Ability
     constraint_hash.all? do |ability_class, constraints|
       ability = ability_class.new(current_user_context, subject, permission)
       constraints.all? { |constraint| ability.send(constraint) }
+    end
+  end
+
+  # Generate a cannot rule for attributes that should be denied.
+  # The constraint block ensures the cannot only applies when the
+  # original constraint condition is met.
+  def cannot_for_attrs(attr_config, current_user_context)
+    ac = attr_config
+    cannot ac.action, ac.subject_class, ac.attrs do |subject|
+      ability = ac.ability_class.new(current_user_context, subject, ac.permission)
+      ability.send(ac.constraint)
     end
   end
 

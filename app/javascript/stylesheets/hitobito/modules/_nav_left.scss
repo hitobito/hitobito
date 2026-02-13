@@ -104,9 +104,10 @@
     padding: 1rem 0;
 
     .lang {
+      display: flex;
+      flex-wrap: nowrap;
       margin-bottom: 3px;
       padding-left: $nav-left-padding-full;
-      display: flex;
       gap: 4px;
     }
 

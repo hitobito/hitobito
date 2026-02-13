@@ -12,7 +12,7 @@ class EventAbility < AbilityDsl::Base
   on(Event) do # rubocop:todo Metrics/BlockLength
     class_side(:list_available, :typeahead).if_any_role
 
-    permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating
+    permission(:any).may(:show).in_upward_hierarchy_or_globally_visible_or_participating
 
     permission(:any)
       .may(:index_participations)
@@ -88,9 +88,9 @@ class EventAbility < AbilityDsl::Base
     end
   end
 
-  def in_same_layer_or_globally_visible_or_participating
+  def in_upward_hierarchy_or_globally_visible_or_participating
     if_globally_visible_or_participating ||
-      contains_any?(user.groups.map(&:layer_group_id), subject.groups.map(&:layer_group_id))
+      contains_any?(user.groups.flat_map(&:layer_hierarchy).map(&:id), subject.groups.map(&:layer_group_id))
   end
 
   def in_same_layer_or_globally_visible_or_participating_or_public

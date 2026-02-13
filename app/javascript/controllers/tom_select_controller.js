@@ -33,6 +33,14 @@ import { Controller } from "@hotwired/stimulus";
       groups. Objects should contain a value and a label property.
       If not set, the optgroups from the HTML are used.
 
+    data-tom-select-optgroups-header-value: A String representing a valid js function body that
+      returning an anonymous function that takes the ope group and renders the corresponding
+      html string, i.e.
+
+        return function(data) {
+          return `<div class="optgroup-header`>${data.label}</div>`
+        }
+
     data-tom-select-selected-value: An array of ids containing the selected options.
       If not set, the selected options from the HTML are used.
 
@@ -60,6 +68,7 @@ export default class extends Controller {
     selected: { type: Array },
     noResults: { type: String, default: "No results found." },
     maxOptions: { type: Number, default: null }, // no limit by default (null)
+    optgroupsHeader: String,
   };
 
   connect() {
@@ -92,6 +101,8 @@ export default class extends Controller {
     if (this.optionsValue.length) options.options = this.optionsValue;
     if (this.optgroupsValue.length) options.optgroups = this.optgroupsValue;
     if (this.selectedValue.length) options.items = this.selectedValue;
+    if (this.optgroupsHeaderValue.length)
+      options.render.optgroup_header = Function(this.optgroupsHeaderValue)();
 
     return options;
   }
@@ -115,6 +126,13 @@ export default class extends Controller {
 
   #renderNoResults() {
     return `<div class='no-results'>${this.noResultsValue}</div>`;
+  }
+
+  #optGroupHeader(data) {
+    if (!data.color) {
+      return `<div class="optgroup-header">${data.label}</div>`;
+    }
+    return `<div class="optgroup-header"><i style="color: ${data.color}" class="fas fa-circle"></i><span class="ms-1">${data.label}</span></div>`;
   }
 
   #renderOption(data, escape) {

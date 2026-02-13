@@ -15,6 +15,8 @@
                       true,
                       !@ignored_approvers.include?(approver.id),
                       id: "ignored_approver_#{approver.id}",
+                      "aria-label": "#{approver.to_s(:list)}: #{approver_layer_roles(approver)}",
+                      "role": "switch",
                       class: 'switcher',
                       data: { remote: true,
                               url: group_person_add_request_ignored_approvers_path(group_id: @group.id, person_id: approver.id),

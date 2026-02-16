@@ -8,9 +8,7 @@
     = f.input_field(:email,
                     placeholder: t('.placeholder_value'))
   %div.col-11.col-md-11.col-lg-5.col-xl-5.col-xxl-3.d-flex.flex-row.me-3.mt-1
-    = f.input_field(:translated_label,
-                    placeholder: t('.placeholder_type'),
-                    data: {provide: :typeahead, source: AdditionalEmail.available_labels})
+    = contact_method_label_field(f)
   - if entry.is_a?(Person)
     = f.label(:mailings, class: 'checkbox me-3') do
       = f.check_box(:mailings)

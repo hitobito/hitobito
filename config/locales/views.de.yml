@@ -150,6 +150,9 @@ de:
         Als öffentlich markierte Einträge sind auch für Leitungspersonen aus anderen Gruppen
         sichtbar, wenn du selbst eine Leitungsperson bist.
 
+    phone_number_fields:
+      placeholder_type: Bezeichnung (Privat, Arbeit...)
+
     social_account_fields:
       placeholder_value: Website, Skypename, Profillink...
       placeholder_type: Art (Skype, Facebook...)

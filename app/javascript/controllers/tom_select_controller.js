@@ -33,11 +33,13 @@ import { Controller } from "@hotwired/stimulus";
       groups. Objects should contain a value and a label property.
       If not set, the optgroups from the HTML are used.
 
-    data-tom-select-optgroups-header-value: A String representing a valid js function body.
-      It should return a function that takes a opt group object and renders the corresponding HTML string, i.e
+    data-tom-select-optgroups-header-value: A String representing a valid js function body that
+      returns an anonymous function. It takes the opt group header and an escape function
+      and renders the corresponding html string. Use the escape function prevent XSS attacks, see
+      https://tom-select.js.org/docs (Section Render Templates). A working examples looks like this
 
-        return function(data) {
-          return `<div class="optgroup-header`>${data.label}</div>`
+        return function(data, escape) {
+          return `<div class="optgroup-header`>${escape(data.label)}</div>`
         }
 
     data-tom-select-selected-value: An array of ids containing the selected options.

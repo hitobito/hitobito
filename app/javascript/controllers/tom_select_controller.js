@@ -33,9 +33,8 @@ import { Controller } from "@hotwired/stimulus";
       groups. Objects should contain a value and a label property.
       If not set, the optgroups from the HTML are used.
 
-    data-tom-select-optgroups-header-value: A String representing a valid js function body that
-      returning an anonymous function that takes the ope group and renders the corresponding
-      html string, i.e.
+    data-tom-select-optgroups-header-value: A String representing a valid js function body.
+      It should return a function that takes a opt group object and renders the corresponding HTML string, i.e
 
         return function(data) {
           return `<div class="optgroup-header`>${data.label}</div>`

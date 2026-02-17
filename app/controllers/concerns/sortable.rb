@@ -28,6 +28,8 @@ module Sortable
     def sort_mappings=(hash)
       self.sort_mappings_with_indifferent_access = hash.with_indifferent_access
     end
+
+    def sort_mappings = sort_mappings_with_indifferent_access
   end
 
   # Prepended methods for sorting.

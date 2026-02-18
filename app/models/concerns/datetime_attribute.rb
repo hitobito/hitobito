@@ -58,6 +58,20 @@ module DatetimeAttribute
     @datetimes[attr] ||= {}
   end
 
+  def normalize_datetime_field(field, value)
+    (field == :date) ? parse_date(value) : value.to_i
+  end
+
+  def parse_date(value)
+    if value.split(".").last.length == 2
+      Date.strptime(value, "%d.%m.%y")
+    else
+      Date.parse(value)
+    end
+  rescue
+    value
+  end
+
   module ClassMethods
     def datetime_attr(*attrs)
       attrs.each do |attr|
@@ -81,9 +95,16 @@ module DatetimeAttribute
 
     def define_datetime_setter(attr, field)
       accessor = datetime_accessor(attr, field)
+
       define_method(:"#{accessor}=") do |value|
-        send(:"#{attr}_will_change!") unless value == send(accessor)
-        datetime_fields(attr)[field] = value
+        current_val = send(accessor)
+        normalized_value = normalize_datetime_field(field, value)
+
+        unless normalized_value == current_val
+          send(:"#{attr}_will_change!")
+        end
+
+        datetime_fields(attr)[field] = normalized_value
       end
     end
 

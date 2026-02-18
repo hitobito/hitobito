@@ -589,6 +589,42 @@ describe Event do
       e.update(dates_attributes: {"0" => {finish_at_date: d2, id: ed.id}})
       expect(e.dates.first.finish_at).to eq(Time.zone.local(2012, 12, 13, 0, 0))
     end
+
+    it "should not have changes when start_at did not change" do
+      date_time = Time.zone.local(2026, 2, 17)
+      date_record = e.dates.create!(start_at: date_time)
+
+      expect(date_record).not_to receive(:start_at_will_change!)
+
+      e.update(
+        dates_attributes: {
+          "0" => {
+            id: date_record.id,
+            start_at_date: date_time.to_s,
+            start_at_hour: date_time.hour,
+            start_at_min: date_time.min
+          }
+        }
+      )
+    end
+
+    it "should set hour and minute to zero when nil is passed" do
+      date_time = Time.zone.local(2026, 2, 17, 6, 7)
+      date_record = e.dates.create!(start_at: date_time)
+
+      e.update(
+        dates_attributes: {
+          "0" => {
+            id: date_record.id,
+            start_at_hour: nil,
+            start_at_min: nil
+          }
+        }
+      )
+
+      expect(date_record.start_at.hour).to be_zero
+      expect(date_record.start_at.min).to be_zero
+    end
   end
 
   context "participation role labels" do

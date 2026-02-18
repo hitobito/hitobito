@@ -87,6 +87,8 @@ de:
       locale_indicator: "Sprache dieses Eingabefelds"
       input_translation_button: "Eingabefelder für weitere verfügbare Sprachen anzeigen"
 
+    jump_to_content: "Zum Hauptinhalt springen"
+
   list:
     index:
       title: "%{models}"

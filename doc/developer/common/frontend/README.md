@@ -10,15 +10,11 @@ Längerfristig wollen wir aber auf Vanilla JS (Default Javascript) setzen und Co
 
 ## Bootstrap
 
-### 5.2.0
+Aktuell verwenden wir einige Komponenten aus Bootstrap:
 
-Aktuell verwenden wir einige Komponenten aus Bootstrap 5.2.0:
+[package.json](https://github.com/hitobito/hitobito/blob/master/package.json)
 
-npm package: bootstrap: 5.2.0
-
-[package.json](https://github.com/hitobito/hitobito/blob/master/package.json#L13)
-
-[javascript componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/packs/application.js#L38)
+[javascript componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/packs/application.js)
 
 ```
 bootstrap-alert
@@ -74,19 +70,17 @@ To implement nested forms you can use the `nested_fields_for` form helper define
 
 ## Jquery
 
-aktuell verwenden wir Jquery in der Version 1.12.4
+Aktuell verwenden wir noch Jquery, dies soll jedoch längerfristig komplett aus Hitobito entfernt werden.
 
-längerfristig soll Jquery komplett aus Hitobito entfernt werden.
-
-Jquery UI ist in der Version 1.12.1 vorhanden. Auch diese Abhängigkeit soll komplett ersetzt werden.
+Jquery UI ist auch vorhanden. Auch diese Abhängigkeit soll komplett ersetzt werden.
 
 ## Icons
 
-Für Icons wird Font-Awesome free 5.x verwendet.
+Für Icons wird Font-Awesome free verwendet.
 
 https://github.com/FortAwesome/Font-Awesome
 
-Der Katalog der verfügbaren Icons gibt's hier: https://fontawesome.com/v5/search?m=free
+Der Katalog der verfügbaren Icons gibt's hier: https://fontawesome.com/search?ic=free-collection
 
 ## Fonts
 

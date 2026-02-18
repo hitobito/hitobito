@@ -8,8 +8,6 @@
                     placeholder: t('.placeholder_value'))
 
   %div.col-11.col-md-11.col-lg-5.col-xl-5.col-xxl-3.d-flex.flex-row.me-3.mt-1
-    = f.input_field(:translated_label,
-                    placeholder: t('.placeholder_type'),
-                    data: {provide: :typeahead, source: SocialAccount.available_labels})
+    = contact_method_label_field(f)
 
   = render 'contactable/public_check_box', f: f

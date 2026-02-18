@@ -4,9 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 .address-input-fields{data: { controller: 'additional-address' }}
-  = f.labeled_input_field(:translated_label,
-    placeholder: t('.placeholder_type'),
-    data: {provide: :typeahead, source: AdditionalAddress.available_labels})
+  = f.labeled(:translated_label) do
+    = contact_method_label_field(f)
   = f.indented do
     = f.input_field(:uses_contactable_name, data: { action: 'additional-address#toggle'}, caption: t('.caption_uses_contactable_name'))
   %div{data: { 'additional-address-target' => 'toggle'}, class: ("hidden" if f.object.uses_contactable_name)}

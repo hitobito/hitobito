@@ -108,6 +108,29 @@ describe "TomSelect Stimulus Controller", js: true do
         expect(page).to have_selector(".ts-dropdown [data-group='group2'] .option", text: "Custom Option 1")
         expect(page).to have_selector(".ts-dropdown .option", count: 5)
       end
+
+      it "renders customized header" do
+        options = 5.times.map do |i|
+          {id: i, label: "Custom Option #{i} <script>alert('boh')</script>", group: "group#{(i % 3) + 1}"}
+        end
+        optgroups = [
+          {value: "group1", label: "Group 1"},
+          {value: "group2", label: "Group 2"},
+          {value: "group3", label: "Group 3"}
+        ]
+        visit "/tom_select?data-tom-select-options-value=#{ERB::Util.url_encode(options.to_json)}&" \
+          "data-tom-select-optgroups-value=#{ERB::Util.url_encode(optgroups.to_json)}&" \
+          "data-tom-select-optgroups-header-value=return function(data, escape) { " \
+              "return `<h1>${escape(data.label)}</h1>` }"
+
+        expect(page).to have_selector(".ts-wrapper", visible: true)
+
+        find(".ts-control").click
+        expect(page).not_to have_selector(".ts-dropdown .optgroup-header", text: "Group 1")
+        expect(page).to have_selector(".ts-dropdown h1", text: "Group 1")
+        expect(page).to have_selector(".ts-dropdown [data-group='group1'] .option",
+          text: "Custom Option 0 <script>alert('boh')</script>")
+      end
     end
 
     context "max_options" do

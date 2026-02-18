@@ -93,7 +93,7 @@ describe Person::DeviseOverrides do
     let(:person) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: group).person.reload }
 
     it "does send confirmation instructions via email" do
-      person.update!(email: nil)
+      person.update!(email: nil, unconfirmed_email: "new_mail@example.net")
 
       expect do
         person.send_confirmation_instructions
@@ -101,7 +101,7 @@ describe Person::DeviseOverrides do
     end
 
     it "does not send confirmation instructions if unconfirmed email is blank" do
-      person.update!(email: "ye-olde-maileth@example.net")
+      person.update!(email: "ye-olde-maileth@example.net", unconfirmed_email: nil)
 
       expect do
         person.send_confirmation_instructions

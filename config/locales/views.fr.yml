@@ -1809,7 +1809,9 @@ fr:
       events: Meine nächsten %{event_type_label}
 
     contact_data:
+      address_link_aria_label: Adresse in nominatim.openstreetmap.org öffnen
       lives_in_household_with: Habite dans le foyer avec
+      profile_picture_alt: Profilbild
 
     email_field:
       used_as_login: Utilisé en tant qu'identifiant.

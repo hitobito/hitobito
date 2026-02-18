@@ -1809,7 +1809,9 @@ it:
       events: Meine nächsten %{event_type_label}
 
     contact_data:
+      address_link_aria_label: Adresse in nominatim.openstreetmap.org öffnen
       lives_in_household_with: Vive nello stesso nucleo famigliare di
+      profile_picture_alt: Profilbild
 
     email_field:
       used_as_login: Sarà utilizzato come login

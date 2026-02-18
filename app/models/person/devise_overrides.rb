@@ -24,7 +24,7 @@ module Person::DeviseOverrides
   end
 
   def send_confirmation_instructions
-    super if email?
+    super if unconfirmed_email?
   end
 
   # from lib/devise/models/recoverable.rb

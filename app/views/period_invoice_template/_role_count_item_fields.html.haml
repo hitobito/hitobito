@@ -16,6 +16,8 @@
           %h5.modal-title= t(".choose_role_types")
           %button.btn-close{ type: :button, data: { bs_dismiss: "modal" }, aria_label: t("global.button.close") }
         .modal-body
+          -# The following is copied from subscriber/group/_roles.html.haml
+          -# Consider extracting a partial if another copy is added
           - Role::TypeList.new(entry.group.class).each do |layer, groups|
             %h3.filter-toggle.mt-4=layer if groups.any?
             - groups.each do |group, role_types|

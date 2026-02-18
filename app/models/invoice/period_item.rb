@@ -47,6 +47,8 @@ class Invoice::PeriodItem < InvoiceItem
   validates :name, :unit_cost, presence: true
   validates :unit_cost, money: true, unless: proc { |i| i.unit_cost.nil? }
 
+  before_validation :enforce_unit_cost_precision
+
   def count
     # This is only a sample implementation. Subclasses may as well
     # redefine this method entirely.
@@ -101,5 +103,11 @@ class Invoice::PeriodItem < InvoiceItem
   def people
     # If no specific people are given, fall back to the invoice recipient or no people condition
     @people ||= invoice&.recipient&.is_a?(Person) ? invoice.recipient_id : Person.select(:id)
+  end
+
+  def enforce_unit_cost_precision
+    dynamic_cost_parameters[:unit_cost] = ActiveSupport::NumberHelper.number_to_currency(
+      dynamic_cost_parameters[:unit_cost], format: "%n"
+    )
   end
 end

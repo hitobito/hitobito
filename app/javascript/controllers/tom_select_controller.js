@@ -129,13 +129,6 @@ export default class extends Controller {
     return `<div class='no-results'>${this.noResultsValue}</div>`;
   }
 
-  #optGroupHeader(data) {
-    if (!data.color) {
-      return `<div class="optgroup-header">${data.label}</div>`;
-    }
-    return `<div class="optgroup-header"><i style="color: ${data.color}" class="fas fa-circle"></i><span class="ms-1">${data.label}</span></div>`;
-  }
-
   #renderOption(data, escape) {
     let label = `<div>${escape(data[this.labelValue])}</div>`;
     if (data.description) {

@@ -92,7 +92,7 @@
     font-size: 0.7rem;
     padding-left: $nav-left-padding-full;
     margin-top: 1rem;
-    border-left: 3px solid transparent;
+    margin-left: 3px;
   }
 
   .nav-left-section-link~.divider,
@@ -104,16 +104,16 @@
     padding: 1rem 0;
 
     .lang {
-      white-space: nowrap;
+      display: flex;
+      flex-wrap: nowrap;
+      margin-bottom: 3px;
+      padding-left: $nav-left-padding-full;
+      gap: 4px;
     }
 
     .lang a {
-      display: inline;
-      padding: 0rem;
-    }
-
-    .lang {
-      padding-left: $nav-left-padding-full;
+      width: min-content;
+      padding: 0;
     }
 
     .lang .active {

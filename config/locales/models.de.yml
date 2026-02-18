@@ -1367,6 +1367,7 @@ de:
         unit_cost: Preis
         cost_center: Kostenstelle
         account: Konto
+        vat_rate: MwSt.
 
       period_invoice_template/role_count_item:
         role_types: Rollentypen

@@ -9,12 +9,15 @@
     = item_fields.hidden_field(:type, value: item_fields.object.class.name)
     .d-flex.flex-row.gap-2
       = item_fields.input_field :name, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:name) + "*", class: "mb-2"
-      .input-group.input-group-sm.mb-2{ style: "flex-basis: 50%" }
-        = item_fields.input_field :unit_cost, name: item_fields.object_name + "[dynamic_cost_parameters][unit_cost]", placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:unit_cost) + "*", class: "text-end"
+      .input-group.input-group-sm.mb-2{ style: "flex-basis: 60%" }
+        = item_fields.input_field :unit_cost, name: item_fields.object_name + "[dynamic_cost_parameters][unit_cost]", value: number_to_currency(item_fields.object.unit_cost, format: "%n"), placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:unit_cost) + "*", class: "text-end"
         .input-group-text= f.object.group.invoice_config.currency
     .d-flex.flex-row.gap-2
       = item_fields.input_field :cost_center, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:cost_center), class: "mb-2"
       = item_fields.input_field :account, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:account), class: "mb-2"
+      .input-group.input-group-sm.mb-2{ style: "flex-basis: 75%" }
+        = item_fields.input_field :vat_rate, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:vat_rate), class: "text-end"
+        .input-group-text= "%"
     = render "#{item_fields.object.class.name.underscore}_fields", f: item_fields
     .controls.align-with-form
       = link_to(ta(:remove), "javascript:void(0)", class: "remove_nested_fields", data: { action: "period-invoice-template-form#remove" })

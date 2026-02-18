@@ -27,6 +27,8 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   validates :name, :unit_cost, presence: true
   validates :unit_cost, money: true, unless: proc { |i| i.unit_cost.nil? }
 
+  before_validation :enforce_unit_cost_precision
+
   def dynamic_cost_parameter_definitions
     invoice_item_class.dynamic_cost_parameter_definitions
   end
@@ -34,7 +36,7 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   def to_invoice_item(invoice: nil)
     invoice_item_class.for_groups(
       period_invoice_template.group_id, # TODO pass the groups from recipient_source in here, #3752
-      name:, cost_center:, account:, invoice:,
+      name:, cost_center:, account:, vat_rate:, invoice:,
       dynamic_cost_parameters: dynamic_cost_parameters.merge({
         period_start_on: period_invoice_template.start_on,
         period_end_on: period_invoice_template.end_on
@@ -52,5 +54,11 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   rescue ArgumentError, TypeError
     errors.add(:unit_cost, :is_not_a_decimal_number)
     nil
+  end
+
+  def enforce_unit_cost_precision
+    dynamic_cost_parameters[:unit_cost] = ActiveSupport::NumberHelper.number_to_currency(
+      dynamic_cost_parameters[:unit_cost], format: "%n"
+    )
   end
 end

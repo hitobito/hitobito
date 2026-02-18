@@ -4,6 +4,8 @@
 -#  https://github.com/hitobito/hitobito.
 
 - if @role_types
+  -# A copy of the following exists in period_invoice_template/_role_count_item_fields.html.haml
+  -# Consider extracting a partial if another copy is added
   - @role_types.each do |layer, groups|
     %h3.filter-toggle.mt-4=layer if groups.any?
     - groups.each do |group, role_types|

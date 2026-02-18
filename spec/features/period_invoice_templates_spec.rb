@@ -57,7 +57,7 @@ describe :period_invoice_templates, js: true do
       expect(entry).not_to be_nil
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
-      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("10")
+      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("10.00")
       expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([Group::TopGroup::Secretary.name,
         Group::TopGroup::LocalSecretary.name])
     end
@@ -112,7 +112,7 @@ describe :period_invoice_templates, js: true do
       expect(entry).not_to be_nil
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
-      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("100")
+      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("100.00")
       expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([Group::TopGroup::Secretary.name,
         Group::TopGroup::LocalSecretary.name])
     end

@@ -96,7 +96,7 @@ describe Person::HistoryController, type: :controller do
       event_headers = events.all("thead tr").last
       expect(event_headers.all("th").map(&:text)).to eq(["Name / Gruppe", "Rolle", "Daten", ""])
 
-      expect(events.all("tr td a").size).to eq 3
+      expect(events.all("tr td a").size).to eq 6
     end
   end
 end

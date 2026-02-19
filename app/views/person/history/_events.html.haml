@@ -10,7 +10,7 @@
       - t.col(t('.event_label')) do |p|
         = p.event.labeled_link
       - t.col(Role.model_name.human) do |p|
-        = p.list_roles
+        = p.labeled_link(p.list_roles)
       - t.col(Event::Date.model_name.human(count: 2)) do |p|
         = p.event.dates_full
       - if participations.first.event.is_a?(Event::Course)

@@ -55,11 +55,14 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung wurde erfolgreich erstellt"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
+      expect(entry.recipient_group_type).to eq "Group::TopLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("10.00")
-      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([Group::TopGroup::Secretary.name,
-        Group::TopGroup::LocalSecretary.name])
+      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([
+        Group::TopGroup::Secretary.name,
+        Group::TopGroup::LocalSecretary.name
+      ])
     end
 
     it "validates presence of items" do
@@ -77,7 +80,7 @@ describe :period_invoice_templates, js: true do
   end
 
   context "update" do
-    let(:period_invoice_template) { Fabricate(:period_invoice_template) }
+    let(:period_invoice_template) { Fabricate(:period_invoice_template, recipient_group_type: Group::TopLayer.name) }
     let(:edit_path) { edit_group_period_invoice_template_path(group, period_invoice_template) }
 
     it "allows to create a period invoice template" do
@@ -110,11 +113,14 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung - edited wurde erfolgreich aktualisiert"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
+      expect(entry.recipient_group_type).to eq "Group::TopLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("100.00")
-      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([Group::TopGroup::Secretary.name,
-        Group::TopGroup::LocalSecretary.name])
+      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([
+        Group::TopGroup::Secretary.name,
+        Group::TopGroup::LocalSecretary.name
+      ])
     end
 
     it "validates presence of items" do

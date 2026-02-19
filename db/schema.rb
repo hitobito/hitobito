@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_19_101500) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_19_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1079,7 +1079,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_19_101500) do
     t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "recipient_source_type"
+    t.integer "recipient_source_id"
     t.index ["group_id"], name: "index_period_invoice_templates_on_group_id"
+    t.index ["recipient_source_type", "recipient_source_id"], name: "index_period_invoice_templates_on_recipient_source"
   end
 
   create_table "person_add_request_ignored_approvers", id: :serial, force: :cascade do |t|

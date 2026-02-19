@@ -34,12 +34,40 @@ export default class extends Controller {
 
   save(event) {
     const submit = document.querySelector("input[name=autosubmit]");
-    if (submit) {
-      submit.value = event.target.name || "autosubmit";
-      this.element.requestSubmit();
-      submit.value = "";
-    } else {
-      this.element.requestSubmit();
-    }
+    this.#withAutosubmitValue(submit, event.target.name || "autosubmit", () => {
+      this.#withTurboFrame(event.target.dataset.turboFrame, () => {
+        this.element.requestSubmit();
+      })
+    })
+  }
+
+  /**
+   * In autosubmitted requests, we want to send along a parameter autosubmit=something, so that
+   * the server can identify that this is an autosubmit request. For this to work, a hidden
+   * "autosubmit" field must be present in the form. #withAutosubmitValue will temporarily
+   * override the value of that hidden field during autosubmit requests.
+   */
+  #withAutosubmitValue(autosubmitElement, value, callback) {
+    if (!autosubmitElement || !value) return callback();
+    const previous = autosubmitElement.value;
+    autosubmitElement.value = value;
+    callback();
+    autosubmitElement.value = previous;
+  }
+
+  /**
+   * In some cases, we want to specify a data-turbo-frame on the form during autosubmits,
+   * but not (or with a different data-turbo-frame value) during normal submits. This
+   * is the case when the form is both used normally for submitting CRUD requests, but also
+   * some inputs should trigger a partial reload of the form (because some other fields might
+   * depend on the values in the previous fields). In that case, we can specify the
+   * data-turbo-frame value on the element triggering the autosubmit#save action.
+   */
+  #withTurboFrame(turboFrameId, callback) {
+    if (!turboFrameId) return callback();
+    const previous = this.element.dataset.turboFrame;
+    this.element.dataset.turboFrame = turboFrameId;
+    callback();
+    this.element.dataset.turboFrame = previous;
   }
 }

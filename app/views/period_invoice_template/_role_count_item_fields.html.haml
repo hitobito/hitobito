@@ -18,7 +18,7 @@
         .modal-body
           -# The following is copied from subscriber/group/_roles.html.haml
           -# Consider extracting a partial if another copy is added
-          - Role::TypeList.new(entry.group.class).each do |layer, groups|
+          - Role::TypeList.new(entry.recipient_group_type.try(:constantize) || entry.group.class).each do |layer, groups|
             %h3.filter-toggle.mt-4=layer if groups.any?
             - groups.each do |group, role_types|
               .control-group.mt-1

@@ -15,6 +15,24 @@ class PeriodInvoiceTemplatesController < CrudController
       ]
     }]
 
+  def create
+    if params[:autosubmit].present?
+      assign_attributes
+      respond_with(entry, success: false) # force returning to the /new page
+    else
+      super
+    end
+  end
+
+  def update
+    if params[:autosubmit].present?
+      assign_attributes
+      respond_with(entry, success: false) # force returning to the /edit page
+    else
+      super
+    end
+  end
+
   def assign_attributes
     super
     entry.recipient_source ||= GroupsFilter.new

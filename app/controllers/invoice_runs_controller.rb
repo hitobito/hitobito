@@ -149,7 +149,7 @@ class InvoiceRunsController < CrudController
 
   # rubocop:todo Metrics/CyclomaticComplexity
   # rubocop:todo Metrics/MethodLength
-  def assign_attributes # rubocop:disable Metrics/AbcSize # rubocop:todo Metrics/MethodLength
+  def assign_attributes # rubocop:disable Metrics/AbcSize
     entry.creator = current_user
     entry.invoice = parent.issued_invoices
       .build(model_params.present? ? permitted_params[:invoice] : {})
@@ -169,13 +169,6 @@ class InvoiceRunsController < CrudController
         item
       end
     end
-
-    # TODO in #3752, move this logic out of here into the period_invoice_templates
-    # if fixed_fees?
-    #   InvoiceRuns::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
-    #     flash.now[key] = text
-    #   end
-    # end
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/CyclomaticComplexity

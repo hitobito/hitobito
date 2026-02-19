@@ -87,6 +87,8 @@ it:
       locale_indicator: "Lingua di questo campo di inserimento"
       input_translation_button: "Mostra i campi di inserimento per le altre lingue disponibili"
 
+    jump_to_content: "Zum Hauptinhalt springen"
+
   list:
     index:
       title: "%{models}"
@@ -260,6 +262,9 @@ it:
     download: "Export"
     csv: "CSV"
     xlsx: "XLSX"
+
+  dropdown/period_invoice_templates/add_item:
+    add_item: Rechnungsposten hinzufügen
 
   devise:
     failure:
@@ -1201,6 +1206,7 @@ it:
 
   label_formats:
     global_labels: "Formati globali delle etichette"
+    global_labels_activated: "Globale Etikettenformate anzeigen"
     own_labels: I miei formati delle etichette
     see_global_labels: "Indicare formati globali delle etichette"
     form:
@@ -2379,3 +2385,7 @@ it:
     create_managed_person_button: Registrazione del bambino
     assign_managed_person_button: Assegnare un bambino
     assign_manager_person_button: Assegnare amministratore/trice
+
+  period_invoice_template:
+    role_count_item_fields:
+      choose_role_types: Rollentypen auswählen

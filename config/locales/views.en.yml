@@ -86,6 +86,8 @@ en:
       locale_indicator: "Language of this input field"
       input_translation_button: "Show input fields for other available languages"
 
+    jump_to_content: "Zum Hauptinhalt springen"
+
   list:
     index:
       title: "Listing %{models}"
@@ -259,6 +261,9 @@ en:
     download: "Export"
     csv: "CSV"
     xlsx: "XLSX"
+
+  dropdown/period_invoice_templates/add_item:
+    add_item: Rechnungsposten hinzufügen
 
   devise:
     failure:
@@ -1176,6 +1181,7 @@ en:
 
   label_formats:
     global_labels: "Global label formats"
+    global_labels_activated: "Globale Etikettenformate anzeigen"
     own_labels: My label formats
     see_global_labels: "Show global labels"
     form:
@@ -2326,3 +2332,7 @@ en:
     create_managed_person_button: Enter child
     assign_managed_person_button: Assign child
     assign_manager_person_button: Assign administrator
+
+  period_invoice_template:
+    role_count_item_fields:
+      choose_role_types: Rollentypen auswählen

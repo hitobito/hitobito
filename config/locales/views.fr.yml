@@ -87,6 +87,8 @@ fr:
       locale_indicator: "Langue de ce champ de saisie"
       input_translation_button: "Afficher les champs de saisie pour les autres langues disponibles"
 
+    jump_to_content: "Zum Hauptinhalt springen"
+
   list:
     index:
       title: "%{models}"
@@ -260,6 +262,9 @@ fr:
     download: "Exporter"
     csv: "CSV"
     xlsx: "XLSX"
+
+  dropdown/period_invoice_templates/add_item:
+    add_item: Rechnungsposten hinzufügen
 
   devise:
     failure:
@@ -1203,6 +1208,7 @@ fr:
 
   label_formats:
     global_labels: "Formats globaux d'étiquettes"
+    global_labels_activated: "Globale Etikettenformate anzeigen"
     own_labels: Mes formats d'étiquettes
     see_global_labels: "Afficher les formats globaux d'étiquettes"
     form:
@@ -2380,3 +2386,7 @@ fr:
     create_managed_person_button: Saisir un enfant
     assign_managed_person_button: Kind zuweisen
     assign_manager_person_button: Verwalter*in zuweisen
+
+  period_invoice_template:
+    role_count_item_fields:
+      choose_role_types: Rollentypen auswählen

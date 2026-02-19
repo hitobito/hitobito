@@ -89,6 +89,7 @@ en:
         must_exist: must exist
         readonly: can't be changed
         cannot_be_later_than_today: cannot be later than today
+        is_not_a_decimal_number: muss eine Dezimalzahl sein
       models:
         cors_origin:
           attributes:
@@ -359,6 +360,9 @@ en:
       period_invoice_template:
         one: Sammelrechnung
         other: Sammelrechnungen
+      period_invoice_template/role_count_item:
+        one: Rollen-Zählung
+        other: Rollen-Zählungen
       oauth/application:
         one: OAuth application
         other: OAuth applications
@@ -1351,6 +1355,17 @@ en:
         start_on: Rechnungsperiode Start
         end_on: Rechnungsperiode Ende
         recipient_group_type: Empfängergruppen
+        items: Rechnungsposten
+
+      period_invoice_template/item:
+        name: Name
+        unit_cost: Preis
+        cost_center: Kostenstelle
+        account: Konto
+        vat_rate: MwSt.
+
+      period_invoice_template/role_count_item:
+        role_types: Rollentypen
 
       service_token:
         name: Name

@@ -39,6 +39,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # The input field is chosen based on the ActiveRecord column type.
   # Use additional html_options for the input element.
   def input_field(attr, html_options = {}) # rubocop:disable Metrics/*
+    return readonly_value(attr, html_options) if cannot?(:update, @object, attr)
+
     # Checks if the attr is a globalized attr (translates: ...) and automatically generates
     # a globalized input field for it, allowing the user to fill in the field in
     # all available languages.
@@ -452,9 +454,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   # To add an additional help text, use the help option.
   # E.g. labeled_boolean_field(:checked, :help => 'Some Help')
   def method_missing(name, *args)
-    field_method = labeled_field_method?(name)
-    if field_method
+    if (field_method = labeled_field_method?(name))
       build_labeled_field(field_method, *args)
+    elsif (field_method = permitted_field_method?(name))
+      build_permitted_field(field_method, *args)
     else
       super
     end
@@ -462,7 +465,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   # Overriden to fullfill contract with method_missing 'labeled_' methods.
   def respond_to_missing?(name, include_all = false)
-    labeled_field_method?(name).present? || super
+    labeled_field_method?(name).present? ||
+      permitted_field_method?(name).present? ||
+      super
   end
 
   # Generates a help inline for fields
@@ -511,6 +516,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   private
+
+  def cannot?(*args) = @template.current_ability&.cannot?(*args)
 
   # Returns true if attr is a non-polymorphic association.
   # If one or more macros are given, the association must be of this kind.
@@ -593,6 +600,22 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       required: options[:required],
       label_class: label_class,
       class: content_class)
+  end
+
+  def permitted_field_method?(name)
+    suffix = "_if_permitted"
+    if name.to_s.end_with?(suffix)
+      field_method = name.to_s[0...-suffix.size]
+      field_method if respond_to?(field_method)
+    end
+  end
+
+  def build_permitted_field(field_method, *args)
+    if @template.can?(:update, @object, args.first)
+      send(field_method, *args)
+    else
+      readonly_value(*args)
+    end
   end
 
   def with_labeled_field_help(help, help_inline)

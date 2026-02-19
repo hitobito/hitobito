@@ -77,6 +77,59 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Rechnungsposten muss ausgefüllt werden"
       expect(group.period_invoice_templates.length).to be 0
     end
+
+    it "offers only role types matching the selected recipient group type" do
+      visit new_path
+      expect(page).not_to have_text "Rollentypen"
+
+      fill_in "Bezeichnung", with: "Mitgliedsrechnung"
+      fill_in "Rechnungsperiode Start", with: "1.1.2020"
+
+      click_link "Rechnungsposten hinzufügen"
+      click_link "Rollen-Zählung"
+      expect(page).to have_text "Rollentypen"
+
+      fill_in "Name*", with: "Normaler Preis"
+      fill_in "Preis*", with: "10"
+
+      click_button "Rollentypen auswählen"
+      expect(page).to have_content "Schliessen"
+      check "Local Secretary"
+      check "Secretary"
+      click_button "Schliessen"
+
+      expect(page).to have_no_content "Schliessen"
+      expect(page).to have_content "Secretary, Local Secretary"
+
+      select "Bottom Layer", from: "Empfängergruppen"
+      expect(page).to have_no_content "Local Secretary"
+      # select remains focused, indicating only the items part of the form has been replaced
+      expect(page.active_element).to match_selector(:select, "Empfängergruppen")
+
+      click_button "Rollentypen auswählen"
+      expect(page).to have_content "Schliessen"
+      expect(page).to have_no_content "Local Secretary"
+      check "Local Guide"
+      check "Basic Permissions"
+      click_button "Schliessen"
+
+      expect(page).to have_no_content "Schliessen"
+      expect(page).to have_content "Local Guide, Basic Permissions"
+
+      click_button "Speichern"
+
+      expect(page).to have_text "Sammelrechnung Mitgliedsrechnung wurde erfolgreich erstellt"
+      entry = group.period_invoice_templates.first
+      expect(entry).not_to be_nil
+      expect(entry.recipient_group_type).to eq "Group::BottomLayer"
+      expect(entry.items.length).to be 1
+      expect(entry.items[0].name).to eq("Normaler Preis")
+      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("10.00")
+      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([
+        Group::BottomLayer::LocalGuide.name,
+        Group::BottomLayer::BasicPermissionsOnly.name
+      ])
+    end
   end
 
   context "update" do
@@ -141,6 +194,61 @@ describe :period_invoice_templates, js: true do
       expect(entry.items[0].name).to eq("Mitgliedsbeitrag")
       expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to be_nil
       expect(entry.items[0].dynamic_cost_parameters["role_types"]).to be_blank
+    end
+
+    it "offers only role types matching the selected recipient group type" do
+      visit edit_path
+      expect(page).to have_text "Rollentypen"
+      expect(page).to have_text "Local Guide"
+
+      fill_in "Bezeichnung", with: "Mitgliedsrechnung - edited"
+
+      click_link "Entfernen"
+      click_link "Rechnungsposten hinzufügen"
+      click_link "Rollen-Zählung"
+      expect(page).to have_text "Rollentypen"
+
+      fill_in "Name*", with: "Normaler Preis"
+      fill_in "Preis*", with: "100"
+
+      click_button "Rollentypen auswählen"
+      expect(page).to have_content "Schliessen"
+      check "Local Secretary"
+      check "Secretary"
+      click_button "Schliessen"
+
+      expect(page).to have_no_content "Schliessen"
+      expect(page).to have_no_content "Local Guide"
+      expect(page).to have_content "Secretary, Local Secretary"
+
+      select "Bottom Layer", from: "Empfängergruppen"
+      expect(page).to have_no_content "Local Secretary"
+      # select remains focused, indicating only the items part of the form has been replaced
+      expect(page.active_element).to match_selector(:select, "Empfängergruppen")
+
+      click_button "Rollentypen auswählen"
+      expect(page).to have_content "Schliessen"
+      expect(page).to have_no_content "Local Secretary"
+      check "Local Guide"
+      check "Basic Permissions"
+      click_button "Schliessen"
+
+      expect(page).to have_no_content "Schliessen"
+      expect(page).to have_content "Local Guide, Basic Permissions"
+
+      click_button "Speichern"
+
+      expect(page).to have_text "Sammelrechnung Mitgliedsrechnung - edited wurde erfolgreich aktualisiert"
+      entry = group.period_invoice_templates.first
+      expect(entry).not_to be_nil
+      expect(entry.recipient_group_type).to eq "Group::BottomLayer"
+      expect(entry.items.length).to be 1
+      expect(entry.items[0].name).to eq("Normaler Preis")
+      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("100.00")
+      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([
+        Group::BottomLayer::LocalGuide.name,
+        Group::BottomLayer::BasicPermissionsOnly.name
+      ])
     end
   end
 end

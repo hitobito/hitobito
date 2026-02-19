@@ -20,6 +20,14 @@ describe Sheet::PeriodInvoiceTemplate do
     end
   end
 
+  context "new" do
+    let(:period_invoice_template) { PeriodInvoiceTemplate.new(group: Group.root) }
+
+    it "uses name of period invoice template as title on show" do
+      expect(sheet.title).to eq "Sammelrechnungen"
+    end
+  end
+
   context "show" do
     let(:period_invoice_template) { Fabricate(:period_invoice_template) }
 

@@ -23,6 +23,10 @@ module Person::DeviseOverrides
     super if email?
   end
 
+  def send_confirmation_instructions
+    super if unconfirmed_email?
+  end
+
   # from lib/devise/models/recoverable.rb
   def send_reset_password_instructions
     persisted? && super

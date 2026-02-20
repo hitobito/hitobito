@@ -47,7 +47,7 @@ describe Person::CsvImportsController, type: :controller do
           params: {group_id: group.id, data: data, role_type: role_type.sti_name, field_mappings: mapping}
       }.to change(Person, :count).by(1)
       is_expected.to redirect_to group_people_path(group, name: "Leader",
-        filters: {role: {role_type_ids: [role_type.id]}})
+        filters: {role: {role_type_ids: [role_type.type_id]}})
     end
   end
 

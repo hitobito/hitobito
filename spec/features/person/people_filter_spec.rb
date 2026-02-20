@@ -15,8 +15,8 @@ describe PeopleController, js: true do
 
     sign_in_and_create_filter
 
-    find("#filters_role_role_type_ids_#{Group::BottomLayer::Leader.id}").set(true)
-    find("#filters_role_role_type_ids_#{Group::BottomLayer::Member.id}").set(true)
+    find("#filters_role_role_type_ids_#{Group::BottomLayer::Leader.type_id}").set(true)
+    find("#filters_role_role_type_ids_#{Group::BottomLayer::Member.type_id}").set(true)
     fill_in("people_filter_name", with: "Bottom Layer")
     all("form .btn-toolbar").first.click_button("Suche speichern")
 
@@ -31,10 +31,10 @@ describe PeopleController, js: true do
     # roles accordion is already open
     expect(page).to have_selector(".accordion-body", count: 1)
 
-    expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Leader.id}")
-    expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Member.id}")
+    expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Leader.type_id}")
+    expect(page).to have_checked_field("filters_role_role_type_ids_#{Group::BottomLayer::Member.type_id}")
 
-    find("#filters_role_role_type_ids_#{Group::BottomLayer::Member.id}").set(false)
+    find("#filters_role_role_type_ids_#{Group::BottomLayer::Member.type_id}").set(false)
     all("form .btn-toolbar").first.click_button("Suchen")
 
     expect(page).to have_selector(".table tbody tr", count: 1)

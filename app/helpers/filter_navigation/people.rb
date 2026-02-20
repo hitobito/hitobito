@@ -177,7 +177,7 @@ module FilterNavigation
     end
 
     def fixed_types_path(name, types, options = {})
-      type_ids = types.collect(&:id).join(Person::Filter::Base::ID_URL_SEPARATOR)
+      type_ids = types.collect(&:type_id).join(Person::Filter::Base::ID_URL_SEPARATOR)
       path(options.merge(name: name,
         filters: {role: {role_type_ids: type_ids}}))
     end

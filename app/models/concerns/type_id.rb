@@ -7,7 +7,7 @@ module TypeId
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :id, instance_reader: false, instance_writer: false
+    class_attribute :type_id, instance_reader: false, instance_writer: false
   end
 
   module ClassMethods
@@ -16,7 +16,7 @@ module TypeId
     def inherited(subclass)
       super
       next_id = @@types_by_id.present? ? @@types_by_id.keys.max + 1 : 1
-      subclass.id = next_id
+      subclass.type_id = next_id
       @@types_by_id[next_id] = subclass
     end
 

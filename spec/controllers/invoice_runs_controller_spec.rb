@@ -85,7 +85,7 @@ describe InvoiceRunsController do
             group_id: group.id,
             range: "deep",
             filters: {
-              role: {role_type_ids: role_types.collect(&:id).join("-")}
+              role: {role_type_ids: role_types.collect(&:type_id).join("-")}
             }
           }
         }

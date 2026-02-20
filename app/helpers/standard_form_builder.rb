@@ -278,7 +278,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:multiple] = true
     add_css_class(html_options, FORM_CONTROL_SELECT_WITH_WIDTH)
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
-    html_options[:data].to_h.merge!(
+    html_options[:data] = html_options[:data].to_h.merge!(
       chosen_no_results: I18n.t("global.chosen_no_results"),
       placeholder: " ",
       controller: "tom-select"

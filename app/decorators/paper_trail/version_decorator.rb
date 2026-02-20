@@ -37,33 +37,38 @@ module PaperTrail
     end
 
     def author
-      if model.version_author.present?
-        author_id = model.version_author
-        author_type = model.whodunnit_type
-        if author_type == ServiceToken.sti_name
-          author_service_token(author_id)
-        else
-          author_person(author_id)
-        end
-      end
-    end
+      return if model.version_author.blank?
 
-    def author_person(author_id)
-      person = Person.where(id: author_id).first
-      if person
-        h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
-      end
-    end
-
-    def author_service_token(author_id)
-      token = ServiceToken.where(id: author_id).first
-      if token
-        layer_id = token.layer_group_id
-        label = author_service_token_label(token)
-        h.link_to_if(can?(:show, token), label, h.group_service_token_path(layer_id, token.id))
+      case model.whodunnit_type
+      when ServiceToken.sti_name
+        author_service_token || deleted_service_token_message
+      when Person.sti_name
+        author_person || deleted_user_message
       else
-        I18n.t("version.deleted_service_token", model_name: ServiceToken.model_name.human)
+        model.whodunnit_type
       end
+    end
+
+    def author_person
+      person = Person.find_by(id: model.version_author) or return
+
+      h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
+    end
+
+    def author_service_token
+      token = ServiceToken.find_by(id: model.version_author) or return
+
+      layer_id = token.layer_group_id
+      label = author_service_token_label(token)
+      h.link_to_if(can?(:show, token), label, h.group_service_token_path(layer_id, token.id))
+    end
+
+    def deleted_user_message
+      I18n.t("version.deleted_user", id: model.version_author)
+    end
+
+    def deleted_service_token_message
+      I18n.t("version.deleted_service_token", model_name: ServiceToken.model_name.human)
     end
 
     def author_service_token_label(token)
@@ -177,7 +182,7 @@ module PaperTrail
         changeset: changeset)
     end
 
-    def association_change_text_with_people_manager(changeset, item) # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
+    def association_change_text_with_people_manager(changeset, _item) # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
       # Since PeopleManager entries are either created or destroyed, accessing changes makes sense
       changes = object.send(:object_changes_deserialized)
       manager_id = changes["manager_id"].compact.first
@@ -207,21 +212,11 @@ module PaperTrail
     end
 
     def reifyed_item
-      if model.event == "create"
-        version = model.next
-        if version
-          reify(version)
-        else
-          model.item
-        end
-      else
-        reify(model)
-      end
+      (model.event == "create") ? reify_create : reify(model)
     end
 
     def reify(version)
-      item_type = version.item_type.constantize
-      return version.reify unless item_type.column_names.include?("type")
+      return version.reify unless item_class.column_names.include?("type")
 
       model_type = YAML.safe_load(
         version.object,
@@ -230,6 +225,19 @@ module PaperTrail
 
       Object.const_defined?(model_type) ? version.reify : Wrapped.new(model_type)
     end
+
+    def reify_create
+      if model.next.nil? && model.item
+        model.item
+      else
+        clazz = type_class_from_changeset || item_class
+        clazz.new(attrs_from_changeset)
+      end
+    end
+
+    def attrs_from_changeset = model.changeset.transform_values(&:last)
+
+    def type_class_from_changeset = attrs_from_changeset["type"]&.safe_constantize
 
     def attribute_change_key(from, to)
       if from.present? && to.present?

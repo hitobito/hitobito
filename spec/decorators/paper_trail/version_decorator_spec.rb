@@ -37,6 +37,22 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         )
       end
     end
+
+    context "with deleted current user" do
+      let(:user) { Fabricate(:person) }
+
+      before do
+        PaperTrail.request.whodunnit = user.id.to_s
+        update
+        user.destroy!
+      end
+
+      it do
+        is_expected.to match(
+          /^\w+, \d+\. [\w|ä]+ \d{4}, \d{2}:\d{2} Uhr<br \/>geändert durch inzwischen gelöschte Person #{user.id}$/
+        )
+      end
+    end
   end
 
   context "#author" do
@@ -190,6 +206,13 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
       is_expected.to eq("Social Media Adresse <i>Bar (Foo)</i> wurde hinzugefügt.")
     end
 
+    it "builds create text for later deleted association" do
+      account = Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar")
+      SocialAccount.where(id: account.id).delete_all
+
+      is_expected.to eq("Social Media Adresse <i>Bar (Foo)</i> wurde hinzugefügt.")
+    end
+
     it "sanitizes html" do
       Fabricate(:social_account, contactable: person, label: "Foo",
         name: '<script>alert("test")</script>')
@@ -226,6 +249,20 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         is_expected.to eq("<i>Bottom Member</i> wurde als Kind hinzugefügt.")
       end
 
+      it "builds create text for later deleted people manager" do
+        pm = PeopleManager.create(manager: top_leader, managed: bottom_member)
+        PeopleManager.where(id: pm.id).delete_all
+
+        is_expected.to eq("<i>Bottom Member</i> wurde als Kind hinzugefügt.")
+      end
+
+      it "builds create text for later deleted managed" do
+        PeopleManager.create(manager: top_leader, managed: bottom_member)
+        Person.where(id: bottom_member.id).delete_all
+
+        is_expected.to eq("<i>(Gelöschte Person)</i> wurde als Kind hinzugefügt.")
+      end
+
       it "builds destroy text" do
         pm = PeopleManager.create(manager: top_leader, managed: bottom_member)
         pm.destroy!
@@ -247,6 +284,20 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
         PeopleManager.create(managed: top_leader, manager: bottom_member)
 
         is_expected.to eq("<i>Bottom Member</i> wurde als Verwalter*in hinzugefügt.")
+      end
+
+      it "builds create text for later deleted people manager" do
+        pm = PeopleManager.create(managed: top_leader, manager: bottom_member)
+        PeopleManager.where(id: pm.id).delete_all
+
+        is_expected.to eq("<i>Bottom Member</i> wurde als Verwalter*in hinzugefügt.")
+      end
+
+      it "builds create text for later deleted manager" do
+        PeopleManager.create(managed: top_leader, manager: bottom_member)
+        Person.where(id: bottom_member.id).delete_all
+
+        is_expected.to eq("<i>(Gelöschte Person)</i> wurde als Verwalter*in hinzugefügt.")
       end
 
       it "builds destroy text" do

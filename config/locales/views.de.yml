@@ -2298,6 +2298,7 @@ de:
     household_destroyed: "Haushalt (%{object_changes}) wurde aufgelöst."
     person_merge: "Zwei Personen wurden in diesen Eintrag zusammengeführt. Gelöschte Person:"
     deleted_service_token: "Inzwischen gelöschtes %{model_name}"
+    deleted_user: "inzwischen gelöschte Person %{id}"
 
   tags/merge:
     success: Die Tags wurden erfolgreich zusammengeführt.

@@ -10,6 +10,10 @@ module LayoutHelper
     (current_user&.roles.present? && !current_user&.basic_permissions_only?) || current_user&.root?
   end
 
+  def render_sheets?
+    (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
+  end
+
   def render_header_logo?
     true
   end

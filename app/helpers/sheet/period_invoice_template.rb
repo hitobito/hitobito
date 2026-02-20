@@ -6,7 +6,7 @@
 module Sheet
   class PeriodInvoiceTemplate < Sheet::Invoice
     def title
-      entry&.name || ::PeriodInvoiceTemplate.model_name.human(count: 2)
+      entry&.name.presence || ::PeriodInvoiceTemplate.model_name.human(count: 2)
     end
 
     tab "period_invoice_templates.tabs.info",

@@ -49,6 +49,7 @@ class InvoiceRun < ActiveRecord::Base
   RECIPIENT_TYPES = %w[MailingList PeopleFilter GroupsFilter Event::ParticipationsFilter].freeze
 
   validates :recipient_source_type, inclusion: {in: RECIPIENT_TYPES}
+  # TODO validate recipient_source_id so that no arbitrary changes can be made
 
   scope :list, -> { order(:created_at) }
 

@@ -1185,6 +1185,8 @@ de:
         success: Zahlung über %{amount} wurde erfasst.
 
   period_invoice_templates:
+    form:
+      recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
     new:
       title: Sammelrechnung definieren
     actions_index:

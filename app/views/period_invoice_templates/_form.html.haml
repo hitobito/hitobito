@@ -3,16 +3,20 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(buttons_top: false, data: { controller: "period-invoice-template-form", period_invoice_template_form_wrapper_selector_value: "#items_fields .fields" }) do |f|
+= entry_form(buttons_top: false, data: { controller: "period-invoice-template-form autosubmit", period_invoice_template_form_wrapper_selector_value: "#items_fields .fields" }) do |f|
+  = hidden_field_tag :autosubmit
   = f.labeled_input_fields :name, :start_on, :end_on
 
-  = f.labeled t("activerecord.attributes.period_invoice_template.items"), mark_as_required: true, label_class: "col-md-3 col-xl-2 align-self-baseline", class: "align-self-baseline" do
-    #items_fields
-      = render "item_fields", f: f, item_class: nil, new_record: false
-      %div{ data: { period_invoice_template_form_target: "target" } }
+  = f.labeled_collection_select(:recipient_group_type, entry.group.class.child_types, :to_s, ->(group_type) { group_type.model_name.human(count: 2) }, {}, class: "form-select form-select-sm", disabled: entry.invoice_runs.any?, help_inline: t(".recipient_group_type_help", group: entry.group), data: { action: "change->autosubmit#save", turbo_frame: :period_invoice_template_items })
 
-    = Dropdown::PeriodInvoiceTemplates::AddItem.new(self)
+  = turbo_frame_tag :period_invoice_template_items, target: :_top do
+    = f.labeled t("activerecord.attributes.period_invoice_template.items"), mark_as_required: true, label_class: "col-md-3 col-xl-2 align-self-baseline", class: "align-self-baseline" do
+      #items_fields
+        = render "item_fields", f: f, item_class: nil, new_record: false
+        %div{ data: { period_invoice_template_form_target: "target" } }
 
-    - Settings.groups.period_invoice_templates.item_classes.keys.map(&:to_s).each do |item_class|
-      %template{ data: { period_invoice_template_form: { target: "template", item_type: item_class } } }
-        = render "item_fields", f: f, item_class: item_class, new_record: true
+      = Dropdown::PeriodInvoiceTemplates::AddItem.new(self)
+
+      - Settings.groups.period_invoice_templates.item_classes.keys.map(&:to_s).each do |item_class|
+        %template{ data: { period_invoice_template_form: { target: "template", item_type: item_class } } }
+          = render "item_fields", f: f, item_class: item_class, new_record: true

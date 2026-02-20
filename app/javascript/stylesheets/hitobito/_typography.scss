@@ -106,6 +106,10 @@ dd {
     .multiline::after {
       content: "\00a0";
     }
+
+    > ul {
+      margin-bottom: 0;
+    }
   }
 
   @include responsive(mediaTablet) {

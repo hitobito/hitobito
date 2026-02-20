@@ -11,7 +11,7 @@ describe PeopleFiltersController do
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
   let(:role_types) { [Group::TopGroup::Leader, Group::TopGroup::Member] }
-  let(:role_type_ids) { role_types.collect(&:id) }
+  let(:role_type_ids) { role_types.collect(&:type_id) }
   let(:role_type_ids_string) { role_type_ids.join(Person::Filter::Base::ID_URL_SEPARATOR) }
   let(:role_type_names) { role_types.collect(&:sti_name) }
 

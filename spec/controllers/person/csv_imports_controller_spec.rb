@@ -104,7 +104,7 @@ describe Person::CsvImportsController do
       expect { post :create, params: required_params }.to change(Person, :count).by(1)
       expect(flash[:notice]).to eq ["1 Person (Leader) wurde erfolgreich importiert."]
       expect(flash[:alert]).not_to be_present
-      is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+      is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.type_id]}},
         name: "Leader")
     end
 
@@ -115,7 +115,7 @@ describe Person::CsvImportsController do
       it "imports first person and displays errors for second person" do
         expect { post :create, params: required_params }.to change(Person, :count).by(0)
         expect(flash[:alert]).to eq ["1 Person (Leader) wurde nicht importiert."]
-        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.type_id]}},
           name: "Leader")
       end
     end
@@ -162,7 +162,7 @@ describe Person::CsvImportsController do
       it "is ignored" do
         expect { post :create, params: required_params }.to change(Person, :count).by(1)
         expect(flash[:alert]).to be_blank
-        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+        is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.type_id]}},
           name: "Leader")
       end
     end
@@ -215,7 +215,7 @@ describe Person::CsvImportsController do
         it "creates request" do
           person # create
           post :create, params: required_params.merge(update_behaviour: "override")
-          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.type_id]}},
             name: "Member")
 
           expect(person.reload.roles.count).to eq(1)
@@ -231,7 +231,7 @@ describe Person::CsvImportsController do
           Fabricate(Group::TopGroup::Member.name, group: groups(:top_group), person: user)
 
           post :create, params: required_params.merge(update_behaviour: "override")
-          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.type_id]}},
             name: "Member")
 
           expect(person.reload.roles.count).to eq(2)
@@ -251,7 +251,7 @@ describe Person::CsvImportsController do
 
           post :create, params: required_params
 
-          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.id]}},
+          is_expected.to redirect_to group_people_path(group, filters: {role: {role_type_ids: [role_type.type_id]}},
             name: "Member")
           expect(person.reload.roles.count).to eq(1)
           expect(person.add_requests.count).to eq(1)

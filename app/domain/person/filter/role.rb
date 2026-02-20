@@ -86,7 +86,7 @@ class Person::Filter::Role < Person::Filter::Base
 
   def initialize_role_types
     classes = role_classes
-    args[:role_type_ids] = classes.map(&:id)
+    args[:role_type_ids] = classes.map(&:type_id)
     args[:role_types] = classes.map(&:sti_name)
   end
 

@@ -11,8 +11,12 @@ module LayoutHelper
   end
 
   def render_sheets?
+<<<<<<< HEAD
     (current_person&.roles.present? && !current_person&.basic_permissions_only?) ||
       current_person&.root?
+=======
+    (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
+>>>>>>> 03e3bc20d (WIP)
   end
 
   def render_header_logo?

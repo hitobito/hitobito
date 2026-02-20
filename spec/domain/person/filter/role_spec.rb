@@ -48,7 +48,7 @@ describe Person::Filter::Role do
     let(:entries) { list_filter.entries }
     let(:range) { nil }
     let(:role_types) { [] }
-    let(:role_type_ids_string) { role_types.collect(&:id).join(Person::Filter::Role::ID_URL_SEPARATOR) }
+    let(:role_type_ids_string) { role_types.collect(&:type_id).join(Person::Filter::Role::ID_URL_SEPARATOR) }
 
     before do
       @tg_member = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
@@ -247,7 +247,7 @@ describe Person::Filter::Role do
     context :filter do
       def filter(attrs)
         include_archived = attrs[:include_archived]
-        role_type_ids = Array(role_type).collect(&:id)
+        role_type_ids = Array(role_type).collect(&:type_id)
         filters = {role: transform(attrs).merge(role_type_ids: role_type_ids, kind: kind,
           include_archived: include_archived)}
         Person::Filter::List.new(attrs.fetch(:group, group), user, range: attrs.fetch(:range, range), filters: filters)

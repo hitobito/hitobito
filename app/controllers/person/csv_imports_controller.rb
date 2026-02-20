@@ -177,7 +177,7 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def redirect_params
-    {filters: {role: {role_type_ids: [role_type.id]}}, name: importer.human_role_name}
+    {filters: {role: {role_type_ids: [role_type.type_id]}}, name: importer.human_role_name}
   end
 
   def role_type

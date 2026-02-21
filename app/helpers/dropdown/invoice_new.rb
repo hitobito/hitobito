@@ -118,9 +118,8 @@ module Dropdown
     end
 
     def finance_groups
-      # rubocop:todo Layout/LineLength
-      @finance_groups ||= Group.where(id: current_ability.user_finance_layer_ids).includes(:invoice_config)
-      # rubocop:enable Layout/LineLength
+      @finance_groups ||= Group.where(id: current_ability.user_finance_layer_ids)
+        .includes(invoice_config: :logo_attachment)
     end
 
     def invalid_config_error_msg

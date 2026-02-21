@@ -58,7 +58,6 @@ class InvoiceConfig < ActiveRecord::Base
   has_many :message_templates, dependent: :destroy, as: :templated
   has_one :custom_content, dependent: :destroy, as: :context
 
-  validates :group_id, uniqueness: true
   validates :email, format: Devise.email_regexp, allow_blank: true
 
   validates :payee_name, :payee_zip_code, :payee_town, :payee_country,

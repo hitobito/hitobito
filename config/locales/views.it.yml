@@ -2311,6 +2311,7 @@ it:
     household_destroyed: "Il bilancio (%{object_changes}) è stato annullato."
     person_merge: "Unite due persone in questa registrazione. Persona cancellata:"
     deleted_service_token: "Nel frattempo eliminato %{model_name}"
+    deleted_user: "inzwischen gelöschte Person %{id}"
 
   tags/merge:
     success: Le tag sono state fuse con successo.

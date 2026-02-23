@@ -2312,6 +2312,7 @@ fr:
     household_destroyed: "Le foyer (%{object_changes}) a été résolu."
     person_merge: "Deux personnes ont été fusionnées sous cette entrée. Personne supprimée:"
     deleted_service_token: "Supprimé entre-temps %{model_name}"
+    deleted_user: "inzwischen gelöschte Person %{id}"
 
   tags/merge:
     success: Les tags ont été fusionnés avec succès.

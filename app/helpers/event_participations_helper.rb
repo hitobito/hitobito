@@ -4,10 +4,6 @@
 #  https://github.com/hitobito/hitobito.
 
 module EventParticipationsHelper
-  def format_event_participation_created_at(participation)
-    f(participation.created_at.to_date)
-  end
-
   def event_participations_roles_header(t, event)
     headers = [t.sort_header(:roles, Role.model_name.human(count: 2))]
 

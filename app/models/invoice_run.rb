@@ -108,6 +108,8 @@ class InvoiceRun < ActiveRecord::Base
     when Event::ParticipationsFilter.sti_name
       Event::ParticipationFilter::List.new(recipient_source.event, current_user,
         recipient_source.to_params).list_people
+    when GroupsFilter.sti_name
+      recipient_source.entries
     end
   end
   # rubocop:enable Metrics/AbcSize

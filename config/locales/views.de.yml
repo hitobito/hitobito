@@ -1133,6 +1133,7 @@ de:
           name: Variabler Spendenaufruf
           number: Spenden
           description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
+      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
       recipient_info:
         one: "Rechnung wird für eine Person erstellt."
         other: "Rechnung wird für %{count} Personen erstellt."

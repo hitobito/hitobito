@@ -5,8 +5,26 @@
 
 module Sheet
   module PeriodInvoiceTemplates
-    class InvoiceRun < Base
-      self.parent_sheet = Sheet::PeriodInvoiceTemplate
+    class InvoiceRun < Sheet::Invoice
+      def parent_sheet
+        @parent_sheet ||= create_parent(Sheet::PeriodInvoiceTemplate)
+      end
+
+      def title
+        entry ? entry.title : ::InvoiceRun.model_name.human(count: 2)
+      end
+
+      def parent_link_url
+        unless no_invoice_or_shared_title?
+          return view.group_invoice_run_invoices_path(entry.group,
+            entry)
+        end
+        super
+      end
+
+      def no_invoice_or_shared_title?
+        !child.entry || (child.title == entry.title)
+      end
     end
   end
 end

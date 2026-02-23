@@ -6,7 +6,7 @@
 require "spec_helper"
 
 describe Sheet::PeriodInvoiceTemplate do
-  let(:sheet) { Sheet::PeriodInvoiceTemplate.new(self, nil, period_invoice_template) }
+  let(:sheet) { described_class.new(self, nil, period_invoice_template) }
 
   context "index" do
     let(:period_invoice_template) { nil }

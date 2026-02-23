@@ -26,4 +26,32 @@ describe Export::Tabular::People::ContactAccounts do
       expect(subject.human(SocialAccount, "foo")).to eq "Social Media Adresse foo"
     end
   end
+
+  context "free_text" do
+    it "creates free text key" do
+      expect(subject.free_text_key(PhoneNumber)).to eq :phone_number_free_text
+      expect(subject.free_text_key(AdditionalEmail)).to eq :additional_email_free_text
+    end
+
+    it "creates free text human label with plural model name" do
+      expect(subject.free_text_human(PhoneNumber)).to eq "Telefonnummern Freitext"
+      expect(subject.free_text_human(AdditionalEmail)).to eq "Weitere E-Mails Freitext"
+    end
+  end
+
+  context "predefined_labels" do
+    it "returns predefined labels from settings" do
+      expect(subject.predefined_labels(PhoneNumber)).to include("Privat", "Mobil", "Arbeit")
+    end
+  end
+
+  context "free_text_label_enabled?" do
+    it "returns false for phone_number" do
+      expect(subject.free_text_label_enabled?(PhoneNumber)).to be false
+    end
+
+    it "returns true for additional_email" do
+      expect(subject.free_text_label_enabled?(AdditionalEmail)).to be true
+    end
+  end
 end

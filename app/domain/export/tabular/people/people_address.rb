@@ -6,7 +6,7 @@
 module Export::Tabular::People
   class PeopleAddress < Export::Tabular::Base
     self.model_class = ::Person
-    self.row_class = PersonRow
+    self.row_class = PublicPersonRow
 
     private
 
@@ -17,21 +17,24 @@ module Export::Tabular::People
     end
 
     def association_attributes
-      account_labels(AdditionalEmail.where(public: true)).merge(
-        account_labels(PhoneNumber.where(public: true))
-      )
+      label_attributes_for(AdditionalEmail).merge(label_attributes_for(PhoneNumber))
     end
 
-    def account_labels(collection)
-      scope = collection
-        .where(contactable_id: people_ids, contactable_type: Person.sti_name)
-        .distinct_on(:label)
-      model = scope.model
-      scope.map(&:translated_label).uniq.each_with_object({}) do |label, obj|
-        if label.present?
-          obj[ContactAccounts.key(model, label)] = ContactAccounts.human(model, label)
-        end
+    def label_attributes_for(model)
+      predefined_label_attributes(model).merge(free_text_label_attributes(model))
+    end
+
+    def predefined_label_attributes(model)
+      ContactAccounts.predefined_labels(model).each_with_object({}) do |label, result|
+        result[ContactAccounts.key(model, label)] =
+          ContactAccounts.human(model, model.translate_label(label))
       end
+    end
+
+    def free_text_label_attributes(model)
+      return {} unless ContactAccounts.free_text_label_enabled?(model)
+
+      {ContactAccounts.free_text_key(model) => ContactAccounts.free_text_human(model)}
     end
 
     def build_attribute_labels

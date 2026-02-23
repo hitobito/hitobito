@@ -37,8 +37,14 @@ describe Export::Tabular::People::PeopleFull do
         "Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
         "zusätzliche Adresszeile", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
         "Hauptebene", "Rollen",
-        "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Sprache",
-        "Tags", "Weitere E-Mail Vater", "Telefonnummer Vater", "Social Media Adresse Skype"
+        "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Sprache", "Tags",
+        "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Vater",
+        "Weitere E-Mail Mutter", "Weitere E-Mail Andere", "Weitere E-Mails Freitext",
+        "Telefonnummer Privat", "Telefonnummer Mobil", "Telefonnummer Arbeit",
+        "Telefonnummer Vater", "Telefonnummer Mutter", "Telefonnummer Fax", "Telefonnummer Andere",
+        "Social Media Adresse Facebook", "Social Media Adresse MSN", "Social Media Adresse Skype",
+        "Social Media Adresse Twitter", "Social Media Adresse Webseite", "Social Media Adresse Andere",
+        "Social Media Adressen Freitext"
       ]
 
       expect(csv.headers).to match_array expected
@@ -59,6 +65,10 @@ describe Export::Tabular::People::PeopleFull do
 
   context "french" do
     let(:lang) { :fr }
+
+    def t_free_text_label
+      I18n.t("activerecord.attributes.contact_account.free_text_label", locale: lang)
+    end
 
     it "has correct headers" do
       headers = [
@@ -82,9 +92,26 @@ describe Export::Tabular::People::PeopleFull do
         "Données supplémentaires",
         "Langue",
         "Tags",
+        "Adresse e-mail supplémentaire Privé",
+        "Adresse e-mail supplémentaire Professionnel",
         "Adresse e-mail supplémentaire Père",
+        "Adresse e-mail supplémentaire Mère",
+        "Adresse e-mail supplémentaire Autre",
+        "Adresses e-mail supplémentaires #{t_free_text_label}",
+        "Numéro de téléphone Privé",
+        "Numéro de téléphone Mobile",
+        "Numéro de téléphone Professionnel",
         "Numéro de téléphone Père",
-        "Adresse d'un média social Skype"
+        "Numéro de téléphone Mère",
+        "Numéro de téléphone Fax",
+        "Numéro de téléphone Autre",
+        "Adresse d'un média social Facebook",
+        "Adresse d'un média social MSN",
+        "Adresse d'un média social Skype",
+        "Adresse d'un média social Twitter",
+        "Adresse d'un média social Site web",
+        "Adresse d'un média social Autre",
+        "Adresses de réseaux sociaux #{t_free_text_label}"
       ]
       expect(csv.headers).to match_array headers
       expect(csv.headers).to eq headers

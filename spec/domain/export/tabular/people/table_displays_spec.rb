@@ -37,7 +37,11 @@ describe Export::Tabular::People::TableDisplays do
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
         :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
-        :layer_group, :roles]
+        :layer_group, :roles,
+        :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
+        :additional_email_mutter, :additional_email_andere, :additional_email_free_text,
+        :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
+        :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere]
     end
 
     it "model class is actually person" do
@@ -46,8 +50,8 @@ describe Export::Tabular::People::TableDisplays do
 
     it "does not allow accessing unregistered columns" do
       table_display.selected = [:years]
-      expect(people_list.labels.last).to eq "Rollen"
-      expect(people_list.attributes.last).to eq :roles
+      expect(people_list.labels.last).to eq "Telefonnummer Andere"
+      expect(people_list.attributes.last).to eq :phone_number_andere
       expect(people_list.attributes.grep(/years/).count).to eq 0
     end
 
@@ -71,16 +75,16 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.attributes.grep(/first_name/).count).to eq 1
     end
 
-    it "does include dynamic attributes" do
-      person.phone_numbers.create!(label: "foobar", number: "0790000000")
-      expect(people_list.labels.last).to eq "Telefonnummer foobar"
-      expect(people_list.data_rows.first.last).to eq "+41 79 000 00 00"
+    it "does include predefined phone number columns" do
+      person.phone_numbers.create!(label: "Privat", number: "0790000000")
+      expect(people_list.attribute_labels).to have_key(:phone_number_privat)
+      expect(people_list.attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
     end
 
-    it "does not fail when dynamic attributes include a ." do
-      person.phone_numbers.create!(label: "foo.bar", number: "0790000000")
-      expect(people_list.labels.last).to eq "Telefonnummer foo.bar"
-      expect(people_list.data_rows.first.last).to eq "+41 79 000 00 00"
+    it "exports phone number value in predefined column" do
+      person.phone_numbers.create!(label: "Privat", number: "0790000000")
+      idx = people_list.attributes.index(:phone_number_privat)
+      expect(people_list.data_rows.first[idx]).to eq "+41 79 000 00 00"
     end
 
     it "does exclude attribute if exclude_attr of certain column is true" do
@@ -145,7 +149,11 @@ describe Export::Tabular::People::TableDisplays do
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
         :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
-        :layer_group, :roles]
+        :layer_group, :roles,
+        :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
+        :additional_email_mutter, :additional_email_andere, :additional_email_free_text,
+        :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
+        :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere]
     end
 
     it "model class is actually participation" do
@@ -197,16 +205,16 @@ describe Export::Tabular::People::TableDisplays do
       expect(scope.count).to be 1
     end
 
-    it "does include dynamic attributes" do
-      person.phone_numbers.create!(label: "foobar", number: "0790000000")
-      expect(people_list.labels.last).to eq "Telefonnummer foobar"
-      expect(people_list.data_rows.first.last).to eq "+41 79 000 00 00"
+    it "does include predefined phone number columns" do
+      person.phone_numbers.create!(label: "Privat", number: "0790000000")
+      expect(people_list.attribute_labels).to have_key(:phone_number_privat)
+      expect(people_list.attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
     end
 
-    it "does not fail when dynamic attributes include a ." do
-      person.phone_numbers.create!(label: "foo.bar", number: "0790000000")
-      expect(people_list.labels.last).to eq "Telefonnummer foo.bar"
-      expect(people_list.data_rows.first.last).to eq "+41 79 000 00 00"
+    it "exports phone number value in predefined column" do
+      person.phone_numbers.create!(label: "Privat", number: "0790000000")
+      idx = people_list.attributes.index(:phone_number_privat)
+      expect(people_list.data_rows.first[idx]).to eq "+41 79 000 00 00"
     end
 
     it "does exclude attribute if exclude_attr of certain column is true" do

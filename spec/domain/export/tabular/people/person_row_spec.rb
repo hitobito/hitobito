@@ -17,15 +17,42 @@ describe Export::Tabular::People::PersonRow do
   end
 
   context "phone numbers" do
-    before { person.phone_numbers << PhoneNumber.new(label: "foobar", number: 321) }
+    before { person.phone_numbers << PhoneNumber.new(label: "Privat", number: "0791234567") }
 
-    it { expect(row.fetch(:phone_number_foobar)).to eq "321" }
+    it { expect(row.fetch(:phone_number_privat)).to eq "+41 79 123 45 67" }
+
+    it "joins multiple values with same label" do
+      person.phone_numbers << PhoneNumber.new(label: "Privat", number: "0791234568")
+      expect(row.fetch(:phone_number_privat)).to eq "+41 79 123 45 67;+41 79 123 45 68"
+    end
   end
 
   context "social accounts" do
-    before { person.social_accounts << SocialAccount.new(label: "foo oder bar!", name: "asdf") }
+    before { person.social_accounts << SocialAccount.new(label: "Facebook", name: "asdf") }
 
-    it { expect(row.fetch(:"social_account_foo oder bar!")).to eq "asdf" }
+    it { expect(row.fetch(:social_account_facebook)).to eq "asdf" }
+  end
+
+  context "social accounts with free text labels" do
+    before do
+      person.social_accounts << SocialAccount.new(label: "Mastodon", name: "@user@mastodon.social")
+      person.social_accounts << SocialAccount.new(label: "Bluesky", name: "@user.bsky.social")
+    end
+
+    it "exports non-predefined entries in the free text column" do
+      expect(row.fetch(:social_account_free_text)).to eq "Mastodon:@user@mastodon.social;Bluesky:@user.bsky.social"
+    end
+  end
+
+  context "additional emails with free text labels" do
+    before do
+      person.additional_emails << AdditionalEmail.new(label: "Ferien", email: "ferien@example.com")
+      person.additional_emails << AdditionalEmail.new(label: "Newsletter", email: "news@example.com")
+    end
+
+    it "exports non-predefined entries in the free text column" do
+      expect(row.fetch(:additional_email_free_text)).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
+    end
   end
 
   context "additional_addresses" do

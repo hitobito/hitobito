@@ -14,10 +14,31 @@ module Export::Tabular::People
         "#{model.model_name.human} #{label_or_default(label, model)}"
       end
 
+      def free_text_key(model)
+        :"#{model.model_name.to_s.underscore}_free_text"
+      end
+
+      def free_text_human(model)
+        label_text = I18n.t("activerecord.attributes.contact_account.free_text_label")
+        "#{model.model_name.human(count: :other)} #{label_text}"
+      end
+
+      def predefined_labels(model)
+        contact_account_settings(model)&.predefined_labels || []
+      end
+
+      def free_text_label_enabled?(model)
+        contact_account_settings(model)&.free_text_label&.enabled
+      end
+
       private
 
+      def contact_account_settings(model)
+        Settings.send(model.table_name.singularize)
+      end
+
       def label_or_default(label, model)
-        label || Settings.send(model.table_name.singularize).predefined_labels.first
+        label || predefined_labels(model).first
       end
     end
   end

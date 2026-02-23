@@ -42,7 +42,7 @@ describe Export::EventParticipationsExportJob do
 
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
-      expect(lines[0].split(";").count).to match(15)
+      expect(lines[0].split(";").count).to match(28)
     end
   end
 
@@ -57,7 +57,8 @@ describe Export::EventParticipationsExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
-      expect(lines[0].split(";").count).to match(25)
+
+      expect(lines[0].split(";").count).to match(45)
     end
 
     it "shows the correct timestamps on the participation instances" do
@@ -68,9 +69,10 @@ describe Export::EventParticipationsExportJob do
       subject.perform
 
       lines = file.read.lines
+      expect(lines.first).to include "Anmeldedatum"
 
-      created_at_index = 24
-      expect(lines[0].split(";")[created_at_index].strip).to eq("Anmeldedatum")
+      created_at_index = lines.first.strip.split(";").index("Anmeldedatum")
+
       csv_created_ats = lines[1..2].map { _1.split(";")[created_at_index].strip }
       expect(csv_created_ats).to all(eq(created_at.strftime("%d.%m.%Y")))
     end
@@ -90,9 +92,9 @@ describe Export::EventParticipationsExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/Hauptebene.*/)
-      expect(lines[0].split(";").count).to match(16)
+      expect(lines[0].split(";").count).to match(29)
       # rubocop:todo Layout/LineLength
-      expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;Bottom One\n"
+      expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;;;;;;;;;;;;;;Bottom One\n"
       # rubocop:enable Layout/LineLength
     end
   end

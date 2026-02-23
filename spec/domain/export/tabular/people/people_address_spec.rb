@@ -17,7 +17,11 @@ describe Export::Tabular::People::PeopleAddress do
   its(:attributes) do
     should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
       :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
-      :layer_group, :roles]
+      :layer_group, :roles,
+      :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
+      :additional_email_mutter, :additional_email_andere, :additional_email_free_text,
+      :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
+      :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere]
   end
 
   context "standard attributes" do
@@ -28,13 +32,6 @@ describe Export::Tabular::People::PeopleAddress do
       its([:roles]) { should eq "Rollen" }
       its([:first_name]) { should eq "Vorname" }
     end
-
-    context "key list" do
-      subject { people_list.attribute_labels.keys.join(" ") }
-
-      it { is_expected.not_to match(/phone/) }
-      it { is_expected.not_to match(/social_account/) }
-    end
   end
 
   describe "account labels" do
@@ -43,51 +40,65 @@ describe Export::Tabular::People::PeopleAddress do
     let(:attributes) { people_list.attributes }
     let(:attribute_labels) { people_list.attribute_labels }
 
+    describe "fixed columns from predefined_labels" do
+      it "includes all predefined phone number labels as columns" do
+        expect(attribute_labels).to have_key(:phone_number_privat)
+        expect(attribute_labels).to have_key(:phone_number_mobil)
+        expect(attribute_labels).to have_key(:phone_number_arbeit)
+        expect(attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
+      end
+
+      it "does not include a free text column for phone numbers" do
+        expect(attribute_labels).not_to have_key(:phone_number_free_text)
+      end
+
+      it "includes all predefined additional email labels as columns" do
+        expect(attribute_labels).to have_key(:additional_email_privat)
+        expect(attribute_labels).to have_key(:additional_email_arbeit)
+        expect(attribute_labels[:additional_email_privat]).to eq "Weitere E-Mail Privat"
+      end
+
+      it "includes a free text column for additional emails" do
+        expect(attribute_labels).to have_key(:additional_email_free_text)
+        expect(attribute_labels[:additional_email_free_text]).to eq "Weitere E-Mails Freitext"
+      end
+    end
+
     describe "Phone Numbers" do
       before { PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567") }
 
-      it "includes phone number" do
-        expect(attribute_labels.keys).to have(16).items
-        expect(attribute_labels).to have_key(:phone_number_privat)
-        expect(attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
+      it "exports phone number value in the corresponding column" do
         expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
       end
 
-      it "includes multiple phone numbers" do
-        PhoneNumber.create!(contactable: person, label: "Foobar", number: "0791234568")
-        expect(attribute_labels.keys).to have(17).items
-        expect(attribute_labels[:phone_number_foobar]).to eq "Telefonnummer Foobar"
-        expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
-        expect(row(0)[attributes.index(:phone_number_foobar)]).to eq "+41 79 123 45 68"
-      end
-
-      it "does not include phone number with blank label" do
-        number = PhoneNumber.create!(contactable: person, label: "Foobar", number: "0791234568")
-        number.update_columns(label: "")
-        expect(attribute_labels.keys).to have(16).items
-        expect(attribute_labels).not_to have_key(:phone_number_)
+      it "joins multiple phone numbers with same label using semicolon" do
+        PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234568")
+        expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67;+41 79 123 45 68"
       end
 
       context "with multiple people" do
         let(:bottom_member) { people(:bottom_member) }
-        let(:other) { Fabricate(:person) }
         let(:list) { [person, bottom_member] }
 
         before do
-          PhoneNumber.create!(contactable: person, label: "Foobar", number: "0791234568")
-          PhoneNumber.create!(contactable: bottom_member, label: "Foobar", number: "0791234569")
-          PhoneNumber.create!(contactable: other, label: "Other", number: "0791234560")
+          PhoneNumber.create!(contactable: bottom_member, label: "Mobil", number: "0791234569")
         end
 
-        it "includes phone number of all in list" do
+        it "exports values for each person in the correct column" do
           expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
-          expect(row(0)[attributes.index(:phone_number_foobar)]).to eq "+41 79 123 45 68"
+          expect(row(0)[attributes.index(:phone_number_mobil)]).to be_nil
           expect(row(1)[attributes.index(:phone_number_privat)]).to be_nil
-          expect(row(1)[attributes.index(:phone_number_foobar)]).to eq "+41 79 123 45 69"
+          expect(row(1)[attributes.index(:phone_number_mobil)]).to eq "+41 79 123 45 69"
+        end
+      end
+
+      context "public filtering" do
+        before do
+          PhoneNumber.create!(contactable: person, label: "Mobil", number: "0791234000", public: false)
         end
 
-        it "does not include phone number of person not in list" do
-          expect(subject.attribute_labels).not_to have_key(:phone_number_other)
+        it "does not export non-public phone numbers in address export" do
+          expect(row(0)[attributes.index(:phone_number_mobil)]).to be_nil
         end
       end
     end
@@ -95,48 +106,35 @@ describe Export::Tabular::People::PeopleAddress do
     describe "Additional Emails" do
       before { AdditionalEmail.create!(contactable: person, label: "Privat", email: "privat@example.com") }
 
-      it "includes additional email" do
-        expect(attribute_labels.keys).to have(16).items
-        expect(attribute_labels).to have_key(:additional_email_privat)
-        expect(attribute_labels[:additional_email_privat]).to eq "Weitere E-Mail Privat"
+      it "exports additional email value in the corresponding column" do
         expect(row(0)[attributes.index(:additional_email_privat)]).to eq "privat@example.com"
       end
 
-      it "includes multiple additional emails" do
-        AdditionalEmail.create!(contactable: person, label: "Foobar", email: "foobar@example.com")
-        expect(attribute_labels.keys).to have(17).items
-        expect(attribute_labels[:additional_email_foobar]).to eq "Weitere E-Mail Foobar"
-        expect(row(0)[attributes.index(:additional_email_privat)]).to eq "privat@example.com"
-        expect(row(0)[attributes.index(:additional_email_foobar)]).to eq "foobar@example.com"
+      it "joins multiple additional emails with same label using semicolon" do
+        AdditionalEmail.create!(contactable: person, label: "Privat", email: "privat2@example.com")
+        values = row(0)[attributes.index(:additional_email_privat)]
+        expect(values).to eq "privat@example.com;privat2@example.com"
       end
 
-      it "does not include additional email with blank label" do
-        email = AdditionalEmail.create!(contactable: person, label: "Foobar", email: "foobar@example.com")
-        email.update_columns(label: "")
-        expect(attribute_labels.keys).to have(16).items
-        expect(attribute_labels).not_to have_key(:additional_email_)
+      it "exports non-predefined labels in the free text column" do
+        AdditionalEmail.create!(contactable: person, label: "Ferien", email: "ferien@example.com")
+        expect(row(0)[attributes.index(:additional_email_free_text)]).to eq "Ferien:ferien@example.com"
       end
 
-      context "with multiple people" do
-        let(:bottom_member) { people(:bottom_member) }
-        let(:other) { Fabricate(:person) }
-        let(:list) { [person, bottom_member] }
+      it "joins multiple non-predefined entries with semicolons in free text column" do
+        AdditionalEmail.create!(contactable: person, label: "Ferien", email: "ferien@example.com")
+        AdditionalEmail.create!(contactable: person, label: "Newsletter", email: "news@example.com")
+        free_text = row(0)[attributes.index(:additional_email_free_text)]
+        expect(free_text).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
+      end
 
+      context "public filtering" do
         before do
-          AdditionalEmail.create!(contactable: person, label: "Foobar", email: "foobar@example.com")
-          AdditionalEmail.create!(contactable: bottom_member, label: "Foobar", email: "foobar2@example.com")
-          AdditionalEmail.create!(contactable: other, label: "Other", email: "other@example.com")
+          AdditionalEmail.create!(contactable: person, label: "Arbeit", email: "secret@example.com", public: false)
         end
 
-        it "includes additional email of all in list" do
-          expect(row(0)[attributes.index(:additional_email_privat)]).to eq "privat@example.com"
-          expect(row(0)[attributes.index(:additional_email_foobar)]).to eq "foobar@example.com"
-          expect(row(1)[attributes.index(:additional_email_privat)]).to be_nil
-          expect(row(1)[attributes.index(:additional_email_foobar)]).to eq "foobar2@example.com"
-        end
-
-        it "does not include additional email of person not in list" do
-          expect(subject.attribute_labels).not_to have_key(:additional_email_other)
+        it "does not export non-public emails in address export" do
+          expect(row(0)[attributes.index(:additional_email_arbeit)]).to be_nil
         end
       end
     end

@@ -63,19 +63,22 @@ public/uploads
 
 # custom project/editor setup
 TAGS
-/.vimrc
-/todo.tasks
-/tags
-.envrc
 *.iml
+.byebug_history
+.envrc
 .generators
+.github/copilot-instructions.md
+.github/prompts
 .idea
+.nvimrc
+.project
 .pry_history
 .pry-history
-.project
+.superpowers*
 .vscode
-.nvimrc
-.byebug_history
+.vimrc
+/todo.tasks
+/tags
 
 # for experiments with webpack
 /public/packs

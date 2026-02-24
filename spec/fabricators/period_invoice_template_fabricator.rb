@@ -30,6 +30,9 @@ Fabricator(:period_invoice_template) do
   end_on { Time.zone.now.next_year }
   group { Group.root }
   recipient_group_type { Group::BottomLayer.name }
+  recipient_source {
+    GroupsFilter.new(parent: Group.root, group_type: Group::BottomLayer.name, active_at: Time.zone.today)
+  }
   before_create do |period_invoice_template|
     if period_invoice_template.items.empty?
       period_invoice_template.items.build(type: PeriodInvoiceTemplate::RoleCountItem.name, name: "Mitgliedsbeitrag",

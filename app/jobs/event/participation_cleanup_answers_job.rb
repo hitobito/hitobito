@@ -15,8 +15,10 @@ class Event::ParticipationCleanupAnswersJob < RecurringJob
   end
 
   def obsolete_answers
-    Event::Answer.joins(:participation,
-      :question).where(question: {sensitive: true}).where(not_participating_since_cutoff)
+    Event::Answer
+      .joins(:participation, :question)
+      .where(question: {sensitive: true})
+      .where(not_participating_since_cutoff)
   end
 
   def not_participating_since_cutoff

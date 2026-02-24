@@ -2,10 +2,6 @@
 
 ## Version 2.8
 
-- Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
-
-## Version 2.8
-
 - Es können jetzt Sammelrechnungen erfasst werden (#3748)
 - Gruppen haben neu ein Tab welches alle Rechnungen anzeigt, die direkt an diese Gruppe gesendet wurden (#3856)
 - Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
@@ -13,6 +9,8 @@
 - Im Text "Anlass: E-Mail Voranmeldung" kann nun auch der Platzhalter "event-details" verwendet werden, damit der Text analog zur Anmeldebestätigung formuliert werden kann. (hitobito_sww#280)
 - Die Rechnungsübersicht einer Person enthält nun auch pro Rechnung die Informationen der letzten Zahlung und des insgesamt bezahlten Betrages (hitobito_sww#290)
 - Eventteilnahmen werden auf dem Personenprofil neu nach Eventtyp gruppiert angezeigt und zeigen die Teilnahmerolle(n) (#hitobito_dsj#44)
+- Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
+- In allen Umgebungen welche nach bestimmter Zeit automatisch Antworten auf Eventfragen löschen, werden künftig nur noch als „sensibel“ markierte Antworten entfernt, wobei alle Fragen ab sofort standardmäßig als sensibel voreingestellt sind. (hitobito_sac_cas#2299)
 
 ## Version 2.8
 

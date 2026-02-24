@@ -849,6 +849,7 @@ de:
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         disclosure: Antwortangabe
+        sensitive: Sensibel
         disclosures:
           required: Obligatorisch
           optional: Optional

@@ -116,6 +116,11 @@ class Event::Participation < ActiveRecord::Base
     def upcoming
       joins(:event).merge(Event.upcoming(::Time.zone.today)).distinct
     end
+
+    # used in sac_cas wagon
+    def in_the_past
+      joins(:event).merge(Event.in_the_past(::Time.zone.today))
+    end
   end
 
   ### INSTANCE METHODS

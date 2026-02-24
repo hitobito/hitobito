@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -40,6 +40,7 @@ describe EventsController, js: true do
 
   describe "application_questions" do
     before do
+      Settings.event.participations.delete_answers_after_months = 6
       Event::Question.delete_all
       sign_in
     end
@@ -71,6 +72,7 @@ describe EventsController, js: true do
 
       click_link("Antwortmöglichkeit hinzufügen")
       expect(page).to have_content("Antwortmöglichkeit", count: 4)
+      expect(page).to have_field("Sensibel")
 
       all(".fa-language").last.click
       input_id = all(".fields").last.first("input")[:id]
@@ -84,6 +86,12 @@ describe EventsController, js: true do
       expect(choices.first.choice_translations).to eql({de: "Antwort 1", en: "Choice 1", fr: "Résponse 1", it: ""})
       expect(choices.second.choice_translations).to eql({de: "Antwort 2", en: "Choice 2", fr: "", it: ""})
       expect(choices.third.choice_translations).to eql({de: "New choice", en: "", fr: "", it: ""})
+    end
+
+    it "should not have sensitive checkbox when delete_answers_after_months is not defined" do
+      Settings.event.participations.delete_answers_after_months = nil
+
+      expect(page).not_to have_field "Sensibel"
     end
   end
 

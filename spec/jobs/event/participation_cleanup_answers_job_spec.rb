@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -45,9 +45,25 @@ describe Event::ParticipationCleanupAnswersJob do
       end
     end
 
+    it "keeps non sensitive answer when running on cutoff date" do
+      question.update!(sensitive: false)
+
+      travel_to(cutoff_date) do
+        expect { subject.perform }.not_to change { Event::Answer.count }
+      end
+    end
+
     it "removes answer when running after cutoff date" do
       travel_to(cutoff_date + 1.day) do
         expect { subject.perform }.to change { Event::Answer.count }.by(-1)
+      end
+    end
+
+    it "keeps non sensitive answer when running after cutoff date" do
+      question.update!(sensitive: false)
+
+      travel_to(cutoff_date + 1.day) do
+        expect { subject.perform }.not_to change { Event::Answer.count }
       end
     end
 

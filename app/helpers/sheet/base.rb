@@ -116,7 +116,9 @@ module Sheet
     end
 
     def parent_sheet
-      @parent_sheet ||= self.class.parent_sheet ? create_parent(self.class.parent_sheet) : nil
+      @parent_sheet ||= if self.class.parent_sheet_for(view)
+        create_parent(self.class.parent_sheet_for(view))
+      end
     end
 
     def create_parent(clazz, entry = nil)

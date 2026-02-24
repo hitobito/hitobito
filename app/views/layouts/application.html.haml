@@ -61,7 +61,7 @@
           %nav.nav-left
             = render 'layouts/nav'
         .w-100
-          - if (current_person&.roles.present? && !current_person&.basic_permissions_only?) || current_person&.root?
+          - if render_sheets?
             = render_sheets do
               .content-header#main-content
                 %h1

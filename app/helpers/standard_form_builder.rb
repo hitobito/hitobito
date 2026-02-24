@@ -81,8 +81,9 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
       html_options[:data][:password_toggle_target] = "input"
       input_html = super(attr, html_options)
 
-      icon_html = @template.content_tag(:span,
-        class: "position-absolute end-0 top-50 translate-middle-y me-2 text-muted password-toggle",
+      icon_html = @template.content_tag(:button,
+        type: :button,
+        class: "position-absolute end-0 top-50 translate-middle-y me-2 text-muted password-toggle btn-link bg-transparent me-0",
         data: {action: "click->password-toggle#toggle"}) do
         @template.content_tag(:i, "",
           class: "fa-regular fa-eye",

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -26,6 +26,26 @@ describe :login, js: true do
 
     expect(page).to have_link "Abmelden"
     expect(page).to have_selector(".content-header h1", text: person.full_name)
+  end
+
+  it "allows to reveal password" do
+    visit new_person_session_path
+
+    password_field = find("#person_password")
+    expect(password_field[:type]).to eq "password"
+    expect(page).to have_css(".fa-eye")
+    expect(page).not_to have_css(".fa-eye-slash")
+
+    find(".fa-eye").click
+
+    expect(password_field[:type]).to eq "text"
+    expect(page).to have_css(".fa-eye-slash")
+    expect(page).not_to have_css(".fa-eye")
+
+    find(".fa-eye-slash").click
+
+    expect(password_field[:type]).to eq "password"
+    expect(page).to have_css(".fa-eye")
   end
 
   it "does not allow login with nickname" do

@@ -68,11 +68,29 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  # Render a password field
-  def password_field(attr, html_options = {})
+  # Render a password field with eye icon to reveal password
+  def password_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength
     add_css_class(html_options, FORM_CONTROL_WITH_WIDTH)
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
-    super
+    add_css_class(html_options, "pe-5")
+
+    @template.content_tag(:div,
+      class: "position-relative",
+      data: {controller: "password-toggle"}) do
+      html_options[:data] ||= {}
+      html_options[:data][:password_toggle_target] = "input"
+      input_html = super(attr, html_options)
+
+      icon_html = @template.content_tag(:span,
+        class: "position-absolute end-0 top-50 translate-middle-y me-2 text-muted password-toggle",
+        data: {action: "click->password-toggle#toggle"}) do
+        @template.content_tag(:i, "",
+          class: "fa-regular fa-eye",
+          data: {password_toggle_target: "icon"})
+      end
+
+      input_html + icon_html
+    end
   end
 
   # Render a text_area.

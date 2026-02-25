@@ -917,6 +917,7 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         disclosure: Impostazione
+        sensitive: Sensibel
         disclosures:
           required: Obbligatorio
           optional: Opzionale

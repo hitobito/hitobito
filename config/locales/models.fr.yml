@@ -918,6 +918,7 @@ fr:
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         disclosure: Paramétrage
+        sensitive: Sensibel
         disclosures:
           required: Obligatoire
           optional: Optionnel

@@ -68,11 +68,32 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  # Render a password field
+  # Render a password field with eye icon to reveal password
   def password_field(attr, html_options = {})
     add_css_class(html_options, FORM_CONTROL_WITH_WIDTH)
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
-    super
+    add_css_class(html_options, "pe-5")
+
+    content_tag(:div,
+      class: "position-relative",
+      data: {controller: "password-toggle"}) do
+      html_options[:data] ||= {}
+      html_options[:data][:password_toggle_target] = "input"
+
+      super(attr, html_options) + reveal_password_button
+    end
+  end
+
+  def reveal_password_button
+    content_tag(:button,
+      type: :button,
+      class: "position-absolute end-0 top-50 translate-middle-y me-2 " \
+        "text-muted password-toggle btn-link bg-transparent me-0",
+      data: {action: "click->password-toggle#toggle"}) do
+      content_tag(:i, "",
+        class: "fa-regular fa-eye",
+        data: {password_toggle_target: "icon"})
+    end
   end
 
   # Render a text_area.

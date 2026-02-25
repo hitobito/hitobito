@@ -11,6 +11,7 @@
 - Eventteilnahmen werden auf dem Personenprofil neu nach Eventtyp gruppiert angezeigt und zeigen die Teilnahmerolle(n) (#hitobito_dsj#44)
 - Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
 - Alle Passwortfelder haben neu die Option das Passwort anzeigen zu lassen (hitobito_sac_cas#2291)
+- In allen Umgebungen welche nach bestimmter Zeit automatisch Antworten auf Eventfragen löschen, werden künftig nur noch als „sensibel“ markierte Antworten entfernt, wobei alle Fragen ab sofort standardmäßig als sensibel voreingestellt sind. (hitobito_sac_cas#2299)
 
 ## Version 2.8
 

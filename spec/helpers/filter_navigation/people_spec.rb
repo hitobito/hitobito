@@ -38,9 +38,9 @@ describe "FilterNavigation::People" do
     context "visible false" do
       before do
         group.people_filters.create!(name: "2_Members",
-          filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: false)
+          filter_chain: {role: {role_types: role_types.map(&:type_id)}}, visible: false)
         group.people_filters.create!(name: "1_Leaders",
-          filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: false)
+          filter_chain: {role: {role_types: role_types.map(&:type_id)}}, visible: false)
       end
 
       its("dropdown.items") { should have(3).items }
@@ -68,16 +68,15 @@ describe "FilterNavigation::People" do
           Group::GlobalGroup::Member,
           Group::TopGroup::Leader,
           Group::TopGroup::Secretary,
-          Group::TopGroup::Member]
-                                               .collect(&:id).join("-")}/
+          Group::TopGroup::Member].collect(&:type_id).join("-")}/
       end
 
       context "with custom filters" do
         before do
           group.people_filters.create!(name: "2_Members",
-            filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: true)
+            filter_chain: {role: {role_types: role_types.map(&:type_id)}}, visible: true)
           group.people_filters.create!(name: "1_Leaders",
-            filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: true)
+            filter_chain: {role: {role_types: role_types.map(&:type_id)}}, visible: true)
         end
 
         its("dropdown.active") { should be_falsey }
@@ -105,14 +104,14 @@ describe "FilterNavigation::People" do
     context "with selected filter" do
       before do
         group.people_filters.create!(name: "Leaders",
-          filter_chain: {role: {role_types: role_types.map(&:id)}}, visible: true)
+          filter_chain: {role: {role_types: role_types.map(&:type_id)}}, visible: true)
       end
 
       subject do
         filter = Person::Filter::List.new(group,
           nil,
           name: "Leaders",
-          filters: {role: {role_type_ids: role_types.map(&:id)}})
+          filters: {role: {role_type_ids: role_types.map(&:type_id)}})
         FilterNavigation::People.new(template, group, filter)
       end
 
@@ -146,8 +145,7 @@ describe "FilterNavigation::People" do
         Group::GlobalGroup::Leader,
         Group::GlobalGroup::Member,
         Group::BottomGroup::Leader,
-        Group::BottomGroup::Member]
-                                             .collect(&:id).join("-")}/
+        Group::BottomGroup::Member].collect(&:type_id).join("-")}/
     end
 
     it "contains member item with count" do

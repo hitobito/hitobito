@@ -13,6 +13,10 @@ describe PeopleController do
 
   before { allow(Settings.additional_address).to receive(:enabled).and_return(true) }
 
+  def role_type_ids(*role_classes)
+    {role_type_ids: role_classes.map(&:type_id).join("-")}
+  end
+
   context "as top leader" do
     before { sign_in(top_leader) }
 
@@ -42,42 +46,52 @@ describe PeopleController do
           @tg_extern.update(first_name: "", last_name: "Bundy", nickname: "", town: "", street: "", zip_code: nil)
         end
 
-        let(:role_type_ids) { [Role::External.id, Group::TopGroup::Leader.id, Group::TopGroup::Member.id].join("-") }
+        let(:external_leader_and_member_role_type_ids) do
+          role_type_ids(Role::External, Group::TopGroup::Leader, Group::TopGroup::Member)
+        end
 
         context "default sort" do
           it "sorts by name" do
-            get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}}
+            get :index, params: {
+              group_id: group, range: "layer", filters: {role: external_leader_and_member_role_type_ids}
+            }
             expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader, @tg_member].collect(&:id))
           end
 
           it "people.default_sort setting can override it to sort by role" do
             allow(Settings.people).to receive_messages(default_sort: "role")
-            get :index, params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}}
+            get :index, params: {
+              group_id: group, range: "layer", filters: {role: external_leader_and_member_role_type_ids}
+            }
             expect(assigns(:people).collect(&:id)).to eq([top_leader, @tg_member, @tg_extern].collect(&:id))
           end
         end
 
         it "sorts based on last_name" do
-          get :index,
-            # rubocop:todo Layout/LineLength
-            params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: :last_name,
-                     # rubocop:enable Layout/LineLength
-                     sort_dir: :asc}
+          get :index, params: {
+            group_id: group, range: "layer",
+            filters: {role: external_leader_and_member_role_type_ids},
+            sort: :last_name, sort_dir: :asc
+          }
           expect(assigns(:people).collect(&:id)).to eq([@tg_extern, top_leader, @tg_member].collect(&:id))
         end
 
         it "sorts based on roles" do
-          get :index,
-            params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: :roles,
-                     sort_dir: :asc}
+          get :index, params: {
+            group_id: group, range: "layer",
+            filters: {role: external_leader_and_member_role_type_ids},
+            sort: :roles, sort_dir: :asc
+          }
           expect(assigns(:people).object).to eq([top_leader, @tg_member, @tg_extern])
         end
 
         %w[first_name nickname zip_code town].each do |attr|
           it "sorts based on #{attr}" do
-            get :index,
-              params: {group_id: group, range: "layer", filters: {role: {role_type_ids: role_type_ids}}, sort: attr,
-                       sort_dir: :asc}
+            get :index, params: {
+              group_id: group, range: "layer",
+              filters: {role: external_leader_and_member_role_type_ids},
+              sort: attr, sort_dir: :asc
+            }
             expect(assigns(:people).object).to eq([@tg_member, top_leader, @tg_extern])
           end
         end
@@ -92,15 +106,19 @@ describe PeopleController do
         end
 
         it "loads externs of a group when type given" do
-          get :index, params: {group_id: group, filters: {role: {role_type_ids: [Role::External.id].join("-")}}}
+          get :index, params: {group_id: group, filters: {role: role_type_ids(Role::External)}}
 
           expect(assigns(:people).collect(&:id)).to match_array([@tg_extern].collect(&:id))
         end
 
         it "loads selected roles of a group when types given" do
           get :index,
-            params: {group_id: group,
-                     filters: {role: {role_type_ids: [Role::External.id, Group::TopGroup::Member.id].join("-")}}}
+            params: {
+              group_id: group,
+              filters: {
+                role: role_type_ids(Role::External, Group::TopGroup::Member)
+              }
+            }
 
           expect(assigns(:people).collect(&:id)).to match_array([@tg_member, @tg_extern].collect(&:id))
         end
@@ -256,7 +274,7 @@ describe PeopleController do
           it "loads selected roles of a group when types given" do
             get :index, params: {
               group_id: group,
-              filters: {role: {role_type_ids: [Group::BottomGroup::Member.id, Role::External.id].join("-")}},
+              filters: {role: role_type_ids(Group::BottomGroup::Member, Role::External)},
               range: "layer"
             }
 
@@ -281,12 +299,10 @@ describe PeopleController do
 
             it "renders json with only the one role in this group" do
               get :index, params: {
-                            group_id: group,
-                            range: "layer",
-                            filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id,
-                              Role::External.id].join("-")}}
-                          },
-                format: :json
+                group_id: group,
+                range: "layer",
+                filters: {role: role_type_ids(Group::BottomGroup::Leader, Role::External)}
+              }, format: :json
               json = JSON.parse(@response.body)
               person = json["people"].find { |p| p["id"] == @tg_member.id.to_s }
               expect(person["links"]["roles"].size).to eq(2)
@@ -311,7 +327,7 @@ describe PeopleController do
         it "loads selected roles of a group when types given" do
           get :index, params: {
             group_id: group,
-            filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}},
+            filters: {role: role_type_ids(Group::BottomGroup::Leader, Role::External)},
             range: "deep"
           }
 
@@ -323,11 +339,10 @@ describe PeopleController do
 
           it "renders json with only the one role in this group" do
             get :index, params: {
-                          group_id: group,
-                          range: "deep",
-                          filters: {role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}}
-                        },
-              format: :json
+              group_id: group,
+              range: "deep",
+              filters: {role: role_type_ids(Group::BottomGroup::Leader, Role::External)}
+            }, format: :json
             json = JSON.parse(@response.body)
             person = json["people"].find { |p| p["id"] == @tg_member.id.to_s }
             expect(person["links"]["roles"].size).to eq(2)
@@ -344,7 +359,7 @@ describe PeopleController do
             range: "deep",
             visible: true,
             filter_chain: {
-              role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}
+              role: {role_type_ids: [Group::BottomGroup::Leader.type_id, Role::External.type_id].join("-")}
             }
           )
 
@@ -375,7 +390,7 @@ describe PeopleController do
               range: "deep",
               visible: true,
               filter_chain: {
-                role: {role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")}
+                role: role_type_ids(Group::BottomGroup::Leader, Role::External)
               }
             )
 
@@ -391,12 +406,10 @@ describe PeopleController do
           it "does not redirect" do
             group.archive!
 
-            get :index, params: {group_id: group, filters: {
-              role: {
-                role_type_ids: [Group::BottomGroup::Leader.id, Role::External.id].join("-")
-              }
-            }}
-
+            get :index, params: {
+              group_id: group,
+              filters: {role: role_type_ids(Group::BottomGroup::Leader, Role::External)}
+            }
             expect(response).to have_http_status(200)
           end
         end

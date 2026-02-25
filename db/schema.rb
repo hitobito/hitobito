@@ -377,6 +377,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_23_162000) do
     t.integer "event_id"
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "admin", default: false, null: false
+    t.boolean "sensitive", default: true, null: false
     t.string "disclosure"
     t.string "type", null: false
     t.integer "derived_from_question_id"

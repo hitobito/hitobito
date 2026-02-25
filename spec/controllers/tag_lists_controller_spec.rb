@@ -69,7 +69,7 @@ describe TagListsController do
 
     it "shows modal for all people" do
       role_type_ids = [leader, bottom_member].map do |p|
-        p.roles.map { |r| r.class.id }
+        p.roles.map { |r| r.class.type_id }
       end.flatten.uniq
 
       get :new, xhr: true,
@@ -117,7 +117,7 @@ describe TagListsController do
 
     it "creates many tags on 'all' and displays flash message" do
       role_type_ids = [leader, bottom_member].map do |p|
-        p.roles.map { |r| r.class.id }
+        p.roles.map { |r| r.class.type_id }
       end.flatten.uniq
 
       post :create, params: {

@@ -16,7 +16,7 @@
 
 require "spec_helper"
 
-describe AsyncDownloadFile do
+describe UserJobResult do
   let(:raw_filename) { "subscriptions to blørbaëls rants" }
   let(:person_id) { 42 }
   let(:person) { Person.new(id: person_id) }

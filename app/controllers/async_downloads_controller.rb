@@ -33,6 +33,6 @@ class AsyncDownloadsController < ApplicationController
   private
 
   def file
-    @file ||= AsyncDownloadFile.from_filename(params[:id], params[:file_type])
+    @file ||= UserJobResult.from_filename(params[:id], params[:file_type])
   end
 end

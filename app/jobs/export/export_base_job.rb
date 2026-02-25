@@ -55,6 +55,6 @@ class Export::ExportBaseJob < BaseJob
   private
 
   def async_download_file
-    @async_download_file ||= AsyncDownloadFile.maybe_from_filename(filename, @user_id, @format)
+    @async_download_file ||= UserJobResult.maybe_from_filename(filename, @user_id, @format)
   end
 end

@@ -19,7 +19,7 @@
 #  person_id  :integer          not null
 #
 
-class AsyncDownloadFile < ApplicationRecord
+class UserJobResult < ApplicationRecord
   class << self
     FILENAME_REGEX = /\A(.*)_(\d+)-(\d+)\z/
 
@@ -37,7 +37,7 @@ class AsyncDownloadFile < ApplicationRecord
       name, timestamp, person_id = parse_filename(filename)
 
       file = find_or_create_by(
-        name: name, timestamp: timestamp, person_id: person_id
+        name: name, start_timestamp: timestamp, person_id: person_id
       )
       file.update!(filetype: filetype)
       file

@@ -110,7 +110,7 @@ describe "households/edit.html.haml" do
 
     it "has tom select field for adding new member" do
       expect(tom_select["autofocus"]).to eq "autofocus"
-      expect(tom_select["data-action"]).to eq "autosubmit#save"
+      expect(tom_select["data-action"]).to eq "autosubmit#submit"
       expect(tom_select["data-controller"]).to eq "tom-select"
       expect(tom_select["data-tom-select-url-value"]).to eq query_household_path(person_id: 2)
       expect(tom_select["data-tom-select-no-results-value"]).to eq "Keine Einträge gefunden."

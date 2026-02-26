@@ -15,24 +15,24 @@ export default class extends Controller {
   };
 
   initialize() {
-    this.save = this.save.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   connect() {
     if (this.delayValue > 0) {
-      this.save = debounce(this.save, this.delayValue);
+      this.submit = debounce(this.submit, this.delayValue);
     }
   }
 
   clear() {
-    const elem = this.element.querySelector("[data-action='autosubmit#save']");
+    const elem = this.element.querySelector("[data-action='autosubmit#submit']");
     if(elem) {
       elem.value = "";
       this.element.requestSubmit();
     }
   }
 
-  save(event) {
+  submit(event) {
     const submit = document.querySelector("input[name=autosubmit]");
     this.#withAutosubmitValue(submit, event.target.name || "autosubmit", () => {
       this.#withTurboFrame(event.target.dataset.turboFrame, () => {
@@ -61,7 +61,7 @@ export default class extends Controller {
    * is the case when the form is both used normally for submitting CRUD requests, but also
    * some inputs should trigger a partial reload of the form (because some other fields might
    * depend on the values in the previous fields). In that case, we can specify the
-   * data-turbo-frame value on the element triggering the autosubmit#save action.
+   * data-turbo-frame value on the element triggering the autosubmit#submit action.
    */
   #withTurboFrame(turboFrameId, callback) {
     if (!turboFrameId) return callback();

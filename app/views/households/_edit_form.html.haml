@@ -10,6 +10,6 @@
     class: 'form-control form-control-sm person-search',
     placeholder: I18n.t('households.edit.placeholder_search_person'),
     autofocus: true,
-    data: { controller: 'tom-select', action: 'autosubmit#save',
+    data: { controller: 'tom-select', action: 'autosubmit#submit',
     tom_select_url_value: query_household_path(person_id: person.id),
     tom_select_no_results_value: I18n.t('global.no_list_entries')})

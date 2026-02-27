@@ -213,6 +213,8 @@ it:
               attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
         period_invoice_template:
           attributes:
+            recipient_group_type:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:

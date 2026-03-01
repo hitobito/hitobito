@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_23_162000) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_24_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -903,6 +903,47 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_23_162000) do
     t.string "nonce", null: false
   end
 
+  create_table "pass_definition_translations", force: :cascade do |t|
+    t.bigint "pass_definition_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.index ["locale"], name: "index_pass_definition_translations_on_locale"
+    t.index ["pass_definition_id"], name: "index_pass_definition_translations_on_pass_definition_id"
+  end
+
+  create_table "pass_definitions", force: :cascade do |t|
+    t.string "owner_type", null: false
+    t.bigint "owner_id", null: false
+    t.string "template_key", default: "default", null: false
+    t.string "background_color", default: "#0066cc", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_type", "owner_id"], name: "index_pass_definitions_on_owner"
+  end
+
+  create_table "pass_grants", force: :cascade do |t|
+    t.bigint "pass_definition_id", null: false
+    t.string "grantor_type", null: false
+    t.bigint "grantor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pass_definition_id", "grantor_type", "grantor_id"], name: "idx_pass_grants_unique", unique: true
+  end
+
+  create_table "pass_memberships", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "pass_definition_id", null: false
+    t.integer "state", default: 0, null: false
+    t.date "valid_from"
+    t.date "valid_until"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id", "pass_definition_id"], name: "idx_pass_memberships_unique", unique: true
+  end
+
   create_table "payees", force: :cascade do |t|
     t.bigint "person_id"
     t.bigint "payment_id", null: false
@@ -1302,6 +1343,28 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_23_162000) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
     t.index ["mutation_id"], name: "index_versions_on_mutation_id"
+  end
+
+  create_table "wallets_apple_device_registrations", force: :cascade do |t|
+    t.bigint "pass_installation_id", null: false
+    t.string "device_library_identifier", null: false
+    t.string "push_token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_library_identifier", "pass_installation_id"], name: "idx_wallets_apple_device_reg_unique", unique: true
+  end
+
+  create_table "wallets_pass_installations", force: :cascade do |t|
+    t.bigint "pass_membership_id", null: false
+    t.integer "wallet_type", null: false
+    t.integer "state", default: 0, null: false
+    t.string "wallet_identifier", null: false
+    t.string "authentication_token"
+    t.datetime "last_synced_at"
+    t.text "sync_error"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pass_membership_id", "wallet_type"], name: "idx_wallets_pass_installations_unique", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

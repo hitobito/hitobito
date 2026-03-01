@@ -142,6 +142,14 @@ en:
           attributes:
             scopes:
               not_match_configured: "do not match the ones configured on the server"
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: must be a valid 6-digit hex color starting with #
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: At least one role type must be selected
         person:
           name_missing: 'Please enter a name'
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
@@ -356,6 +364,21 @@ en:
       note:
         one: Note
         other: Notes
+      pass_definition:
+        one: Pass Definition
+        other: Pass Definitions
+      pass_grant:
+        one: Pass Grant
+        other: Pass Grants
+      pass_membership:
+        one: Pass Membership
+        other: Pass Memberships
+      wallets/pass_installation:
+        one: Wallet Installation
+        other: Wallet Installations
+      wallets/apple_wallet/device_registration:
+        one: Apple Device Registration
+        other: Apple Device Registrations
       payment:
         one: Payment
         other: Payments
@@ -884,6 +907,39 @@ en:
 
       note:
         text: Text
+
+      pass_definition:
+        name: Name
+        description: Description
+        owner: Owner
+        template_key: Template
+        background_color: Background Color
+
+      pass_grant:
+        pass_definition: Pass Definition
+        grantor: Granting Group
+        related_role_types: Role Types
+
+      pass_membership:
+        person: Person
+        pass_definition: Pass Definition
+        state: State
+        valid_from: Valid from
+        valid_until: Valid until
+
+      wallets/pass_installation:
+        pass_membership: Pass Membership
+        wallet_type: Wallet Type
+        state: State
+        wallet_identifier: Wallet ID
+        authentication_token: Authentication Token
+        last_synced_at: Last Synced
+        sync_error: Sync Error
+
+      wallets/apple_wallet/device_registration:
+        pass_installation: Pass Installation
+        device_library_identifier: Device ID
+        push_token: Push Token
 
       oauth/application:
         cors_origins: Hosts with API access

@@ -170,6 +170,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     foreign_key: :layer_group_id,
     dependent: :destroy
 
+  has_many :pass_definitions, as: :owner, dependent: :destroy
+
   ### VALIDATIONS
 
   validates_by_schema except: [:logo]

@@ -144,6 +144,14 @@ fr:
           attributes:
             scopes:
               not_match_configured: "ne correspondent pas aux données sur le serveur."
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: doit être une couleur hexadécimale valide de 6 chiffres commençant par #
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: Au moins un type de rôle doit être sélectionné
         person:
           name_missing: 'Veuillez saisir votre nom'
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
@@ -405,6 +413,26 @@ fr:
         one: Note
         many: Notes
         other: Notes
+      pass_definition:
+        one: Définition de pass
+        many: Définitions de pass
+        other: Définitions de pass
+      pass_grant:
+        one: Autorisation de pass
+        many: Autorisations de pass
+        other: Autorisations de pass
+      pass_membership:
+        one: Adhésion de pass
+        many: Adhésions de pass
+        other: Adhésions de pass
+      wallets/pass_installation:
+        one: Installation wallet
+        many: Installations wallet
+        other: Installations wallet
+      wallets/apple_wallet/device_registration:
+        one: Enregistrement d'appareil Apple
+        many: Enregistrements d'appareils Apple
+        other: Enregistrements d'appareils Apple
       payment:
         one: paiements
         many: Paiements
@@ -955,6 +983,39 @@ fr:
 
       note:
         text: Texte
+
+      pass_definition:
+        name: Nom
+        description: Description
+        owner: Propriétaire
+        template_key: Modèle
+        background_color: Couleur de fond
+
+      pass_grant:
+        pass_definition: Définition de pass
+        grantor: Groupe autorisateur
+        related_role_types: Types de rôle
+
+      pass_membership:
+        person: Personne
+        pass_definition: Définition de pass
+        state: État
+        valid_from: Valide dès
+        valid_until: Valide jusqu'à
+
+      wallets/pass_installation:
+        pass_membership: Adhésion de pass
+        wallet_type: Type de wallet
+        state: État
+        wallet_identifier: ID wallet
+        authentication_token: Jeton d'authentification
+        last_synced_at: Dernière synchronisation
+        sync_error: Erreur de synchronisation
+
+      wallets/apple_wallet/device_registration:
+        pass_installation: Installation de pass
+        device_library_identifier: ID de l'appareil
+        push_token: Jeton push
 
       oauth/application:
         cors_origins: Serveur avec accès via API

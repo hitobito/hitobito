@@ -6,19 +6,15 @@
 module Passes
   # Registry for pass template bundles.
   # Each template key maps to a Template struct containing the pdf_class,
-  # verify_partial, and wallet_data_provider used to render a pass.
-  #
-  # Full implementation in WP 1a (#3989). This is the minimal skeleton
-  # required by PassDefinition's template_key validation.
+  # pass_view_partial, and wallet_data_provider used to render a pass.
   module TemplateRegistry
-    Template = Data.define(:key, :pdf_class, :verify_partial, :wallet_data_provider)
+    Template = Data.define(:pdf_class, :pass_view_partial, :wallet_data_provider)
 
     class << self
-      def register(key, pdf_class:, verify_partial:, wallet_data_provider:)
+      def register(key, pdf_class:, pass_view_partial:, wallet_data_provider:)
         registry[key.to_s] = Template.new(
-          key: key.to_s,
           pdf_class: pdf_class,
-          verify_partial: verify_partial,
+          pass_view_partial: pass_view_partial,
           wallet_data_provider: wallet_data_provider
         )
       end
@@ -34,17 +30,15 @@ module Passes
         registry.keys
       end
 
+      def reset!
+        @registry = nil
+      end
+
       private
 
       def registry
         @registry ||= {}
       end
     end
-
-    # Register the default template bundle (placeholder classes until WP 1a).
-    register("default",
-      pdf_class: nil,
-      verify_partial: nil,
-      wallet_data_provider: nil)
   end
 end

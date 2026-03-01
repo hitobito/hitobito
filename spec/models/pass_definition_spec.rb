@@ -120,7 +120,8 @@ describe PassDefinition do
     it "returns the registered template" do
       template = definition.template
       expect(template).to be_a(Passes::TemplateRegistry::Template)
-      expect(template.key).to eq("default")
+      expect(template.pass_view_partial).to eq("default")
+      expect(template.wallet_data_provider).to eq(Passes::WalletDataProvider)
     end
 
     it "raises for unknown template_key" do

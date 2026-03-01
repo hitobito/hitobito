@@ -21,7 +21,7 @@ class PassDefinition < ActiveRecord::Base
     format: {with: /\A#[0-9a-fA-F]{6}\z/, message: :invalid_hex_color}
 
   # Resolve the template bundle for this definition.
-  # Returns a Passes::TemplateRegistry::Template with pdf_class, verify_partial,
+  # Returns a Passes::TemplateRegistry::Template with pdf_class, pass_view_partial,
   # wallet_data_provider.
   def template
     Passes::TemplateRegistry.fetch(template_key)

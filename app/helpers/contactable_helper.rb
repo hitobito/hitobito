@@ -7,9 +7,11 @@ module ContactableHelper
   def contact_method_label_field(form)
     feature_gate_key = "#{form.object.class.name.underscore}.custom_label"
 
-    return contact_method_label_text_field(form) if FeatureGate.enabled?(feature_gate_key)
-
-    contact_method_label_select(form)
+    if FeatureGate.enabled?(feature_gate_key)
+      contact_method_label_text_field(form)
+    else
+      contact_method_label_select(form)
+    end
   end
 
   def contact_method_label_text_field(form)

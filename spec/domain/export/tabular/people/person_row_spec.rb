@@ -17,30 +17,31 @@ describe Export::Tabular::People::PersonRow do
   end
 
   context "phone numbers" do
-    before { person.phone_numbers << PhoneNumber.new(label: "Privat", number: "0791234567") }
+    before { person.phone_numbers << PhoneNumber.new(label: "Privat", number: "321") }
 
-    it { expect(row.fetch(:phone_number_privat)).to eq "+41 79 123 45 67" }
+    it { expect(row.fetch(:phone_number_privat)).to eq "321" }
 
     it "joins multiple values with same label" do
-      person.phone_numbers << PhoneNumber.new(label: "Privat", number: "0791234568")
-      expect(row.fetch(:phone_number_privat)).to eq "+41 79 123 45 67;+41 79 123 45 68"
+      person.phone_numbers << PhoneNumber.new(label: "Privat", number: "654")
+      expect(row.fetch(:phone_number_privat)).to eq "321;654"
     end
   end
 
   context "social accounts" do
-    before { person.social_accounts << SocialAccount.new(label: "Facebook", name: "asdf") }
+    before { person.social_accounts << SocialAccount.new(label: "Facebook", name: "farcebook") }
 
-    it { expect(row.fetch(:social_account_facebook)).to eq "asdf" }
+    it { expect(row.fetch(:social_account_facebook)).to eq "farcebook" }
   end
 
   context "social accounts with free text labels" do
     before do
-      person.social_accounts << SocialAccount.new(label: "Mastodon", name: "@user@mastodon.social")
-      person.social_accounts << SocialAccount.new(label: "Bluesky", name: "@user.bsky.social")
+      person.social_accounts << SocialAccount.new(label: "Mastodummy", name: "@user@mastodummy.example.com")
+      person.social_accounts << SocialAccount.new(label: "Bluescry", name: "@user.bluescry.example.com")
     end
 
     it "exports non-predefined entries in the free text column" do
-      expect(row.fetch(:social_account_custom_label)).to eq "Mastodon:@user@mastodon.social;Bluesky:@user.bsky.social"
+      expect(row.fetch(:social_account_custom_label))
+        .to eq "Mastodummy:@user@mastodummy.example.com;Bluescry:@user.bluescry.example.com"
     end
   end
 

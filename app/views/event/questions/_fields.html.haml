@@ -17,8 +17,8 @@
   - Event::Question::DISCLOSURE_VALUES.each do |key|
     = f.inline_radio_button(:disclosure, key, f.object.disclosure_label(key))
 
-- delete_answers_after_months = Settings.event.participations.delete_answers_after_months
-- if delete_answers_after_months.present?
+- if Settings.event.participations.manual_sensitive_option
+  - delete_answers_after_months = Settings.event.participations.delete_answers_after_months
   = f.labeled_input_field(:sensitive, caption: t('event.questions.sensitive_caption', cutoff: delete_answers_after_months))
 
 = render_extensions :fields, locals: { f: f }

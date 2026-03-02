@@ -37,7 +37,7 @@ class InvoiceRunsController < CrudController
 
   respond_to :js, only: [:new]
 
-  helper_method :cancel_url, :fixed_fees?
+  helper_method :cancel_url, :fixed_fees?, :group
 
   def new
     assign_attributes

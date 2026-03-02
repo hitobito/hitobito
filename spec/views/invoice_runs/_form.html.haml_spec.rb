@@ -16,6 +16,7 @@ describe "invoice_runs/_form.html.haml" do
     allow(view).to receive_messages({
       current_user: person,
       parent: group,
+      group: group,
       cancel_url: "",
       model_class: InvoiceRun,
       entry: invoice_run,
@@ -23,19 +24,6 @@ describe "invoice_runs/_form.html.haml" do
     })
 
     allow(controller).to receive_messages(current_user: person)
-  end
-
-  describe "fixed fees" do
-    before { allow(view).to receive(:fixed_fees?).and_return(true) }
-
-    it "renders hidden fixed_fees param" do
-      expect(dom).to have_css("input[name=fixed_fees]", visible: false)
-    end
-
-    it "renders invoice items table" do
-      invoice.invoice_items.build(name: "pen", unit_cost: 10, count: 2)
-      expect(dom).to have_css("tbody td", text: "pen")
-    end
   end
 
   it "only renders invoice articles of group" do

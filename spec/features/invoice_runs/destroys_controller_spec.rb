@@ -40,7 +40,7 @@ describe InvoiceRuns::DestroysController, js: true do
 
       expect(table).to have_content(/membership fee/)
       destroy_link.click
-      expect(page).to have_text(/Wollen Sie den Rechnungslauf wirklich löschen?/)
+      expect(page).to have_text(/Willst du diesen Rechnungslauf wirklich löschen?/)
 
       expect do
         modal.find('button[type="submit"]').click

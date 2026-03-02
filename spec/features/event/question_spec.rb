@@ -41,6 +41,7 @@ describe EventsController, js: true do
   describe "application_questions" do
     before do
       Settings.event.participations.delete_answers_after_months = 6
+      Settings.event.participations.manual_sensitive_option = true
       Event::Question.delete_all
       sign_in
     end
@@ -88,8 +89,8 @@ describe EventsController, js: true do
       expect(choices.third.choice_translations).to eql({de: "New choice", en: "", fr: "", it: ""})
     end
 
-    it "should not have sensitive checkbox when delete_answers_after_months is not defined" do
-      Settings.event.participations.delete_answers_after_months = nil
+    it "should not have sensitive checkbox when manual_sensitive_option is disabled" do
+      Settings.event.participations.manual_sensitive_option = false
 
       expect(page).not_to have_field "Sensibel"
     end

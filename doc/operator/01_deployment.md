@@ -37,6 +37,7 @@ gesetzt werden. Werte ohne Default müssen in der Regel definiert werden.
 | SENTRY_DSN | Configuration der Sentry Instanz, an welche Fehler gesendet werden sollen. Falls diese Variable nicht gesetzt ist, werden keine Fehlermeldungen verschickt. | -                        |
 | HITOBITO_STAGE | Für das "Environment" in Sentry und, um einen Info-Header zu konfigurieren | Rails.env |
 | HITOBITO_PROJECT | Für das "Project"-Tag in Sentry | hitobito |
+| HITOBITO_WALLETS_SYNC_SECONDS | Intervall in Sekunden für die Synchronisation von Wallet-Pässen | `180` (3 Minuten) |
 
 ### Inbetriebnahme
 

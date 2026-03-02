@@ -66,4 +66,19 @@ describe PassGrant do
       )
     end
   end
+
+  context "callbacks" do
+    it "enqueues PassPopulateJob after save" do
+      expect {
+        grant.save!
+      }.to change { Delayed::Job.where("handler LIKE '%PassPopulateJob%'").count }.by_at_least(1)
+    end
+
+    it "enqueues PassPopulateJob again after update" do
+      grant.save!
+      expect {
+        grant.update!(role_types: [Group::TopGroup::Member.sti_name])
+      }.to change { Delayed::Job.where("handler LIKE '%PassPopulateJob%'").count }.by(1)
+    end
+  end
 end

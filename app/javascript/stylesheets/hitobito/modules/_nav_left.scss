@@ -138,27 +138,31 @@
     padding-left: 3 * $hierarchy-shift-width + $nav-left-padding-full;
   }
 
-  ul ul ul ul ul ul ul a {
+  ul ul ul ul ul ul a {
     padding-left: 4 * $hierarchy-shift-width + $nav-left-padding-full;
   }
 
-  ul ul ul ul ul ul ul ul a {
+  ul ul ul ul ul ul ul a {
     padding-left: 5 * $hierarchy-shift-width + $nav-left-padding-full;
   }
 
-  ul ul ul ul ul ul ul ul ul a {
+  ul ul ul ul ul ul ul ul a {
     padding-left: 6 * $hierarchy-shift-width + $nav-left-padding-full;
   }
 
-  ul ul ul ul ul ul ul ul ul ul a {
+  ul ul ul ul ul ul ul ul ul a {
     padding-left: 7 * $hierarchy-shift-width + $nav-left-padding-full;
   }
 
-  ul ul ul ul ul ul ul ul ul ul ul a {
+  ul ul ul ul ul ul ul ul ul ul a {
     padding-left: 8 * $hierarchy-shift-width + $nav-left-padding-full;
   }
 
-  ul ul ul ul ul ul ul ul ul ul ul ul a {
+  ul ul ul ul ul ul ul ul ul ul ul a {
     padding-left: 9 * $hierarchy-shift-width + $nav-left-padding-full;
+  }
+
+  ul ul ul ul ul ul ul ul ul ul ul ul a {
+    padding-left: 10 * $hierarchy-shift-width + $nav-left-padding-full;
   }
 }

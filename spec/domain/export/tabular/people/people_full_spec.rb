@@ -17,12 +17,12 @@ describe Export::Tabular::People::PeopleFull do
       :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
       :layer_group, :roles, :gender, :birthday, :additional_information, :language, :tags,
       :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
-      :additional_email_mutter, :additional_email_andere, :additional_email_free_text,
+      :additional_email_mutter, :additional_email_andere, :additional_email_custom_label,
       :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
       :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere,
       :social_account_facebook, :social_account_msn, :social_account_skype,
       :social_account_twitter, :social_account_webseite, :social_account_andere,
-      :social_account_free_text]
+      :social_account_custom_label]
     should match_array expected
     should eq expected
   end
@@ -61,8 +61,8 @@ describe Export::Tabular::People::PeopleFull do
       it "exports non-predefined labels in the free text column" do
         person.additional_addresses << Fabricate.build(:additional_address, label: "Ferien", street: "abc")
         data = people_list.data_rows.to_a.first
-        free_text_value = data[subject.keys.index(:additional_address_free_text)]
-        expect(free_text_value).to start_with("Ferien:Top Leader, abc")
+        custom_label = data[subject.keys.index(:additional_address_custom_label)]
+        expect(custom_label).to start_with("Ferien:Top Leader, abc")
       end
     end
 

@@ -992,7 +992,7 @@ de:
               other: Zukünftige
 
       contact_account:
-        free_text_label: Freitext
+        custom_label: Freitext
         predefined_labels:
           privat: Privat
           mobil: Mobil

@@ -19,7 +19,7 @@ describe Export::Tabular::People::PeopleAddress do
       :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
       :layer_group, :roles,
       :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
-      :additional_email_mutter, :additional_email_andere, :additional_email_free_text,
+      :additional_email_mutter, :additional_email_andere, :additional_email_custom_label,
       :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
       :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere]
   end
@@ -49,7 +49,7 @@ describe Export::Tabular::People::PeopleAddress do
       end
 
       it "does not include a free text column for phone numbers" do
-        expect(attribute_labels).not_to have_key(:phone_number_free_text)
+        expect(attribute_labels).not_to have_key(:phone_number_custom_label)
       end
 
       it "includes all predefined additional email labels as columns" do
@@ -59,8 +59,8 @@ describe Export::Tabular::People::PeopleAddress do
       end
 
       it "includes a free text column for additional emails" do
-        expect(attribute_labels).to have_key(:additional_email_free_text)
-        expect(attribute_labels[:additional_email_free_text]).to eq "Weitere E-Mails Freitext"
+        expect(attribute_labels).to have_key(:additional_email_custom_label)
+        expect(attribute_labels[:additional_email_custom_label]).to eq "Weitere E-Mails Freitext"
       end
     end
 
@@ -118,14 +118,14 @@ describe Export::Tabular::People::PeopleAddress do
 
       it "exports non-predefined labels in the free text column" do
         AdditionalEmail.create!(contactable: person, label: "Ferien", email: "ferien@example.com")
-        expect(row(0)[attributes.index(:additional_email_free_text)]).to eq "Ferien:ferien@example.com"
+        expect(row(0)[attributes.index(:additional_email_custom_label)]).to eq "Ferien:ferien@example.com"
       end
 
       it "joins multiple non-predefined entries with semicolons in free text column" do
         AdditionalEmail.create!(contactable: person, label: "Ferien", email: "ferien@example.com")
         AdditionalEmail.create!(contactable: person, label: "Newsletter", email: "news@example.com")
-        free_text = row(0)[attributes.index(:additional_email_free_text)]
-        expect(free_text).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
+        custom_label = row(0)[attributes.index(:additional_email_custom_label)]
+        expect(custom_label).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
       end
 
       context "public filtering" do

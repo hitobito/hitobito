@@ -80,20 +80,20 @@ module Export::Tabular::People
     end
 
     def contact_account_attribute(accounts, attr)
-      return free_text_label_account_values(accounts) if free_text_label?(accounts, attr)
+      return custom_label_account_values(accounts) if custom_label?(accounts, attr)
 
       accounts.select do |e|
         ContactAccounts.key(e.class, e.label) == attr
       end.map(&:value).join(";").presence
     end
 
-    def free_text_label?(accounts, attr)
+    def custom_label?(accounts, attr)
       return false if accounts.empty?
 
-      ContactAccounts.free_text_key(accounts.first.class) == attr
+      ContactAccounts.custom_label_key(accounts.first.class) == attr
     end
 
-    def free_text_label_account_values(accounts)
+    def custom_label_account_values(accounts)
       return if accounts.empty?
 
       model = accounts.first.class

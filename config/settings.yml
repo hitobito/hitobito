@@ -72,7 +72,7 @@ email:
 root_email: <%= ENV['RAILS_ROOT_USER_EMAIL'].presence || 'hitobito@puzzle.ch' %>
 
 phone_number:
-  free_text_label:
+  custom_label:
     enabled: false
   predefined_labels:
     - Privat
@@ -85,7 +85,7 @@ phone_number:
   default_country: CH
 
 social_account:
-  free_text_label:
+  custom_label:
     enabled: true
   predefined_labels:
     - Facebook
@@ -96,7 +96,7 @@ social_account:
     - Andere
 
 additional_email:
-  free_text_label:
+  custom_label:
     enabled: true
   predefined_labels:
     - Privat
@@ -106,7 +106,7 @@ additional_email:
     - Andere
 
 additional_address:
-  free_text_label:
+  custom_label:
     enabled: true
   enabled: false
   predefined_labels:

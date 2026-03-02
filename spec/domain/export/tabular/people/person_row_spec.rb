@@ -40,7 +40,7 @@ describe Export::Tabular::People::PersonRow do
     end
 
     it "exports non-predefined entries in the free text column" do
-      expect(row.fetch(:social_account_free_text)).to eq "Mastodon:@user@mastodon.social;Bluesky:@user.bsky.social"
+      expect(row.fetch(:social_account_custom_label)).to eq "Mastodon:@user@mastodon.social;Bluesky:@user.bsky.social"
     end
   end
 
@@ -51,7 +51,7 @@ describe Export::Tabular::People::PersonRow do
     end
 
     it "exports non-predefined entries in the free text column" do
-      expect(row.fetch(:additional_email_free_text)).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
+      expect(row.fetch(:additional_email_custom_label)).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
     end
   end
 

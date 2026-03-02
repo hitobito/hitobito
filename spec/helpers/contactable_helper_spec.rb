@@ -75,7 +75,7 @@ describe ContactableHelper, type: :helper do
   describe "#contact_method_label_field" do
     it "returns a text field when feature gate is enabled" do
       allow(FeatureGate).to receive(:enabled?)
-        .with("additional_email.free_text_label")
+        .with("additional_email.custom_label")
         .and_return(true)
 
       result = helper.contact_method_label_field(form)
@@ -86,7 +86,7 @@ describe ContactableHelper, type: :helper do
 
     it "returns a select field when feature gate is disabled" do
       allow(FeatureGate).to receive(:enabled?)
-        .with("additional_email.free_text_label")
+        .with("additional_email.custom_label")
         .and_return(false)
 
       result = helper.contact_method_label_field(form)

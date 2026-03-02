@@ -50,12 +50,12 @@ describe Export::Tabular::People::PublicPersonRow do
   context "free text labels" do
     it "includes public entries in free text column" do
       person.additional_emails.create!(label: "Ferien", email: "ferien@example.com", public: true)
-      expect(row.fetch(:additional_email_free_text)).to eq "Ferien:ferien@example.com"
+      expect(row.fetch(:additional_email_custom_label)).to eq "Ferien:ferien@example.com"
     end
 
     it "excludes non-public entries from free text column" do
       person.additional_emails.create!(label: "Geheim", email: "geheim@example.com", public: false)
-      expect(row.fetch(:additional_email_free_text)).to be_nil
+      expect(row.fetch(:additional_email_custom_label)).to be_nil
     end
   end
 end

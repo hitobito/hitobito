@@ -39,7 +39,7 @@ describe Export::Tabular::People::TableDisplays do
         :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
         :layer_group, :roles,
         :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
-        :additional_email_mutter, :additional_email_andere, :additional_email_free_text,
+        :additional_email_mutter, :additional_email_andere, :additional_email_custom_label,
         :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
         :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere]
     end
@@ -151,7 +151,7 @@ describe Export::Tabular::People::TableDisplays do
         :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
         :layer_group, :roles,
         :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
-        :additional_email_mutter, :additional_email_andere, :additional_email_free_text,
+        :additional_email_mutter, :additional_email_andere, :additional_email_custom_label,
         :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
         :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere]
     end

@@ -16,17 +16,17 @@ application:
 root_email: <%= singular_name.gsub("_", "-") %>@puzzle.ch
 
 phone_number:
-  free_text_label:
+  custom_label:
     enabled: false
 
 social_account:
-  free_text_label:
+  custom_label:
     enabled: false
 
 additional_email:
-  free_text_label:
+  custom_label:
     enabled: false
 
 additional_address:
-  free_text_label:
+  custom_label:
     enabled: false

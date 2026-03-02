@@ -21,7 +21,7 @@ module Export::Tabular::People
     end
 
     def label_attributes_for(model)
-      predefined_label_attributes(model).merge(free_text_label_attributes(model))
+      predefined_label_attributes(model).merge(custom_label_attributes(model))
     end
 
     def predefined_label_attributes(model)
@@ -31,10 +31,10 @@ module Export::Tabular::People
       end
     end
 
-    def free_text_label_attributes(model)
-      return {} unless ContactAccounts.free_text_label_enabled?(model)
+    def custom_label_attributes(model)
+      return {} unless ContactAccounts.custom_label_enabled?(model)
 
-      {ContactAccounts.free_text_key(model) => ContactAccounts.free_text_human(model)}
+      {ContactAccounts.custom_label_key(model) => ContactAccounts.custom_label_human(model)}
     end
 
     def build_attribute_labels

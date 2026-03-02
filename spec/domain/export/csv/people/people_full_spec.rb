@@ -66,8 +66,8 @@ describe Export::Tabular::People::PeopleFull do
   context "french" do
     let(:lang) { :fr }
 
-    def t_free_text_label
-      I18n.t("activerecord.attributes.contact_account.free_text_label", locale: lang)
+    def t_custom_label
+      I18n.t("activerecord.attributes.contact_account.custom_label", locale: lang)
     end
 
     it "has correct headers" do
@@ -97,7 +97,7 @@ describe Export::Tabular::People::PeopleFull do
         "Adresse e-mail supplémentaire Père",
         "Adresse e-mail supplémentaire Mère",
         "Adresse e-mail supplémentaire Autre",
-        "Adresses e-mail supplémentaires #{t_free_text_label}",
+        "Adresses e-mail supplémentaires #{t_custom_label}",
         "Numéro de téléphone Privé",
         "Numéro de téléphone Mobile",
         "Numéro de téléphone Professionnel",
@@ -111,7 +111,7 @@ describe Export::Tabular::People::PeopleFull do
         "Adresse d'un média social Twitter",
         "Adresse d'un média social Site web",
         "Adresse d'un média social Autre",
-        "Adresses de réseaux sociaux #{t_free_text_label}"
+        "Adresses de réseaux sociaux #{t_custom_label}"
       ]
       expect(csv.headers).to match_array headers
       expect(csv.headers).to eq headers

@@ -2393,3 +2393,10 @@ it:
   period_invoice_template:
     role_count_item_fields:
       choose_role_types: Rollentypen auswählen
+
+  wallets:
+    pass:
+      member_name: Nome
+      member_number: Numero di membro
+      valid_until: Valido fino al
+      description: Descrizione

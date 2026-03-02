@@ -17,15 +17,43 @@ describe Export::Tabular::People::PersonRow do
   end
 
   context "phone numbers" do
-    before { person.phone_numbers << PhoneNumber.new(label: "foobar", number: 321) }
+    before { person.phone_numbers << PhoneNumber.new(label: "Privat", number: "321") }
 
-    it { expect(row.fetch(:phone_number_foobar)).to eq "321" }
+    it { expect(row.fetch(:phone_number_privat)).to eq "321" }
+
+    it "joins multiple values with same label" do
+      person.phone_numbers << PhoneNumber.new(label: "Privat", number: "654")
+      expect(row.fetch(:phone_number_privat)).to eq "321;654"
+    end
   end
 
   context "social accounts" do
-    before { person.social_accounts << SocialAccount.new(label: "foo oder bar!", name: "asdf") }
+    before { person.social_accounts << SocialAccount.new(label: "Facebook", name: "farcebook") }
 
-    it { expect(row.fetch(:"social_account_foo oder bar!")).to eq "asdf" }
+    it { expect(row.fetch(:social_account_facebook)).to eq "farcebook" }
+  end
+
+  context "social accounts with free text labels" do
+    before do
+      person.social_accounts << SocialAccount.new(label: "Mastodummy", name: "@user@mastodummy.example.com")
+      person.social_accounts << SocialAccount.new(label: "Bluescry", name: "@user.bluescry.example.com")
+    end
+
+    it "exports non-predefined entries in the free text column" do
+      expect(row.fetch(:social_account_custom_label))
+        .to eq "Mastodummy:@user@mastodummy.example.com;Bluescry:@user.bluescry.example.com"
+    end
+  end
+
+  context "additional emails with free text labels" do
+    before do
+      person.additional_emails << AdditionalEmail.new(label: "Ferien", email: "ferien@example.com")
+      person.additional_emails << AdditionalEmail.new(label: "Newsletter", email: "news@example.com")
+    end
+
+    it "exports non-predefined entries in the free text column" do
+      expect(row.fetch(:additional_email_custom_label)).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
+    end
   end
 
   context "additional_addresses" do

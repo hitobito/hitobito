@@ -14,3 +14,19 @@ application:
 # Initially, a password reset token may be mailed from the application
 # to this address to set a password.
 root_email: <%= singular_name.gsub("_", "-") %>@puzzle.ch
+
+phone_number:
+  custom_label:
+    enabled: false
+
+social_account:
+  custom_label:
+    enabled: false
+
+additional_email:
+  custom_label:
+    enabled: false
+
+additional_address:
+  custom_label:
+    enabled: false

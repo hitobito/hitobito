@@ -26,4 +26,32 @@ describe Export::Tabular::People::ContactAccounts do
       expect(subject.human(SocialAccount, "foo")).to eq "Social Media Adresse foo"
     end
   end
+
+  context "custom labels" do
+    it "#custom_label_key" do
+      expect(subject.custom_label_key(PhoneNumber)).to eq :phone_number_custom_label
+      expect(subject.custom_label_key(AdditionalEmail)).to eq :additional_email_custom_label
+    end
+
+    it "#custom_label_human" do
+      expect(subject.custom_label_human(PhoneNumber)).to eq "Telefonnummern Freitext"
+      expect(subject.custom_label_human(AdditionalEmail)).to eq "Weitere E-Mails Freitext"
+    end
+  end
+
+  context "predefined_labels" do
+    it "returns predefined labels from settings" do
+      expect(subject.predefined_labels(PhoneNumber)).to include("Privat", "Mobil", "Arbeit")
+    end
+  end
+
+  context "custom_label_enabled?" do
+    it "returns false for phone_number" do
+      expect(subject.custom_label_enabled?(PhoneNumber)).to be false
+    end
+
+    it "returns true for additional_email" do
+      expect(subject.custom_label_enabled?(AdditionalEmail)).to be true
+    end
+  end
 end

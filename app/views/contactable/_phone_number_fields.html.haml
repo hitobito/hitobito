@@ -7,5 +7,5 @@
   %div.col-11.col-md-11.col-lg-5.col-xl-5.col-xxl-4.me-3
     = f.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
   %div.col-11.col-md-11.col-lg-5.col-xl-5.col-xxl-3.d-flex.flex-row.me-3.mt-1
-    = f.collection_select(:translated_label, PhoneNumber.available_labels, :to_s, :to_s, {}, class: 'form-select form-select-sm h-100')
+    = contact_method_label_field(f)
   = render 'contactable/public_check_box', f: f

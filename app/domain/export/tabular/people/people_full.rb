@@ -5,6 +5,7 @@
 
 module Export::Tabular::People
   class PeopleFull < PeopleAddress
+    self.row_class = PersonRow
     self.styled_attrs = {
       date: [:birthday]
     }
@@ -22,14 +23,22 @@ module Export::Tabular::People
     end
 
     def association_attributes
-      account_labels(AdditionalEmail)
-        .merge(account_labels(PhoneNumber))
-        .merge(account_labels(SocialAccount))
-        .merge(account_labels(AdditionalAddress))
-        .merge(qualification_kinds)
+      contact_account_attributes.merge(qualification_kind_attributes)
     end
 
-    def qualification_kinds
+    def contact_account_attributes
+      account_attribute_types.each_with_object({}) do |type, result|
+        result.merge!(label_attributes_for(type))
+      end
+    end
+
+    def account_attribute_types
+      [AdditionalEmail, PhoneNumber, SocialAccount].tap do |types|
+        types << AdditionalAddress if FeatureGate.enabled?("additional_address")
+      end
+    end
+
+    def qualification_kind_attributes
       model = QualificationKind
       qualification_kinds = QualificationKind
         .joins(qualifications: :person)

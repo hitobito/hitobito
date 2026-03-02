@@ -42,19 +42,24 @@ module Export::Tabular::People
     private
 
     def phone_number_attribute(attr)
-      contact_account_attribute(entry.phone_numbers, attr)
+      contact_account_attribute(filtered_accounts(entry.phone_numbers), attr)
     end
 
     def social_account_attribute(attr)
-      contact_account_attribute(entry.social_accounts, attr)
+      contact_account_attribute(filtered_accounts(entry.social_accounts), attr)
     end
 
     def additional_email_attribute(attr)
-      contact_account_attribute(entry.additional_emails, attr)
+      contact_account_attribute(filtered_accounts(entry.additional_emails), attr)
     end
 
     def additional_address_attribute(attr)
-      contact_account_attribute(entry.additional_addresses, attr)
+      contact_account_attribute(filtered_accounts(entry.additional_addresses), attr)
+    end
+
+    # PublicPersonRow overrides this method to only include public accounts
+    def filtered_accounts(accounts)
+      accounts
     end
 
     def qualification_kind(id)
@@ -75,10 +80,29 @@ module Export::Tabular::People
     end
 
     def contact_account_attribute(accounts, attr)
-      account = accounts.find do |e|
-        ContactAccounts.key(e.class, e.translated_label) == attr
-      end
-      account.value if account
+      return custom_label_account_values(accounts) if custom_label?(accounts, attr)
+
+      accounts.select do |e|
+        ContactAccounts.key(e.class, e.label) == attr
+      end.map(&:value).join(";").presence
+    end
+
+    def custom_label?(accounts, attr)
+      return false if accounts.empty?
+
+      ContactAccounts.custom_label_key(accounts.first.class) == attr
+    end
+
+    def custom_label_account_values(accounts)
+      return if accounts.empty?
+
+      model = accounts.first.class
+      predefined = ContactAccounts.predefined_labels(model).map(&:downcase)
+      accounts
+        .reject { |e| predefined.include?(e.label&.downcase) }
+        .map { |e| "#{e.label}:#{e.value}" }
+        .join(";")
+        .presence
     end
   end
 end

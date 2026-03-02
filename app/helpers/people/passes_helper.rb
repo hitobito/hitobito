@@ -19,8 +19,7 @@ module People::PassesHelper
   end
 
   def google_wallet_configured?
-    # TODO: enable once Wallets::GoogleWallet::Config is implemented (#3983)
-    false
+    Wallets::GoogleWallet::Config.present?
   end
 
   def apple_wallet_configured?

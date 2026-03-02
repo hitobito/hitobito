@@ -1,0 +1,5 @@
+# Service account credentials go in config/google_service_account.json
+
+google_wallet:
+  issuer_id: "3388000000022266745"
+  issuer_email: "wallet-service@project.iam.gserviceaccount.com"

@@ -43,6 +43,7 @@ gem "faker"
 gem "faraday"
 gem "gibbon"
 gem "globalize"
+gem "googleauth" # Used for the google wallet integration
 gem "graphiti"
 gem "graphiti-rails"
 gem "haml"

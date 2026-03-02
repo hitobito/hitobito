@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: groups_filters
+#
+#  id         :integer          not null, primary key
+#  group_type :string
+#  active_at  :date
+#  parent_id  :integer
+#
+# Indexes
+#
+#  index_groups_filters_on_parent_id  (parent_id)
+#
+
 #  Copyright (c) 2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at

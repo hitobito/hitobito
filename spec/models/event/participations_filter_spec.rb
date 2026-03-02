@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: event_participations_filters
+#
+#  id               :integer          not null, primary key
+#  event_id         :integer
+#  participant_type :string
+#
+# Indexes
+#
+#  index_event_participations_filters_on_event_id  (event_id)
+#
+
 #  Copyright (c) 2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at

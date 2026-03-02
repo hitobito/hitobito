@@ -4,16 +4,15 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: calendars
 #
-#  id          :bigint           not null, primary key
-#  description :text
+#  id          :integer          not null, primary key
 #  name        :string           not null
+#  group_id    :integer          not null
+#  description :text
 #  token       :string           not null
-#  group_id    :bigint           not null
 #
 # Indexes
 #

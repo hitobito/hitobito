@@ -1,17 +1,14 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: custom_contents
 #
 #  id                    :integer          not null, primary key
-#  context_type          :string
 #  key                   :string           not null
-#  label                 :string           not null
-#  placeholders_optional :string
 #  placeholders_required :string
-#  subject               :string
-#  context_id            :bigint
+#  placeholders_optional :string
+#  context_type          :string
+#  context_id            :integer
 #
 # Indexes
 #

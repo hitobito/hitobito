@@ -2,15 +2,14 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: cors_origins
 #
-#  id               :bigint           not null, primary key
+#  id               :integer          not null, primary key
 #  auth_method_type :string
+#  auth_method_id   :integer
 #  origin           :string           not null
-#  auth_method_id   :bigint
 #
 # Indexes
 #

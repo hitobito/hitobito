@@ -1,14 +1,13 @@
 # frozen_string_literal: true
-
 # == Schema Information
 #
 # Table name: family_members
 #
-#  id         :bigint           not null, primary key
-#  family_key :string           not null
+#  id         :integer          not null, primary key
+#  person_id  :integer          not null
 #  kind       :string           not null
-#  other_id   :bigint           not null
-#  person_id  :bigint           not null
+#  other_id   :integer          not null
+#  family_key :string           not null
 #
 # Indexes
 #

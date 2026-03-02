@@ -314,6 +314,27 @@ describe Event::ParticipationsController do
         get :show, params: {group_id: group.id, event_id: simple_event.id, id: participation.id}
       end
     end
+
+    context "with basic_permissions_only" do
+      let(:group) { groups(:bottom_layer_one) }
+      let(:user) { Fabricate(Group::BottomLayer::BasicPermissionsOnly.sti_name, group:).person }
+      let(:participation) { Fabricate(:event_participation, event: course, participant: user) }
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      render_views
+
+      it "shows event sheet" do
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+        expect(dom).to have_css ".sheet.parent a.level.active", text: course.name
+      end
+
+      it "does not show group sheet" do
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+        expect(dom).to have_no_css ".sheet.parent a.level.active", text: group.name
+      end
+    end
   end
 
   context "GET print" do

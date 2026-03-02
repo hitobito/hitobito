@@ -4,16 +4,15 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: family_members
 #
-#  id         :bigint           not null, primary key
-#  family_key :string           not null
+#  id         :integer          not null, primary key
+#  person_id  :integer          not null
 #  kind       :string           not null
-#  other_id   :bigint           not null
-#  person_id  :bigint           not null
+#  other_id   :integer          not null
+#  family_key :string           not null
 #
 # Indexes
 #

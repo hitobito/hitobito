@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: message_templates
+#
+#  id             :integer          not null, primary key
+#  templated_type :string
+#  templated_id   :integer
+#  title          :string           not null
+#  body           :text
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#
+# Indexes
+#
+#  index_message_templates_on_templated  (templated_type,templated_id)
+#
+
 #  frozen_string_literal: true
 
 #  Copyright (c) 2024, Schweizer Wanderwege. This file is part of

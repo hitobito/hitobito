@@ -10,9 +10,14 @@ module LayoutHelper
     (current_user&.roles.present? && !current_user&.basic_permissions_only?) || current_user&.root?
   end
 
-  def render_sheets?
-    (current_person&.roles.present? && !current_person&.basic_permissions_only?) ||
-      current_person&.root?
+  def render_sheets? # rubocop:disable Metrics/CyclomaticComplexity
+    return true if current_user&.root? || basic_permissions_on_participations?
+
+    current_person&.roles&.any? && !current_person&.basic_permissions_only?
+  end
+
+  def basic_permissions_on_participations?
+    current_user&.basic_permissions_only? && controller.is_a?(Event::ParticipationsController)
   end
 
   def render_header_logo?

@@ -2,12 +2,11 @@
 #
 # Table name: event_kind_categories
 #
-#  id         :bigint           not null, primary key
-#  deleted_at :datetime
-#  label      :string
-#  order      :integer
+#  id         :integer          not null, primary key
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  deleted_at :datetime
+#  order      :integer
 #
 
 require "spec_helper"

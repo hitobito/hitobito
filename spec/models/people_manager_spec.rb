@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: people_managers
+#
+#  id         :integer          not null, primary key
+#  manager_id :integer          not null
+#  managed_id :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_people_managers_on_manager_id_and_managed_id  (manager_id,managed_id) UNIQUE
+#
+
 # frozen_string_literal: true
 
 #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of

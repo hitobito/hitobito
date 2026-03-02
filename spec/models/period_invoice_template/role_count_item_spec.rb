@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: period_invoice_template_items
+#
+#  id                         :integer          not null, primary key
+#  name                       :string           not null
+#  type                       :string           not null
+#  cost_center                :string
+#  account                    :string
+#  dynamic_cost_parameters    :text
+#  period_invoice_template_id :integer          not null
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  vat_rate                   :decimal(5, 2)
+#
+# Indexes
+#
+#  idx_on_period_invoice_template_id_ffb9250706  (period_invoice_template_id)
+#
+
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2025, Swiss Badminton. This file is part of

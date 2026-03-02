@@ -4,18 +4,17 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 # == Schema Information
 #
 # Table name: event_invitations
 #
-#  id                 :bigint           not null, primary key
-#  declined_at        :datetime
+#  id                 :integer          not null, primary key
 #  participation_type :string           not null
+#  declined_at        :datetime
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
-#  event_id           :bigint           not null
-#  person_id          :bigint           not null
+#  event_id           :integer          not null
+#  person_id          :integer          not null
 #
 # Indexes
 #

@@ -2,11 +2,11 @@
 #
 # Table name: calendars
 #
-#  id          :bigint           not null, primary key
-#  description :text
+#  id          :integer          not null, primary key
 #  name        :string           not null
+#  group_id    :integer          not null
+#  description :text
 #  token       :string           not null
-#  group_id    :bigint           not null
 #
 # Indexes
 #

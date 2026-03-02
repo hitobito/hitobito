@@ -8,6 +8,10 @@ module Sheet
     self.parent_sheet = Sheet::Group
 
     class << self
+      def parent_sheet_for(view_context)
+        view_context.basic_permissions_on_participations? ? nil : Sheet::Group
+      end
+
       private
 
       def can_view_qualifications?(view, event)
@@ -53,6 +57,11 @@ module Sheet
 
     def current_parent_nav_path
       view.typed_group_events_path(parent_sheet.entry.id, entry.klass)
+    end
+
+    def path_args
+      return super if parent_sheet.present?
+      [entry.groups.first, entry]
     end
   end
 end

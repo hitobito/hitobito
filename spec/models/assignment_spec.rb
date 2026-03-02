@@ -2,16 +2,16 @@
 #
 # Table name: assignments
 #
-#  id              :bigint           not null, primary key
-#  attachment_type :string
-#  description     :text             not null
-#  read_at         :date
+#  id              :integer          not null, primary key
+#  person_id       :integer          not null
+#  creator_id      :integer          not null
 #  title           :string           not null
+#  description     :text             not null
+#  attachment_type :string
+#  attachment_id   :integer
+#  read_at         :date
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  attachment_id   :integer
-#  creator_id      :bigint           not null
-#  person_id       :bigint           not null
 #
 # Indexes
 #

@@ -22,7 +22,13 @@ class PassGrant < ActiveRecord::Base
   validate :has_eligibility_criteria
   validates :grantor_id, uniqueness: {scope: [:pass_definition_id, :grantor_type]}
 
+  after_save :populate_passes
+
   private
+
+  def populate_passes
+    PassPopulateJob.new(pass_definition_id).enqueue!
+  end
 
   def has_eligibility_criteria
     if related_role_types.reject(&:marked_for_destruction?).empty?

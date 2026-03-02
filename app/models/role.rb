@@ -124,8 +124,10 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   after_create :reset_person_minimized_at
   after_destroy :set_contact_data_visible
   after_destroy :set_first_primary_group
+  after_destroy :update_passes
   after_save :set_first_primary_group
   after_save :set_contact_data_visible
+  after_save :update_passes
 
   ### SCOPES
 
@@ -355,5 +357,9 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def set_first_primary_group
     People::UpdateAfterRoleChange.new(person.reload).set_first_primary_group
+  end
+
+  def update_passes
+    Passes::PassUpdater.new(self).run
   end
 end

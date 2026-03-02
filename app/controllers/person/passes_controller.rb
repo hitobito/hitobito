@@ -69,8 +69,7 @@ class Person::PassesController < CrudController
       .find_or_initialize_by(wallet_type: wallet_type) do |pi|
       pi.locale = person.language
     end
-    Wallets::PassSynchronizer.new(pass_installation).assign_validity
-    pass_installation.save!
+    Wallets::PassSynchronizer.new(pass_installation).assign_validity.save!
     pass_installation
   end
 

@@ -8,6 +8,7 @@
 class Export::Pdf::Messages::Letter
   class Header < Section
     include Export::Pdf::AddressRenderers
+    include Export::Pdf::Concerns::GroupAddressLookup
     include Export::Pdf::ShippingInfoRenderers
 
     LOGO_BOX = [450, 40].freeze
@@ -73,23 +74,7 @@ class Export::Pdf::Messages::Letter
     end
 
     def sender_address
-      if address_present?(group)
-        group_address(group)
-      elsif address_present?(group.layer_group)
-        group_address(group.layer_group)
-      else
-        ""
-      end
-    end
-
-    def group_address(group)
-      [group.name.to_s.squish,
-        group.address.to_s.squish,
-        [group.zip_code, group.town].compact.join(" ").squish].compact.join("\n")
-    end
-
-    def address_present?(group)
-      [:address, :town].all? { |a| group.send(a)&.strip.present? }
+      group_address_parts(group).compact.join(", ")
     end
   end
 end

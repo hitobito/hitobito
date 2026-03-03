@@ -287,6 +287,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
         .where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
     end
 
+    # Events ran in the past
+    def in_the_past(midnight = Time.zone.now.midnight)
+      where.not(id: Event::Date.where("finish_at IS NULL OR finish_at >= ?", midnight)
+        .select(:event_id))
+    end
+
     # Events that are open for applications.
     def application_possible
       today = Time.zone.today

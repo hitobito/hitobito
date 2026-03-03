@@ -24,7 +24,7 @@ describe :payment_process, js: true do
     invoice.update!(reference: "000000000000100000000000905")
 
     attach_file "payment_process[file]",
-      file_fixture("../invoices/camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923.xml")
+      file_fixture("../invoices/camt.054_version_001.08.xml")
 
     expect do
       find("button.btn", text: "Hochladen").click

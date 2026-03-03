@@ -11,7 +11,7 @@ describe Payments::EbicsImport do
   subject { described_class.new(config) }
 
   let(:invoice_files) {
-    [read("camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923")]
+    [read("camt.054_version_001.08")]
   }
   let(:config) { payment_provider_configs(:postfinance) }
   let(:epics_client) { double(:epics_client) }
@@ -78,7 +78,7 @@ describe Payments::EbicsImport do
     payment = invoice.payments.first
     expect(payment.invoice).to eq(invoice)
     # rubocop:todo Layout/LineLength
-    expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    expect(payment.transaction_identifier).to eq("269f8c6e-cc72-4d9f-a2e6-05ecfaec9042")
     # rubocop:enable Layout/LineLength
     expect(payment.payee.person_name).to eq("Maria Bernasconi")
     expect(payment.payee.person_address).to eq("Place de la Gare 15, 2502 Biel/Bienne")
@@ -111,7 +111,7 @@ describe Payments::EbicsImport do
     payment = invoice.payments.first
     expect(payment.invoice).to eq(invoice)
     # rubocop:todo Layout/LineLength
-    expect(payment.transaction_identifier).to eq("20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798")
+    expect(payment.transaction_identifier).to eq("269f8c6e-cc72-4d9f-a2e6-05ecfaec9042")
     # rubocop:enable Layout/LineLength
     expect(payment.payee.person_name).to eq("Maria Bernasconi")
     expect(payment.payee.person_address).to eq("Place de la Gare 15, 2502 Biel/Bienne")

@@ -212,7 +212,17 @@ class Invoice::PaymentProcessor
     to_datetime(datetime)
   end
 
+  # UETR is the Unique End-to-End Transaction Reference.
+  # This number is designed to be globally unique across all banking statements
+  # It is used by all banks on the SWIFT network
+  # We use the old way of identifying payments, if for some reason the UETR number
+  # would not be provided in the file.
   def transaction_identifier(net_entry, transaction)
+    transaction.dig("Refs", "UETR").presence ||
+      legacy_transaction_identifier(net_entry, transaction)
+  end
+
+  def legacy_transaction_identifier(net_entry, transaction)
     [
       esr_reference(transaction),
       reference(transaction),

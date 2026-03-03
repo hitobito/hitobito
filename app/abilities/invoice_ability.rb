@@ -18,7 +18,7 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(InvoiceRun) do
-    permission(:finance).may(:update, :destroy).in_layer_if_active
+    permission(:finance).may(:show, :update, :destroy).in_layer_if_active
     permission(:finance).may(:create).in_layer_with_recipient_source
     permission(:finance).may(:index_invoices).in_layer_with_recipient_source_if_active
   end

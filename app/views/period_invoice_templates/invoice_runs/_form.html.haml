@@ -1,0 +1,48 @@
+-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= entry_form(url: group_period_invoice_template_invoice_runs_path(group, period_invoice_template),
+             cancel_url: cancel_url,
+             buttons_top: false,
+             data: { group: group_path(group) }) do |f|
+
+  .row
+    .labeled.col-md-9.col-lg-8.col-xl-8.mw-63ch.offset-md-3.offset-xl-2
+      .alert.alert-warning
+        = t('.recipient_count_disclaimer')
+
+  = f.fields_for :invoice, entry.invoice do |fi|
+    = render "invoices/message_template", f: fi, group: entry
+    = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipients(current_user).count), data: { message_template_target: :title }
+    = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
+    = fi.labeled_input_field :payment_information
+    = fi.labeled_input_field :payment_purpose
+    = fi.labeled_date_field :issued_at
+
+    .invoice-articles.offset-md-1.mt-4.col-md-9.col-lg-8.col-xl-7
+      = table(entry.invoice.invoice_items, class: 'table table-striped') do |t|
+        - t.attr(:name)
+        - t.attr(:count)
+        - t.attr(:vat_rate) { |i| i.decorate.vat_rate }
+        - t.attr(:unit_cost) { |i| i.decorate.unit_cost }
+        - t.attr(:cost)  { |i| i.decorate.cost }
+
+      .invoice-items-total.d-flex.flex-row-reverse
+        %table
+          %tr
+            %td.left
+              = captionize(:cost, Invoice)
+            %td.right
+              = format_currency(entry.calculated[:cost])
+          %tr
+            %td.left
+              = captionize(:vat_rate, InvoiceItem)
+            %td.right
+              = format_currency(entry.calculated[:vat])
+          %tr
+            %td.left
+              %b= captionize(:total_inkl_vat, Invoice)
+            %td.right
+              %b= format_currency(entry.calculated[:total])

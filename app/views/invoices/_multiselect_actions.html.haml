@@ -12,6 +12,8 @@
     = extended_all_checkbox(@invoices)
     .actions
       = invoice_sending_dropdown
-      = action_button(t('invoices.cancel'), group_invoice_run_path(group, invoice_run_id: invoice_run&.id), :'trash-alt', 'data-method': :delete, data: { checkable: true })
+      - if period_invoice_template
+        = action_button(t('invoices.cancel'), group_period_invoice_template_invoice_run_path(group.id, period_invoice_template.id, id: invoice_run&.id), :'trash-alt', 'data-method': :delete, data: { checkable: true })
+      - else
+        = action_button(t('invoices.cancel'), group_invoice_run_path(group, invoice_run_id: invoice_run&.id), :'trash-alt', 'data-method': :delete, data: { checkable: true })
       = invoices_print_dropdown
-

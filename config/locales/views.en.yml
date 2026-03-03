@@ -1112,7 +1112,7 @@ en:
       show:
         title: Rechnungslauf löschen
         non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
-        confirm_delete: Wollen Sie den Rechnungslauf wirklich löschen?
+        confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
     form:
       invoice_articles:
         variable_donation:

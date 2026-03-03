@@ -13,6 +13,7 @@ describe "invoices/_table.html.haml" do
     assign(:invoices, paginated_invoices)
     allow(view).to receive(:entries).and_return(paginated_invoices)
     allow(view).to receive(:parent).and_return(group)
+    allow(view).to receive(:period_invoice_template).and_return(nil)
     allow(view).to receive(:url_for).and_return("/invoices?sort=title&sort_dir=asc")
     allow(view).to receive(:sortable?).and_return(true)
     allow(view).to receive(:invoice_run).and_return(nil)

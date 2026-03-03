@@ -3,9 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(url: group_invoice_run_path(parent),
+= entry_form(url: group_invoice_run_path(group),
              cancel_url: cancel_url,
-             data: { group: group_path(parent) }) do |f|
+             data: { group: group_path(group) }) do |f|
 
   = hidden_field_tag "ids", params[:ids]
   = hidden_field_tag "filter", params[:filter] ? params[:filter].to_json : nil
@@ -14,8 +14,10 @@
     = f.hidden_field :recipient_source_id
     = f.hidden_field :recipient_source_type
 
-  .alert.alert-warning.align-with-form
-    Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Personen zutreffen, kann die finale Liste der Rechnungsempfänger noch ändern.
+  .row
+    .labeled.col-md-9.col-lg-8.col-xl-8.mw-63ch.offset-md-3.offset-xl-2
+      .alert.alert-warning
+        = t('.recipient_count_disclaimer')
 
   = f.fields_for :invoice, entry.invoice do |fi|
     = render "invoices/message_template", f: fi, group: entry
@@ -23,18 +25,15 @@
     = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
     = fi.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose
-    = fi.labeled_date_field :issued_at unless fixed_fees?
+    = fi.labeled_date_field :issued_at
     = render_extensions :form_invoice_fields, locals: { f: fi }
-    - if fixed_fees?
-      = render "fixed_fees", invoice_items: fi.object.invoice_items
-    - else
-      = field_set_tag do
-        = render "invoice_articles", f: fi, group: parent
+    = field_set_tag do
+      = render "invoice_articles", f: fi, group: group
 
-      = field_set_tag do
-        = fi.labeled_inline_fields_for :invoice_items, 'invoice_items'
+    = field_set_tag do
+      = fi.labeled_inline_fields_for :invoice_items, 'invoice_items'
 
-      = field_set_tag do
-        = fi.labeled_input_field :hide_total
+    = field_set_tag do
+      = fi.labeled_input_field :hide_total
 
-      = render "invoices/recalculate/calculated", invoice: fi.object.decorate
+    = render "invoices/recalculate/calculated", invoice: fi.object.decorate

@@ -59,6 +59,8 @@ class Invoice::PeriodItem < InvoiceItem
       .count
   end
 
+  def cost = dynamic_cost
+
   def dynamic_cost = unit_cost * count
 
   def unit_cost
@@ -74,7 +76,7 @@ class Invoice::PeriodItem < InvoiceItem
   end
 
   def period_end_on
-    dynamic_cost_parameters[:period_end_on]
+    dynamic_cost_parameters[:period_end_on] || Time.zone.today
   end
 
   private

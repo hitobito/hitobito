@@ -9,8 +9,13 @@ module Sheet
       entry&.name.presence || ::PeriodInvoiceTemplate.model_name.human(count: 2)
     end
 
+    def root
+      create_parent(Sheet::Group)
+    end
+
     tab "period_invoice_templates.tabs.info",
       :group_period_invoice_template_path,
+      no_alt: true,
       if: ->(_, _, entry) { entry.present? }
 
     tab "period_invoice_templates.tabs.invoice_runs",

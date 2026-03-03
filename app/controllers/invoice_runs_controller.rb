@@ -37,7 +37,7 @@ class InvoiceRunsController < CrudController
 
   respond_to :js, only: [:new]
 
-  helper_method :cancel_url, :fixed_fees?
+  helper_method :cancel_url, :fixed_fees?, :group
 
   def new
     assign_attributes
@@ -85,7 +85,7 @@ class InvoiceRunsController < CrudController
   end
 
   def show
-    redirect_to group_invoices_path(parent)
+    redirect_to group_invoices_path(group)
   end
 
   def fixed_fees?
@@ -99,7 +99,7 @@ class InvoiceRunsController < CrudController
   end
 
   def find_entry
-    parent.invoice_runs.find(params[:invoice_run_id])
+    group.invoice_runs.find(params[:invoice_run_id])
   end
 
   def list_entries
@@ -111,17 +111,17 @@ class InvoiceRunsController < CrudController
     if params[:singular]
       if invoice_run_id
         group_invoice_run_invoice_path(
-          parent, invoice_run_id: invoice_run_id, id: invoices.first.id
+          group, invoice_run_id: invoice_run_id, id: invoices.first.id
         )
       else
-        group_invoice_path(parent, invoices.first)
+        group_invoice_path(group, invoices.first)
       end
     elsif params.dig(:invoice_run, :recipient_source_id)
-      group_invoice_runs_path(parent)
+      group_invoice_runs_path(group)
     elsif invoice_run_id
-      group_invoice_run_invoices_path(parent, invoice_run_id: invoice_run_id, returning: true)
+      group_invoice_run_invoices_path(group, invoice_run_id: invoice_run_id, returning: true)
     else
-      group_invoices_path(parent, returning: true)
+      group_invoices_path(group, returning: true)
     end
   end
 
@@ -130,7 +130,7 @@ class InvoiceRunsController < CrudController
   end
 
   def invoices
-    Invoice::Filter.new(params).apply_or_none(parent.issued_invoices)
+    Invoice::Filter.new(params).apply_or_none(group.issued_invoices)
   end
 
   def flash_message(action: action_name, count: nil, title: nil)
@@ -143,18 +143,16 @@ class InvoiceRunsController < CrudController
   end
 
   def cancel_url
-    return group_path(parent) if fixed_fees?
-    session[:invoice_referer] || group_invoices_path(parent)
+    return group_path(group) if fixed_fees?
+    session[:invoice_referer] || group_invoices_path(group)
   end
 
   # rubocop:todo Metrics/CyclomaticComplexity
   # rubocop:todo Metrics/MethodLength
   def assign_attributes # rubocop:disable Metrics/AbcSize
     entry.creator = current_user
-    entry.invoice = parent.issued_invoices
-      .build(model_params.present? ? permitted_params[:invoice] : {})
-    entry.recipient_source = InvoiceRuns::RecipientSourceBuilder.new(params,
-      @group).recipient_source
+    entry.invoice = build_invoice
+    entry.recipient_source = recipient_source
 
     # TODO in #3752, move this logic out of here into the period_invoice_templates
     # if fixed_fees?
@@ -174,7 +172,7 @@ class InvoiceRunsController < CrudController
   # rubocop:enable Metrics/CyclomaticComplexity
 
   def authorize_class
-    authorize!(:index_issued_invoices, parent)
+    authorize!(:index_issued_invoices, group)
   end
 
   def permitted_params
@@ -192,5 +190,17 @@ class InvoiceRunsController < CrudController
 
   def cancel_all_invoices
     invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
+  end
+
+  def group = parent
+
+  def build_invoice
+    group.issued_invoices
+      .build(model_params.present? ? permitted_params[:invoice] : {})
+      .tap { |invoice| invoice.issued_at ||= Time.zone.today }
+  end
+
+  def recipient_source
+    InvoiceRuns::RecipientSourceBuilder.new(params, @group).recipient_source
   end
 end

@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class InvoicesController < CrudController
+class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   include Api::JsonPaging
   include RenderMessagesExports
   include AsyncDownload
@@ -11,7 +11,7 @@ class InvoicesController < CrudController
   decorates :invoice
 
   self.nesting = Group
-  self.optional_nesting = [InvoiceRun]
+  self.optional_nesting = [PeriodInvoiceTemplate, InvoiceRun]
 
   self.sort_mappings = {
     last_payment_at: Invoice.order_by_payment_statement,
@@ -41,7 +41,7 @@ class InvoicesController < CrudController
       :_destroy
     ]]
 
-  helper_method :group, :invoice_run, :filter_params
+  helper_method :group, :period_invoice_template, :invoice_run, :filter_params
 
   after_destroy :update_invoice_run_total
 
@@ -86,7 +86,10 @@ class InvoicesController < CrudController
   private
 
   def invoices_return_path
-    if invoice_run
+    if period_invoice_template
+      group_period_invoice_template_invoice_run_invoices_path(group, period_invoice_template,
+        invoice_run, returning: true)
+    elsif invoice_run
       group_invoice_run_invoices_path(group, invoice_run, returning: true)
     else
       group_invoices_path(group, returning: true)
@@ -225,6 +228,10 @@ class InvoicesController < CrudController
 
   def group
     parent.is_a?(InvoiceRun) ? parent.group : parent
+  end
+
+  def period_invoice_template
+    parents.find { |parent| parent.is_a?(PeriodInvoiceTemplate) }
   end
 
   def invoice_run

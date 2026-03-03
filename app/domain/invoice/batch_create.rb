@@ -90,8 +90,10 @@ class Invoice::BatchCreate
     invoice.invoice_items.collect do |item|
       attrs = item.attributes
       if item.dynamic
-        item.dynamic_cost_parameters[:recipient_id] = recipient_id
-        item.dynamic_cost_parameters[:group_id] = group_id
+        unless item.is_a?(Invoice::PeriodItem)
+          item.dynamic_cost_parameters[:recipient_id] = recipient_id
+          item.dynamic_cost_parameters[:group_id] = group_id
+        end
         attrs[:cost] = item.dynamic_cost
       end
       # Do not try to save invalid item since that would abort the whole invoice create transaction

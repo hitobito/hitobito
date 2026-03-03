@@ -33,10 +33,10 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
     invoice_item_class.dynamic_cost_parameter_definitions
   end
 
-  def to_invoice_item(invoice: nil)
+  def to_invoice_item(invoice: nil, recipient_groups: period_invoice_template.group_id)
     invoice_item_class.for_groups(
-      period_invoice_template.group_id, # TODO pass the groups from recipient_source in here, #3752
-      name:, cost_center:, account:, vat_rate:, invoice:,
+      recipient_groups,
+      name:, cost_center:, account:, vat_rate:, invoice:, unit_cost: unit_cost,
       dynamic_cost_parameters: dynamic_cost_parameters.merge({
         period_start_on: period_invoice_template.start_on,
         period_end_on: period_invoice_template.end_on

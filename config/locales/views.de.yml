@@ -1126,13 +1126,14 @@ de:
       show:
         title: Rechnungslauf löschen
         non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
-        confirm_delete: Wollen Sie den Rechnungslauf wirklich löschen?
+        confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
     form:
       invoice_articles:
         variable_donation:
           name: Variabler Spendenaufruf
           number: Spenden
           description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
+      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
       recipient_info:
         one: "Rechnung wird für eine Person erstellt."
         other: "Rechnung wird für %{count} Personen erstellt."
@@ -1189,6 +1190,21 @@ de:
         success: Zahlung über %{amount} wurde erfasst.
 
   period_invoice_templates:
+    invoice_runs:
+      actions_index:
+        add:
+          zero: "Rechnungslauf fahren"
+          other: "Weiteren Rechnungslauf fahren"
+      destroys:
+        show:
+          title: Rechnungslauf löschen
+          non_draft_info: 'In diesem Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+          confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+      form:
+        recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+        recipient_info:
+          one: "%{count} Empfänger gefunden."
+          other: "%{count} Empfänger gefunden."
     form:
       recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
     new:

@@ -18,7 +18,14 @@ module Sheet
 
     def parent_sheet
       @parent_sheet ||= begin
-        parent_sheet_class = invoice_run ? Sheet::InvoiceRun : Sheet::Group
+        parent_sheet_class = if period_invoice_template
+          Sheet::PeriodInvoiceTemplate
+        elsif invoice_run
+          Sheet::InvoiceRun
+        else
+          Sheet::Group
+        end
+
         create_parent(parent_sheet_class)
       end
     end
@@ -35,6 +42,11 @@ module Sheet
 
     def invoice_run
       @invoice_run ||= ::InvoiceRun.find_by(id: view.params[:invoice_run_id])
+    end
+
+    def period_invoice_template
+      @period_invoice_template ||= ::PeriodInvoiceTemplate
+        .find_by(id: view.params[:period_invoice_template_id])
     end
   end
 end

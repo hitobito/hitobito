@@ -11,7 +11,7 @@ describe Payments::EbicsImportJob do
   include ActiveJob::TestHelper
 
   let(:invoice_files) {
-    [read("camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923")]
+    [read("camt.054_version_001.08")]
   }
 
   let(:invalid_invoice_files) {

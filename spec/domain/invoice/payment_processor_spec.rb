@@ -49,6 +49,20 @@ describe Invoice::PaymentProcessor do
     expect(parser.notice).to eq "Es wurden 5 gültige Zahlungen ohne dazugehörige Rechnungen erkannt."
 
     expect(identifiers).to eq(
+      [
+        "4ef70d24-d2e4-44b6-a2bc-335ba48a7041",
+        "269f8c6e-cc72-4d9f-a2e6-05ecfaec9042",
+        "dff256cc-52db-424a-bba0-d9d155823043",
+        "17af6a8a-ed59-4b68-b7d6-3e9a72134044",
+        "02ccf2af-d68a-4db3-bcad-b3e18a1a3045"
+      ]
+    )
+  end
+
+  it "builds legacy transaction identifier" do
+    identifiers = parser("camt.054_version_001.04").payments.map(&:transaction_identifier)
+
+    expect(identifiers).to eq(
       # rubocop:todo Layout/LineLength
       ["20180314001221000006905084508206000000000000100000000000905710.822018-03-15 00:00:00 +0100CH6309000000250097798",
         # rubocop:enable Layout/LineLength
@@ -166,7 +180,7 @@ describe Invoice::PaymentProcessor do
 
   private
 
-  def parser(file = "camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923")
+  def parser(file = "camt.054_version_001.08")
     @parser ||= Invoice::PaymentProcessor.new(read(file))
   end
 

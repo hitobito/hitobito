@@ -59,7 +59,7 @@ describe PaymentProcessesController do
     Rack::Test::UploadedFile.new(path, media_type)
   end
 
-  def xmlfile(name = "camt.054-ESR-ASR_T_CH0209000000857876452_378159670_0_2018031411011923")
+  def xmlfile(name = "camt.054_version_001.08")
     Rails.root.join("spec/fixtures/invoices/#{name}.xml")
   end
 end

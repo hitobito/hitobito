@@ -228,4 +228,45 @@ describe PassDecorator do
       expect(decorator.wallet_data_provider).to be(decorator.wallet_data_provider)
     end
   end
+
+  describe "#pdf_background_color" do
+    it "strips hash prefix from color" do
+      definition.background_color = "#0066CC"
+      expect(decorator.pdf_background_color).to eq("0066CC")
+    end
+
+    it "defaults to white when color is blank" do
+      definition.background_color = nil
+      expect(decorator.pdf_background_color).to eq("FFFFFF")
+    end
+
+    it "defaults to white when color is empty string" do
+      definition.background_color = ""
+      expect(decorator.pdf_background_color).to eq("FFFFFF")
+    end
+  end
+
+  describe "#text_colors" do
+    context "with light background" do
+      before { definition.background_color = "#FFFFFF" }
+
+      it "returns dark text colors" do
+        colors = decorator.text_colors
+        expect(colors[:text]).to eq("333333")
+        expect(colors[:muted]).to eq("666666")
+        expect(colors[:label]).to eq("888888")
+      end
+    end
+
+    context "with dark background" do
+      before { definition.background_color = "#000000" }
+
+      it "returns light text colors" do
+        colors = decorator.text_colors
+        expect(colors[:text]).to eq("FFFFFF")
+        expect(colors[:muted]).to eq("CCCCCC")
+        expect(colors[:label]).to eq("AAAAAA")
+      end
+    end
+  end
 end

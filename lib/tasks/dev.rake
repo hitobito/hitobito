@@ -299,6 +299,20 @@ namespace :dev do
       puts "PassGrant ##{grant.id} saved for root group with #{all_role_types.size} role types:"
       all_role_types.each { |t| puts "  - #{t}" }
     end
+
+    desc "Generate a PDF for a given pass ID and write it to tmp/"
+    task :generate_pdf, [:pass_id] => [:environment] do |_, args|
+      pass_id = args.fetch(:pass_id) { abort("Usage: rake dev:passes:generate_pdf[PASS_ID]") }
+      pass = Pass.find(pass_id)
+
+      template = Passes::TemplateRegistry.fetch(pass.pass_definition.template_key)
+      generator = template.pdf_class.new(pass)
+
+      output_path = Rails.root.join("tmp", generator.filename)
+      File.binwrite(output_path, generator.render)
+
+      puts "PDF written to #{output_path}"
+    end
   end
 
   namespace :help_texts do

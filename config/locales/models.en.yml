@@ -933,6 +933,7 @@ en:
         related_role_types: Role Types
 
       pass:
+        member_number: Member number
         person: Person
         pass_definition: Pass Definition
         state: State

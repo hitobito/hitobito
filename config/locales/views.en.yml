@@ -1119,6 +1119,7 @@ en:
           name: Variabler Spendenaufruf
           number: Donations
           description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
+      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
       recipient_info:
         one: "Invoice is created for one person."
         other: "Invoice is created for %{count} persons."
@@ -1174,6 +1175,21 @@ en:
         success: Payment of %{amount}has been registered.
 
   period_invoice_templates:
+    invoice_runs:
+      actions_index:
+        add:
+          zero: "Rechnungslauf fahren"
+          other: "Weiteren Rechnungslauf fahren"
+      destroys:
+        show:
+          title: Rechnungslauf löschen
+          non_draft_info: 'In diesem Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+          confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+      form:
+        recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+        recipient_info:
+          one: "%{count} Empfänger gefunden."
+          other: "%{count} Empfänger gefunden."
     form:
       recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
     new:

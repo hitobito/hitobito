@@ -1125,13 +1125,14 @@ it:
       show:
         title: Cancellare fattura collettiva
         non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato “Bozza” né “Annullata”. Pertanto, la fattura collettiva non può essere cancellata.'
-        confirm_delete: Vuoi davvero eliminare la fattura collettiva?
+        confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
     form:
       invoice_articles:
         variable_donation:
           name: Appello per donazioni variabili
           number: Donazioni
           description: Appello per donazioni sulla base di donazioni esistenti
+      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
       recipient_info:
         one: "La fattura viene emessa per una sola persona."
         many: "La fattura viene emessa per %{count} persone."
@@ -1199,6 +1200,22 @@ it:
         success: Pagamento sopra i %{amount} è stato registrato
 
   period_invoice_templates:
+    invoice_runs:
+      actions_index:
+        add:
+          zero: "Rechnungslauf fahren"
+          other: "Weiteren Rechnungslauf fahren"
+      destroys:
+        show:
+          title: Rechnungslauf löschen
+          non_draft_info: 'In diesem Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+          confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+      form:
+        recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+        recipient_info:
+          one: "%{count} Empfänger gefunden."
+          many: "%{count} Empfänger gefunden."
+          other: "%{count} Empfänger gefunden."
     form:
       recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
     new:

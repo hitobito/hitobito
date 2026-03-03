@@ -1758,6 +1758,18 @@ de:
         other: "%{count} %{role} haben eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfragen erneut vorgenommen werden."
 
   people:
+    passes:
+      index:
+        title: Pässe
+        show_pass: Anzeigen
+        add_to_google_wallet: Zu Google Wallet hinzufügen
+        add_to_apple_wallet: Zu Apple Wallet hinzufügen
+        download_pdf: PDF herunterladen
+        no_passes: Keine Pässe vorhanden.
+
+    passes_aside:
+      title: Pässe
+
     addresses_sync:
       create:
         scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
@@ -2385,5 +2397,10 @@ de:
     pass:
       member_name: Name
       member_number: Mitgliedernummer
+      valid_from: Gültig ab
       valid_until: Gültig bis
       description: Beschreibung
+    google:
+      save_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
+    apple:
+      generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.

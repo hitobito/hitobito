@@ -58,6 +58,10 @@ class Pass
     "#{person.id}-#{definition.id}"
   end
 
+  def to_s
+    definition.name
+  end
+
   def to_h
     {
       definition_id: definition.id,

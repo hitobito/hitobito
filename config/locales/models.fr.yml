@@ -1002,6 +1002,10 @@ fr:
         state: État
         valid_from: Valide dès
         valid_until: Valide jusqu'à
+        states:
+          eligible: Admissible
+          ended: Expiré
+          revoked: Révoqué
 
       wallets/pass_installation:
         pass_membership: Adhésion de pass

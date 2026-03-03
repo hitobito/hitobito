@@ -81,7 +81,7 @@ describe Wallets::GoogleWallet::PassService do
       expect(payload[:issuerName]).to eq("SAC Mitgliedschaft")
       expect(payload[:reviewStatus]).to eq("UNDER_REVIEW")
       expect(payload[:multipleDevicesAndHoldersAllowedStatus]).to eq("MULTIPLE_HOLDERS")
-      expect(payload[:linksModuleData]).to eq({uris: []})
+      expect(payload).not_to have_key(:linksModuleData)
     end
   end
 
@@ -107,13 +107,24 @@ describe Wallets::GoogleWallet::PassService do
       expect(payload[:hexBackgroundColor]).to eq("#003366")
     end
 
-    it "includes header with definition name" do
+    it "includes header with member name" do
       payload = nil
       allow(client).to receive(:create_or_update_object) { |p, **_| payload = p }
 
       service.save_url
 
       expect(payload[:header]).to eq(
+        {defaultValue: {language: I18n.locale.to_s, value: person.full_name}}
+      )
+    end
+
+    it "includes cardTitle with definition name" do
+      payload = nil
+      allow(client).to receive(:create_or_update_object) { |p, **_| payload = p }
+
+      service.save_url
+
+      expect(payload[:cardTitle]).to eq(
         {defaultValue: {language: I18n.locale.to_s, value: "SAC Mitgliedschaft"}}
       )
     end
@@ -213,7 +224,7 @@ describe Wallets::GoogleWallet::PassService do
 
       if pass_poro.valid_until
         interval = payload[:validTimeInterval]
-        expect(interval[:end][:date]).to eq(pass_poro.valid_until.iso8601)
+        expect(interval[:end][:date]).to eq(pass_poro.valid_until.end_of_day.iso8601)
       end
     end
 
@@ -249,17 +260,26 @@ describe Wallets::GoogleWallet::PassService do
       expect(payload[:heroImage]).to be_nil
     end
 
-    it "uses application logo as fallback" do
+    it "uses application logo as fallback when publicly reachable" do
       logo_config = double("logo", present?: true, image: "logo.png")
       allow(Settings.application).to receive(:logo).and_return(logo_config)
-      allow(ActionController::Base.helpers).to receive(:asset_url).with("logo.png").and_return("http://test.host/assets/logo.png")
+
+      # Stub webpack manifest lookup
+      manifest = double("manifest")
+      allow(Webpacker.instance).to receive(:manifest).and_return(manifest)
+      allow(manifest).to receive(:lookup).with("wagon-media/images/logo.png").and_return(nil)
+      allow(manifest).to receive(:lookup).with("media/images/logo.png").and_return("/packs/media/images/logo-abc123.png")
+
+      # Stub default_url_options for absolute URL building
+      allow(Rails.application.routes).to receive(:default_url_options)
+        .and_return({host: "example.com", protocol: "https"})
 
       payload = nil
       allow(client).to receive(:create_or_update_object) { |p, **_| payload = p }
 
       service.save_url
 
-      expect(payload[:heroImage]).to eq({sourceUri: {uri: "http://test.host/assets/logo.png"}})
+      expect(payload[:heroImage]).to eq({sourceUri: {uri: "https://example.com/packs/media/images/logo-abc123.png"}})
     end
   end
 end

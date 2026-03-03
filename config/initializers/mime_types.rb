@@ -6,3 +6,4 @@
 Mime::Type.register_alias 'text/plain', :email
 Mime::Type.register_alias 'text/plain', :email_outlook
 Mime::Type.register_alias 'application/xlsx', :xlsx
+Mime::Type.register "application/vnd.apple.pkpass", :pkpass

@@ -1,0 +1,34 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title t('.title')
+
+- if @pass_memberships.any?
+  %table.table.table-striped
+    %thead
+      %tr
+        %th= PassDefinition.human_attribute_name(:name)
+        %th= PassMembership.human_attribute_name(:state)
+        %th= PassMembership.human_attribute_name(:valid_from)
+        %th= PassMembership.human_attribute_name(:valid_until)
+        %th
+    %tbody
+      - @pass_memberships.each do |membership|
+        %tr
+          %td= membership.pass_definition.name
+          %td= t("activerecord.attributes.pass_membership.states.#{membership.state}")
+          %td= membership.valid_from ? l(membership.valid_from) : ''
+          %td= membership.valid_until ? l(membership.valid_until) : ''
+          %td.action-buttons
+            = link_to t('.show_pass'), group_person_pass_path(@group, @person, membership.pass_definition)
+            - if google_wallet_configured?
+              = link_to google_wallet_group_person_pass_path(@group, @person, membership.pass_definition), class: 'btn btn-sm btn-outline-primary' do
+                = t('.add_to_google_wallet')
+            - if apple_wallet_configured?
+              = link_to group_person_pass_path(@group, @person, membership.pass_definition, format: :pkpass), class: 'btn btn-sm btn-outline-primary' do
+                = t('.add_to_apple_wallet')
+            = link_to t('.download_pdf'), group_person_pass_path(@group, @person, membership.pass_definition, format: :pdf), class: 'btn btn-sm btn-outline-secondary'
+- else
+  .text-muted= t('.no_passes')

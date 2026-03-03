@@ -1001,6 +1001,10 @@ it:
         state: Stato
         valid_from: Valido da
         valid_until: Valido fino a
+        states:
+          eligible: Ammissibile
+          ended: Scaduto
+          revoked: Revocato
 
       wallets/pass_installation:
         pass_membership: Appartenenza pass

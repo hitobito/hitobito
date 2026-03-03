@@ -1726,6 +1726,18 @@ en:
         one: "%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access."
         other: "%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access."
   people:
+    passes:
+      index:
+        title: Passes
+        show_pass: Show
+        add_to_google_wallet: Add to Google Wallet
+        add_to_apple_wallet: Add to Apple Wallet
+        download_pdf: Download PDF
+        no_passes: No passes available.
+
+    passes_aside:
+      title: Passes
+
     addresses_sync:
       create:
         scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
@@ -2345,5 +2357,10 @@ en:
     pass:
       member_name: Name
       member_number: Member number
+      valid_from: Valid from
       valid_until: Valid until
       description: Description
+    google:
+      save_failed: The pass could not be added to Google Wallet.
+    apple:
+      generation_failed: The pass could not be generated for Apple Wallet.

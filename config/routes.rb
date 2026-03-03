@@ -143,6 +143,11 @@ Hitobito::Application.routes.draw do
             post :minimize
             post :delete
           end
+          resources :passes, only: [:index, :show] do
+            member do
+              get :google_wallet
+            end
+          end
         end
 
         member do

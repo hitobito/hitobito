@@ -926,6 +926,10 @@ en:
         state: State
         valid_from: Valid from
         valid_until: Valid until
+        states:
+          eligible: Eligible
+          ended: Ended
+          revoked: Revoked
 
       wallets/pass_installation:
         pass_membership: Pass Membership

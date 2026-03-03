@@ -928,6 +928,10 @@ de:
         state: Status
         valid_from: Gültig von
         valid_until: Gültig bis
+        states:
+          eligible: Berechtigt
+          ended: Abgelaufen
+          revoked: Widerrufen
 
       wallets/pass_installation:
         pass_membership: Pass-Mitgliedschaft

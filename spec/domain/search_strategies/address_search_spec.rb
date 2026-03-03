@@ -51,6 +51,13 @@ describe SearchStrategies::AddressSearch do
         end
       end
     end
+
+    it "should return empty array when no address exists at all" do
+      Address.destroy_all
+      
+      expect(Address).not_to receive(:search)
+      expect(search_class("whatever").search_fulltext).to be_empty
+    end
   end
 
   def search_class(term = nil, page = nil)

@@ -6,7 +6,7 @@
 module SearchStrategies
   class AddressSearch < Base
     def search_fulltext
-      return no_adresses unless term_present?
+      return no_adresses unless term_present? && Address.exists?
 
       Address.search(@term).limit(@limit)
     end

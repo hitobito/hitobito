@@ -148,6 +148,9 @@ it:
     public_check_box:
       tooltip: Annotazioni private sono visibili solo al proprio gruppo. Se sei un capo nel tuo gruppo, le annotazioni marcate come pubbliche saranno visibili anche ai capi e responsabili di altri gruppi,.
 
+    phone_number_fields:
+      placeholder_type: Bezeichnung (Privat, Arbeit...)
+
     social_account_fields:
       placeholder_value: Sito internet, nome skype, profilo...
       placeholder_type: Tipo (Skype, Facebook...)

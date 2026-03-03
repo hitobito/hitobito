@@ -147,6 +147,9 @@ en:
     public_check_box:
       tooltip: 'Private entries are visible only to your own group. If you are a group leader, entries marked as public are visible to leaders of other groups. '
 
+    phone_number_fields:
+      placeholder_type: Bezeichnung (Privat, Arbeit...)
+
     social_account_fields:
       placeholder_value: Website, Skype-name, other profiles...
       placeholder_type: Type (Skype, Facebook, ...)

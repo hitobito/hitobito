@@ -989,6 +989,7 @@ en:
               one: In the future
               other: Future
       contact_account:
+        custom_label: Freitext
         predefined_labels:
           privat: Private
           mobil: Mobile

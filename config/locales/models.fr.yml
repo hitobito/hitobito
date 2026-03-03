@@ -634,7 +634,7 @@ fr:
           fr: Français
           it: Italien
           rm: Romanche
-          
+
         primary_group_id: Groupe principal
         layer_group_label: Niveau
         self_registration_reason: Motif d'entrée
@@ -1064,6 +1064,7 @@ fr:
               many: Futur
               other: Futur
       contact_account:
+        custom_label: Freitext
         predefined_labels:
           privat: Privé
           mobil: Mobile

@@ -148,6 +148,9 @@ fr:
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
 
+    phone_number_fields:
+      placeholder_type: Bezeichnung (Privat, Arbeit...)
+
     social_account_fields:
       placeholder_value: Site internet, identifiant Skype, lien vers un profil...
       placeholder_type: Type (Skype, Facebook...)

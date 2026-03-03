@@ -1063,6 +1063,7 @@ it:
               many: Futuro
               other: Futuro
       contact_account:
+        custom_label: Freitext
         predefined_labels:
           privat: Privato
           mobil: Cellulare

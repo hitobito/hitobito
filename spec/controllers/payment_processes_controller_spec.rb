@@ -44,13 +44,12 @@ describe PaymentProcessesController do
                                  "Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt."
   end
 
-  it "POST#create with data persists valid payments" do
+  it "POST#create with data enqueues payment process job" do
     invoice.update_columns(reference: "000000000000100000000000905")
     expect do
       post :create, params: {group_id: group.id, data: xmlfile.read}
-    end.to change { invoice.payments.count }.by(1)
+    end.to change { Delayed::Job.where("handler ILIKE '%Invoice::PaymentProcessJob%'").count }.by(1)
     expect(response).to redirect_to group_invoices_path(group)
-    expect(invoice.reload).to be_payed
   end
 
   private

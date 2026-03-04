@@ -1490,7 +1490,7 @@ de:
 
     invalid_file: Die hochgeladene Datei ist nicht gültig.
     parsing_error: Die hochgeladene kann nicht verarbeitet werden (%{error}).
-    created: Es wurden %{count} Zahlungen erfasst.
+    job_enqueued: "Zahlungen werden im Hintergrund erfasst."
     payments:
       valid_with_invoice:
         one: Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.

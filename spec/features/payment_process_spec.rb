@@ -19,7 +19,7 @@ describe :payment_process, js: true do
     visit new_group_payment_process_path(top_layer)
   end
 
-  it "processes payments and finds invoice" do
+  it "enqueues job to process payments" do
     invoice = Fabricate(:invoice, group: groups(:top_layer), recipient: bottom_member)
     invoice.update!(reference: "000000000000100000000000905")
 
@@ -52,9 +52,7 @@ describe :payment_process, js: true do
 
     expect do
       find("button.btn", text: "5 Zahlungen importieren").click
-      expect(page).to have_content("Es wurden 5 Zahlungen erfasst.")
-    end.to change { Payment.count }.by(5)
-
-    expect(invoice.payments.count).to eq(1)
+      expect(page).to have_content("Zahlungen werden im Hintergrund erfasst.")
+    end.to change { Delayed::Job.where("handler ILIKE '%Invoice::PaymentProcessJob%'").count }.by(1)
   end
 end

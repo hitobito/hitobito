@@ -23,8 +23,9 @@ class PaymentProcessesController < ApplicationController
       flash.now[:alert] = processor.alert
       render :show
     elsif processor && params[:data]
-      redirect_to group_invoices_path(group), notice: t("payment_processes.created",
-        count: processor.process)
+      Invoice::PaymentProcessJob.new(data).enqueue!
+      redirect_to group_invoices_path(group),
+        notice: t("payment_processes.job_enqueued")
     elsif @parsing_error
       redirect_to new_group_payment_process_path(group), alert: t("payment_processes.parsing_error",
         error: @parsing_error)

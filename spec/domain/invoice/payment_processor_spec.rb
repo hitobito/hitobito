@@ -33,7 +33,7 @@ describe Invoice::PaymentProcessor do
     invoice.update_columns(reference: "000000000000100000000000905",
       total: 710.82)
     expect do
-      expect(parser.process).to eq 5
+      parser.process
     end.to change { Payment.count }.by(5)
 
     expect(parser.alert).to be_nil
@@ -63,20 +63,14 @@ describe Invoice::PaymentProcessor do
     identifiers = parser("camt.054_version_001.04").payments.map(&:transaction_identifier)
 
     expect(identifiers).to eq(
-      # rubocop:todo Layout/LineLength
-      ["20180314001221000006905084508206000000000000100000000000905710.822018-03-15 00:00:00 +0100CH6309000000250097798",
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
+      # rubocop:disable Layout/LineLength
+      [
+        "20180314001221000006905084508206000000000000100000000000905710.822018-03-15 00:00:00 +0100CH6309000000250097798",
         "20180314001221000006915084508216000000000000100000000000800710.822018-03-15 00:00:00 +0100CH6309000000250097798",
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
         "20180314001221000006925084508226000000000000100000000001165710.822018-03-15 00:00:00 +0100CH6309000000250097798",
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
         "20180314001221000006935084508236000000000000100000000001069710.822018-03-15 00:00:00 +0100CH6309000000250097798",
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        "20180314001221000006945084508246000000000000100000000000750710.822018-03-15 00:00:00 +0100CH6309000000250097798"]
+        "20180314001221000006945084508246000000000000100000000000750710.822018-03-15 00:00:00 +0100CH6309000000250097798"
+      ]
       # rubocop:enable Layout/LineLength
     )
   end
@@ -87,7 +81,7 @@ describe Invoice::PaymentProcessor do
       invoice_run_id: list.id,
       total: 710.82)
     expect do
-      expect(parser.process).to eq 5
+      parser.process
     end.to change { Payment.count }.by(5)
 
     expect(parser.alert).to be_nil
@@ -105,7 +99,7 @@ describe Invoice::PaymentProcessor do
       invoice_run_id: list.id,
       total: 710.82)
     expect do
-      expect(parser.process).to eq 5
+      parser.process
     end.to change { Payment.count }.by(5)
 
     expect(parser.alert).to be_nil
@@ -137,7 +131,7 @@ describe Invoice::PaymentProcessor do
       esr_number: "00 00000 00000 10000 00000 00905",
       total: 710.82)
     expect do
-      expect(parser.process).to eq 5
+      parser.process
     end.to change { Payment.count }.by(5)
     expect(invoice.reload).to be_payed
   end

@@ -6,7 +6,7 @@ class TagListsController < ListController
   skip_authorization_check
   skip_authorize_resource
 
-  helper_method :group
+  helper_method :group, :manageable_people_ids
 
   respond_to :js, only: [:new, :deletable]
 

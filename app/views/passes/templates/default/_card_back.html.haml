@@ -1,0 +1,15 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- bg_style = pass.definition.background_color.present? ? "background-color: #{pass.definition.background_color}" : nil
+- dark_bg_class = pass_card_bg_class(pass.definition.background_color)
+
+.pass-card.pass-card--back{class: dark_bg_class, style: bg_style}
+  .pass-card__back-content
+    .pass-card__qr
+      = pass_qr_code_svg(pass)
+    - if pass.definition.description.present?
+      %p.pass-card__back-description= pass.definition.description
+    %p.pass-card__back-title= pass.definition.name

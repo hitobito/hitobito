@@ -1,0 +1,29 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.passes-verification.passes-verification--default
+  .passes-verification__card
+    = render pass_template_partial(@pass_definition.template.pass_view_partial, 'card_front'), pass: @pass, person: @person
+
+  - case @state
+  - when :valid
+    .passes-verification__status.passes-verification__status--valid
+      = icon(:check_circle)
+      %span= t("passes.verifications.status.valid")
+
+  - when :expired
+    .passes-verification__status.passes-verification__status--expired
+      = icon(:exclamation_triangle)
+      %span= t("passes.verifications.status.expired")
+    - if @pass.valid_until.present?
+      %p.passes-verification__expired-date
+        = t("passes.verifications.expired_on")
+        = l(@pass.valid_until)
+
+  - when :invalid
+    .passes-verification__status.passes-verification__status--invalid
+      = icon(:times_circle)
+      %span= t("passes.verifications.status.invalid")
+    %p= t("passes.verifications.status.invalid_message")

@@ -127,9 +127,10 @@ describe Export::Pdf::Passes::Default do
   end
 
   describe "back card" do
-    it "renders QR placeholder" do
+    it "renders QR code image" do
+      # QR code is rendered as a PNG image, not text — verify no "QR" placeholder remains
       texts = text_with_position(analyzer).map(&:last)
-      expect(texts).to include("QR")
+      expect(texts).not_to include("QR")
     end
 
     it "renders the pass title repeated on back" do

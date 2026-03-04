@@ -1,0 +1,72 @@
+// Copyright (c) 2026, Puzzle ITC. This file is part of
+// hitobito and licensed under the Affero General Public License version 3
+// or later. See the COPYING file at the top-level directory or at
+// https://github.com/hitobito/hitobito.
+
+.passes-verification-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: #f8f9fa;
+}
+
+.passes-verification {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+
+  &__card {
+    margin-bottom: 1rem;
+
+    .pass-card {
+      margin: 0 auto;
+    }
+  }
+
+  &__status {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    &--valid {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    &--expired {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    &--invalid {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  }
+
+  &__expired-date {
+    font-size: 0.9rem;
+    color: #856404;
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .passes-verification {
+    &__card {
+      .pass-card {
+        width: 100%;
+        max-width: 420px;
+      }
+    }
+  }
+}

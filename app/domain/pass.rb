@@ -49,9 +49,6 @@ class Pass
 
   def qrcode_value
     Passes::VerificationQrCode.new(person, definition).verify_url
-  rescue NameError
-    # Stub until Passes::VerificationQrCode is implemented (WP 11)
-    "https://example.com/passes/#{definition.id}/verify/placeholder"
   end
 
   def account_id

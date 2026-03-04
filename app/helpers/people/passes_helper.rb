@@ -4,6 +4,18 @@
 #  https://github.com/hitobito/hitobito.
 
 module People::PassesHelper
+  # Resolves a pass template partial with fallback to the "default" template.
+  # If the template provides e.g. only _card_front, the missing _card_back and
+  # _verify partials are loaded from passes/templates/default/ instead.
+  def pass_template_partial(template_name, partial_name)
+    path = "passes/templates/#{template_name}/_#{partial_name}"
+    if template_name != "default" && lookup_context.find_all(path).empty?
+      "passes/templates/default/#{partial_name}"
+    else
+      "passes/templates/#{template_name}/#{partial_name}"
+    end
+  end
+
   def google_wallet_configured?
     Wallets::GoogleWallet::Config.exist?
   end
@@ -14,6 +26,13 @@ module People::PassesHelper
 
   # Returns 'pass-card--dark-bg' if the background color is dark, nil otherwise.
   # Uses the same W3C luminance formula as Export::Pdf::Passes::Default.
+  # Renders an inline SVG QR code for the pass verification URL.
+  def pass_qr_code_svg(pass, size: 120)
+    qr = Passes::VerificationQrCode.new(pass.person, pass.definition).generate
+    qr.as_svg(module_size: 3, standalone: true, use_path: true,
+      viewbox: true, svg_attributes: {width: size, height: size, class: "pass-card__qr-svg"}).html_safe
+  end
+
   def pass_card_bg_class(hex_color)
     return nil if hex_color.blank?
 

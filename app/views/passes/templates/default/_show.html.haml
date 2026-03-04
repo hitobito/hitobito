@@ -1,0 +1,21 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- template_name = @pass.definition.template.pass_view_partial
+
+.pass-card-wrapper
+  .pass-card-sides
+    = render pass_template_partial(template_name, 'card_front'), pass: @pass, person: @person
+    = render pass_template_partial(template_name, 'card_back'), pass: @pass, person: @person
+
+  .pass-card-actions
+    = link_to group_person_pass_path(@group, @person, @pass.definition, format: :pdf), class: 'btn btn-outline-secondary' do
+      = t('people.passes.index.download_pdf')
+    - if google_wallet_configured?
+      = link_to google_wallet_group_person_pass_path(@group, @person, @pass.definition), class: 'btn btn-outline-primary' do
+        = t('people.passes.index.add_to_google_wallet')
+    - if apple_wallet_configured?
+      = link_to group_person_pass_path(@group, @person, @pass.definition, format: :pkpass), class: 'btn btn-outline-primary' do
+        = t('people.passes.index.add_to_apple_wallet')

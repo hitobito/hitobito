@@ -28,6 +28,11 @@ Hitobito::Application.routes.draw do
 
   get "/verify_membership/:verify_token" => "people/membership/verify#show", as: "verify_membership"
 
+  resources :passes, only: [] do
+    get "verify/:verify_token", action: :show,
+      controller: "passes/verifications", as: :verify
+  end
+
   language_scope do
     namespace :oauth do
       resource :profile, only: :show

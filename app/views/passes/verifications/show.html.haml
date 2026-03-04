@@ -1,0 +1,22 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title = t("passes.verifications.title")
+%html{lang: I18n.locale}
+  %head
+    %meta{charset: "utf-8"}
+    %title= "#{Settings.application.name} - #{title}"
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
+    = stylesheet_pack_tag "application"
+  %body
+    .passes-verification-page
+      - if @pass_definition && @state != :invalid
+        = render pass_template_partial(@pass_definition.template.pass_view_partial, 'verify')
+      - else
+        .passes-verification.passes-verification--default
+          .passes-verification__status.passes-verification__status--invalid
+            = icon(:times_circle)
+            %span= t("passes.verifications.status.invalid")
+          %p= t("passes.verifications.status.invalid_message")

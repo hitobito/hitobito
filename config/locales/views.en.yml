@@ -2364,3 +2364,15 @@ en:
       save_failed: The pass could not be added to Google Wallet.
     apple:
       generation_failed: The pass could not be generated for Apple Wallet.
+
+  passes:
+    verifications:
+      title: Pass Verification
+      valid_from: "Valid from"
+      valid_until: "Valid until"
+      expired_on: "Expired on"
+      status:
+        valid: Pass is valid
+        expired: Pass has expired
+        invalid: Pass is invalid
+        invalid_message: This pass could not be verified.

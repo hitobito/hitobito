@@ -324,7 +324,7 @@ module Export
           content_x = card_x + padding
           center_x = card_x + (CARD_WIDTH / 2)
 
-          # QR code placeholder (centered, large)
+          # QR code (centered, large)
           qr_size = 25.mm
           qr_x = center_x - (qr_size / 2)
           qr_y = card_y - 6.mm
@@ -334,18 +334,15 @@ module Export
           pdf.fill_rounded_rectangle([qr_x, qr_y], qr_size, qr_size, 2.mm)
           pdf.fill_color "000000"
 
-          pdf.stroke_color colors[:muted]
-          pdf.stroke_rounded_rectangle([qr_x, qr_y], qr_size, qr_size, 2.mm)
-          pdf.stroke_color "000000"
-
-          with_color(colors[:label]) do
-            pdf.text_box "QR",
-              at: [qr_x, qr_y - (qr_size / 2) + 2.mm],
-              width: qr_size,
-              height: 4.mm,
-              size: 8,
-              align: :center
-          end
+          # Render QR code PNG
+          qr = ::Passes::VerificationQrCode.new(person, pass_definition).generate
+          qr_png = qr.as_png(size: 200, border_modules: 1)
+          qr_image = StringIO.new(qr_png.to_blob)
+          qr_padding = 1.mm
+          pdf.image qr_image,
+            at: [qr_x + qr_padding, qr_y - qr_padding],
+            width: qr_size - (2 * qr_padding),
+            height: qr_size - (2 * qr_padding)
 
           # Description below QR
           desc_y = qr_y - qr_size - 3.mm

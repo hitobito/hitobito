@@ -25,7 +25,7 @@ class PaymentProcessesController < ApplicationController
     elsif processor && params[:data]
       Invoice::PaymentProcessJob.new(data).enqueue!
       redirect_to group_invoices_path(group),
-        notice: t("payment_processes.job_enqueued", count: processor.payments.count)
+        notice: t("payment_processes.job_enqueued")
     elsif @parsing_error
       redirect_to new_group_payment_process_path(group), alert: t("payment_processes.parsing_error",
         error: @parsing_error)

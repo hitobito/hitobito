@@ -23,7 +23,12 @@ namespace :fixtures do
       parts.join("-").tr("-", "_")
     }
 
-    fixture_data = [:lft, :rgt, :name, :short_name, :type, :email, :address, :zip_code, :town]
+    fixture_data = [
+      :lft, :rgt,
+      :name, :short_name, :type,
+      :email,
+      :street, :housenumber, :zip_code, :town
+    ]
 
     Group.order(:lft).find_each do |group|
       entry = {

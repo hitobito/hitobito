@@ -214,6 +214,8 @@ fr:
               attached_unless_disabled: 'doit être indiqué si une position de logo est sélectionnée'
         period_invoice_template:
           attributes:
+            recipient_group_type:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
@@ -630,9 +632,9 @@ fr:
           de: Allemand
           en: Anglais
           fr: Français
-          it: Italienisch
-          rm: Rätoromanisch
-          
+          it: Italien
+          rm: Romanche
+
         primary_group_id: Groupe principal
         layer_group_label: Niveau
         self_registration_reason: Motif d'entrée
@@ -918,6 +920,7 @@ fr:
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         disclosure: Paramétrage
+        sensitive: Sensibel
         disclosures:
           required: Obligatoire
           optional: Optionnel
@@ -1061,6 +1064,7 @@ fr:
               many: Futur
               other: Futur
       contact_account:
+        custom_label: Freitext
         predefined_labels:
           privat: Privé
           mobil: Mobile

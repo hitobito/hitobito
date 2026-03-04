@@ -213,6 +213,8 @@ it:
               attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
         period_invoice_template:
           attributes:
+            recipient_group_type:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
@@ -631,7 +633,7 @@ it:
           fr: Francese
           it: Italiano
           rm: Romancio
-          
+
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale
         self_registration_reason: Motivo dell'ingresso
@@ -917,6 +919,7 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         disclosure: Impostazione
+        sensitive: Sensibel
         disclosures:
           required: Obbligatorio
           optional: Opzionale
@@ -1060,6 +1063,7 @@ it:
               many: Futuro
               other: Futuro
       contact_account:
+        custom_label: Freitext
         predefined_labels:
           privat: Privato
           mobil: Cellulare

@@ -210,6 +210,8 @@ en:
               attached_unless_disabled: 'must be specified if a logo position is selected'
         period_invoice_template:
           attributes:
+            recipient_group_type:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
@@ -561,7 +563,7 @@ en:
           fr: French
           it: Italienisch
           rm: Rätoromanisch
-          
+
         primary_group_id: Main group
         layer_group_label: Main layer
         self_registration_reason: Reason for entry
@@ -847,6 +849,7 @@ en:
         choices: Possible answers
         multiple_choices: Multiple choice
         disclosure: Antwortangabe
+        sensitive: Sensibel
         disclosures:
           required: Required
           optional: Optional
@@ -986,6 +989,7 @@ en:
               one: In the future
               other: Future
       contact_account:
+        custom_label: Freitext
         predefined_labels:
           privat: Private
           mobil: Mobile

@@ -148,6 +148,9 @@ fr:
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
 
+    phone_number_fields:
+      placeholder_type: Bezeichnung (Privat, Arbeit...)
+
     social_account_fields:
       placeholder_value: Site internet, identifiant Skype, lien vers un profil...
       placeholder_type: Type (Skype, Facebook...)
@@ -590,6 +593,7 @@ fr:
 
     questions:
       add_choice: "Antwortmöglichkeit hinzufügen"
+      sensitive_caption: Antworten werden %{cutoff} Monate nach Ende des Anlasses gelöscht.
 
   assignments:
     attachment: "afficher les pièces jointes"
@@ -1123,13 +1127,14 @@ fr:
       show:
         title: Supprimer une série de facture
         non_draft_info: 'La série de facture contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
-        confirm_delete: Voulez-vous vraiment supprimer la série de factures?
+        confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
     form:
       invoice_articles:
         variable_donation:
           name: Demande de dons variable
           number: Dons
           description: Demande de dons basée sur les sommes de dons existant déjà
+      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
       recipient_info:
         one: "La facture est établie pour und personne."
         many: "La facture est établie pour %{count} personnes."
@@ -1197,6 +1202,24 @@ fr:
         success: La facture supérieur à %{amount} saisie.
 
   period_invoice_templates:
+    invoice_runs:
+      actions_index:
+        add:
+          zero: "Rechnungslauf fahren"
+          other: "Weiteren Rechnungslauf fahren"
+      destroys:
+        show:
+          title: Rechnungslauf löschen
+          non_draft_info: 'In diesem Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+          confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+      form:
+        recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+        recipient_info:
+          one: "%{count} Empfänger gefunden."
+          many: "%{count} Empfänger gefunden."
+          other: "%{count} Empfänger gefunden."
+    form:
+      recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
     new:
       title: Sammelrechnung definieren
     actions_index:
@@ -1812,7 +1835,7 @@ fr:
 
     attrs:
       additional_data: Indications supplémentaires
-      events: Meine nächsten %{event_type_label}
+      events: Mes prochains %{event_type_label}
 
     contact_data:
       address_link_aria_label: Adresse in nominatim.openstreetmap.org öffnen

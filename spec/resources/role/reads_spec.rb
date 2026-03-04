@@ -149,4 +149,79 @@ describe RoleResource, type: :resource do
       end
     end
   end
+
+  describe "filtering" do
+    describe "active_at" do
+      let(:person) { Fabricate(Group::BottomLayer::Leader.name, group: role.group).person }
+      let!(:new_role) { Fabricate(Group::BottomLayer::Leader.name, group: role.group, start_on: 1.week.ago) }
+      let!(:past_role) {
+        Fabricate(Group::BottomLayer::Leader.name, group: role.group, start_on: 1.year.ago, end_on: 1.week.ago)
+      }
+      let!(:past_role_of_readable_person) {
+        Fabricate(Group::BottomLayer::Leader.name, group: role.group, start_on: 1.year.ago, end_on: 1.week.ago,
+          person: new_role.person)
+      }
+      let!(:future_role) { Fabricate(Group::BottomLayer::Leader.name, group: role.group, start_on: 1.week.from_now) }
+      let!(:future_role_of_readable_person) {
+        Fabricate(Group::BottomLayer::Leader.name, group: role.group, start_on: 1.week.from_now,
+          person: new_role.person)
+      }
+
+      context "without filter" do
+        before { params[:filter] = {} }
+
+        it "filters by active roles" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "without parameter" do
+        before { params[:filter] = {active: nil} }
+
+        it "works" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "with parameter in the past" do
+        before { params[:filter] = {active: 2.weeks.ago.to_date} }
+
+        it "filters away new role but does not expose past role of inaccessible person" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "with parameter in the future" do
+        before { params[:filter] = {active: 2.weeks.from_now.to_date} }
+
+        it "includes future role of accessible person" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).to include(future_role_of_readable_person.id)
+        end
+      end
+    end
+  end
 end

@@ -13,6 +13,7 @@
 - Die Absender Adresse einer Rechnung wird jetzt gegenüber dem Logo gedruckt (hitobito_ejv#63)
 - Alle Passwortfelder haben neu die Option das Passwort anzeigen zu lassen (hitobito_sac_cas#2291)
 - In allen Umgebungen welche nach bestimmter Zeit automatisch Antworten auf Eventfragen löschen, werden künftig nur noch als „sensibel“ markierte Antworten entfernt, wobei alle Fragen ab sofort standardmäßig als sensibel voreingestellt sind. (hitobito_sac_cas#2299)
+- In der JSON:API kann neu nach aktiven Rollen gefiltert werden. Möglich ist sowohl das Filtern mit `?filter[active]` nach Rollen die heute aktiv sind, als auch mit `?filter[active]=YYYY-MM-DD` nach Rollen die in der Vergangenheit oder Zukunft aktiv sind/waren. Dabei werden aber immer nur Rollen ausgegeben, die zum heutigen Zeitpunkt immer noch lesbar sind (hitobito_pfadi_de#37)
 
 ## Version 2.8
 

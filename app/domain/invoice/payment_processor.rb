@@ -30,7 +30,6 @@ class Invoice::PaymentProcessor
     Payment.transaction do
       valid_payments.all?(&:save) || (raise ActiveRecord::Rollback)
       invoice_runs.each(&:update_paid)
-      valid_payments.count
     end
   rescue StandardError => e
     raise ProcessError.new(e, xml)

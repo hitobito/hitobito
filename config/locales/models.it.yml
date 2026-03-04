@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -51,6 +51,8 @@ it:
         terminate_on: Data d'uscita
       household:
         members: Componenti del nucleo familiare
+      choice:
+        choice: Antwortmöglichkeit
 
     errors:
       messages:
@@ -83,12 +85,13 @@ it:
         at_least_one_present: È necessario compilare almeno una %{model_name}
         type_not_allowed: non può essere salvato
         must_be_after_opening: deve essere dopo l'inizio dell'annuncio
-        must_have_same_type: devono essere dello stesso tipo
+        must_have_same_type: müssen von demselben Typ sein
         greater_than: deve essere più grande di %{count}
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
         readonly: non può venir cambiato
         cannot_be_later_than_today: non può essere più tardi di oggi
+        is_not_a_decimal_number: muss eine Dezimalzahl sein
       models:
         cors_origin:
           attributes:
@@ -194,6 +197,7 @@ it:
         invoice:
           recipient_address_or_email_required: 'deve essere riempito l''indirizzo del ricevente oppure l''e-mail'
           recipient_name_or_company_name_required: 'Il nome dell''azienda o il nome devono essere compilati'
+          recipient_street_or_postbox_required: 'Via o casella postale devono essere compilati'
           attributes:
             invoice_config:
               invalid: 'non valido; modificate le impostazioni prima di redigere una fattura'
@@ -207,6 +211,12 @@ it:
               invalid_check_digit: 'non valido; cifra di controllo non corretta'
             logo:
               attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
+        period_invoice_template:
+          attributes:
+            recipient_group_type:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
+            end_on:
+              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
           attributes:
             end_on:
@@ -398,6 +408,14 @@ it:
         one: Pagamento
         many: Pagamenti
         other: Pagamenti
+      period_invoice_template:
+        one: Sammelrechnung
+        many: Sammelrechnungen
+        other: Sammelrechnungen
+      period_invoice_template/role_count_item:
+        one: Rollen-Zählung
+        many: Rollen-Zählungen
+        other: Rollen-Zählungen
       oauth/application:
         one: Applicazioni OAuth
         many: Applicazioni OAuth
@@ -563,6 +581,7 @@ it:
         origin: host con accesso API
 
       person:
+        id: Personennummer
         salutation: Appellativo
         first_name: Nome
         last_name: Cognome
@@ -614,7 +633,7 @@ it:
           fr: Francese
           it: Italiano
           rm: Romancio
-          
+
         primary_group_id: Gruppo principale
         layer_group_label: Livello principale
         self_registration_reason: Motivo dell'ingresso
@@ -900,6 +919,7 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         disclosure: Impostazione
+        sensitive: Sensibel
         disclosures:
           required: Obbligatorio
           optional: Opzionale
@@ -1043,6 +1063,7 @@ it:
               many: Futuro
               other: Futuro
       contact_account:
+        custom_label: Freitext
         predefined_labels:
           privat: Privato
           mobil: Cellulare
@@ -1339,7 +1360,7 @@ it:
 
       invoice_run:
         title: Titolo
-        receiver: Destinatario
+        recipient_source: Empfänger
         recipients_total: Destinatario complessivo
         recipients_paid: Destinatario pagato
         amount_total: Importo complessivo
@@ -1408,6 +1429,23 @@ it:
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise
+
+      period_invoice_template:
+        name: Bezeichnung
+        start_on: Rechnungsperiode Start
+        end_on: Rechnungsperiode Ende
+        recipient_group_type: Empfängergruppen
+        items: Rechnungsposten
+
+      period_invoice_template/item:
+        name: Name
+        unit_cost: Preis
+        cost_center: Kostenstelle
+        account: Konto
+        vat_rate: MwSt.
+
+      period_invoice_template/role_count_item:
+        role_types: Rollentypen
 
       service_token:
         name: Cognome

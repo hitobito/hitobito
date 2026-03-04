@@ -1,6 +1,6 @@
 # API
 
-Es gibt drei Möglichkeiten, Daten aus hitobito zu beziehen:
+Es gibt die folgenden Möglichkeiten, Daten aus hitobito zu beziehen:
 
 ### JSON-Schnittstelle mit persönlichem Token
 User können persönliche Zugangs-Tokens generieren und einer externen Applikation mitteilen, welche dann im Namen des Users die JSON-Schnittstelle nutzen kann. Die Applikation hat dabei dieselben Berechtigungen wie der Benutzer.

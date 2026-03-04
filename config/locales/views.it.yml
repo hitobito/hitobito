@@ -1835,7 +1835,7 @@ it:
 
     attrs:
       additional_data: Informazioni supplementari
-      events: Meine nächsten %{event_type_label}
+      events: Prossimi %{event_type_label}
 
     contact_data:
       address_link_aria_label: Adresse in nominatim.openstreetmap.org öffnen

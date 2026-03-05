@@ -6,8 +6,16 @@
 # All settings may be overriden in wagons!
 # See https://github.com/rubyconfig/config
 
+<% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
+                 ENV['RAILS_HOST_NAME'].presence ||
+                 'localhost'
+   hostname    = ENV['RAILS_HOST_NAME'].presence || 'localhost:3000'
+   protocol    = %w(true yes 1).include?(ENV['RAILS_HOST_SSL']) ? 'https' : 'http'
+%>
+
 application:
   name: hitobito  # set same name in email.sender and email.mass_recipient
+  base_uri: <%= "#{protocol}://#{hostname}" %>
   logo:
     image: logo.png # put under app/assets/images
     height: 30 # pixel, has to bet set as the logo is a background image,
@@ -29,12 +37,6 @@ application:
     # first entry is considered the default language
     de: Deutsch
 
-<% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
-                 ENV['RAILS_HOST_NAME'].presence ||
-                 'localhost'
-   hostname    = ENV['RAILS_HOST_NAME'].presence || 'localhost:3000'
-   protocol    = %w(true yes 1).include?(ENV['RAILS_HOST_SSL']) ? 'https' : 'http'
-%>
 currency:
   unit: CHF
 

@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe Wallets::PassEligibility do
+describe Passes::PassEligibility do
   # Fixture hierarchy (nested-set lft/rgt):
   #
   # top_layer (1..18)
@@ -151,49 +151,6 @@ describe Wallets::PassEligibility do
     end
   end
 
-  describe "#matching_roles" do
-    it "returns active matching roles for person" do
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
-
-      roles = eligibility.matching_roles(top_leader)
-      expect(roles).to include(roles(:top_leader))
-    end
-
-    it "excludes archived roles" do
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
-
-      person = Fabricate(:person)
-      archived_role = create_role(person: person, group: groups(:top_group),
-        type: Group::TopGroup::Member, archived_at: 1.day.ago)
-
-      expect(eligibility.matching_roles(person)).not_to include(archived_role)
-    end
-
-    it "excludes ended roles" do
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
-
-      person = Fabricate(:person)
-      ended_role = create_role(person: person, group: groups(:top_group),
-        type: Group::TopGroup::Member,
-        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
-
-      expect(eligibility.matching_roles(person)).not_to include(ended_role)
-    end
-
-    it "returns roles matching across multiple grants" do
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader, Group::TopGroup::Member])
-
-      person = Fabricate(:person)
-      member_role = create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member)
-
-      expect(eligibility.matching_roles(person)).to include(member_role)
-    end
-
-    it "returns empty relation when no grants exist" do
-      expect(eligibility.matching_roles(top_leader)).to be_empty
-    end
-  end
-
   describe "#matching_roles_including_ended" do
     it "includes ended roles" do
       create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
@@ -235,66 +192,6 @@ describe Wallets::PassEligibility do
 
     it "returns empty relation when no grants exist" do
       expect(eligibility.matching_roles_including_ended(top_leader)).to be_empty
-    end
-  end
-
-  describe ".definitions_for" do
-    it "returns definitions matching person's active roles" do
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
-
-      expect(described_class.definitions_for(top_leader)).to include(definition)
-    end
-
-    it "excludes definitions where role type does not match" do
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Secretary])
-
-      expect(described_class.definitions_for(top_leader)).not_to include(definition)
-    end
-
-    it "matches when grantor group encompasses the role's group" do
-      # Grant on top_layer (lft:1, rgt:18) should match role in top_group (lft:14, rgt:15)
-      create_grant(grantor: groups(:top_layer), role_types: [Group::TopGroup::Leader])
-
-      expect(described_class.definitions_for(top_leader)).to include(definition)
-    end
-
-    it "does not match when role group is outside grantor subtree" do
-      # Grant on bottom_layer_one should NOT match top_leader's role in top_group
-      create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::TopGroup::Leader])
-
-      expect(described_class.definitions_for(top_leader)).not_to include(definition)
-    end
-
-    it "returns distinct definitions even with multiple matching grants" do
-      create_grant(grantor: groups(:top_layer), role_types: [Group::TopGroup::Leader])
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
-
-      result = described_class.definitions_for(top_leader)
-      expect(result.count { |d| d.id == definition.id }).to eq(1)
-    end
-
-    it "returns empty relation for person with no active roles" do
-      person = Fabricate(:person)
-
-      expect(described_class.definitions_for(person)).to be_empty
-    end
-
-    it "excludes definitions for ended roles" do
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
-
-      person = Fabricate(:person)
-      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
-        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
-
-      expect(described_class.definitions_for(person)).not_to include(definition)
-    end
-  end
-
-  describe ".group_definitions_for" do
-    it "delegates to same logic as definitions_for" do
-      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
-
-      expect(described_class.group_definitions_for(top_leader)).to include(definition)
     end
   end
 

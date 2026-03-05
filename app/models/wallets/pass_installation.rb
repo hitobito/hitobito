@@ -9,7 +9,7 @@ class Wallets::PassInstallation < ActiveRecord::Base
     class_name: "Wallets::AppleWallet::DeviceRegistration",
     dependent: :destroy
 
-  delegate :person, :pass_definition, :valid_from, :valid_until, to: :pass_membership
+  delegate :person, :pass_definition, :valid_from, :valid_until, :pass, to: :pass_membership
 
   enum :wallet_type, {google: 0, apple: 1}
   enum :state, {active: 0, expired: 1, revoked: 2, pending_sync: 3}

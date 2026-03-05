@@ -11,4 +11,8 @@ class PassMembership < ActiveRecord::Base
   enum :state, {eligible: 0, ended: 1, revoked: 2}
 
   validates :person_id, uniqueness: {scope: :pass_definition_id}
+
+  def pass
+    @pass ||= Pass.new(person: person, definition: pass_definition)
+  end
 end

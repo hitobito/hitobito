@@ -13,7 +13,7 @@ module Passes
     def run
       return unless @person.pass_memberships.exists?
 
-      affected = Wallets::PassEligibility.affected_pass_memberships(@person, role: @role)
+      affected = Passes::PassEligibility.affected_pass_memberships(@person, role: @role)
       return unless affected.any?
 
       affected.find_each do |membership|

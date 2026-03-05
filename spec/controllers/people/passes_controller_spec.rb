@@ -53,13 +53,21 @@ describe People::PassesController do
   describe "GET #show" do
     context "format.html" do
       it "renders the show view" do
+        membership = person.pass_memberships.create!(pass_definition: definition,
+          state: :eligible, valid_from: Date.current)
+
         get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}
 
         expect(response).to be_successful
-        expect(assigns(:pass)).to be_a(Pass)
-        expect(assigns(:pass).definition).to eq(definition)
+        expect(assigns(:pass_membership)).to eq(membership)
         expect(assigns(:group)).to eq(group)
         expect(assigns(:person)).to eq(person)
+      end
+
+      it "returns 404 when no pass membership exists" do
+        expect {
+          get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}
+        }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "raises CanCan::AccessDenied for unauthorized user" do
@@ -75,6 +83,10 @@ describe People::PassesController do
       let(:save_url) { "https://pay.google.com/gp/v/save/jwt-token" }
       let(:google_service) { instance_double(Wallets::GoogleWallet::PassService, save_url: save_url) }
       let(:synchronizer) { instance_double(Wallets::PassSynchronizer) }
+      let!(:membership) do
+        person.pass_memberships.create!(pass_definition: definition,
+          state: :eligible, valid_from: Date.current)
+      end
 
       before do
         allow(Wallets::GoogleWallet::PassService).to receive(:new).and_return(google_service)
@@ -86,7 +98,6 @@ describe People::PassesController do
         expect {
           get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
         }.to change(Wallets::PassInstallation, :count).by(1)
-          .and change(PassMembership, :count).by(1)
 
         expect(response).to redirect_to(save_url)
         installation = Wallets::PassInstallation.last
@@ -94,12 +105,22 @@ describe People::PassesController do
         expect(installation.wallet_identifier).to be_present
       end
 
+      it "returns 404 when no pass membership exists" do
+        membership.destroy
+        expect {
+          get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "passes the installation to GoogleWallet::PassService" do
+        expect(Wallets::GoogleWallet::PassService).to receive(:new)
+          .with(kind_of(Wallets::PassInstallation))
+          .and_return(google_service)
+
+        get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
+      end
+
       it "reuses existing pass membership and installation" do
-        membership = person.pass_memberships.create!(
-          pass_definition: definition,
-          state: :eligible,
-          valid_from: Date.current
-        )
         membership.pass_installations.create!(
           wallet_type: :google,
           wallet_identifier: SecureRandom.uuid
@@ -126,6 +147,10 @@ describe People::PassesController do
       let(:pkpass_data) { "fake-pkpass-binary-data" }
       let(:apple_service) { instance_double(Wallets::AppleWallet::PassService, generate_pass: pkpass_data) }
       let(:synchronizer) { instance_double(Wallets::PassSynchronizer) }
+      let!(:membership) do
+        person.pass_memberships.create!(pass_definition: definition,
+          state: :eligible, valid_from: Date.current)
+      end
 
       before do
         stub_const("Wallets::AppleWallet::PassService", Class.new)
@@ -138,7 +163,6 @@ describe People::PassesController do
         expect {
           get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}, format: :pkpass
         }.to change(Wallets::PassInstallation, :count).by(1)
-          .and change(PassMembership, :count).by(1)
 
         expect(response).to be_successful
         expect(response.media_type).to eq("application/vnd.apple.pkpass")
@@ -173,28 +197,6 @@ describe People::PassesController do
         expect(response).to be_successful
         expect(response.media_type).to eq("application/pdf")
       end
-    end
-  end
-
-  describe "#find_or_create_pass_installation" do
-    it "sets validity from Pass PORO when creating membership" do
-      allow_any_instance_of(Pass).to receive(:eligible?).and_return(true)
-      allow_any_instance_of(Pass).to receive(:valid_from).and_return(Date.new(2025, 1, 1))
-      allow_any_instance_of(Pass).to receive(:valid_until).and_return(Date.new(2025, 12, 31))
-
-      save_url = "https://pay.google.com/gp/v/save/test"
-      google_service = instance_double(Wallets::GoogleWallet::PassService, save_url: save_url)
-      allow(Wallets::GoogleWallet::PassService).to receive(:new).and_return(google_service)
-      synchronizer = instance_double(Wallets::PassSynchronizer)
-      allow(Wallets::PassSynchronizer).to receive(:new).and_return(synchronizer)
-      allow(synchronizer).to receive(:compute_validity!)
-
-      get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
-
-      membership = person.pass_memberships.find_by(pass_definition: definition)
-      expect(membership.state).to eq("eligible")
-      expect(membership.valid_from).to eq(Date.new(2025, 1, 1))
-      expect(membership.valid_until).to eq(Date.new(2025, 12, 31))
     end
   end
 end

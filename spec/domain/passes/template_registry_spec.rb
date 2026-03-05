@@ -6,9 +6,11 @@
 require "spec_helper"
 
 describe Passes::TemplateRegistry do
+  let(:test_pdf_class) { Class.new }
+
   let(:default_args) do
     {
-      pdf_class: "DummyPdf",
+      pdf_class: test_pdf_class,
       pass_view_partial: "default",
       wallet_data_provider: Passes::WalletDataProvider
     }
@@ -24,15 +26,17 @@ describe Passes::TemplateRegistry do
 
   describe ".register and .fetch" do
     it "registers and fetches a template bundle" do
+      foo_pdf_class = Class.new
+
       described_class.register("foo",
-        pdf_class: "FooPdf",
+        pdf_class: foo_pdf_class,
         pass_view_partial: "foo",
         wallet_data_provider: Passes::WalletDataProvider)
 
       template = described_class.fetch("foo")
 
       expect(template).to be_a(described_class::Template)
-      expect(template.pdf_class).to eq("FooPdf")
+      expect(template.pdf_class).to eq(foo_pdf_class)
       expect(template.pass_view_partial).to eq("foo")
       expect(template.wallet_data_provider).to eq(Passes::WalletDataProvider)
     end

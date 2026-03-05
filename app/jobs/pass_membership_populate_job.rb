@@ -14,7 +14,7 @@ class PassMembershipPopulateJob < BaseJob
   def perform
     set_locale
     pass_definition = PassDefinition.find(@pass_definition_id)
-    eligibility = Wallets::PassEligibility.new(pass_definition)
+    eligibility = Passes::PassEligibility.new(pass_definition)
 
     eligibility.people.find_each do |person|
       pass = Pass.new(person: person, definition: pass_definition)

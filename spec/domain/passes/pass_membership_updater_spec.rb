@@ -27,7 +27,7 @@ describe Passes::PassMembershipUpdater do
   describe "#run" do
     context "when person has no pass_memberships" do
       it "returns early without querying eligibility" do
-        expect(Wallets::PassEligibility).not_to receive(:affected_pass_memberships)
+        expect(Passes::PassEligibility).not_to receive(:affected_pass_memberships)
         updater.run
       end
     end

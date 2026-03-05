@@ -53,6 +53,8 @@ config/*.sphinx.conf
 Wagonfile
 config/mail.yml
 config/post-address-sync.yml
+config/google_*.yml
+config/google_*.json
 
 # uploaded pictures
 public/uploads

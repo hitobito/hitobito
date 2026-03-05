@@ -6,7 +6,7 @@
 Rails.application.config.to_prepare do
   Passes::TemplateRegistry.reset!
   Passes::TemplateRegistry.register("default",
-    pdf_class: "Export::Pdf::Passes::Default",
+    pdf_class: Export::Pdf::Passes::Default,
     pass_view_partial: "default",
     wallet_data_provider: Passes::WalletDataProvider)
 end

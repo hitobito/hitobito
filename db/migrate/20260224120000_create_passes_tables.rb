@@ -15,7 +15,7 @@ class CreatePassesTables < ActiveRecord::Migration[8.0]
     reversible do |dir|
       dir.up do
         PassDefinition.create_translation_table!(
-          name: {type: :string, null: false},
+          name: :string,
           description: :text
         )
       end

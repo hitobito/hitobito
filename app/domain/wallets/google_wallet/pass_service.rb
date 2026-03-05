@@ -6,10 +6,11 @@
 module Wallets
   module GoogleWallet
     class PassService
-      attr_reader :pass
+      def pass = @pass_installation.pass
 
-      def initialize(pass, client: Client.new)
-        @pass = pass
+
+      def initialize(pass_installation, client: Client.new)
+        @pass_installation = pass_installation
         @client = client
       end
 
@@ -42,7 +43,7 @@ module Wallets
       end
 
       def pass_object_id
-        "#{Config.issuer_id}.pass_#{pass.account_id}"
+        "#{Config.issuer_id}.pass_#{@pass_installation.wallet_identifier}"
       end
 
       def pass_class = generic_class

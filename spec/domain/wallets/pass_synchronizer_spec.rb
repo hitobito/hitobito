@@ -74,6 +74,15 @@ describe Wallets::PassSynchronizer do
           synchronizer.sync!
         end
 
+        it "passes the installation to GoogleWallet::PassService" do
+          service = instance_double("Wallets::GoogleWallet::PassService", create_or_update: nil)
+          expect(Wallets::GoogleWallet::PassService).to receive(:new)
+            .with(installation)
+            .and_return(service)
+
+          synchronizer.sync!
+        end
+
         it "updates last_synced_at and clears sync_error" do
           service = instance_double("Wallets::GoogleWallet::PassService")
           allow(Wallets::GoogleWallet::PassService).to receive(:new).and_return(service)

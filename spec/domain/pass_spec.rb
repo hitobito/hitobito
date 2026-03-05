@@ -18,7 +18,7 @@ describe Pass do
     end
   end
 
-  let(:eligibility) { instance_double(Wallets::PassEligibility) }
+  let(:eligibility) { instance_double(Passes::PassEligibility) }
   let(:matching_roles) { person.roles.where(type: Group::TopGroup::Leader.sti_name) }
   let(:matching_roles_including_ended) { person.roles.with_inactive.where(type: Group::TopGroup::Leader.sti_name) }
 
@@ -26,8 +26,8 @@ describe Pass do
 
   before do
     # Stub PassEligibility since it's implemented in WP 03b
-    stub_const("Wallets::PassEligibility", Class.new) unless defined?(Wallets::PassEligibility)
-    allow(Wallets::PassEligibility).to receive(:new).with(definition).and_return(eligibility)
+    stub_const("Passes::PassEligibility", Class.new) unless defined?(Passes::PassEligibility)
+    allow(Passes::PassEligibility).to receive(:new).with(definition).and_return(eligibility)
   end
 
   describe "#eligible?" do

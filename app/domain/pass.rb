@@ -79,6 +79,6 @@ class Pass
   private
 
   def eligibility
-    @eligibility ||= Wallets::PassEligibility.new(definition)
+    @eligibility ||= Passes::PassEligibility.new(definition)
   end
 end

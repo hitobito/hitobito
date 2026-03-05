@@ -16,10 +16,19 @@ describe Wallets::GoogleWallet::PassService do
   end
 
   let(:issuer_id) { "3388000000022266745" }
-  let(:pass_poro) { Pass.new(person: person, definition: definition) }
   let(:client) { instance_double(Wallets::GoogleWallet::Client) }
+  let(:default_membership) do
+    Fabricate(:pass_membership, person: person, pass_definition: definition,
+      state: :eligible, valid_from: Date.current)
+  end
+  let(:default_installation) do
+    Fabricate(:wallets_pass_installation,
+      pass_membership: default_membership,
+      wallet_type: :google,
+      wallet_identifier: "#{person.id}-#{definition.id}")
+  end
 
-  subject(:service) { described_class.new(pass_poro, client: client) }
+  subject(:service) { described_class.new(default_installation, client: client) }
 
   before do
     allow(Wallets::GoogleWallet::Config).to receive(:issuer_id).and_return(issuer_id)
@@ -57,6 +66,40 @@ describe Wallets::GoogleWallet::PassService do
     it "sends INACTIVE state to client" do
       expect(client).to receive(:create_or_update_object).with(
         {id: expected_pass_object_id, state: "INACTIVE"},
+        type: :generic
+      )
+
+      service.revoke
+    end
+  end
+
+  describe "with pass_installation" do
+    let(:membership) do
+      Fabricate(:pass_membership, person: person, pass_definition: definition,
+        state: :eligible, valid_from: Date.current)
+    end
+    let(:installation) do
+      Fabricate(:wallets_pass_installation,
+        pass_membership: membership,
+        wallet_type: :google,
+        wallet_identifier: "my-stable-uuid")
+    end
+
+    subject(:service) { described_class.new(installation, client: client) }
+
+    it "uses wallet_identifier as object id suffix" do
+      allow(client).to receive(:create_class)
+      allow(client).to receive(:create_or_update_object)
+      expect(client).to receive(:generate_save_url)
+        .with("#{issuer_id}.pass_my-stable-uuid", type: :generic)
+        .and_return("https://pay.google.com/...")
+
+      service.save_url
+    end
+
+    it "uses wallet_identifier for revoke" do
+      expect(client).to receive(:create_or_update_object).with(
+        {id: "#{issuer_id}.pass_my-stable-uuid", state: "INACTIVE"},
         type: :generic
       )
 

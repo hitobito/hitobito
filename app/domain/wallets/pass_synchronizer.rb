@@ -52,15 +52,8 @@ module Wallets
 
     private
 
-    def build_pass
-      Pass.new(
-        person: pass_installation.person,
-        definition: pass_installation.pass_definition
-      )
-    end
-
     def sync_google!
-      service = Wallets::GoogleWallet::PassService.new(build_pass)
+      service = Wallets::GoogleWallet::PassService.new(pass_installation)
       if pass_installation.revoked?
         service.revoke
       else

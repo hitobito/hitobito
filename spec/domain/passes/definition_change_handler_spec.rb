@@ -47,8 +47,9 @@ describe Passes::DefinitionChangeHandler do
       end
 
       it "marks installations for sync when template_key changes" do
+        alt_pdf_class = Class.new
         Passes::TemplateRegistry.register("alt",
-          pdf_class: "Export::Pdf::Passes::Alt",
+          pdf_class: alt_pdf_class,
           pass_view_partial: "default",
           wallet_data_provider: Passes::WalletDataProvider)
 

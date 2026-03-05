@@ -16,7 +16,8 @@ class People::PassesController < ApplicationController
   # GET /groups/:group_id/people/:person_id/passes/:id(.pdf|.pkpass)
   def show
     authorize!(:update, person)
-    @pass = Pass.new(person: person, definition: pass_definition)
+    @pass_membership = find_pass_membership
+    @pass = @pass_membership.pass
 
     respond_to do |format|
       format.html { render :show }
@@ -28,7 +29,7 @@ class People::PassesController < ApplicationController
   # GET /groups/:group_id/people/:person_id/passes/:id/google_wallet
   def google_wallet
     authorize!(:update, person)
-    @pass = Pass.new(person: person, definition: pass_definition)
+    @pass_membership = find_pass_membership
 
     redirect_to_google_wallet
   end
@@ -39,7 +40,7 @@ class People::PassesController < ApplicationController
     pass_installation = find_or_create_pass_installation(:google)
     Wallets::PassSynchronizer.new(pass_installation).compute_validity!
 
-    service = Wallets::GoogleWallet::PassService.new(@pass)
+    service = Wallets::GoogleWallet::PassService.new(pass_installation)
     redirect_to service.save_url, allow_other_host: true
   rescue => e
     Rails.logger.error("Google Wallet save failed: #{e.message}")
@@ -51,7 +52,7 @@ class People::PassesController < ApplicationController
     pass_installation = find_or_create_pass_installation(:apple)
     Wallets::PassSynchronizer.new(pass_installation).compute_validity!
 
-    service = Wallets::AppleWallet::PassService.new(@pass, pass_installation: pass_installation)
+    service = Wallets::AppleWallet::PassService.new(pass_installation)
     send_data service.generate_pass,
       type: "application/vnd.apple.pkpass",
       disposition: "attachment",
@@ -64,24 +65,18 @@ class People::PassesController < ApplicationController
 
   def render_pdf
     template = pass_definition.template
-    pdf = template.pdf_class.constantize.new(person, pass_definition)
+    pdf = template.pdf_class.new(person, pass_definition)
     I18n.with_locale(person.language) do
       send_data pdf.render, type: :pdf, disposition: "inline", filename: pdf.filename
     end
   end
 
+  def find_pass_membership
+    person.pass_memberships.find_by!(pass_definition: pass_definition)
+  end
+
   def find_or_create_pass_installation(wallet_type)
-    pass_membership = person.pass_memberships.find_or_create_by!(
-      pass_definition: pass_definition
-    ) do |pm|
-      # Edge Case: PassMembershipPopulateJob hat noch nicht gelaufen,
-      # aber Person klickt bereits auf "Add to Wallet".
-      # Gültigkeitsdaten aus Pass PORO berechnen.
-      pm.state = @pass.eligible? ? :eligible : :ended
-      pm.valid_from = @pass.valid_from
-      pm.valid_until = @pass.valid_until
-    end
-    pass_membership.pass_installations.find_or_create_by!(wallet_type: wallet_type) do |pi|
+    @pass_membership.pass_installations.find_or_create_by!(wallet_type: wallet_type) do |pi|
       pi.wallet_identifier = SecureRandom.uuid
     end
   end

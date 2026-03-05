@@ -103,7 +103,9 @@ class InvoiceRunsController < CrudController
   end
 
   def list_entries
-    super.includes(:recipient_source).list.where(created_at: year_filter)
+    super.includes(:recipient_source).list.where(created_at: year_filter).then do |scope|
+      parents.any?(PeriodInvoiceTemplate) ? scope : scope.standalone
+    end
   end
 
   def return_path # rubocop:todo Metrics/AbcSize,Metrics/MethodLength

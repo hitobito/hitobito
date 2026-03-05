@@ -45,15 +45,29 @@ describe InvoiceRunsController do
     let(:person) { people(:top_leader) }
     render_views
     let(:node) { Capybara::Node::Simple.new(response.body) }
-    let(:column) { node.find("#main table tbody tr td:eq(3)") }
 
     before { sign_in(person) }
 
-    it "renders final Empfänger count" do
-      InvoiceRun.create!(group: group, title: "title", recipients_processed: 20, recipients_total: 20,
+    context "recipient count column" do
+      let(:column) { node.find("#main table tbody tr td:eq(3)") }
+
+      it "renders final Empfänger count" do
+        InvoiceRun.create!(group: group, title: "title", recipients_processed: 20, recipients_total: 20,
+          recipient_source: PeopleFilter.new)
+        get :index, params: {group_id: group.id}
+        expect(column).to have_text("20")
+      end
+    end
+
+    it "renders only standalone invoice lists if used outside of a period invoice template" do
+      period_invoice_template = Fabricate(:period_invoice_template)
+      InvoiceRun.create!(group: group, title: "dependent", recipients_processed: 20, recipients_total: 20,
+        recipient_source: PeopleFilter.new, period_invoice_template:)
+      InvoiceRun.create!(group: group, title: "standalone", recipients_processed: 20, recipients_total: 20,
         recipient_source: PeopleFilter.new)
       get :index, params: {group_id: group.id}
-      expect(column).to have_text("20")
+      expect(node).to have_text("standalone")
+      expect(node).not_to have_text("dependent")
     end
   end
 

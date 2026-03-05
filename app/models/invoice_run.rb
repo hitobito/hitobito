@@ -52,6 +52,7 @@ class InvoiceRun < ActiveRecord::Base
   # TODO validate recipient_source_id so that no arbitrary changes can be made
 
   scope :list, -> { order(:created_at) }
+  scope :standalone, -> { where(period_invoice_template_id: nil) }
 
   validates_by_schema except: :invalid_recipient_ids
 

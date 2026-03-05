@@ -46,6 +46,10 @@ class Event::Answer < ActiveRecord::Base
       .select("event_answers.*")
   }
 
+  def to_s(format = :default)
+    question.label
+  end
+
   def answer
     super&.gsub(Choice::ESCAPED_SEPARATOR, ",")
   end

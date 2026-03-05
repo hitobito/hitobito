@@ -304,6 +304,9 @@ de:
       event/question:
         one: Eventfrage
         other: Eventfragen
+      event/answer:
+        one: Anmeldefrage
+        other: Anmeldefragen
       family_member:
         one: Familienmitglied
         other: Familienmitglieder

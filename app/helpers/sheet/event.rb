@@ -54,7 +54,7 @@ module Sheet
     tab "global.tabs.log",
       :log_group_event_path,
       if: (lambda do |view, _group, event|
-        view.can?(:log, event)
+        view.can?(:update, event)
       end)
 
     def link_url

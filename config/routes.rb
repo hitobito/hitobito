@@ -122,7 +122,7 @@ Hitobito::Application.routes.draw do
       resources :invoice_runs, only: [:index] do
         resource :destroy, only: [:show, :destroy], module: :invoice_runs,
           as: "invoice_runs_destroy"
-        resources :invoices
+        resources :invoices, controller: "invoice_runs/invoices"
       end
 
       FeatureGate.if("groups.period_invoice_templates") do
@@ -130,7 +130,7 @@ Hitobito::Application.routes.draw do
           resources :invoice_runs, except: [:edit, :update], module: :period_invoice_templates do
             resource :destroy, only: [:show, :destroy], module: :invoice_runs,
               as: "invoice_runs_destroy"
-            resources :invoices, controller: "/invoices"
+            resources :invoices, controller: "/invoice_runs/invoices"
           end
         end
       end

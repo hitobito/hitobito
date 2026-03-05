@@ -154,12 +154,6 @@ class InvoiceRunsController < CrudController
     entry.invoice = build_invoice
     entry.recipient_source = recipient_source
 
-    # TODO in #3752, move this logic out of here into the period_invoice_templates
-    # if fixed_fees?
-    #   InvoiceRuns::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
-    #     flash.now[key] = text
-    #   end
-
     if params[:invoice_items].present?
       entry.invoice.invoice_items = params[:invoice_items].map do |type|
         item = InvoiceItem.type_mappings[type.to_sym].new

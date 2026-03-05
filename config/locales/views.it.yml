@@ -1190,9 +1190,6 @@ it:
       one: "La fattura è stata annullata"
       other: "%{count} fatture sono state annullate."
 
-  invoice_runs/fixed_fee:
-    recipient_role_group_mismatch: "Non è stato possibile individuare alcun destinatario per i seguenti gruppi: %{groups}"
-
   payments:
     export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
     create:

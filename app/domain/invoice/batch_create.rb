@@ -67,7 +67,9 @@ class Invoice::BatchCreate
     invoice = invoice_run.group.issued_invoices.build(invoice_attrs)
     add_invoice_items(invoice, recipient)
 
-    invoice.save if invoice.invoice_items.any?
+    # In some cases, e.g. no invoice items present, we don't want to not create the invoice,
+    # but still report successful processing of the recipient.
+    save_invoice?(invoice) ? invoice.save : true
   end
 
   # Creates clones of all invoice items on the invoice_run invoice
@@ -86,6 +88,21 @@ class Invoice::BatchCreate
 
     item.dynamic_cost_parameters[:recipient_id] = recipient.id
     item.dynamic_cost_parameters[:group_id] = invoice_run.group.layer_group.id
+  end
+
+  def save_invoice?(invoice)
+    # Invoice must contain some items, otherwise we silently skip saving the invoice
+    return false if invoice.invoice_items.empty?
+
+    if invoice.invoice_items.any? { |item| item.is_a?(Invoice::PeriodItem) }
+      # Period invoices with only zero cost items are not persisted. See also
+      # https://github.com/hitobito/hitobito/issues/3753
+      invoice.invoice_items.map(&:cost).any?(&:nonzero?)
+    else
+      # If no dynamic items are present, a zero total is allowed. See also
+      # https://github.com/hitobito/hitobito_die_mitte/issues/148
+      true
+    end
   end
 
   def update_invoice_run

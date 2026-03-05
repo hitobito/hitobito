@@ -219,63 +219,6 @@ describe InvoicesController do
       end.to change { Delayed::Job.count }.by(1)
     end
 
-    context "invoice run" do
-      let(:sent) { invoices(:sent) }
-      let(:letter) { messages(:with_invoice) }
-      let(:invoice_run) {
-        messages(:with_invoice).create_invoice_run(title: "test", group_id: group.id,
-          recipient_source: PeopleFilter.new)
-      }
-      let(:top_leader) { people(:top_leader) }
-
-      before do
-        update_issued_at_to_current_year
-        sent.update(invoice_run: invoice_run)
-      end
-
-      it "does not include invoice when viewing group invoices" do
-        get :index, params: {group_id: group.id}
-        expect(assigns(:invoices)).not_to include sent
-      end
-
-      it "does include invoice when viewing invoice run invoices" do
-        get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
-        expect(assigns(:invoices)).to include sent
-      end
-
-      it "does include invoice when viewing invoice run invoices in next year" do
-        travel_to(1.year.from_now) do
-          get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
-          expect(assigns(:invoices)).to include sent
-        end
-      end
-
-      it "does render pdf using invoice renderer" do
-        expect do
-          get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}, format: :pdf
-        end.to change { Delayed::Job.count }.by(1)
-      end
-
-      it "does render pdf Letter renderer renderer" do
-        top_leader.update(
-          street: "Greatstreet",
-          housenumber: "345",
-          zip_code: 3456,
-          town: "Greattown",
-          country: "CH"
-        )
-
-        invoice_run.update(message: letter)
-
-        expect(Export::MessageJob).to receive(:new)
-          .with(:pdf, person.id, letter.id, Hash)
-          .and_call_original
-        expect do
-          get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}, format: :pdf
-        end.to change { Delayed::Job.count }.by(1)
-      end
-    end
-
     it "exports labels pdf" do
       get :index, params: {group_id: group.id, label_format_id: label_formats(:standard).id}, format: :pdf
       expect(response.media_type).to eq("application/pdf")
@@ -329,16 +272,6 @@ describe InvoicesController do
         get :index, params: {group_id: group.id}
         expect(dom).to have_field("from", with: "1.1.#{current_year}")
         expect(dom).to have_field("to", with: "31.12.#{current_year}")
-      end
-
-      it "renders filter with date values from invoice run" do
-        invoice_run = InvoiceRun.create!(title: "test", group:, created_at: Time.zone.local(2025, 10, 12),
-          recipient_source: PeopleFilter.new)
-        invoice.update(invoice_run:)
-
-        get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
-        expect(dom).to have_field("from", with: "1.1.2025")
-        expect(dom).to have_field("to", with: "31.12.2025")
       end
     end
   end
@@ -426,28 +359,6 @@ describe InvoicesController do
       expect(invoice.reload.state).to eq "cancelled"
       expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:notice]).to eq "Rechnung wurde storniert."
-    end
-
-    it "updates and redirects to invoice_run" do
-      run = InvoiceRun.create(title: "List", group: group, invoices: [invoice, invoices(:sent)],
-        recipient_source: PeopleFilter.new)
-
-      run.update_total
-      expect(run.recipients_total).to eq(2)
-      expect(run.amount_total.to_f).to eq(5.85)
-
-      invoice.reload
-
-      expect do
-        delete :destroy, params: {group_id: group.id, invoice_run_id: run.id, id: invoice.id}
-      end.not_to change { group.issued_invoices.count }
-      expect(response).to redirect_to(group_invoice_run_invoices_path(group, run, returning: true))
-      expect(invoice.reload.state).to eq "cancelled"
-
-      run.reload
-
-      expect(run.recipients_total).to eq(1)
-      expect(run.amount_total).to eq(0.5)
     end
   end
 

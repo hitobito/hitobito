@@ -51,4 +51,27 @@ describe Event::Attachment do
       expect { a.visibility = :foo }.to raise_error("'foo' is not a valid visibility")
     end
   end
+
+  context "paper trails", versioning: true do
+    it "sets main to event on create" do
+      expect do
+        event.attachments.create!
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(event)
+    end
+
+    it "sets main to event on update" do
+      event.attachments.create!
+      expect do
+        event.attachments.first.update!(visibility: "team")
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(event)
+    end
+  end
 end

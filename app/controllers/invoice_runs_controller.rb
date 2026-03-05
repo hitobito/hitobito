@@ -37,7 +37,7 @@ class InvoiceRunsController < CrudController
 
   respond_to :js, only: [:new]
 
-  helper_method :cancel_url, :fixed_fees?, :group
+  helper_method :cancel_url, :group
 
   def new
     assign_attributes
@@ -86,10 +86,6 @@ class InvoiceRunsController < CrudController
 
   def show
     redirect_to group_invoices_path(group)
-  end
-
-  def fixed_fees?
-    params.key?(:fixed_fees)
   end
 
   private
@@ -145,7 +141,6 @@ class InvoiceRunsController < CrudController
   end
 
   def cancel_url
-    return group_path(group) if fixed_fees?
     session[:invoice_referer] || group_invoices_path(group)
   end
 

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -56,58 +56,39 @@ class Invoice::BatchCreate
     end
   end
 
+  # Creates a clone of the invoice_run invoice for the given recipient
+  # and saves it.
   def create_invoice(recipient) # rubocop:todo Metrics/AbcSize
     invoice_attrs = invoice.attributes.merge(
-      title: invoice_run.fixed_fee ? title_with_layer(recipient) : invoice.title,
       creator_id: invoice_run.creator_id,
       invoice_run_id: invoice_run.id,
       recipient: recipient
     )
     invoice = invoice_run.group.issued_invoices.build(invoice_attrs)
-
     add_invoice_items(invoice, recipient)
+
     invoice.save if invoice.invoice_items.any?
   end
 
+  # Creates clones of all invoice items on the invoice_run invoice
+  # and adds them to the invoice.
   def add_invoice_items(invoice, recipient)
-    if invoice_run.fixed_fee
-      invoice.invoice_items = InvoiceRuns::FixedFee.for(invoice_run.fixed_fee,
-        recipient.layer_group.id).invoice_items
-      invoice.invoice_items.each do |item|
-        item.invoice = invoice
-        item.recalculate
-      end
-    else
-      invoice.invoice_items_attributes = invoice_items_attributes(recipient.id)
-    end
+    invoice.invoice_items = invoice_run.invoice.invoice_items.map do |template_item|
+      item = invoice.invoice_items.build(template_item.attributes)
+      item.invoice = invoice
+      set_dynamic_cost_parameters(item, recipient)
+      item if item.recalculate.valid?
+    end.compact
+  end
+
+  def set_dynamic_cost_parameters(item, recipient)
+    return unless item.dynamic
+
+    item.dynamic_cost_parameters[:recipient_id] = recipient.id
+    item.dynamic_cost_parameters[:group_id] = invoice_run.group.layer_group.id
   end
 
   def update_invoice_run
     invoice_run.update(recipients_processed: results.count(true), invalid_recipient_ids: invalid)
-  end
-
-  def invoice_items_attributes(recipient_id)
-    invoice.invoice_items.collect do |item|
-      attrs = item.attributes
-      if item.dynamic
-        unless item.is_a?(Invoice::PeriodItem)
-          item.dynamic_cost_parameters[:recipient_id] = recipient_id
-          item.dynamic_cost_parameters[:group_id] = group_id
-        end
-        attrs[:cost] = item.dynamic_cost
-      end
-      # Do not try to save invalid item since that would abort the whole invoice create transaction
-      attrs if InvoiceItem.new(attrs).recalculate.valid?
-    end.compact
-  end
-
-  def title_with_layer(recipient)
-    return invoice.title unless recipient
-
-    [invoice.title, recipient.layer_group.name].join(" - ")
-  end
-
-  def group_id
-    invoice_run.group.layer_group.id
   end
 end

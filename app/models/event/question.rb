@@ -27,6 +27,9 @@
 #
 
 class Event::Question < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(q) { q.event_id },
+                         main_type: Event.sti_name}
+
   include Globalized
   include I18nEnums
 

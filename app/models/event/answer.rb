@@ -20,6 +20,9 @@
 #
 
 class Event::Answer < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(a) { a.participation_id },
+                         main_type: Event::Participation.sti_name}
+
   belongs_to :participation
   belongs_to :question
 

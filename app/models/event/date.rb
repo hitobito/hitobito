@@ -21,6 +21,9 @@
 #
 
 class Event::Date < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(d) { d.event_id },
+                         main_type: Event.sti_name}
+
   include DatetimeAttribute
   datetime_attr :start_at, :finish_at
 

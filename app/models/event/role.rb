@@ -19,6 +19,8 @@
 #
 
 class Event::Role < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(r) { r.participation_id },
+                         main_type: Event::Participation.sti_name}
   # rubocop:disable Naming/ConstantName,Style/MutableConstant
 
   Permissions = [:event_full, :participations_full, :participations_read, :qualify]

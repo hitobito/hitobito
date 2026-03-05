@@ -65,6 +65,11 @@
 #
 # The same event may be attached to multiple groups of the same kind.
 class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
+  has_paper_trail meta: {main_id: ->(e) { e.id },
+                         main_type: sti_name},
+    skip: [:shared_access_token, :applicant_count, :participant_count,
+      :teamer_count, :created_at, :updated_at, :updater_id, :type]
+
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
   require_dependency "event/date"
@@ -89,6 +94,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   include FullTextSearchable
   include Globalized
   translates :application_conditions, :description, :name, :signature_confirmation_text
+  include GlobalizedPaperTrails
 
   ### ATTRIBUTES
 

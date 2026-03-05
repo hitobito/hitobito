@@ -250,6 +250,9 @@ de:
       event:
         one: Anlass
         other: Anlässe
+      translation: # All translation tables
+        one: Übersetzung
+        other: Übersetzungen
       event/course:
         one: Kurs
         other: Kurse
@@ -298,6 +301,9 @@ de:
       event/date:
         one: Datum
         other: Daten
+      event/question:
+        one: Eventfrage
+        other: Eventfragen
       family_member:
         one: Familienmitglied
         other: Familienmitglieder

@@ -212,7 +212,13 @@ module PaperTrail
     end
 
     def reifyed_item
-      (model.event == "create") ? reify_create : reify(model)
+      if model.event == "create" || model.event == "removed"
+        # "removed" is a custom event for habtm where only the join table is destroyed;
+        # actual records still exist, so we reify_existing.
+        reify_exisiting
+      else
+        reify(model)
+      end
     end
 
     def reify(version)
@@ -226,13 +232,15 @@ module PaperTrail
       Object.const_defined?(model_type) ? version.reify : Wrapped.new(model_type)
     end
 
-    def reify_create
-      if model.next.nil? && model.item
-        model.item
-      else
-        clazz = type_class_from_changeset || item_class
-        clazz.new(attrs_from_changeset)
-      end
+    def reify_exisiting
+      return model.item if model.next.nil? && model.item
+
+      model.item || build_new_instance
+    end
+
+    def build_new_instance
+      clazz = type_class_from_changeset || item_class
+      clazz.new(attrs_from_changeset)
     end
 
     def attrs_from_changeset = model.changeset.transform_values(&:last)

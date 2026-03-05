@@ -906,7 +906,6 @@ it:
     tabs:
       deleted: "Cancellato"
       statistics: "Statistica"
-      logs: Log
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     statistics:
       title: Statistica
@@ -1808,7 +1807,6 @@ it:
 
     tabs:
       history: Azioni
-      log: Log
       security_tools: Sicurezza
       colleagues: Collaboratore
       invoices: Fatture

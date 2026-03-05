@@ -234,6 +234,17 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
 
       is_expected.to eq("Social Media Adresse <i>Bar (Foo)</i> wurde gelöscht.")
     end
+
+    it "builds removed text" do
+      # Create a custom removed version for a HABTM association
+      PaperTrail::Version.create!(main: person,
+                                  item: groups(:top_layer),
+                                  event: :removed,
+                                  object: groups(:top_layer),
+                                  object_changes: {}.to_yaml)
+
+      is_expected.to eq("Gruppe <i>Top</i> wurde entfernt.")
+    end
   end
 
   context "association_change for people_manager" do

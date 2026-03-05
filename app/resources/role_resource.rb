@@ -23,6 +23,12 @@ class RoleResource < ApplicationResource
   attribute :type, :string
   attribute :label, :string
 
+  filter :active, :date, single: true, only: [:eq] do
+    eq do |scope, value|
+      scope.with_inactive.active_scope(value.presence || Time.zone.today)
+    end
+  end
+
   before_save :raise_when_changing_readonly_attr, only: [:update]
 
   belongs_to :person, writable: false

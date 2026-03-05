@@ -1504,7 +1504,7 @@ it:
 
     invalid_file: Il documento caricato non è valido
     parsing_error: Il documento caricato non può essere elaborato (%{error})
-    created: Sono stati registrati %{count} pagamenti
+    job_enqueued: "Zahlungen werden im Hintergrund erfasst."
     payments:
       valid_with_invoice:
         one: È stato riconosciuto un pagamento valido con relativa fattura.

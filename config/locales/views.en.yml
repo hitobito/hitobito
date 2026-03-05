@@ -1470,7 +1470,7 @@ en:
 
     invalid_file: Uploaded file is not valid.
     parsing_error: The file could not be processed (%{error})I
-    created: '%{count}payments created.'
+    job_enqueued: "Zahlungen werden im Hintergrund erfasst."
     payments:
       valid_with_invoice:
         one: Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.

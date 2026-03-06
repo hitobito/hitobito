@@ -886,7 +886,7 @@ de:
         type: Rolle
         participation: Person
         remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
-
+        string_long: "%{role} von %{participation}"
 
       family_member:
         kind: Verwandschaftsverhältnis

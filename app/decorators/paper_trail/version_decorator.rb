@@ -264,8 +264,23 @@ module PaperTrail
     end
 
     def normalize(attr, value)
-      col = item_class.columns_hash[attr.to_s]
-      h.h(h.format_column(col.try(:type), value))
+      if attr.to_s.end_with?("_id") && value.present?
+        belongs_to_change_args(attr, value)
+      else
+        col = item_class.columns_hash[attr.to_s]
+        h.h(h.format_column(col.try(:type), value))
+      end
+    end
+
+    def belongs_to_change_args(attr, value)
+      association_name = attr.to_s.chomp("_id")
+
+      if object.item.respond_to?(association_name)
+        record = object.item.send(association_name)
+        record.class.base_class.find(value).to_s if record
+      else
+        value
+      end
     end
 
     class Wrapped

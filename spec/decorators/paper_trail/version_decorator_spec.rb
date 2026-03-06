@@ -228,6 +228,13 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
                         "Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.")
     end
 
+    it "builds update text for belongs_to attribute" do
+      person.update!(primary_group: groups(:bottom_layer_one))
+
+      is_expected.to eq("Person <i>Top Leader</i> wurde aktualisiert: Hauptgruppe " \
+      "wurde von <i>TopGroup</i> auf <i>Bottom One</i> geändert.")
+    end
+
     it "builds destroy text" do
       account = Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar")
       account.destroy!

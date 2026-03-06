@@ -228,11 +228,29 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
                         "Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.")
     end
 
+    it "builds update text for belongs_to attribute" do
+      person.update!(primary_group: groups(:bottom_layer_one))
+
+      is_expected.to eq("Person <i>Top Leader</i> wurde aktualisiert: Hauptgruppe " \
+      "wurde von <i>TopGroup</i> auf <i>Bottom One</i> geändert.")
+    end
+
     it "builds destroy text" do
       account = Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar")
       account.destroy!
 
       is_expected.to eq("Social Media Adresse <i>Bar (Foo)</i> wurde gelöscht.")
+    end
+
+    it "builds removed text" do
+      # Create a custom removed version for a HABTM association
+      PaperTrail::Version.create!(main: person,
+        item: groups(:top_layer),
+        event: :removed,
+        object: groups(:top_layer),
+        object_changes: {}.to_yaml)
+
+      is_expected.to eq("Gruppe <i>Top</i> wurde entfernt.")
     end
   end
 

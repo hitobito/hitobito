@@ -109,7 +109,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     # Otherwise, the choices_attributes key would not present and when the attrs are assigned
     # to the entry, the choices would be reset to the initial values
     %i[application_questions_attributes admin_questions_attributes].each do |key|
-      model_params.dig(key)&.each_value { |v| v[:choices_attributes] ||= {} }
+      model_params.dig(key)&.each_value { |v| v[:choices_attributes] ||= {} if v.is_a?(Hash) }
     end
     super
   end

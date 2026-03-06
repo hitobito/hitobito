@@ -348,4 +348,28 @@ describe Event::Question do
       expect(question.choices_translations).to eql({de: "Ja", en: "Yes", fr: "Oui", it: "Sì"}.stringify_keys)
     end
   end
+
+  context "paper trails", versioning: true do
+    let(:event) { events(:top_course) }
+
+    it "sets main to event on create" do
+      expect do
+        event.questions.create!(question: "Warum ist die Banane krumm?", disclosure: :required)
+      end.to change { PaperTrail::Version.count }.by(2) # creates a version for answers, one per participation
+
+      version = PaperTrail::Version.where(item_type: Event::Question.sti_name).order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(event)
+    end
+
+    it "sets main to event on update" do
+      expect do
+        event.questions.first.update!(question: "Warum ist die Banane krumm?")
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(event)
+    end
+  end
 end

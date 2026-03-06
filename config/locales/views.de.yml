@@ -74,6 +74,7 @@ de:
     tabs:
       info: Info
       settings: Einstellungen
+      log: Log
 
     search:
       placeholder: "Suchen..."
@@ -904,7 +905,6 @@ de:
     tabs:
       deleted: "Gelöscht"
       statistics: "Statistiken"
-      logs: Log
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     statistics:
       title: Statistiken
@@ -1790,7 +1790,6 @@ de:
 
     tabs:
       history: Verlauf
-      log: Log
       security_tools: Sicherheit
       colleagues: Mitarbeiter/-innen
       invoices: Rechnungen
@@ -2292,6 +2291,7 @@ de:
       create: "%{model} <i>%{label}</i> wurde hinzugefügt."
       update: "%{model} <i>%{label}</i> wurde aktualisiert: %{changeset}"
       destroy: "%{model} <i>%{label}</i> wurde gelöscht."
+      removed: "%{model} <i>%{label}</i> wurde entfernt."
 
       person/add_request:
         create: "Zugriffsanfrage für <i>%{label}</i> wurde gestellt."

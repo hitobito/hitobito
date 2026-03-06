@@ -250,6 +250,9 @@ de:
       event:
         one: Anlass
         other: Anlässe
+      translation: # All translation tables
+        one: Übersetzung
+        other: Übersetzungen
       event/course:
         one: Kurs
         other: Kurse
@@ -298,6 +301,12 @@ de:
       event/date:
         one: Datum
         other: Daten
+      event/question:
+        one: Eventfrage
+        other: Eventfragen
+      event/answer:
+        one: Anmeldefrage
+        other: Anmeldefragen
       family_member:
         one: Familienmitglied
         other: Familienmitglieder
@@ -877,7 +886,7 @@ de:
         type: Rolle
         participation: Person
         remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
-
+        string_long: "%{role} von %{participation}"
 
       family_member:
         kind: Verwandschaftsverhältnis

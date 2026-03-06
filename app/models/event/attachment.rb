@@ -19,6 +19,9 @@
 #
 
 class Event::Attachment < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(a) { a.event_id },
+                         main_type: Event.sti_name}
+
   MAX_FILE_SIZE = Settings.event.attachments.max_file_size.megabytes
   CONTENT_TYPES = Settings.event.attachments.content_types
 

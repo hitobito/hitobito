@@ -896,7 +896,6 @@ en:
     tabs:
       deleted: "Deleted"
       statistics: "Statistics"
-      logs: Log
     export_enqueued: "Export is started in the background and downloaded after completion."
     statistics:
       title: Statistics
@@ -1758,7 +1757,6 @@ en:
 
     tabs:
       history: History
-      log: log
       security_tools: Security
       colleagues: Colleagues
       invoices: Invoices

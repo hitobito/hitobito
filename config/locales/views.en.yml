@@ -2430,6 +2430,18 @@ en:
     role_count_item_fields:
       choose_role_types: Select roller types
 
+  passes:
+    verifications:
+      title: Pass Verification
+      valid_from: "Valid from"
+      valid_until: "Valid until"
+      expired_on: "Expired on"
+      status:
+        valid: Pass is valid
+        expired: Pass has expired
+        invalid: Pass is invalid
+        invalid_message: This pass could not be verified.
+
   wallets:
     google:
       generation_failed: The pass could not be added to Google Wallet.

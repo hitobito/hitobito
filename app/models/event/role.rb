@@ -19,6 +19,8 @@
 #
 
 class Event::Role < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(r) { r.participation_id },
+                         main_type: Event::Participation.sti_name}
   # rubocop:disable Naming/ConstantName,Style/MutableConstant
 
   Permissions = [:event_full, :participations_full, :participations_read_details,
@@ -94,9 +96,17 @@ class Event::Role < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s(_format = :default)
+  def to_s(format = :default)
     model_name = self.class.label
-    label? ? "#{label} (#{model_name})" : model_name
+
+    if format == :long
+      I18n.t("activerecord.attributes.event/role.string_long", role: model_name,
+        participation: participation.to_s)
+    elsif label?
+      "#{label} (#{model_name})"
+    else
+      model_name
+    end
   end
 
   def person

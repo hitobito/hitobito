@@ -20,6 +20,9 @@
 #
 
 class Event::Answer < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(a) { a.participation_id },
+                         main_type: Event::Participation.sti_name}
+
   belongs_to :participation
   belongs_to :question
 
@@ -42,6 +45,10 @@ class Event::Answer < ActiveRecord::Base
       .includes(question: :translations)
       .select("event_answers.*")
   }
+
+  def to_s(format = :default)
+    question.label
+  end
 
   def answer
     super&.gsub(Choice::ESCAPED_SEPARATOR, ",")

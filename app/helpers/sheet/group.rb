@@ -66,7 +66,7 @@ module Sheet
         end)
     end
 
-    tab "groups.tabs.logs",
+    tab "global.tabs.log",
       :group_log_path,
       if: (lambda do |view, group|
         view.can?(:log, group)

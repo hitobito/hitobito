@@ -1,0 +1,23 @@
+-#  Copyright (c) 2025, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- if @role_types
+  - @role_types.each do |layer, groups|
+    %h3.filter-toggle.mt-4= layer if groups.any?
+    - groups.each do |group, role_types|
+      .control-group.mt-1
+        = label_tag(nil, group, class: 'control-label filter-toggle')
+        .controls
+          - role_types.each do |role_type|
+            = label_tag("pass_grant_role_types_#{role_type.sti_name.downcase}",
+                        class: 'checkbox inline') do
+              = check_box_tag("pass_grant[role_types][]",
+                              role_type.sti_name,
+                              defined?(selected) && selected.include?(role_type.sti_name),
+                              id: "pass_grant_role_types_#{role_type.sti_name.downcase}")
+              = role_type.label
+
+- else
+  %p= t('.please_choose_group')

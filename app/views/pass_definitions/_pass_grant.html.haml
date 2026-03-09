@@ -1,0 +1,12 @@
+-#  Copyright (c) 2025, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+%h4= pass_grant.grantor.with_layer.join(' / ')
+- pass_grant.grouped_role_types.each do |layer, groups|
+  %h5= layer
+  %dl.dl-horizontal.dl-borderless.row
+    - groups.each do |group, role_types|
+      %dt.col-2.ms-5= group
+      %dd.col-9.ms-2= role_types.map(&:label).join(', ')

@@ -25,6 +25,7 @@ class PassGrant < ActiveRecord::Base
   # Will become: has_role_types_or_qualification_types
   validate :has_eligibility_criteria
   validates :grantor_id, uniqueness: {scope: [:pass_definition_id, :grantor_type]}
+  validates :grantor_type, presence: true
 
   ### CALLBACKS
 
@@ -34,7 +35,24 @@ class PassGrant < ActiveRecord::Base
 
   scope :group_grants, -> { where(grantor_type: "Group") }
 
+  ### INSTANCE METHODS
+
+  def grouped_role_types
+    role_classes = related_role_types.map(&:role_class)
+    Role::TypeList.new(grantor.class).each_with_object({}) do |(layer, groups), result|
+      groups_result = filter_role_types(groups, role_classes)
+      result[layer] = groups_result if groups_result.present?
+    end
+  end
+
   private
+
+  def filter_role_types(groups, role_classes)
+    groups.each_with_object({}) do |(group, role_types), result|
+      matching = role_types.select { |rt| role_classes.include?(rt) }
+      result[group] = matching if matching.present?
+    end
+  end
 
   def populate_passes
     PassPopulateJob.new(pass_definition_id).enqueue!

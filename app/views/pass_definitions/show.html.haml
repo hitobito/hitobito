@@ -1,0 +1,29 @@
+-#  Copyright (c) 2025, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title entry.to_s
+
+- content_for(:toolbar, render('actions_show'))
+
+= render 'attrs'
+
+%h2= PassGrant.model_name.human(count: 2)
+
+- if entry.pass_grants.any?
+  = table(entry.pass_grants.includes(:grantor, :related_role_types), class: 'table table-striped') do |t|
+    - t.col('') { |grant| render 'pass_grant', pass_grant: grant }
+    - action_col(t) do |grant|
+      - if can?(:edit, entry)
+        = link_action_edit(edit_group_pass_definition_pass_grant_path(@group, entry, grant))
+    - action_col(t) do |grant|
+      - if can?(:edit, entry)
+        = link_action_destroy(group_pass_definition_pass_grant_path(@group, entry, grant))
+- else
+  %p= t('.no_pass_grants_yet')
+
+- if can?(:edit, entry)
+  = link_to(t('crud.new.title', model: PassGrant.model_name.human),
+            new_group_pass_definition_pass_grant_path(@group, entry),
+            class: 'btn btn-primary')

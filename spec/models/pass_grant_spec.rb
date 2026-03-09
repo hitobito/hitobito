@@ -67,6 +67,23 @@ describe PassGrant do
     end
   end
 
+  context "#grouped_role_types" do
+    before { grant.save! }
+
+    it "returns role types grouped by layer and group" do
+      result = grant.grouped_role_types
+      expect(result).to be_a(Hash)
+      expect(result.values.first).to be_a(Hash)
+      role_types = result.values.flat_map { |groups| groups.values }.flatten
+      expect(role_types).to include(Group::TopGroup::Leader)
+    end
+
+    it "only includes assigned role types" do
+      role_types = grant.grouped_role_types.values.flat_map { |groups| groups.values }.flatten
+      expect(role_types).not_to include(Group::TopGroup::Member)
+    end
+  end
+
   context "callbacks" do
     it "enqueues PassPopulateJob after save" do
       expect {

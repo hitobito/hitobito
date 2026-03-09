@@ -177,10 +177,9 @@ describe EventDecorator, :draper_with_helpers do
 
     context "with every possible attribute" do
       it {
-        # rubocop:todo Layout/LineLength
-        is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
+        is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p>" \
+        "<a href=\"mailto:top_leader@example.com\">top_leader@example.com</a>"
       }
-      # rubocop:enable Layout/LineLength
     end
 
     context "with only name" do

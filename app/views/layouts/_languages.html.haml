@@ -6,4 +6,4 @@
       = link_to lang.upcase,
                 url_for(params.to_unsafe_h.merge(locale: lang, only_path: true)),
                 title: label,
-                class: "#{(lang == I18n.locale ? 'active' : nil)} border-0 p-1"
+                class: class_names("border-0", "p-1", "active": lang == I18n.locale)

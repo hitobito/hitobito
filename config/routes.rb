@@ -240,6 +240,7 @@ Hitobito::Application.routes.draw do
 
         scope module: "event" do
           member do
+            get "log" => "log#index"
             get  "register" => "register#index"
             post "register" => "register#check"
             put  "register" => "register#register"

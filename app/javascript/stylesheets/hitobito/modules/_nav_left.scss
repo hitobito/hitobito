@@ -34,7 +34,7 @@
   a.is-active,
   li.is-active>a {
     background-color: desaturate(lighten($link-color, 50%), 20%);
-    border-left: 3px solid $link-color;
+    border-color: $link-color;
   }
 
   a.is-archived,

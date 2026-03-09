@@ -105,7 +105,7 @@
 
     .lang {
       margin-bottom: 3px;
-      padding-left: $nav-left-padding-full;
+      padding-left: calc($nav-left-padding-full + 3px);
 
       a {
         width: min-content;

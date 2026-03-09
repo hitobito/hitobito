@@ -27,15 +27,18 @@
 #
 
 class Event::Question < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(q) { q.event_id },
+                         main_type: Event.sti_name}
+
   include Globalized
-  include I18nEnums
-
-  self.list_alphabetically = Settings.event.questions.list_alphabetically
-
   # ensure all translated attributes including subclasses are added here
   # as globalize will add it to the base class' translated_attribute_names
   # anyway and break sti subclasses
   translates :question, :choices
+  include GlobalizedPaperTrails
+  include I18nEnums
+
+  self.list_alphabetically = Settings.event.questions.list_alphabetically
 
   belongs_to :event
   belongs_to :derived_from_question, class_name: "Event::Question", inverse_of: :derived_questions
@@ -98,6 +101,10 @@ class Event::Question < ActiveRecord::Base
     # use safe navigation so not to break records missing the
     # question text created before validation was added
     question&.truncate(30)
+  end
+
+  def to_s(format = :default)
+    label
   end
 
   def global?

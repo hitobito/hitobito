@@ -44,6 +44,7 @@ RSpec.describe MigrateInvoiceRunsReceiverIds, type: :migration do
     it "does create people_filter in certain group and update association of invoice_run" do
       expect do
         migration_context.up(migration_version)
+        InvoiceRun.reset_column_information
       end.to change { PeopleFilter.count }.by(1)
 
       new_people_filter = PeopleFilter.last
@@ -65,13 +66,14 @@ RSpec.describe MigrateInvoiceRunsReceiverIds, type: :migration do
 
       expect do
         migration_context.up(migration_version)
+        InvoiceRun.reset_column_information
       end.to change { PeopleFilter.count }.by(2)
 
       expect(group_invoice_run.reload.recipient_source_id).not_to eq group_invoice_run_2.reload.recipient_source_id
     end
 
     it "does not migrate invoice_run when receiver_type is not group" do
-      group_invoice_run.destroy!
+      group_invoice_run.delete
 
       expect do
         migration_context.up(migration_version)
@@ -95,6 +97,7 @@ RSpec.describe MigrateInvoiceRunsReceiverIds, type: :migration do
     it "does create people_filter with correct filter_chain and update association of invoice_run" do
       expect do
         migration_context.up(migration_version)
+        InvoiceRun.reset_column_information
       end.to change { PeopleFilter.count }.by(1)
 
       new_people_filter = PeopleFilter.last

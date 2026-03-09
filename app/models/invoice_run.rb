@@ -33,6 +33,9 @@
 #
 
 class InvoiceRun < ActiveRecord::Base
+  include Globalized
+
+  translates :title
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :period_invoice_template, optional: true
@@ -48,6 +51,7 @@ class InvoiceRun < ActiveRecord::Base
 
   RECIPIENT_TYPES = %w[MailingList PeopleFilter GroupsFilter Event::ParticipationsFilter].freeze
 
+  validates :title, presence: true
   validates :recipient_source_type, inclusion: {in: RECIPIENT_TYPES}
   # TODO validate recipient_source_id so that no arbitrary changes can be made
 

@@ -14,8 +14,8 @@ class InvoiceRunsController < CrudController
   self.permitted_attrs = [
     :recipient_source_id,
     :recipient_source_type,
+    :title,
     invoice: [
-      :title,
       :description,
       :payment_information,
       :payment_purpose,
@@ -48,7 +48,6 @@ class InvoiceRunsController < CrudController
 
   def create # rubocop:todo Metrics/AbcSize
     assign_attributes
-    entry.title = entry.invoice.title
 
     if entry.valid? && entry.save
       Invoice::BatchCreate.call(entry, current_user, LIMIT_CREATE)
@@ -147,6 +146,7 @@ class InvoiceRunsController < CrudController
   # rubocop:todo Metrics/CyclomaticComplexity
   # rubocop:todo Metrics/MethodLength
   def assign_attributes # rubocop:disable Metrics/AbcSize
+    entry.attributes = title_params
     entry.creator = current_user
     entry.invoice = build_invoice
     entry.recipient_source = recipient_source
@@ -189,9 +189,16 @@ class InvoiceRunsController < CrudController
     group.issued_invoices
       .build(model_params.present? ? permitted_params[:invoice] : {})
       .tap { |invoice| invoice.issued_at ||= Time.zone.today }
+      .tap { |invoice| invoice.title ||= entry.title }
   end
 
   def recipient_source
     InvoiceRuns::RecipientSourceBuilder.new(params, @group).recipient_source
+  end
+
+  def title_params
+    model_params&.permit(GlobalizedPermittedAttrs.new(
+      InvoiceRun, [:title]
+    ).permitted_attrs) || {}
   end
 end

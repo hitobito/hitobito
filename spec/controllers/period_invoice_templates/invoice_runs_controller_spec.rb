@@ -68,7 +68,7 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
       role_types: [Group::BottomLayer::LocalGuide.name],
       period_start_on: Time.zone.yesterday,
       period_end_on: Time.zone.today.next_year
-    })
+    }.stringify_keys)
     expect(assigns(:invoice_run).invoice.invoice_items[0].count).to eq 9
   end
 
@@ -78,8 +78,8 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
         group_id: Group.root.id,
         period_invoice_template_id: period_invoice_template.id,
         invoice_run: {
+          title: "Test run",
           invoice: {
-            title: "Test run",
             description: "Description",
             payment_information: "Payment info",
             payment_purpose: "Purpose",

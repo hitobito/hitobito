@@ -1148,7 +1148,7 @@ fr:
     create:
       one: "Facture <i>%{title}</i> a été établie."
       many: "Facture <i>%{title}</i> a été établie pour %{count} destinataires."
-      other: "Facture 1%{title}1 a été établie pour %{count} destinataires."
+      other: "Facture <i>%{title}</i> a été établie pour %{count} destinataires."
     create_batch: "La facture <i>%{title}</i>est créée pour %{count} destinataire-s en arrière-plan."
     update:
       zero: "Choisir au moins une facture."

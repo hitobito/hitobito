@@ -375,7 +375,7 @@ it:
       explanation: "forse ha inserito l'indirizzo in maniera errata oppure questa pagina è stata cancellata nel frattempo."
     "500":
       title: "siamo spiacenti, qualcosa è andato storto (500)"
-      explanation: "abbiamo ricevuto una segnalazione e studieremo il problema il più presto possibile"
+      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
     "503":
       title: "siamo spiacenti, questa pagina non è disponibile al momento (503)"
       explanation: "al momento stiamo lavorando a questa pagine e per questo motivo non è disponibile. Non dovrebbe durare a lungo."

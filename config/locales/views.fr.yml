@@ -375,7 +375,7 @@ fr:
       explanation: "L'adresse entrée est erronée ou la page a été effacée."
     "500":
       title: "Nous présentons nos excuses, une erreur s'est produite (500)"
-      explanation: "Nous avons reçu une notification et allons nous occuper du problème dès que possible."
+      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
     "503":
       title: "Nous présentons nos excuses, cette page n'est pas disponible pour le moment (503)"
       explanation: "Nous travaillons sur cette page, c'est pourquoi elle n'est pas disponible. Ceci ne devrait pas durer très longtemps."

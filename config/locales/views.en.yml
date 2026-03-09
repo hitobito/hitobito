@@ -374,7 +374,7 @@ en:
       explanation: "Maybe you typed the address incorrectly, or the page has been deleted."
     "500":
       title: "Sorry, something went wrong (500)"
-      explanation: "We have received a message and will look at the problem as quickly as possible."
+      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
     "503":
       title: "Sorry, page is currently not available (503)"
       explanation: "We are working on this page, so it is not available. This should not take too long."

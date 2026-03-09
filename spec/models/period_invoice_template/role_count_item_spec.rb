@@ -32,6 +32,7 @@ describe PeriodInvoiceTemplate::RoleCountItem do
 
   subject(:item) do
     described_class.new(
+      id: 998877,
       period_invoice_template:,
       account: "1234",
       cost_center: "5678",
@@ -70,6 +71,7 @@ describe PeriodInvoiceTemplate::RoleCountItem do
       expect(result).to be_an_instance_of(Invoice::RoleCountItem)
       expect(result.attributes.with_indifferent_access).to include({
         dynamic_cost_parameters: {
+          template_item_id: item.id,
           period_start_on: period_invoice_template.start_on,
           period_end_on: period_invoice_template.end_on,
           role_types: [Group::TopGroup::Leader.name],

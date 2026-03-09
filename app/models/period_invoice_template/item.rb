@@ -38,6 +38,7 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
       recipient_groups,
       name:, cost_center:, account:, vat_rate:, invoice:, unit_cost: unit_cost,
       dynamic_cost_parameters: dynamic_cost_parameters.merge({
+        template_item_id: id,
         period_start_on: period_invoice_template.start_on,
         period_end_on: period_invoice_template.end_on
       })

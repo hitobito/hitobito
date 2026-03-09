@@ -114,7 +114,7 @@ describe Invoice::BatchCreate do
       expect(run).not_to be_persisted
     end
 
-    it "does not rollback if any save fails" do
+    it "does not rollback everything if any invoice save fails" do
       Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group))
       Subscription.create!(mailing_list: mailing_list,
         subscriber: group,
@@ -125,8 +125,48 @@ describe Invoice::BatchCreate do
       invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
       run.invoice = invoice
 
-      allow_any_instance_of(Invoice).to receive(:save).and_wrap_original do |m|
-        @saved = @saved ? false : m.call
+      allow_any_instance_of(Invoice).to receive(:save!).and_wrap_original do |m|
+        @saved = @saved ? (raise ActiveRecord::RecordNotSaved.new("Test exception", nil)) : m.call
+      end
+
+      expect do
+        Invoice::BatchCreate.new(run, person).call
+      end.to change { group.issued_invoices.count }.by(1)
+        .and change { group.invoice_items.count }.by(1)
+      expect(run.invalid_recipient_ids).to have(1).item
+    end
+
+    it "does not rollback everything if any save fails due to errors while inserting ProcessedSubjects" do
+      p2 = Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)).person
+      Subscription.create!(mailing_list: mailing_list,
+        subscriber: group,
+        role_types: [Group::TopGroup::Leader])
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, person:, group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, person: p2, group: groups(:bottom_layer_one))
+
+      period_invoice_template = Fabricate(:period_invoice_template)
+      run = InvoiceRun.new(recipient_source: mailing_list, group: group, title: :title)
+      invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+      invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name: "membership",
+        unit_cost: 10,
+        dynamic_cost_parameters: {
+          template_item_id: period_invoice_template.items.first.id,
+          period_start_on: 1.year.ago,
+          period_end_on: Time.zone.today,
+          unit_cost: "10.00",
+          role_types: Group::BottomLayer::BasicPermissionsOnly.name
+        })
+      run.invoice = invoice
+      recipients = run.recipients(person)
+
+      allow_any_instance_of(Invoice::RoleCountItem).to receive(:subjects).and_return([
+        {subject_id: recipients.first.id, subject_type: "Person", invoice_id: 999998,
+         item_id: period_invoice_template.items.first.id},
+        {subject_id: recipients.second.id, subject_type: "Person", invoice_id: 999999,
+         item_id: period_invoice_template.items.first.id}
+      ])
+      allow(InvoiceRun::ProcessedSubject).to receive(:insert_all!).and_wrap_original do |m, *args|
+        @saved = @saved ? (raise ActiveRecord::RecordNotUnique.new("Test exception")) : m.call(*args)
       end
 
       expect do
@@ -145,6 +185,7 @@ describe Invoice::BatchCreate do
       invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name: "membership",
         unit_cost: 10,
         dynamic_cost_parameters: {
+          template_item_id: period_invoice_template.items.first.id,
           period_start_on: 1.year.ago,
           period_end_on: Time.zone.today,
           unit_cost: "10.00",
@@ -162,6 +203,29 @@ describe Invoice::BatchCreate do
         Invoice::BatchCreate.new(run, person).call
       end.to change { group.issued_invoices.count }.by(1)
       expect(run.invalid_recipient_ids).to have(0).items
+    end
+
+    it "documents the processed subjects" do
+      period_invoice_template = Fabricate(:period_invoice_template)
+
+      run = InvoiceRun.new(recipient_source: period_invoice_template.recipient_source,
+        period_invoice_template:, group:, title: "Run")
+      invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+      invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name: "membership",
+        unit_cost: 10,
+        dynamic_cost_parameters: {
+          template_item_id: period_invoice_template.items.first.id,
+          period_start_on: 1.year.ago,
+          period_end_on: Time.zone.today,
+          unit_cost: "10.00",
+          role_types: Group::BottomLayer::BasicPermissionsOnly.name
+        })
+      run.invoice = invoice
+
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, group: groups(:bottom_layer_one))
+      expect do
+        Invoice::BatchCreate.new(run, person).call
+      end.to change { InvoiceRun::ProcessedSubject.count }.by(1)
     end
   end
 

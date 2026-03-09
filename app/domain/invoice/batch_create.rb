@@ -49,7 +49,7 @@ class Invoice::BatchCreate
       slice.each do |receiver|
         success = create_invoice(receiver)
         invalid << receiver.id unless success
-        results << success
+        results << !!success
       end
 
       update_invoice_run
@@ -66,10 +66,7 @@ class Invoice::BatchCreate
     )
     invoice = invoice_run.group.issued_invoices.build(invoice_attrs)
     add_invoice_items(invoice, recipient)
-
-    # In some cases, e.g. no invoice items present, we don't want to not create the invoice,
-    # but still report successful processing of the recipient.
-    save_invoice?(invoice) ? invoice.save : true
+    save_invoice(invoice)
   end
 
   # Creates clones of all invoice items on the invoice_run invoice
@@ -88,6 +85,23 @@ class Invoice::BatchCreate
 
     item.dynamic_cost_parameters[:recipient_id] = recipient.id
     item.dynamic_cost_parameters[:group_id] = invoice_run.group.layer_group.id
+  end
+
+  def save_invoice(invoice)
+    # In some cases, e.g. no invoice items present, we don't want to create the invoice,
+    # but still report successful processing of the recipient.
+    return true unless save_invoice?(invoice)
+
+    Invoice.transaction do
+      invoice.save!
+      invoice.invoice_items.select { |item| item.is_a?(Invoice::PeriodItem) }.each do |item|
+        subjects = item.subjects
+        InvoiceRun::ProcessedSubject.insert_all!(subjects)
+      end
+      true
+    rescue
+      raise ActiveRecord::Rollback
+    end
   end
 
   def save_invoice?(invoice)

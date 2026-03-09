@@ -63,6 +63,7 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
     expect(assigns(:invoice_run).invoice.invoice_items.length).to eq 1
     expect(assigns(:invoice_run).invoice.invoice_items[0].type).to eq Invoice::RoleCountItem.name
     expect(assigns(:invoice_run).invoice.invoice_items[0].dynamic_cost_parameters).to eq({
+      template_item_id: period_invoice_template.items.first.id,
       unit_cost: "5.00",
       role_types: [Group::BottomLayer::LocalGuide.name],
       period_start_on: Time.zone.yesterday,

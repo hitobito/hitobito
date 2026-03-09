@@ -35,6 +35,7 @@ class Invoice::PeriodItem < InvoiceItem
   def self.for_groups(groups, **params)
     new(**params).tap do |item|
       item.groups = groups
+      item.recipient_type = Group.sti_name
     end
   end
 
@@ -43,10 +44,11 @@ class Invoice::PeriodItem < InvoiceItem
   def self.for_people(people, **params)
     new(**params).tap do |item|
       item.people = people
+      item.recipient_type = Person.sti_name
     end
   end
 
-  attr_writer :groups, :people
+  attr_writer :groups, :people, :recipient_type
 
   # Forbid saving instances of this abstract class in the DB.
   # AR cannot handle abstract_class in the middle of an STI hierarchy, so we leave it at this.
@@ -109,6 +111,7 @@ class Invoice::PeriodItem < InvoiceItem
     base_scope # Consider models...
       .merge(group_condition) # ... which belong to relevant groups...
       .merge(people_condition) # ... which belong to relevant people...
+      .merge(not_processed_before_condition) # ... which haven't been processed in other invoices...
       .merge(active_condition(period_start_on, period_end_on)) # ... which were active in the period
   end
 
@@ -116,8 +119,16 @@ class Invoice::PeriodItem < InvoiceItem
     raise "implement in subclass"
   end
 
+  # Subjects are models which are counted when calculating the total cost of the invoice item.
+  # For membership invoices, the subjects are usually people or roles.
   def subject_type
     raise "implement in subclass"
+  end
+
+  # The recipient is the model which receives and pays the invoice.
+  # For membership invoices, the recipients are usually groups or people.
+  def recipient_type
+    @recipient_type ||= invoice&.recipient_type
   end
 
   def group_condition
@@ -130,6 +141,21 @@ class Invoice::PeriodItem < InvoiceItem
   def people_condition
     # Assumes the base_scope is already joined to the :person which the counted models belong to
     Person.where(id: people)
+  end
+
+  def not_processed_before_condition
+    subject_type.where.not(existing_processed_subjects.arel.exists)
+  end
+
+  def existing_processed_subjects
+    InvoiceRun::ProcessedSubject
+      .where(processed_subjects_table[:subject_id].eq(subjects_table[:id]))
+      .where(subject_type: subject_type.sti_name)
+      .where(item_id: template_item_id)
+      .joins("INNER JOIN invoices previous_invoice ON " \
+        "#{InvoiceRun::ProcessedSubject.quoted_table_name}.invoice_id = previous_invoice.id")
+      .where(Arel.sql("previous_invoice.recipient_id").eq(recipient_id_expression))
+      .where(previous_invoice: {recipient_type: recipient_type})
   end
 
   def active_condition(start_on, end_on)
@@ -151,5 +177,15 @@ class Invoice::PeriodItem < InvoiceItem
     dynamic_cost_parameters[:unit_cost] = ActiveSupport::NumberHelper.number_to_currency(
       dynamic_cost_parameters[:unit_cost], format: "%n"
     )
+  end
+
+  def processed_subjects_table = InvoiceRun::ProcessedSubject.arel_table
+
+  def subjects_table = subject_type.arel_table
+
+  def recipient_id_expression
+    return Arel.sql("ancestor.id") if recipient_type == "Group"
+
+    recipient_type.constantize.arel_table[:id]
   end
 end

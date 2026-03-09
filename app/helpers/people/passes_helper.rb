@@ -23,8 +23,7 @@ module People::PassesHelper
   end
 
   def apple_wallet_configured?
-    # TODO: enable once Wallets::AppleWallet::Config is implemented (#3985)
-    false
+    Wallets::AppleWallet::Config.present?
   end
 
   # Renders an inline SVG QR code for the pass verification URL.

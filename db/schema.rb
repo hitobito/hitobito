@@ -643,12 +643,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.index ["subject_type", "subject_id"], name: "index_invoice_run_processed_subjects_on_subject"
   end
 
+  create_table "invoice_run_translations", force: :cascade do |t|
+    t.bigint "invoice_run_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "title"
+    t.index ["invoice_run_id"], name: "index_invoice_run_translations_on_invoice_run_id"
+    t.index ["locale"], name: "index_invoice_run_translations_on_locale"
+  end
+
   create_table "invoice_runs", force: :cascade do |t|
     t.string "recipient_source_type"
     t.bigint "recipient_source_id"
     t.bigint "group_id"
     t.bigint "creator_id"
-    t.string "title", null: false
     t.decimal "amount_total", precision: 15, scale: 2, default: "0.0", null: false
     t.decimal "amount_paid", precision: 15, scale: 2, default: "0.0", null: false
     t.integer "recipients_total", default: 0, null: false

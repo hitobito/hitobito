@@ -199,7 +199,8 @@ describe InvoiceRunsController do
 
     it "POST#create creates an invoice for single member" do
       expect do
-        post :create, params: {group_id: group.id, ids: person.id, invoice_run: {invoice: invoice_attrs}}
+        post :create, params: {group_id: group.id, ids: person.id, invoice_run:
+          {title: "Title", invoice: invoice_attrs}}
       end.to change { group.issued_invoices.count }.by(1)
 
       expect(response).to redirect_to group_invoice_run_invoices_path(group, InvoiceRun.last, returning: true)
@@ -211,9 +212,24 @@ describe InvoiceRunsController do
         post :create,
           params: {group_id: group.id,
                    ids: person.id,
-                   invoice_run: {invoice: invoice_attrs.merge(title: "current_user")}}
+                   invoice_run: {title: "current_user", invoice: invoice_attrs}}
       end.to change { group.issued_invoices.count }.by(1)
 
+      expect(Invoice.find_by(title: "current_user").creator).to eq(person)
+    end
+
+    it "POST#create allows to set translated title" do
+      expect do
+        post :create,
+          params: {group_id: group.id,
+                   ids: person.id,
+                   invoice_run: {title: "current_user", title_fr: "personne",
+                                 invoice: invoice_attrs}}
+      end.to change { group.issued_invoices.count }.by(1)
+
+      created = InvoiceRun.last
+      expect(created.title).to eq "current_user"
+      expect(created.title_fr).to eq "personne"
       expect(Invoice.find_by(title: "current_user").creator).to eq(person)
     end
 
@@ -223,7 +239,7 @@ describe InvoiceRunsController do
         post :create,
           params: {group_id: group.id,
                    invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class,
-                                 invoice: invoice_attrs.merge(title: "test")}}
+                                 title: "test", invoice: invoice_attrs}}
       end.to change { group.issued_invoices.count }.by(1)
       expect(assigns(:invoice_run).recipient_source).to eq list
       expect(response).to redirect_to group_invoice_runs_path(group)
@@ -233,7 +249,7 @@ describe InvoiceRunsController do
       expect do
         post :create,
           params: {group_id: group.id,
-                   invoice_run: {invoice: invoice_attrs.merge(title: "test")},
+                   invoice_run: {title: "test", invoice: invoice_attrs},
                    filter: {
                      group_id: group.id,
                      range: "layer",
@@ -253,7 +269,7 @@ describe InvoiceRunsController do
         post :create,
           params: {group_id: group.id,
                    invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class,
-                                 invoice: invoice_attrs.merge(title: "test")}}
+                                 title: "test", invoice: invoice_attrs}}
         Delayed::Job.last.payload_object.perform
       end.to change { group.issued_invoices.count }.by(2)
 
@@ -389,7 +405,6 @@ describe InvoiceRunsController do
 
   def invoice_attrs
     {
-      title: "Title",
       recipient_ids: group.people.limit(2).collect(&:id).join(","),
       invoice_items_attributes: {"1" => {name: "item1", unit_cost: 1, count: 1},
                                  "2" => {name: "item2", unit_cost: 2, count: 1}}

@@ -67,7 +67,7 @@ describe PeriodInvoiceTemplates::InvoiceRunsController, js: true do
       expect(page).to have_text "Willst du diesen Rechnungslauf wirklich löschen?"
       click_button "Löschen"
 
-      expect(page).to have_text "Rechnungslauf Testlauf wurde erfolgreich gelöscht."
+      expect(page).to have_text "Rechnungslauf wurde erfolgreich gelöscht."
       expect(page).to have_text "Keine Einträge gefunden"
       expect(page).to have_text "Rechnungslauf fahren"
       expect(page).not_to have_text "Weiteren Rechnungslauf fahren"

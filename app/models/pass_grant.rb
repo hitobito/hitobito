@@ -40,6 +40,7 @@ class PassGrant < ActiveRecord::Base
   # Will become: has_role_types_or_qualification_types
   validate :has_eligibility_criteria
   validates :grantor_id, uniqueness: {scope: [:pass_definition_id, :grantor_type]}
+  validates :grantor_type, presence: true
 
   ### CALLBACKS
 
@@ -48,6 +49,22 @@ class PassGrant < ActiveRecord::Base
   ### SCOPES
 
   scope :group_grants, -> { where(grantor_type: "Group") }
+
+  ### INSTANCE METHODS
+
+  def grouped_role_types
+    result = {}
+    role_classes = related_role_types.map(&:role_class)
+    Role::TypeList.new(grantor.class).each do |layer, groups|
+      groups_result = {}
+      groups.each do |group, role_types|
+        role_types_result = role_types.select { |rt| role_classes.include?(rt) }
+        groups_result[group] = role_types_result if role_types_result.present?
+      end
+      result[layer] = groups_result if groups_result.present?
+    end
+    result
+  end
 
   private
 

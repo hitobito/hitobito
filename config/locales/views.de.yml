@@ -1543,6 +1543,21 @@ de:
     subscribe: "Anmelden"
     unsubscribe: "Abmelden"
 
+  pass_definitions:
+    global:
+      link:
+        add: Pass erstellen
+    show:
+      no_pass_grants_yet: Es sind noch keine Berechtigungen konfiguriert.
+
+  pass_grants:
+    edit:
+      title: Pass-Berechtigung bearbeiten
+    roles:
+      please_choose_group: Bitte wähle eine Gruppe aus
+    errors:
+      group_required: Gruppe muss ausgewählt werden
+
   navigation:
     menu: "Menü"
     groups: "Gruppen"

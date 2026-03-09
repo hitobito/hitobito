@@ -2302,6 +2302,7 @@ de:
       create: "%{model} <i>%{label}</i> wurde hinzugefügt."
       update: "%{model} <i>%{label}</i> wurde aktualisiert: %{changeset}"
       destroy: "%{model} <i>%{label}</i> wurde gelöscht."
+      removed: "%{model} <i>%{label}</i> wurde entfernt."
 
       person/add_request:
         create: "Zugriffsanfrage für <i>%{label}</i> wurde gestellt."

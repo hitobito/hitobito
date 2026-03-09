@@ -10,8 +10,8 @@ class GroupAbility < AbilityDsl::Base
 
   on(Group) do # rubocop:disable Metrics/BlockLength
     permission(:any)
-      .may(:read, :index_events, :"index_event/courses", :index_mailing_lists)
-      .if_any_role
+      .may(:read, :index_events, :"index_event/courses", :index_mailing_lists,
+        :index_pass_definitions).if_any_role
     permission(:any)
       .may(:register_people) # via API with session cookie
       .in_self_registration_groups

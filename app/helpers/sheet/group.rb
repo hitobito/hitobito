@@ -46,6 +46,13 @@ module Sheet
         !group.archived? && view.can?(:index_mailing_lists, group)
       end)
 
+    tab "activerecord.models.pass_definition.other",
+      :group_pass_definitions_path,
+      params: {returning: true},
+      if: (lambda do |view, group|
+        !group.archived? && view.can?(:index_pass_definitions, group)
+      end)
+
     tab :tab_person_add_request_label,
       :group_person_add_requests_path,
       if: (lambda do |view, group|

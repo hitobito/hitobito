@@ -1416,6 +1416,11 @@ en:
     subscribe: "Log in"
     unsubscribe: "Sign out"
 
+  pass_definitions:
+    global:
+      link:
+        add: Create pass
+
   messages:
     attrs:
       dispatch_infos: Processing

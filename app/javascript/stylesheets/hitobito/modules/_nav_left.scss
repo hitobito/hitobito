@@ -104,27 +104,17 @@
     padding: 1rem 0;
 
     .lang {
-      display: flex;
-      flex-wrap: nowrap;
       margin-bottom: 3px;
       padding-left: $nav-left-padding-full;
-      gap: 4px;
-    }
 
-    .lang a {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-width: 24px;
-      min-height: 24px;
-      width: min-content;
-      padding: 0;
-      border: 0;
-    }
+      a {
+        width: min-content;
+      }
 
-    .lang .active {
-      color: $black;
-      text-decoration: none;
+      .active {
+        color: $black;
+        text-decoration: none;
+      }
     }
   }
 

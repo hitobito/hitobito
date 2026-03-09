@@ -163,13 +163,13 @@ body {
   }
 
   .lang {
-    display: flex;
     font-size: 1rem;
-
-    a {
-      padding: 0 0.25rem;
-    }
   }
+}
+
+.lang a {
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .sheet,

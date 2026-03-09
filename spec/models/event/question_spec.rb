@@ -355,7 +355,9 @@ describe Event::Question do
     it "sets main to event on create" do
       expect do
         event.questions.create!(question: "Warum ist die Banane krumm?", disclosure: :required)
-      end.to change { PaperTrail::Version.count }.by(3) # creates a version for answers, one per participation and one version for the translation
+      end.to change {
+               PaperTrail::Version.count
+             }.by(3) # creates a version for answers, one per participation and one version for the translation
 
       version = PaperTrail::Version.where(item_type: Event::Question.sti_name).order(:created_at, :id).last
       expect(version.event).to eq("create")

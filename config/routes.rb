@@ -286,6 +286,7 @@ Hitobito::Application.routes.draw do
             member do
               get "print"
               resources :guests, only: [:new, :create]
+              get "log" => "participations/log#index"
             end
           end
 

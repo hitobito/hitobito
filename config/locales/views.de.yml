@@ -2473,6 +2473,7 @@ de:
     google:
       generation_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
     apple:
+      member_name: Mitglied
       generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
     pass:
       member_name: Name

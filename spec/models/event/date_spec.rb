@@ -185,4 +185,26 @@ describe Event::Date do
       expect(date.errors.details[:finish_at]).to include(error: :year_must_be_after_1900)
     end
   end
+
+  context "paper trails", versioning: true do
+    it "sets main to event on create" do
+      expect do
+        event.dates.create!(start_at: 1.day.ago)
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.where(item_type: Event::Date.sti_name).order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(event)
+    end
+
+    it "sets main to event on update" do
+      expect do
+        event.dates.first.update!(label: "This is just a guess, maybe the event is at a completely different date")
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.where(item_type: Event::Date.sti_name).order(:created_at, :id).last
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(event)
+    end
+  end
 end

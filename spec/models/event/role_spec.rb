@@ -110,4 +110,29 @@ describe Event::Role do
       end.to change { Event::Participation.count }.by(-1)
     end
   end
+
+  context "paper trails", versioning: true do
+    let(:event) { events(:top_course) }
+
+    it "sets main to participation on create" do
+      expect do
+        Event::Role::Treasurer.create!(event:, participation: event_participations(:top))
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(event_participations(:top))
+    end
+
+    it "sets main to participation on update" do
+      role = Event::Role::Treasurer.create!(event:, participation: event_participations(:top))
+      expect do
+        role.update!(label: "Leader (Actually I'm not a leader)")
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(event_participations(:top))
+    end
+  end
 end

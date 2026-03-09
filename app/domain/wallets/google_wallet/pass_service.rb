@@ -49,6 +49,10 @@ module Wallets
       # Currently always :generic. Event ticket support planned for future phase.
       def pass_type = :generic
 
+      # In a multi-tenant environment (multiple instances sharing the same
+      # issuer_id), the wagon sets id_prefix_addition to a code block returning 
+      # a tenant-specific identifier so at runtime we ensure global uniqueness of 
+      # class and object IDs.
       def id_prefix = [Config.issuer_id, "hitobito", id_prefix_addition&.call].compact.join(".")
 
       # Identifies the pass template shared by all holders of the same PassDefinition.

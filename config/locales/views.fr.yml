@@ -2488,6 +2488,7 @@ fr:
     google:
       generation_failed: Le pass n'a pas pu être ajouté à Google Wallet.
     apple:
+      member_name: Membre
       generation_failed: Le pass n'a pas pu être généré pour Apple Wallet.
     pass:
       member_name: Nom

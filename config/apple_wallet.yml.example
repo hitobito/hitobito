@@ -1,0 +1,8 @@
+apple_wallet:
+  pass_type_identifier: "pass.com.example.membership"
+  team_identifier: "ABC123DEF4"
+  p12_certificate_path: "config/apple_wallet.p12"
+  p12_password: "secret"
+  wwdr_certificate_path: "config/AppleWWDRCAG4.cer"
+  web_service_url: "https://app.example.com/wallets/apple"
+  contact_info: "info@example.com"

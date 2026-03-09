@@ -73,4 +73,52 @@ describe PeriodInvoiceTemplates::InvoiceRunsController, js: true do
       expect(page).not_to have_text "Weiteren Rechnungslauf fahren"
     end
   end
+
+  context "multiple sequential invoice runs" do
+    let(:index_path) { group_period_invoice_template_invoice_runs_path(group, period_invoice_template) }
+
+    it "only considers new members added since the last invoice run" do
+      # First invoice run
+      # Should work normally
+      visit index_path
+      click_link "Rechnungslauf fahren"
+
+      expect(page).to have_text "Hinweis: Falls die Filterbedingungen"
+      expect(page).to have_text "Mitgliedsbeitrag"
+      expect(page).to have_text "45.00 EUR"
+
+      fill_in "Titel", with: "Testlauf"
+      click_button "Speichern"
+
+      expect(page).to have_text "Rechnung Testlauf wurde für 2 Empfänger erstellt."
+      expect(page).to have_text "Bottom One"
+      expect(page).to have_text "15.00 EUR"
+      expect(page).to have_text "Bottom Two"
+      expect(page).to have_text "30.00 EUR"
+
+      # In the meantime, new people are added to hitobito
+      2.times do
+        Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two))
+      end
+
+      # Follow-up invoice run
+      # Should only include the one new added role and ignore the previously invoiced ones.
+      # Should not create any invoice for layers which contain no invoiceable roles at all.
+
+      visit index_path
+      click_link "Rechnungslauf fahren"
+
+      expect(page).to have_text "Hinweis: Falls die Filterbedingungen"
+      expect(page).to have_text "Mitgliedsbeitrag"
+      expect(page).to have_text "10.00 EUR"
+
+      fill_in "Titel", with: "Zweiter Testlauf"
+      click_button "Speichern"
+
+      expect(page).to have_text "Rechnung Zweiter Testlauf wurde für 2 Empfänger erstellt."
+      expect(page).not_to have_text "Bottom One"
+      expect(page).to have_text "Bottom Two"
+      expect(page).to have_text "10.00 EUR"
+    end
+  end
 end

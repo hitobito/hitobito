@@ -80,6 +80,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     phone_number
     email
     social_account
+    picture
   ].freeze
 
   SEARCHABLE_ATTRS = [:number, {event_translations: [:name], groups: [:name]}]

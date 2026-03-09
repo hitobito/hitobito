@@ -377,7 +377,7 @@ de:
       explanation: "Vielleicht haben Sie die Adresse falsch eingegeben oder die Seite ist inzwischen gelöscht worden."
     "500":
       title: "Entschuldigung, da ging etwas schief (500)"
-      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
+      explanation: ""
     "503":
       title: "Entschuldigung, die Seite ist momentan nicht verfügbar (503)"
       explanation: "Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern."

@@ -115,11 +115,6 @@ additional_address:
 address_sync:
   enabled: false
 
-invoice_runs:
-  fixed_fees:
-    membership:
-      enabled: false
-
 custom_dashboard_page:
   enabled: false
 

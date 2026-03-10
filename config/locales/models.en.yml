@@ -1430,10 +1430,6 @@ en:
       mailing_lists: Read all subscriptions to which you have access
       nextcloud: Reading your Nextcloud groups and your display name
 
-  fixed_fees:
-    membership:
-      members: Members
-
   errors:
     messages:
       invalid_zipcode: is not valid

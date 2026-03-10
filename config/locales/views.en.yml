@@ -1165,9 +1165,6 @@ en:
       one: "Invoice cancelled"
       other: "%{count} Rechnungen wurden storniert."
 
-  invoice_runs/fixed_fee:
-    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
-
   payments:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     create:

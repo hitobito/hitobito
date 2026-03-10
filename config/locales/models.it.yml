@@ -1506,10 +1506,6 @@ it:
       mailing_lists: Leggere tutti gli abbonamenti a cui hai accesso
       nextcloud: Leggi i tuoi gruppi Nextcloud e il tuo nome visualizzato
 
-  fixed_fees:
-    membership:
-      members: Membri
-
   errors:
     messages:
       invalid_zipcode: non è valido

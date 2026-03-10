@@ -1192,9 +1192,6 @@ fr:
       one: "La facture a été annulée."
       other: "%{count} factures ont été annulées."
 
-  invoice_runs/fixed_fee:
-    recipient_role_group_mismatch: "Aucun destinataire n'a pu être identifié pour les groupes suivants: %{groups}"
-
   payments:
     export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
     create:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_06_134500) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_10_161028) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_06_134500) do
     t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
+    t.boolean "temporary", default: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 

@@ -37,6 +37,7 @@ describe Export::Tabular::Groups::List do
       "Hausnummer",
       "zusätzliche Adresszeile",
       "Postfach",
+      "Sprache",
       "Telefonnummern",
       "Anzahl Mitglieder",
       "Social Media"

@@ -266,6 +266,46 @@ describe Invoice::BatchCreate do
         Invoice::BatchCreate.new(run, person).call
       end.to change { InvoiceRun::ProcessedSubject.count }.by(1)
     end
+
+    it "generates the invoice in the recipient's language" do
+      period_invoice_template = Fabricate(:period_invoice_template)
+
+      run = InvoiceRun.new(recipient_source: period_invoice_template.recipient_source,
+        period_invoice_template:, group:, title: "Run", title_fr: "FRun")
+      invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+      invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name: "membership",
+        name_fr: "Fmembership", unit_cost: 10,
+        dynamic_cost_parameters: {
+          template_item_id: period_invoice_template.items.first.id,
+          period_start_on: 1.year.ago,
+          period_end_on: Time.zone.today,
+          unit_cost: "10.00",
+          role_types: Group::BottomLayer::BasicPermissionsOnly.name
+        })
+      run.invoice = invoice
+
+      group_de = groups(:bottom_layer_one)
+      group_fr = groups(:bottom_layer_two)
+      group_fr.update!(language: :fr)
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, group: group_de)
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, group: group_fr)
+
+      expect do
+        Invoice::BatchCreate.new(run, person).call
+      end.to change { group.issued_invoices.count }.by(2)
+
+      created_de, created_fr = Invoice.last(2)
+
+      expect(created_de.title).to eq "Run"
+      expect(created_de.recipient).to eq group_de
+      expect(created_de.invoice_items.first.name).to eq "membership"
+
+      LocaleSetter.with_locale(person: group_fr) do
+        expect(created_fr.recipient).to eq group_fr
+        expect(created_fr.title).to eq "FRun"
+        expect(created_fr.invoice_items.first.name).to eq "Fmembership"
+      end
+    end
   end
 
   private

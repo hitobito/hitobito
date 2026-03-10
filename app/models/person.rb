@@ -285,7 +285,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates_by_schema except: [:email, :data_quality]
   validates :email, length: {allow_nil: true, maximum: 255} # other email validations by devise
   validates :company_name, presence: {if: :company?}
-  validates :language, inclusion: {in: LANGUAGES.keys.map(&:to_s)}
   validates :birthday,
     timeliness: {type: :date, allow_blank: true, before: Date.new(10_000, 1, 1)}
   validates :additional_information, length: {allow_nil: true, maximum: (2**16) - 1}
@@ -374,12 +373,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
     def root
       find_by(email: Settings.root_email)
-    end
-
-    def language_labels
-      Person::LANGUAGES.keys.map do |key|
-        [key, I18n.t("activerecord.attributes.person.languages.#{key}")]
-      end
     end
 
     private

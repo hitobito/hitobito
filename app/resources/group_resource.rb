@@ -42,6 +42,11 @@ class GroupResource < ApplicationResource
       context.rails_storage_proxy_url(@object.logo.blob)
     end
 
+    if (Settings.application.languages.keys + Settings.application.additional_languages&.keys.to_a)
+        .uniq.count > 1
+      extra_attribute :language, :string
+    end
+
     extra_attribute :privacy_policies, :array do
       Group::PrivacyPolicyFinder.for(group: @object).all.map do |policy|
         {

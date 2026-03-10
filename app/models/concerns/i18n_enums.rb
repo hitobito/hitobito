@@ -22,8 +22,9 @@ module I18nEnums
 
       key ||= attr.to_s.pluralize
       prefix = i18n_prefix || "activerecord.attributes.#{name.underscore}.#{key}"
+      possible = -> { possible_values || yield }
 
-      validates attr, inclusion: {in: block || possible_values}, allow_blank: true
+      validates attr, inclusion: {in: possible}, allow_blank: true
 
       define_method(:"#{attr}_label") do |value = nil|
         value ||= send(attr)
@@ -35,10 +36,12 @@ module I18nEnums
       end
 
       define_singleton_method(:"#{attr}_labels") do
-        I18n.t(prefix).except(NIL_KEY.to_sym)
+        possible.call.map do |key|
+          [key.to_sym, I18n.t("#{prefix}.#{key}")]
+        end.to_h
       end
 
-      possible_values&.each do |value|
+      possible.call.each do |value|
         scope value.to_sym, -> { where(attr => value) } if scopes
         define_method(:"#{value}?") { self[attr] == value } if queries
       end

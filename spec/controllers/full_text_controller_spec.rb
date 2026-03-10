@@ -36,8 +36,9 @@ describe FullTextController, type: :controller do
     end
 
     it "redirects to group if only finding a single group" do
-      get :index, params: {q: groups(:bottom_layer_one).to_s}
-      expect(response).to redirect_to(group_path(groups(:bottom_layer_one)))
+      groups(:bottom_layer_two).update!(name: "Testgroupnamefoobartest")
+      get :index, params: {q: "Testgroupnamefoobartest"}
+      expect(response).to redirect_to(group_path(groups(:bottom_layer_two)))
     end
 
     it "finds event" do

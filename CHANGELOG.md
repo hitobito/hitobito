@@ -30,6 +30,7 @@
 - In der Ansicht "Rollen, die auf mich Zugriff haben" werden gelöschte Gruppen neu separat gruppiert. Merci @patrickuhlmann! (#4043)
 - In der API werden bei weiteren Mailadressen neu auch die Einstellungen zu Versand und Rechnungen ausgegeben. Merci @B52-Bomber! (#4044)
 - Der Name von Rechnungsläufen und Rechnungsposten ist neu übersetzbar. (#3879)
+- In der Suche können Suchbegriffe neu "mit Anführungszeichen gruppiert" werden, einzelne Suchbegriffe können mit einem vorangestellten Minus -ausgeschlossen werden und mit OR können verschiedene Optionen gleichzeitig gesucht werden. (#3879)
 
 ## Version 2.8
 

@@ -18,9 +18,8 @@ class SearchColumnBuilder
   end
 
   def run
-    # rubocop:todo Layout/LineLength
-    # do not run if there are still migrations needed (to prevent running this before wagon migrations)
-    # rubocop:enable Layout/LineLength
+    # do not run if there are still migrations needed
+    # (to prevent running this before wagon migrations)
     return if migrations_pending?
 
     # Process each searchable model to add a tsvector column and a GIN index
@@ -72,8 +71,6 @@ class SearchColumnBuilder
   end
 
   # Adds or replaces a tsvector column and associated GIN index on specified columns
-  # rubocop:todo Metrics/AbcSize
-  # rubocop:todo Metrics/CyclomaticComplexity
   def create_searchable_column_and_index(table_name, attrs, replace: false)
     # check if every attribute exists on the table
     return unless attrs.all? { |attr| connection.column_exists?(table_name, attr.to_s) }
@@ -84,21 +81,27 @@ class SearchColumnBuilder
 
     quoted_table_name = connection.quote_table_name(table_name)
 
-    migration.remove_column(quoted_table_name, SEARCH_COLUMN) if connection.column_exists?(
-      quoted_table_name, SEARCH_COLUMN
-    )
+    remove_existing_index(quoted_table_name, table_name)
+    remove_existing_column(quoted_table_name)
+
+    create_search_column(table_name, quoted_table_name, attrs)
+    create_search_index(table_name, quoted_table_name)
+  end
+
+  def remove_existing_index(quoted_table_name, table_name)
     if connection.index_exists?(
       quoted_table_name, :search_column, using: :gin
     )
       migration.remove_index(quoted_table_name,
         name: "#{table_name}_search_column_gin_idx")
     end
-
-    create_search_column(table_name, quoted_table_name, attrs)
-    create_search_index(table_name, quoted_table_name)
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/AbcSize
+
+  def remove_existing_column(quoted_table_name)
+    migration.remove_column(quoted_table_name, SEARCH_COLUMN) if connection.column_exists?(
+      quoted_table_name, SEARCH_COLUMN
+    )
+  end
 
   def create_search_column(table_name, quoted_table_name, attrs)
     statement = <<~SQL
@@ -108,9 +111,8 @@ class SearchColumnBuilder
       ) STORED;
     SQL
 
-    # rubocop:todo Layout/LineLength
-    migration.say_with_time "Creating Search Column #{table_name}.#{SEARCH_COLUMN} with #{attrs.to_sentence}" do
-      # rubocop:enable Layout/LineLength
+    migration.say_with_time "Creating Search Column #{table_name}.#{SEARCH_COLUMN} " \
+      "with #{attrs.to_sentence}" do
       connection.execute(statement)
     end
   end
@@ -123,19 +125,36 @@ class SearchColumnBuilder
     end
   end
 
+  # Combines word stemming and transformation rules of all languages supported in postgres
   def ts_vector_statement(attrs)
-    # rubocop:todo Layout/LineLength
-    "to_tsvector(
-      'simple',
-      #{attrs.map { |attr|
-        if attr == :birthday # or any other date field, when another date field, other than birthday will become searchable, please add method to check for type here
-          convert_date_field_to_text(connection.quote_column_name(attr))
-        else
-          "COALESCE(#{connection.quote_column_name(attr)}::text, '')"
-        end
-      }.join(" || ' ' || ")}
-    )"
-    # rubocop:enable Layout/LineLength
+    supported_languages.map do |lang|
+      "to_tsvector('#{lang}', #{cast_attrs(attrs)})"
+    end.join(" || ")
+  end
+
+  # Finds the supported postgres ts_configs (stemming rules, transformations such as ö => o, ...)
+  # for all of the languages activated in this hitobito application
+  def supported_languages
+    @supported_languages ||= Settings.application.languages.keys
+      .map { |lang| FullTextSearchable::SUPPORTED_LANGUAGES[lang] }.uniq
+  end
+
+  def cast_attrs(attrs)
+    attrs.map do |attr|
+      # If more date fields become searchable, we need to add them to this check
+      if attr == :birthday
+        convert_date_field_to_text(connection.quote_column_name(attr))
+      elsif attr == :email
+        # Index email as single word as well as individual parts, so it can be searched
+        # by domain or part of the email.
+        # However, don't split on periods (.) because the postgres *_to_tsquery functions
+        # don't seem to split on periods inside words.
+        "COALESCE(#{connection.quote_column_name(attr)}::text, '') || ' ' " \
+          "|| regexp_replace(COALESCE(email::text, ''), '[@_+-]', ' ', 'g')"
+      else
+        "COALESCE(#{connection.quote_column_name(attr)}::text, '')"
+      end
+    end.join(" || ' ' || ")
   end
 
   # directly parsing a date to text is not immutable and not possible inside a generated column

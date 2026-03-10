@@ -37,6 +37,45 @@ describe Invoice::BatchCreate do
       expect(run.amount_paid).to eq 0
     end
 
+    it "creates invoices in recipient language" do
+      Subscription.create!(mailing_list: mailing_list,
+        subscriber: group,
+        role_types: [Group::TopGroup::Leader])
+      person_de = people(:top_leader)
+      person_fr = Fabricate(Group::TopGroup::Leader.name, group: groups(:top_group)).person
+      person_fr.update!(language: :fr)
+
+      run = InvoiceRun.create!(recipient_source: mailing_list, group: group,
+        title: "title", title_fr: "titre")
+
+      invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+      invoice.invoice_items.build(name: "pens", name_fr: "crayons", unit_cost: 1.5)
+      run.invoice = invoice
+      expect do
+        Invoice::BatchCreate.call(run, person)
+      end.to change { group.issued_invoices.count }.by(2)
+        .and change { group.invoice_items.count }.by(2)
+
+      interesting_attributes = run.reload.invoices.map do |invoice|
+        LocaleSetter.with_locale(person: invoice.recipient) do
+          {
+            recipient: invoice.recipient,
+            title: invoice.title,
+            item_name: invoice.invoice_items.first.name
+          }
+        end
+      end
+      expect(interesting_attributes).to match_array([{
+        recipient: person_de,
+        title: "title",
+        item_name: "pens"
+      }, {
+        recipient: person_fr,
+        title: "titre",
+        item_name: "crayons"
+      }])
+    end
+
     it "creates invoices for people in group distinct people regardless of role count" do
       group = groups(:bottom_layer_one)
       group.issued_invoices.destroy_all

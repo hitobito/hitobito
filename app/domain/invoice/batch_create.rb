@@ -3,11 +3,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# Create actual invoices for a given invoice-list.
+# Create actual invoices for a given invoice list.
 #
 # The main worker method is #create_invoices.
-# The Invoice-List ist updated with success/failure counts
-# Failures are invoices without invoice-items or any other more specific validation error.
+# The invoice list is updated with success/failure counts.
+# Failures are invoices with specific validation errors.
+# An invoice with no items or a total of zero will result
+# in the invoice not being saved, but still reporting
+# success, because it is not an issue with an individual
+# invoice.
 class Invoice::BatchCreate
   attr_reader :invoice_run, :current_user, :invoice, :results, :invalid
 
@@ -58,15 +62,18 @@ class Invoice::BatchCreate
 
   # Creates a clone of the invoice_run invoice for the given recipient
   # and saves it.
-  def create_invoice(recipient) # rubocop:todo Metrics/AbcSize
-    invoice_attrs = invoice.attributes.merge(
-      creator_id: invoice_run.creator_id,
-      invoice_run_id: invoice_run.id,
-      recipient: recipient
-    )
-    invoice = invoice_run.group.issued_invoices.build(invoice_attrs)
-    add_invoice_items(invoice, recipient)
-    save_invoice(invoice)
+  def create_invoice(recipient)
+    LocaleSetter.with_locale(person: recipient) do
+      invoice_attrs = invoice.attributes.merge(
+        title: invoice_run.title || invoice.title,
+        creator_id: invoice_run.creator_id,
+        invoice_run_id: invoice_run.id,
+        recipient: recipient
+      )
+      invoice = invoice_run.group.issued_invoices.build(invoice_attrs)
+      add_invoice_items(invoice, recipient)
+      save_invoice(invoice)
+    end
   end
 
   # Creates clones of all invoice items on the invoice_run invoice

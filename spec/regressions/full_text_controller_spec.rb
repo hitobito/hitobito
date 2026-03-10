@@ -14,13 +14,15 @@ describe FullTextController, type: :controller do
 
   describe "GET #index" do
     let(:group) { groups(:top_layer) }
+    let(:user) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: group).person }
 
     before do
       allow_any_instance_of(FullTextController).to receive(:only_result).and_return(nil)
+      sign_in(user)
     end
 
     context "with finance permissions" do
-      before { sign_in(people(:top_leader)) }
+      let(:user) { people(:top_leader) }
 
       it "renders invoices tab" do
         get :index, params: {q: "bla"}
@@ -30,14 +32,25 @@ describe FullTextController, type: :controller do
     end
 
     context "without finance permissions" do
-      let(:user) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: group).person }
-
-      before { sign_in(user) }
-
       it "does not render invoices tab" do
         get :index, params: {q: "bla"}
 
         expect(dom.all(:css, ".nav.nav-tabs")[0].text).to_not include "Rechnungen"
+      end
+    end
+
+    context "with single invoice result" do
+      before do
+        allow_any_instance_of(FullTextController).to receive(:only_result).and_return(invoice)
+      end
+
+      let(:invoice) { invoices(:sent) }
+
+      it "redirects to invoice view" do
+        get :index, params: {q: "bla"}
+
+        expect(response.headers["Location"]).not_to include "/api/"
+        expect(response.headers["Location"]).to end_with "/invoices/#{invoice.id}"
       end
     end
   end

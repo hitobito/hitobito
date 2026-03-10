@@ -79,6 +79,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   serialize :encrypted_text_message_password, coder: YAML
 
   i18n_enum :letter_address_position, ADDRESS_POSITION_VALUES, scopes: false, queries: false
+  i18n_enum :language, Person::LANGUAGES.keys.map(&:to_s),
+    i18n_prefix: "activerecord.attributes.person.languages"
   attr_encrypted :text_message_username, :text_message_password
 
   acts_as_paranoid

@@ -13,6 +13,9 @@
     - else
       %p.text.mt-2= ta(:none_available)
 
+  - if Group.language_labels.many?
+    = f.labeled_i18n_enum_field :language, Group.language_labels.to_a, class: 'form-select form-select-sm'
+
   - if entry.class.attr_used?(:nextcloud_url)
     = f.labeled_input_fields(:nextcloud_url)
 

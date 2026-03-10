@@ -529,6 +529,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.string "housenumber", limit: 20
     t.string "address_care_of"
     t.string "postbox"
+    t.string "language", default: "de", null: false
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"

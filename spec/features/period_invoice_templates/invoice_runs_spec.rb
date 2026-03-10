@@ -72,6 +72,36 @@ describe PeriodInvoiceTemplates::InvoiceRunsController, js: true do
       expect(page).to have_text "Rechnungslauf fahren"
       expect(page).not_to have_text "Weiteren Rechnungslauf fahren"
     end
+
+    it "generates the invoices in the language of the receiver" do
+      groups(:bottom_layer_two).update!(language: :fr)
+      period_invoice_template.items.first.update!(name_fr: "cotisation des membres")
+
+      visit index_path
+      click_link "Rechnungslauf fahren"
+
+      expect(page).to have_text "Hinweis: Falls die Filterbedingungen"
+
+      fill_in "Titel", with: "Testlauf"
+      first("button[data-bs-title*=\"weitere verfügbare Sprachen\"]").click
+      first("input[name*=title_fr]").fill_in with: "Test FR"
+      click_button "Speichern"
+
+      expect(page).to have_text "Rechnung Testlauf wurde für 2 Empfänger erstellt."
+      expect(page).to have_text "2 Rechnungen angezeigt."
+      expect(page).to have_text "Testlauf"
+      expect(page).to have_text "Bottom One"
+      expect(page).to have_text "Test FR"
+      expect(page).to have_text "Bottom Two"
+
+      click_link "Test FR"
+      expect(page).to have_text "Rechnung stellen / mahnen"
+      click_link "FR"
+      expect(page).to have_text "Test FR"
+      expect(page).to have_text "cotisation des membres"
+      expect(page).not_to have_text "Mitgliedsbeitrag"
+      expect(page).not_to have_text "Testlauf"
+    end
   end
 
   context "multiple sequential invoice runs" do

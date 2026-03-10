@@ -19,6 +19,7 @@
 
   %aside.col-lg-5
     = render 'attrs_contact'
+    = render_extensions "show_contacts"
 
     - if entry.participant_types.present?
       = render 'attrs_application'

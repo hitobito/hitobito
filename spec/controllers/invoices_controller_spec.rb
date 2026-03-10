@@ -428,7 +428,6 @@ describe InvoicesController do
                 count: 1,
                 _destroy: false
               }
-
             }
           }
         }
@@ -437,6 +436,31 @@ describe InvoicesController do
       expect(assigns(:invoice).invoice_items.first.cost_center).to eq "board"
       expect(assigns(:invoice).invoice_items.first.account).to eq "advertisment"
     end
+  end
+
+  it "POST#create allows to set translated invoice item names" do
+    expect do
+      post :create, params: {group_id: group.id, invoice: {
+        title: "current_user",
+        recipient_type: "Person",
+        recipient_id: person.id,
+        invoice_items_attributes: {
+          "1": {
+            name: "Stift",
+            name_fr: "Crayon",
+            cost_center: "board",
+            account: "advertisment",
+            vat_rate: 0.0,
+            unit_cost: 22.0,
+            count: 1,
+            _destroy: false
+          }
+        }
+      }}
+    end.to change { Invoice.count }.by(1)
+
+    expect(Invoice.find_by(title: "current_user").invoice_items.first.name).to eq("Stift")
+    expect(Invoice.find_by(title: "current_user").invoice_items.first.name_fr).to eq("Crayon")
   end
 
   def update_issued_at_to_current_year

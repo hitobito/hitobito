@@ -52,7 +52,7 @@
 
 class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   SEARCHABLE_ATTRS = [:title, :reference, :sequence_number,
-    {invoice_items: [:name, :account, :cost_center]}]
+    {invoice_items: [:account, :cost_center], invoice_item_translations: [:name]}]
 
   include I18nEnums
   include PaymentSlips

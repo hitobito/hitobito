@@ -28,6 +28,8 @@
 #
 
 class InvoiceItem < ActiveRecord::Base
+  include Globalized
+
   # used to map declassified type string to class constant
   class_attribute :type_mappings
 
@@ -48,6 +50,8 @@ class InvoiceItem < ActiveRecord::Base
   class_attribute :dynamic_cost_parameter_definitions
   self.dynamic_cost_parameter_definitions = {}
 
+  translates :name
+
   before_update :recalculate, if: :count_or_unit_cost_changed?
   after_update :recalculate_invoice!
   after_destroy :recalculate_invoice!
@@ -58,6 +62,7 @@ class InvoiceItem < ActiveRecord::Base
 
   scope :list, -> { order(:name) }
 
+  validates :name, presence: true
   validates :unit_cost, money: true, allow_nil: true
   validates :unit_cost, presence: true, unless: :dynamic
   validates :count, presence: true, unless: :dynamic

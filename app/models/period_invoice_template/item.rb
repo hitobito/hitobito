@@ -17,7 +17,11 @@
 # In order to actually calculate counts and prices, the #to_invoice_item method
 # is used to get an invoice item that can perform the calculation.
 class PeriodInvoiceTemplate::Item < ActiveRecord::Base
+  include Globalized
+
   self.table_name = "period_invoice_template_items"
+
+  translates :name
 
   serialize :dynamic_cost_parameters, type: Hash, coder: YAML
   belongs_to :period_invoice_template
@@ -36,12 +40,12 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   def to_invoice_item(invoice: nil, recipient_groups: period_invoice_template.group_id)
     invoice_item_class.for_groups(
       recipient_groups,
-      name:, cost_center:, account:, vat_rate:, invoice:, unit_cost: unit_cost,
-      dynamic_cost_parameters: dynamic_cost_parameters.merge({
-        template_item_id: id,
-        period_start_on: period_invoice_template.start_on,
-        period_end_on: period_invoice_template.end_on
-      })
+      **name_attrs.merge(cost_center:, account:, vat_rate:, invoice:, unit_cost: unit_cost,
+        dynamic_cost_parameters: dynamic_cost_parameters.merge({
+          template_item_id: id,
+          period_start_on: period_invoice_template.start_on,
+          period_end_on: period_invoice_template.end_on
+        }))
     )
   end
 
@@ -61,5 +65,12 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
     dynamic_cost_parameters[:unit_cost] = ActiveSupport::NumberHelper.number_to_currency(
       dynamic_cost_parameters[:unit_cost], format: "%n"
     )
+  end
+
+  private
+
+  def name_attrs
+    attributes.with_indifferent_access
+      .slice(:name, *Globalized.globalized_names_for_attr(:name, true))
   end
 end

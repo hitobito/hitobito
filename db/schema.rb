@@ -617,9 +617,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.index ["group_id"], name: "index_invoice_configs_on_group_id", unique: true
   end
 
+  create_table "invoice_item_translations", force: :cascade do |t|
+    t.integer "invoice_item_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["invoice_item_id"], name: "index_invoice_item_translations_on_invoice_item_id"
+    t.index ["locale"], name: "index_invoice_item_translations_on_locale"
+  end
+
   create_table "invoice_items", id: :serial, force: :cascade do |t|
     t.integer "invoice_id", null: false
-    t.string "name", null: false
     t.text "description"
     t.decimal "vat_rate", precision: 5, scale: 2
     t.decimal "unit_cost", precision: 12, scale: 2, null: false
@@ -1080,8 +1089,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.index ["manager_id", "managed_id"], name: "index_people_managers_on_manager_id_and_managed_id", unique: true
   end
 
+  create_table "period_invoice_template_item_translations", force: :cascade do |t|
+    t.bigint "period_invoice_template_item_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["locale"], name: "index_period_invoice_template_item_translations_on_locale"
+    t.index ["period_invoice_template_item_id"], name: "index_1682613137a779f03cc58338cc57aebdd2d7b115"
+  end
+
   create_table "period_invoice_template_items", force: :cascade do |t|
-    t.string "name", null: false
     t.string "type", null: false
     t.string "cost_center"
     t.string "account"

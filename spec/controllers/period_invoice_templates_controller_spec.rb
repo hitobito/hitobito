@@ -57,6 +57,34 @@ describe PeriodInvoiceTemplatesController do
       expect(entry.recipient_source.parent_id).to eq Group.root.id
     end
 
+    it "POST#create allows to translate the invoice item" do
+      start = Time.zone.today
+      expect do
+        post :create, params: {
+          group_id: Group.root.id,
+          period_invoice_template: {
+            name: "Test",
+            start_on: start,
+            recipient_group_type: Group::BottomLayer.name,
+            items_attributes: {
+              "0": {
+                name: "Invoice item",
+                name_fr: "Position 1",
+                type: PeriodInvoiceTemplate::RoleCountItem.name,
+                dynamic_cost_parameters: {
+                  unit_cost: 10,
+                  role_types: [Group::BottomLayer::Member.name]
+                }
+              }
+            }
+          }
+        }
+      end.to change { PeriodInvoiceTemplate.count }.by 1
+      entry = PeriodInvoiceTemplate.last
+      expect(entry.items.first.name).to eq "Invoice item"
+      expect(entry.items.first.name_fr).to eq "Position 1"
+    end
+
     it "POST#create validates inputs" do
       expect do
         post :create, params: {

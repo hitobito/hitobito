@@ -28,6 +28,20 @@ Hitobito::Application.routes.draw do
 
   get "/verify_membership/:verify_token" => "people/membership/verify#show", as: "verify_membership"
 
+
+  scope "/wallets/apple", module: "wallets/apple_wallet", as: "apple_wallet" do
+    post "v1/devices/:device_id/registrations/:pass_type_id/:serial", action: :register_device,
+      controller: "web_service"
+    delete "v1/devices/:device_id/registrations/:pass_type_id/:serial", action: :unregister_device,
+      controller: "web_service"
+    get "v1/devices/:device_id/registrations/:pass_type_id", action: :updatable_passes,
+      controller: "web_service"
+    get "v1/passes/:pass_type_id/:serial", action: :send_updated_pass,
+      controller: "web_service"
+    post "v1/log", action: :log_message,
+      controller: "web_service"
+  end
+
   language_scope do
     namespace :oauth do
       resource :profile, only: :show

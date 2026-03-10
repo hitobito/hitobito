@@ -1,0 +1,25 @@
+# Copyright (c) 2026, BdP and DPSG. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
+
+pens_de:
+  invoice_item_id: <%= ActiveRecord::FixtureSet.identify(:pens) %>
+  locale: de
+  name: pens
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+pins_de:
+  invoice_item_id: <%= ActiveRecord::FixtureSet.identify(:pins) %>
+  locale: de
+  name: pins
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+needles_de:
+  invoice_item_id: <%= ActiveRecord::FixtureSet.identify(:needles) %>
+  locale: de
+  name: needles
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

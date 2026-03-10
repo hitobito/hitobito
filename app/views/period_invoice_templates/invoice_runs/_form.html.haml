@@ -35,14 +35,14 @@
             %td.left
               = captionize(:cost, Invoice)
             %td.right
-              = format_currency(entry.calculated[:cost])
+              = format_currency(entry.calculated[:cost], unit: entry.group.invoice_config.currency)
           %tr
             %td.left
               = captionize(:vat_rate, InvoiceItem)
             %td.right
-              = format_currency(entry.calculated[:vat])
+              = format_currency(entry.calculated[:vat], unit: entry.group.invoice_config.currency)
           %tr
             %td.left
               %b= captionize(:total_inkl_vat, Invoice)
             %td.right
-              %b= format_currency(entry.calculated[:total])
+              %b= format_currency(entry.calculated[:total], unit: entry.group.invoice_config.currency)

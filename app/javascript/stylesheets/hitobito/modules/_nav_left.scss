@@ -34,7 +34,7 @@
   a.is-active,
   li.is-active>a {
     background-color: desaturate(lighten($link-color, 50%), 20%);
-    border-left: 3px solid $link-color;
+    border-color: $link-color;
   }
 
   a.is-archived,
@@ -92,7 +92,7 @@
     font-size: 0.7rem;
     padding-left: $nav-left-padding-full;
     margin-top: 1rem;
-    border-left: 3px solid transparent;
+    margin-left: 3px;
   }
 
   .nav-left-section-link~.divider,
@@ -104,21 +104,17 @@
     padding: 1rem 0;
 
     .lang {
-      white-space: nowrap;
-    }
+      margin-bottom: 3px;
+      padding-left: calc($nav-left-padding-full + 3px);
 
-    .lang a {
-      display: inline;
-      padding: 0rem;
-    }
+      a {
+        width: min-content;
+      }
 
-    .lang {
-      padding-left: $nav-left-padding-full;
-    }
-
-    .lang .active {
-      color: $black;
-      text-decoration: none;
+      .active {
+        color: $black;
+        text-decoration: none;
+      }
     }
   }
 

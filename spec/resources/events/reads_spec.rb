@@ -82,6 +82,12 @@ describe EventResource, type: :resource do
       render
       expect(d[0].sideload(:kind)).to be_present
     end
+
+    it "may include participations" do
+      params[:include] = "participations"
+      render
+      expect(d[0].sideload(:participations)).to be_present
+    end
   end
 
   describe "filtering" do

@@ -455,6 +455,7 @@ Hitobito::Application.routes.draw do
     resources :event_kinds, module: :event, controller: :kinds, only: [:index, :show]
     resources :event_kind_categories, module: :event, controller: :kind_categories,
       only: [:index, :show]
+    resources :event_participations, module: :event, controller: :participations, only: [:index, :show]
     resources :invoices, only: [:index, :show, :update]
     resources :roles, except: [:edit, :new]
     resources :mailing_lists, only: [:index, :show]

@@ -14,6 +14,8 @@ module JsonApi
       can :read, ::Event::Course if main_ability.can?(:list_available, ::Event)
       can :read, ::Event::Kind if main_ability.can?(:list_available, ::Event)
       can :read, ::Event::KindCategory if main_ability.can?(:list_available, ::Event)
+
+      merge(JsonApi::EventParticipationAbility.new(main_ability))
     end
   end
 end

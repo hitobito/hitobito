@@ -42,6 +42,8 @@ class Event::Participation < ActiveRecord::Base
   belongs_to :event, -> { includes(:translations) }, inverse_of: :participations
   belongs_to :participant, polymorphic: true
 
+  scope :list, -> { order(:created_at) }
+
   scope :with_person_participants, -> {
     # rubocop:todo Layout/LineLength
     joins("LEFT JOIN people ON event_participations.participant_type = 'Person' AND event_participations.participant_id = people.id")

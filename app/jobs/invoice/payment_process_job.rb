@@ -4,14 +4,20 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::PaymentProcessJob < BaseJob
-  self.parameters = [:data]
+  self.parameters = [:xml_file_id]
 
-  def initialize(data)
+  def initialize(xml_file_id)
     super()
-    @data = data
+    @xml_file_id = xml_file_id
   end
 
   def perform
-    Invoice::PaymentProcessor.new(@data).process
+    processor.process
   end
+
+  private
+
+  def processor = @processor ||= Invoice::PaymentProcessor.new(xml_file.download)
+
+  def xml_file = @xml_file ||= ActiveStorage::Blob.find(@xml_file_id)
 end

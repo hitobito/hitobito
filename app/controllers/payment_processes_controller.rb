@@ -12,26 +12,47 @@ class PaymentProcessesController < ApplicationController
   end
 
   def show
-    unless processor
+    unless valid_file?(file_param)
       redirect_to new_group_payment_process_path(group), alert: t("payment_processes.invalid_file")
     end
   end
 
   def create # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-    if valid_file?(file_param) && processor
-      flash.now[:notice] = processor.notice
-      flash.now[:alert] = processor.alert
+    if valid_file?(file_param)
+      enqueue_read_payment_process_job
       render :show
-    elsif processor && params[:data]
-      Invoice::PaymentProcessJob.new(data).enqueue!
-      redirect_to group_invoices_path(group),
-        notice: t("payment_processes.job_enqueued")
+    elsif params[:xml_file_id]
+      enqueue_payment_process_job
+      redirect_to group_invoices_path(group), notice: t("payment_processes.job_enqueued")
     elsif @parsing_error
       redirect_to new_group_payment_process_path(group), alert: t("payment_processes.parsing_error",
         error: @parsing_error)
     else
       redirect_to new_group_payment_process_path(group), alert: t("payment_processes.invalid_file")
     end
+  end
+
+  private
+
+  def enqueue_read_payment_process_job
+    Invoice::ReadPaymentProcessJob.new(
+      current_user.id,
+      "preview-table",
+      group.id,
+      store_temporary_blob.id
+    ).enqueue!
+  end
+
+  def enqueue_payment_process_job
+    Invoice::PaymentProcessJob.new(params[:xml_file_id]).enqueue!
+  end
+
+  def store_temporary_blob
+    ActiveStorage::Blob.create_temporary!(
+      io: file_param,
+      filename: file_param.original_filename,
+      content_type: file_param.content_type
+    )
   end
 
   def authorize_action
@@ -44,34 +65,17 @@ class PaymentProcessesController < ApplicationController
 
   alias_method :parent, :group
 
-  def processor
-    @processor ||= Invoice::PaymentProcessor.new(data)
-  rescue => e
-    @parsing_error = e
-    nil
-  end
-
   def file_param
     params[:payment_process] && params[:payment_process][:file]
-  end
-
-  def valid_file_or_data?
-    valid_file?(file_param) || params[:data].present?
-  end
-
-  def data
-    @data ||= read_file || params[:data]
-  end
-
-  def read_file
-    file_param && valid_file?(file_param) && file_param.read.force_encoding("UTF-8")
   end
 
   def valid_file?(io)
     io.present? &&
       io.respond_to?(:content_type) &&
       # windows sends csv files as application/vnd.excel, windows 10 as application/octet-stream
-      io.content_type =~ %r{text/xml}
+      io.content_type =~ %r{text/xml} &&
+      io.tempfile.read.include?("BkToCstmrDbtCdtNtfctn") &&
+      io.tempfile.rewind
   end
 
   def parents

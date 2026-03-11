@@ -31,23 +31,19 @@ describe PaymentProcessesController do
   it "POST#create handles files with only one entry" do
     post :create, params: {group_id: group.id, payment_process: {file: file(path: xmlfile("FI_camt_single_entry"))}}
     expect(response).to be_successful
-    expect(flash[:alert]).to be_blank
-    expect(flash[:notice]).to be_blank
   end
 
-  it "POST#create with file informs about valid and invalid payments" do
-    invoice.update_columns(reference: "000000000000100000000000905")
-    post :create, params: {group_id: group.id, payment_process: {file: file}}
-    expect(response).to be_successful
-    expect(flash[:alert]).to_not be_present
-    expect(flash[:notice]).to eq "Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.\n" \
-                                 "Es wurden 4 gültige Zahlungen ohne dazugehörige Rechnungen erkannt."
+  it "POST#create start read payment process job" do
+    expect do
+      post :create, params: {group_id: group.id, payment_process: {file: file(path: xmlfile("FI_camt_single_entry"))}}
+    end.to change { Delayed::Job.where("handler ILIKE '%Invoice::ReadPaymentProcessJob%'").count }.by(1)
+      .and change { ActiveStorage::Blob.temporary.count }.by(1)
   end
 
-  it "POST#create with data enqueues payment process job" do
+  it "POST#create with xml_file_id enqueues payment process job" do
     invoice.update_columns(reference: "000000000000100000000000905")
     expect do
-      post :create, params: {group_id: group.id, data: xmlfile.read}
+      post :create, params: {group_id: group.id, xml_file_id: 2}
     end.to change { Delayed::Job.where("handler ILIKE '%Invoice::PaymentProcessJob%'").count }.by(1)
     expect(response).to redirect_to group_invoices_path(group)
   end

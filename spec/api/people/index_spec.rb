@@ -8,7 +8,7 @@
 require "rails_helper"
 
 RSpec.describe "people#index", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", required_flags: [:people] do
     let(:params) { {} }
 
     subject(:make_request) do

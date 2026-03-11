@@ -415,49 +415,24 @@ describe TokenAbility do
     context "authorized" do
       let(:token) { service_tokens(:permitted_top_layer_token) }
 
+      it "may index" do
+        is_expected.to be_able_to(:index, Event::Participation)
+      end
+
       it "may show" do
         is_expected.to be_able_to(:show, event_participation)
-      end
-
-      it "may show indepently of event and group" do
-        token.update(groups: false, events: false)
-        is_expected.to be_able_to(:show, event_participation)
-      end
-
-      it "may index_participations" do
-        is_expected.to be_able_to(:index_participations, event_participation.event)
-      end
-
-      it "may index_participations idenpently of event and group" do
-        token.update(groups: false, events: false)
-        is_expected.to be_able_to(:index_participations, event_participation.event)
-      end
-
-      it "may not index_participations of sub layer" do
-        event = Event.new(groups: [groups(:bottom_layer_one)])
-        is_expected.not_to be_able_to(:index_participations, event)
-      end
-
-      it "may not show participation of sub layer" do
-        event = Event.new(groups: [groups(:bottom_layer_one)])
-        is_expected.not_to be_able_to(:index_participations, event.participations.build)
       end
     end
 
     context "unauthorized" do
       let(:token) { service_tokens(:rejected_top_layer_token) }
 
+      it "may not index" do
+        is_expected.not_to be_able_to(:index, Event::Participation)
+      end
+
       it "may not show" do
         is_expected.not_to be_able_to(:show, event_participation)
-      end
-
-      it "may not index_participations" do
-        is_expected.not_to be_able_to(:index_participations, event_participation.event)
-      end
-
-      it "may not index_participations of sub layer" do
-        event = Event.new(groups: [groups(:bottom_layer_one)])
-        is_expected.not_to be_able_to(:index_participations, event)
       end
     end
   end

@@ -11,26 +11,28 @@ This documentation is about the new JSON API introduced in 2023. Check the [lega
 
 Currently the following endpoints are provided:
 
-| Method | Path                           | Function                                                                     |
-|--------|--------------------------------|------------------------------------------------------------------------------|
-| GET    | /api/people/                   | List all accessible people                                                   |
-| GET    | /api/people/:id                | Fetch a single person entry, replace :id with the person's primary key       |
-| PATCH  | /api/people/:id                | Update a person entry, replace :id with the person's primary key             |
-| GET    | /api/roles/                    | List all accessible roles                                                    |
-| POST   | /api/roles/                    | Create a new role                                                            |
-| GET    | /api/roles/:id                 | Fetch a single role entry, replace :id with the roles' primary key           |
-| PATCH  | /api/roles/:id                 | Update a role entry, replace :id with the roles' primary key                 |
-| DELETE | /api/roles/:id                 | Remove a role entry, replace :id with the roles' primary key                 |
-| GET    | /api/groups/                   | List all accessible groups                                                   |
-| GET    | /api/groups/:id                | Fetch a single group entry, replace :id with the groups's primary key        |
-| GET    | /api/events/                   | List all accessible events                                                   |
-| GET    | /api/events/:id                | Fetch a single event entry, replace :id with the event's primary key         |
-| GET    | /api/event_kinds/              | List all accessible events kinds                                             |
-| GET    | /api/event_kinds/:id           | Fetch a single event kind, replace :id with the event's primary key          |
-| GET    | /api/event_kind_categories/    | List all accessible events kind categories                                   |
-| GET    | /api/event_kind_categories/:id | Fetch a single event kind category, replace :id with the event's primary key |
-| GET    | /api/mailing_lists/            | List all accessible mailing lists                                            |
-| GET    | /api/mailing_lists/:id         | Fetch a single mailing_list, replace :id with the list's primary key         |
+| Method | Path                           | Function                                                                          |
+|--------|--------------------------------|-----------------------------------------------------------------------------------|
+| GET    | /api/people/                   | List all accessible people                                                        |
+| GET    | /api/people/:id                | Fetch a single person entry, replace :id with the person's primary key            |
+| PATCH  | /api/people/:id                | Update a person entry, replace :id with the person's primary key                  |
+| GET    | /api/roles/                    | List all accessible roles                                                         |
+| POST   | /api/roles/                    | Create a new role                                                                 |
+| GET    | /api/roles/:id                 | Fetch a single role entry, replace :id with the roles' primary key                |
+| PATCH  | /api/roles/:id                 | Update a role entry, replace :id with the roles' primary key                      |
+| DELETE | /api/roles/:id                 | Remove a role entry, replace :id with the roles' primary key                      |
+| GET    | /api/groups/                   | List all accessible groups                                                        |
+| GET    | /api/groups/:id                | Fetch a single group entry, replace :id with the groups's primary key             |
+| GET    | /api/events/                   | List all accessible events                                                        |
+| GET    | /api/events/:id                | Fetch a single event entry, replace :id with the event's primary key              |
+| GET    | /api/event_participations/     | List all accessible event participations                                          |
+| GET    | /api/event_participations/:id  | Fetch a single event particiation entry, replace :id with the event's primary key |
+| GET    | /api/event_kinds/              | List all accessible events kinds                                                  |
+| GET    | /api/event_kinds/:id           | Fetch a single event kind, replace :id with the event's primary key               |
+| GET    | /api/event_kind_categories/    | List all accessible events kind categories                                        |
+| GET    | /api/event_kind_categories/:id | Fetch a single event kind category, replace :id with the event's primary key      |
+| GET    | /api/mailing_lists/            | List all accessible mailing lists                                                 |
+| GET    | /api/mailing_lists/:id         | Fetch a single mailing_list, replace :id with the list's primary key              |
 
 
 All successful responses do have HTTP Status `2xx`.
@@ -329,12 +331,13 @@ Response **200 OK**
 
 The following table shows required Service Token permissions per endpoint.
 
-| Endpoint | required permission |
-| -------- | ------------------- |
-| /people  | people              |
-| /groups  | groups              |
-| /roles   | groups, people      |
-| /events  | events              |
+| Endpoint              | required permission  |
+| --------              | -------------------  |
+| /people               | people               |
+| /groups               | groups               |
+| /roles                | groups, people       |
+| /events               | events               |
+| /event_participations | event_participations |
 
 ### Hitobito Developer
 
@@ -345,6 +348,12 @@ Checklist for creating/extending JSON:API endpoints:
   - for new resources, generate tests with `rails generate graphiti:resource_test <ResourceClass>`
   - for new endpoints, generate tests with `rails generate graphiti:api_test <ResourceClass>`
 - Add/extend ability in `app/abilities/json_api/`
+  - ability must only use [hash syntax](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/fetching_records.md)
+  - ability must work for all 3 request auth types, see `Authentication`
+    - session based request uses standard `Ability`
+    - oauth grant based request uses `DoorkeeperAbility` (identical to `Ability` if scope is allowed for resource)
+    - token based request uses `TokenAbility` which defines specific permissions and flags
+  - see `JsonApi::EventParticipationAbility` and `EventParticipationResource` for an example
 - Run `rake graphiti:schema:generate` where you did the changes (core/wagon) to update
   the schema file and add it to git
 - Update list of endpoints in this document
@@ -355,3 +364,4 @@ Permissions are primarly checked in graphiti resources `app/resources`, not in c
 in non JSON:API controllers. For this there's specific abilities in `app/abilities/json_api`.
 We're also authorizing inside the JSON:API controllers to make sure
 the right HTTP status code is returned. (e.g. 403 instead of 404 if access denied)
+

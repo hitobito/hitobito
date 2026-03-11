@@ -1,0 +1,41 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+class Event::ParticipationResource < ApplicationResource
+  primary_endpoint "event_participations", [:index, :show]
+
+  self.type = :event_participations
+
+  with_options writable: false, filterable: false, sortable: false do
+    attribute :event_id, :integer, filterable: true
+    attribute :participant_id, :integer, filterable: true
+    attribute :participant_type, :string, filterable: true
+    attribute :application_id, :integer # relation??
+    attribute :active, :boolean
+    attribute :qualified, :boolean
+    attribute :additional_information, :string # index_full
+    attribute :created_at, :datetime
+    attribute :updated_at, :datetime
+  end
+
+  belongs_to :event
+  polymorphic_belongs_to :participant do
+    group_by(:participant_type) do
+      on(:Person)
+      on(:"Event::Guest")
+    end
+  end
+
+  def base_scope
+    #  super.list.active  why active??
+    super.list
+  end
+
+  def index_ability
+    JsonApi::EventAbility.new(current_ability)
+  end
+end

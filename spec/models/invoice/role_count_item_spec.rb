@@ -11,6 +11,7 @@ describe Invoice::RoleCountItem do
   let(:group) { groups(:top_group) }
   let(:role_types) { [Group::TopGroup::Leader.name] }
   let(:invoice) { Fabricate(:invoice, group:) }
+  let(:template_item_id) { 1337 }
   let(:attrs) {
     {
       invoice:,
@@ -18,6 +19,7 @@ describe Invoice::RoleCountItem do
       cost_center: "5678",
       name: "invoice item",
       dynamic_cost_parameters: {
+        template_item_id:,
         role_types:,
         unit_cost: 10.50,
         period_start_on: 1.month.ago,
@@ -126,6 +128,69 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
       end
 
+      it "ignores roles which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:)
+        previous_invoice = Fabricate(:invoice, recipient: group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(0)
+      end
+
+      it "ignores roles in subgroups which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
+        previous_invoice = Fabricate(:invoice, recipient: group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(0)
+      end
+
+      it "counts roles even when subject with different id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:)
+        previous_invoice = Fabricate(:invoice, recipient: group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:)
+        previous_invoice = Fabricate(:invoice, recipient: group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different item_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:)
+        previous_invoice = Fabricate(:invoice, recipient: group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different recipient_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:)
+        previous_invoice = Fabricate(:invoice, recipient_id: group.id + 1, recipient_type: "Group", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different recipient_type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:)
+        previous_invoice = Fabricate(:invoice, recipient_id: group.id, recipient_type: "Person", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
       it "counts multiple roles of the same person and same group as one" do
         role1 = Fabricate(Group::BottomGroup::Leader.name, group:,
           start_on: 3.weeks.ago, end_on: 2.weeks.ago)
@@ -214,6 +279,69 @@ describe Invoice::RoleCountItem do
       it "ignores role of the wrong type" do
         Fabricate(Group::BottomGroup::Member.name, group: recipient_group)
         expect(item.count).to eq(0)
+      end
+
+      it "ignores roles which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(0)
+      end
+
+      it "ignores roles in subgroups which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(0)
+      end
+
+      it "counts roles even when subject with different id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different item_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different recipient_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient_id: recipient_group.id + 1, recipient_type: "Group", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different recipient_type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient_id: recipient_group.id, recipient_type: "Person", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
       end
 
       it "ignores group_id on the invoice" do
@@ -321,6 +449,69 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
       end
 
+      it "ignores roles which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
+        previous_invoice = Fabricate(:invoice, recipient: person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(0)
+      end
+
+      it "ignores roles in subgroups which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one), person:)
+        previous_invoice = Fabricate(:invoice, recipient: person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(0)
+      end
+
+      it "counts roles even when subject with different id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
+        previous_invoice = Fabricate(:invoice, recipient: person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
+        previous_invoice = Fabricate(:invoice, recipient: person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different item_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
+        previous_invoice = Fabricate(:invoice, recipient: person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different recipient_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
+        previous_invoice = Fabricate(:invoice, recipient_id: person.id + 1, recipient_type: "Person", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different recipient_type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
+        previous_invoice = Fabricate(:invoice, recipient_id: person.id, recipient_type: "Group", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
       it "counts multiple roles of the same person and same group as one" do
         Fabricate(Group::BottomGroup::Leader.name, group:, person:,
           start_on: 3.weeks.ago, end_on: 2.weeks.ago)
@@ -413,6 +604,70 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
       end
 
+      it "ignores roles which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(0)
+      end
+
+      it "ignores roles in subgroups which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one),
+          person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(0)
+      end
+
+      it "counts roles even when subject with different id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different item_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different recipient_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient_id: recipient_person.id + 1, recipient_type: "Person", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
+      it "counts roles even when subject with different recipient_type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient_id: recipient_person.id, recipient_type: "Group", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.count).to eq(1)
+      end
+
       it "counts multiple roles of the same person and same group as one" do
         Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
           start_on: 3.weeks.ago, end_on: 2.weeks.ago)
@@ -450,7 +705,397 @@ describe Invoice::RoleCountItem do
     end
   end
 
+  context "#build_subjects" do
+    let(:role_types) { [Group::BottomGroup::Leader.name] }
+
+    before do
+      Group::BottomGroup::Leader.destroy_all
+    end
+
+    context "with single group recipient" do
+      let(:group) { groups(:bottom_layer_one) }
+      let(:recipient_group) { groups(:bottom_group_one_one) }
+
+      subject(:item) { described_class.for_groups(recipient_group.id, **attrs) }
+
+      before do
+        item.invoice.recipient = recipient_group
+      end
+
+      it "constructs attrs for creating ProcessedSubjects" do
+        expect(item.subjects).to eq([])
+
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        role2 = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        role3 = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        item.instance_variable_set(:@subjects, nil)
+
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
+          {subject_id: role2.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
+          {subject_id: role3.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "ignores inactive role" do
+        Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
+          start_on: 1.year.ago, end_on: 10.months.ago)
+        expect(item.subjects).to eq([])
+      end
+
+      it "ignores future role" do
+        Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
+          start_on: 10.months.from_now, end_on: 1.year.from_now)
+        expect(item.subjects).to eq([])
+      end
+
+      it "considers past role which overlaps the period" do
+        item.dynamic_cost_parameters[:period_start_on] = 11.months.ago
+        item.dynamic_cost_parameters[:period_end_on] = 9.months.ago
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
+          start_on: 12.months.ago, end_on: 10.months.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "ignores roles outside of the recipient group" do
+        Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_two))
+        expect(item.subjects).to eq([])
+      end
+
+      it "searches deep within the group" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "ignores role of the wrong type" do
+        Fabricate(Group::BottomGroup::Member.name, group: recipient_group)
+        expect(item.subjects).to eq([])
+      end
+
+      it "ignores roles which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to eq([])
+      end
+
+      it "ignores roles in subgroups which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to eq([])
+      end
+
+      it "counts roles even when subject with different id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to eq([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts roles even when subject with different type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to eq([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts roles even when subject with different item_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+
+        expect(item.subjects).to eq([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts roles even when subject with different recipient_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient_id: recipient_group.id + 1, recipient_type: "Group", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to eq([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts roles even when subject with different recipient_type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        previous_invoice = Fabricate(:invoice, recipient_id: recipient_group.id, recipient_type: "Person", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to eq([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "ignores group_id on the invoice" do
+        group2 = groups(:bottom_group_one_two)
+        item.invoice.group_id = group2.id
+        Fabricate(Group::BottomGroup::Leader.name, group: group2)
+        expect(item.subjects).to eq([])
+
+        role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
+        item.instance_variable_set(:@subjects, nil)
+
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts multiple roles of the same person and same group as one" do
+        role1 = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        Fabricate(Group::BottomGroup::Leader.name, group: recipient_group, person: role1.person,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts multiple roles of separate people separately" do
+        role1 = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        role2 = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
+          {subject_id: role2.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts multiple roles of the same person in separate groups separately" do
+        group2 = groups(:bottom_group_one_one_one)
+        role1 = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        role2 = Fabricate(Group::BottomGroup::Leader.name, group: group2, person: role1.person,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
+          {subject_id: role2.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts multiple roles with separate types of the same person and same group as one" do
+        item.dynamic_cost_parameters[:role_types] =
+          [Group::BottomGroup::Leader.name, Group::BottomGroup::Member.name]
+        role1 = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        Fabricate(Group::BottomGroup::Member.name, group: recipient_group, person: role1.person,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+    end
+
+    context "with single person recipient" do
+      let(:group) { groups(:bottom_group_one_one) }
+      let(:recipient_person) { people(:bottom_member) }
+
+      subject(:item) { described_class.for_people(recipient_person.id, **attrs) }
+
+      before do
+        item.invoice.recipient = recipient_person
+      end
+
+      it "constructs attrs for creating ProcessedSubjects" do
+        expect(item.subjects).to eq([])
+
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        item.instance_variable_set(:@subjects, nil)
+
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "ignores inactive role" do
+        Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
+          start_on: 1.year.ago, end_on: 10.months.ago)
+        expect(item.subjects).to eq([])
+      end
+
+      it "ignores future role" do
+        Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
+          start_on: 10.months.from_now, end_on: 1.year.from_now)
+        expect(item.subjects).to eq([])
+      end
+
+      it "considers past role which overlaps the period" do
+        item.dynamic_cost_parameters[:period_start_on] = 11.months.ago
+        item.dynamic_cost_parameters[:period_end_on] = 9.months.ago
+        role = Fabricate(Group::BottomGroup::Leader.name, group:,
+          person: recipient_person, start_on: 12.months.ago, end_on: 10.months.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "ignores roles outside of the search group" do
+        Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_two),
+          person: recipient_person)
+        expect(item.subjects).to eq([])
+      end
+
+      it "searches deep within the group" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one),
+          person: recipient_person)
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "ignores role of the wrong type" do
+        Fabricate(Group::BottomGroup::Member.name, group:, person: recipient_person)
+        expect(item.subjects).to eq([])
+      end
+
+      it "ignores roles which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to eq([])
+      end
+
+      it "ignores roles in subgroups which were processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one),
+          person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to eq([])
+      end
+
+      it "counts roles even when subject with different id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts roles even when subject with different type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts roles even when subject with different item_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts roles even when subject with different recipient_id was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient_id: recipient_person.id + 1, recipient_type: "Person", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts roles even when subject with different recipient_type was processed before" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
+        previous_invoice = Fabricate(:invoice, recipient_id: recipient_person.id, recipient_type: "Group", group:)
+        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
+          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts multiple roles of the same person and same group as one" do
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "ignores roles of people other than recipient" do
+        Fabricate(Group::BottomGroup::Leader.name, group:,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts multiple roles of the same person in separate groups separately" do
+        group2 = groups(:bottom_group_one_one_one)
+        role1 = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        role2 = Fabricate(Group::BottomGroup::Leader.name, group: group2, person: recipient_person,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
+          {subject_id: role2.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+
+      it "counts multiple roles with separate types of the same person and same group as one" do
+        item.dynamic_cost_parameters[:role_types] =
+          [Group::BottomGroup::Leader.name, Group::BottomGroup::Member.name]
+        role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
+          start_on: 3.weeks.ago, end_on: 2.weeks.ago)
+        Fabricate(Group::BottomGroup::Member.name, group:, person: recipient_person,
+          start_on: 2.days.ago, end_on: 1.day.ago)
+        expect(item.subjects).to match_array([
+          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+        ])
+      end
+    end
+  end
+
   context "#dynamic_cost" do
+    before do
+      item.invoice.recipient = groups(:top_group)
+    end
+
     it "multiplies price and count" do
       Fabricate(Group::TopGroup::Leader.name, group:)
       expect(item.dynamic_cost).to eq(21.00)

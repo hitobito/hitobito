@@ -1185,6 +1185,11 @@ it:
         one: "Per la fattura %{number} non è stato inviato il sollecito in quanto le impostazioni per il sollecito non sono valide."
         many: "Per %{count} fatture non è stato inviato il sollecito in quanto le impostazioni per il sollecito non sono valide."
         other: "Per %{count} fatture non è stato inviato il sollecito in quanto le impostazioni per il sollecito non sono valide."
+    invoices:
+      invalid_recipients:
+        one: "Für einen Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        many: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        other: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
     destroy:
       zero: "Dapprima deve essere selezionata una fattura."
       one: "La fattura è stata annullata"

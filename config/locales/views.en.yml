@@ -374,7 +374,7 @@ en:
       explanation: "Maybe you typed the address incorrectly, or the page has been deleted."
     "500":
       title: "Sorry, something went wrong (500)"
-      explanation: "We have received a message and will look at the problem as quickly as possible."
+      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
     "503":
       title: "Sorry, page is currently not available (503)"
       explanation: "We are working on this page, so it is not available. This should not take too long."
@@ -1160,13 +1160,14 @@ en:
       payment_reminders_missing:
         one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
         other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+    invoices:
+      invalid_recipients:
+        one: "Für einen Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        other: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Invoice cancelled"
       other: "%{count} Rechnungen wurden storniert."
-
-  invoice_runs/fixed_fee:
-    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -1470,7 +1471,7 @@ en:
 
     invalid_file: Uploaded file is not valid.
     parsing_error: The file could not be processed (%{error})I
-    created: '%{count}payments created.'
+    job_enqueued: "Zahlungen werden im Hintergrund erfasst."
     payments:
       valid_with_invoice:
         one: Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.

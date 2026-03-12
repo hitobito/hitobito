@@ -100,7 +100,12 @@ module DatetimeAttribute
         current_val = send(accessor)
         normalized_value = normalize_datetime_field(field, value)
 
-        unless normalized_value == current_val
+        unless normalized_value.presence == current_val
+          # When the finish_at date is not set, hour and minute values will always be nil,
+          # since no date exists. From the normalized_value (fields) we get zero
+          # We don't want to call attribute_will_change in that case because it effectively did not.
+          return if current_val.nil? && !normalized_value.is_a?(Date) && normalized_value.to_i.zero?
+
           send(:"#{attr}_will_change!")
         end
 

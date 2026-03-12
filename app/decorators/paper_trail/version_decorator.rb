@@ -37,42 +37,7 @@ module PaperTrail
     end
 
     def author
-      return if model.version_author.blank?
-
-      case model.whodunnit_type
-      when ServiceToken.sti_name
-        author_service_token || deleted_service_token_message
-      when Person.sti_name
-        author_person || deleted_user_message
-      else
-        model.whodunnit_type
-      end
-    end
-
-    def author_person
-      person = Person.find_by(id: model.version_author) or return
-
-      h.link_to_if(can?(:show, person), person.to_s, h.person_path(person.id))
-    end
-
-    def author_service_token
-      token = ServiceToken.find_by(id: model.version_author) or return
-
-      layer_id = token.layer_group_id
-      label = author_service_token_label(token)
-      h.link_to_if(can?(:show, token), label, h.group_service_token_path(layer_id, token.id))
-    end
-
-    def deleted_user_message
-      I18n.t("version.deleted_user", id: model.version_author)
-    end
-
-    def deleted_service_token_message
-      I18n.t("version.deleted_service_token", model_name: ServiceToken.model_name.human)
-    end
-
-    def author_service_token_label(token)
-      "#{ServiceToken.model_name.human}: #{token}"
+      PaperTrail::VersionAuthorPresenter.new(model, h).render
     end
 
     def changes
@@ -174,7 +139,10 @@ module PaperTrail
           item)
       end
 
-      # used to overwrite in youth wagon
+      if item_type.include?("Translation") && main_type
+        return changeset
+      end
+
       I18n.t("version.association_change.#{item_class.name.underscore}.#{model.event}",
         default: :"version.association_change.#{model.event}",
         model: item_class.model_name.human,
@@ -233,8 +201,6 @@ module PaperTrail
     end
 
     def reify_exisiting
-      return model.item if model.next.nil? && model.item
-
       model.item || build_new_instance
     end
 
@@ -258,17 +224,36 @@ module PaperTrail
     end
 
     def attribute_change_args(attr, from, to)
-      {attr: item_class.human_attribute_name(attr),
+      {attr: attr_label(attr),
        from: normalize(attr, from),
        to: normalize(attr, to)}
     end
 
-    def normalize(attr, value)
+    def attr_label(attr)
+      if item_type.include?("Translation")
+        "#{main_type&.safe_constantize&.human_attribute_name(attr)} (#{item})"
+      else
+        (item_subtype&.safe_constantize || item_class).human_attribute_name(attr)
+      end
+    end
+
+    def normalize(attr, value) # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
       if attr.to_s.end_with?("_id") && value.present?
         belongs_to_change_args(attr, value)
+      elsif attr.to_s.end_with?("type") && value.present?
+        value.safe_constantize&.model_name&.human
+      elsif enum_translation(attr, value).present?
+        enum_translation(attr, value)
       else
         col = item_class.columns_hash[attr.to_s]
         h.h(h.format_column(col.try(:type), value))
+      end
+    end
+
+    def enum_translation(attr, value)
+      item_i18n_key = item_subtype&.safe_constantize&.model_name&.i18n_key
+      if I18n.exists?("activerecord.attributes.#{item_i18n_key}.#{attr.to_s.pluralize}.#{value}")
+        I18n.t("activerecord.attributes.#{item_i18n_key}.#{attr.to_s.pluralize}.#{value}")
       end
     end
 
@@ -277,7 +262,7 @@ module PaperTrail
 
       if object.item.respond_to?(association_name)
         record = object.item.send(association_name)
-        record.class.base_class.find(value).to_s if record
+        record.class.base_class.find_by(id: value).to_s if record
       else
         value
       end

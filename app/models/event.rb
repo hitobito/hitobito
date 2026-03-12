@@ -67,7 +67,7 @@
 class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   has_paper_trail meta: {main_id: ->(e) { e.id },
                          main_type: sti_name},
-    skip: [:shared_access_token, :applicant_count, :participant_count,
+    skip: [:id, :shared_access_token, :applicant_count, :participant_count,
       :teamer_count, :created_at, :updated_at, :updater_id, :type]
 
   # This statement is required because these classes would not be loaded correctly otherwise.

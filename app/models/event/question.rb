@@ -104,7 +104,7 @@ class Event::Question < ActiveRecord::Base
   end
 
   def to_s(format = :default)
-    label
+    reload.label
   end
 
   def global?

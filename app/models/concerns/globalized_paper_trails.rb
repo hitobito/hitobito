@@ -16,7 +16,8 @@ module GlobalizedPaperTrails
     # To prevent issues of having paper trail versions when we don't want/need them, we add all
     # translated attributes to the skip list and create own paper trail versions on the
     # translation classes
-    paper_trail_options[:skip] |= translated_attribute_names.map(&:to_s)
+    paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                   globalize_attribute_names.map(&:to_s))
 
     translation_class.class_eval do
       # To be able to use the same translation key for all classes we override the i18n_key
@@ -40,7 +41,7 @@ module GlobalizedPaperTrails
       # values are just the strings from settings.yml, so the log does not display translated
       # language names
       def to_s(format = :default)
-        Settings.application.languages[locale]
+        locale
       end
     end
   end

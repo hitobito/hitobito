@@ -68,6 +68,7 @@ class Event::Role < ActiveRecord::Base
   after_update :update_participant_count, if: :type_previously_changed?
   before_destroy :protect_applying_participant
   after_destroy :destroy_participation_for_last
+  after_save :create_event_paper_trail_version, if: :saved_change_to_type?
 
   class << self
     def label
@@ -175,5 +176,15 @@ class Event::Role < ActiveRecord::Base
   def update_participant_count
     event ||= participation.event
     event&.refresh_participant_counts!
+  end
+
+  def create_event_paper_trail_version
+    PaperTrail::Version.create!(
+      item: self,
+      main: event,
+      event: previously_new_record? ? "create" : "update",
+      object: attributes.to_yaml,
+      object_changes: {"type" => saved_changes[:type]}.to_yaml
+    )
   end
 end

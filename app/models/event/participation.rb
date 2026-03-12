@@ -30,7 +30,8 @@
 class Event::Participation < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(p) { p.id },
                          main_type: sti_name},
-    skip: [:created_at, :updated_at]
+    skip: [:id, :created_at, :updated_at, :event_id, :participant_id, :participant_type,
+      :application_id]
 
   # These mails can be manually sent to participants in the participation show page via a dropdown
   MANUALLY_SENDABLE_PARTICIPANT_MAILS = [

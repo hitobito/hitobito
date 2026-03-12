@@ -16,21 +16,11 @@ module GlobalizedPaperTrails
     # To prevent issues of having paper trail versions when we don't want/need them, we add all
     # translated attributes to the skip list and create own paper trail versions on the
     # translation classes
+    sync_paper_trail_skip_attributes
     paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
                                    globalize_attribute_names.map(&:to_s))
 
     translation_class.class_eval do
-      # To be able to use the same translation key for all classes we override the i18n_key
-      # This is used that we don't have to add event/translations, invoice/translations and multiple
-      # translation keys resulting in the same translation.
-      def self.model_name
-        super.tap do |name|
-          def name.i18n_key
-            "translation"
-          end
-        end
-      end
-
       has_paper_trail meta: {main_id: ->(t) {
         t.send(reflect_on_association(:globalized_model).foreign_key)
       },
@@ -43,6 +33,23 @@ module GlobalizedPaperTrails
       def to_s(format = :default)
         locale
       end
+    end
+  end
+
+  class_methods do
+    # Resync paper trail skip options after another translated attribute
+    # may have been added to a wagon
+    def translates(...)
+      super
+
+      sync_paper_trail_skip_attributes
+    end
+
+    def sync_paper_trail_skip_attributes
+      return unless respond_to?(:paper_trail_options)
+
+      paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                     globalize_attribute_names.map(&:to_s))
     end
   end
 end

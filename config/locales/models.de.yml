@@ -252,9 +252,6 @@ de:
       event:
         one: Anlass
         other: Anlässe
-      translation: # All translation tables
-        one: Übersetzung
-        other: Übersetzungen
       event/course:
         one: Kurs
         other: Kurse
@@ -307,8 +304,8 @@ de:
         one: Eventfrage
         other: Eventfragen
       event/answer:
-        one: Anmeldefrage
-        other: Anmeldefragen
+        one: Antwort auf Anmeldefrage
+        other: Antwort auf Anmeldefragen
       family_member:
         one: Familienmitglied
         other: Familienmitglieder
@@ -684,6 +681,7 @@ de:
         motto: Motto
         cost: Kosten
         contact: Kontaktperson
+        creator_id: Ersteller
         notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
         maximum_participants: Maximale Teilnehmerzahl
         minimum_participants: Minimale Teilnehmerzahl
@@ -858,6 +856,7 @@ de:
         answers: Fragen
         created_at: Anmeldedatum
         roles: Rolle
+        active: Aktiv
 
       event/question:
         question: Frage

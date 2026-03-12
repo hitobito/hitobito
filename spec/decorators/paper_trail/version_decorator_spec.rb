@@ -195,6 +195,11 @@ describe PaperTrail::VersionDecorator, :draper_with_helpers, versioning: true do
       string = decorator.attribute_change(:updated_at, nil, now)
       expect(string).to eq "Geändert wurde auf <i>21.06.2014 18:00</i> gesetzt."
     end
+
+    it "translates i18n_enum values" do
+      string = decorator.attribute_change(:language, "de", "fr")
+      expect(string).to eq("Sprache wurde von <i>Deutsch</i> auf <i>Französisch</i> geändert.")
+    end
   end
 
   context "#association_change" do

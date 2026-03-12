@@ -12,32 +12,24 @@ class Event::LogController < ApplicationController
 
   def index
     @group = group
-    @versions = PaperTrail::Version
+    @versions = event_related_versions
       .changed
-      .where(version_conditions)
-      .reorder("created_at DESC, id DESC")
+      .reorder(created_at: :desc, id: :desc)
       .includes(:item)
       .page(params[:page])
   end
 
   private
 
-  def version_conditions
-    {
-      main_id: event.id,
-      main_type: Event.sti_name
-    }
+  def event_related_versions
+    PaperTrail::Version.where(main_id: event.id, main_type: Event.sti_name)
+      .or(PaperTrail::Version.where(main_id: event.question_ids,
+        main_type: Event::Question.sti_name))
   end
 
-  def event
-    @event ||= Event.find(params[:id])
-  end
+  def event = @event ||= group.events.find(params[:id])
 
-  def group
-    @group ||= Group.find(params[:group_id])
-  end
+  def group = @group ||= Group.find(params[:group_id])
 
-  def authorize_action
-    authorize!(:update, event)
-  end
+  def authorize_action = authorize!(:update, event)
 end

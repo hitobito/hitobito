@@ -30,19 +30,11 @@ class Event::Participations::LogController < ApplicationController
     }
   end
 
-  def participation
-    @participation ||= Event::Participation.find(params[:id])
-  end
+  def participation = @participation ||= event.participations.find(params[:id])
 
-  def event
-    @event ||= Event.find(params[:event_id])
-  end
+  def event = @event ||= group.events.find(params[:event_id])
 
-  def group
-    @group ||= Group.find(params[:group_id])
-  end
+  def group = @group ||= Group.find(params[:group_id])
 
-  def authorize_action
-    authorize!(:update, participation)
-  end
+  def authorize_action = authorize!(:update, participation)
 end

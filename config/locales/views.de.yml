@@ -627,7 +627,7 @@ de:
           all: Alle
           only_with_places_available: Nur mit verfügbaren Plätzen
         select_states: Nach Status filtern
-        time_period: Im Zeitraum (optional)
+        time_period: Im Zeitraum von
         until: bis
       group_filter:
         all_layers: Alle Gruppen
@@ -815,7 +815,7 @@ de:
     duplicates: "Duplikate"
 
   filter_navigation/events:
-    all: "Alle"
+    deep: "Alle"
     layer: "nur %{layer}"
 
   filter_navigation/event/participations:

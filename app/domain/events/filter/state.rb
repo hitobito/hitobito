@@ -6,30 +6,29 @@
 #  https://github.com/hitobito/hitobito.
 
 module Events::Filter
-  class State
-    def initialize(_user, params, _options, scope)
-      @params = params
-      @scope = scope
+  class State < Filter::Base
+    self.permitted_args = [:states]
+
+    def apply(scope)
+      scope.where(state: valid_states)
     end
 
-    def to_scope
-      return @scope if valid_states.blank?
-
-      @scope.where(state: valid_states)
+    def blank?
+      valid_states.blank?
     end
 
     private
-
-    def requested_states
-      @params.dig(:filter, :states).to_a.map(&:to_s)
-    end
 
     def valid_states
       @valid_states ||= (requested_states & possible_states)
     end
 
+    def requested_states
+      args[:states].to_a.map(&:to_s)
+    end
+
     def possible_states
-      @possible_states ||= Event::Course.possible_states.map(&:to_s)
+      Event::Course.possible_states.map(&:to_s)
     end
   end
 end

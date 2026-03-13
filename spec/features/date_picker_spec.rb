@@ -22,9 +22,9 @@ describe "Datepicker", js: true do
       let(:lang) { l }
 
       it "does not change date picker format" do
-        find("#filter_since").click
+        find("#filters_date_range_since").click
         click_on(Time.zone.today.day.to_s)
-        expect(find("#filter_since").value).to eq(Time.zone.today.strftime("%d.%m.%Y"))
+        expect(find("#filters_date_range_since").value).to eq(Time.zone.today.strftime("%d.%m.%Y"))
       end
     end
   end

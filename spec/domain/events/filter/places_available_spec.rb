@@ -1,98 +1,59 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
+#  or later. See the COPYING at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
 
 describe Events::Filter::PlacesAvailable do
-  let(:person) { people(:top_leader) }
-  let(:options) { {kind_used: true} }
-
-  let(:scope) { Events::FilteredList.new(person, {}, options).base_scope }
-
-  subject(:filter) { described_class.new(person, params, options, scope) }
-
-  let(:sql) { filter.to_scope.to_sql }
-  let(:where_condition) { sql.sub(/.*(WHERE.*)$/, '\1') }
+  let(:base_scope) { Event.all }
+  subject(:filter) { described_class.new(:places_available, params) }
 
   let!(:unlimited_course) do
-    Fabricate(:course, name: "unlimited", maximum_participants: nil, participant_count: 23)
+    Fabricate(:course, maximum_participants: nil, participant_count: 0)
   end
 
   let!(:filled_course) do
-    Fabricate(:course, name: "full", maximum_participants: 23, participant_count: 23)
+    Fabricate(:course, maximum_participants: 10, participant_count: 10)
   end
 
-  context "has assumptions" do
-    let(:params) { {} } # dummy, not needed
-
-    it "there are 3 courses" do
-      expect(Event::Course.count).to eq 3
-    end
+  let!(:available_course) do
+    Fabricate(:course, maximum_participants: 10, participant_count: 5)
   end
 
-  context "with the request to show available places, it" do
-    let(:params) do
-      {
-        filter: {
-          places_available: 1
-        }
-      }
+  let!(:empty_course) do
+    Fabricate(:course, maximum_participants: 10, participant_count: 0)
+  end
+
+  context "with the request to show available places" do
+    let(:params) { {value: 1} }
+
+    it "is not blank" do
+      expect(filter.blank?).to be false
     end
 
-    it "checks the maximum_participants" do
-      expect(where_condition)
-        .to match(/COALESCE\(events.maximum_participants, 0\) = 0/)
-    end
-
-    it "compares the participant_count to the maximum_participants" do
-      expect(where_condition)
-        .to match("participant_count < events.maximum_participants")
-    end
-
-    it "does not include the filled_course in the results" do
-      expect(subject.to_scope.to_a).to_not include filled_course
-    end
-
-    it "does include the unlimited_course in the results" do
-      expect(subject.to_scope.to_a).to include unlimited_course
-    end
-
-    it "shows only 2 results" do
-      expect(subject.to_scope.to_a).to have(2).entries
+    it "returns courses with available places" do
+      result = filter.apply(base_scope)
+      expect(result.count).to eq 5
+      expect(result).to include(unlimited_course)
+      expect(result).to include(available_course)
+      expect(result).to include(empty_course)
+      expect(result).not_to include(filled_course)
     end
   end
 
-  context "with no request to limit to available places, it" do
-    let(:params) do
-      {
-        filter: {
-          places_available: 0
-        }
-      }
+  context "with no request to limit to available places" do
+    let(:params) { {} }
+
+    it "is blank" do
+      expect(filter.blank?).to be true
     end
 
-    it "does not check maximum_participants" do
-      expect(where_condition).to_not match("maximum_participants")
-    end
-
-    it "does not check participant_count" do
-      expect(where_condition).to_not match("participant_count")
-    end
-
-    it "does include the filled_course in the results" do
-      expect(subject.to_scope.to_a).to include filled_course
-    end
-
-    it "does include the unlimited_course in the results" do
-      expect(subject.to_scope.to_a).to include unlimited_course
-    end
-
-    it "shows all 3 courses" do
-      expect(subject.to_scope.to_a).to have(3).entries
+    it "contains all events" do
+      result = filter.apply(base_scope)
+      expect(result.count).to eq 5
     end
   end
 end

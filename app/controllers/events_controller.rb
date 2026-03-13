@@ -117,7 +117,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   private
 
   def list_entries
-    event_filter.list_entries.includes(:translations, :groups)
+    event_filter.entries
   end
 
   def build_entry
@@ -229,10 +229,10 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def for_typeahead(entries)
-    entries.map do |entry|
-      role_types = entry.role_types.sort { |type|
-        type.participant? ? 0 : 1
-      }.map { |type| {label: type.label, name: type.name} }
+    entries.joins(:translations).map do |entry|
+      role_types = entry.role_types
+        .sort { |type| type.participant? ? 0 : 1 }
+        .map { |type| {label: type.label, name: type.name} }
       {id: entry.id, label: entry.name, types: role_types}
     end
   end
@@ -328,12 +328,9 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def event_filter
-    if request.format.json?
-      Event::ApiFilter.new(group, params, year)
-    else
-      expression = sort_expression if sorting?
-      Event::Filter.new(group, params[:type], params[:filter], year, expression)
-    end
+    params[:year] = year
+    params[:sort_expression] = sort_expression if sorting? && !request.format.json?
+    Events::Filter::GroupList.new(group, current_user, params)
   end
 
   def entries_page(page_param)
@@ -348,8 +345,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
 
   def visible_entries
     @visible_entries ||= begin
-      visible_entry_ids = entries.select(:id).select { |entry| can?(:show, entry) }.map(&:id)
-
+      visible_entry_ids = entries.select { |entry| can?(:show, entry) }.map(&:id)
       entries.select("events.*").where(id: visible_entry_ids)
     end
   end

@@ -39,7 +39,7 @@ class Person::EventQueries
   def upcoming_events
     Event.select("*").from(
       unordered_upcoming_events
-    ).order_by_date
+    ).order(:start_at)
   end
 
   def upcoming_participations

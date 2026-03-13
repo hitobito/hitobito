@@ -60,7 +60,7 @@ describe Events::CoursesController, type: :controller do
     end
 
     it "date fields contain existing filter values" do
-      get :index, params: {filter: {since: "22.04.2021", until: "21.04.2022"}}
+      get :index, params: {filters: {date_range: {since: "22.04.2021", until: "21.04.2022"}}}
       expect(form).to have_css("input.date", count: 2)
       expect(form.all("input.date")[0][:value]).to eq "22.04.2021"
       expect(form.all("input.date")[1][:value]).to eq "21.04.2022"
@@ -106,37 +106,57 @@ describe Events::CoursesController, type: :controller do
 
       it "displays course categories" do
         get :index
+
+        filters = {
+          date_range: {since: "01.01.2010", until: "01.01.2011"},
+          groups: {ids: [top_layer.id, top_group.id]}
+        }
+
         expect(navigation.all("li").size).to eq 2
         expect(navigation.all("li")[0].text.strip).to eq "Vorbasiskurse"
-        expect(navigation.all("li a")[0][:href]).to eq list_courses_path(filter: {category: category.id,
-                                                                                  group_ids: [top_layer.id]})
+        expect(navigation.all("li a")[0][:href]).to eq list_courses_path(
+          filters: filters.merge(course_kind_category: {id: category.id})
+        ).gsub("list_courses?filters", "list_courses?&filters")
         expect(navigation.all("li")[1].text.strip).to eq "Andere Kurse"
-        expect(navigation.all("li a")[1][:href]).to eq list_courses_path(filter: {category: 0,
-                                                                                  group_ids: [top_layer.id]})
+        expect(navigation.all("li a")[1][:href]).to eq list_courses_path(
+          filters: filters.merge(course_kind_category: {id: 0})
+        ).gsub("list_courses?filters", "list_courses?&filters")
       end
 
       it "displays available course kinds when filtering by course category" do
         set_start_dates(slk_ev, "2010-02-2")
         set_start_dates(glk_ev, "2010-01-2")
 
-        get :index, params: {filter: {category: category.id}}
+        get :index, params: {filters: {course_kind_category: {id: category.id}}}
+
+        filters = {
+          date_range: {since: "01.01.2010", until: "01.01.2011"},
+          groups: {ids: [top_layer.id, top_group.id]}
+        }
+
         expect(navigation.all("li ul li").size).to eq 1
         expect(navigation.all("li ul li")[0].text.strip).to eq "Gruppenleiterkurs"
         expect(navigation.all("li ul li a")[0][:href]).to eq list_courses_path(
-          filter: {category: category.id, group_ids: [top_layer.id]}, anchor: "gruppenleiterkurs"
-        )
+          filters: filters.merge(course_kind_category: {id: category.id}), anchor: "gruppenleiterkurs"
+        ).gsub("list_courses?filters", "list_courses?&filters")
       end
 
       it "displays other course kinds when filtering for kinds without category" do
         set_start_dates(slk_ev, "2010-02-2")
         set_start_dates(glk_ev, "2010-01-2")
 
-        get :index, params: {filter: {category: 0}}
+        get :index, params: {filters: {course_kind_category: {id: 0}}}
+
+        filters = {
+          date_range: {since: "01.01.2010", until: "01.01.2011"},
+          groups: {ids: [top_layer.id, top_group.id]}
+        }
+
         expect(navigation.all("li ul li").size).to eq 3
         expect(navigation.all("li ul li")[1].text.strip).to eq "Fortbildungskurs"
         expect(navigation.all("li ul li a")[1][:href]).to eq list_courses_path(
-          filter: {category: 0, group_ids: [top_layer.id]}, anchor: "fortbildungskurs"
-        )
+          filters: filters.merge(course_kind_category: {id: 0}), anchor: "fortbildungskurs"
+        ).gsub("list_courses?filters", "list_courses?&filters")
       end
     end
   end
@@ -171,7 +191,7 @@ describe Events::CoursesController, type: :controller do
     it "does not show details for users who cannot manage course" do
       person = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
       sign_in(person)
-      get :index, params: {filter: {group_ids: [slk_ev.groups.first.id]}}
+      get :index, params: {filters: {groups: {ids: [slk_ev.groups.first.id]}}}
       expect(main.find("table tr:eq(1) td:eq(1) a").text).to eq "Eventus"
       expect(main.find("table tr:eq(1) td:eq(1)").text.strip).to eq "EventusSLK 123 Top"
       expect(main.find("table tr:eq(1) td:eq(1) a")[:href]).to eq group_event_path(slk_ev.groups.first, slk_ev)
@@ -182,14 +202,14 @@ describe Events::CoursesController, type: :controller do
     end
 
     it "groups courses by course type" do
-      get :index, params: {filter: {until: "01.01.2012"}}
+      get :index, params: {filters: {date_range: {until: "01.01.2012"}}}
       expect(main.all("h2").size).to eq 2
       expect(main.all("h2")[0].text.strip).to eq "Gruppenleiterkurs"
       expect(main.all("h2")[1].text.strip).to eq "Scharleiterkurs"
     end
 
     it "filters with group param" do
-      get :index, params: {group_id: glk_ev.group_ids.first}
+      get :index, params: {filters: {groups: {ids: [glk_ev.group_ids.first]}}}
       expect(main.all("h2").size).to eq 1
     end
   end

@@ -9,69 +9,54 @@ module Events::CourseListing
   extend ActiveSupport::Concern
 
   included do
-    attr_reader :since_date, :until_date
-    helper_method :course_list_title, :since_date, :until_date
+    helper_method :course_list_title
   end
 
   private
 
-  def set_filter_vars
+  def init_filter_vars
     set_group_vars
-    set_date_vars
+    set_date_range
     set_course_state_vars
-    set_kind_category_vars
   end
 
   def course_filters
-    Events::FilteredList.new(
-      current_person, params,
-      kind_used: kind_used?,
-      list_all_courses: can?(:list_all, Event::Course)
-    )
+    args = params.merge(list_all_courses: can?(:list_all, Event::Course))
+    @filter = Events::Filter::CourseList.new(current_person, args)
   end
 
   def course_list_title
     @course_list_title ||= begin
-      return I18n.t("event.lists.courses.no_category") if @kind_category_id == "0"
+      selected_kind_category_id = @filter.chain.dig(:course_kind_category, :id)
+      return I18n.t("event.lists.courses.no_category") if selected_kind_category_id == "0"
 
-      Event::KindCategory.find_by(id: @kind_category_id)&.label
+      Event::KindCategory.find_by(id: selected_kind_category_id)&.label
     end
   end
 
-  def set_group_vars # rubocop:todo Metrics/AbcSize
-    params[:filter] ||= {}
-    params[:filter][:group_ids] ||=
-      Events::Filter::Groups.new(
-        course_filters.user, course_filters.params,
-        course_filters.options, course_filters.to_scope
-      ).default_user_course_groups.map(&:id)
-    @group_ids = params.dig(:filter, :group_ids).to_a.compact_blank.map(&:to_i)
-  end
-
-  def set_date_vars
-    since_date = date_or_default(params.dig(:filter, :since), Time.zone.today.to_date)
-    until_date = date_or_default(params.dig(:filter, :until), since_date.advance(years: 1))
-
-    @since_date = I18n.l(since_date)
-    @until_date = I18n.l(until_date)
-  end
-
-  def date_or_default(date, default)
-    Date.parse(date)
-  rescue ArgumentError, TypeError
-    default
-  end
-
   def set_course_state_vars
-    @states = params.dig(:filter, :states) || Event::Course.possible_states.without("canceled")
-    @places_available = params.dig(:filter, :places_available)
+    params[:filters] ||= {}
+    params[:filters][:state] ||= {}
+    params[:filters][:state][:states] ||= Event::Course.possible_states.without("canceled")
   end
 
-  def set_kind_category_vars
-    @kind_category_id = params.dig(:filter, :category)
+  def set_date_range
+    params[:filters] ||= {}
+    params[:filters][:date_range] ||= {
+      since: I18n.l(Time.zone.today.to_date),
+      until: I18n.l(1.year.from_now.to_date)
+    }
   end
 
-  def kind_used?
-    Event::Course.attr_used?(:kind_id)
+  def set_group_vars
+    params[:filters] ||= {}
+    params[:filters][:groups] ||= {}
+    params[:filters][:groups][:ids] ||= course_groups_from_hierarchy.map(&:id)
+  end
+
+  def course_groups_from_hierarchy
+    ids = current_person.primary_group&.hierarchy&.select(:id) ||
+      current_person.groups_hierarchy_ids
+    Group.where(id: ids).course_offerers
   end
 end

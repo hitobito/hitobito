@@ -6,55 +6,21 @@
 #  https://github.com/hitobito/hitobito.
 
 module Events::Filter
-  class Groups
-    def initialize(user, params, options, scope)
-      @user = user
-      @params = params
-      @scope = scope
-      @options = options
+  class Groups < Filter::Base
+    self.permitted_args = [:ids]
+
+    def apply(scope)
+      scope.with_group_id(group_ids)
     end
 
-    def to_scope
-      conditions = complete_course_list_allowed? ?
-                     Event.all :
-                     Event.in_hierarchy(@user).or(Event.where(globally_visible: true))
-
-      conditions = conditions.with_group_id(group_ids) if group_ids.any?
-
-      @scope.merge(conditions).distinct
-    end
-
-    def default_user_course_groups
-      course_groups_from_primary_layer || course_groups_from_hierarchy || Group.none
+    def blank?
+      group_ids.blank?
     end
 
     private
 
-    def complete_course_list_allowed?
-      @options[:list_all_courses] == true
-    end
-
     def group_ids
-      @params.dig(:filter, :group_ids).to_a.compact_blank
-    end
-
-    def course_groups_from_primary_layer
-      Group
-        .course_offerers
-        .where(id: @user.primary_group.try(:layer_group_id))
-        .first
-        .try(:hierarchy)
-        .try(:course_offerers)
-    end
-
-    def course_groups_from_hierarchy
-      Group
-        .course_offerers
-        .where(id: @user.groups_hierarchy_ids)
-        .where.not(groups: {id: Group.root_id})
-        .first
-        .try(:hierarchy)
-        .try(:course_offerers)
+      args[:ids].to_a.compact_blank
     end
   end
 end

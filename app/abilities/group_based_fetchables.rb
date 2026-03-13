@@ -40,9 +40,8 @@ class GroupBasedFetchables
 
   def in_above_group_condition(condition)
     groups_above_group.each do |group|
-      condition.or("#{Group.quoted_table_name}.lft >= ? AND #{Group.quoted_table_name}.rgt <= ? " \
+      condition.or("#{Group.below_or_at_condition(group.lft, group.rgt)} " \
                    "AND #{Group.quoted_table_name}.layer_group_id = ?",
-        group.lft, group.rgt,
         group.layer_group_id)
     end
   end

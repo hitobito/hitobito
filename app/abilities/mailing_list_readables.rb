@@ -37,10 +37,7 @@ class MailingListReadables < GroupReadables
 
   def in_above_layer_condition(condition)
     layer_groups_above.each do |group|
-      condition.or(
-        "#{Group.quoted_table_name}.lft >= ? AND #{Group.quoted_table_name}.rgt <= ? ",
-        group.lft, group.rgt
-      )
+      condition.or(Group.below_or_at_condition(group.lft, group.rgt))
     end
   end
 

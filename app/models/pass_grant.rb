@@ -15,6 +15,8 @@ class PassGrant < ActiveRecord::Base
   # Future: include RelatedQualificationType::Assigners (WP 13)
   # Future: has_many :related_qualification_types, as: :relation, dependent: :destroy
 
+  scope :group_grants, -> { where(grantor_type: "Group") }
+
   # Extracted as method for Future Phase extensibility (WP 13: qualification-based passes).
   # Will become: has_role_types_or_qualification_types
   validate :has_eligibility_criteria

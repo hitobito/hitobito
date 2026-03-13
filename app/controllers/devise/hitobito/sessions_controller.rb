@@ -42,6 +42,53 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
 
   private
 
+  def after_sign_in_path_for(resource)
+    # Devise may return a stale stored path in a different locale (e.g. /de/...)
+    # when the user explicitly signs in under /fr or /it.
+    localize_stored_redirect(super)
+  end
+
+  def localize_stored_redirect(path)
+    return path if path.blank?
+
+    locale = requested_locale
+    return path if locale.blank?
+
+    # Normalize both path and query locale so all redirect styles are covered.
+    uri = URI.parse(path)
+    uri.path = localize_path(uri.path, locale)
+    uri.query = localize_query(uri.query, locale)
+    uri.to_s
+  rescue URI::InvalidURIError
+    path
+  end
+
+  def requested_locale
+    locale = params[:locale].to_s
+    locale if configured_locales.include?(locale)
+  end
+
+  def configured_locales
+    # Keep this dynamic so wagon/core language settings are respected.
+    @configured_locales ||= Settings.application.languages.to_hash.keys.map(&:to_s)
+  end
+
+  def localize_path(path, locale)
+    return path if path.blank?
+
+    path.sub(%r{\A/(?:#{configured_locales.join("|")})(?=/|\z)}, "/#{locale}")
+  end
+
+  def localize_query(query, locale)
+    return query if query.blank?
+
+    params = Rack::Utils.parse_nested_query(query)
+    return query unless configured_locales.include?(params["locale"].to_s)
+
+    params["locale"] = locale
+    Rack::Utils.build_query(params)
+  end
+
   def second_factor_required?(resource)
     !Settings.auth&.skip_2fa && resource.is_a?(Person) && resource.second_factor_required?
   end

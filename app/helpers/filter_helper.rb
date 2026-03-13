@@ -38,6 +38,8 @@ module FilterHelper
 
   def direct_filter_date(attr, label = nil, options = {})
     options[:class] ||= "col-2 date form-control form-control-sm"
+    options[:placeholder] ||= "dd.mm.yyyy"
+    options[:pattern] ||= "\\d{2}\\.\\d{2}\\.\\d{4}"
     direct_filter(attr, label) do
       content_tag(:div, class: "input-group") do
         content_tag(:span, icon(:"calendar-alt"), class: "input-group-text") +
@@ -61,6 +63,8 @@ module FilterHelper
   def direct_filter_date_field(attr, options = {})
     options[:class] ||= "date form-control form-control-sm w-50"
     options[:value] ||= params[attr]
+    options[:placeholder] ||= "dd.mm.yyyy"
+    options[:pattern] ||= "\\d{2}\\.\\d{2}\\.\\d{4}"
     options[:data] = {submit: true}
     content_tag(:span, icon(:"calendar-alt"),
       class: "input-group-text") + text_field(nil, attr, options)

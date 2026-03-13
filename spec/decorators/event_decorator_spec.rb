@@ -171,16 +171,29 @@ describe EventDecorator, :draper_with_helpers do
   end
 
   context "#complete_contact_attributes" do
-    before { event.contact = people(:top_leader) }
+    let(:contact) { people(:top_leader) }
+
+    before { event.contact = contact }
 
     subject { EventDecorator.new(event).complete_contact_attributes }
 
     context "with every possible attribute" do
+      before do
+        2.times do
+          Fabricate(:additional_email, contactable: contact)
+        end
+      end
+
       it {
-        # rubocop:todo Layout/LineLength
-        is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
+        additional_emails = contact.additional_emails.map do |email|
+          "<span><a href=\"mailto:#{email.email}\">#{email.email}</a></span> " \
+            "<span class=\"muted\">#{email.label}</span>"
+        end.join("<br />")
+
+        is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p>" \
+        "<a href=\"mailto:top_leader@example.com\">top_leader@example.com</a>" \
+        "<p>#{additional_emails}</p>"
       }
-      # rubocop:enable Layout/LineLength
     end
 
     context "with only name" do
@@ -190,7 +203,7 @@ describe EventDecorator, :draper_with_helpers do
     end
 
     context "contact person without email" do
-      before { people(:top_leader).update_column(:email, nil) }
+      before { contact.update_column(:email, nil) }
 
       it { is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p>" }
     end

@@ -6,9 +6,7 @@ module VisibleFromAboveCondition
 
     visible_from_above_groups = OrCondition.new
     collapse_groups_to_highest(layer_groups_above) do |layer_group|
-      visible_from_above_groups.or("#{Group.quoted_table_name}.lft >= ? " \
-                                   "AND #{Group.quoted_table_name}.rgt <= ?",
-        layer_group.lft, layer_group.rgt)
+      visible_from_above_groups.or(Group.below_or_at_condition(layer_group.lft, layer_group.rgt))
     end
 
     query = "(#{visible_from_above_groups.to_a.first}) AND roles.type IN (?)"
@@ -21,9 +19,9 @@ module VisibleFromAboveCondition
 
     see_invisible_from_above_groups = OrCondition.new
     collapse_groups_to_highest(layer_groups_see_invisible_from_above) do |layer_group|
-      see_invisible_from_above_groups.or("groups.lft >= ? AND groups.rgt <= ?",
-        layer_group.left,
-        layer_group.rgt)
+      see_invisible_from_above_groups.or(
+        Group.below_or_at_condition(layer_group.lft, layer_group.rgt)
+      )
     end
 
     condition.or(*see_invisible_from_above_groups.to_a)

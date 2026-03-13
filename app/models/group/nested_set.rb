@@ -141,5 +141,19 @@ module Group::NestedSet
     def reset_root_id
       @root_id = nil
     end
+
+    # Generates a SQL condition string for checking if groups are below or at given bounds.
+    # Includes the group at the bounds itself plus all descendants.
+    # Accepts either integer values or column references (e.g., "other_table.lft").
+    def below_or_at_condition(lft, rgt, table_name = quoted_table_name)
+      "#{table_name}.lft >= #{lft} AND #{table_name}.rgt <= #{rgt}"
+    end
+
+    # Generates a SQL condition string for checking if groups are above or at given bounds.
+    # Includes the group at the bounds itself plus all ancestors.
+    # Accepts either integer values or column references (e.g., "other_table.lft").
+    def above_or_at_condition(lft, rgt, table_name = quoted_table_name)
+      "#{table_name}.lft <= #{lft} AND #{table_name}.rgt >= #{rgt}"
+    end
   end
 end

@@ -144,16 +144,52 @@ module Group::NestedSet
 
     # Generates a SQL condition string for checking if groups are below or at given bounds.
     # Includes the group at the bounds itself plus all descendants.
-    # Accepts either integer values or column references (e.g., "other_table.lft").
-    def below_or_at_condition(lft, rgt, table_name = quoted_table_name)
-      "#{table_name}.lft >= #{lft} AND #{table_name}.rgt <= #{rgt}"
+    # lft/rgt accept Integer values, hardcoded column references (e.g., "other_table.lft"),
+    # or "?" bind-parameter placeholders. Anything else raises ArgumentError.
+    # tbl is always quoted via connection.quote_table_name.
+    def below_or_at_condition(lft, rgt, tbl = table_name)
+      quoted_tbl = connection.quote_table_name(tbl)
+      "#{quoted_tbl}.lft >= #{sanitize_nested_set_bound(lft)} AND " \
+        "#{quoted_tbl}.rgt <= #{sanitize_nested_set_bound(rgt)}"
     end
 
     # Generates a SQL condition string for checking if groups are above or at given bounds.
     # Includes the group at the bounds itself plus all ancestors.
-    # Accepts either integer values or column references (e.g., "other_table.lft").
-    def above_or_at_condition(lft, rgt, table_name = quoted_table_name)
-      "#{table_name}.lft <= #{lft} AND #{table_name}.rgt >= #{rgt}"
+    # lft/rgt accept Integer values, hardcoded column references (e.g., "other_table.lft"),
+    # or "?" bind-parameter placeholders. Anything else raises ArgumentError.
+    # tbl is always quoted via connection.quote_table_name.
+    def above_or_at_condition(lft, rgt, tbl = table_name)
+      quoted_tbl = connection.quote_table_name(tbl)
+      "#{quoted_tbl}.lft <= #{sanitize_nested_set_bound(lft)} AND " \
+        "#{quoted_tbl}.rgt >= #{sanitize_nested_set_bound(rgt)}"
+    end
+
+    private
+
+    # Validates a nested-set bound value against SQL injection.
+    # Three forms are accepted:
+    #
+    # Integer -- a DB-sourced lft/rgt value, e.g. group.lft.
+    #   Interpolated directly as a numeric literal; safe by type.
+    #
+    # Column reference string matching /\A[\w.]+\z/ -- a hardcoded cross-table
+    #   column reference used in JOIN conditions, e.g. "group_subscriptions.lft".
+    #
+    # "?" -- a bind-parameter placeholder. The caller is responsible for
+    #   providing the actual value via ActiveRecord's sanitize_sql machinery,
+    #   e.g. condition.or(sql, role.group.lft, role.group.rgt, ...).
+    #
+    # Anything else raises ArgumentError to prevent SQL injection.
+    def sanitize_nested_set_bound(value)
+      raise ArgumentError, "Unsafe value: #{value.inspect}" unless safe_nested_set_bound?(value)
+
+      value
+    end
+
+    def safe_nested_set_bound?(value)
+      value.is_a?(Integer) ||        # DB integer attribute, e.g. group.lft
+        value == "?" ||              # bind-parameter placeholder
+        value.match?(/\A[\w.]+\z/)  # hardcoded column reference, e.g. "group_subscriptions.lft"
     end
   end
 end

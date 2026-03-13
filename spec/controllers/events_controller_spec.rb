@@ -102,7 +102,7 @@ describe EventsController do
 
       it "does page correctly even if event have multiple dates" do
         events(:top_event).dates.create!(start_at: "2012-3-02")
-        get :index, params: {group_id: group.id, year: 2012, filter: "all"}
+        get :index, params: {group_id: group.id, year: 2012, range: "deep"}
         expect(assigns(:events)).to have(3).entries
       end
 
@@ -112,7 +112,7 @@ describe EventsController do
         # there are 3 events, with the paging-limit of 2, the pages 1 and 2 are
         # filled, page 42 is not
 
-        get :index, params: {group_id: group.id, year: 2012, filter: "all", page: 42}
+        get :index, params: {group_id: group.id, year: 2012, range: "deep", page: 42}
         expect(assigns(:events)).to have(2).entries
       end
 
@@ -122,12 +122,12 @@ describe EventsController do
       end
 
       it "limits list to events of all non layer descendants" do
-        get :index, params: {group_id: group.id, filter: "layer", year: 2012}
+        get :index, params: {group_id: group.id, range: "layer", year: 2012}
         expect(assigns(:events)).to have(2).entries
       end
 
       it "orders according to sort expression" do
-        get :index, params: {group_id: group.id, filter: "layer", year: 2012,
+        get :index, params: {group_id: group.id, range: "layer", year: 2012,
                              sort: :name, sort_dir: :asc}
         expect(assigns(:events).first.name).to eq "Eventus"
       end
@@ -173,7 +173,7 @@ describe EventsController do
         expect(json["current_page"]).to eq(1)
         expect(json["total_pages"]).to eq(2)
         expect(json["prev_page_link"]).to be_nil
-        expect(json["next_page_link"]).to eq controller.url_for(request.params.merge(page: 2))
+        expect(json["next_page_link"]).to eq controller.url_for(request.params.merge(page: 2, year: Date.current.year))
       end
 
       it "renders json pagination second page" do
@@ -190,7 +190,7 @@ describe EventsController do
 
         expect(json["current_page"]).to eq(2)
         expect(json["total_pages"]).to eq(2)
-        expect(json["prev_page_link"]).to eq controller.url_for(request.params.merge(page: 1))
+        expect(json["prev_page_link"]).to eq controller.url_for(request.params.merge(page: 1, year: Date.current.year))
         expect(json["next_page_link"]).to be_nil
       end
     end

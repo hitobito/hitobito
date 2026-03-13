@@ -248,24 +248,23 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # Default scope for event lists
     def list
       subquery = joins(:dates, :translations)
-        .select("events.*", "event_dates.start_at")
-        .select(Event::Translation.column_names
-                                  .reject { |col|
-                  ["id", "event_id", "created_at",
-                    "updated_at"].include?(col)
-                }
-                                  .map { |col| "event_translations.#{col}" })
-        .preload_all_dates
+        .select("events.*", "event_dates.start_at", *list_translation_columns)
 
-      Event.select("*").from(subquery.unscope(:order).distinct_on(:id), :events).order_by_date
+      Event
+        .unscoped
+        .select("events.*")
+        .from(subquery.unscope(:order).distinct_on(:id), :events)
+        .order("start_at")
+        .preload(:dates)
+    end
+
+    def list_translation_columns
+      (Event::Translation.column_names - ["id", "event_id", "created_at", "updated_at"])
+        .map { |col| "event_translations.#{col}" }
     end
 
     def preload_all_dates
       all.extending(Event::PreloadAllDates)
-    end
-
-    def order_by_date
-      select(:start_at).order(:start_at)
     end
 
     # Events with at least one date in the given year
@@ -288,12 +287,22 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
           start_date: start_date, end_date: end_date).distinct
     end
 
+    # before or on start date
     def before_or_on(date)
       joins(:dates).where(event_dates: {start_at: ..date.end_of_day})
     end
 
+    # after or on start date
     def after_or_on(date)
       joins(:dates).where(event_dates: {start_at: date.midnight..})
+    end
+
+    # after or on start or finish date
+    def since(date)
+      joins(:dates)
+        .where("(event_dates.finish_at IS NULL AND event_dates.start_at >= :date) OR " \
+              "(event_dates.finish_at IS NOT NULL AND event_dates.finish_at >= :date)",
+          date: date.beginning_of_day).distinct
     end
 
     # Events from groups in the hierarchy of the given user.

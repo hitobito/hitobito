@@ -6,22 +6,15 @@
 #  https://github.com/hitobito/hitobito.
 
 module Events::Filter
-  class PlacesAvailable
-    def initialize(_user, params, _options, scope)
-      @params = params
-      @scope = scope
+  class PlacesAvailable < Filter::Base
+    self.permitted_args = [:value]
+
+    def apply(scope)
+      scope.places_available
     end
 
-    def to_scope
-      return @scope unless only_available?
-
-      @scope.places_available
-    end
-
-    private
-
-    def only_available?
-      @params.dig(:filter, :places_available).to_i == 1
+    def blank?
+      args[:value].to_i != 1
     end
   end
 end

@@ -13,7 +13,7 @@ class Events::CoursesController < ApplicationController
 
   def index
     authorize_courses
-    set_filter_vars
+    init_filter_vars
 
     respond_to do |format|
       format.html { prepare_sidebar }
@@ -42,12 +42,15 @@ class Events::CoursesController < ApplicationController
   end
 
   def courses_scope
-    course_filters.to_scope
-      .includes(:groups, :dates, :translations, kind: :translations)
+    course_filters.entries
   end
 
   def course_grouping
     kind_used? ? ->(event) { event.kind.label } : DEFAULT_GROUPING
+  end
+
+  def kind_used?
+    Event::Course.attr_used?(:kind_id)
   end
 
   def display_any_booking_info?

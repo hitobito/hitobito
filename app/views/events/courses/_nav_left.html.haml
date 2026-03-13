@@ -1,21 +1,24 @@
 %ul.nav-left-list
+  - selected_category_id = @filter.chain.dig(:course_kind_category, :id)
   - if kind_used?
     - if kind_categories_used?
       - @categories.each do |category|
         %li
-          = link_to(category.to_s, set_filter(category: category.id), data: { turbo: false })
+          - link_params = params.to_unsafe_h.deep_merge(filters: { course_kind_category: {id: category.id } })
+          = link_to(category.to_s, link_params, data: { turbo: false })
 
-          - if @kind_category_id == category.id.to_s
+          - if selected_category_id == category.id.to_s
             %ul
               - category.kinds.each do |kind|
-                %li= link_to(kind.label, set_filter(category: category.id, anchor: kind.label.parameterize), data: { turbo: false })
+                %li= link_to(kind.label, link_params.merge(anchor: kind.label.parameterize), data: { turbo: false })
       %li
-        = link_to(t('event.lists.courses.no_category'), set_filter(category: 0), data: { turbo: false })
+        - link_params = params.to_unsafe_h.deep_merge(filters: { course_kind_category: {id: 0 } })
+        = link_to(t('event.lists.courses.no_category'), link_params, data: { turbo: false })
 
-        - if @kind_category_id == '0'
+        - if selected_category_id == '0'
           %ul
             - @kinds_without_category.each do |kind|
-              %li= link_to(kind.label, set_filter(category: 0, anchor: kind.label.parameterize), data: { turbo: false })
+              %li= link_to(kind.label, link_params.merge(anchor: kind.label.parameterize), data: { turbo: false })
 
     - else
       - @grouped_events.keys.each do |kind|

@@ -13,9 +13,7 @@ class Person::EventQueries
   def pending_applications
     person.event_applications
       .merge(Event::Participation.pending)
-      .merge(Event::Participation.upcoming)
-      .includes(event: [:groups])
-      .joins(event: :dates)
+      .includes(event: [:dates, :groups])
       .select("event_applications.*", "event_dates.start_at")
       .order("event_dates.start_at")
       .distinct.tap do |applications|

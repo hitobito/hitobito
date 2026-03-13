@@ -6,25 +6,24 @@
 #  https://github.com/hitobito/hitobito.
 
 module Events::Filter
-  class CourseKindCategory
-    def initialize(_user, params, _options, scope)
-      @params = params
-      @scope = scope
+  class CourseKindCategory < Filter::Base
+    self.permitted_args = [:id]
+
+    def apply(scope)
+      id = (kind_category_id.to_s == "0") ? nil : kind_category_id
+      scope
+        .left_joins(:kind)
+        .where(event_kinds: {kind_category_id: id})
     end
 
-    def to_scope
-      return @scope if kind_category_id.blank?
-
-      scope = @scope.left_joins(kind: :kind_category)
-      return scope.where(event_kinds: {kind_category_id: nil}) if kind_category_id == "0"
-
-      scope.where(event_kind_categories: {id: kind_category_id})
+    def blank?
+      !Event::Course.attr_used?(:kind_id) || super
     end
 
     private
 
     def kind_category_id
-      @params.dig(:filter, :category)
+      args[:id]
     end
   end
 end

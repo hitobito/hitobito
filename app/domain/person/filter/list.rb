@@ -5,25 +5,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Person::Filter::List
-  attr_reader :group, :user, :chain, :range, :name
+class Person::Filter::List < Filter::List
+  self.item_class = Person
+  self.filter_chain_class = Person::Filter::Chain
+
+  attr_reader :group, :range
 
   def initialize(group, user, params = {}, accessibles_class = nil)
+    super(user, params)
     @group = group
-    @user = user
-    @chain = Person::Filter::Chain.new(params[:filters])
     @range = params[:range]
-    @name = params[:name]
-    @ids = params[:ids].to_s.split(",")
     @accessibles_class = accessibles_class
   end
 
   def entries
-    default_order(filtered_accessibles.preload_groups.distinct)
-  end
-
-  def all_count
-    @all_count ||= filter.distinct.count
+    super.preload_groups.distinct
   end
 
   def multiple_groups
@@ -32,51 +28,26 @@ class Person::Filter::List
 
   private
 
-  def filtered_accessibles
-    filtered = filter_with_selection.reselect(:id).distinct
-
-    accessibles.where(id: filtered)
-  end
-
-  def filter_with_selection
-    if @ids.present? && @ids != %w[all]
-      filter.where(id: @ids)
-    else
-      filter
-    end
-  end
-
-  def filter
-    # When not filtering, the default is to exclude all passive and external people,
-    # i.e. include only members
-
-    if chain.present?
-      chain.filter(list_range)
-    else
-      list_range.where(roles: {archived_at: nil})
-        .or(list_range.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
-        .members
-    end
-  end
-
-  def list_range
-    case range
-    when "deep"
-      Person.in_or_below(group, chain.roles_join)
-    when "layer"
-      Person.in_layer(group, join: chain.roles_join)
-    else
-      Person.in_group(group, chain.roles_join)
-    end
-  end
-
-  def accessibles
+  def accessible_scope
     ability = accessibles_class.new(
       user,
       (group_range? ? @group : nil),
       include_ended_roles: chain.include_ended_roles?
     )
     Person.accessible_by(ability).select(:contact_data_visible)
+  end
+
+  def default_order(people)
+    people = people.order_by_role if Settings.people.default_sort == "role"
+    people.order_by_name
+  end
+
+  def default_filter_scope
+    # When not filtering, the default is to exclude all passive and external people,
+    # i.e. include only members
+    base_scope.where(roles: {archived_at: nil})
+      .or(base_scope.where(Role.arel_table[:archived_at].gt(Time.now.utc)))
+      .members
   end
 
   def accessibles_class
@@ -91,8 +62,14 @@ class Person::Filter::List
     !%w[deep layer].include?(range)
   end
 
-  def default_order(entries)
-    entries = entries.order_by_role if Settings.people.default_sort == "role"
-    entries.order_by_name
+  def base_scope
+    case range
+    when "deep"
+      Person.in_or_below(group, chain.roles_join)
+    when "layer"
+      Person.in_layer(group, join: chain.roles_join)
+    else
+      Person.in_group(group, chain.roles_join)
+    end
   end
 end

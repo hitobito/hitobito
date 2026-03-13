@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe :event_guest, js: true do
+describe :list_courses, js: true do
   subject { page }
 
   let(:course) { events(:top_course) }
@@ -17,7 +17,7 @@ describe :event_guest, js: true do
 
   before do
     sign_in(person)
-    visit "/de/list_courses?filter[since]=01.01.2012"
+    visit "/de/list_courses?filters[date_range][since]=01.01.2012"
   end
 
   def submit_with

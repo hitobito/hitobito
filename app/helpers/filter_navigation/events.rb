@@ -14,13 +14,13 @@ module FilterNavigation
     end
 
     def active_label
-      label_for_filter(template.params.fetch(:filter, "all"))
+      label_for_filter(template.params.fetch(:range, "deep"))
     end
 
     private
 
     def init_items
-      filter_item("all")
+      filter_item("deep")
       filter_item("layer")
     end
 
@@ -33,7 +33,7 @@ module FilterNavigation
     end
 
     def filter_path(name)
-      template.url_for(template.params.to_unsafe_h.merge(filter: name, only_path: true))
+      template.url_for(template.params.to_unsafe_h.merge(range: name, only_path: true))
     end
   end
 end

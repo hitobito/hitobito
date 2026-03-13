@@ -16,11 +16,7 @@ class Export::EventsExportJob < Export::ExportBaseJob
   private
 
   def filter
-    Event::Filter.new(group,
-      @filter_args[:type],
-      @filter_args[:filter],
-      @filter_args[:year],
-      @filter_args[:sort_expression])
+    @filter ||= Events::Filter::GroupList.new(group, user, @filter_args.with_indifferent_access)
   end
 
   def group
@@ -28,6 +24,6 @@ class Export::EventsExportJob < Export::ExportBaseJob
   end
 
   def entries
-    filter.list_entries
+    filter.entries
   end
 end

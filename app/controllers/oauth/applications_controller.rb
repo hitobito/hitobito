@@ -8,7 +8,7 @@
 module Oauth
   class ApplicationsController < CrudController
     self.permitted_attrs = [
-      :name, :redirect_uri, :confidential,
+      :name, :description, :redirect_uri, :confidential,
       :logo, :remove_logo, :skip_consent_screen,
       :additional_audiences,
       scopes: [], cors_origins_attributes: [:id, :origin, :_destroy]

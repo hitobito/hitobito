@@ -1,6 +1,8 @@
 = entry_form do |f|
   = f.labeled_input_field :name
 
+  = f.labeled_text_area :description, rows: 5
+
   = f.labeled_text_area :redirect_uri, rows: 5,
     help: raw(t('.help_native_redirect_uris', native_redirect_uri: Doorkeeper.configuration.native_redirect_uri)),
     class: 'col-6 form-control form-control-sm'

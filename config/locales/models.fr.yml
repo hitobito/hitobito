@@ -961,6 +961,7 @@ fr:
         uid: Client ID
         secret: Client secret
         redirect_uri: Rediriger les URIs
+        description: Description
         additional_audiences: Autres audiences
         skip_consent_screen: Sauter le consentement
 

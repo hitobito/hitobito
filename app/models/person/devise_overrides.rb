@@ -19,6 +19,10 @@ module Person::DeviseOverrides
     end
   end
 
+  def timeout_in
+    remember_created_at? ? 2.weeks : Devise.timeout_in
+  end
+
   def send_unlock_instructions
     super if email?
   end

@@ -780,6 +780,10 @@ input.switcher {
 
 // New rules since Bootstrap 5 upgrade
 
+.labeled {
+  position: relative;
+}
+
 .labeled .form-check, .labeled .nested-form .controls > p {
   padding-top: calc(0.375rem + 1px);
 }
@@ -884,10 +888,6 @@ fieldset > div > div.labeled {
   > p.inline {
     padding-top: calc(0.375rem + 1px);
   }
-}
-
-.mw-63ch {
-  max-width: 63ch;
 }
 
 form[aria-busy=true] {

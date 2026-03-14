@@ -37,7 +37,8 @@ describe Mails::ImapMailsController do
 
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
-      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mail_data)
+      expect(imap_connector).to receive(:fetch_mails).with(:inbox, page: 1)
+        .and_return({mails: imap_mail_data, total_count: 2})
 
       get :index, params: {mailbox: "inbox"}
 
@@ -76,7 +77,8 @@ describe Mails::ImapMailsController do
 
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
-      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mail_data)
+      expect(imap_connector).to receive(:fetch_mails).with(:inbox, page: 1)
+        .and_return({mails: imap_mail_data, total_count: 2})
 
       get :index, params: {mailbox: "invalid_mailbox"}
 
@@ -92,7 +94,7 @@ describe Mails::ImapMailsController do
       expect(controller).to receive(:imap).and_return(imap_connector)
       expect(imap_connector)
         .to receive(:fetch_mails)
-        .with(:inbox)
+        .with(:inbox, page: 1)
         .and_raise(Net::IMAP::NoResponseError, ImapErrorDataDouble)
 
       get :index, params: {mailbox: "inbox"}
@@ -120,7 +122,7 @@ describe Mails::ImapMailsController do
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
 
-      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_raise(Errno::EADDRNOTAVAIL)
+      expect(imap_connector).to receive(:fetch_mails).with(:inbox, page: 1).and_raise(Errno::EADDRNOTAVAIL)
 
       get :index, params: {mailbox: "inbox"}
 
@@ -140,7 +142,7 @@ describe Mails::ImapMailsController do
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
 
-      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_raise(SocketError)
+      expect(imap_connector).to receive(:fetch_mails).with(:inbox, page: 1).and_raise(SocketError)
 
       get :index, params: {mailbox: "inbox"}
 
@@ -159,7 +161,7 @@ describe Mails::ImapMailsController do
       # mock imap_connector
       expect(controller).to receive(:imap).and_return(imap_connector)
 
-      expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_raise(Net::IMAP::NoResponseError,
+      expect(imap_connector).to receive(:fetch_mails).with(:inbox, page: 1).and_raise(Net::IMAP::NoResponseError,
         ImapErrorDataDouble)
 
       get :index, params: {mailbox: "inbox"}
@@ -185,7 +187,8 @@ describe Mails::ImapMailsController do
 
         # mock imap_connector
         allow(controller).to receive(:imap).and_return(imap_connector)
-        expect(imap_connector).to receive(:fetch_mails).with(:inbox).and_return(imap_mail_data)
+        expect(imap_connector).to receive(:fetch_mails).with(:inbox, page: 1)
+          .and_return({mails: imap_mail_data, total_count: 2})
         allow(imap_connector).to receive(:counts).and_return(inbox: 2)
 
         get :index, params: {mailbox: "inbox"}

@@ -35,7 +35,7 @@ describe Healthz::MailController do
         cache.write(:app_status, app_status)
 
         expect(imap_connector)
-          .to receive(:fetch_mails)
+          .to receive(:fetch_all_mails)
           .with(:inbox)
           .and_return([imap_mail])
 
@@ -56,7 +56,7 @@ describe Healthz::MailController do
         cache.write(:app_status, app_status)
 
         expect(imap_connector)
-          .to receive(:fetch_mails)
+          .to receive(:fetch_all_mails)
           .with(:inbox)
           .and_return([imap_mail])
 

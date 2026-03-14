@@ -154,8 +154,8 @@ de:
       placeholder_type: Bezeichnung (Privat, Arbeit...)
 
     social_account_fields:
-      placeholder_value: Website, Skypename, Profillink...
-      placeholder_type: Art (Skype, Facebook...)
+      placeholder_value: Website, SocialMedia, Profillink...
+      placeholder_type: Art (Instagram, Facebook...)
 
     additional_email_fields:
       placeholder_value: E-Mail

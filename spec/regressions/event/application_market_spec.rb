@@ -51,12 +51,15 @@ describe Event::ApplicationMarketController, type: :controller do
     end
 
     it "has add button" do
-      button = dom.find(".btn-group a")
-      expect(button.text).to eq " Teilnehmer/-in hinzufügen"
+      button = dom.find(".btn-group a", text: " Teilnehmer/-in hinzufügen")
       expect(button).to have_css("i.fa-plus")
       path_options = {for_someone_else: true,
                       event_role: {type: course.class.participant_types.first.sti_name}}
       expect(button[:href]).to eq new_group_event_participation_path(group, course, path_options)
+    end
+
+    it "has export dropdown" do
+      dropdown = dom.find(".dropdown-toggle")
     end
 
     context "preconditions not fullfilled" do

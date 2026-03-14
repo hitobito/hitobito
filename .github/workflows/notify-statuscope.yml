@@ -13,9 +13,9 @@ on:
         required: true
     secrets:
       HEARTBEAT_URL:
-        required: true
+        required: false
       HEARTBEAT_TOKEN:
-        required: true
+        required: false
 
 jobs:
   notify-statuscope:
@@ -27,20 +27,20 @@ jobs:
 
     steps:
       - name: 'Check Configuration'
+        id: check_config
         run: |
           echo "HEARTBEAT_APPLICATION is ${{ env.HEARTBEAT_APPLICATION }}"
 
-          (
-          [[ "${{ env.HEARTBEAT_URL }}" != '' ]] &&
-          [[ "${{ env.HEARTBEAT_TOKEN }}" != '' ]] &&
-          echo "HEARTBEAT_URL and HEARTBEAT_TOKEN are present."
-          ) || (
-          echo "Please ensure that you have HEARTBEAT_URL and HEARTBEAT_TOKEN set as secrets"
-          exit 1
-          )
+          if [[ "${{ env.HEARTBEAT_URL }}" != '' ]] && [[ "${{ env.HEARTBEAT_TOKEN }}" != '' ]]; then
+            echo "HEARTBEAT_URL and HEARTBEAT_TOKEN are present."
+            echo "secrets_present=true" >> $GITHUB_OUTPUT
+          else
+            echo "HEARTBEAT_URL or HEARTBEAT_TOKEN not set — skipping statuscope notification."
+            echo "secrets_present=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: 'Send success'
-        if: ${{ inputs.test_result == true }}
+        if: ${{ inputs.test_result == true && steps.check_config.outputs.secrets_present == 'true' }}
         run: >
           curl --silent ${{ env.HEARTBEAT_URL }}/signal \
             -d application=${{ env.HEARTBEAT_APPLICATION }} \
@@ -48,7 +48,7 @@ jobs:
             -d status=ok | jq .
 
       - name: 'Send failure'
-        if: ${{ inputs.test_result == false }}
+        if: ${{ inputs.test_result == false && steps.check_config.outputs.secrets_present == 'true' }}
         run: >
           curl --silent ${{ env.HEARTBEAT_URL }}/signal \
             -d application=${{ env.HEARTBEAT_APPLICATION }} \

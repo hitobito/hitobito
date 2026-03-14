@@ -5,6 +5,10 @@
 
 module AbilityDsl::Constraints::Event
   module Participation
+    def her_own_or_for_participations_read_details_events
+      her_own || for_participations_read_details_events
+    end
+
     def her_own_or_for_participations_full_events
       her_own || for_participations_full_events
     end

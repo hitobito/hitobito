@@ -213,4 +213,59 @@ describe :event_participation, js: true do
       end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
     end
   end
+
+  context "additional_information, which is used for dietary info in some wagons" do
+    let(:person) { Fabricate(:person) }
+    let(:person2) { Fabricate(:person) }
+    let(:event) { Fabricate(:event, application_opening_at: 5.days.ago, groups: [group]) }
+    let(:group) { groups(:bottom_layer_one) }
+    let(:participation) { Event::Participation.create!(event:, participant: person) }
+    let(:participation2) { Event::Participation.create!(event:, participant: person2) }
+    let!(:participation2_role) {
+      Fabricate(:event_role, participation: participation2, type: "Event::Role::Participant")
+    }
+
+    before do
+      event.update(participations_visible: true)
+      participation2.update(additional_information: "fructarian")
+      person.table_display_for(Event::Participation).update!(selected: %w[additional_information])
+      sign_in(person)
+    end
+
+    it "is not visible with participant role" do
+      Fabricate(:event_role, participation: participation, type: "Event::Role::Participant")
+
+      visit group_event_participations_path(group.id, event.id)
+      expect(page).not_to have_content("fructarian")
+      expect(page).to have_content("fehlende Berechtigung")
+
+      visit group_event_participation_path(group.id, event.id, participation2.id)
+      expect(page).not_to have_content("Bemerkungen")
+      expect(page).not_to have_content("fructarian")
+    end
+
+    it "is visible to cooks" do
+      Fabricate(:event_role, participation: participation, type: "Event::Role::Cook")
+
+      visit group_event_participations_path(group.id, event.id)
+      expect(page).to have_content("fructarian")
+      expect(page).not_to have_content("fehlende Berechtigung")
+
+      visit group_event_participation_path(group.id, event.id, participation2.id)
+      expect(page).to have_content("Bemerkungen")
+      expect(page).to have_content("fructarian")
+    end
+
+    it "is visible to leaders" do
+      Fabricate(:event_role, participation: participation, type: "Event::Role::Leader")
+
+      visit group_event_participations_path(group.id, event.id)
+      expect(page).to have_content("fructarian")
+      expect(page).not_to have_content("fehlende Berechtigung")
+
+      visit group_event_participation_path(group.id, event.id, participation2.id)
+      expect(page).to have_content("Bemerkungen")
+      expect(page).to have_content("fructarian")
+    end
+  end
 end

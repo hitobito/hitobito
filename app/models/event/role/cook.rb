@@ -20,7 +20,7 @@
 
 # Kueche
 class Event::Role::Cook < Event::Role
-  self.permissions = [:participations_read]
+  self.permissions = [:participations_read_details]
 
   self.kind = :helper
 end

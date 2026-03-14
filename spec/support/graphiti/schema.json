@@ -2323,6 +2323,12 @@
           "writable": true,
           "description": null
         },
+        "household_key": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "primary_group_id": {
           "type": "integer",
           "readable": true,
@@ -2383,6 +2389,7 @@
         "zip_code": {},
         "town": {},
         "country": {},
+        "household_key": {},
         "primary_group_id": {},
         "gender": {},
         "birthday": {},
@@ -2591,6 +2598,21 @@
           ]
         },
         "country": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "household_key": {
           "type": "string",
           "operators": [
             "eq",

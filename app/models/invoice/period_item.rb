@@ -20,24 +20,35 @@
 #    for each of these individual recipients. This is used for previewing the total
 #    amount on an invoice form.
 #
+# In cases 1 and 2, a period item can also calculate a list of subjects (models) which
+# contribute to the count. This is used to persist which subjects have already been
+# taken into account (processed) in past invoices. Case 3 is only used for previewing
+# counts, so the result of the #subjects method is undefined in that case.
+#
 # In all cases, a period item takes a period start date and an optional period end date,
 # and only counts models which were "alive" or "active" some time during that period.
 class Invoice::PeriodItem < InvoiceItem
   self.dynamic = true
 
+  # Prepare the item for calculating preview counts for a list of recipient groups.
+  # See case 3 in the documentation comment on this class.
   def self.for_groups(groups, **params)
     new(**params).tap do |item|
       item.groups = groups
+      item.recipient_type = Group.sti_name
     end
   end
 
+  # Prepare the item for calculating preview counts for a list of recipient people.
+  # See case 3 in the documentation comment on this class.
   def self.for_people(people, **params)
     new(**params).tap do |item|
       item.people = people
+      item.recipient_type = Person.sti_name
     end
   end
 
-  attr_writer :groups, :people
+  attr_writer :groups, :people, :recipient_type
 
   # Forbid saving instances of this abstract class in the DB.
   # AR cannot handle abstract_class in the middle of an STI hierarchy, so we leave it at this.
@@ -48,16 +59,6 @@ class Invoice::PeriodItem < InvoiceItem
   validates :unit_cost, money: true, unless: proc { |i| i.unit_cost.nil? }
 
   before_validation :enforce_unit_cost_precision
-
-  def count
-    # This is only a sample implementation. Subclasses may as well
-    # redefine this method entirely.
-    @count ||= base_scope # Count models...
-      .merge(group_condition) # ... which belong to relevant groups...
-      .merge(people_condition) # ... which belong to relevant people...
-      .active(period_start_on..period_end_on) # ... and which were active in the period
-      .count
-  end
 
   def cost = dynamic_cost
 
@@ -71,6 +72,25 @@ class Invoice::PeriodItem < InvoiceItem
     nil
   end
 
+  def count
+    @count ||= scope.count
+  end
+
+  # If used with a single recipient (cases 1 or 2 in the documentation comment on this
+  # class), this method calculates a list of all models which are counted towards the
+  # count of this invoice item. This list can be persisted in InvoiceRun::ProcessedSubjects
+  # in order to exclude these subjects from later invoice runs with the same template item.
+  def subjects
+    @subjects ||= scope.map do |subject|
+      {
+        subject_id: subject.id,
+        subject_type: subject_type.sti_name,
+        item_id: template_item_id,
+        invoice_id: invoice.id
+      }
+    end
+  end
+
   def period_start_on
     dynamic_cost_parameters[:period_start_on]
   end
@@ -79,22 +99,68 @@ class Invoice::PeriodItem < InvoiceItem
     dynamic_cost_parameters[:period_end_on] || Time.zone.today
   end
 
+  def template_item_id
+    dynamic_cost_parameters[:template_item_id]
+  end
+
   private
+
+  def scope
+    # This is only a sample implementation. Subclasses may as well
+    # redefine this method entirely.
+    base_scope # Consider models...
+      .merge(group_condition) # ... which belong to relevant groups...
+      .merge(people_condition) # ... which belong to relevant people...
+      .merge(not_processed_before_condition) # ... which haven't been processed in other invoices...
+      .merge(active_condition(period_start_on, period_end_on)) # ... which were active in the period
+  end
 
   def base_scope
     raise "implement in subclass"
   end
 
+  # Subjects are models which are counted when calculating the total cost of the invoice item.
+  # For membership invoices, the subjects are usually people or roles.
+  def subject_type
+    raise "implement in subclass"
+  end
+
+  # The recipient is the model which receives and pays the invoice.
+  # For membership invoices, the recipients are usually groups or people.
+  def recipient_type
+    @recipient_type ||= invoice&.recipient_type
+  end
+
   def group_condition
     # Assumes the base_scope is already joined to the :group which the counted models belong to
     Group.joins(
-      "INNER JOIN groups ancestor ON ancestor.lft <= groups.lft AND ancestor.rgt > groups.lft "
+      "INNER JOIN groups ancestor ON ancestor.lft <= groups.lft AND ancestor.rgt > groups.lft"
     ).where(ancestor: {id: groups})
   end
 
   def people_condition
     # Assumes the base_scope is already joined to the :person which the counted models belong to
     Person.where(id: people)
+  end
+
+  def not_processed_before_condition
+    subject_type.where.not(existing_processed_subjects.arel.exists)
+  end
+
+  def existing_processed_subjects
+    InvoiceRun::ProcessedSubject
+      .where(processed_subjects_table[:subject_id].eq(subjects_table[:id]))
+      .where(subject_type: subject_type.sti_name)
+      .where(item_id: template_item_id)
+      .joins("INNER JOIN invoices previous_invoice ON " \
+        "#{InvoiceRun::ProcessedSubject.quoted_table_name}.invoice_id = previous_invoice.id")
+      .where(Arel.sql("previous_invoice.recipient_id").eq(recipient_id_expression))
+      .where(previous_invoice: {recipient_type: recipient_type})
+  end
+
+  def active_condition(start_on, end_on)
+    # Assumes the base_scope is already joined to the :role which the counted models belong to
+    Role.active(start_on..end_on)
   end
 
   def groups
@@ -104,12 +170,22 @@ class Invoice::PeriodItem < InvoiceItem
 
   def people
     # If no specific people are given, fall back to the invoice recipient or no people condition
-    @people ||= invoice&.recipient&.is_a?(Person) ? invoice.recipient_id : Person.select(:id)
+    @people ||= invoice&.recipient&.is_a?(Person) ? invoice.recipient_id : Person.all
   end
 
   def enforce_unit_cost_precision
     dynamic_cost_parameters[:unit_cost] = ActiveSupport::NumberHelper.number_to_currency(
       dynamic_cost_parameters[:unit_cost], format: "%n"
     )
+  end
+
+  def processed_subjects_table = InvoiceRun::ProcessedSubject.arel_table
+
+  def subjects_table = subject_type.arel_table
+
+  def recipient_id_expression
+    return Arel.sql("ancestor.id") if recipient_type == "Group"
+
+    recipient_type.constantize.arel_table[:id]
   end
 end

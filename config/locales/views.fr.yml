@@ -1187,13 +1187,15 @@ fr:
         one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
         many: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
         other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+    invoices:
+      invalid_recipients:
+        one: "Für einen Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        many: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        other: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
     destroy:
       zero: "Choisir d'abord une facture"
       one: "La facture a été annulée."
       other: "%{count} factures ont été annulées."
-
-  invoice_runs/fixed_fee:
-    recipient_role_group_mismatch: "Aucun destinataire n'a pu être identifié pour les groupes suivants: %{groups}"
 
   payments:
     export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."

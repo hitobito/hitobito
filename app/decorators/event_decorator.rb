@@ -121,9 +121,12 @@ class EventDecorator < ApplicationDecorator
 
     contact_attributes[:name] = contact.contact_name
     contact_attributes[:address] =
-      [contact.complete_address, *contact.all_additional_addresses].compact.join(", ").html_safe
+      [contact.complete_address, *contact.all_additional_addresses].compact.join.html_safe
     contact_attributes[:email] =
-      [contact.primary_email&.to_s, *contact.all_additional_emails].compact.join(", ").html_safe
+      [
+        contact.email.present? ? h.mail_to(contact.email) : nil,
+        *contact.all_additional_emails
+      ].compact.join.html_safe
     contact_attributes[:phone_number] = contact.all_phone_numbers
     contact_attributes[:social_account] = contact.all_social_accounts
 

@@ -1160,13 +1160,14 @@ en:
       payment_reminders_missing:
         one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
         other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+    invoices:
+      invalid_recipients:
+        one: "Für einen Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        other: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
     destroy:
       zero: "Zuerst muss eine Rechnung ausgewählt werden."
       one: "Invoice cancelled"
       other: "%{count} Rechnungen wurden storniert."
-
-  invoice_runs/fixed_fee:
-    recipient_role_group_mismatch: "Für folgende Gruppen konnte kein Empfänger ermittelt werden: %{groups}"
 
   payments:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."

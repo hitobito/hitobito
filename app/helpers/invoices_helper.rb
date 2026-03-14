@@ -51,7 +51,13 @@ module InvoicesHelper
   def invoice_link(invoice)
     case parent
     when Group then group_invoice_path(invoice.group_id, invoice)
-    when InvoiceRun then group_invoice_run_invoice_path(parent.group, parent, invoice)
+    when InvoiceRun
+      if parent.period_invoice_template
+        group_period_invoice_template_invoice_run_invoice_path(parent.group,
+          parent.period_invoice_template, parent, invoice)
+      else
+        group_invoice_run_invoice_path(parent.group, parent, invoice)
+      end
     end
   end
 

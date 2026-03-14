@@ -161,6 +161,19 @@ body {
       color: $white;
     }
   }
+
+  .lang {
+    font-size: 1rem;
+
+    a {
+      text-align: center;
+    }
+  }
+}
+
+.lang a {
+  min-width: 24px;
+  min-height: 24px;
 }
 
 .sheet,

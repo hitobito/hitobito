@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2024, Die Mitte Schweiz. This file is part of
-#  hitobito_cvp and licensed under the Affero General Public License version 3
+#  Copyright (c) 2022-2026, Die Mitte Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_die_mitte.
+#  https://github.com/hitobito/hitobito.
 
 # == Schema Information
 #
@@ -52,6 +52,7 @@ class InvoiceRun < ActiveRecord::Base
   # TODO validate recipient_source_id so that no arbitrary changes can be made
 
   scope :list, -> { order(:created_at) }
+  scope :standalone, -> { where(period_invoice_template_id: nil) }
 
   validates_by_schema except: :invalid_recipient_ids
 
@@ -61,16 +62,6 @@ class InvoiceRun < ActiveRecord::Base
 
   def calculated
     @calculated ||= invoice.calculated
-  end
-
-  def fixed_fee
-    invoice.invoice_items.flat_map { |item|
-      item[:dynamic_cost_parameters][:fixed_fees].to_s
-    }.compact_blank.uniq.first
-  end
-
-  def fixed_fees?
-    fixed_fee.present?
   end
 
   def invoice_parameters

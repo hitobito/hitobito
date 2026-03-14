@@ -8,6 +8,7 @@ require "spec_helper"
 describe PeriodInvoiceTemplates::InvoiceRunsController do
   let(:group) { groups(:top_layer) }
   let(:period_invoice_template) { Fabricate(:period_invoice_template, group:) }
+  let(:node) { Capybara::Node::Simple.new(response.body) }
 
   around do |example|
     original = Settings.groups.period_invoice_templates.enabled
@@ -28,12 +29,31 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
     groups(:bottom_layer_two).update!(street: "Greatstreet", zip_code: 8000, town: "Bern")
   end
 
-  it "GET#index lists invoice runs" do
-    run = InvoiceRun.create!(group:, title: "title", recipients_processed: 20,
-      recipients_total: 20, recipient_source: GroupsFilter.new, period_invoice_template:)
-    get :index, params: {group_id: group.id,
-                         period_invoice_template_id: period_invoice_template.id}
-    expect(assigns(:invoice_runs)).to match_array([run])
+  context "GET#index" do
+    render_views
+
+    it "GET#index lists invoice runs" do
+      run = InvoiceRun.create!(group:, title: "title", recipients_processed: 20,
+        recipients_total: 20, recipient_source: GroupsFilter.new, period_invoice_template:)
+      get :index, params: {group_id: group.id,
+                           period_invoice_template_id: period_invoice_template.id}
+      expect(assigns(:invoice_runs)).to match_array([run])
+    end
+
+    it "GET#index renders only dependent invoice lists" do
+      period_invoice_template_2 = Fabricate(:period_invoice_template)
+      InvoiceRun.create!(group: group, title: "dependent", recipients_processed: 20, recipients_total: 20,
+        recipient_source: PeopleFilter.new, period_invoice_template:)
+      InvoiceRun.create!(group: group, title: "other", recipients_processed: 20, recipients_total: 20,
+        recipient_source: PeopleFilter.new, period_invoice_template: period_invoice_template_2)
+      InvoiceRun.create!(group: group, title: "standalone", recipients_processed: 20, recipients_total: 20,
+        recipient_source: PeopleFilter.new)
+      get :index, params: {group_id: group.id,
+                           period_invoice_template_id: period_invoice_template.id}
+      expect(node).to have_text("dependent")
+      expect(node).not_to have_text("standalone")
+      expect(node).not_to have_text("other")
+    end
   end
 
   it "GET#new assigns attributes and renders crud/new template" do
@@ -43,6 +63,7 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
     expect(assigns(:invoice_run).invoice.invoice_items.length).to eq 1
     expect(assigns(:invoice_run).invoice.invoice_items[0].type).to eq Invoice::RoleCountItem.name
     expect(assigns(:invoice_run).invoice.invoice_items[0].dynamic_cost_parameters).to eq({
+      template_item_id: period_invoice_template.items.first.id,
       unit_cost: "5.00",
       role_types: [Group::BottomLayer::LocalGuide.name],
       period_start_on: Time.zone.yesterday,

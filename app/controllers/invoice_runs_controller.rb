@@ -37,7 +37,7 @@ class InvoiceRunsController < CrudController
 
   respond_to :js, only: [:new]
 
-  helper_method :cancel_url, :fixed_fees?, :group
+  helper_method :cancel_url, :group
 
   def new
     assign_attributes
@@ -88,10 +88,6 @@ class InvoiceRunsController < CrudController
     redirect_to group_invoices_path(group)
   end
 
-  def fixed_fees?
-    params.key?(:fixed_fees)
-  end
-
   private
 
   def entry
@@ -103,7 +99,9 @@ class InvoiceRunsController < CrudController
   end
 
   def list_entries
-    super.includes(:recipient_source).list.where(created_at: year_filter)
+    super.includes(:recipient_source).list.where(created_at: year_filter).then do |scope|
+      parents.any?(PeriodInvoiceTemplate) ? scope : scope.standalone
+    end
   end
 
   def return_path # rubocop:todo Metrics/AbcSize,Metrics/MethodLength
@@ -143,7 +141,6 @@ class InvoiceRunsController < CrudController
   end
 
   def cancel_url
-    return group_path(group) if fixed_fees?
     session[:invoice_referer] || group_invoices_path(group)
   end
 
@@ -153,12 +150,6 @@ class InvoiceRunsController < CrudController
     entry.creator = current_user
     entry.invoice = build_invoice
     entry.recipient_source = recipient_source
-
-    # TODO in #3752, move this logic out of here into the period_invoice_templates
-    # if fixed_fees?
-    #   InvoiceRuns::FixedFee.for(params[:fixed_fees]).prepare(entry) do |key, text|
-    #     flash.now[key] = text
-    #   end
 
     if params[:invoice_items].present?
       entry.invoice.invoice_items = params[:invoice_items].map do |type|

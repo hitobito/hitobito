@@ -115,7 +115,19 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     on_or_after_message: :must_be_later_than_start_on,
     if: -> { start_on.present? }
 
+  validate :date_year_must_be_four_digits
+
   validate :assert_type_is_allowed_for_group, on: :create
+
+  def date_year_must_be_four_digits
+    [:start_on, :end_on].each do |attribute|
+      date = public_send(attribute)
+      next if date.blank?
+      next if date.year.abs <= 9999
+
+      errors.add(attribute, :year_must_be_four_digits)
+    end
+  end
 
   ### CALLBACKS
 

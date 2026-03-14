@@ -218,8 +218,11 @@ de:
               must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
           attributes:
+            start_on:
+              year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
             end_on:
               must_be_later_than_start_on: kann nicht vor Von sein
+              year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
 
 
     models:

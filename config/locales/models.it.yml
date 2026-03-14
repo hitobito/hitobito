@@ -219,8 +219,11 @@ it:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
           attributes:
+            start_on:
+              year_must_be_four_digits: deve contenere un anno di massimo 4 cifre
             end_on:
               must_be_later_than_start_on: non può essere prima di "de"
+              year_must_be_four_digits: deve contenere un anno di massimo 4 cifre
 
 
     models:

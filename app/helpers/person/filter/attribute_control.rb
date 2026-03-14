@@ -126,13 +126,9 @@ class Person::Filter::AttributeControl
   end
 
   def date_field(time, attribute_value_class, value, html_options)
-    options = html_options.merge(class: "#{CONTROL_CLASSES} date date_field #{attribute_value_class}")
-    options[:placeholder] ||= "dd.mm.yyyy"
-    options[:pattern] ||= "\\d{2}\\.\\d{2}\\.\\d{4}"
-
     text_field_tag("#{filter_name_prefix}[value]",
       value,
-      options)
+      html_options.merge(class: "#{CONTROL_CLASSES} date date_field #{attribute_value_class}"))
   end
 
   def gender_select_field(time, attribute_value_class, value, html_options)

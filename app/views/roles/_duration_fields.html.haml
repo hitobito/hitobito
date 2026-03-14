@@ -5,15 +5,6 @@
 
 = field_set_tag Role.human_attribute_name(:dates) do
   = f.labeled(:start_on) do
-    = f.date_field(:start_on,
-      class: 'date col-6',
-      value: f(@role.start_on),
-      placeholder: 'dd.mm.yyyy',
-      pattern: '\\d{2}\\.\\d{2}\\.\\d{4}')
+    = f.date_field(:start_on, class: 'date col-6', value: f(@role.start_on))
   = f.labeled(:end_on) do
-    = f.date_field(:end_on,
-      disabled: !can?(:destroy, @role),
-      class: 'date col-6',
-      value: f(@role.end_on),
-      placeholder: 'dd.mm.yyyy',
-      pattern: '\\d{2}\\.\\d{2}\\.\\d{4}')
+    = f.date_field(:end_on, disabled: !can?(:destroy, @role), class: 'date col-6', value: f(@role.end_on))

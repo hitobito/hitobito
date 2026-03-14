@@ -173,8 +173,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def date_field(attr, html_options = {})
     html_options[:value] ||= date_value(attr)
     html_options[:autocomplete] ||= "off"
-    html_options[:placeholder] ||= "dd.mm.yyyy"
-    html_options[:pattern] ||= "\\d{2}\\.\\d{2}\\.\\d{4}"
     add_css_class(html_options, "mw-100 mw-md-20ch date #{FORM_CONTROL}")
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
     content_tag(:div, class: "input-group") do

@@ -119,16 +119,6 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   validate :assert_type_is_allowed_for_group, on: :create
 
-  def date_year_must_be_four_digits
-    [:start_on, :end_on].each do |attribute|
-      date = public_send(attribute)
-      next if date.blank?
-      next if date.year.abs <= 9999
-
-      errors.add(attribute, :year_must_be_four_digits)
-    end
-  end
-
   ### CALLBACKS
 
   after_initialize :set_start_on_to_today, if: :new_record?
@@ -323,6 +313,16 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def assert_type_is_allowed_for_group
     if type && group && !group.role_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed)
+    end
+  end
+
+  def date_year_must_be_four_digits
+    [:start_on, :end_on].each do |attribute|
+      date = public_send(attribute)
+      next if date.blank?
+      next if date.year.abs <= 9999
+
+      errors.add(attribute, :year_must_be_four_digits)
     end
   end
 

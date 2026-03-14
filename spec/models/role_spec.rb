@@ -70,6 +70,35 @@ describe Role do
       is_expected.not_to be_valid
       expect(error_messages).to include("Bis kann nicht vor Von sein")
     end
+
+    it "is valid when start_on has a normal 4-digit year" do
+      role.attributes = {start_on: Date.new(2024, 1, 1), end_on: nil}
+      is_expected.to be_valid
+    end
+
+    it "is valid when end_on has a normal 4-digit year" do
+      role.attributes = {start_on: nil, end_on: Date.new(9999, 12, 31)}
+      is_expected.to be_valid
+    end
+
+    it "is invalid when start_on has a year greater than 9999" do
+      role.start_on = Date.new(20_205, 1, 1)
+      is_expected.not_to be_valid
+      expect(error_messages).to include("Von darf h\u00F6chstens eine 4-stellige Jahreszahl enthalten")
+    end
+
+    it "is invalid when end_on has a year greater than 9999" do
+      role.attributes = {start_on: nil, end_on: Date.new(10000, 1, 1)}
+      is_expected.not_to be_valid
+      expect(error_messages).to include("Bis darf h\u00F6chstens eine 4-stellige Jahreszahl enthalten")
+    end
+
+    it "is invalid when both start_on and end_on have years greater than 9999" do
+      role.attributes = {start_on: Date.new(20_205, 1, 1), end_on: Date.new(20_206, 1, 1)}
+      is_expected.not_to be_valid
+      expect(error_messages).to include("Von darf h\u00F6chstens eine 4-stellige Jahreszahl enthalten")
+      expect(error_messages).to include("Bis darf h\u00F6chstens eine 4-stellige Jahreszahl enthalten")
+    end
   end
 
   context "scopes" do

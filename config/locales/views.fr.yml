@@ -210,6 +210,11 @@ fr:
     merge: "Fusionner"
     archive: "Archiver"
 
+  dropdown/applications_export:
+    button: "Exporter les adresses e-mail"
+    emails_comma_separated: "Separati da virgole (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Separati da punto e virgola (Outlook)"
+
   dropdown/people_export:
     button: "Exporter"
     csv: "CSV"

@@ -5,6 +5,8 @@
 
 - if event.attr_used?(:priorization) || event.attr_used?(:waiting_list)
   = form_tag nil, class: 'form-inline mb-2', method: :get do
+    %span.float-end
+      = submit_tag t('global.button.refresh'), class: 'btn btn-sm btn-outline-primary mb-2'
     .btn-group{data_toggle: 'buttons-checkbox'}
       - if event.attr_used?(:priorization)
         = render 'prio_check', prio: 1
@@ -15,4 +17,3 @@
           = check_box_tag :waiting_list, true, params[:waiting_list]
           = t('.national_waitinglist')
 
-    = submit_tag t('global.button.refresh'), class: 'btn btn-sm btn-outline-primary mb-2'

@@ -91,7 +91,6 @@ social_account:
   custom_label:
     enabled: true
   predefined_labels:
-    - Facebook
     - WhatsApp
     - YouTube
     - Facebook

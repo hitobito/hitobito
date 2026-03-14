@@ -416,13 +416,13 @@ fr:
       apply_until: "jusqu'au %{date}"
     application_market:
       application:
-        modal_title: Voulez-vous vraiment confirmer cette inscription?
+        modal_title: Voulez-vous confirmer cette inscription?
         confirm_and_send_mail: Confirmer et envoyer un e-mail
         confirm_and_send_no_mail: Confirmer sans e-mail
       participant:
-        modal_title: Voulez-vous vraiment confirmer cette inscription?
-        confirm_and_send_mail: Confirmer et envoyer un e-mail
-        confirm_and_send_no_mail: Confirmer sans e-mail
+        modal_title: Souhaitez-vous supprimer cette inscription?
+        confirm_and_send_mail: Supprimer et envoyer un e-mail
+        confirm_and_send_no_mail: Supprimer sans e-mail
       already_assigned: "Cette personne est déjà attribuée à un autre endroit."
       maximum_participations_reached: Le nombre maximal de participants autorisé est atteint. Pour confirmer d'autres inscriptions, le nombre maximal de participants doit être augmenté.
       participation:

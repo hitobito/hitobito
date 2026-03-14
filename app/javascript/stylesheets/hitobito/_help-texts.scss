@@ -4,7 +4,7 @@
 //  https://github.com/hitobito/hitobito.
 
 .help-text {
-  margin-top: -20px;
+  margin-top: 3px;
   padding: 4px 10px;
   border-radius: 3px;
   background-color: $gray-lighter;
@@ -12,15 +12,6 @@
 h1 + .help-text {
   margin: 0 -10px;
 }
-
-.checkbox + .help-text-trigger {
-  top: 0x;
-}
-
-select + .help-text-trigger + .help-text {
-  margin-top: 0px;
-}
-
 
 .form-horizontal .controls .help-text {
   float: none;
@@ -38,28 +29,15 @@ select + .help-text-trigger + .help-text {
   }
 }
 
-input + .help-text-trigger {
-  top: -26px;
-  margin-left: 475px;
-}
-
-textarea + .help-text-trigger {
-  top: -112px;
-  margin-left: 475px;
-}
-
-.form-check + .help-text-trigger {
-  top: -18px;
-  margin-left: 475px;
-}
-
-div + .help-text-trigger {
-  top: -26px;
-  margin-left: 160px;
-}
-
 .help-text-trigger {
-  position: relative;
+  position: absolute;
+  right: -22px;
+  top: 4px;
+  @media screen and (max-width: 767px) {
+    right: 12px;
+    top: -25px;
+  }
+
   padding: 0 4px;
   border-radius: 4px;
 
@@ -77,30 +55,15 @@ div + .help-text-trigger {
   }
 
   h1 & {
+    position: initial;
+    vertical-align: text-bottom;
     font-size: 14px;
     margin-left: 5px;
-    top: -2px;
   }
 }
 
-.control-group {
-  position: relative;
-
-  label.checkbox {
-    display: inline-block;
-  }
-
-  .help-text-trigger {
-    margin-left: 4px;
-
-    @media screen and (max-width: 880px) {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-    }
-    @media screen and (max-width: 480px) {
-      top: 0px;
-      right: 0px;
-    }
+div:has(trix-toolbar) + .help-text-trigger {
+  @media screen and (min-width: 767px) {
+    top: 40px;
   }
 }

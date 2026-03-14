@@ -426,7 +426,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     add_css_class(html_options, "labeled")
     unless html_options[:class].include?("col-")
-      add_css_class(html_options, "col-md-9 col-lg-8 col-xl-8 mw-63ch")
+      add_css_class(html_options, "col-md-9 col-lg-8 col-xl-8 mw-63ch mw-md-47ch mw-lg-63ch")
     end
 
     row_classes = "row mb-2"

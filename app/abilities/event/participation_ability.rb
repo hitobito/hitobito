@@ -10,8 +10,9 @@ class Event::ParticipationAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event::Participation
 
   on(Event::Participation) do # rubocop:disable Metrics/BlockLength
-    permission(:any).may(:show).her_own_or_for_participations_read_events
-    permission(:any).may(:show_details, :print).her_own_or_for_participations_full_events
+    permission(:any).may(:show).her_own_or_manager_or_for_participations_read_events
+    permission(:any).may(:show_details, :print)
+      .her_own_or_manager_or_for_participations_read_details_events
     permission(:any).may(:create).her_own_if_application_possible
     permission(:any).may(:show_full, :update).for_participations_full_events
     permission(:any).may(:destroy).her_own_if_application_cancelable
@@ -48,10 +49,6 @@ class Event::ParticipationAbility < AbilityDsl::Base
       permission(:any).may(:destroy).her_own_if_application_cancelable
       general(:create).at_least_one_group_not_deleted
     end
-    # abilities which managers inherit from their managed children
-    permission(:any).may(:show).her_own_or_manager_or_for_participations_read_events
-    permission(:any).may(:show_details, :print)
-      .her_own_or_manager_or_for_participations_full_events
   end
 
   on(Event::Guest) do
@@ -78,6 +75,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
 
   def her_own_or_manager_or_for_participations_read_events
     her_own_or_for_participations_read_events || manager
+  end
+
+  def her_own_or_manager_or_for_participations_read_details_events
+    her_own_or_for_participations_read_details_events || manager
   end
 
   def her_own_or_manager_or_for_participations_full_events

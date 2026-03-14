@@ -13,6 +13,11 @@ module AbilityDsl::Constraints
 
     def for_participations_read_events
       permission_in_event?(:participations_read) ||
+        for_participations_read_details_events
+    end
+
+    def for_participations_read_details_events
+      permission_in_event?(:participations_read_details) ||
         for_participations_full_events
     end
 

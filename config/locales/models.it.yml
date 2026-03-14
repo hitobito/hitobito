@@ -960,6 +960,7 @@ it:
         uid: Client ID
         secret: Client secret
         redirect_uri: Redirect URIs
+        description: Descrizione
         additional_audiences: Altri destinatari
         skip_consent_screen: Salta il consenso
 

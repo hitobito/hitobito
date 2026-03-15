@@ -415,8 +415,8 @@ en:
         confirm_and_send_no_mail: Confirm without email
       participant:
         modal_title: Do you wish to remove this registration?
-        confirm_and_send_mail: Remove and send an email
-        confirm_and_send_no_mail: Remove without email
+        confirm_and_send_mail: Confirm and send an email
+        confirm_and_send_no_mail: Confirm without email
       already_assigned: "This person was already assigned or registered for a different event."
       maximum_participations_reached: The maximum number of participants has been reached. In order to accept further registrations, the maximum number of participants must be increased.
       participation:

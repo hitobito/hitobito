@@ -423,8 +423,8 @@ de:
         confirm_and_send_no_mail: Bestätigen ohne E-Mail
       participant:
         modal_title: Wollen Sie diese Zuteilung entfernen?
-        confirm_and_send_mail: Entfernen und E-Mail senden
-        confirm_and_send_no_mail: Entfernen ohne E-Mail
+        confirm_and_send_mail: Bestätigen und E-Mail senden
+        confirm_and_send_no_mail: Bestätigen ohne E-Mail
       already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
       maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
       participation:

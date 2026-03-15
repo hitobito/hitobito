@@ -421,8 +421,8 @@ it:
         confirm_and_send_no_mail: Conferma senza e-mail
       participant:
         modal_title: Vuoi cancellare questa registrazione?
-        confirm_and_send_mail: Cancellare e inviare l'e-mail
-        confirm_and_send_no_mail: Cancellare senza e-mail
+        confirm_and_send_mail: Confermare e inviare l'e-mail
+        confirm_and_send_no_mail: Conferma senza e-mail
       already_assigned: "Questa persona è già assegnata da un'altra parte."
       maximum_participations_reached: È stato raggiunto il numero massimo di partecipanti consentito. Per confermare ulteriori iscrizioni, è necessario aumentare il numero massimo di partecipanti.
       participation:

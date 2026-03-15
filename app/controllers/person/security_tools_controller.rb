@@ -140,11 +140,11 @@ class Person::SecurityToolsController < ApplicationController
 
   def groups_and_roles_that_see_me
     groups_and_roles = {}
-    relevant_groups.each do |group_id, group_name, group_type|
+    relevant_groups.each do |group_id, group_name, group_type, deleted_at|
       group_type.constantize.role_types.each do |role_type|
         next unless can_see_me?(role_type, group_id)
 
-        groups_and_roles[group_id] ||= {name: group_name, roles: []}
+        groups_and_roles[group_id] ||= {name: group_name, roles: [], deleted: deleted_at.present?}
         groups_and_roles[group_id][:roles] << role_type.label
       end
     end
@@ -152,9 +152,10 @@ class Person::SecurityToolsController < ApplicationController
   end
 
   def relevant_groups
-    @relevant_groups ||= Group.where(layer_group_id: relevant_layer_ids)
+    @relevant_groups ||= Group.with_deleted
+      .where(layer_group_id: relevant_layer_ids)
       .order_by_type
-      .pluck(:id, :name, :type)
+      .pluck(:id, :name, :type, :deleted_at)
   end
 
   def relevant_layer_ids

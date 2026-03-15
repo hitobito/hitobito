@@ -9,4 +9,6 @@ class AdditionalEmailResource < ApplicationResource
   include ContactAccountResource
 
   attribute :email, :string
+  attribute :mailings, :boolean
+  attribute :invoices, :boolean
 end

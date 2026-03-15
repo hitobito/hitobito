@@ -38,15 +38,7 @@ class Imap::Connector
 
       all_uids.sort!.reverse!
       page_uids = all_uids[((page - 1) * per_page)...(page * per_page)] || []
-
-      mails = if page_uids.empty?
-        []
-      else
-        fetch_data = @imap.uid_fetch(page_uids, attributes)
-        fetch_data.blank? ? [] : fetch_data.map { |mail| Imap::Mail.build(mail) }
-      end
-
-      mails.sort! { |a, b| b.date.to_i <=> a.date.to_i }
+      mails = fetch_mails_by_uids(page_uids)
       {mails: mails, total_count: all_uids.size}
     end
   end
@@ -88,6 +80,14 @@ class Imap::Connector
   end
 
   private
+
+  def fetch_mails_by_uids(page_uids)
+    return [] if page_uids.empty?
+
+    fetch_data = @imap.uid_fetch(page_uids, attributes)
+    mails = fetch_data.blank? ? [] : fetch_data.map { |mail| Imap::Mail.build(mail) }
+    mails.sort! { |a, b| b.date.to_i <=> a.date.to_i }
+  end
 
   def count(mailbox)
     select_mailbox(mailbox)

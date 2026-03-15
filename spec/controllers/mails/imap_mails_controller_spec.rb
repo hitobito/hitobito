@@ -20,6 +20,7 @@ describe Mails::ImapMailsController do
   before do
     email = double
     retriever = double
+    bounces = double(block_threshold: 3)
     config = double("config",
       address: "imap.example.com",
       imap_port: 995,
@@ -28,6 +29,7 @@ describe Mails::ImapMailsController do
       password: "holly-secret")
     allow(Settings).to receive(:email).and_return(email)
     allow(email).to receive(:retriever).and_return(retriever)
+    allow(email).to receive(:bounces).and_return(bounces)
     allow(retriever).to receive(:config).and_return(config)
   end
 
@@ -48,7 +50,7 @@ describe Mails::ImapMailsController do
 
       expect(mails.count).to eq(2)
 
-      mail1 = mails.last
+      mail1 = mails.first
       expect(mail1.uid).to eq("42")
       expect(mail1.subject).to be(imap_mail_1.subject)
       # allow some leeway to not run into timing errors
@@ -59,7 +61,7 @@ describe Mails::ImapMailsController do
       expect(mail1.multipart_body).to eq(nil)
       expect(mail1.hash.to_s.length).to eq(32)
 
-      mail2 = mails.first
+      mail2 = mails.last
       expect(mail2.uid).to eq("43")
       expect(mail2.subject).to be(imap_mail_2.subject)
       # allow some leeway to not run into timing errors

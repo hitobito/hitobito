@@ -106,7 +106,8 @@ describe :login, js: true do
     target_person_id = person.id
     visit "/#{source_locale}/users/sign_in"
     base_uri = URI.parse(current_url)
-    absolute_target = "#{base_uri.scheme}://#{base_uri.host}:#{base_uri.port}/#{source_locale}/groups/#{target_group_id}/people/#{target_person_id}.html"
+    absolute_target = "#{base_uri.scheme}://#{base_uri.host}:#{base_uri.port}" \
+      "/#{source_locale}/groups/#{target_group_id}/people/#{target_person_id}.html"
 
     visit absolute_target
     expect(page).to have_current_path("/#{source_locale}/users/sign_in")

@@ -4,8 +4,8 @@
 
 module TableDisplays::People
   class PolymorphicLayerGroupLabelColumn < TableDisplays::PolymorphicColumn
-    def required_permission(attr)
-      :show
+    def allowed?(object, _attr, original_object, _original_attr)
+      ability.can?(:show, original_object) || ability.can?(:show, object)
     end
 
     def required_model_attrs(attr)

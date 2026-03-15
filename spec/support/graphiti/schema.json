@@ -308,6 +308,18 @@
           "readable": true,
           "writable": true,
           "description": null
+        },
+        "mailings": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "invoices": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
         }
       },
       "extra_attributes": {},
@@ -317,7 +329,9 @@
         "public": {},
         "contactable_id": {},
         "contactable_type": {},
-        "email": {}
+        "email": {},
+        "mailings": {},
+        "invoices": {}
       },
       "filters": {
         "id": {
@@ -393,6 +407,20 @@
             "match",
             "not_match"
           ]
+        },
+        "mailings": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "invoices": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
         }
       },
       "relationships": {},

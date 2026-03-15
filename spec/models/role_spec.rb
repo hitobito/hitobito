@@ -99,6 +99,23 @@ describe Role do
       expect(error_messages).to include("Von darf h\u00F6chstens eine 4-stellige Jahreszahl enthalten")
       expect(error_messages).to include("Bis darf h\u00F6chstens eine 4-stellige Jahreszahl enthalten")
     end
+
+    it "is valid with the minimum allowed year 1900" do
+      role.attributes = {start_on: Date.new(1900, 1, 1), end_on: nil}
+      is_expected.to be_valid
+    end
+
+    it "is invalid when start_on has a year before 1900" do
+      role.start_on = Date.new(1899, 12, 31)
+      is_expected.not_to be_valid
+      expect(error_messages).to include("Von muss eine Jahreszahl ab 1900 enthalten")
+    end
+
+    it "is invalid when end_on has a year before 1900" do
+      role.attributes = {start_on: nil, end_on: Date.new(1899, 12, 31)}
+      is_expected.not_to be_valid
+      expect(error_messages).to include("Bis muss eine Jahreszahl ab 1900 enthalten")
+    end
   end
 
   context "scopes" do

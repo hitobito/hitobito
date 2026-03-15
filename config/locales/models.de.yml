@@ -91,6 +91,8 @@ de:
         readonly: darf nicht verändert werden
         cannot_be_later_than_today: kann nicht später als heute sein
         is_not_a_decimal_number: muss eine Dezimalzahl sein
+        year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
+        year_must_be_after_1900: muss eine Jahreszahl ab 1900 enthalten
       models:
         cors_origin:
           attributes:
@@ -218,11 +220,8 @@ de:
               must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
           attributes:
-            start_on:
-              year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
             end_on:
               must_be_later_than_start_on: kann nicht vor Von sein
-              year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
 
 
     models:

@@ -161,6 +161,34 @@ describe Person do
     expect(person.errors.messages[:base].size).to be_zero
   end
 
+  context "birthday year validation" do
+    it "is valid with a 4-digit year" do
+      person = Person.new(last_name: "Foo", birthday: Date.new(9999, 12, 31))
+
+      expect(person).to be_valid
+    end
+
+    it "is valid with the minimum allowed year 1900" do
+      person = Person.new(last_name: "Foo", birthday: Date.new(1900, 1, 1))
+
+      expect(person).to be_valid
+    end
+
+    it "is invalid with more than 4 digits in year" do
+      person = Person.new(last_name: "Foo", birthday: Date.new(10_000, 1, 1))
+      person.valid?
+
+      expect(person.errors.details[:birthday]).to include(error: :year_must_be_four_digits)
+    end
+
+    it "is invalid with a year before 1900" do
+      person = Person.new(last_name: "Foo", birthday: Date.new(1899, 12, 31))
+      person.valid?
+
+      expect(person.errors.details[:birthday]).to include(error: :year_must_be_after_1900)
+    end
+  end
+
   it "with login role does not require email" do
     group = groups(:top_group)
     person = Person.new(last_name: "Foo")

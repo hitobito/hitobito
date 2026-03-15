@@ -36,6 +36,9 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   include Role::Types
   include NormalizedLabels
   include TypeId
+  include DateYearValidatable
+
+  validates_date_year :start_on, :end_on
 
   ### ATTRIBUTES
 
@@ -114,8 +117,6 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     on_or_after: :start_on,
     on_or_after_message: :must_be_later_than_start_on,
     if: -> { start_on.present? }
-
-  validate :date_year_must_be_four_digits
 
   validate :assert_type_is_allowed_for_group, on: :create
 
@@ -313,16 +314,6 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def assert_type_is_allowed_for_group
     if type && group && !group.role_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed)
-    end
-  end
-
-  def date_year_must_be_four_digits
-    [:start_on, :end_on].each do |attribute|
-      date = public_send(attribute)
-      next if date.blank?
-      next if date.year.abs <= 9999
-
-      errors.add(attribute, :year_must_be_four_digits)
     end
   end
 

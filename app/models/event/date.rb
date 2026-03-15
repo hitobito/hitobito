@@ -22,7 +22,10 @@
 
 class Event::Date < ActiveRecord::Base
   include DatetimeAttribute
+  include DateYearValidatable
   datetime_attr :start_at, :finish_at
+
+  validates_date_year :start_at, :finish_at
 
   belongs_to :event, touch: true
 

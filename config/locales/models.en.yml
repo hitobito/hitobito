@@ -90,6 +90,8 @@ en:
         readonly: can't be changed
         cannot_be_later_than_today: cannot be later than today
         is_not_a_decimal_number: must be a decimal number
+        year_must_be_four_digits: must contain a year with at most 4 digits
+        year_must_be_after_1900: must contain a year of 1900 or later
       models:
         cors_origin:
           attributes:
@@ -216,11 +218,8 @@ en:
               must_be_later_than_start_on: cannot be before the start of the accounting period
         role:
           attributes:
-            start_on:
-              year_must_be_four_digits: must contain a year with at most 4 digits
             end_on:
               must_be_later_than_start_on: cannot be before From
-              year_must_be_four_digits: must contain a year with at most 4 digits
 
 
     models:

@@ -127,4 +127,62 @@ describe Event::Date do
     expect(date).not_to be_valid
     expect(date).to have(2).errors_on(:start_at)
   end
+
+  context "year validation" do
+    it "is valid when event dates have a 4-digit year" do
+      date = event.dates.new(
+        label: "foobar",
+        start_at: Time.zone.local(9999, 1, 1),
+        finish_at: Time.zone.local(9999, 1, 2)
+      )
+
+      expect(date).to be_valid
+    end
+
+    it "is valid with the minimum allowed year 1900" do
+      date = event.dates.new(
+        label: "foobar",
+        start_at: Time.zone.local(1900, 1, 1),
+        finish_at: Time.zone.local(1900, 1, 2)
+      )
+
+      expect(date).to be_valid
+    end
+
+    it "is invalid when start_at year has more than 4 digits" do
+      date = event.dates.new(label: "foobar", start_at: DateTime.new(10_000, 1, 1))
+      date.valid?
+
+      expect(date.errors.details[:start_at]).to include(error: :year_must_be_four_digits)
+    end
+
+    it "is invalid when finish_at year has more than 4 digits" do
+      date = event.dates.new(
+        label: "foobar",
+        start_at: Time.zone.local(2024, 1, 1),
+        finish_at: DateTime.new(10_000, 1, 1)
+      )
+      date.valid?
+
+      expect(date.errors.details[:finish_at]).to include(error: :year_must_be_four_digits)
+    end
+
+    it "is invalid when start_at year is before 1900" do
+      date = event.dates.new(label: "foobar", start_at: Time.zone.local(1899, 12, 31))
+      date.valid?
+
+      expect(date.errors.details[:start_at]).to include(error: :year_must_be_after_1900)
+    end
+
+    it "is invalid when finish_at year is before 1900" do
+      date = event.dates.new(
+        label: "foobar",
+        start_at: Time.zone.local(2024, 1, 1),
+        finish_at: Time.zone.local(1899, 12, 31)
+      )
+      date.valid?
+
+      expect(date.errors.details[:finish_at]).to include(error: :year_must_be_after_1900)
+    end
+  end
 end

@@ -92,6 +92,8 @@ it:
         readonly: non può venir cambiato
         cannot_be_later_than_today: non può essere più tardi di oggi
         is_not_a_decimal_number: deve essere un numero decimale
+        year_must_be_four_digits: deve contenere un anno di massimo 4 cifre
+        year_must_be_after_1900: deve contenere un anno dal 1900 in poi
       models:
         cors_origin:
           attributes:
@@ -219,11 +221,8 @@ it:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
           attributes:
-            start_on:
-              year_must_be_four_digits: deve contenere un anno di massimo 4 cifre
             end_on:
               must_be_later_than_start_on: non può essere prima di "de"
-              year_must_be_four_digits: deve contenere un anno di massimo 4 cifre
 
 
     models:

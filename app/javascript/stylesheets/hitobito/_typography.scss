@@ -124,7 +124,9 @@ dd {
   }
 
   dt {
-    text-align: right;
+    @include responsive(mediaTablet) {
+      text-align: right;
+    }
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -140,6 +142,11 @@ dd {
     }
   }
 }
+
+aside .dl-horizontal dt {
+  text-align: start;
+}
+
 .dl-borderless,
 .dl-borderless:last-child {
   border: 0;

@@ -106,7 +106,7 @@ module FormatHelper
   end
 
   def render_attrs_group(content = nil, &block)
-    content_tag(:dl, content, class: "dl-horizontal m-0 p-2 border-top", &block)
+    content_tag(:dl, content, class: "dl-horizontal m-0 py-2 border-top", &block)
   end
 
   # Like #render_attrs, but only for attributes with a present value.

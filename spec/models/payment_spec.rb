@@ -58,6 +58,26 @@ describe Payment do
     expect(invoice.amount_open).to eq(-1.0)
   end
 
+  it "marks reminded invoice with total 0 as payed even when invoice has missing structured address fields" do
+    # Simulates an old invoice (pre-structured-addresses) in reminded state with total 0.
+    # Such invoices fail address validations on invoice.update(), which previously caused the
+    # state change to be silently dropped.
+    invoice.update_columns(
+      state: "reminded",
+      total: 0,
+      recipient_name: nil,
+      recipient_street: nil,
+      recipient_zip_code: nil,
+      recipient_town: nil,
+      recipient_country: nil
+    )
+    invoice.reload
+
+    expect do
+      invoice.payments.create!(amount: 0)
+    end.to change { invoice.reload.state }.to("payed")
+  end
+
   it "allows multiple payments for same invoice without reference" do
     invoice.payments.create!(amount: invoice.total - 1)
     expect(invoice.payments.build(amount: 1)).to be_valid

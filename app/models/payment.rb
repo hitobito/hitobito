@@ -90,7 +90,7 @@ class Payment < ActiveRecord::Base
     end
 
     if new_state
-      invoice.update(state: new_state)
+      invoice.update_column(:state, new_state)
     end
   end
 

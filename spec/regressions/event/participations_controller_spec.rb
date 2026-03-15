@@ -159,6 +159,80 @@ describe Event::ParticipationsController, type: :controller do
     end
   end
 
+  describe "layer group label column" do
+    let(:event) { Fabricate(:event, name: "Test event", groups: [groups(:bottom_layer_two)]) }
+    let(:group) { person.groups.first }
+
+    let(:person) { people(:bottom_member) }
+    let!(:participation) { Fabricate(:event_participation, event:, participant: person, active: true) }
+    let!(:event_role) { Fabricate(Event::Role::Participant.name, participation:) }
+
+    let(:viewer) { Fabricate(:person, first_name: "Viewer", last_name: "Person") }
+
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    before do
+      person.update!(primary_group_id: group.id)
+      sign_in(viewer)
+      viewer.table_display_for(Event::Participation).update!(selected: %w[participant.layer_group_label])
+    end
+
+    it "is not visible to person without show access on participating person" do
+      # Viewer has a role close to the event
+      Fabricate(Group::BottomLayer::Member.name, group: event.groups.first, person: viewer)
+
+      # Exceptionally allow this unrelated user to view the participant list.
+      # This is not possible in the core but some wagons might allow it.
+      allow_any_instance_of(Event::ParticipationsController).to receive(:authorize_class) do
+        controller.send(:authorize!, :show, event)
+      end
+
+      get :index, params: {group_id: event.groups.first.id, event_id: event.id}
+
+      expect(dom).to have_content "Hauptebene"
+      expect(dom).to have_content "fehlende Berechtigung"
+      expect(dom).not_to have_content "Bottom One"
+    end
+
+    it "is visible to fellow participant due to participations_visible granting show access" do
+      # Viewer is another event participant
+      viewer_participation = Fabricate(:event_participation, event:, participant: viewer, active: true)
+      Fabricate(Event::Role::Participant.name, participation: viewer_participation)
+      event.update!(participations_visible: true)
+
+      get :index, params: {group_id: event.groups.first.id, event_id: event.id}
+
+      expect(dom).to have_content "Hauptebene"
+      expect(dom).not_to have_content "fehlende Berechtigung"
+      expect(dom).to have_content "Bottom One"
+    end
+
+    it "is visible to person with show access on participating person" do
+      # Viewer has a role close to the participating person
+      Fabricate(Group::BottomLayer::Leader.name, group:, person: viewer)
+      # Viewer has a role close to the event
+      Fabricate(Group::BottomLayer::Leader.name, group: event.groups.first, person: viewer)
+
+      get :index, params: {group_id: event.groups.first.id, event_id: event.id}
+
+      expect(dom).to have_content "Hauptebene"
+      expect(dom).not_to have_content "fehlende Berechtigung"
+      expect(dom).to have_content "Bottom One"
+    end
+
+    it "is visible to event leader" do
+      # Viewer is an event leader
+      viewer_participation = Fabricate(:event_participation, event:, participant: viewer, active: true)
+      Fabricate(Event::Role::Leader.name, participation: viewer_participation)
+
+      get :index, params: {group_id: event.groups.first.id, event_id: event.id}
+
+      expect(dom).to have_content "Hauptebene"
+      expect(dom).not_to have_content "fehlende Berechtigung"
+      expect(dom).to have_content "Bottom One"
+    end
+  end
+
   context "preconditions not fullfilled" do
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 

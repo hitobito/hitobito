@@ -77,9 +77,9 @@ describe :login, js: true do
     expect(page).to have_current_path("/#{source_locale}/users/sign_in")
 
     visit "/#{requested_locale}/users/sign_in"
-    fill_in "Haupt-E-Mail", with: person.email
-    fill_in "Passwort", with: password
-    click_button "Anmelden"
+    fill_in "person_login_identity", with: person.email
+    fill_in "person_password", with: password
+    find("form.new_person [type='submit']").click
 
     expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}")
   end
@@ -92,9 +92,9 @@ describe :login, js: true do
     expect(page).to have_current_path("/#{source_locale}/users/sign_in")
 
     visit "/#{requested_locale}/users/sign_in"
-    fill_in "Haupt-E-Mail", with: person.email
-    fill_in "Passwort", with: password
-    click_button "Anmelden"
+    fill_in "person_login_identity", with: person.email
+    fill_in "person_password", with: password
+    find("form.new_person [type='submit']").click
 
     expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}?foo=bar")
   end
@@ -102,16 +102,19 @@ describe :login, js: true do
   it "preserves the requested login locale when stored path is absolute" do
     source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
     skip "requires at least two configured locales" if requested_locale.blank?
-    target_group_id = person.primary_group_id + 1234
-    target_person_id = person.id + 5678
+    target_group_id = person.primary_group_id
+    target_person_id = person.id
+    visit "/#{source_locale}/users/sign_in"
+    base_uri = URI.parse(current_url)
+    absolute_target = "#{base_uri.scheme}://#{base_uri.host}:#{base_uri.port}/#{source_locale}/groups/#{target_group_id}/people/#{target_person_id}.html"
 
-    visit "http://localhost:3000/#{source_locale}/groups/#{target_group_id}/people/#{target_person_id}.html"
+    visit absolute_target
     expect(page).to have_current_path("/#{source_locale}/users/sign_in")
 
     visit "/#{requested_locale}/users/sign_in"
-    fill_in "Haupt-E-Mail", with: person.email
-    fill_in "Passwort", with: password
-    click_button "Anmelden"
+    fill_in "person_login_identity", with: person.email
+    fill_in "person_password", with: password
+    find("form.new_person [type='submit']").click
 
     expect(page).to have_current_path("/#{requested_locale}/groups/#{target_group_id}/people/#{target_person_id}.html")
   end
@@ -125,13 +128,12 @@ describe :login, js: true do
 
     visit "/#{requested_locale}/users/sign_in"
     page.execute_script <<~JS
-      document.querySelector('form.new_person').setAttribute('action', '/users/sign_in')
+      document.querySelector('form.new_person').setAttribute('action', '/users/sign_in?locale=#{requested_locale}')
     JS
-    fill_in "Haupt-E-Mail", with: person.email
-    fill_in "Passwort", with: password
-    click_button "Anmelden"
+    fill_in "person_login_identity", with: person.email
+    fill_in "person_password", with: password
+    find("form.new_person [type='submit']").click
 
     expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}")
   end
-
 end

@@ -12,9 +12,18 @@ class Event::ApplicationMarketController < ApplicationController
 
   helper_method :event
 
+  include RenderPeopleExports
+
   def index
     @participants = load_participants
     @applications = sort_and_decorate(load_applications)
+
+    respond_to do |format|
+      format.html
+      format.vcf { render_vcf(@applications.map(&:person)) }
+      format.email { render_emails(@applications.map(&:person), ",") }
+      format.email_outlook { render_emails(@applications.map(&:person), ";") }
+    end
   end
 
   def add_participant

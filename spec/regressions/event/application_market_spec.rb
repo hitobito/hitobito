@@ -58,8 +58,11 @@ describe Event::ApplicationMarketController, type: :controller do
       expect(button[:href]).to eq new_group_event_participation_path(group, course, path_options)
     end
 
-    it "has export dropdown" do
-      dropdown = dom.find(".dropdown-toggle")
+    it "has email export dropdown" do
+      expect(dom).to have_css ".dropdown-toggle"
+      expect(dom).to have_css ".dropdown-item"
+      expect(dom).to have_content "Komma getrennt"
+      expect(dom).to have_content "Semikolon getrennt"
     end
 
     context "preconditions not fullfilled" do

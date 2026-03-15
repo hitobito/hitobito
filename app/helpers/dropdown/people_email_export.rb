@@ -14,7 +14,8 @@ module Dropdown
       @params = params
 
       add_item(translate(:emails_comma_separated), params.merge(format: :email), target: :_blank)
-      add_item(translate(:emails_semicolon_separated), params.merge(format: :email), target: :_blank)
+      add_item(translate(:emails_semicolon_separated), params.merge(format: :email),
+        target: :_blank)
     end
   end
 end

@@ -1,3 +1,8 @@
+#  Copyright (c) 2026, Hitobito AG. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 module PaperTrail
   class VersionAuthorPresenter
     attr_reader :model, :h
@@ -30,9 +35,13 @@ module PaperTrail
       token = ServiceToken.find_by(id: model.version_author)
       return deleted_service_token_message unless token
 
-      label = "#{ServiceToken.model_name.human}: #{token}"
+      label = author_service_token_label(token)
       h.link_to_if(h.can?(:show, token), label,
         h.group_service_token_path(token.layer_group_id, token.id))
+    end
+
+    def author_service_token_label(token)
+      "#{ServiceToken.model_name.human}: #{token}"
     end
 
     def deleted_user_message

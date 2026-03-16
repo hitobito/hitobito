@@ -119,6 +119,7 @@ class EventDecorator < ApplicationDecorator
   def complete_contact_attributes # rubocop:todo Metrics/AbcSize
     contact_attributes = {}
 
+    contact_attributes[:picture] = event_contact_person_picture
     contact_attributes[:name] = contact.contact_name
     contact_attributes[:address] =
       [contact.complete_address, *contact.all_additional_addresses].compact.join.html_safe
@@ -131,6 +132,13 @@ class EventDecorator < ApplicationDecorator
     contact_attributes[:social_account] = contact.all_social_accounts
 
     safe_join(contact_attributes.values_at(*visible_contact_attributes.map(&:to_sym)))
+  end
+
+  def event_contact_person_picture
+    content_tag(:div, class: "crop-to-square my-3") do
+      h.image_tag(h.upload_url(contact, :picture, size: "72x72", default: "profil"),
+        alt: h.t("people.contact_data.profile_picture_alt"), size: "72x72")
+    end
   end
 
   def organizer_group(group = nil)

@@ -75,6 +75,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/role_ability"
 
   ALLOWED_VISIBLE_CONTACT_ATTRIBUTES = %w[
+    picture
     name
     address
     phone_number

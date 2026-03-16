@@ -1,0 +1,10 @@
+apple_wallet:
+  pass_type_identifier: "pass.com.example.dev"
+  team_identifier: "DEVTEAM01"
+  p12_certificate_path: "config/apple_wallet.p12"
+  p12_password: "dev-secret"
+  wwdr_certificate_path: "config/AppleWWDRCAG4.cer"
+  web_service_url: "http://localhost:3000/wallets/apple"
+  logo_url: ""
+  icon_url: ""
+  contact_info: "dev@example.com"

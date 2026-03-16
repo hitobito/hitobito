@@ -144,6 +144,14 @@ it:
           attributes:
             scopes:
               not_match_configured: "non concordano con ciò che è salvato sul server"
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: "deve essere un colore esadecimale valido di 6 cifre che inizia con #"
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: Deve essere selezionato almeno un tipo di ruolo
         person:
           name_missing: 'Inserire un nome'
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
@@ -404,6 +412,21 @@ it:
         one: Nota
         many: Note
         other: Note
+      pass_definition:
+        one: Definizione pass
+        other: Definizioni pass
+      pass_grant:
+        one: Autorizzazione pass
+        other: Autorizzazioni pass
+      pass:
+        one: Tessera associativa
+        other: Tessere associativa
+      wallets/pass_installation:
+        one: Installazione wallet
+        other: Installazioni wallet
+      wallets/apple_wallet/device_registration:
+        one: Registrazione dispositivo Apple
+        other: Registrazioni dispositivi Apple
       payment:
         one: Pagamento
         many: Pagamenti
@@ -954,6 +977,43 @@ it:
 
       note:
         text: Testo
+
+      pass_definition:
+        name: Nome
+        description: Descrizione
+        owner: Proprietario
+        template_key: Modello
+        background_color: Colore di sfondo
+
+      pass_grant:
+        pass_definition: Definizione pass
+        grantor: Gruppo autorizzatore
+        related_role_types: Tipi di ruolo
+
+      pass:
+        person: Persona
+        pass_definition: Definizione pass
+        state: Stato
+        valid_from: Valido da
+        valid_until: Valido fino a
+        states:
+          eligible: idoneo
+          ended: scaduto
+          revoked: revocato
+
+      wallets/pass_installation:
+        pass: Tessera associativa
+        wallet_type: Tipo di wallet
+        state: Stato
+        wallet_identifier: ID wallet
+        authentication_token: Token di autenticazione
+        last_synced_at: Ultima sincronizzazione
+        sync_error: Errore di sincronizzazione
+
+      wallets/apple_wallet/device_registration:
+        pass_installation: Installazione pass
+        device_library_identifier: ID dispositivo
+        push_token: Token push
 
       oauth/application:
         cors_origins: host con accesso API

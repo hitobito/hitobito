@@ -3,17 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-development:
-  adapter: solid_cable
-  polling_interval: 0.1.seconds
+class CleanupTemporaryBlobsJob < RecurringJob
+  run_every 1.day
 
-test:
-  adapter: test
-
-production:
-  adapter: solid_cable
-  connects_to:
-    database:
-      writing: cable
-  polling_interval: 0.1.seconds
-  message_retention: 1.day
+  def perform_internal
+    ActiveStorage::Blob.temporary.where(created_at: ...24.hours.ago).find_each do |blob|
+      blob.purge
+    end
+  end
+end

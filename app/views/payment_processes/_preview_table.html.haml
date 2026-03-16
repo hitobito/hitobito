@@ -1,0 +1,27 @@
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+%div{ id: "preview-table" }
+  = standard_form(:payment_process, url: group_payment_process_path(data[:group])) do |f|
+    - if data[:from] && data[:to]
+      %h3=t('.valid_payments_with_invoice_and_dates', from: l(data[:from]), to: l(data[:to]))
+    - else
+      %h3=t('.valid_payments_with_invoice')
+    = render "payment_processes/valid_payments_with_invoice_table", payments: data[:valid_payments_with_invoice]
+
+    - if data[:from] && data[:to]
+      %h3=t('.valid_payments_without_invoice_and_dates', from: l(data[:from]), to: l(data[:to]))
+    - else
+      %h3=t('.valid_payments_without_invoice')
+    = render "payment_processes/valid_payments_without_invoice_table", payments: data[:valid_payments_without_invoice]
+
+    %h3=t('.invalid_payments')
+    = render "payment_processes/invalid_payments_table", payments: data[:invalid_payments]
+
+    = hidden_field_tag :xml_file_id, data[:xml_file_id]
+
+    .btn-toolbar.d-inline
+      = submit_button(f, t('.create', count: data[:valid_payments].count), disabled: data[:valid_payments].empty?)
+      = cancel_link(group_invoices_path(data[:group]))

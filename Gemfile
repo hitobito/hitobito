@@ -93,6 +93,7 @@ gem "simple_xlsx_reader" # import data from xlsx files (used in some wagons)
 gem "sorted_set"
 gem "sprockets-rails"
 gem "strip_attributes" # strip whitespace of attributes
+gem "solid_cable"
 gem "truemail"
 gem "ttfunk", "< 1.8.0"
 gem "turbo-rails"

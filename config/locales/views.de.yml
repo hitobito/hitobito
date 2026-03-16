@@ -129,6 +129,9 @@ de:
         success: "%{model} wurde erfolgreich gelöscht."
         failure: "%{model} konnte nicht gelöscht werden."
 
+  async_render:
+    info_note: Bitte lassen Sie dieses Fenster geöffnet, um den Vorgang abzuschliessen.
+
   blocked:
     index:
       title: Login gesperrt
@@ -1504,21 +1507,27 @@ de:
         one: Es wurde eine ungültige Zahlung erkannt.
         other: Es wurden %{count} ungültige Zahlungen erkannt.
     show:
+      async_rendering_enqueued: Die XML Datei wird im Hintergrund eingelesen, dies kann einige Sekunden dauern.
+    preview_table:
       valid_payments_with_invoice: Zuordenbare Zahlungen
       valid_payments_with_invoice_and_dates: Zuordenbare Zahlungen vom %{from} bis %{to}
       valid_payments_without_invoice: Nicht Zuordenbar
       valid_payments_without_invoice_and_dates: Nicht zuordenbare Zahlungen vom %{from} bis %{to}
       invalid_payments: Ungültige Zahlungen
-      amount_open: Offen
       create:
         zero: Zahlung importieren
         one: Zahlung importieren
         other: "%{count} Zahlungen importieren"
-      icon_tooltip_invoice_missing: Kann keiner Rechnung zugeordnet werden
-      icon_tooltip_invoice_not_payable: Die Rechnung kann in diesem Zustand nicht beglichen werden
+    valid_payments_with_invoice_table:
       icon_tooltip_settles: Begleicht die offene Rechnung
       icon_tooltip_exceeds: Übersteigt die offene Rechnung um %{difference}
       icon_tooltip_undercuts: Unterschreitet die offene Rechnung um %{difference}
+      amount_open: Offen
+    valid_payments_without_invoice_table:
+      icon_tooltip_invoice_missing: Kann keiner Rechnung zugeordnet werden
+    invalid_payments_table:
+      icon_tooltip_invoice_missing: Kann keiner Rechnung zugeordnet werden
+      icon_tooltip_invoice_not_payable: Die Rechnung kann in diesem Zustand nicht beglichen werden
     new:
       upload_button: "Hochladen"
       xml_file: "XML Datei"

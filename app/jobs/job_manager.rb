@@ -62,6 +62,7 @@ class JobManager
 
   def standard_jobs # rubocop:disable Metrics/MethodLength
     [
+      CleanupTemporaryBlobsJob,
       DownloadCleanerJob,
       Event::ParticipationCleanupJob,
       Event::ParticipationCleanupAnswersJob,

@@ -145,6 +145,14 @@ de:
           attributes:
             scopes:
               not_match_configured: "stimmen nicht mit den auf dem Server hinterlegten überein."
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
@@ -366,6 +374,21 @@ de:
       note:
         one: Notiz
         other: Notizen
+      pass_definition:
+        one: Pass-Definition
+        other: Pass-Definitionen
+      pass_grant:
+        one: Pass-Berechtigung
+        other: Pass-Berechtigungen
+      pass:
+        one: Ausweis
+        other: Ausweise
+      wallets/pass_installation:
+        one: Wallet-Installation
+        other: Wallet-Installationen
+      wallets/apple_wallet/device_registration:
+        one: Apple-Geräteregistrierung
+        other: Apple-Geräteregistrierungen
       payment:
         one: Zahlung
         other: Zahlungen
@@ -898,6 +921,43 @@ de:
 
       note:
         text: Text
+
+      pass_definition:
+        name: Name
+        description: Beschreibung
+        owner: Besitzer
+        template_key: Vorlage
+        background_color: Hintergrundfarbe
+
+      pass_grant:
+        pass_definition: Pass-Definition
+        grantor: Berechtigende Gruppe
+        related_role_types: Rollentypen
+
+      pass:
+        person: Person
+        pass_definition: Pass-Definition
+        state: Status
+        valid_from: Gültig von
+        valid_until: Gültig bis
+        states:
+          eligible: Gültig
+          ended: Abgelaufen
+          revoked: Widerrufen
+
+      wallets/pass_installation:
+        pass: Ausweis
+        wallet_type: Wallet-Typ
+        state: Status
+        wallet_identifier: Wallet-ID
+        authentication_token: Authentifizierungs-Token
+        last_synced_at: Letzte Synchronisation
+        sync_error: Synchronisationsfehler
+
+      wallets/apple_wallet/device_registration:
+        pass_installation: Pass-Installation
+        device_library_identifier: Geräte-ID
+        push_token: Push-Token
 
       oauth/application:
         cors_origins: Hosts mit API-Zugriff

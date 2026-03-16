@@ -75,12 +75,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/role_ability"
 
   ALLOWED_VISIBLE_CONTACT_ATTRIBUTES = %w[
+    picture
     name
     address
     phone_number
     email
     social_account
-    picture
   ].freeze
 
   SEARCHABLE_ATTRS = [:number, {event_translations: [:name], groups: [:name]}]

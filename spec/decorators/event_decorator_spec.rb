@@ -173,7 +173,16 @@ describe EventDecorator, :draper_with_helpers do
   context "#complete_contact_attributes" do
     let(:contact) { people(:top_leader) }
 
-    before { event.contact = contact }
+    include UploadDisplayHelper
+
+    before do
+      event.contact = contact
+
+      contact.picture.attach(
+        io: File.open("spec/fixtures/person/test_picture.jpg"),
+        filename: "test_picture.jpg"
+      )
+    end
 
     subject { EventDecorator.new(event).complete_contact_attributes }
 
@@ -182,6 +191,7 @@ describe EventDecorator, :draper_with_helpers do
         2.times do
           Fabricate(:additional_email, contactable: contact)
         end
+        contact.reload
       end
 
       it {
@@ -206,6 +216,22 @@ describe EventDecorator, :draper_with_helpers do
       before { contact.update_column(:email, nil) }
 
       it { is_expected.to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p>" }
+    end
+
+    context "with only picture" do
+      before { event.update!(visible_contact_attributes: [:picture]) }
+
+      let(:expected_image_html) do
+        helper.content_tag(:div, class: "crop-to-square my-3") do
+          helper.image_tag(
+            helper.upload_url(contact, :picture, size: "72x72", default: "profil"),
+            alt: I18n.t("people.contact_data.profile_picture_alt"),
+            size: "72x72"
+          )
+        end
+      end
+
+      it { is_expected.to eq expected_image_html }
     end
   end
 end

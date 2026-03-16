@@ -17,15 +17,6 @@ module EventsHelper
     end
   end
 
-  def event_contact_person_picture(event)
-    return unless event.visible_contact_attributes.include?("picture")
-
-    content_tag(:div, class: "crop-to-square") do
-      image_tag(upload_url(event.contact, :picture, size: "72x72", default: "profil"),
-        alt: t("people.contact_data.profile_picture_alt"), size: "72x72")
-    end
-  end
-
   def export_events_ical_button
     type = params[:type].presence || "Event"
     if can?(:"export_#{type.underscore.pluralize}", @group)

@@ -2,6 +2,10 @@ name: "Setup steps for wagon CI"
 description: "DRY yaml setup setup steps which are used multiple times in the wagon CI workflow"
 
 inputs:
+  github_token:
+    description: Token for repository access (defaults to GITHUB_TOKEN)
+    required: false
+    default: ${{ github.token }}
   migrations:
     description: Unless set to false, migrations will be run as part of the setup.
     default: "true"
@@ -55,6 +59,7 @@ runs:
       with:
         repository: "hitobito/hitobito"
         ref: ${{ env.CORE_REF }}
+        token: ${{ inputs.github_token }}
         path: "hitobito"
 
     - name: "Set up Ruby"
@@ -89,11 +94,13 @@ runs:
       with:
         repository: hitobito/${{ inputs.wagon_dependency_repository }}
         ref: ${{ env.WAGON_DEPENDENCY_REF }}
+        token: ${{ inputs.github_token }}
         path: ${{ inputs.wagon_dependency_repository }}
 
     - name: Checkout ${{ inputs.wagon_repository }}
       uses: actions/checkout@v4
       with:
+        token: ${{ inputs.github_token }}
         path: ${{ inputs.wagon_repository }}
 
     - name: "Create cache key"

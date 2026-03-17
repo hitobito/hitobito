@@ -678,6 +678,7 @@ en:
         phone_number: Telefonnummer anzeigen
         email: E-Mail anzeigen
         social_account: Social Media anzeigen
+        picture: Profilfoto anzeigen
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
     global:
       link:

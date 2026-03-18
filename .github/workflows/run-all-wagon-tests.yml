@@ -47,6 +47,7 @@ jobs:
           echo $WAGONS
           echo "wagons=$WAGONS" | tr -d "\n" >> $GITHUB_OUTPUT
         env:
+          # This PAT needs access to all repos, Read access to metadata and Read and Write access to actions, code, and pull requests
           GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
 
   run-wagon-tests:

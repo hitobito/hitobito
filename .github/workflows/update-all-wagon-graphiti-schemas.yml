@@ -19,8 +19,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} # auto-cancel previous runs of this same workflow on the same PR, if any are still running
 
 permissions:
-  contents: write    # Required to push commits to the branches
-  pull-requests: write # Required to create/edit PRs via the CLI
+  contents: write
+  pull-requests: write
 
 jobs:
   find-wagons:
@@ -41,6 +41,7 @@ jobs:
           echo $WAGONS
           echo "wagons=$WAGONS" | tr -d "\n" >> $GITHUB_OUTPUT
         env:
+          # This PAT needs access to all repos, Read access to metadata and Read and Write access to actions, code, and pull requests
           GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
 
   update-wagon-graphiti-schemas:
@@ -125,6 +126,7 @@ jobs:
 
           # Check if there are actually changes to the schema
           if [[ -n "$(git status --porcelain)" ]]; then
+            git diff spec/support/graphiti/schema.json
             git add spec/support/graphiti/schema.json
             git commit -m "Update Graphiti schema (hitobito/hitobito#$PR)"
             echo "changed=true" >> $GITHUB_OUTPUT
@@ -136,10 +138,12 @@ jobs:
       - name: Push commit
         if: steps.commit-schema.outputs.changed == 'true'
         working-directory: ${{ matrix.wagon.repo }}
+        env:
+          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
         run: |
-          # Create a unique branch name to avoid conflicts
           BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
           git checkout -b "$BRANCH_NAME"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/hitobito/${{ matrix.wagon.repo }}.git"
           git push origin "$BRANCH_NAME"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
 

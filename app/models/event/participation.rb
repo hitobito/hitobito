@@ -128,7 +128,6 @@ class Event::Participation < ActiveRecord::Base
   def init_answers
     answers.tap do |list|
       event.questions.list.each do |question|
-        next if question.hidden?
         next if list.find { |answer| answer.question_id == question.id }
 
         list << question.answers.new(question: question) # without this, only the id is set

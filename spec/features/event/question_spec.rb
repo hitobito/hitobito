@@ -13,12 +13,25 @@ describe EventsController, js: true do
       event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
     end
   end
-  let(:global_questions) do
+  let(:question_templates) do
     {
-      vegetarian: Event::Question::Default.create!(question: "Vegetarian?", choices: "yes", event_type: "Event"),
-      camp_only: Event::Question::Default.create!(question: "Course?", event_type: "Event::Camp"),
-      required: Event::Question::Default.create!(question: "Required?", disclosure: :required),
-      hidden: Event::Question::Default.create!(question: "Hidden?", disclosure: :hidden)
+      vegetarian: Event::QuestionTemplate.create!(
+        group: groups(:top_layer),
+        default: true,
+        event_type: "Event",
+        question: Event::Question::Default.create!(question: "Vegetarian?", choices: "yes")
+      ),
+      camp_only: Event::QuestionTemplate.create!(
+        group: groups(:top_layer),
+        default: true,
+        event_type: "Event::Camp",
+        question: Event::Question::Default.create!(question: "Course?")
+      ),
+      required: Event::QuestionTemplate.create!(
+        group: groups(:top_layer),
+        default: true,
+        question: Event::Question::Default.create!(question: "Required?", required: true)
+      )
     }
   end
 
@@ -51,7 +64,7 @@ describe EventsController, js: true do
         question: "Testquestion",
         choices: "Antwort 1, Antwort 2",
         choices_en: "Choice 1, Choice 2",
-        disclosure: :required
+        required: true
       )
 
       visit edit_group_event_path(event.group_ids.first, event.id)
@@ -74,6 +87,7 @@ describe EventsController, js: true do
       click_link("Antwortmöglichkeit hinzufügen")
       expect(page).to have_content("Antwortmöglichkeit", count: 4)
       expect(page).to have_field("Sensibel")
+      expect(page).to have_field("Obligatorisch")
 
       all(".fa-language").last.click
       input_id = all(".fields").last.first("input")[:id]
@@ -103,16 +117,17 @@ describe EventsController, js: true do
     end
 
     before do
-      Event::Question.delete_all
-      global_questions
+      Event::QuestionTemplate.delete_all
+      question_templates
+      event.init_questions
+      event.save!
       sign_in
     end
 
     it "includes global questions with matching event type" do
       visit edit_group_event_path(event.group_ids.first, event.id)
-      is_expected.to have_text(global_questions[:vegetarian].question)
-      is_expected.not_to have_text(global_questions[:camp_only].question)
-      is_expected.to have_text(global_questions[:hidden].question)
+      is_expected.to have_text(question_templates[:vegetarian].question.question)
+      is_expected.not_to have_text(question_templates[:camp_only].question.question)
 
       is_expected.not_to have_text("Entfernen")
     end
@@ -122,29 +137,12 @@ describe EventsController, js: true do
       click_save
       expect(page).to have_content "Anlass Eventus wurde erfolgreich aktualisiert."
     end
-
-    it "requires questions to have disclosure selected before saving" do
-      visit new_group_event_path(groups(:top_group))
-      fill_in(:event_name, with: "Eventus2")
-      click_on("Daten")
-      fill_in(:event_dates_attributes_0_start_at_date, with: "01.01.2025")
-      click_save
-      expect(page).to have_content("Anmeldeangaben ist nicht gültig")
-
-      question_fields_element.all(".fields").each do |question_element| # rubocop:disable Rails/FindEach
-        within(question_element) do
-          choose(Event::Question.disclosure_labels[:optional])
-        end
-      end
-      click_save
-      expect(page).to have_content "Anlass Eventus2 wurde erfolgreich erstellt."
-    end
   end
 
   describe "answers for global questions" do
     let(:event_with_questions) do
       event.init_questions
-      event.application_questions.map { |question| question.update!(disclosure: question.disclosure || :optional) }
+      event.application_questions.map { |question| question.update!(required: question.required || false) }
       event.save!
       event
     end
@@ -153,8 +151,8 @@ describe EventsController, js: true do
     subject { page }
 
     before do
-      Event::Question.delete_all
-      global_questions
+      Event::QuestionTemplate.delete_all
+      question_templates
       event_with_questions
       sign_in(user)
       visit contact_data_group_event_participations_path(event.group_ids.first, event.id,
@@ -163,11 +161,10 @@ describe EventsController, js: true do
     end
 
     it "hides hidden questions but shows others" do
-      is_expected.to have_text(global_questions[:vegetarian].question)
-      is_expected.to have_text(global_questions[:required].question + " *")
+      is_expected.to have_text(question_templates[:vegetarian].question.question)
+      is_expected.to have_text(question_templates[:required].question.question + " *")
 
-      is_expected.not_to have_text(global_questions[:camp_only].question)
-      is_expected.not_to have_text(global_questions[:hidden].question)
+      is_expected.not_to have_text(question_templates[:camp_only].question.question)
     end
 
     it "fails with empty required questions" do
@@ -176,7 +173,7 @@ describe EventsController, js: true do
 
       is_expected.to have_content "Antwort muss ausgefüllt werden"
 
-      within find_question_field(global_questions[:required]) do
+      within find_question_field(question_templates[:required].question) do
         answer_element = find('input[type="text"]')
         answer_element.fill_in(with: "Something")
       end

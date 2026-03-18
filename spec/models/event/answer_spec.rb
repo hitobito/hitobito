@@ -28,7 +28,7 @@ describe Event::Answer do
   subject(:answer) { described_class.new(participation:, question:) }
 
   context "with required question" do
-    before { question.update!(disclosure: :required) }
+    before { question.update!(required: true) }
 
     it "validates required answer" do
       answer.participation.enforce_required_answers = true

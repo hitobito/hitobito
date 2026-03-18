@@ -22,6 +22,25 @@ module Globalized
 
     class_attribute :list_alphabetically
     self.list_alphabetically = true
+
+    # When translating attributes on a sti_model, the translations are in a shared
+    # translation table aswell
+    # Globalized adds all the known translation from that table to methods like #attributes
+    # This leads to the issue of other sti_models not being able to evaluate that method
+    # because it doesn't know about the translation for that certain attribute
+    #
+    # In the case of an attribute being in the translated_attribute_names of
+    # globalized (table columns). We want to just return nil instead of throwing a
+    # method_missing error
+    def method_missing(method_name, *args, &block)
+      return nil if translated_attribute_names.include?(method_name)
+
+      super
+    end
+
+    def respond_to_missing?(method_name, include_private = false)
+      translated_attribute_names.include?(method_name.to_sym) || super
+    end
   end
 
   module ClassMethods

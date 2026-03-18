@@ -33,7 +33,7 @@ concurrency:
 jobs:
   find-wagons:
     name: 'Find all Puzzle-managed wagons'
-    if: ${{ github.event_name != 'pull_request_target' || (github.event_name == 'pull_request' && github.event.action == 'labeled' && github.event.label.name == 'run-wagon-tests!') }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action == 'labeled' && github.event.label.name == 'run-wagon-tests!') }}
     runs-on: 'ubuntu-latest'
     outputs:
       wagons: ${{ steps.list-wagon-repositories.outputs.wagons }}

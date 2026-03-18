@@ -112,7 +112,8 @@ jobs:
       - name: Update graphiti schema
         working-directory: ${{ matrix.wagon.repo }}
         run: |
-          bundle exec rake app:graphiti:schema:generate
+          bundle exec rake --tasks
+          bundle exec rake app:graphiti:schema:generate --trace
 
       - name: Commit updated schema
         id: commit-schema

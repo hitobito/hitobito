@@ -85,8 +85,7 @@ class Imap::Connector
     return [] if page_uids.empty?
 
     fetch_data = @imap.uid_fetch(page_uids, attributes)
-    mails = fetch_data.blank? ? [] : fetch_data.map { |mail| Imap::Mail.build(mail) }
-    mails.sort! { |a, b| b.date.to_i <=> a.date.to_i }
+    fetch_data.blank? ? [] : fetch_data.map { |mail| Imap::Mail.build(mail) }.sort
   end
 
   def count(mailbox)

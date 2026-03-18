@@ -21,6 +21,10 @@ class Imap::Mail
     entry
   end
 
+  def <=>(other)
+    other.date.to_i <=> date.to_i
+  end
+
   def uid
     @net_imap_mail.attr["UID"]
   end
@@ -30,7 +34,7 @@ class Imap::Mail
   end
 
   def date
-    Time.zone.utc_to_local(DateTime.parse(envelope.date.presence || DateTime.now.to_s))
+    Time.zone.utc_to_local(DateTime.parse(envelope&.date.presence || DateTime.now.to_s))
   end
 
   def sender_email

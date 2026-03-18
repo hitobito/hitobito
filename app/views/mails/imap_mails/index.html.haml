@@ -7,6 +7,10 @@
 - content_for(:filter, FilterNavigation::MailingLists::ImapMails.new(self).to_s)
 
 #main
+  - if mails.present?
+    .pagination-bar
+    = paginate mails
+
   = imap_mail_table(self) do |t|
     - if not imap_mail_mailbox?(:failed)
       - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|

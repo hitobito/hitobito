@@ -684,6 +684,7 @@ fr:
         phone_number: Afficher le numéro de téléphone
         email: Afficher l'e-mail
         social_account: Afficher les médias sociaux
+        picture: Profilfoto anzeigen
       kind_overrides_link_title: "Les champs suivants sont repris: Description"
     global:
       link:

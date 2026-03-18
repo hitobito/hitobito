@@ -682,6 +682,7 @@ it:
         phone_number: Mostra il numero di telefono
         email: Mostra e-mail
         social_account: Mostra i social media
+        picture: Profilfoto anzeigen
       kind_overrides_link_title: "Vengono trasferiti i seguenti campi: Descrizione"
     global:
       link:

@@ -9,13 +9,15 @@ module Dropdown
 
     def initialize(template, user, params, options = {})
       super(template, translate(:button), :download)
-      _, _, _ = true
       @user = user
       @params = params
 
-      add_item(translate(:emails_comma_separated), params.merge(format: :email), target: :_blank)
-      add_item(translate(:emails_semicolon_separated), params.merge(format: :email),
-        target: :_blank)
+      add_email_item(:emails_comma_separated, :email)
+      add_email_item(:emails_semicolon_separated, :email_outlook)
+    end
+
+    def add_email_item(key, format)
+      add_item(translate(key), params.merge(format:), target: :_blank)
     end
   end
 end

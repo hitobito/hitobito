@@ -61,8 +61,8 @@ describe Event::ApplicationMarketController, type: :controller do
     it "has email export dropdown" do
       expect(dom).to have_css ".dropdown-toggle"
       expect(dom).to have_css ".dropdown-item"
-      expect(dom).to have_content "Komma getrennt"
-      expect(dom).to have_content "Semikolon getrennt"
+      expect(dom).to have_link "Komma getrennt", href: /application_market\.email\?/
+      expect(dom).to have_link "Semikolon getrennt", href: /application_market\.email_outlook\?/
     end
 
     context "preconditions not fullfilled" do

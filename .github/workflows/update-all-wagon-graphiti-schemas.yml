@@ -112,6 +112,13 @@ jobs:
       - name: Update graphiti schema
         working-directory: ${{ matrix.wagon.repo }}
         run: |
+          pwd
+          ls -la
+          echo "Moving into the wagon directory ${{ matrix.wagon.repo }}"
+          cd ../${{ matrix.wagon.repo }}
+          pwd
+          ls -la
+          echo "Should now be inside the ${{ matrix.wagon.repo }} directory"
           bundle exec rake --tasks
           bundle exec rake app:graphiti:schema:generate --trace
 

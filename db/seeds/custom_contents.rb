@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-CustomContent.seed_once(
+CustomContent.seed(
   :key,
   { key: Person::LoginMailer::CONTENT_LOGIN,
     placeholders_required: 'login-url',
@@ -113,7 +113,7 @@ CustomContent.seed_once(
 )
 
 if FeatureGate.enabled? "custom_dashboard_page"
-  CustomContent.seed_once(
+  CustomContent.seed(
     :key,
     { key: DashboardController::CUSTOM_DASHBOARD_PAGE_CONTENT,
       placeholders_required: '',

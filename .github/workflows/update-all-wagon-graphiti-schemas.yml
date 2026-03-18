@@ -125,7 +125,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           # Check if there are actually changes to the schema
-          if [[ -n "$(git status --porcelain)" ]]; then
+          if [[ -n "$(git status --porcelain spec/support/graphiti/schema.json)" ]]; then
             git diff spec/support/graphiti/schema.json
             git add spec/support/graphiti/schema.json
             git commit -m "Update Graphiti schema (hitobito/hitobito#$PR)"

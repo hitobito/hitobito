@@ -100,7 +100,7 @@ runs:
     - name: Checkout ${{ inputs.wagon_repository }}
       uses: actions/checkout@v4
       with:
-        repository: ${{ inputs.wagon_repository }}
+        repository: hitobito/${{ inputs.wagon_repository }}
         token: ${{ inputs.github_token }}
         path: ${{ inputs.wagon_repository }}
 

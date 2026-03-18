@@ -52,6 +52,8 @@ jobs:
       matrix:
         wagon: ${{ fromJSON(needs.find-wagons.outputs.wagons) }}
       max-parallel: 5
+    env:
+      RAILS_DB_ADAPTER: nulldb
     steps:
       - name: "Determine common branch and set branch name for wagon"
         env:

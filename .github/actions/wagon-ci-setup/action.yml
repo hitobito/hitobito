@@ -24,6 +24,9 @@ inputs:
   wagon_dependency_ref:
     description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
     default: ""
+  wagon_ref:
+    description: Use a specific version of the wagon for the workflow run. Defaults to the current ref.
+    default: ""
 
 runs:
   using: composite
@@ -52,6 +55,19 @@ runs:
         fi
 
         echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV
+      shell: bash
+
+    - name: "Determine common branch and set branch name for wagon repo"
+      env:
+        WAGON_REPO: ${{ inputs.wagon_repository }}
+        INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
+      run: |
+        WAGON_REF="$INPUT_WAGON_REF"
+        if [ -z "$INPUT_WAGON_REF" ] && [ "$WAGON_REPO" != '' ]; then
+          WAGON_REF=$(git ls-remote --heads https://github.com/hitobito/$WAGON_REPO | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
+        fi
+
+        echo "WAGON_REF=$WAGON_REF" >> $GITHUB_ENV
       shell: bash
 
     - name: "Checkout hitobito at ${{ env.CORE_REF }}"
@@ -101,6 +117,7 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: hitobito/${{ inputs.wagon_repository }}
+        ref: ${{ env.WAGON_REF }}
         token: ${{ inputs.github_token }}
         path: ${{ inputs.wagon_repository }}
 

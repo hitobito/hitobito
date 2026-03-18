@@ -144,6 +144,7 @@ jobs:
           BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
           git checkout -b "$BRANCH_NAME"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/hitobito/${{ matrix.wagon.repo }}.git"
+          git pull --rebase
           git push origin "$BRANCH_NAME"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
 

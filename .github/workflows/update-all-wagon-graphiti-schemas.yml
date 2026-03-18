@@ -27,7 +27,7 @@ jobs:
     name: 'Find all affected wagons'
     if: |
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'update-wagon-graphiti-schema!'))
+      (github.event_name == 'pull_request' && github.event.action == 'labeled' && github.event.label.name == 'update-wagon-graphiti-schema!')
     runs-on: 'ubuntu-latest'
     outputs:
       wagons: ${{ steps.list-wagon-repositories.outputs.wagons }}

@@ -102,6 +102,7 @@ jobs:
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           github_token: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
+          migrations: false
           assets: false
           wagon_repository: ${{ matrix.wagon.repo }}
           wagon_dependency_repository: hitobito_youth

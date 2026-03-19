@@ -25,7 +25,6 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
   config.cache_store = :memory_store
-  config.active_job.queue_adapter = :test
 
   # Set to false for faster wagon tests once db is setup
   config.active_record.maintain_test_schema = %w[1 true].exclude?(ENV["DISABLE_TEST_SCHEMA_MAINTENANCE"])

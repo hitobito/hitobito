@@ -14,11 +14,12 @@ class Person::EventQueries
     person.event_applications
       .merge(Event::Participation.pending)
       .merge(Event::Participation.upcoming)
-      .includes(event: [:groups])
       .joins(event: :dates)
-      .select("event_applications.*", "event_dates.start_at")
-      .order("event_dates.start_at")
-      .distinct.tap do |applications|
+      .includes(event: [:groups])
+      .group("event_applications.id")
+      .select("event_applications.*, MIN(event_dates.start_at) AS first_start_at")
+      .order("first_start_at")
+      .tap do |applications|
       Event::PreloadAllDates.for(applications.collect(&:event))
     end
   end

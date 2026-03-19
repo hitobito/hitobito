@@ -1700,6 +1700,9 @@ en:
         person_blocked: Login is locked
         person_not_blocked: Login is not locked
 
+      groups_and_roles_that_see_me:
+        deleted_groups: Deleted groups
+
       password_override:
         flashes:
           success: Das Passwort wurde überschrieben. Die Person wurde informiert und kann über die Funktion "Passwort vergessen" jederzeit ein neues Passwort anfordern.

@@ -3,6 +3,7 @@
 ## Version 2.8
 
 - Mail Inboxes Ansicht funktioniert jetzt auch bei einer grösseren Anzahl Emails (#3549 merci @patrickuhlmann)
+- Abgrenzung aktiver von gelöschten Gruppen in der "Rollen die auf mich Zugriff haben" Ansicht (hitobito/hitobito_cevi#200, merci @patrickuhlmann)
 - Labels von Kontaktinformationen (Telefonnummern etc.) können auf die vordefinierten Werde eingeschränkt werden. In den Personenexporten werden pro vordefiniertem Label eine Spalte ausgegeben (#1800) 
 - Es können jetzt, falls aktiviert, Sammelrechnungen erfasst werden. Diese können verwendet werden, um wiederholbare Rechnungsläufe an Gruppen zu versenden, mit berechneten Beträgen basierend auf der Anzahl Rollen, die während einer spezifischen Rechnungseriode in der jeweiligen Empfängergruppe aktiv waren. (#3610)
 - Gruppen haben neu ein Tab welches alle Rechnungen anzeigt, die direkt an diese Gruppe gesendet wurden (#3856)

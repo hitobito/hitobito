@@ -1,0 +1,20 @@
+#  Copyright (c) 2026, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+top_layer_pass_de:
+  pass_definition_id: <%= ActiveRecord::FixtureSet.identify(:top_layer_pass) %>
+  locale: de
+  name: TopLayer Member Pass
+  description: Pass für TopLayer Mitglieder
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+top_layer_pass_fr:
+  pass_definition_id: <%= ActiveRecord::FixtureSet.identify(:top_layer_pass) %>
+  locale: fr
+  name: Pass Membre TopLayer
+  description: Pass pour les membres TopLayer
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

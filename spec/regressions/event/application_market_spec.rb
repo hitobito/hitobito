@@ -51,12 +51,18 @@ describe Event::ApplicationMarketController, type: :controller do
     end
 
     it "has add button" do
-      button = dom.find(".btn-group a")
-      expect(button.text).to eq " Teilnehmer/-in hinzufügen"
+      button = dom.find(".btn-group a", text: " Teilnehmer/-in hinzufügen")
       expect(button).to have_css("i.fa-plus")
       path_options = {for_someone_else: true,
                       event_role: {type: course.class.participant_types.first.sti_name}}
       expect(button[:href]).to eq new_group_event_participation_path(group, course, path_options)
+    end
+
+    it "has email export dropdown" do
+      expect(dom).to have_css ".dropdown-toggle"
+      expect(dom).to have_css ".dropdown-item"
+      expect(dom).to have_link "Komma getrennt", href: /application_market\.email\?/
+      expect(dom).to have_link "Semikolon getrennt", href: /application_market\.email_outlook\?/
     end
 
     context "preconditions not fullfilled" do

@@ -2,6 +2,7 @@
 
 ## Version 2.8
 
+- Export der angemeldeten aber nicht zugeteilten Kursteilnehmer (#4032, merci @DominikFischli)
 - Mail Inboxes Ansicht funktioniert jetzt auch bei einer grösseren Anzahl Emails (#3549 merci @patrickuhlmann)
 - Abgrenzung aktiver von gelöschten Gruppen in der "Rollen die auf mich Zugriff haben" Ansicht (hitobito/hitobito_cevi#200, merci @patrickuhlmann)
 - Labels von Kontaktinformationen (Telefonnummern etc.) können auf die vordefinierten Werde eingeschränkt werden. In den Personenexporten werden pro vordefiniertem Label eine Spalte ausgegeben (#1800) 

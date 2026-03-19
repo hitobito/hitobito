@@ -15,7 +15,7 @@
                                             :plus,
                                             for_someone_else: true)
 
-  .col-3
+  .col-3.text-end
     %span#booking_info= event.booking_info
 
 #main.row{data: { turbo: 'false' }}
@@ -32,11 +32,15 @@
 
 
   %article.col-6
+    - if can?(:index_full_participations, @event)
+      %div.ml-3.pt-2.float-end
+        = Dropdown::PeopleEmailExport.new(self, current_user, params)
     %h2= Event::Application.label_plural
     .pending_applications_info
       %span= "#{@applications.count} #{Event::Application.label(count: @applications.count)}"
       %span.d-none.one=Event::Application.label
       %span.d-none.other=Event::Application.label_plural
+
 
     = render 'prio_buttons'
 

@@ -212,6 +212,11 @@ de:
     merge: "Fusionieren"
     archive: "Archivieren"
 
+  dropdown/people_email_export:
+    button: "Export E-Mail Adressen"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
+
   dropdown/people_export:
     button: "Export"
     csv: "CSV"

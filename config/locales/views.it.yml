@@ -210,6 +210,11 @@ it:
     merge: "raggruppare"
     archive: "archiviare"
 
+  dropdown/applications_export:
+    button: "Esporta gli indirizzi e-mail"
+    emails_comma_separated: "Séparés par des virgules (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Séparé par un point-virgule (Outlook)"
+
   dropdown/people_export:
     button: "esportare"
     csv: "CSV"

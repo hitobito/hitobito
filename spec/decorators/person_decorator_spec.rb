@@ -100,7 +100,10 @@ describe PersonDecorator, :draper_with_helpers do
 
   context "participations" do
     it "pending_applications returns participations that are not active" do
-      dates = [Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date)]
+      dates = [
+        Fabricate(:event_date, start_at: 10.days.from_now.to_date, finish_at: 18.days.from_now.to_date),
+        Fabricate(:event_date, start_at: 20.days.from_now.to_date, finish_at: 21.days.from_now.to_date)
+      ]
       course = Fabricate(:course, groups: [groups(:top_layer)], dates: dates)
       participation = Fabricate(:event_participation, event: course, participant: person)
       application = Fabricate(:event_application, priority_1: course, participation: participation)

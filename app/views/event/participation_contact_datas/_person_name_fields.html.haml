@@ -5,4 +5,5 @@
 
 -# locals: (f:)
 
-= f.labeled_input_fields(*entry.decorate.used_attributes(:first_name, :last_name, :nickname)) 
+- [:first_name, :last_name, :nickname, :company_name].each do |a|
+  = f.labeled_input_field(a) if event.show_contact_attr?(a)

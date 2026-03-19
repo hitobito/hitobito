@@ -1,0 +1,15 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+-# locals: (f:)
+
+= f.labeled_input_fields(*entry.decorate.used_attributes(:first_name, :last_name, :nickname))
+- entry.decorate.used?(:company_name) do
+  = f.labeled_input_field(:company_name,
+                           placeholder: I18n.t('global.search.placeholder_company_name'),
+                           data: { provide: 'entity',
+                                   url: query_company_name_path })
+- entry.decorate.used?(:company) do
+  = f.labeled_boolean_field :company

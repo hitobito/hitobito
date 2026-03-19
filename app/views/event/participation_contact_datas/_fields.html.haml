@@ -4,8 +4,7 @@
 -#  https://github.com/hitobito/hitobito_pbs.
 
 = field_set_tag do
-  - [:first_name, :last_name, :nickname, :company_name].each do |a|
-    = f.labeled_input_field(a) if event.show_contact_attr?(a)
+  = render 'person_name_fields', f: f
 
 = render 'event/participation_contact_datas/address_fields', f: f
 

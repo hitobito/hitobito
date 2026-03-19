@@ -62,7 +62,7 @@ class AppStatus::Mail < AppStatus
   end
 
   def fetch_mails
-    imap.fetch_mails(:inbox)
+    imap.fetch_all_mails(:inbox)
   end
 
   def imap

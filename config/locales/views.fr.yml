@@ -1747,6 +1747,9 @@ fr:
         person_blocked: Le login est maintenant bloqué
         person_not_blocked: Le login n'est maintenant pas bloqué
 
+      groups_and_roles_that_see_me:
+        deleted_groups: Groupes supprimés
+
       password_override:
         flashes:
           success: Le mot de passe a été écrasé. La personne a été informée et peut à tout moment demander un nouveau mot de passe via la fonction "Mot de passe oublié".

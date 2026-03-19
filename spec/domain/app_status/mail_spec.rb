@@ -34,7 +34,7 @@ describe AppStatus::Mail do
       cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(imap_connector)
-        .to receive(:fetch_mails)
+        .to receive(:fetch_all_mails)
         .with(:inbox)
         .and_return([imap_mail1, imap_mail2])
 
@@ -47,7 +47,7 @@ describe AppStatus::Mail do
       cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(imap_connector)
-        .to receive(:fetch_mails)
+        .to receive(:fetch_all_mails)
         .with(:inbox)
         .and_return([])
 
@@ -63,7 +63,7 @@ describe AppStatus::Mail do
       cache.write(:app_status, {seen_mails: seen_mails})
 
       expect(imap_connector)
-        .to receive(:fetch_mails)
+        .to receive(:fetch_all_mails)
         .with(:inbox)
         .and_return([imap_mail1, imap_mail2])
 

@@ -37,12 +37,10 @@ class Mails::ImapMailsController < ApplicationController
   end
 
   def fetch_mails
-    mails = imap.fetch_mails(mailbox)
-
-    mails.sort! { |a, b| a.date.to_i <=> b.date.to_i }
-    mails = mails.reverse
-
-    Kaminari.paginate_array(mails).page(params[:page].to_i)
+    current_page = [params[:page].to_i, 1].max
+    result = imap.fetch_mails(mailbox, page: current_page)
+    Kaminari.paginate_array(result[:mails], total_count: result[:total_count])
+      .page(current_page)
   end
 
   def counts

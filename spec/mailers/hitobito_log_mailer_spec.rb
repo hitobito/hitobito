@@ -20,11 +20,27 @@ describe HitobitoLogMailer do
   end
 
   it "renders for log entry for mailing list" do
-    SeedFu.quiet = true
-    SeedFu.seed [Rails.root.join("db", "seeds")]
+    custom_content = CustomContent.get(described_class::ERROR)
+    custom_content.label = "Hitobito Log: Täglicher Fehlerbericht"
+    custom_content.subject = "[Hitobito] Täglicher Fehlerbericht"
+    custom_content.body = <<~HTML
+      Guten Tag, <br><br>
+
+      Dies ist die automatische Benachrichtigung über Fehler im <a href="{hitobito-log-url}">Hitobito Log</a>.
+
+      Nachfolgend finden Sie die wichtigsten Informationen und eine Übersicht der ersten Fehler-Einträge der letzten 24 Stunden. <br>
+
+      <strong>Anzahl Fehler</strong>: {error-count}<br>
+      <strong>Zeitraum</strong>: {time-period} <br><br>
+      <strong>Details zu den ersten 10 Fehler:</strong><br><br>
+      {error-log-table}
+    HTML
+    custom_content.save!
+
     list = mailing_lists(:leaders)
     entry = HitobitoLogEntry.create!(subject: list, category: :mail, level: :error, message: :test)
     mail = described_class.error([entry.id], range)
+
     expect(mail.body).to match(%r{/mailing_lists/#{list.id}})
   end
 end

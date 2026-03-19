@@ -51,12 +51,27 @@ describe Person::SecurityToolsController do
         expected_groups_and_roles[bottom_layer.id] = {name: bottom_layer.name,
                                                        roles: [Group::BottomLayer::Leader.label,
                                                          Group::BottomLayer::LocalGuide.label,
-                                                         Group::BottomLayer::Member.label]}
+                                                         Group::BottomLayer::Member.label],
+                                                       deleted: false}
         expected_groups_and_roles[top_group.id] = {name: top_group.name,
                                                     roles: [Group::TopGroup::Leader.label,
-                                                      Group::TopGroup::Secretary.label]}
+                                                      Group::TopGroup::Secretary.label],
+                                                    deleted: false}
 
         expect(assigns(:groups_and_roles_that_see_me)).to eq(expected_groups_and_roles)
+      end
+
+      it "marks deleted groups as deleted" do
+        sign_in(bottom_member)
+
+        @user = bottom_member
+        bottom_layer = groups(:bottom_layer_one)
+        bottom_layer.update_column(:deleted_at, Time.current)
+
+        get :index, params: nesting, xhr: true, format: :js
+
+        result = assigns(:groups_and_roles_that_see_me)
+        expect(result[bottom_layer.id][:deleted]).to be true
       end
     end
   end

@@ -1730,6 +1730,9 @@ de:
         person_blocked: Login ist gesperrt
         person_not_blocked: Login ist nicht gesperrt
 
+      groups_and_roles_that_see_me:
+        deleted_groups: Gelöschte Gruppen
+
       password_override:
         flashes:
           success: Das Passwort wurde überschrieben. Die Person wurde informiert und kann über die Funktion "Passwort vergessen" jederzeit ein neues Passwort anfordern.

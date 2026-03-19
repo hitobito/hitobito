@@ -1742,6 +1742,9 @@ it:
         person_blocked: Il login è bloccato
         person_not_blocked: Il login non è bloccato
 
+      groups_and_roles_that_see_me:
+        deleted_groups: Gruppi eliminati
+
       password_override:
         flashes:
           success: La password è stata sovrascritta. La persona è stata informata e può richiedere in qualsiasi momento una nuova password utilizzando la funzione "Password dimenticata".

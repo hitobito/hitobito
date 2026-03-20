@@ -68,7 +68,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
       format.html { @events = entries_page(params[:page]) }
       format.csv { render_tabular_in_background(:csv) }
       format.xlsx { render_tabular_in_background(:xlsx) }
-      format.ics { render_ical(visible_entries) }
+      format.ics { render_ical(entries) }
       format.json { render_entries_json(entries_page(params[:page])) }
     end
   end
@@ -334,19 +334,12 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def entries_page(page_param)
-    page_scope = visible_entries.page(page_param)
+    page_scope = entries.page(page_param)
 
     if page_scope.size.zero?
-      visible_entries.page(1)
+      entries.page(1)
     else
       page_scope
     end
-  end
-
-  def visible_entries
-    @visible_entries ||=
-      entries
-        .select("events.*")
-        .where(id: Event.accessible_by(EventReadables.new(current_ability.user)).select(:id))
   end
 end

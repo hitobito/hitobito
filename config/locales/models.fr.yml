@@ -52,7 +52,7 @@ fr:
       household:
         members: Membres du foyer
       choice:
-        choice: Antwortmöglichkeit
+        choice: Réponse possible
 
     errors:
       messages:
@@ -85,13 +85,13 @@ fr:
         at_least_one_present: Au moins %{model_name} doit être remplie
         type_not_allowed: ne peut pas être créé ici
         must_be_after_opening: doit être ultérieur à l'inscription
-        must_have_same_type: müssen von demselben Typ sein
+        must_have_same_type: doivent être du même type
         greater_than: doit être supérieur à %{count}.
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
         must_exist: doivent être présents
         readonly: ne peut pas être modifié
         cannot_be_later_than_today: ne peut pas être plus tard qu'aujourd'hui
-        is_not_a_decimal_number: muss eine Dezimalzahl sein
+        is_not_a_decimal_number: doit être un nombre décimal
       models:
         cors_origin:
           attributes:
@@ -151,9 +151,9 @@ fr:
             base:
               max_one_additional_invoice_address: Une seule adresse peut être choisie comme adresse de facturation.
               additional_address_labels_must_be_unique: Les désignations des autres adresses doivent être uniques.
-              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
-              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
-              managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
+              cannot_have_managers_and_manageds: '%{name} ne peut pas avoir à la fois des administrateurs et des enfants.'
+              manager_already_managed: L'administrateur n'a pas pu être ajouté, car il est déjà géré.
+              managed_already_manager: L'enfant n'a pas pu être ajouté, car il est déjà administrateur.
             email:
               taken: >
                   a déjà été attribué. Cette adresse doit être unique pour chaque
@@ -175,8 +175,8 @@ fr:
 
           attributes:
             manager_id:
-              taken: ist bereits gesetzt.
-          manager_and_managed_the_same: kann sich nicht selber verwalten.
+              taken: est déjà défini.
+          manager_and_managed_the_same: ne peut pas se gérer tout seul.
         qualification:
           attributes:
             qualification_kind_id:
@@ -198,7 +198,7 @@ fr:
         invoice:
           recipient_address_or_email_required: 'L''adresse ou l''adresse e-mail du destinataire doit être renseignée'
           recipient_name_or_company_name_required: 'Le nom de l''entreprise ou le nom doit être rempli.'
-          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
+          recipient_street_or_postbox_required: 'Il faut indiquer une adresse postale ou une boîte postale'
           attributes:
             invoice_config:
               invalid: 'n''est pas valable ; adaptez les réglages avant de faire le calcul'
@@ -215,9 +215,9 @@ fr:
         period_invoice_template:
           attributes:
             recipient_group_type:
-              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
+              readonly_due_to_existing_invoice_runs: ne doit plus être modifié, car des cycles de facturation existent déjà
             end_on:
-              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
+              must_be_later_than_start_on: ne peut pas être antérieur au début de la période comptable
         role:
           attributes:
             end_on:
@@ -582,7 +582,7 @@ fr:
         origin: Serveur avec accès via API
 
       person:
-        id: Personennummer
+        id: N° personnel
         salutation: Titre
         first_name: Prénom
         last_name: Nom
@@ -920,7 +920,7 @@ fr:
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         disclosure: Paramétrage
-        sensitive: Sensibel
+        sensitive: Sensible
         disclosures:
           required: Obligatoire
           optional: Optionnel
@@ -961,6 +961,7 @@ fr:
         uid: Client ID
         secret: Client secret
         redirect_uri: Rediriger les URIs
+        description: Beschreibung
         additional_audiences: Autres audiences
         skip_consent_screen: Sauter le consentement
 
@@ -1064,7 +1065,7 @@ fr:
               many: Futur
               other: Futur
       contact_account:
-        custom_label: Freitext
+        custom_label: Texte libre
         predefined_labels:
           privat: Privé
           mobil: Mobile
@@ -1267,16 +1268,16 @@ fr:
         recipient_postbox: Case postale
         recipient_country: Pays
         recipient_street: Rue
-        recipient_housenumber: Hausnummer
+        recipient_housenumber: numéro de rue
         recipient_zip_code: NPA
         recipient_town: Lieu
         recipient_address: Adresse du destinataire
-        payee_name: Zahlungsempfänger Name
-        payee_street: Zahlungsempfänger Strasse
-        payee_housenumber: Zahlungsempfänger Hausnummer
-        payee_zip_code: Zahlungsempfänger PLZ
-        payee_town: Zahlungsempfänger Ort
-        payee_country: Zahlungsempfänger Land
+        payee_name: Nom du bénéficiaire
+        payee_street: Rue du Bénéficiaire
+        payee_housenumber: Numéro de rue du Bénéficiaire
+        payee_zip_code: Code postal du bénéficiaire
+        payee_town: Ville du Bénéficiaire
+        payee_country: Pays du Bénéficiaire
         due_at: Échue le
         issued_at: Établie le
         sent_at: Envoyée le
@@ -1361,7 +1362,7 @@ fr:
 
       invoice_run:
         title: Titre
-        recipient_source: Empfänger
+        recipient_source: Destinataire
         recipients_total: Nombre total de destinataires
         recipients_paid: Destinataire payé
         amount_total: Montant total
@@ -1432,21 +1433,21 @@ fr:
           bcn: Banque Cantonale Neuchâteloise
 
       period_invoice_template:
-        name: Bezeichnung
-        start_on: Rechnungsperiode Start
-        end_on: Rechnungsperiode Ende
-        recipient_group_type: Empfängergruppen
-        items: Rechnungsposten
+        name: Désignation
+        start_on: Début de la période comptable
+        end_on: Fin de la période comptable
+        recipient_group_type: Groupes de destinataires
+        items: Postes de factures
 
       period_invoice_template/item:
-        name: Name
-        unit_cost: Preis
-        cost_center: Kostenstelle
-        account: Konto
-        vat_rate: MwSt.
+        name: Nom
+        unit_cost: Prix
+        cost_center: Centre de coûts
+        account: Compte
+        vat_rate: TVA
 
       period_invoice_template/role_count_item:
-        role_types: Rollentypen
+        role_types: Type de rôle
 
       service_token:
         name: Nom
@@ -1489,9 +1490,9 @@ fr:
             unwritable_attribute: ne peut pas être modifié
         self_registration_resource:
           adult_consent:
-            must_be_accepted: muss akzeptiert werden
+            must_be_accepted: doit être accepté
           privacy_policy_accepted:
-            must_be_accepted: muss akzeptiert werden
+            must_be_accepted: doit être accepté
 
   doorkeeper:
     scopes:

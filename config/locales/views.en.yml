@@ -86,7 +86,7 @@ en:
       locale_indicator: "Language of this input field"
       input_translation_button: "Show input fields for other available languages"
 
-    jump_to_content: "Zum Hauptinhalt springen"
+    jump_to_content: "Skip to main content"
 
   list:
     index:
@@ -148,7 +148,7 @@ en:
       tooltip: 'Private entries are visible only to your own group. If you are a group leader, entries marked as public are visible to leaders of other groups. '
 
     phone_number_fields:
-      placeholder_type: Bezeichnung (Privat, Arbeit...)
+      placeholder_type: Description (Personal, Work, etc.)
 
     social_account_fields:
       placeholder_value: Website, Skype-name, other profiles...
@@ -194,7 +194,7 @@ en:
     register_new_managed: Enter and register a new child
     disabled_messages:
       already_exists: "is already registered"
-      cannot_see_event: "darf den Anlass nicht sehen"
+      cannot_see_event: "must not see the event"
 
   dropdown/event/participation/mail_dispatch:
     title: E-Mail senden
@@ -208,6 +208,11 @@ en:
     move: "Move"
     merge: "Merge"
     archive: "Archive"
+
+  dropdown/people_email_export:
+    button: "Export E-Mail Adressen"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
 
   dropdown/people_export:
     button: "Export"
@@ -266,7 +271,7 @@ en:
     xlsx: "XLSX"
 
   dropdown/period_invoice_templates/add_item:
-    add_item: Rechnungsposten hinzufügen
+    add_item: Add an invoice item
 
   devise:
     failure:
@@ -374,7 +379,7 @@ en:
       explanation: "Maybe you typed the address incorrectly, or the page has been deleted."
     "500":
       title: "Sorry, something went wrong (500)"
-      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
+      explanation: "We have received a report and will look into the issue as soon as possible."
     "503":
       title: "Sorry, page is currently not available (503)"
       explanation: "We are working on this page, so it is not available. This should not take too long."
@@ -410,11 +415,11 @@ en:
       apply_until: "until %{date}"
     application_market:
       application:
-        modal_title: Wollen Sie diese Anmeldung wirklich bestätigen?
+        modal_title: Wollen Sie diese Anmeldung bestätigen?
         confirm_and_send_mail: Bestätigen und E-Mail senden
         confirm_and_send_no_mail: Bestätigen ohne E-Mail
       participant:
-        modal_title: Wollen Sie diese Anmeldung wirklich bestätigen?
+        modal_title: Wollen Sie diese Zuteilung entfernen?
         confirm_and_send_mail: Bestätigen und E-Mail senden
         confirm_and_send_no_mail: Bestätigen ohne E-Mail
       already_assigned: "This person was already assigned or registered for a different event."
@@ -471,7 +476,7 @@ en:
             privacy_policy_not_accepted: "To complete the registration, you must agree to the privacy policy."
 
         edit:
-          title: Neues Kind registrieren und am Anlass anmelden
+          title: Register a new child and sign them up for the event
           save: Continue
 
     participations:
@@ -586,8 +591,8 @@ en:
         submit: add
 
     questions:
-      add_choice: "Antwortmöglichkeit hinzufügen"
-      sensitive_caption: Antworten werden %{cutoff} Monate nach Ende des Anlasses gelöscht.
+      add_choice: "Add an answer option"
+      sensitive_caption: Replies will be deleted %{cutoff} months after the event ends.
 
   assignments:
     attachment: "Show attachment"
@@ -678,7 +683,7 @@ en:
         phone_number: Telefonnummer anzeigen
         email: E-Mail anzeigen
         social_account: Social Media anzeigen
-        picture: Profilfoto anzeigen
+        picture: Show profile picture
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
     global:
       link:
@@ -1111,16 +1116,16 @@ en:
   invoice_runs:
     destroys:
       show:
-        title: Rechnungslauf löschen
-        non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
-        confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+        title: Delete billing run
+        non_draft_info: 'The invoice run contains at least one invoice that does not have the status ‘Draft’ or ‘Cancelled’. Therefore, the invoice run cannot be deleted.'
+        confirm_delete: Are you sure you want to delete this billing run?
     form:
       invoice_articles:
         variable_donation:
-          name: Variabler Spendenaufruf
+          name: Flexible fundraising appeal
           number: Donations
-          description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
-      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+          description: Fundraising appeal based on existing donations
+      recipient_count_disclaimer: "Please note: If the filter criteria apply to more or fewer recipients in future, the final list of invoices generated may still change."
       recipient_info:
         one: "Invoice is created for one person."
         other: "Invoice is created for %{count} persons."
@@ -1166,9 +1171,9 @@ en:
         one: "Für einen Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
         other: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
     destroy:
-      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      zero: "First, you need to select an invoice."
       one: "Invoice cancelled"
-      other: "%{count} Rechnungen wurden storniert."
+      other: "%{count} Invoices have been cancelled."
 
   payments:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -1180,32 +1185,32 @@ en:
     invoice_runs:
       actions_index:
         add:
-          zero: "Rechnungslauf fahren"
-          other: "Weiteren Rechnungslauf fahren"
+          zero: "Run the billing run"
+          other: "Run another billing run"
       destroys:
         show:
-          title: Rechnungslauf löschen
-          non_draft_info: 'In diesem Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
-          confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+          title: Delete billing run
+          non_draft_info: 'This invoice run contains at least one invoice that does not have the status ‘Draft’ or ‘Cancelled’. Therefore, the invoice run cannot be deleted.'
+          confirm_delete: Are you sure you want to delete this billing run?
       form:
-        recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+        recipient_count_disclaimer: "Please note: If the filter criteria apply to more or fewer recipients in future, the final list of invoices generated may still change."
         recipient_info:
           one: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_group_type_help: All groups of this type in or below %{group} will receive an invoice. This does not apply to groups that had already been deleted or archived by the start date of the billing period.
     new:
-      title: Sammelrechnung definieren
+      title: Define a collective invoice
     actions_index:
       link:
-        add: Neue Sammelrechnung definieren
+        add: Define a new collective invoice
     tabs:
       info: Info
-      invoice_runs: Rechnungsläufe
+      invoice_runs: Billing run
 
   label_formats:
     global_labels: "Global label formats"
-    global_labels_activated: "Globale Etikettenformate anzeigen"
+    global_labels_activated: "View global label formats"
     own_labels: My label formats
     see_global_labels: "Show global labels"
     form:
@@ -1472,7 +1477,7 @@ en:
 
     invalid_file: Uploaded file is not valid.
     parsing_error: The file could not be processed (%{error})I
-    job_enqueued: "Zahlungen werden im Hintergrund erfasst."
+    job_enqueued: "Payments are recorded in the background."
     payments:
       valid_with_invoice:
         one: Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.
@@ -1676,7 +1681,7 @@ en:
           email_primary_invalid: Main email is invalid
           email_additional_invalid: Further email is invalid
           address_invalid: Address not in directory
-          post_address_check_invalid: Post-Adressabgleich fehlerhaft
+          post_address_check_invalid: Postal address match incorrect
 
     security_tools:
       index:
@@ -1699,6 +1704,9 @@ en:
         confirm_unblock_person: "Achtung: Damit kann ist die Person nicht mehr blockiert. Willst du das wirklich?"
         person_blocked: Login is locked
         person_not_blocked: Login is not locked
+
+      groups_and_roles_that_see_me:
+        deleted_groups: Gelöschte Gruppen
 
       password_override:
         flashes:
@@ -1787,12 +1795,12 @@ en:
 
     attrs:
       additional_data: More information
-      events: Meine nächsten %{event_type_label}
+      events: My upcoming %{event_type_label}
 
     contact_data:
-      address_link_aria_label: Adresse in nominatim.openstreetmap.org öffnen
+      address_link_aria_label: Open the address in nominatim.openstreetmap.org
       lives_in_household_with: Lives in household with
-      profile_picture_alt: Profilbild
+      profile_picture_alt: Profile picture
 
     email_field:
       used_as_login: Is used as login
@@ -1934,8 +1942,8 @@ en:
       filters_role_kind:
         active_today: Aktuell aktive Rollen
         active: role was active
-        started: gestartete Rollen
-        started_help: Bezieht sich auf das "Von" Datum auf der Rolle
+        started: roles started
+        started_help: ' Refers to the “From” date on the roll'
         created: role was made.
         deleted: role has been deleted.
         inactive: inaktive oder nie vorhandene Rollen
@@ -2125,12 +2133,12 @@ en:
       success:
         zero: No tags removed
         one: One tag has been removed
-        other: "Tags auf %{count} Personen werden im Hintergrund entfernt"
+        other: "Tags on %{count} people will be removed in the background"
     create:
       success:
         zero: No tags created
         one: One tag has been created
-        other: "Tags auf %{count} Personen werden im Hintergrund erstellt"
+        other: "Tags on %{count} people will be removed in the background"
     deletable:
       title: Which tags should be deleted?
       no_entries: Tags cannot be removed
@@ -2282,7 +2290,7 @@ en:
     household_destroyed: "Haushalt (%{object_changes}) wurde aufgelöst."
     person_merge: "Two persons have been merged. Deleted person:"
     deleted_service_token: "Inzwischen gelöschtes %{model_name}"
-    deleted_user: "inzwischen gelöschte Person %{id}"
+    deleted_user: "User %{id}, now deleted"
 
   tags/merge:
     success: Tags merged successfully.
@@ -2360,4 +2368,4 @@ en:
 
   period_invoice_template:
     role_count_item_fields:
-      choose_role_types: Rollentypen auswählen
+      choose_role_types: Select roller types

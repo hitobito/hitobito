@@ -87,7 +87,7 @@ it:
       locale_indicator: "Lingua di questo campo di inserimento"
       input_translation_button: "Mostra i campi di inserimento per le altre lingue disponibili"
 
-    jump_to_content: "Zum Hauptinhalt springen"
+    jump_to_content: "Vai al contenuto principale"
 
   list:
     index:
@@ -149,7 +149,7 @@ it:
       tooltip: Annotazioni private sono visibili solo al proprio gruppo. Se sei un capo nel tuo gruppo, le annotazioni marcate come pubbliche saranno visibili anche ai capi e responsabili di altri gruppi,.
 
     phone_number_fields:
-      placeholder_type: Bezeichnung (Privat, Arbeit...)
+      placeholder_type: Tipo (privato, lavoro, ...)
 
     social_account_fields:
       placeholder_value: Sito internet, nome skype, profilo...
@@ -210,6 +210,11 @@ it:
     merge: "raggruppare"
     archive: "archiviare"
 
+  dropdown/people_email_export:
+    button: "Export E-Mail Adressen"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
+
   dropdown/people_export:
     button: "esportare"
     csv: "CSV"
@@ -267,7 +272,7 @@ it:
     xlsx: "XLSX"
 
   dropdown/period_invoice_templates/add_item:
-    add_item: Rechnungsposten hinzufügen
+    add_item: Aggiungi voci contabili
 
   devise:
     failure:
@@ -375,7 +380,7 @@ it:
       explanation: "forse ha inserito l'indirizzo in maniera errata oppure questa pagina è stata cancellata nel frattempo."
     "500":
       title: "siamo spiacenti, qualcosa è andato storto (500)"
-      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
+      explanation: "Abbiamo ricevuto una segnalazione e esamineremo il problema il prima possibile."
     "503":
       title: "siamo spiacenti, questa pagina non è disponibile al momento (503)"
       explanation: "al momento stiamo lavorando a questa pagine e per questo motivo non è disponibile. Non dovrebbe durare a lungo."
@@ -411,11 +416,11 @@ it:
       apply_until: "fino a %{date}"
     application_market:
       application:
-        modal_title: Vuole davvero confermare questa registrazione?
+        modal_title: Wollen Sie diese Anmeldung bestätigen?
         confirm_and_send_mail: Confermare e inviare l'e-mail
         confirm_and_send_no_mail: Conferma senza e-mail
       participant:
-        modal_title: Vuole davvero confermare questa registrazione?
+        modal_title: Wollen Sie diese Zuteilung entfernen?
         confirm_and_send_mail: Confermare e inviare l'e-mail
         confirm_and_send_no_mail: Conferma senza e-mail
       already_assigned: "Questa persona è già assegnata da un'altra parte."
@@ -590,8 +595,8 @@ it:
         submit: Aggiungere
 
     questions:
-      add_choice: "Antwortmöglichkeit hinzufügen"
-      sensitive_caption: Antworten werden %{cutoff} Monate nach Ende des Anlasses gelöscht.
+      add_choice: "Possibile risposta risposta"
+      sensitive_caption: Le risposte vengono cancellate %{cutoff} mesi dopo la conclusione dell'evento.
 
   assignments:
     attachment: "Mostrare l'allegato."
@@ -682,7 +687,7 @@ it:
         phone_number: Mostra il numero di telefono
         email: Mostra e-mail
         social_account: Mostra i social media
-        picture: Profilfoto anzeigen
+        picture: Mostra foto del profilo
       kind_overrides_link_title: "Vengono trasferiti i seguenti campi: Descrizione"
     global:
       link:
@@ -1126,14 +1131,14 @@ it:
       show:
         title: Cancellare fattura collettiva
         non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato “Bozza” né “Annullata”. Pertanto, la fattura collettiva non può essere cancellata.'
-        confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+        confirm_delete: Vuoi davvero eliminare questa fattura collettiva?
     form:
       invoice_articles:
         variable_donation:
           name: Appello per donazioni variabili
           number: Donazioni
           description: Appello per donazioni sulla base di donazioni esistenti
-      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+      recipient_count_disclaimer: "Nota: qualora in futuro i criteri di filtro si applichino a un numero maggiore o minore di destinatari, l'elenco definitivo delle fatture generate potrebbe subire delle modifiche."
       recipient_info:
         one: "La fattura viene emessa per una sola persona."
         many: "La fattura viene emessa per %{count} persone."
@@ -1206,33 +1211,33 @@ it:
     invoice_runs:
       actions_index:
         add:
-          zero: "Rechnungslauf fahren"
-          other: "Weiteren Rechnungslauf fahren"
+          zero: "Eseguire il fattura collettiva"
+          other: "Eseguire un altro fattura collettiva"
       destroys:
         show:
-          title: Rechnungslauf löschen
-          non_draft_info: 'In diesem Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
-          confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+          title: Cancellare fattura collettiva
+          non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato “Bozza” né “Annullata”. Pertanto, la fattura collettiva non può essere cancellata.'
+          confirm_delete: Vuoi davvero eliminare questa fattura collettiva?
       form:
-        recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+        recipient_count_disclaimer: "Nota: qualora in futuro i criteri di filtro si applichino a un numero maggiore o minore di destinatari, l'elenco definitivo delle fatture generate potrebbe subire delle modifiche."
         recipient_info:
           one: "%{count} Empfänger gefunden."
           many: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_group_type_help: Tutti i gruppi di questo tipo presenti in %{group} o al di sotto di esso riceveranno una fattura. Sono esclusi i gruppi che erano già stati eliminati o archiviati alla data di inizio del periodo di fatturazione.
     new:
-      title: Sammelrechnung definieren
+      title: Definire la fattura collettive
     actions_index:
       link:
-        add: Neue Sammelrechnung definieren
+        add: Definire una nuova fattura collettive
     tabs:
-      info: Info
-      invoice_runs: Rechnungsläufe
+      info: Informazioni
+      invoice_runs: Fatture collettive
 
   label_formats:
     global_labels: "Formati globali delle etichette"
-    global_labels_activated: "Globale Etikettenformate anzeigen"
+    global_labels_activated: "Indicare formati globali delle etichette"
     own_labels: I miei formati delle etichette
     see_global_labels: "Indicare formati globali delle etichette"
     form:
@@ -1507,7 +1512,7 @@ it:
 
     invalid_file: Il documento caricato non è valido
     parsing_error: Il documento caricato non può essere elaborato (%{error})
-    job_enqueued: "Zahlungen werden im Hintergrund erfasst."
+    job_enqueued: "I pagamenti vengono registrati in background."
     payments:
       valid_with_invoice:
         one: È stato riconosciuto un pagamento valido con relativa fattura.
@@ -1742,6 +1747,9 @@ it:
         person_blocked: Il login è bloccato
         person_not_blocked: Il login non è bloccato
 
+      groups_and_roles_that_see_me:
+        deleted_groups: Gelöschte Gruppen
+
       password_override:
         flashes:
           success: La password è stata sovrascritta. La persona è stata informata e può richiedere in qualsiasi momento una nuova password utilizzando la funzione "Password dimenticata".
@@ -1841,9 +1849,9 @@ it:
       events: Prossimi %{event_type_label}
 
     contact_data:
-      address_link_aria_label: Adresse in nominatim.openstreetmap.org öffnen
+      address_link_aria_label: Apri l'indirizzo su nominatim.openstreetmap.org
       lives_in_household_with: Vive nello stesso nucleo famigliare di
-      profile_picture_alt: Profilbild
+      profile_picture_alt: Foto del profilo
 
     email_field:
       used_as_login: Sarà utilizzato come login
@@ -2179,12 +2187,12 @@ it:
       success:
         zero: Non sono stati eliminati tags
         one: È stato eliminato un tag
-        other: "Tags auf %{count} Personen werden im Hintergrund entfernt"
+        other: "I tag su %{count} persone verranno rimossi in background"
     create:
       success:
         zero: Non sono stati creati tags
         one: È stato creato un tag
-        other: "Tags auf %{count} Personen werden im Hintergrund erstellt"
+        other: "I tag su %{count} persone verranno creato in background"
     deletable:
       title: Quali tags devono venir cancellati?
       no_entries: Da nessuna delle persone scelte possono venir cancellati tags.
@@ -2337,7 +2345,7 @@ it:
     household_destroyed: "Il bilancio (%{object_changes}) è stato annullato."
     person_merge: "Unite due persone in questa registrazione. Persona cancellata:"
     deleted_service_token: "Nel frattempo eliminato %{model_name}"
-    deleted_user: "inzwischen gelöschte Person %{id}"
+    deleted_user: "persona ormai cancellata %{model_name}"
 
   tags/merge:
     success: Le tag sono state fuse con successo.
@@ -2415,4 +2423,4 @@ it:
 
   period_invoice_template:
     role_count_item_fields:
-      choose_role_types: Rollentypen auswählen
+      choose_role_types: Selezionare i tipi di rullo

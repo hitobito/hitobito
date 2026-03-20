@@ -52,7 +52,7 @@ it:
       household:
         members: Componenti del nucleo familiare
       choice:
-        choice: Antwortmöglichkeit
+        choice: Possibile risposta
 
     errors:
       messages:
@@ -85,13 +85,13 @@ it:
         at_least_one_present: È necessario compilare almeno una %{model_name}
         type_not_allowed: non può essere salvato
         must_be_after_opening: deve essere dopo l'inizio dell'annuncio
-        must_have_same_type: müssen von demselben Typ sein
+        must_have_same_type: devono essere dello stesso tipo
         greater_than: deve essere più grande di %{count}
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
         readonly: non può venir cambiato
         cannot_be_later_than_today: non può essere più tardi di oggi
-        is_not_a_decimal_number: muss eine Dezimalzahl sein
+        is_not_a_decimal_number: deve essere un numero decimale
       models:
         cors_origin:
           attributes:
@@ -214,9 +214,9 @@ it:
         period_invoice_template:
           attributes:
             recipient_group_type:
-              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
+              readonly_due_to_existing_invoice_runs: non può più essere modificato, poiché esistono già cicli di fatturazione
             end_on:
-              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
+              must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
           attributes:
             end_on:
@@ -581,7 +581,7 @@ it:
         origin: host con accesso API
 
       person:
-        id: Personennummer
+        id: Numero personale
         salutation: Appellativo
         first_name: Nome
         last_name: Cognome
@@ -919,7 +919,7 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         disclosure: Impostazione
-        sensitive: Sensibel
+        sensitive: Delicato
         disclosures:
           required: Obbligatorio
           optional: Opzionale
@@ -960,6 +960,7 @@ it:
         uid: Client ID
         secret: Client secret
         redirect_uri: Redirect URIs
+        description: Beschreibung
         additional_audiences: Altri destinatari
         skip_consent_screen: Salta il consenso
 
@@ -1063,7 +1064,7 @@ it:
               many: Futuro
               other: Futuro
       contact_account:
-        custom_label: Freitext
+        custom_label: Testo libero
         predefined_labels:
           privat: Privato
           mobil: Cellulare
@@ -1360,7 +1361,7 @@ it:
 
       invoice_run:
         title: Titolo
-        recipient_source: Empfänger
+        recipient_source: Destinatario
         recipients_total: Destinatario complessivo
         recipients_paid: Destinatario pagato
         amount_total: Importo complessivo
@@ -1431,21 +1432,21 @@ it:
           bcn: Banque Cantonale Neuchâteloise
 
       period_invoice_template:
-        name: Bezeichnung
-        start_on: Rechnungsperiode Start
-        end_on: Rechnungsperiode Ende
-        recipient_group_type: Empfängergruppen
-        items: Rechnungsposten
+        name: Denominazione
+        start_on: Inizio del periodo contabile
+        end_on: Fine del periodo contabile
+        recipient_group_type: Gruppi di destinatari
+        items: Voci contabili
 
       period_invoice_template/item:
-        name: Name
-        unit_cost: Preis
-        cost_center: Kostenstelle
-        account: Konto
-        vat_rate: MwSt.
+        name: Nome
+        unit_cost: Prezzo
+        cost_center: Centro di costo
+        account: Conto
+        vat_rate: IVA
 
       period_invoice_template/role_count_item:
-        role_types: Rollentypen
+        role_types: Tipo di rullo
 
       service_token:
         name: Cognome

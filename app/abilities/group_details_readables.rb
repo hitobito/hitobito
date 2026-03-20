@@ -16,19 +16,8 @@ class GroupDetailsReadables < GroupReadables
 
   def accessible_conditions
     OrCondition.new.tap do |condition|
-      in_same_group_condition(condition)
-      in_above_group_condition(condition)
-      in_same_layer_condition(condition)
+      append_group_conditions(condition)
       in_above_layer_condition(condition)
-    end
-  end
-
-  def in_above_layer_condition(condition)
-    layer_groups_above.each do |group|
-      condition.or(
-        "#{Group.quoted_table_name}.lft >= ? AND #{Group.quoted_table_name}.rgt <= ? ",
-        group.lft, group.rgt
-      )
     end
   end
 end

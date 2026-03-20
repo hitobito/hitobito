@@ -139,16 +139,16 @@ describe Events::CoursesController do
 
   context "booking info" do
     before do
-      course1 = Fabricate(:course, display_booking_info: false, groups: [groups(:top_layer)])
+      course1 = Fabricate(:course, display_booking_info: false, groups: [groups(:bottom_layer_one)])
       Fabricate(:event_date, event: course1, start_at: Date.new(2012, 1, 13))
-      course2 = Fabricate(:course, display_booking_info: true, groups: [groups(:top_layer)])
+      course2 = Fabricate(:course, display_booking_info: true, groups: [groups(:bottom_layer_one)])
       Fabricate(:event_date, event: course2, start_at: Date.new(2012, 1, 23))
     end
 
     it "is visible for manager" do
       sign_in(people(:top_leader))
       get :index, params: {filters: {date_range: {since: "01.01.2012", until: "01.02.2012"},
-                                     groups: {ids: [groups(:top_layer).id]}}}
+                                     groups: {ids: [groups(:bottom_layer_one).id]}}}
       expect(response.body).to have_selector("tbody tr", count: 2)
       expect(response.body).to have_selector("tbody tr:nth-child(1) td:nth-child(3)",
         text: "0 Anmeldungen")
@@ -159,7 +159,7 @@ describe Events::CoursesController do
     it "is only visible for member where allowed by course" do
       sign_in(people(:bottom_member))
       get :index, params: {filters: {date_range: {since: "01.01.2012", until: "01.02.2012"},
-                                     groups: {ids: [groups(:top_layer).id]}}}
+                                     groups: {ids: [groups(:bottom_layer_one).id]}}}
       expect(response.body).to have_selector("tbody tr", count: 2)
       expect(response.body).not_to have_selector("tbody tr:nth-child(1) td:nth-child(3)",
         text: "0 Anmeldungen")

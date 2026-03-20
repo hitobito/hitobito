@@ -65,14 +65,14 @@ class EventResource < ApplicationResource
 
   filter :kind_category_id, :integer, only: [:eq] do
     eq do |scope, kind_category_ids|
-      # rubocop:todo Layout/LineLength
-      scope.select("events.*").joins(kind: :kind_category).where(kind: {kind_category_id: kind_category_ids})
-      # rubocop:enable Layout/LineLength
+      scope.select("events.*")
+        .joins(kind: :kind_category)
+        .where(kind: {kind_category_id: kind_category_ids})
     end
   end
 
   def base_scope
-    Event.accessible_by(index_ability).includes(:groups, :translations).list
+    Event.accessible_by(index_ability).list.includes(:groups)
   end
 
   def index_ability

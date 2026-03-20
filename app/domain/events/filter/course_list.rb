@@ -28,8 +28,17 @@ class Events::Filter::CourseList < Events::Filter::List
     if params[:list_all_courses] == true
       Event::Course.all
     else
+      # Users can only show events in their own layer. Hence `in_hierarchy` will
+      # list events that cannot be showed or applied to. This is weird legacy behaviour.
+      # At some time, either events in the hierarchy should become showable or they
+      # should not be listed here. Then, using the original `accessible_scope` method with
+      # `Event.accessible_by(EventReadables)` would be sufficient.
       Event::Course.in_hierarchy(user).or(Event::Course.where(globally_visible: true))
     end
+  end
+
+  def accessible_scope
+    Event::Course.all
   end
 
   def additional_course_includes

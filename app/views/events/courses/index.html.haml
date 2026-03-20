@@ -6,7 +6,7 @@
 - title course_list_title.presence || t('event.lists.courses.title')
 - manager = can?(:list_all, Event::Course)
 
-%p= t('event.lists.courses.explanation') unless can?(:list_all, Event::Course)
+%p= t('event.lists.courses.explanation') unless manager
 
 = render "filter"
 

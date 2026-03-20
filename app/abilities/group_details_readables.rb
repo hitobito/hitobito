@@ -16,9 +16,7 @@ class GroupDetailsReadables < GroupReadables
 
   def accessible_conditions
     OrCondition.new.tap do |condition|
-      in_same_group_condition(condition)
-      in_above_group_condition(condition)
-      in_same_layer_condition(condition)
+      append_group_conditions(condition)
       in_above_layer_condition(condition)
     end
   end

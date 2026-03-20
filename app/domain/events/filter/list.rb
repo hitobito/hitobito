@@ -10,6 +10,12 @@ class Events::Filter::List < Filter::List
   self.filter_chain_class = Events::Filter::Chain
 
   def entries
-    super.preload(:groups, :events_groups, :translations, :dates).select(:id)
+    super.preload(:groups, :events_groups, :translations, :dates)
+  end
+
+  private
+
+  def accessible_scope
+    Event.accessible_by(EventReadables.new(user))
   end
 end

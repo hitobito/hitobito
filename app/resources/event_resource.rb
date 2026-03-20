@@ -68,7 +68,8 @@ class EventResource < ApplicationResource
 
   filter :kind_category_id, :integer, only: [:eq] do
     eq do |scope, kind_category_ids|
-      scope.select("events.*").joins(kind: :kind_category)
+      scope.select("events.*")
+        .joins(kind: :kind_category)
         .where(kind: {kind_category_id: kind_category_ids})
     end
   end

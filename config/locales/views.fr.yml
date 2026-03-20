@@ -87,7 +87,7 @@ fr:
       locale_indicator: "Langue de ce champ de saisie"
       input_translation_button: "Afficher les champs de saisie pour les autres langues disponibles"
 
-    jump_to_content: "Zum Hauptinhalt springen"
+    jump_to_content: "Aller au contenu principal"
 
   list:
     index:
@@ -149,7 +149,7 @@ fr:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
 
     phone_number_fields:
-      placeholder_type: Bezeichnung (Privat, Arbeit...)
+      placeholder_type: Intitulé (Vie privée, Travail...)
 
     social_account_fields:
       placeholder_value: Site internet, identifiant Skype, lien vers un profil...
@@ -210,10 +210,10 @@ fr:
     merge: "Fusionner"
     archive: "Archiver"
 
-  dropdown/applications_export:
-    button: "Exporter les adresses e-mail"
-    emails_comma_separated: "Separati da virgole (Apple Mail, Thunderbird, ...)"
-    emails_semicolon_separated: "Separati da punto e virgola (Outlook)"
+  dropdown/people_email_export:
+    button: "Export E-Mail Adressen"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
 
   dropdown/people_export:
     button: "Exporter"
@@ -272,7 +272,7 @@ fr:
     xlsx: "XLSX"
 
   dropdown/period_invoice_templates/add_item:
-    add_item: Rechnungsposten hinzufügen
+    add_item: Ajouter un poste de facture
 
   devise:
     failure:
@@ -380,7 +380,7 @@ fr:
       explanation: "L'adresse entrée est erronée ou la page a été effacée."
     "500":
       title: "Nous présentons nos excuses, une erreur s'est produite (500)"
-      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
+      explanation: "Nous avons reçu un signalement et allons examiner le problème dès que possible."
     "503":
       title: "Nous présentons nos excuses, cette page n'est pas disponible pour le moment (503)"
       explanation: "Nous travaillons sur cette page, c'est pourquoi elle n'est pas disponible. Ceci ne devrait pas durer très longtemps."
@@ -416,11 +416,11 @@ fr:
       apply_until: "jusqu'au %{date}"
     application_market:
       application:
-        modal_title: Voulez-vous confirmer cette inscription?
+        modal_title: Wollen Sie diese Anmeldung bestätigen?
         confirm_and_send_mail: Confirmer et envoyer un e-mail
         confirm_and_send_no_mail: Confirmer sans e-mail
       participant:
-        modal_title: Souhaitez-vous supprimer cette inscription?
+        modal_title: Wollen Sie diese Zuteilung entfernen?
         confirm_and_send_mail: Confirmer et envoyer un e-mail
         confirm_and_send_no_mail: Confirmer sans e-mail
       already_assigned: "Cette personne est déjà attribuée à un autre endroit."
@@ -556,7 +556,7 @@ fr:
         flash:
           privacy_policy_not_accepted: Pour terminer l'inscription, il faut accepter la déclaration de protection des données.
         email_check:
-          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
+          enter_email: Veuillez saisir l'adresse e-mail avec laquelle vous souhaitez vous inscrire.
       index:
         sign_in: Inscription
         login: Login
@@ -597,8 +597,8 @@ fr:
         submit: Ajouter
 
     questions:
-      add_choice: "Antwortmöglichkeit hinzufügen"
-      sensitive_caption: Antworten werden %{cutoff} Monate nach Ende des Anlasses gelöscht.
+      add_choice: "Ajouter une réponse possible"
+      sensitive_caption: Les réponses seront supprimées %{cutoff} mois après la fin de l'événement.
 
   assignments:
     attachment: "afficher les pièces jointes"
@@ -689,7 +689,7 @@ fr:
         phone_number: Afficher le numéro de téléphone
         email: Afficher l'e-mail
         social_account: Afficher les médias sociaux
-        picture: Profilfoto anzeigen
+        picture: Afficher la photo de profil
       kind_overrides_link_title: "Les champs suivants sont repris: Description"
     global:
       link:
@@ -764,8 +764,8 @@ fr:
     registered: "Tes données personnelles ont été enregistrées. Prière d'apporter les indications complémentaires suivantes en vue de l'inscription."
     application_window_closed: "La fenêtre d'inscription pour cet événement est close."
     no_places_available: "Le nombre maximal de participants pour cet événement est déjà atteint."
-    email_sent_manager: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst."
-    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
+    email_sent_manager: "Nous t'avons envoyé un e-mail contenant un lien qui te permet de t'inscrire directement, toi ou ton enfant, à cet événement."
+    registered_manager: 'Vos données personnelles ont été enregistrées. Vous pouvez désormais inscrire vos enfants en cliquant sur le bouton « S''inscrire ».'
 
   event/roles:
     full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
@@ -925,7 +925,7 @@ fr:
       distribution: Répartition
     self_registration:
       alert:
-        not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
+        not_active: L'auto-inscription n'est pas possible dans ce groupe.
       show:
         meta_description: Page d'auto-inscription pour Hitobito
       form:
@@ -1133,14 +1133,14 @@ fr:
       show:
         title: Supprimer une série de facture
         non_draft_info: 'La série de facture contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
-        confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+        confirm_delete: Voulez-vous vraiment supprimer ce cycle de facturation ?
     form:
       invoice_articles:
         variable_donation:
           name: Demande de dons variable
           number: Dons
           description: Demande de dons basée sur les sommes de dons existant déjà
-      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+      recipient_count_disclaimer: "Remarque : si les critères de filtrage s'appliquent à un nombre plus ou moins important de destinataires à l'avenir, la liste finale des factures générées est susceptible de changer."
       recipient_info:
         one: "La facture est établie pour und personne."
         many: "La facture est établie pour %{count} personnes."
@@ -1213,33 +1213,33 @@ fr:
     invoice_runs:
       actions_index:
         add:
-          zero: "Rechnungslauf fahren"
-          other: "Weiteren Rechnungslauf fahren"
+          zero: "Lancer le cycle de facturation"
+          other: "Lancer un nouveau cycle de facturation"
       destroys:
         show:
-          title: Rechnungslauf löschen
-          non_draft_info: 'In diesem Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
-          confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+          title: Supprimer le cycle de facturation
+          non_draft_info: 'Ce cycle de facturation contient au moins une facture qui n''a ni le statut « Brouillon » ni le statut « Annulée ». Par conséquent, le cycle de facturation ne peut pas être supprimé.'
+          confirm_delete: Voulez-vous vraiment supprimer ce cycle de facturation ?
       form:
-        recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+        recipient_count_disclaimer: "Remarque : si les critères de filtrage s'appliquent à un nombre plus ou moins important de destinataires à l'avenir, la liste finale des factures générées est susceptible de changer."
         recipient_info:
           one: "%{count} Empfänger gefunden."
           many: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_group_type_help: Tous les groupes de ce type situés dans ou sous %{group} recevront une facture. Sont exclus les groupes qui avaient déjà été supprimés ou archivés à la date de début de la période de facturation.
     new:
-      title: Sammelrechnung definieren
+      title: Définir une facture collective
     actions_index:
       link:
-        add: Neue Sammelrechnung definieren
+        add: Définir une nouvelle facture collective
     tabs:
-      info: Info
-      invoice_runs: Rechnungsläufe
+      info: Informations
+      invoice_runs: Série de factures
 
   label_formats:
     global_labels: "Formats globaux d'étiquettes"
-    global_labels_activated: "Globale Etikettenformate anzeigen"
+    global_labels_activated: "Afficher les formats globaux d'étiquettes"
     own_labels: Mes formats d'étiquettes
     see_global_labels: "Afficher les formats globaux d'étiquettes"
     form:
@@ -1514,7 +1514,7 @@ fr:
 
     invalid_file: La donnée téléchargée n'est pas valable.
     parsing_error: La donnée téléchargée ne peut pas être retravaillée (%{error}).
-    job_enqueued: "Zahlungen werden im Hintergrund erfasst."
+    job_enqueued: "Les paiements sont enregistrés en arrière-plan."
     payments:
       valid_with_invoice:
         one: Un paiement valable a été reconnu avec la facture correspondante.
@@ -1723,7 +1723,7 @@ fr:
           email_primary_invalid: Adresse e-mail principale non valide
           email_additional_invalid: Adresse e-mail supplémentaire non valide
           address_invalid: L'adresse ne se trouve pas dans la liste.
-          post_address_check_invalid: Post-Adressabgleich fehlerhaft
+          post_address_check_invalid: Erreur lors de la vérification de l'adresse postale
 
     security_tools:
       index:
@@ -1748,7 +1748,7 @@ fr:
         person_not_blocked: Le login n'est maintenant pas bloqué
 
       groups_and_roles_that_see_me:
-        deleted_groups: Groupes supprimés
+        deleted_groups: Gelöschte Gruppen
 
       password_override:
         flashes:
@@ -1849,9 +1849,9 @@ fr:
       events: Mes prochains %{event_type_label}
 
     contact_data:
-      address_link_aria_label: Adresse in nominatim.openstreetmap.org öffnen
+      address_link_aria_label: Ouvrir l'adresse sur nominatim.openstreetmap.org
       lives_in_household_with: Habite dans le foyer avec
-      profile_picture_alt: Profilbild
+      profile_picture_alt: Photo de profil
 
     email_field:
       used_as_login: Utilisé en tant qu'identifiant.
@@ -2188,12 +2188,12 @@ fr:
       success:
         zero: Aucun tag n'a été enlevé
         one: Un tag a été enlevé
-        other: "Tags auf %{count} Personen werden im Hintergrund entfernt"
+        other: "tags sur %{count} personnes seront supprimées en arrière-plan"
     create:
       success:
         zero: Aucun tag n'a été créé
         one: Un tag a été créé
-        other: "Tags auf %{count} Personen werden im Hintergrund erstellt"
+        other: "tags sur %{count} personnes seront supprimées en arrière-plan"
     deletable:
       title: Quels tags doivent-être supprimés?
       no_entries: Aucun tag ne peut être supprimé parmi les personnes sélectionnées
@@ -2305,8 +2305,8 @@ fr:
 
   taggable:
     add_tag: Rajouter un tag
-    cannot_create: Bitte wähle einen bestehenden Tag aus
-    no_entry: (keine)
+    cannot_create: Veuillez sélectionner une tag existante
+    no_entry: (aucune)
 
   version:
     attribute_change:
@@ -2324,14 +2324,14 @@ fr:
         update: "La demande d'accès pour <i>%{label}</i> a été actualisée: %{changeset}"
         destroy: "Il y a eu une réponse pour la demande d'accès de <i>%{label}</i>."
 
-      deleted_person: "Gelöschte Person"
+      deleted_person: "Personne supprimée"
       people_manager:
         create:
-          manager: "<i>%{label}</i> wurde als Verwalter*in hinzugefügt."
-          managed: "<i>%{label}</i> wurde als Kind hinzugefügt."
+          manager: "<i>%{label}</i> a été ajouté(e) en tant qu'administrateur/administratrice."
+          managed: "<i>%{label}</i> a été ajouté lorsqu'il était enfant."
         destroy:
-          manager: "<i>%{label}</i> wurde als Verwalter*in entfernt."
-          managed: "<i>%{label}</i> wurde als Kind entfernt."
+          manager: "<i>%{label}</i> a été démis·e de ses fonctions d'administrateur·trice."
+          managed: "<i>%{label}</i> a été supprimé lorsqu'il était enfant."
 
     impersonate: "Le compte a été repris par %{user}."
     impersonation_done: "Le compte n'est plus utilisé par %{user}."
@@ -2346,7 +2346,7 @@ fr:
     household_destroyed: "Le foyer (%{object_changes}) a été résolu."
     person_merge: "Deux personnes ont été fusionnées sous cette entrée. Personne supprimée:"
     deleted_service_token: "Supprimé entre-temps %{model_name}"
-    deleted_user: "inzwischen gelöschte Person %{id}"
+    deleted_user: "Personne %{id} désormais supprimée"
 
   tags/merge:
     success: Les tags ont été fusionnés avec succès.
@@ -2414,14 +2414,14 @@ fr:
 
   people_managers:
     section:
-      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
+      manageds_help: Tu ne peux ajouter comme enfants que les personnes pour lesquelles tu disposes d'un accès en écriture.
     common_heading: Enfants / Administrateurs
     managers_heading: Administrateurs
     manageds_heading: Enfants
     create_managed_person_button: Saisir un enfant
-    assign_managed_person_button: Kind zuweisen
-    assign_manager_person_button: Verwalter*in zuweisen
+    assign_managed_person_button: Attribuer un enfant
+    assign_manager_person_button: Désigner un administrateur
 
   period_invoice_template:
     role_count_item_fields:
-      choose_role_types: Rollentypen auswählen
+      choose_role_types: Sélectionner les types de rouleaux

@@ -50,7 +50,7 @@ en:
       household:
         members: Household members
       choice:
-        choice: Antwortmöglichkeit
+        choice: possible answer
 
     errors:
       messages:
@@ -59,7 +59,7 @@ en:
         event/participation_contact_datas/managed:
           attributes:
             base:
-              duplicates_present: Diese Person existiert bereits. Bitte kontaktiere die Adressverwaltung um sie als dein Kind zu registrieren.
+              duplicates_present: This person already exists. Please contact the address register to register them as your child.
         roles/termination:
           attributes:
             terminate_on:
@@ -83,13 +83,13 @@ en:
         at_least_one_present: At least one %{model_name} must be replenished
         type_not_allowed: can't be created here
         must_be_after_opening: must be after the start of the application period
-        must_have_same_type: müssen von demselben Typ sein
+        must_have_same_type: must be of the same type
         greater_than: must be bigger than %{count}
         greater_than_or_equal_to: 'must be bigger or equal to '
         must_exist: must exist
         readonly: can't be changed
         cannot_be_later_than_today: cannot be later than today
-        is_not_a_decimal_number: muss eine Dezimalzahl sein
+        is_not_a_decimal_number: must be a decimal number
       models:
         cors_origin:
           attributes:
@@ -149,9 +149,9 @@ en:
             base:
               max_one_additional_invoice_address: Only one address can be selected as the billing address.
               additional_address_labels_must_be_unique: The names of the other addresses must be unique.
-              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
-              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
-              managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
+              cannot_have_managers_and_manageds: '%{name} cannot have both administrator and children.'
+              manager_already_managed: The administrator could not be added because they are already an administrator.
+              managed_already_manager: The child could not be added as they are already an administrator.
             email:
               taken: >
                   is already taken. This address must be unique for every person,
@@ -171,8 +171,8 @@ en:
 
           attributes:
             manager_id:
-              taken: ist bereits gesetzt.
-          manager_and_managed_the_same: kann sich nicht selber verwalten.
+              taken: is already set.
+          manager_and_managed_the_same: cannot manage itself.
         qualification:
           attributes:
             qualification_kind_id:
@@ -193,8 +193,8 @@ en:
 
         invoice:
           recipient_address_or_email_required: 'Recipient address or email must be provided'
-          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
-          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
+          recipient_name_or_company_name_required: 'You must enter a company name or your name'
+          recipient_street_or_postbox_required: 'You must enter either a street address or a PO box'
           attributes:
             invoice_config:
               invalid: 'is not valid; adjust the settings before creating an invoice'
@@ -211,9 +211,9 @@ en:
         period_invoice_template:
           attributes:
             recipient_group_type:
-              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
+              readonly_due_to_existing_invoice_runs: cannot be changed anymore, as invoice runs already exist
             end_on:
-              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
+              must_be_later_than_start_on: cannot be before the start of the accounting period
         role:
           attributes:
             end_on:
@@ -511,7 +511,7 @@ en:
         origin: Host with API access
 
       person:
-        id: Personennummer
+        id: personal number
         salutation: Salutation
         first_name: First name
         last_name: Last name
@@ -561,8 +561,8 @@ en:
           de: German
           en: English
           fr: French
-          it: Italienisch
-          rm: Rätoromanisch
+          it: Italian
+          rm: Romansh
 
         primary_group_id: Main group
         layer_group_label: Main layer
@@ -849,7 +849,7 @@ en:
         choices: Possible answers
         multiple_choices: Multiple choice
         disclosure: Antwortangabe
-        sensitive: Sensibel
+        sensitive: Sensitive
         disclosures:
           required: Required
           optional: Optional
@@ -890,7 +890,7 @@ en:
         uid: Client ID
         secret: Client secret
         redirect_uri: Redirect URIs
-        description: Description
+        description: Beschreibung
         additional_audiences: Further audiences
         skip_consent_screen: Skip consent
 
@@ -972,7 +972,7 @@ en:
               qualify: Creating qualifications for people at this level and all lower levels.
               approve_applications: Confirmation of course registrations for people at this level.
               finance: Create and manage invoices
-              layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
+              layer_and_below_finance: Create and manage invoices at this level and all levels below it.
               impersonation: Use Hitobito as another person
               see_invisible_from_above: Also sees people who are otherwise not allowed to be seen by higher levels.
               manual_deletion: Deleting persons without roles
@@ -990,7 +990,7 @@ en:
               one: In the future
               other: Future
       contact_account:
-        custom_label: Freitext
+        custom_label: Free text
         predefined_labels:
           privat: Private
           mobil: Mobile
@@ -1195,12 +1195,12 @@ en:
         recipient_zip_code: Postal Code
         recipient_town: Place
         recipient_address: Recipient address
-        payee_name: Zahlungsempfänger Name
-        payee_street: Zahlungsempfänger Strasse
-        payee_housenumber: Zahlungsempfänger Hausnummer
-        payee_zip_code: Zahlungsempfänger PLZ
-        payee_town: Zahlungsempfänger Ort
-        payee_country: Zahlungsempfänger Land
+        payee_name: Payee's name
+        payee_street: Payee's address
+        payee_housenumber: Payee's house number
+        payee_zip_code: Payee's postcode
+        payee_town: Payee Town
+        payee_country: Payee country
         due_at: Due at
         issued_at: Issued at
         sent_at: Sent at
@@ -1285,10 +1285,10 @@ en:
 
       invoice_run:
         title: Title
-        recipient_source: Empfänger
-        recipients_total: Empfänger Insgesamt
-        recipients_paid: Empfänger Bezahlt
-        amount_total: Betrag insgesamt
+        recipient_source: Recipient
+        recipients_total: Recipients total
+        recipients_paid: Recipient paid
+        amount_total: Total amount
         amount_paid: Amount paid
 
       # used for nested attributes
@@ -1353,24 +1353,24 @@ en:
           zkb: Zürcher Kantonalbank
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
-          bcn: Banque Cantonale Neuchâteloise
+          bcn: Neuenburger Kantonalbank
 
       period_invoice_template:
-        name: Bezeichnung
-        start_on: Rechnungsperiode Start
-        end_on: Rechnungsperiode Ende
-        recipient_group_type: Empfängergruppen
-        items: Rechnungsposten
+        name: Description
+        start_on: Start of accounting period
+        end_on: End of accounting period
+        recipient_group_type: Recipient groups
+        items: Invoice item
 
       period_invoice_template/item:
         name: Name
-        unit_cost: Preis
-        cost_center: Kostenstelle
-        account: Konto
-        vat_rate: MwSt.
+        unit_cost: Price
+        cost_center: Cost center
+        account: Account
+        vat_rate: VAT
 
       period_invoice_template/role_count_item:
-        role_types: Rollentypen
+        role_types: role type
 
       service_token:
         name: Name
@@ -1384,7 +1384,7 @@ en:
         layer_full: Lese- und Schreibrechte auf dieser Ebene
         layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
         people: People
-        register_people: Neue Personen registrieren (braucht Schreibrechte)
+        register_people: Register new persons (requires write authorization)
         groups: Groups
         events: Events
         invoices: Invoices
@@ -1403,7 +1403,7 @@ en:
   api:
     errors:
       resources:
-        id_must_not_be_set: ID darf nicht gesetzt sein
+        id_must_not_be_set: ID must not be set
         role_resource:
           group_id:
             unwritable_attribute: can't be changed
@@ -1413,9 +1413,9 @@ en:
             unwritable_attribute: can't be changed
         self_registration_resource:
           adult_consent:
-            must_be_accepted: muss akzeptiert werden
+            must_be_accepted: must be accepted
           privacy_policy_accepted:
-            must_be_accepted: muss akzeptiert werden
+            must_be_accepted: must be accepted
 
   doorkeeper:
     scopes:

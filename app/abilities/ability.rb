@@ -26,6 +26,7 @@ class Ability
     MessageAbility,
     NoteAbility,
     OauthAbility,
+    PassAbility,
     PeopleFilterAbility,
     PeopleManagerAbility,
     PersonAbility,

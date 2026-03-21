@@ -46,13 +46,23 @@ class PassDecorator < SimpleDelegator
     end
   end
 
-  # Returns an absolute URL for the logo.
+  # Returns an absolute URL for the logo (for use in wallet providers and PDF).
   # Priority: group logo blob URL > Settings.application.logo webpack path.
   def logo_url
     if logo_group
       Rails.application.routes.url_helpers.rails_blob_url(logo_group.logo, only_path: false)
     else
       settings_logo_url
+    end
+  end
+
+  # Returns a root-relative path suitable for use in HTML (image_tag).
+  # Uses the webpack asset path directly, avoiding the need for a full URL.
+  def logo_path
+    if logo_group
+      Rails.application.routes.url_helpers.rails_blob_path(logo_group.logo)
+    else
+      settings_logo_pack_path
     end
   end
 

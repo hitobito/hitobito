@@ -3,5 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito
 
--# Stub view – replaced with full content in #3993
-- content_for(:title, @pass.pass_definition.name)
+- title @pass.pass_definition.name
+
+- content_for(:toolbar) do
+  = action_button t('person.passes.index.download_pdf'), group_person_pass_path(@group, @person, @pass_definition, format: :pdf), "print"
+  - if google_wallet_configured?
+    = action_button t('person.passes.index.add_to_google_wallet'), google_wallet_group_person_pass_path(@group, @person, @pass_definition), "add"
+  - if apple_wallet_configured?
+    = action_button t('person.passes.index.add_to_apple_wallet'), group_person_pass_path(@group, @person, @pass_definition, format: :pkpass), "add"
+
+= render pass_template_partial(@pass.pass_definition.template.pass_view_partial, 'show')

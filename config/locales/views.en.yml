@@ -1761,6 +1761,15 @@ en:
           success: Login has been successfully unlocked.
           error: You cannot unlock your own login.
 
+    passes:
+      index:
+        title: Passes
+        show_pass: Show
+        add_to_google_wallet: Add to Google Wallet
+        add_to_apple_wallet: Add to Apple Wallet
+        download_pdf: Download PDF
+        no_passes: No passes available.
+
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
 
@@ -1793,7 +1802,11 @@ en:
       requests:
         one: "%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access."
         other: "%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access."
+
   people:
+    passes_aside:
+      title: Passes
+
     addresses_sync:
       create:
         scheduled: Der Adressenabgleich wurde erfolgreich gestartet.

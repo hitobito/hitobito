@@ -90,6 +90,7 @@ function setup_dbs() {
 
 function setup_development_db() {
   echo "Migrating and seeding development database"
+  bundle exec rails db:schema:load
   bundle exec rails db:migrate
   bundle exec rails wagon:migrate
   bundle exec rails db:seed
@@ -109,7 +110,7 @@ function setup_test_db() {
 function reload_test_db() {
     echo "Preparing test database"
     bundle exec rails db:structure:dump_sql
-    echo "DROP SCHEMA public" | rails db -p -e test
+    echo "DROP SCHEMA public CASCADE" | rails db -p -e test
     RAILS_ENV=test rails db:structure:load_sql
     rm -f db/structure.sql
 }
@@ -186,21 +187,18 @@ reset-test-database)
   setup_test_db
   ;;
 
+gemfile)
+  bundle check || bundle
+  echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
+    cp -v Gemfile.lock "../hitobito_%/"
+  ;;
+
 configs)
   shift # loose the "configs" argument
   configs_to_copy=${@:-.rspec}
 
   echo "$WAGONS" | xargs -L1 -d' ' echo | grep -v '^$' | xargs -I% \
     cp -v $configs_to_copy "../hitobito_%/"
-  ;;
-
-gemfile)
-  bundle check || bundle
-  $0 configs Gemfile.lock
-
-  if [ -n "${BUNDLE_GEMFILE}" ]; then
-    $0 configs "${BUNDLE_GEMFILE}.lock"
-  fi
   ;;
 
 binstubs)
@@ -225,30 +223,22 @@ test-prepare)
   ;;
 
 grep)
-  if [[ $# -lt 2 ]]; then
-    echo "You must at least provide a String to grep"
+  if [[ $# -ne 2 ]]; then
+    echo "You must provide a String to grep"
     exit 1
   fi
   set +e
 
-  # Build grep command as array - allows swapping via WAGON_GREP_CMD env var
-  if [[ -n "${WAGON_GREP_CMD:-}" ]]; then
-    # Split env var into array elements, using " " as internal field separator (IFS)
-    IFS=' ' read -ra GREP_CMD <<< "$WAGON_GREP_CMD"
-  else
-    GREP_CMD=("git" "--no-pager" "grep" "--color=always")
-  fi
-
   # grep in core
   echo ">> grepping in hitobito <<" | highlight_phrases
-  "${GREP_CMD[@]}" "${@:2}"
+  git --no-pager grep "${@:2}"
 
   # grep in installed wagons
   for wagon in $(existing_wagon_names); do
     echo ">> grepping in ../hitobito_$wagon/ <<" | highlight_phrases
     (
       cd "../hitobito_$wagon/"
-      "${GREP_CMD[@]}" "${@:2}"
+      git --no-pager grep --color=always "${@:2}"
     )
   done
   ;;
@@ -281,6 +271,7 @@ spec)
 
   # setup for specs
   direnv exec ../hitobito/ $0 gemfile
+  direnv exec ../hitobito/ $0 reset-test-database
 
   # prepare DB
 #  export RAILS_ENV=test

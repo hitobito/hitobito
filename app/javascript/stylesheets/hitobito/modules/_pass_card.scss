@@ -1,0 +1,213 @@
+// Copyright (c) 2026, Puzzle ITC. This file is part of
+// hitobito and licensed under the Affero General Public License version 3
+// or later. See the COPYING file at the top-level directory or at
+// https://github.com/hitobito/hitobito.
+
+
+// CSS custom properties (--pass-bg, --pass-text, --pass-text-muted, --pass-text-label)
+// are set dynamically via the pass_card_style helper based on background luminance
+
+.pass-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 0;
+}
+
+.pass-card-sides {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pass-card {
+  // Credit card aspect ratio ~85.6mm × 53.98mm ≈ 1.586:1
+  width: 420px;
+  min-height: 265px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  background-color: var(--pass-bg, #fff);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &-front {
+    // Front side specific styles
+  }
+
+  &-back {
+    // Back side: centered content
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-header {
+    padding: 1rem 1.25rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+    color: var(--pass-text, #333);
+  }
+
+  &-logo {
+    max-height: 36px;
+    max-width: 100px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  &-body {
+    padding: 0 1.25rem 0.5rem;
+    flex: 1;
+  }
+
+  &-person-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  &-photo {
+    flex-shrink: 0;
+    width: 54px;
+    height: 72px;
+    border-radius: 4px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &-person-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &-member-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--pass-text, #333);
+  }
+
+  &-field {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--pass-text, #555);
+    padding: 0.15rem 0;
+
+    &-label {
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 0.7rem;
+      letter-spacing: 0.03em;
+      color: var(--pass-text-label, #888);
+    }
+  }
+
+  &-description {
+    font-size: 0.8rem;
+    color: var(--pass-text-muted, #666);
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  &-footer {
+    padding: 0.5rem 1.25rem 0.75rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-top: auto;
+  }
+
+  &-validity {
+    font-size: 0.75rem;
+    color: var(--pass-text-muted, #666);
+
+    span {
+      display: block;
+    }
+  }
+
+  // --- Back side ---
+
+  &-back-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+  }
+
+  &-qr {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--pass-text-label, #999);
+    margin-bottom: 0.75rem;
+  }
+
+  &-back-description {
+    font-size: 0.8rem;
+    color: var(--pass-text-muted, #666);
+    margin: 0 0 0.5rem;
+    max-width: 340px;
+  }
+
+  &-back-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--pass-text-label, #888);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+}
+
+.pass-card-actions {
+  margin-top: 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+// Responsive: stack on small screens
+@media (max-width: 900px) {
+  .pass-card-sides {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pass-card {
+    width: 100%;
+    max-width: 420px;
+  }
+}

@@ -1803,6 +1803,15 @@ fr:
           success: Le login a été débloqué avec succès.
           error: Tu ne peux pas débloquer ton propre login.
 
+    passes:
+      index:
+        title: Pass
+        show_pass: Afficher
+        add_to_google_wallet: Ajouter à Google Wallet
+        add_to_apple_wallet: Ajouter à Apple Wallet
+        download_pdf: Télécharger PDF
+        no_passes: Aucun pass disponible.
+
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
 
@@ -1845,6 +1854,9 @@ fr:
         many: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
         other: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
   people:
+    passes_aside:
+      title: Pass
+
     addresses_sync:
       create:
         scheduled: La comparaison d'adresses a été lancée avec succès.

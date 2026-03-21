@@ -36,6 +36,7 @@
     %aside.col-lg-5.offset-lg-1
       = render_extensions :data_quality
       = render 'tags'
+      = render 'passes_aside'
       = render 'roles'
       = render 'add_requests'
       = render 'event_aside', title: Event::Application.model_name.human(count: 2), collection: entry.pending_applications

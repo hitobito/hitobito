@@ -1797,6 +1797,18 @@ fr:
         many: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
         other: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
   people:
+    passes:
+      index:
+        title: Pass
+        show_pass: Afficher
+        add_to_google_wallet: Ajouter à Google Wallet
+        add_to_apple_wallet: Ajouter à Apple Wallet
+        download_pdf: Télécharger PDF
+        no_passes: Aucun pass disponible.
+
+    passes_aside:
+      title: Pass
+
     addresses_sync:
       create:
         scheduled: La comparaison d'adresses a été lancée avec succès.

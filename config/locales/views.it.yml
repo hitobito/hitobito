@@ -1797,6 +1797,18 @@ it:
         many: "%{count} %{role} hanno ricevuto una richiesta d'accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta."
         other: "%{count} %{role} hanno ricevuto una richiesta d'accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta."
   people:
+    passes:
+      index:
+        title: Pass
+        show_pass: Mostrare
+        add_to_google_wallet: Aggiungi a Google Wallet
+        add_to_apple_wallet: Aggiungi a Apple Wallet
+        download_pdf: Scarica PDF
+        no_passes: Nessun pass disponibile.
+
+    passes_aside:
+      title: Pass
+
     addresses_sync:
       create:
         scheduled: Der Adressenabgleich wurde erfolgreich gestartet.

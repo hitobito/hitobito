@@ -260,6 +260,43 @@ namespace :dev do
     end
   end
 
+  namespace :passes do
+    desc "Seed a PassDefinition on the root group with a grant covering all available role types"
+    task seed_definition: :environment do
+      abort("This is for development purposes only.") unless Rails.env.development?
+
+      root = Group.roots.first || abort("No root group found. Run db:seed first.")
+      existing = PassDefinition.find_by(owner: root, template_key: "default")
+      if existing
+        abort("A PassDefinition with template_key 'default' already exists for the root group.")
+      end
+
+      Rails.application.eager_load!
+
+      all_role_types = Role.all_types
+        .map(&:sti_name)
+        .sort
+
+      puts "Found #{all_role_types.size} role types"
+
+      definition = PassDefinition.create!(
+        owner: root,
+        template_key: "default",
+        name: "#{root.name} Mitgliedschaft",
+        background_color: "#0066cc"
+      )
+
+      puts "Created PassDefinition ##{definition.id}: #{definition.name}"
+
+      grant = PassGrant.find_or_initialize_by(pass_definition: definition, grantor: root)
+      grant.role_types = all_role_types
+      grant.save!
+
+      puts "PassGrant ##{grant.id} saved for root group with #{all_role_types.size} role types:"
+      all_role_types.each { |t| puts "  - #{t}" }
+    end
+  end
+
   namespace :help_texts do
     desc "Create all helptexts"
     task create: [:environment] do

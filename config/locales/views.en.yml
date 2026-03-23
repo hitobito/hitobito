@@ -2360,3 +2360,15 @@ en:
   period_invoice_template:
     role_count_item_fields:
       choose_role_types: Rollentypen auswählen
+
+  wallets:
+    google:
+      save_failed: The pass could not be added to Google Wallet.
+    apple:
+      generation_failed: The pass could not be generated for Apple Wallet.
+    pass:
+      member_name: Name
+      member_number: Member number
+      valid_from: Valid from
+      valid_until: Valid until
+      description: Description

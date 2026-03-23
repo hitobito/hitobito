@@ -72,7 +72,7 @@ describe EventsController, js: true do
       )
 
       click_link("Antwortmöglichkeit hinzufügen")
-      expect(page).to have_content("Antwortmöglichkeit", count: 4)
+      expect(page).to have_content("Antwortmöglichkeit", count: 5)
       expect(page).to have_field("Sensibel")
 
       all(".fa-language").last.click

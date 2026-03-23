@@ -10,7 +10,7 @@
         = question.multiple_choices ? icon(:check) : icon(:times)
 
 - else
-  = f.labeled_input_field(:question)
+  = f.labeled_input_field(:question, help: t('events.form.explain_choices'))
   = f.nested_fields_for(:choices, nil, question.deserialized_choices, {model_object: [Choice.new], link_to_add_title: t("event.questions.add_choice")}) do |choices_form|
     .mb-2
       = choices_form.labeled_input_field(:choice)

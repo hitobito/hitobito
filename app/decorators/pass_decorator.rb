@@ -5,6 +5,7 @@
 
 class PassDecorator < SimpleDelegator
   delegate :member_number, :member_name, to: :wallet_data_provider
+  delegate :name, :description, :background_color, to: :pass_definition
 
   def decorate = self
 
@@ -72,6 +73,23 @@ class PassDecorator < SimpleDelegator
     }
   end
 
+  # Returns the normalized background color (without # prefix, defaults to white)
+  def pdf_background_color
+    color = background_color.to_s
+    color.delete_prefix("#").presence || "FFFFFF"
+  end
+
+  # Returns color scheme for text based on background color luminance
+  # @return [Hash] Hash with :text, :muted, and :label color values
+  def text_colors
+    light = light_background?
+    {
+      text: light ? "333333" : "FFFFFF",
+      muted: light ? "666666" : "CCCCCC",
+      label: light ? "888888" : "AAAAAA"
+    }
+  end
+
   def wallet_data_provider
     @wallet_data_provider ||= definition.template.wallet_data_provider.new(self)
   end
@@ -109,5 +127,16 @@ class PassDecorator < SimpleDelegator
     # Resolve to the file on disk via the public directory.
     file_path = Rails.public_path.join(path.delete_prefix("/"))
     File.binread(file_path) if File.exist?(file_path)
+  end
+
+  # Determines if the background color is light or dark based on luminance
+  # @return [Boolean] true if background is light, false if dark
+  def light_background?
+    hex = pdf_background_color
+    r = hex[0..1].to_i(16)
+    g = hex[2..3].to_i(16)
+    b = hex[4..5].to_i(16)
+    luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255.0
+    luminance > 0.5
   end
 end

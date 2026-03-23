@@ -991,6 +991,7 @@ it:
         related_role_types: Tipi di ruolo
 
       pass:
+        member_number: Numero di membro
         person: Persona
         pass_definition: Definizione pass
         state: Stato

@@ -923,6 +923,7 @@ de:
         related_role_types: Rollentypen
 
       pass:
+        member_number: Mitgliedsnummer
         person: Person
         pass_definition: Pass-Definition
         state: Status

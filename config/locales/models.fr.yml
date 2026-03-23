@@ -992,6 +992,7 @@ fr:
         related_role_types: Types de rôle
 
       pass:
+        member_number: Numéro de membre
         person: Personne
         pass_definition: Définition de pass
         state: État

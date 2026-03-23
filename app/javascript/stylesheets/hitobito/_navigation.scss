@@ -9,32 +9,50 @@
 /* Navigation */
 
 .nav-sub {
-  @include clearfix;
   line-height: 2.3;
   //font-family: $heading-font-family;
   border-bottom: 1px solid $border-color;
   clear: both;
   font-size: 0.938em;
+  margin-top: 8px;
+  margin-left: -4px;
+  @include responsive(mediaDesktop) {
+    margin-left: 0;
+  }
+  column-gap: 20px;
+  row-gap: 12px;
   & > li {
-    float: left;
     a {
-      transition: border-color 300ms false false;
-      padding: 8px 0;
-      margin-top: 2px;
-      margin-right: 30px;
+      display: block;
+      transition: text-decoration-color 0.25s ease;
+      padding: 2px 4px 8px;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 10px;
+      text-decoration-thickness: 2px;
       line-height: 14px;
-      border-bottom: 2px solid transparent;
       &:hover {
         background: none;
-        border-color: $gray-light;
+        text-decoration-color: $gray-light;
+      }
+      .sheet.parent &:hover {
+        text-decoration-color: $gray;
       }
     }
   }
   & > .active > a {
-    border-color: $blue;
+    font-weight: 600;
+    transition: text-decoration-color 0.25s ease;
+    text-decoration-color: $blue;
   }
   & > .active > a:hover {
-    border-color: $purple;
+    text-decoration-color: $purple;
+  }
+}
+
+#content .nav-sub {
+  @include responsive(mediaTablet) {
+    margin-left: -2px;
   }
 }
 
@@ -44,11 +62,16 @@
   font-size: 1.5em !important;
   font-weight: bold;
   line-height: 1.25em;
-  padding: 16px 20px 0 20px;
+  padding: 0 10px 0;
+  margin: 8px 0 0;
+  @include responsive(mediaDesktop) {
+    padding: 0 14px 0;
+    margin: 12px 0 0;
+  }
 }
 
 .level + .nav-sub {
-  padding: 0 20px 0 20px;
+  padding: 0 12px;
   margin-bottom: 0;
   border-bottom: none;
   a {
@@ -62,12 +85,17 @@
 
 // Breadcrumb
 .breadcrumb {
-  float: right;
-  margin: 5px 0 0;
-  padding: 5px 10px;
+  margin: 12px 0 0;
+  padding: 0 10px;
+  @include responsive(mediaPhone) {
+    float: right;
+  }
   @include responsive(mediaTablet) {
-    margin: 15px 0 0;
-    padding: 5px 15px;
+    margin: 12px 0 0;
+    padding: 0 15px;
+  }
+  @include responsive(mediaDesktop) {
+    margin: 16px 0 0;
   }
   list-style: none;
   background: none;
@@ -80,7 +108,9 @@
       display: inline-block;
       text-shadow: 0 1px 0 $white;
 
-      a {
+      a:hover {
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
       }
     }
     li.divider {

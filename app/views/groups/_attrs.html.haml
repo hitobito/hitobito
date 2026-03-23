@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito.
 
 #main.row
-  %article.col-6
+  %article.col-12.col-md-6
     %h2= t('.contact_details')
     = render 'contact_data', group: entry, only_public: cannot?(:show_details, @group)
 
@@ -22,6 +22,6 @@
     - if can?(:index_notes, entry)
       = render 'notes/section', create_path: group_notes_path(@group)
 
-  %aside.col-5.offset-1
+  %aside.col-12.col-md-5.offset-md-1
     = render 'child_groups'
     = render_extensions :aside

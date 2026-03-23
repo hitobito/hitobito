@@ -69,72 +69,81 @@ describe :login, js: true do
     expect(page).to have_selector(".content-header h1", text: person.full_name)
   end
 
-  it "preserves the requested login locale when redirecting to a stored path" do
-    source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
-    skip "requires at least two configured locales" if requested_locale.blank?
+  context "locale after login" do
+    it "preserves the requested login locale when redirecting to a stored path" do
+      source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
 
-    visit "/#{source_locale}/groups/#{person.primary_group_id}"
-    expect(page).to have_current_path("/#{source_locale}/users/sign_in")
+      visit "/#{source_locale}/groups/#{person.primary_group_id}"
+      expect(page).to have_current_path("/#{source_locale}/users/sign_in")
 
-    visit "/#{requested_locale}/users/sign_in"
-    fill_in "person_login_identity", with: person.email
-    fill_in "person_password", with: password
-    find("form.new_person [type='submit']").click
+      visit "/#{requested_locale}/users/sign_in"
+      fill_in "person_login_identity", with: person.email
+      fill_in "person_password", with: password
+      find("form.new_person [type='submit']").click
 
-    expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}")
-  end
+      expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}")
+    end
 
-  it "preserves the requested login locale when stored path has query params" do
-    source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
-    skip "requires at least two configured locales" if requested_locale.blank?
+    it "preserves the requested login locale when redirecting to the entrypoint page" do
+      source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
+      sign_in(person)
 
-    visit "/#{source_locale}/groups/#{person.primary_group_id}?foo=bar"
-    expect(page).to have_current_path("/#{source_locale}/users/sign_in")
+      visit "/#{source_locale}/groups/#{person.primary_group_id}"
+      expect(page).to have_current_path("/#{source_locale}/groups/#{person.primary_group_id}")
 
-    visit "/#{requested_locale}/users/sign_in"
-    fill_in "person_login_identity", with: person.email
-    fill_in "person_password", with: password
-    find("form.new_person [type='submit']").click
+      visit "/#{requested_locale}/users/sign_in"
+      expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}/people/#{person.id}.html")
+    end
 
-    expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}?foo=bar")
-  end
+    it "preserves the requested login locale when stored path has query params" do
+      source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
 
-  it "preserves the requested login locale when stored path is absolute" do
-    source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
-    skip "requires at least two configured locales" if requested_locale.blank?
-    target_group_id = person.primary_group_id
-    target_person_id = person.id
-    visit "/#{source_locale}/users/sign_in"
-    base_uri = URI.parse(current_url)
-    absolute_target = "#{base_uri.scheme}://#{base_uri.host}:#{base_uri.port}" \
-      "/#{source_locale}/groups/#{target_group_id}/people/#{target_person_id}.html"
+      visit "/#{source_locale}/groups/#{person.primary_group_id}?foo=bar"
+      expect(page).to have_current_path("/#{source_locale}/users/sign_in")
 
-    visit absolute_target
-    expect(page).to have_current_path("/#{source_locale}/users/sign_in")
+      visit "/#{requested_locale}/users/sign_in"
+      fill_in "person_login_identity", with: person.email
+      fill_in "person_password", with: password
+      find("form.new_person [type='submit']").click
 
-    visit "/#{requested_locale}/users/sign_in"
-    fill_in "person_login_identity", with: person.email
-    fill_in "person_password", with: password
-    find("form.new_person [type='submit']").click
+      expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}?foo=bar")
+    end
 
-    expect(page).to have_current_path("/#{requested_locale}/groups/#{target_group_id}/people/#{target_person_id}.html")
-  end
+    it "preserves the requested login locale when stored path is absolute" do
+      source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
+      target_group_id = person.primary_group_id
+      target_person_id = person.id
+      visit "/#{source_locale}/users/sign_in"
+      base_uri = URI.parse(current_url)
+      absolute_target = "#{base_uri.scheme}://#{base_uri.host}:#{base_uri.port}" \
+        "/#{source_locale}/groups/#{target_group_id}/people/#{target_person_id}.html"
 
-  it "preserves the login locale even when sign_in post is unlocalized" do
-    source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
-    skip "requires at least two configured locales" if requested_locale.blank?
+      visit absolute_target
+      expect(page).to have_current_path("/#{source_locale}/users/sign_in")
 
-    visit "/#{source_locale}/groups/#{person.primary_group_id}"
-    expect(page).to have_current_path("/#{source_locale}/users/sign_in")
+      visit "/#{requested_locale}/users/sign_in"
+      fill_in "person_login_identity", with: person.email
+      fill_in "person_password", with: password
+      find("form.new_person [type='submit']").click
 
-    visit "/#{requested_locale}/users/sign_in"
-    page.execute_script <<~JS
-      document.querySelector('form.new_person').setAttribute('action', '/users/sign_in?locale=#{requested_locale}')
-    JS
-    fill_in "person_login_identity", with: person.email
-    fill_in "person_password", with: password
-    find("form.new_person [type='submit']").click
+      expect(page).to have_current_path("/#{requested_locale}/groups/#{target_group_id}/people/#{target_person_id}.html")
+    end
 
-    expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}")
+    it "preserves the login locale even when sign_in post is unlocalized" do
+      source_locale, requested_locale = Settings.application.languages.keys.map(&:to_s).first(2)
+
+      visit "/#{source_locale}/groups/#{person.primary_group_id}"
+      expect(page).to have_current_path("/#{source_locale}/users/sign_in")
+
+      visit "/#{requested_locale}/users/sign_in"
+      page.execute_script <<~JS
+        document.querySelector('form.new_person').setAttribute('action', '/users/sign_in?locale=#{requested_locale}')
+      JS
+      fill_in "person_login_identity", with: person.email
+      fill_in "person_password", with: password
+      find("form.new_person [type='submit']").click
+
+      expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}")
+    end
   end
 end

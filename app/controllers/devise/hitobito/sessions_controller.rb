@@ -54,7 +54,7 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
     locale = requested_locale
     return path if locale.blank?
 
-    # Normalize both path and query locale so all redirect styles are covered.
+    # Normalize both path and query locale, because our root_path passes the locale as query param
     uri = URI.parse(path)
     uri.path = localize_path(uri.path, locale)
     uri.query = localize_query(uri.query, locale)
@@ -69,7 +69,6 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
   end
 
   def configured_locales
-    # Keep this dynamic so wagon/core language settings are respected.
     @configured_locales ||= Settings.application.languages.to_hash.keys.map(&:to_s)
   end
 

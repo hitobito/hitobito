@@ -22,8 +22,12 @@
 #
 
 class Qualification < ActiveRecord::Base
+  include DateYearValidatable
+
   attr_writer :first_of_kind
   attr_accessor :open_training_days
+
+  validates_date_year :start_at, :finish_at
 
   ### ASSOCIATIONS
 

@@ -36,6 +36,9 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   include Role::Types
   include NormalizedLabels
   include TypeId
+  include DateYearValidatable
+
+  validates_date_year :start_on, :end_on
 
   ### ATTRIBUTES
 

@@ -54,6 +54,72 @@ describe Qualification do
     end
   end
 
+  context "date year validation" do
+    it "is valid when start_at and finish_at have 4-digit years" do
+      qualification = Fabricate.build(
+        :qualification,
+        person: person,
+        qualification_kind: Fabricate(:qualification_kind, validity: nil),
+        start_at: Date.new(8999, 1, 1),
+        finish_at: Date.new(9000, 12, 31)
+      )
+
+      expect(qualification).to be_valid
+    end
+
+    it "is valid with the minimum allowed year 1900" do
+      qualification = Fabricate.build(
+        :qualification,
+        person: person,
+        qualification_kind: qualification_kinds(:sl),
+        start_at: Date.new(1900, 1, 1),
+        finish_at: nil
+      )
+
+      expect(qualification).to be_valid
+    end
+
+    it "is invalid when start_at year has more than 4 digits" do
+      qualification = Fabricate.build(
+        :qualification,
+        person: person,
+        qualification_kind: qualification_kinds(:sl),
+        start_at: Date.new(10_000, 1, 1),
+        finish_at: nil
+      )
+      qualification.valid?
+
+      expect(qualification.errors.details[:start_at]).to include(error: :year_must_be_four_digits)
+    end
+
+    it "is invalid when finish_at year has more than 4 digits" do
+      qualification_kind_without_validity = Fabricate(:qualification_kind, validity: nil)
+      qualification = Fabricate.build(
+        :qualification,
+        person: person,
+        qualification_kind: qualification_kind_without_validity,
+        start_at: Date.new(2024, 1, 1),
+        finish_at: Date.new(10_000, 1, 1)
+      )
+      qualification.valid?
+
+      expect(qualification.errors.details[:finish_at]).to include(error: :year_must_be_four_digits)
+    end
+
+    it "is invalid when start_at year is before 1900" do
+      qualification = Fabricate.build(
+        :qualification,
+        person: person,
+        qualification_kind: qualification_kinds(:sl),
+        start_at: Date.new(1899, 12, 31),
+        finish_at: nil
+      )
+      qualification.valid?
+
+      expect(qualification.errors.details[:start_at]).to include(error: :year_must_be_after_1900)
+    end
+  end
+
   context "#to_s" do
     it "includes qualification kind and finish_at" do
       quali = Fabricate(:qualification, qualification_kind: qualification_kinds(:sl),

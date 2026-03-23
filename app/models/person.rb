@@ -158,6 +158,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   include Groups
   include Contactable
+  include DateYearValidatable
+
+  validates_date_year :birthday
   include DeviseOverrides
   include Encryptable
   include I18nSettable

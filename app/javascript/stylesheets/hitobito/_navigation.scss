@@ -28,12 +28,15 @@
       padding: 2px 4px 8px;
       text-decoration: underline;
       text-decoration-color: transparent;
-      text-underline-offset: 9px;
+      text-underline-offset: 10px;
       text-decoration-thickness: 2px;
       line-height: 14px;
       &:hover {
         background: none;
         text-decoration-color: $gray-light;
+      }
+      .sheet.parent &:hover {
+        text-decoration-color: $gray;
       }
     }
   }

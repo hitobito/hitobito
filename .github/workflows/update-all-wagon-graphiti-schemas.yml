@@ -80,7 +80,7 @@ jobs:
 
           # If empty (manual trigger), ask GitHub CLI for a PR matching this branch
           if [ -z "$PR_NUMBER" ]; then
-            PR_NUMBER=$(gh pr list --head "$BRANCH" --json number --jq '.[0].number')
+            PR_NUMBER=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --json number --jq '.[0].number')
           fi
 
           if [ -n "$PR_NUMBER" ]; then
@@ -88,7 +88,7 @@ jobs:
             echo "pr=$PR_NUMBER" >> $GITHUB_OUTPUT
             echo "PR=$PR_NUMBER" >> $GITHUB_ENV
           else
-            echo "Found no PR, using branch name as a fallback"
+            echo "No PR found for $BRANCH, using branch name as fallback"
             echo "pr=$BRANCH" >> $GITHUB_OUTPUT
             echo "PR=$BRANCH" >> $GITHUB_ENV
           fi
@@ -142,9 +142,10 @@ jobs:
           GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
         run: |
           BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
-          git checkout -b "$BRANCH_NAME"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/hitobito/${{ matrix.wagon.repo }}.git"
-          git pull --rebase
+          git fetch origin "$BRANCH_NAME"
+          git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME" --track "origin/$BRANCH_NAME"
+          git pull --rebase origin "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
 

@@ -17,4 +17,8 @@ class Pass < ActiveRecord::Base
 
   validates :person_id, uniqueness: {scope: :pass_definition_id}
   validates :state, inclusion: {in: ["eligible"]}, on: :create
+
+  def decorate
+    PassDecorator.new(self)
+  end
 end

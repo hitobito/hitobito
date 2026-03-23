@@ -79,9 +79,8 @@ describe Invoice::RoleCountItem do
 
         Fabricate(Group::BottomGroup::Leader.name, group:)
         Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_two_one))
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(2)
+        expect(item.recalculate.count).to eq(2)
       end
 
       it "ignores inactive role" do
@@ -241,9 +240,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.recalculate.count).to eq(1)
       end
 
       it "ignores inactive role" do
@@ -351,9 +349,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.recalculate.count).to eq(1)
       end
 
       it "counts multiple roles of the same person and same group as one" do
@@ -403,9 +400,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group:, person:)
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.recalculate.count).to eq(1)
       end
 
       it "ignores inactive role" do
@@ -562,9 +558,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.recalculate.count).to eq(1)
       end
 
       it "ignores inactive role" do

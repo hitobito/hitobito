@@ -55,6 +55,15 @@ describe PeriodInvoiceTemplates::InvoiceRunsController, js: true do
       expect(page).to have_text "30.00 EUR"
 
       expect(page).to have_text "2 Rechnungen angezeigt."
+      within first("#main tbody tr") do
+        click_link "Testlauf"
+      end
+
+      expect(page).not_to have_text "2 Rechnungen angezeigt."
+      expect(page).to have_text "Mitgliedsbeitrag       3 0.00 % 5.00 EUR 15.00 EUR"
+      page.go_back
+
+      expect(page).to have_text "2 Rechnungen angezeigt."
       page.find("th input[type=checkbox]").check
       click_link "Stornieren"
       expect(page).to have_text "2 Rechnungen wurden storniert"

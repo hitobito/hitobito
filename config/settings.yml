@@ -299,3 +299,6 @@ groups:
 
 hitobito_log:
   recipient_emails:
+
+wallets:
+  sync_interval: <%= ENV['HITOBITO_WALLETS_SYNC_SECONDS'].presence || 3.minutes %>

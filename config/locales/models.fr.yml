@@ -932,14 +932,12 @@ fr:
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: Réponse obligatoire
-        disclosure: Paramétrage
 
       application_questions:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: Réponse obligatoire
-        disclosure: Paramétrage
 
       event/role:
         label: Désignation

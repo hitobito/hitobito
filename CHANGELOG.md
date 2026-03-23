@@ -2,8 +2,6 @@
 
 ## Version 2.8
 
-- Export der angemeldeten aber nicht zugeteilten Kursteilnehmer (#4032, merci @DominikFischli)
-- Mail Inboxes Ansicht funktioniert jetzt auch bei einer grösseren Anzahl Emails (#3549 merci @patrickuhlmann)
 - Abgrenzung aktiver von gelöschten Gruppen in der "Rollen die auf mich Zugriff haben" Ansicht (hitobito/hitobito_cevi#200, merci @patrickuhlmann)
 - Labels von Kontaktinformationen (Telefonnummern etc.) können auf die vordefinierten Werde eingeschränkt werden. In den Personenexporten werden pro vordefiniertem Label eine Spalte ausgegeben (#1800) 
 - Es können jetzt, falls aktiviert, Sammelrechnungen erfasst werden. Diese können verwendet werden, um wiederholbare Rechnungsläufe an Gruppen zu versenden, mit berechneten Beträgen basierend auf der Anzahl Rollen, die während einer spezifischen Rechnungseriode in der jeweiligen Empfängergruppe aktiv waren. (#3610)
@@ -18,6 +16,19 @@
 - In allen Umgebungen welche nach bestimmter Zeit automatisch Antworten auf Eventfragen löschen, werden künftig nur noch als „sensibel“ markierte Antworten entfernt, wobei alle Fragen ab sofort standardmäßig als sensibel voreingestellt sind. (hitobito_sac_cas#2299)
 - In der JSON:API kann neu nach aktiven Rollen gefiltert werden. Möglich ist sowohl das Filtern mit `?filter[active]` nach Rollen die heute aktiv sind, als auch mit `?filter[active]=YYYY-MM-DD` nach Rollen die in der Vergangenheit oder Zukunft aktiv sind/waren. Dabei werden aber immer nur Rollen ausgegeben, die zum heutigen Zeitpunkt immer noch lesbar sind (hitobito_pfadi_de#37)
 - Bei Anlässen/Kursen/etc. ist neu das Profilfoto der Kontaktperson als Anzeigeoption auswählbar. Standardmässig ist dies abgewählt. (hitobito/hitobito_sac_cas#2318)
+- Nach dem Login wird nun konsistent die Sprache von vor dem Login weiterverwendet. Merci @Visualstudiocodetest! (#4023)
+- Jahreszahlen an diversen Orten sind jetzt eingeschränkt auf 4 Stellen. Merci @Visualstudiocodetest! (#4024)
+- Die Haushalts-ID ist neu in der API verfügbar. Merci @B52-Bomber! (#4025)
+- Die Positionen der (i)-Symbole für Hilfetexte sind jetzt sinnvoller gewählt (#4026)
+- In Anlässen können Köche neu die Zusätzlichen Angaben der Teilnehmenden einsehen, und die Leitung kann die Hauptebene der Teilnehmenden auch in der Liste anzeigen (#4027)
+- Noch nicht bestätigte Anmeldungen werden auf dem Personen-Profil jetzt nicht mehr doppelt angezeigt, wenn der Event mehrere Durchführungsdaten hat. Merci @fhinok! (#4028)
+- Für OAuth-Applikationen kann neu ein interner Beschreibungstext erfasst werden. Merci @patrickuhlmann! (#4031)
+- Neu kann eine Liste der Mailadressen aller noch nicht zugeteilten Kursteilnehmenden exportiert werden. Merci @DominikFischli! (#4032)
+- Die Mail Inboxes Ansicht funktioniert jetzt auch bei einer grösseren Anzahl Emails. Merci @patrickuhlmann! (#3549)
+- Auf der Liste der Events wird die Seitennavigation neu auch unten an der Seite angezeigt. Merci @patrickuhlmann! (#4038)
+- Das Design und Abstände auf Desktop und Mobile wurden optimiert. Merci @manuelmeister! (#4041)
+- In der Ansicht "Rollen, die auf mich Zugriff haben" werden gelöschte Gruppen neu separat gruppiert. Merci @patrickuhlmann! (#4043)
+- In der API werden bei weiteren Mailadressen neu auch die Einstellungen zu Versand und Rechnungen ausgegeben. Merci @B52-Bomber! (#4044)
 
 ## Version 2.8
 

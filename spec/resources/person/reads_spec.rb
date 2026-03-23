@@ -33,6 +33,7 @@ describe PersonResource, type: :resource do
         :zip_code,
         :town,
         :country,
+        :household_key,
         :gender,
         :birthday,
         :language,

@@ -31,6 +31,7 @@ class PersonResource < ApplicationResource
   attribute :zip_code, :string
   attribute :town, :string
   attribute :country, :string
+  attribute :household_key, :string, writable: false
   attribute :primary_group_id, :integer, writable: false
   attribute :gender, :string, readable: :show_details?, writable: :write_details?
   attribute :birthday, :date, readable: :show_details?, writable: :write_details?

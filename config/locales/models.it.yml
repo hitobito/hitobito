@@ -697,6 +697,7 @@ it:
         phone_numbers: Numeri di telefono
         social_accounts: Social media
         additional_emails: Altre email
+        additional_addresses: Weitere Adressen
         layer_group: Livello
         parent_id: Gruppo genitori
         layer_group_id: Livello

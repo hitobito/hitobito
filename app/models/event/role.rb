@@ -184,7 +184,8 @@ class Event::Role < ActiveRecord::Base
       main: event,
       event: previously_new_record? ? "create" : "update",
       object: attributes.to_yaml,
-      object_changes: {"type" => saved_changes[:type]}.to_yaml
+      object_changes: {"type" => saved_changes[:type]}.to_yaml,
+      whodunnit: PaperTrail.request.whodunnit
     )
   end
 end

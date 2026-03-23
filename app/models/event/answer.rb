@@ -20,8 +20,11 @@
 #
 
 class Event::Answer < ActiveRecord::Base
-  has_paper_trail meta: {main_id: ->(a) { a.participation_id },
-                         main_type: Event::Participation.sti_name}
+  # create events also create a version but we do it in after_create to
+  # make the event update
+  has_paper_trail on: [:update, :destroy],
+    meta: {main_id: ->(a) { a.participation_id },
+           main_type: Event::Participation.sti_name}
 
   belongs_to :participation
   belongs_to :question
@@ -31,6 +34,8 @@ class Event::Answer < ActiveRecord::Base
   delegate :admin?, to: :question
 
   before_validation { question&.before_validate_answer(self) }
+
+  after_create :record_initial_version_as_update
 
   validates_by_schema
   validates :question_id, uniqueness: {scope: :participation_id}
@@ -47,7 +52,11 @@ class Event::Answer < ActiveRecord::Base
   }
 
   def to_s(format = :default)
-    question.label
+    # Used for log, in the log we want to show to what question the answer
+    # belongs to. The actual change (answer) is inside the version changelog
+    return question.label if format == :long
+
+    answer
   end
 
   def answer
@@ -67,5 +76,14 @@ class Event::Answer < ActiveRecord::Base
 
   def validate_with_question
     question.validate_answer(self)
+  end
+
+  private
+
+  # When a participation is created, we want to show the answer inside the changelog
+  # Only update versions show the changeset with our current implementation.
+  # We record an update event on a create for event answers.
+  def record_initial_version_as_update
+    paper_trail.record_update(force: true, in_after_callback: false, is_touch: false)
   end
 end

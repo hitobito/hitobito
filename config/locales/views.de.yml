@@ -12,6 +12,7 @@ de:
     unknown: unbekannt
     nobody: niemand
     all: Alle
+    empty: Leer
 
     from: Von
     until: Bis

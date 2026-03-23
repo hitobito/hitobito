@@ -57,4 +57,28 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
     string = presenter.attribute_change(:language, "de", "fr")
     expect(string).to eq("Sprache wurde von <i>Deutsch</i> auf <i>Französisch</i> geändert.")
   end
+
+  # We currently have to add a custom i18n key for this spec case because there is no sti model
+  # with translated attributes that is paper trailed. We have this case in the sac_cas wagon but
+  # the fix of the decorator is in core
+  #
+  # If the core ever gets a translated attribute specifically on a sti submodel (translation key is subtype)
+  # this spec can be simplified by just using the existing translation.
+  it "translates attribute label of translated attributes in sti models" do
+    I18n.backend.store_translations(:de, {
+      activerecord: {
+        attributes: {
+          "event/course": {
+            translated_course_attribute: "I am translated"
+          }
+        }
+      }
+    })
+
+    version.update!(item: events(:top_course).translations.first, item_subtype: "Event::Translation")
+    string = presenter.attribute_change(:translated_course_attribute, "old value", "new value")
+
+    expect(string).to eq("I am translated (de) Von Top Course wurde von " \
+      "<i>old value</i> auf <i>new value</i> geändert.")
+  end
 end

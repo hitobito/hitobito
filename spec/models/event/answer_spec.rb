@@ -91,13 +91,13 @@ describe Event::Answer do
     end
 
     context "paper trails", versioning: true do
-      it "sets main to participation on create" do
+      it "sets main to participation on create with event update" do
         expect do
           participation.answers.create!(answer: "Foo", question: participation.event.questions.first)
         end.to change { PaperTrail::Version.count }.by(1)
 
         version = PaperTrail::Version.order(:created_at, :id).last
-        expect(version.event).to eq("create")
+        expect(version.event).to eq("update")
         expect(version.main).to eq(participation)
       end
 

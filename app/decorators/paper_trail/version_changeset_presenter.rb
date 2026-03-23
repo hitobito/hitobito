@@ -7,7 +7,7 @@ module PaperTrail
   class VersionChangesetPresenter
     attr_reader :version, :h
 
-    delegate :item, :item_type, :item_subtype, :main_type, to: :version
+    delegate :item, :item_type, :item_subtype, :main_id, :main_type, to: :version
 
     def initialize(version, view_context)
       @version = version
@@ -51,9 +51,21 @@ module PaperTrail
 
     def attr_label(attr)
       if item_type.include?("Translation")
-        "#{main_type&.safe_constantize&.human_attribute_name(attr)} (#{item})"
+        translation_label(attr)
       else
         (item_subtype&.safe_constantize || item_class).human_attribute_name(attr)
+      end
+    end
+
+    def translation_label(attr)
+      # globalized_model knows the sti model class to be able to load sti translations
+      # as well as being able to load translations for translated attributes even if
+      # the main_type is not the globalized_model.
+      attribute_label = item.globalized_model.class.human_attribute_name(attr)
+      if item.globalized_model.is_a?(main_type.safe_constantize)
+        "#{attribute_label} (#{item})"
+      else
+        "#{attribute_label} (#{item}) #{I18n.t("global.from")} #{item.globalized_model}"
       end
     end
 
@@ -65,12 +77,16 @@ module PaperTrail
       elsif enum_translation(attr, value).present?
         enum_translation(attr, value)
       else
+        return I18n.t("global.empty") if value.blank? || value == ","
+
         col = item_class.columns_hash[attr.to_s]
         h.format_column(col.try(:type), value)
       end
     end
 
     def enum_translation(attr, value)
+      return item.decorate.state_translated if item_class == Event::Participation
+
       item_i18n_key = item_subtype&.safe_constantize&.model_name&.i18n_key
       if I18n.exists?("activerecord.attributes.#{item_i18n_key}.#{attr.to_s.pluralize}.#{value}")
         I18n.t("activerecord.attributes.#{item_i18n_key}.#{attr.to_s.pluralize}.#{value}")

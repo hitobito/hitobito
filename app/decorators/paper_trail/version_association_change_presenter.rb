@@ -38,13 +38,11 @@ module PaperTrail
     end
 
     def association_change_text(changeset, item)
+      return changeset if item_type.include?("Translation") && main_type
+
       if item_type == PeopleManager.sti_name
         return association_change_text_with_people_manager(changeset,
           item)
-      end
-
-      if item_type.include?("Translation") && main_type
-        return changeset
       end
 
       I18n.t("version.association_change.#{item_class.name.underscore}.#{event}",

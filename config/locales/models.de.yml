@@ -301,11 +301,11 @@ de:
         one: Datum
         other: Daten
       event/question:
-        one: Eventfrage
-        other: Eventfragen
+        one: Anmeldeangaben
+        other: Anmeldeangaben
       event/answer:
-        one: Antwort auf Anmeldefrage
-        other: Antwort auf Anmeldefragen
+        one: Antwort auf Anmeldeangabe
+        other: Antworten auf Anmeldeangaben
       family_member:
         one: Familienmitglied
         other: Familienmitglieder

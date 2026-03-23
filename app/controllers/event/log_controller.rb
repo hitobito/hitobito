@@ -23,8 +23,6 @@ class Event::LogController < ApplicationController
 
   def event_related_versions
     PaperTrail::Version.where(main_id: event.id, main_type: Event.sti_name)
-      .or(PaperTrail::Version.where(main_id: event.question_ids,
-        main_type: Event::Question.sti_name))
   end
 
   def event = @event ||= group.events.find(params[:id])

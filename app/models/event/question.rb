@@ -35,7 +35,11 @@ class Event::Question < ActiveRecord::Base
   # as globalize will add it to the base class' translated_attribute_names
   # anyway and break sti subclasses
   translates :question, :choices
+
   include GlobalizedPaperTrails
+  track_main_id_via { |record| record.event_id }
+  track_main_type_via { |record| Event.sti_name }
+
   include I18nEnums
 
   self.list_alphabetically = Settings.event.questions.list_alphabetically
@@ -104,7 +108,7 @@ class Event::Question < ActiveRecord::Base
   end
 
   def to_s(format = :default)
-    reload.label
+    label
   end
 
   def global?

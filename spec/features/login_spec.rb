@@ -92,7 +92,8 @@ describe :login, js: true do
       expect(page).to have_current_path("/#{source_locale}/groups/#{person.primary_group_id}")
 
       visit "/#{requested_locale}/users/sign_in"
-      expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}/people/#{person.id}.html")
+      expect(page).to have_current_path("/#{requested_locale}/groups/#{person.primary_group_id}/" \
+        "people/#{person.id}.html")
     end
 
     it "preserves the requested login locale when stored path has query params" do
@@ -126,7 +127,8 @@ describe :login, js: true do
       fill_in "person_password", with: password
       find("form.new_person [type='submit']").click
 
-      expect(page).to have_current_path("/#{requested_locale}/groups/#{target_group_id}/people/#{target_person_id}.html")
+      expect(page).to have_current_path("/#{requested_locale}/groups/#{target_group_id}/" \
+        "people/#{target_person_id}.html")
     end
 
     it "preserves the login locale even when sign_in post is unlocalized" do

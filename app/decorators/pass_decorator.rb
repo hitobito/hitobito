@@ -132,11 +132,6 @@ class PassDecorator < SimpleDelegator
   # Determines if the background color is light or dark based on luminance
   # @return [Boolean] true if background is light, false if dark
   def light_background?
-    hex = pdf_background_color
-    r = hex[0..1].to_i(16)
-    g = hex[2..3].to_i(16)
-    b = hex[4..5].to_i(16)
-    luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255.0
-    luminance > 0.5
+    ColorLuminance.light?(pdf_background_color)
   end
 end

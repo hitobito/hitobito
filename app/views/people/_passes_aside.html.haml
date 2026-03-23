@@ -1,0 +1,21 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- passes = entry.passes.includes(:pass_definition)
+- if passes.any?
+  %section.passes
+    %h2= t('.title')
+
+    %table.table.table-basic
+      %tbody
+        - passes.each do |membership|
+          %tr
+            %td
+              %strong= membership.pass_definition.name
+            %td= t("activerecord.attributes.pass.states.#{membership.state}")
+            %td
+              = link_to t('people.passes.index.show_pass'), group_person_pass_path(@group, entry, membership.pass_definition), class: 'btn btn-xs btn-outline-primary'
+
+    = link_to t('people.passes.index.title'), group_person_passes_path(@group, entry), class: 'btn btn-sm btn-outline-secondary'

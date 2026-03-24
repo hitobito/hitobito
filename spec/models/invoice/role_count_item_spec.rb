@@ -59,6 +59,11 @@ describe Invoice::RoleCountItem do
       item.dynamic_cost_parameters[:unit_cost] = nil
       expect(item).not_to be_valid
     end
+
+    it "is valid with unit_cost above 1000" do
+      item.dynamic_cost_parameters[:unit_cost] = "1000.00"
+      expect(item).to be_valid
+    end
   end
 
   context "#count" do

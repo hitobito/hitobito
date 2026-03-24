@@ -188,7 +188,7 @@ class Invoice::PeriodItem < InvoiceItem
 
   def enforce_unit_cost_precision
     dynamic_cost_parameters[:unit_cost] = ActiveSupport::NumberHelper.number_to_currency(
-      dynamic_cost_parameters[:unit_cost], format: "%n"
+      dynamic_cost_parameters[:unit_cost], format: "%n", delimiter: ""
     )
   end
 

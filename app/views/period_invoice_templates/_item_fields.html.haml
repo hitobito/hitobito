@@ -11,7 +11,7 @@
       = item_fields.input_field :name, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:name) + "*", class: "mw-md-90ch"
     .d-flex.flex-row.gap-2.mb-2
       .input-group.input-group-sm
-        = item_fields.input_field :unit_cost, name: item_fields.object_name + "[dynamic_cost_parameters][unit_cost]", value: number_to_currency(item_fields.object.unit_cost, format: "%n"), placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:unit_cost) + "*", class: "text-end"
+        = item_fields.input_field :unit_cost, name: item_fields.object_name + "[dynamic_cost_parameters][unit_cost]", value: number_to_currency(item_fields.object.unit_cost, format: "%n", delimiter: ""), placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:unit_cost) + "*", class: "text-end"
         .input-group-text= f.object.group.invoice_config.currency
       .input-group.input-group-sm
         = item_fields.input_field :vat_rate, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:vat_rate), class: "text-end mw-md-90ch"

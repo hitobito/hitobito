@@ -27,6 +27,7 @@ class Event::Guest < ActiveRecord::Base
       Arel.sql(
         <<~SQL.squish
           CASE
+            WHEN event_guests.company THEN event_guests.company_name
             WHEN event_guests.last_name IS NOT NULL AND event_guests.first_name IS NOT NULL THEN event_guests.last_name || ' ' || event_guests.first_name
             WHEN event_guests.last_name IS NOT NULL THEN event_guests.last_name
             WHEN event_guests.first_name IS NOT NULL THEN event_guests.first_name

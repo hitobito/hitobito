@@ -663,7 +663,7 @@ fr:
       caption_participations_visible: "Les participants peuvent se voir les uns les autres dans la liste des participants."
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
-      explain_choices: Laissez vide pour la réponse en texte libre, une ou plusieurs options de réponse (séparées par des virgules) pour la sélection.
+      explain_choices: "Für Freitextantwort keine Antwortmöglichkeiten hinzufügen."
       explain_admin_questions:
         Ici, vous pouvez définir d'autres informations par participant, qui ne sont utilisées que pour la gestion des événements.
       explain_contact_attrs:

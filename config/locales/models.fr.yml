@@ -92,8 +92,8 @@ fr:
         readonly: ne peut pas être modifié
         cannot_be_later_than_today: ne peut pas être plus tard qu'aujourd'hui
         is_not_a_decimal_number: doit être un nombre décimal
-        year_must_be_four_digits: doit contenir une année sur 4 chiffres au maximum
-        year_must_be_after_1900: doit contenir une année à partir de 1900
+        year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
+        year_must_be_after_1900: muss eine Jahreszahl ab 1900 enthalten
       models:
         cors_origin:
           attributes:

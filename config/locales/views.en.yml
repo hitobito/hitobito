@@ -657,7 +657,7 @@ en:
       caption_participations_visible: "Participants can see each other in the participants list."
       times_are_optional: Times are optional
       explain_application_questions: Here you can request further information for the application.
-      explain_choices: Leave blank for free text answer, one or more answer choices (comma separated) for selection.
+      explain_choices: "Für Freitextantwort keine Antwortmöglichkeiten hinzufügen."
       explain_admin_questions:
         Hier kannst du weitere Angaben pro Teilnehmer/-in definieren, welche nur für die Anlassverwaltung verwendet werden.
       explain_contact_attrs:

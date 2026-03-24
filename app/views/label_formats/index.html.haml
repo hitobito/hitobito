@@ -9,7 +9,7 @@
   %h2= I18n.t('label_formats.own_labels')
   = render 'list'
 
-  %h2
+  %h2.d-flex.align-items-center
     = I18n.t('label_formats.global_labels')
     - if can?(:update_settings, current_user)
       &nbsp;

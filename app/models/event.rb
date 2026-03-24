@@ -488,6 +488,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       (!application_closing_at? || application_closing_at >= Time.zone.today)
   end
 
+  def start_at
+    dates.minimum(:start_at)
+  end
+
+  def finish_at
+    dates.maximum(:finish_at)
+  end
+
   private
 
   def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity

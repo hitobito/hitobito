@@ -1090,6 +1090,37 @@ describe Event do
     end
   end
 
+  context "dates" do
+    before do
+      event.dates.destroy_all
+      event.dates.create!(start_at: Time.zone.local(2000, 1, 1), finish_at: Time.zone.local(2000, 2, 1))
+      event.dates.create!(start_at: Time.zone.local(2000, 5, 1), finish_at: Time.zone.local(2000, 6, 1))
+      event.dates.create!(start_at: Time.zone.local(2000, 9, 1), finish_at: Time.zone.local(2000, 11, 1))
+    end
+
+    context "#start_at" do
+      it "returns earliest start_at from all event dates" do
+        expect(event.start_at).to eq Time.zone.local(2000, 1, 1)
+      end
+
+      it "returns earliest start_at from all event dates with overlapping dates" do
+        event.dates.create!(start_at: Time.zone.local(1999, 3, 1), finish_at: Time.zone.local(2000, 6, 1))
+        expect(event.start_at).to eq Time.zone.local(1999, 3, 1)
+      end
+    end
+
+    context "#finish_at" do
+      it "returns latest finish_at from all event dates" do
+        expect(event.finish_at).to eq Time.zone.local(2000, 11, 1)
+      end
+
+      it "returns latest finish_at from all event dates with overlapping dates" do
+        event.dates.create!(start_at: Time.zone.local(2000, 3, 1), finish_at: Time.zone.local(2002, 1, 1))
+        expect(event.finish_at).to eq Time.zone.local(2002, 1, 1)
+      end
+    end
+  end
+
   def set_start_finish(event, start_at)
     start_at = Time.zone.parse(start_at)
     event.dates.create!(start_at: start_at, finish_at: start_at + 5.days)

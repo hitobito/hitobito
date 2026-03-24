@@ -167,6 +167,67 @@ describe Event::Participation do
     end
   end
 
+  context "#oder_by_name" do
+    def build_guest_participation(first_name: nil, last_name: nil, nickname: nil, company_name: nil,
+      main_applicant: nil)
+      Fabricate(
+        :event_participation,
+        event: course,
+        participant: Fabricate(:event_guest, first_name: first_name,
+          last_name: last_name,
+          nickname: nickname,
+          company_name: company_name,
+          company: company_name.present?,
+          main_applicant: main_applicant)
+      )
+    end
+
+    def build_person_participation(first_name: nil, last_name: nil, nickname: nil, company_name: nil)
+      Fabricate(
+        :event_participation,
+        event: course,
+        participant: Fabricate(:person, first_name: first_name,
+          last_name: last_name,
+          nickname: nickname,
+          company_name: company_name,
+          company: company_name.present?)
+      )
+    end
+
+    before { Event::Participation.destroy_all }
+
+    it "#order_by_name orders people and guests by company_name then last_name then first_name and then nickname" do
+      main_applicant = build_person_participation(company_name: "AA")
+      build_person_participation(company_name: "BA")
+      build_guest_participation(company_name: "AB", main_applicant: main_applicant)
+      build_guest_participation(company_name: "BB", main_applicant: main_applicant)
+      build_person_participation(last_name: "AC")
+      build_person_participation(last_name: "BC")
+      build_guest_participation(last_name: "AD", main_applicant: main_applicant)
+      build_guest_participation(last_name: "BD", main_applicant: main_applicant)
+      build_person_participation(first_name: "AE")
+      build_person_participation(first_name: "BE")
+      build_guest_participation(first_name: "AF", main_applicant: main_applicant)
+      build_guest_participation(first_name: "BF", main_applicant: main_applicant)
+      build_person_participation(nickname: "AG")
+      build_person_participation(nickname: "BG")
+      build_guest_participation(nickname: "AH", main_applicant: main_applicant)
+      build_guest_participation(nickname: "BH", main_applicant: main_applicant)
+
+      expect(Event::Participation.order_by_name.select("*").collect(&:to_s)).to eq ["AA", "AB", "AC", "AD", "AE", "AF",
+        " / AG", " / AH", "BA", "BB", "BC", "BD", "BE", "BF", " / BG", " / BH"]
+    end
+
+    it "#order_by_name orders people and guests with same last_name by first_name" do
+      p1 = build_person_participation(last_name: "AA")
+      p2 = build_person_participation(last_name: "BB", first_name: "BB")
+      p3 = build_guest_participation(last_name: "BB", first_name: "AA", main_applicant: p1)
+      p4 = build_guest_participation(last_name: "CC", main_applicant: p1)
+
+      expect(Event::Participation.order_by_name.select("*").collect(&:to_s)).to eq([p1, p3, p2, p4].collect(&:to_s))
+    end
+  end
+
   context "validations" do
     let!(:other_participation) { Fabricate(:event_participation, participant: people(:top_leader), event: course) }
 

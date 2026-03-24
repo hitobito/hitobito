@@ -10,18 +10,19 @@
 
 %ul.unstyled.approvers-list.ms-4
   - @possible_approvers.each do |approver|
-    %li
-      = check_box_tag("set_approver",
-                      true,
-                      !@ignored_approvers.include?(approver.id),
-                      id: "ignored_approver_#{approver.id}",
-                      "aria-label": "#{approver.to_s(:list)}: #{approver_layer_roles(approver)}",
-                      "role": "switch",
-                      class: 'switcher',
-                      data: { remote: true,
-                              url: group_person_add_request_ignored_approvers_path(group_id: @group.id, person_id: approver.id),
-                              method: :put })
-      %label{for: "ignored_approver_#{approver.id}"}
+    %li.d-flex.align-items-center.mb-1
+      .switcher-container
+        = check_box_tag("set_approver",
+                        true,
+                        !@ignored_approvers.include?(approver.id),
+                        id: "ignored_approver_#{approver.id}",
+                        "aria-label": "#{approver.to_s(:list)}: #{approver_layer_roles(approver)}",
+                        "role": "switch",
+                        class: 'switcher',
+                        data: { remote: true,
+                                url: group_person_add_request_ignored_approvers_path(group_id: @group.id, person_id: approver.id),
+                                method: :put })
+        %label{for: "ignored_approver_#{approver.id}"}
       &nbsp;
       %strong= approver.to_s(:list)
       = muted approver_layer_roles(approver)

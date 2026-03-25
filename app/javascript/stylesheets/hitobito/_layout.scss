@@ -417,6 +417,13 @@ strong.bigger-title div.trix-content {
   margin-bottom: 5px;
 }
 
+.approvers-list li::before {
+  // Unicode bullet point
+  content: "\2022";
+  margin-right: .5rem;
+  font-family: "-moz-bullet-font", sans-serif;
+}
+
 .changelog ul {
   padding-left: 2rem;
 }

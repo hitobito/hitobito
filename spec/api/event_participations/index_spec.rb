@@ -22,5 +22,18 @@ describe "event_participations#index", type: :request do
         expect(d.map(&:id)).to match_array(Event::Participation.pluck(:id))
       end
     end
+
+    it "returns participations with roles" do
+      jsonapi_get "/api/event_participations", params: {include: "roles"}
+      expect(response.status).to eq(200), response.body
+      expect(response_body.dig(:included, 0, :type)).to eq "event_roles"
+    end
+
+    it "returns empty list without roles if participation is not accessible" do
+      service_token.update!(layer_group_id: groups(:bottom_layer_one).id)
+      jsonapi_get "/api/event_participations", params: {include: "roles"}
+      expect(response.status).to eq(200), response.body
+      expect(response_body.dig(:included)).to be_nil
+    end
   end
 end

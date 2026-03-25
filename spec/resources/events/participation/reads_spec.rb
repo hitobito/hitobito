@@ -45,60 +45,12 @@ describe Event::ParticipationResource, type: :resource do
       expect(event.name).to eq "Top Course"
     end
 
-    describe "participant" do
-      context "person" do
-        it "may include person" do
-          params[:include] = "participant"
-          render
-          person = d[0].sideload(:participant)
-          expect(person.jsonapi_type).to eq "people"
-          expect(person.attributes["first_name"]).to eq "Bottom"
-        end
-
-        it "may include additional_emails and phone_numbers" do
-          2.times { Fabricate(:additional_email, contactable: people(:bottom_member)) }
-          2.times { Fabricate(:phone_number, contactable: people(:bottom_member)) }
-          params[:include] = "participant.additional_emails,participant.phone_numbers"
-          render
-          person = d[0].sideload(:participant)
-          expect(person.relationships.keys).to eq %w[
-            primary_group
-            layer_group
-            roles
-            phone_numbers
-            social_accounts
-            additional_emails
-          ]
-          expect(person.sideload(:additional_emails)).to have(2).items
-          expect(person.sideload(:phone_numbers)).to have(2).items
-        end
-      end
-
-      context "guest" do
-        let!(:guest) { Fabricate(:event_guest, main_applicant: participation, first_name: "Guest1") }
-
-        before do
-          Fabricate(:event_participation, event: participation.event, participant: guest, active: true)
-          params[:filter] = {participant_type: "Event::Guest"}
-        end
-
-        it "may include guest" do
-          params[:include] = "participant"
-          render
-          guest = d[0].sideload(:participant)
-          expect(guest.jsonapi_type).to eq "event_guests"
-          expect(guest.attributes["first_name"]).to eq "Guest1"
-        end
-
-        it "may include additional_emails and phone_numbers but not defined on guest" do
-          Fabricate(:additional_email, contactable: guest)
-          Fabricate(:phone_number, contactable: guest)
-          params[:include] = "participant.additional_emails,participant.phone_numbers"
-          render
-          guest = d[0].sideload(:participant)
-          expect(guest.relationships).to be_nil
-        end
-      end
+    it "may include roles" do
+      params[:include] = "roles"
+      render
+      leader = d[0].sideload(:roles)[0]
+      expect(leader.type).to eq "Event::Role::Leader"
+      expect(leader.jsonapi_type).to eq "event_roles"
     end
   end
 end

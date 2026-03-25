@@ -15,6 +15,8 @@ shared_examples "jsonapi authorized requests" do |person: :top_leader, required_
     super.merge("X-TOKEN" => token)
   end
 
+  def response_body = @body ||= JSON.parse(response.body).deep_symbolize_keys
+
   context "without authentication" do
     let(:token) { nil }
 

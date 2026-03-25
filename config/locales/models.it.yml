@@ -700,6 +700,7 @@ it:
         social_accounts: Social media
         additional_emails: Altre email
         additional_addresses: Weitere Adressen
+        language: Sprache
         layer_group: Livello
         parent_id: Gruppo genitori
         layer_group_id: Livello

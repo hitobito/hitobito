@@ -663,7 +663,7 @@ fr:
       caption_participations_visible: "Les participants peuvent se voir les uns les autres dans la liste des participants."
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
-      explain_choices: "Für Freitextantwort keine Antwortmöglichkeiten hinzufügen."
+      explain_choices: "N'ajoutez pas de choix pour une réponse en texte libre."
       explain_admin_questions:
         Ici, vous pouvez définir d'autres informations par participant, qui ne sont utilisées que pour la gestion des événements.
       explain_contact_attrs:
@@ -1148,7 +1148,7 @@ fr:
     create:
       one: "Facture <i>%{title}</i> a été établie."
       many: "Facture <i>%{title}</i> a été établie pour %{count} destinataires."
-      other: "Facture <i>%{title}</i> a été établie pour %{count} destinataires."
+      other: "Facture 1%{title}1 a été établie pour %{count} destinataires."
     create_batch: "La facture <i>%{title}</i>est créée pour %{count} destinataire-s en arrière-plan."
     update:
       zero: "Choisir au moins une facture."

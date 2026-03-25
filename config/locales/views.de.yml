@@ -2327,6 +2327,23 @@ de:
     cannot_create: Bitte wähle einen bestehenden Tag aus
     no_entry: (keine)
 
+  user_job_results:
+    index:
+      title: Jobübersicht
+    user_job_result:
+      no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
+      start_timestamp: Startzeitpunkt
+      end_timestamp: Endzeitpunkt
+      attempts: Versuche
+      status:
+        planned: In der Warteschlange
+        in_progress: In Bearbeitung
+        success: Erfolgreich abgeschlossen
+        error: Bei der Bearbeitung trat ein Fehler auf
+    user_job_result_notification:
+      job_success: Job erfolgreich abgeschlossen
+      job_error: Fehler bei Jobausführung aufgetreten
+
   version:
     attribute_change:
       from_to: "%{attr} wurde von <i>%{from}</i> auf <i>%{to}</i> geändert."

@@ -10,17 +10,7 @@
     = action_button(t('.button_show_assignment'), group_person_assignment_path(*entry.assignments.first.path_args), :paper_plane, method: :get)
 
 - if entry.letter?
-  - if entry.dispatched?
-    - if entry.state == 'finished'
-      = action_button(t('.button_show_pdf'),
-                      group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf),
-                      :eye)
-  - else
-    = action_button(t('.button_preview'),
-                  group_mailing_list_message_path(entry.group, entry.mailing_list, entry, format: :pdf, preview: true),
-                  :eye,
-                  target: :_blank)
-
+  - unless entry.dispatched?
     = button_action_edit if can?(:edit, entry)
 
   = render_extensions 'actions_show'

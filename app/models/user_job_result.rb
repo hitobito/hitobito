@@ -19,7 +19,9 @@
 #  person_id  :integer          not null
 #
 
-class AsyncDownloadFile < ApplicationRecord
+class UserJobResult < ApplicationRecord
+  belongs_to :delayed_job, class_name: "Delayed::Backend::ActiveRecord::Job", optional: true
+
   class << self
     FILENAME_REGEX = /\A(.*)_(\d+)-(\d+)\z/
 
@@ -37,7 +39,7 @@ class AsyncDownloadFile < ApplicationRecord
       name, timestamp, person_id = parse_filename(filename)
 
       file = find_or_create_by(
-        name: name, timestamp: timestamp, person_id: person_id
+        name: name, start_timestamp: timestamp, person_id: person_id
       )
       file.update!(filetype: filetype)
       file
@@ -57,6 +59,11 @@ class AsyncDownloadFile < ApplicationRecord
   end
 
   has_one_attached :generated_file
+
+  # Source: Google Gemini
+  after_create_commit -> { broadcast_prepend_to "user_job_results" }
+  after_update_commit -> { broadcast_replace_to "user_job_results" }
+  after_destroy_commit -> { broadcast_remove_to "user_job_results" }
 
   before_destroy do
     generated_file.purge if generated_file.attached?

@@ -23,12 +23,6 @@ class Event::ParticipationResource < ApplicationResource
   end
 
   belongs_to :event
-  polymorphic_belongs_to :participant do
-    group_by(:participant_type) do
-      on(:Person)
-      on(:"Event::Guest")
-    end
-  end
   has_many :roles
 
   def base_scope

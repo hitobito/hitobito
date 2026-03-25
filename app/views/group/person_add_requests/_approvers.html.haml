@@ -10,9 +10,7 @@
 
 %ul.unstyled.approvers-list.ms-2
   - @possible_approvers.each do |approver|
-    %li.d-flex.align-items-center.mb-2
-      -# Manually insert the bullet point because list items with d-flex dont have bullet point
-      .me-2 &bull;
+    %li.d-flex.align-items-center.mb-1
       .switcher-container.me-2
         = check_box_tag("set_approver",
                         true,

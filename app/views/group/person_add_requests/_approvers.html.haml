@@ -8,10 +8,10 @@
 
 %h3= t('.title')
 
-%ul.unstyled.approvers-list.ms-4
+%ul.unstyled.approvers-list.ms-2
   - @possible_approvers.each do |approver|
-    %li.d-flex.align-items-center.mb-1
-      .switcher-container
+    %li.d-flex.align-items-center.mb-2
+      .switcher-container.me-2
         = check_box_tag("set_approver",
                         true,
                         !@ignored_approvers.include?(approver.id),
@@ -23,6 +23,5 @@
                                 url: group_person_add_request_ignored_approvers_path(group_id: @group.id, person_id: approver.id),
                                 method: :put })
         %label{for: "ignored_approver_#{approver.id}"}
-      &nbsp;
-      %strong= approver.to_s(:list)
+      %strong.me-1= approver.to_s(:list)
       = muted approver_layer_roles(approver)

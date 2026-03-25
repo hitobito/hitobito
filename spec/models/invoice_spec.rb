@@ -73,6 +73,28 @@ describe Invoice do
     end.to change { invoice_config.reload.sequence_number }.by(2)
   end
 
+  it "generates unique sequence numbers under concurrent creation" do
+    Invoice.destroy_all
+    invoice_config.update!(sequence_number: 1)
+
+    threads = 3.times.map do |thread_id|
+      Thread.new do
+        ActiveRecord::Base.connection_pool.with_connection do
+          50.times do |i|
+            create_invoice(title: "Invoice Thread-#{thread_id} ##{i}")
+          end
+        end
+      end
+    end
+    threads.each(&:join)
+
+    sequence_numbers = Invoice.pluck(:sequence_number)
+    duplicates = sequence_numbers.tally.select { |_, v| v > 1 }.keys
+    expect(sequence_numbers.uniq.size).to eq(150),
+      "Expected 150 unique sequence numbers, got duplicates: #{duplicates}"
+    expect(invoice_config.reload.sequence_number).to eq(151)
+  end
+
   it "validates that the structured address is specified if no recipient" do
     invoice = Invoice.create(title: "invoice", group: group)
     expect(invoice).not_to be_valid

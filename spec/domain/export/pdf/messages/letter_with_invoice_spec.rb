@@ -109,7 +109,8 @@ describe Export::Pdf::Messages::LetterWithInvoice do
       ]
 
       invoice_text.each_with_index do |text, i|
-        expect(text_with_position[i]).to eq(text)
+        expect(text_with_position[i]).to eq(text),
+          "expected index #{i} to contain #{text.inspect}, got #{text_with_position[i].inspect}"
       end
     end
 
@@ -194,7 +195,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [28, 239, "Eine Strasse 42"],
             [28, 230, "1234 Dorf"],
             [28, 211, "Referenznummer"],
-            [28, 203, "00 00834 96356 70000 00000 00019"],
+            [28, 203, "00 00834 96356 70000 00000 00027"],
             [28, 184, "Zahlbar durch"],
             [28, 175, "Bottom Member"],
             [28, 167, "Greatstreet 345"],
@@ -210,7 +211,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
             [360, 258, "Eine Strasse 42"],
             [360, 247, "1234 Dorf"],
             [360, 226, "Referenznummer"],
-            [360, 215, "00 00834 96356 70000 00000 00019"],
+            [360, 215, "00 00834 96356 70000 00000 00027"],
             [360, 194, "Zahlbar durch"],
             [360, 183, "Bottom Member"],
             [360, 173, "Greatstreet 345"],
@@ -218,7 +219,8 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           ]
 
           invoice_text.each_with_index do |text, i|
-            expect(text_with_position[i]).to eq(text)
+            expect(text_with_position[i]).to eq(text),
+              "expected index #{i} to contain #{text.inspect}, got #{text_with_position[i].inspect}"
           end
         end
       end
@@ -283,7 +285,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [28, 239, "Eine Strasse 42"],
           [28, 230, "1234 Dorf"],
           [28, 211, "Referenznummer"],
-          [28, 203, "00 00834 96356 70000 00000 00019"],
+          [28, 203, "00 00834 96356 70000 00000 00027"],
           [28, 184, "Zahlbar durch"],
           [28, 175, "Bottom Member"],
           [28, 167, "Greatstreet 345"],
@@ -304,7 +306,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
           [360, 258, "Eine Strasse 42"],
           [360, 247, "1234 Dorf"],
           [360, 226, "Referenznummer"],
-          [360, 215, "00 00834 96356 70000 00000 00019"],
+          [360, 215, "00 00834 96356 70000 00000 00027"],
           [360, 194, "Zahlbar durch"],
           [360, 183, "Bottom Member"],
           [360, 173, "Greatstreet 345"],
@@ -312,7 +314,8 @@ describe Export::Pdf::Messages::LetterWithInvoice do
         ]
 
         invoice_text.each_with_index do |text, i|
-          expect(text_with_position[i]).to eq(text)
+          expect(text_with_position[i]).to eq(text),
+            "expected index #{i} to contain #{text.inspect}, got #{text_with_position[i].inspect}"
         end
       end
     end

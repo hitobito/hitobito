@@ -29,6 +29,7 @@ class Event::ParticipationResource < ApplicationResource
       on(:"Event::Guest")
     end
   end
+  has_many :roles
 
   def base_scope
     super.list.active

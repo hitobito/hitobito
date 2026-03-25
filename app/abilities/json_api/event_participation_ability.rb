@@ -51,7 +51,7 @@ module JsonApi
       can_read_if(event_id: participation_read_events)
 
       # from layer_and_below_read and group_and_below roles (subtree)
-      can_read_if(event: {groups: {lft: self_and_below_ids}})
+      can_read_if(event: {groups: {lft: self_and_below_lft_ranges}})
 
       # from layer_read (within_layer)
       can_read_if(event: {groups: {layer_group_id: permission_layer_ids(:layer_read)}})
@@ -87,7 +87,7 @@ module JsonApi
       permissions.flat_map { |permission| ability.user_context.permission_layer_ids(permission) }
     end
 
-    def self_and_below_ids
+    def self_and_below_lft_ranges
       group_ids = permission_layer_ids(:layer_and_below_read) +
         permission_group_ids(:group_and_below_read)
 

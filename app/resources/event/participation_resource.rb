@@ -14,10 +14,10 @@ class Event::ParticipationResource < ApplicationResource
     attribute :event_id, :integer, filterable: true
     attribute :participant_id, :integer, filterable: true
     attribute :participant_type, :string, filterable: true
-    attribute :application_id, :integer # relation??
+    attribute :application_id, :integer
     attribute :active, :boolean
     attribute :qualified, :boolean
-    attribute :additional_information, :string # index_full
+    attribute :additional_information, :string
     attribute :created_at, :datetime
     attribute :updated_at, :datetime
   end
@@ -31,11 +31,10 @@ class Event::ParticipationResource < ApplicationResource
   end
 
   def base_scope
-    #  super.list.active  why active??
-    super.list
+    super.list.active
   end
 
   def index_ability
-    JsonApi::EventAbility.new(current_ability)
+    JsonApi::EventParticipationAbility.new(current_ability)
   end
 end

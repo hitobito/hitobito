@@ -21,6 +21,13 @@ $utilities: map-merge(
       ),
       responsive: true,
     ),
+    "min-width": (
+      property: min-width,
+      class: min-w,
+      values: (
+        0: 0
+      )
+    ),
     "margin-left": (
       property: margin-left,
       class: ml,

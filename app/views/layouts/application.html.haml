@@ -60,7 +60,7 @@
         - if render_nav?
           %nav.nav-left
             = render 'layouts/nav'
-        .w-100
+        .flex-grow-1.min-w-0
           - if render_sheets?
             = render_sheets do
               .content-header#main-content

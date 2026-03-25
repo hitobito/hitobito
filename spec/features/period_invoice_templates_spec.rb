@@ -58,8 +58,8 @@ describe :period_invoice_templates, js: true do
       expect(entry.recipient_group_type).to eq "Group::TopLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
-      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("10.00")
-      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([
+      expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("10.00")
+      expect(entry.items[0].dynamic_cost_parameters[:role_types]).to match_array([
         Group::TopGroup::Secretary.name,
         Group::TopGroup::LocalSecretary.name
       ])
@@ -124,8 +124,8 @@ describe :period_invoice_templates, js: true do
       expect(entry.recipient_group_type).to eq "Group::BottomLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
-      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("10.00")
-      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([
+      expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("10.00")
+      expect(entry.items[0].dynamic_cost_parameters[:role_types]).to match_array([
         Group::BottomLayer::LocalGuide.name,
         Group::BottomLayer::BasicPermissionsOnly.name
       ])
@@ -169,8 +169,8 @@ describe :period_invoice_templates, js: true do
       expect(entry.recipient_group_type).to eq "Group::TopLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
-      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("100.00")
-      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([
+      expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("100.00")
+      expect(entry.items[0].dynamic_cost_parameters[:role_types]).to match_array([
         Group::TopGroup::Secretary.name,
         Group::TopGroup::LocalSecretary.name
       ])
@@ -192,8 +192,8 @@ describe :period_invoice_templates, js: true do
       expect(entry).not_to be_nil
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Mitgliedsbeitrag")
-      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to be_nil
-      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to be_blank
+      expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq "5.00"
+      expect(entry.items[0].dynamic_cost_parameters[:role_types]).to eq [Group::BottomLayer::LocalGuide.name]
     end
 
     it "offers only role types matching the selected recipient group type" do
@@ -244,8 +244,8 @@ describe :period_invoice_templates, js: true do
       expect(entry.recipient_group_type).to eq "Group::BottomLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
-      expect(entry.items[0].dynamic_cost_parameters["unit_cost"]).to eq("100.00")
-      expect(entry.items[0].dynamic_cost_parameters["role_types"]).to match_array([
+      expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("100.00")
+      expect(entry.items[0].dynamic_cost_parameters[:role_types]).to match_array([
         Group::BottomLayer::LocalGuide.name,
         Group::BottomLayer::BasicPermissionsOnly.name
       ])

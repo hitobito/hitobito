@@ -15,11 +15,13 @@ describe Event::ParticipationDecorator, :draper_with_helpers do
   subject(:decorator) { described_class.new(participation) }
 
   describe "#labeled_link" do
-    subject(:labeled_link) { decorator.labeled_link }
+    subject(:labeled_link) { decorator.labeled_link(event.name) }
 
     it "returns event name as link to particpation" do
       is_expected.to have_text(event.name)
-      is_expected.to include(group_event_participation_path(event.groups.first, event, participation))
+      is_expected.to include(group_event_participation_path(group_id: event.groups.first.id,
+        event_id: event.id,
+        id: participation.id))
     end
   end
 end

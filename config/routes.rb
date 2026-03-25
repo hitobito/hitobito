@@ -440,6 +440,8 @@ Hitobito::Application.routes.draw do
       resource :preview, only: [:show], module: :messages
       resource :dispatch, only: [:create, :show], module: :messages
     end
+
+    get "user_job_results" => "user_job_results#index"
   end # scope locale
 
   get "/api", to: "json_api/documentation#index"

@@ -801,133 +801,6 @@
       }
     },
     {
-      "name": "Event::GuestResource",
-      "type": "event_guests",
-      "graphql_entrypoint": "guests",
-      "description": null,
-      "attributes": {
-        "id": {
-          "type": "integer_id",
-          "readable": true,
-          "writable": true,
-          "description": null
-        },
-        "first_name": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "last_name": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "nickname": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "company_name": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "company": {
-          "type": "boolean",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "email": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "address_care_of": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "street": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "housenumber": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "postbox": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "zip_code": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "town": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "country": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "language": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "phone_number": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        }
-      },
-      "extra_attributes": {},
-      "sorts": {
-        "id": {}
-      },
-      "filters": {
-        "id": {
-          "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
-        }
-      },
-      "relationships": {},
-      "stats": {
-        "total": [
-          "count"
-        ]
-      }
-    },
-    {
       "name": "Event::KindCategoryResource",
       "type": "event_kind_categories",
       "graphql_entrypoint": "kindCategories",
@@ -1188,14 +1061,115 @@
           "description": null,
           "resource": "EventResource"
         },
-        "participant": {
-          "type": "polymorphic_belongs_to",
+        "roles": {
+          "type": "has_many",
           "description": null,
-          "resources": [
-            "PersonResource",
-            "Event::GuestResource"
-          ],
-          "parent_resource": "Event::ParticipationResource"
+          "resource": "Event::RoleResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "Event::RoleResource",
+      "type": "event_roles",
+      "graphql_entrypoint": "roles",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "participation_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {},
+        "participation_id": {},
+        "type": {},
+        "label": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "participation_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        }
+      },
+      "relationships": {
+        "participation": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "Event::ParticipationResource"
         }
       },
       "stats": {

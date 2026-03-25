@@ -115,6 +115,10 @@ class TokenAbility
 
   def define_event_participation_abilities
     can :read, Event::Participation
+
+    can :index_participations, Event do |event|
+      event.groups.collect(&:layer_group).any? { |g| token.layer == g }
+    end
   end
 
   def define_group_abilities

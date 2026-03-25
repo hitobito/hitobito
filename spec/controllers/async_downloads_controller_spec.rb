@@ -16,7 +16,7 @@ describe AsyncDownloadsController do
 
   context "show" do
     it "sends file and deletes cookies if current_person has access and last download" do
-      filename = AsyncDownloadFile.create_name("test", person.id)
+      filename = UserJobResult.create_name("test", person.id)
       Cookies::AsyncDownload.new(cookies).set(name: filename, type: "txt")
       generate_test_file(filename)
 
@@ -27,7 +27,7 @@ describe AsyncDownloadsController do
     end
 
     it "sends file removes cookie entry if current_person has access and not last download" do
-      filename = AsyncDownloadFile.create_name("test", person.id)
+      filename = UserJobResult.create_name("test", person.id)
       Cookies::AsyncDownload.new(cookies).set(name: filename, type: "txt")
       Cookies::AsyncDownload.new(cookies).set(name: "second_download", type: "txt")
       generate_test_file(filename)
@@ -44,7 +44,7 @@ describe AsyncDownloadsController do
     end
 
     it "returns 404 if person has no access" do
-      filename = AsyncDownloadFile.create_name("test", 1234) # random person_id
+      filename = UserJobResult.create_name("test", 1234) # random person_id
       generate_test_file(filename)
 
       get :show, params: {id: filename, file_type: "txt"}
@@ -63,7 +63,7 @@ describe AsyncDownloadsController do
 
   context "exist" do
     it "render json status 200 if file exists and person has access" do
-      filename = AsyncDownloadFile.create_name("test", person.id)
+      filename = UserJobResult.create_name("test", person.id)
       generate_test_file(filename)
 
       get :exists?, params: {id: filename, file_type: "txt"}, format: :json
@@ -73,7 +73,7 @@ describe AsyncDownloadsController do
     end
 
     it "render json status 404 if person has no access" do
-      filename = AsyncDownloadFile.create_name("test", 1234) # random person_id
+      filename = UserJobResult.create_name("test", 1234) # random person_id
       generate_test_file(filename)
 
       get :exists?, params: {id: filename, file_type: "txt"}, format: :json
@@ -93,7 +93,7 @@ describe AsyncDownloadsController do
   private
 
   def generate_test_file(filename, filetype = :txt)
-    AsyncDownloadFile
+    UserJobResult
       .from_filename(filename, filetype)
       .write("this is a testfile")
   end

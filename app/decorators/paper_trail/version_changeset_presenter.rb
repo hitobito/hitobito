@@ -84,13 +84,22 @@ module PaperTrail
       end
     end
 
+    # We load both keys and check for a subtype translation, if that does not exist, we fallback
+    # to a base type translation
     def enum_translation(attr, value)
-      return item.decorate.state_translated if item_class == Event::Participation
+      subtype_key = i18n_key(item_subtype)
+      base_key = i18n_key(item_type)
+      attr_path = "#{attr.to_s.pluralize}.#{value}"
 
-      item_i18n_key = item_subtype&.safe_constantize&.model_name&.i18n_key
-      if I18n.exists?("activerecord.attributes.#{item_i18n_key}.#{attr.to_s.pluralize}.#{value}")
-        I18n.t("activerecord.attributes.#{item_i18n_key}.#{attr.to_s.pluralize}.#{value}")
+      if subtype_key && I18n.exists?("activerecord.attributes.#{subtype_key}.#{attr_path}")
+        I18n.t("activerecord.attributes.#{subtype_key}.#{attr_path}")
+      elsif base_key && I18n.exists?("activerecord.attributes.#{base_key}.#{attr_path}")
+        I18n.t("activerecord.attributes.#{base_key}.#{attr_path}")
       end
+    end
+
+    def i18n_key(type)
+      type&.underscore
     end
 
     def belongs_to_change_args(attr, value)

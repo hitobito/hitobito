@@ -5,33 +5,33 @@
 
 app = window.App ||= {}
 
-app.PeopleFilterAttribute = {
+app.FilterAttribute = {
   remove: (e) ->
-    $(e.target).closest('.people_filter_attribute_form').remove()
+    $(e.target).closest('.filter_attribute_form').remove()
     e.preventDefault()
 
   add: (e) ->
     return if e.target.value == ''
-    form = $('.people_filter_attribute_form_template').clone()
+    form = $('.filter_attribute_form_template').clone()
 
-    app.PeopleFilterAttribute.duplicateAttributeForm(e, form)
-    app.PeopleFilterAttribute.setAttributeNameTimestamp(form)
-    app.PeopleFilterAttribute.enableForm(form)
+    app.FilterAttribute.duplicateAttributeForm(e, form)
+    app.FilterAttribute.setAttributeNameTimestamp(form)
+    app.FilterAttribute.enableForm(form)
 
   duplicateAttributeForm: (e, form) ->
-    form.removeClass('people_filter_attribute_form_template')
+    form.removeClass('filter_attribute_form_template')
     form.removeClass('d-none')
     form.find('.attribute_key_dropdown').val(e.target.value)
     form.find('.attribute_key_hidden_field').val(e.target.value)
-    form.appendTo '#people_filter_attribute_forms'
+    form.appendTo '#filter_attribute_forms'
     e.target.value = ''
 
   setAttributeNameTimestamp: (form) ->
     time = new Date().getTime()
 
-    app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_key_hidden_field'), time)
-    app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_constraint_dropdown'), time)
-    app.PeopleFilterAttribute.renameAttributeName(form.find('.attribute_value_input'), time)
+    app.FilterAttribute.renameAttributeName(form.find('.attribute_key_hidden_field'), time)
+    app.FilterAttribute.renameAttributeName(form.find('.attribute_constraint_dropdown'), time)
+    app.FilterAttribute.renameAttributeName(form.find('.attribute_value_input'), time)
 
   renameAttributeName: (selector, time) ->
     regex = /\[\d{13}\]/
@@ -52,7 +52,7 @@ app.PeopleFilterAttribute = {
     form.find('.' + type + '_field').removeAttr('disabled')
 
   toggleValueVisibility: (e) ->
-    input = $(e.target).closest(".people_filter_attribute_form").find(".attribute_value_input")
+    input = $(e.target).closest(".filter_attribute_form").find(".attribute_value_input")
 
     if (e.target.value == "blank")
       input.addClass("invisible")
@@ -60,6 +60,6 @@ app.PeopleFilterAttribute = {
       input.removeClass("invisible")
 }
 
-$(document).on('change', '#attribute_filter', app.PeopleFilterAttribute.add)
-$(document).on('click', '.remove_filter_attribute', app.PeopleFilterAttribute.remove)
-$(document).on('click', '.attribute_constraint_dropdown', app.PeopleFilterAttribute.toggleValueVisibility)
+$(document).on('change', '#attribute_filter', app.FilterAttribute.add)
+$(document).on('click', '.remove_filter_attribute', app.FilterAttribute.remove)
+$(document).on('click', '.attribute_constraint_dropdown', app.FilterAttribute.toggleValueVisibility)

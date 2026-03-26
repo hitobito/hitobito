@@ -7,9 +7,12 @@
 
 module FilterNavigation
   class Events < Base
-    def initialize(template, group)
+    attr_reader :group, :filter
+
+    def initialize(template, group, filter = {})
       super(template)
       @group = group
+      @filter = filter
       init_items
     end
 
@@ -20,8 +23,11 @@ module FilterNavigation
     private
 
     def init_items
-      filter_item("deep")
-      filter_item("layer")
+      if group.layer? && group.has_sublayers?
+        filter_item("deep")
+        filter_item("layer")
+      end
+      init_dropdown_links
     end
 
     def filter_item(name)
@@ -34,6 +40,25 @@ module FilterNavigation
 
     def filter_path(name)
       template.url_for(template.params.to_unsafe_h.merge(range: name, only_path: true))
+    end
+
+    def init_dropdown_links
+      add_define_event_filter_link
+    end
+
+    def add_define_event_filter_link
+      dropdown.add_divider if dropdown.items.present?
+      dropdown.add_item(translate(:new_filter), new_event_filter_path)
+    end
+
+    def new_event_filter_path
+      template.send(
+        :"new_group_events_#{filter.event_type.type_name}_filter_path",
+        group.id,
+        year: filter.year,
+        range: filter.range,
+        filters: filter.chain.to_params
+      )
     end
   end
 end

@@ -1,0 +1,24 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= f.fields_for(:leader) do |fields|
+  .row.mb-2
+    = fields.label(:ids, ti('.leader'), class: "col-form-label col-md-3 col-xl-2")
+    .col-md-9.mw-63ch
+      - selected_ids = filter.chain.dig(:leader, :ids) || []
+      - people = Person.where(id: selected_ids).only_public_data.to_a
+      = fields.select(:ids,
+                      options_from_collection_for_select(people, :id, :to_s, selected_ids),
+                      {},
+                      multiple: true,
+                      class: "form-select form-select-sm w-100",
+                      placeholder: t('global.search.placeholder_person'),
+                      data: { controller: 'tom-select',
+                              tom_select_url_value: query_leaders_group_events_path(group_id: group.id, year: filter.year),
+                              tom_select_no_results_value: I18n.t('global.no_list_entries'),
+                              tom_select_label_value: 'label' })
+      .form-check.mt-1
+        = fields.checkbox(:user, checked: filter.chain.dig(:leader, :user).to_s == "1", class: "form-check-input")
+        = fields.label(:user, ti('.current_user'), class: "form-check-label")

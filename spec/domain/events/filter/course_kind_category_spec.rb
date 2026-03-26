@@ -62,8 +62,7 @@ describe Events::Filter::CourseKindCategory do
     let(:params) { {} }
 
     it "does not filter by category" do
-      result = filter.apply(base_scope)
-      expect(result.count).to eq(3)
+      expect(filter).to be_blank
     end
   end
 

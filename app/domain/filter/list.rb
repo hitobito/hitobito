@@ -14,7 +14,7 @@ class Filter::List
   def initialize(user, params = {})
     @user = user
     @params = params
-    @chain = filter_chain_class.new(params[:filters])
+    @chain = init_filter_chain(params[:filters])
     @name = params[:name]
     @ids = params[:ids].to_s.split(",")
   end
@@ -66,5 +66,9 @@ class Filter::List
 
   def default_order(scope)
     scope.list
+  end
+
+  def init_filter_chain(filters)
+    filter_chain_class.new(filters)
   end
 end

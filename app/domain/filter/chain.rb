@@ -76,9 +76,13 @@ class Filter::Chain
   def build_filter(attr, args)
     type = filter_type(attr)
     if type
-      filter = type.new(attr, args.with_indifferent_access)
+      filter = init_filter(type, attr, args.with_indifferent_access)
       filter.presence
     end
+  end
+
+  def init_filter(type, attr, args)
+    type.new(attr, args)
   end
 
   def filter_type(attr)

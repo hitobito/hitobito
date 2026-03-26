@@ -46,9 +46,7 @@ class InvoiceConfig < ActiveRecord::Base
   class_attribute :logo_positions, default: %w[disabled left right]
 
   i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true
-  i18n_enum :logo_position, scopes: false, queries: false do
-    logo_positions.map(&:to_s)
-  end
+  i18n_enum :logo_position, ->(c) { logo_positions.map(&:to_s) }, scopes: false, queries: false
 
   belongs_to :group, class_name: "Group"
 

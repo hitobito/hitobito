@@ -143,10 +143,16 @@ jobs:
         run: |
           BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/hitobito/${{ matrix.wagon.repo }}.git"
-          git fetch origin "$BRANCH_NAME"
-          git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME" --track "origin/$BRANCH_NAME"
-          git pull --rebase origin "$BRANCH_NAME"
-          git push origin "$BRANCH_NAME"
+
+          if git ls-remote --exit-code --heads origin "$BRANCH_NAME" > /dev/null 2>&1; then
+            git fetch origin "$BRANCH_NAME"
+            git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME" --track "origin/$BRANCH_NAME"
+            git pull --rebase origin "$BRANCH_NAME"
+          else
+            git checkout -b "$BRANCH_NAME"
+          fi
+
+          git push -u origin "$BRANCH_NAME"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
 
       - name: Open a pull request with the changes

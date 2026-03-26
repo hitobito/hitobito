@@ -20,6 +20,7 @@ gesetzt werden. Werte ohne Default müssen in der Regel definiert werden.
 
 | Umgebungsvariable | Beschreibung | Default                  |
 | --- | --- |--------------------------|
+| SECRET_KEY_BASE | Zufällig generierter 128 Zeichen Hexadezimaler string ("123456789abcdef...") der verwendet wird um Dinge wie Sessions zu signieren und verifizieren. | -                        |
 | RAILS_HOST_NAME | Öffentlicher Hostname der Applikation. Wird für Links in E-Mails verwendet. | -                        |
 | RAILS_HOST_SSL | Gibt an, ob die Applikation unter HTTPS läuft (`true` or `false`) | `false`                  |
 | RAILS_DB_NAME | Name der Datenbank | `hitobito_[environment]` |

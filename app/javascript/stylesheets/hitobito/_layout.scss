@@ -421,6 +421,9 @@ strong.bigger-title div.trix-content {
   // Unicode bullet point
   content: "\2022";
   margin-right: .5rem;
+  // Unicode characters can have different sizes depending on the font.
+  // Firefox internally defines the -moz-bullet-font for bullet points. Webkit browsers
+  // dont support this font though, so we fall back to a standard sans serif font.
   font-family: "-moz-bullet-font", sans-serif;
 }
 

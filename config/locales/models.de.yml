@@ -301,7 +301,7 @@ de:
         one: Datum
         other: Daten
       event/question:
-        one: Anmeldeangaben
+        one: Anmeldeangabe
         other: Anmeldeangaben
       event/answer:
         one: Antwort auf Anmeldeangabe

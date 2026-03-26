@@ -36,9 +36,36 @@ class Event::Question < ActiveRecord::Base
   # anyway and break sti subclasses
   translates :question, :choices
 
-  include GlobalizedPaperTrails
-  track_main_id_via { |record| record.event_id }
-  track_main_type_via { |record| Event.sti_name }
+  # To prevent issues of having paper trail versions when we don't want/need them, we add all
+  # translated attributes to the skip list and create own paper trail versions on the
+  # translation classes
+  paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                     globalize_attribute_names.map(&:to_s))
+
+  translation_class.class_eval do
+    has_paper_trail meta: {
+      main_id: ->(t) { t.globalized_model.event_id },
+      main_type: Event.sti_name
+    }
+
+    # This is used to display in log what language record actually changed. Currently those
+    # values are just the strings from settings.yml, so the log does not display translated
+    # language names
+    def to_s(format = :default)
+      locale.to_s
+    end
+  end
+
+  # Resync paper trail skip options after another translated attribute
+  # may have been added to a wagon
+  def translates(...)
+    super
+
+    return unless respond_to?(:paper_trail_options)
+
+    paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                  globalize_attribute_names.map(&:to_s))
+  end
 
   include I18nEnums
 

@@ -15,7 +15,7 @@ module I18nEnums
   module ClassMethods
     # possible_values should be an array of strings or a proc that returns an array of strings
     def i18n_enum(attr, possible_values = nil,
-      scopes: false, queries: false,
+      scopes: false, queries: false, validations: true,
       key: nil, i18n_prefix: nil, &block)
       raise "either possible_values or a block must be given" unless possible_values || block
       raise "cannot generate scopes/queries using a block" if block && (scopes || queries)
@@ -30,11 +30,13 @@ module I18nEnums
         ->(_) { possible_values }
       end
 
-      validate do
-        allowed = possible.call(self) || []
-        value = send(attr)
-        if value.present? && !allowed.include?(value)
-          errors.add(attr, :inclusion, value: value)
+      if validations
+        validate do
+          allowed = possible.call(self) || []
+          value = send(attr)
+          if value.present? && !allowed.include?(value)
+            errors.add(attr, :inclusion, value: value)
+          end
         end
       end
 

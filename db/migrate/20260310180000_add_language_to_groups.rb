@@ -9,7 +9,7 @@ class AddLanguageToGroups < ActiveRecord::Migration[8.0]
   def up
     if column_exists? :groups, :language
       available = Settings.application.languages.keys + Settings.application.additional_languages.keys
-      Group.where.not(language: available).update_all(language: default_language)
+      Group.where.not(language: available).or(Group.where(language: nil)).update_all(language: default_language)
       change_column :groups, :language, :string, default: default_language, null: false
     else
       add_column :groups, :language, :string, default: default_language, null: false

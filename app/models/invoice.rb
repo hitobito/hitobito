@@ -104,8 +104,6 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   normalizes :recipient_email, with: ->(attribute) { attribute.downcase }
 
-  after_create :increment_sequence_number
-
   accepts_nested_attributes_for :invoice_items, allow_destroy: true
 
   # To generate invoice pdfs with custom data, allow setting these attributes manually.
@@ -334,8 +332,15 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     invoice_items.each { |item| item.invoice = self }
   end
 
+  # Thread-safe sequence number generation using row-level locking.
+  # The lock ensures that reading and incrementing happen atomically,
+  # preventing race conditions when multiple workers create invoices simultaneously.
   def set_sequence_number
-    self.sequence_number = [group_id, invoice_config.sequence_number].join(SEQUENCE_NR_SEPARATOR)
+    InvoiceConfig.transaction(requires_new: true) do
+      config = InvoiceConfig.lock.find(invoice_config.id)
+      self.sequence_number = [group_id, config.sequence_number].join(SEQUENCE_NR_SEPARATOR)
+      config.increment!(:sequence_number)
+    end
   end
 
   def set_esr_number
@@ -380,10 +385,6 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def item_invalid?(attributes)
     !InvoiceItem.new(attributes.merge(invoice: self)).valid?
-  end
-
-  def increment_sequence_number
-    invoice_config.increment!(:sequence_number) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def assert_sendable?

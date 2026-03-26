@@ -153,7 +153,7 @@ it:
 
     social_account_fields:
       placeholder_value: Sito internet, nome skype, profilo...
-      placeholder_type: Tipo (Skype, Facebook...)
+      placeholder_type: Tipo (Instagram, Facebook...)
 
     additional_email_fields:
       placeholder_value: Email

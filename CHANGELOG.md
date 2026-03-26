@@ -2,6 +2,7 @@
 
 ## Version 2.8
 
+- Auf der Nachrichtenansicht werden nun keine PDF-Buttons mehr angezeigt (#4016)
 - Event-Teilnahmen wurden in das JSON:API integriert (#3789)
 - Labels von Kontaktinformationen (Telefonnummern etc.) können auf die vordefinierten Werde eingeschränkt werden. In den Personenexporten werden pro vordefiniertem Label eine Spalte ausgegeben (#1800) 
 - Es können jetzt, falls aktiviert, Sammelrechnungen erfasst werden. Diese können verwendet werden, um wiederholbare Rechnungsläufe an Gruppen zu versenden, mit berechneten Beträgen basierend auf der Anzahl Rollen, die während einer spezifischen Rechnungseriode in der jeweiligen Empfängergruppe aktiv waren. (#3610)

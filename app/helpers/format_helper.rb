@@ -141,7 +141,7 @@ module FormatHelper
     case type
     when :time then f(val.to_time)
     when :date then f(val.to_date)
-    when :datetime, :timestamp then "#{f(val.to_date)} #{f(val.to_time)}"
+    when :datetime, :timestamp, :timestamptz then "#{f(val.to_date)} #{f(val.to_time)}"
     when :text then val.present? ? h(val) : EMPTY_STRING
     when :decimal then f(val.to_s.to_f)
     else f(val)

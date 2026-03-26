@@ -37,8 +37,16 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
     expect(string).to eq("Vorname wurde auf <i>Fritz</i> gesetzt.")
   end
 
-  it "is empty without from and to " do
+  it "is empty without from and to" do
     string = presenter.attribute_change(:first_name, nil, "")
+    expect(string).to be_blank
+  end
+
+  # Saving attributes comma seperated (e.g. choices on event questions)
+  # leads to paper trails versions with just commas in them.
+  # These should not be displayed in the log
+  it "is empty if from and to only conatin commas" do
+    string = presenter.attribute_change(:first_name, ",", ",")
     expect(string).to be_blank
   end
 
@@ -56,6 +64,20 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
   it "translates i18n_enum values" do
     string = presenter.attribute_change(:language, "de", "fr")
     expect(string).to eq("Sprache wurde von <i>Deutsch</i> auf <i>Französisch</i> geändert.")
+  end
+
+  it "translates i18n_enum values from base type if subtype does not have own translation" do
+    version.update!(item: event_questions(:top_ov), item_subtype: "Event::Question::Default")
+    string = presenter.attribute_change(:disclosure, "hidden", "optional")
+
+    expect(string).to eq("Antwortangabe wurde von <i>Nicht angezeigt</i> auf <i>Optional</i> geändert.")
+  end
+
+  it "translates attribute label of translated attributes" do
+    version.update!(item: events(:top_course).translations.first)
+    string = presenter.attribute_change(:name, "Alter Name", "Neuer Name")
+
+    expect(string).to eq("Name (de) Von Top Course wurde von <i>Alter Name</i> auf <i>Neuer Name</i> geändert.")
   end
 
   # We currently have to add a custom i18n key for this spec case because there is no sti model
@@ -80,5 +102,12 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
 
     expect(string).to eq("I am translated (de) Von Top Course wurde von " \
       "<i>old value</i> auf <i>new value</i> geändert.")
+  end
+
+  it "translates human attribute name for attributes ending with type" do
+    version.update!(item: event_roles(:top_leader), item_subtype: "Event::Role::Leader")
+    string = presenter.attribute_change(:type, "Event::Role::Leader", "Event::Role::Participant")
+
+    expect(string).to eq("Rolle wurde von <i>Hauptleitung</i> auf <i>Teilnehmer/-in</i> geändert.")
   end
 end

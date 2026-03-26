@@ -34,13 +34,12 @@ module PaperTrail
     private
 
     def attribute_change_key(from, to)
-      if from.present? && to.present?
-        "from_to"
-      elsif from.present?
-        "from"
-      elsif to.present?
-        "to"
-      end
+      from_valid = valid_value?(from)
+      to_valid = valid_value?(to)
+
+      return "from_to" if from_valid && to_valid
+      return "from" if from_valid
+      "to" if to_valid
     end
 
     def attribute_change_args(attr, from, to)
@@ -77,8 +76,6 @@ module PaperTrail
       elsif enum_translation(attr, value).present?
         enum_translation(attr, value)
       else
-        return I18n.t("global.empty") if value.blank? || value == ","
-
         col = item_class.columns_hash[attr.to_s]
         h.format_column(col.try(:type), value)
       end
@@ -114,5 +111,7 @@ module PaperTrail
     end
 
     def item_class = @item_class ||= version.item_type.constantize
+
+    def valid_value?(value) = value.present? && value != ","
   end
 end

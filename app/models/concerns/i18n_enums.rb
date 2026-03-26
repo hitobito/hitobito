@@ -22,9 +22,21 @@ module I18nEnums
 
       key ||= attr.to_s.pluralize
       prefix = i18n_prefix || "activerecord.attributes.#{name.underscore}.#{key}"
-      possible = -> { possible_values || yield }
+      possible = if block_given?
+        ->(record) { record.instance_exec(&block) }
+      elsif possible_values.respond_to?(:call)
+        possible_values
+      else
+        ->(_) { possible_values }
+      end
 
-      validates attr, inclusion: {in: possible}, allow_blank: true
+      validate do
+        allowed = possible.call(self) || []
+        value = send(attr)
+        if value.present? && !allowed.include?(value)
+          errors.add(attr, :inclusion, value: value)
+        end
+      end
 
       define_method(:"#{attr}_label") do |value = nil|
         value ||= send(attr)
@@ -35,15 +47,17 @@ module I18nEnums
         end
       end
 
-      define_singleton_method(:"#{attr}_labels") do
-        possible.call.map do |key|
-          [key.to_sym, I18n.t("#{prefix}.#{key}")]
+      define_singleton_method(:"#{attr}_labels") do |record = nil|
+        possible.call(record).map do |value|
+          [value.to_sym, I18n.t("#{prefix}.#{value}")]
         end.to_h
       end
 
-      possible.call.each do |value|
-        scope value.to_sym, -> { where(attr => value) } if scopes
-        define_method(:"#{value}?") { self[attr] == value } if queries
+      if queries || scopes
+        possible.call(nil).each do |value|
+          scope value.to_sym, -> { where(attr => value) } if scopes
+          define_method(:"#{value}?") { self[attr] == value } if queries
+        end
       end
     end
   end

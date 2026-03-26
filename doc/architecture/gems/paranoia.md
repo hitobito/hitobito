@@ -18,9 +18,8 @@ the `destroy` method is overwritten.
 class Role < ActiveRecord::Base
 
   has_paper_trail meta: { main_id: ->(r) { r.person_id },
-  main_type: Person.sti_name },
-  skip: [:updated_at]
-  
+  main_type: Person.sti_name }
+
   acts_as_paranoid
 ```
 

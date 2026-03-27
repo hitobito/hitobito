@@ -184,12 +184,13 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def permitted_params(role_type = entry.class)
-    @permitted_params ||=
-      begin
-        permitted_attrs = role_type.used_attributes + [:start_on, :end_on]
-        permitted_attrs -= [:end_on] unless can?(:destroy, @role)
-        model_params.permit(permitted_attrs)
-      end
+    @permitted_params ||= model_params.permit(permitted_attrs)
+  end
+
+  def permitted_attrs
+    permitted_attrs = entry.class.used_attributes + [:start_on, :end_on]
+    permitted_attrs -= [:end_on] unless can?(:destroy, @role)
+    permitted_attrs
   end
 
   def find_group

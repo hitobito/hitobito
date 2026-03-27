@@ -452,7 +452,7 @@ de:
 
       additional_address:
         translated_label: Bezeichnung
-        street_and_number: Strasse/Nummer
+        street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ

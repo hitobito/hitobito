@@ -167,6 +167,7 @@ fr:
       caption_used_for_invoices: Utilisé pour les factures
 
     address_fields:
+      housenumber: No.
       updates_household_address: l'adresse est actualisée pour l'ensemble du foyer
 
   custom_content_decorator:

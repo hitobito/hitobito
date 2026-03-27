@@ -217,10 +217,10 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def filename(extension = "pdf")
-    format("%<type>s-%<number>s.%<ext>s",
-      type: self.class.model_name.human,
-      number: sequence_number,
-      ext: extension)
+    attrs = {type: self.class.model_name.human, number: sequence_number}
+    return format("%<type>s-%<number>s", attrs) if extension.blank?
+
+    format("%<type>s-%<number>s.%<ext>s", attrs.merge(ext: extension))
   end
 
   def invoice_config

@@ -611,7 +611,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     labeled(attr, caption, content,
       field_help: field_help,
-      required: options[:required],
+      mark_as_required: options[:required],
       label_class: label_class,
       class: content_class)
   end

@@ -27,10 +27,6 @@ class Wizards::Steps::NewUserForm < Wizards::Step
     super(attr, default: Person.human_attribute_name(attr, options))
   end
 
-  def assignable_attributes
-    attributes.compact_blank.symbolize_keys.except(:adult_consent)
-  end
-
   private
 
   def assert_privacy_policy

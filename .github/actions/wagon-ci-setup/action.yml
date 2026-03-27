@@ -46,15 +46,37 @@ runs:
     - name: "Determine common branch and set branch name for dependency repo"
       if: inputs.wagon_dependency_repository != ''
       env:
+        GH_TOKEN: ${{ inputs.github_token }}
+        INPUT_CORE_REF: ${{ inputs.core_ref }}
         WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
         INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
+        INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
       run: |
-        WAGON_DEPENDENCY_REF="$INPUT_WDEP_REF"
-        if [ -z "$INPUT_WDEP_REF" ] && [ "$WAGON_DEPENDENCY_REPO" != '' ]; then
-          WAGON_DEPENDENCY_REF=$(git ls-remote --heads https://github.com/hitobito/$WAGON_DEPENDENCY_REPO | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
+        REPO_URL="https://github.com/hitobito/$WAGON_DEPENDENCY_REPO"
+        REMOTE_BRANCHES=$(git ls-remote --heads "$REPO_URL" | awk -F'refs/heads/' '{print $2}')
+
+        if [ -n "$INPUT_WDEP_REF" ]; then
+          RESOLVED_REF="$INPUT_WDEP_REF"
+        else
+          PR_BRANCH=""
+          if [[ "$INPUT_CORE_REF" =~ ^refs/pull/([0-9]+)/ ]]; then
+            PR_NUMBER="${BASH_REMATCH[1]}"
+            PR_BRANCH=$(gh pr view "$PR_NUMBER" --repo hitobito/hitobito --json headRefName -q '.headRefName')
+          fi
+
+          for candidate in "$INPUT_CORE_REF" "$PR_BRANCH" "$INPUT_WAGON_REF"; do
+            [ -z "$candidate" ] && continue
+
+            if echo "$REMOTE_BRANCHES" | grep -fxq "$candidate"; then
+              RESOLVED_REF="$candidate"
+              break
+            fi
+          done
         fi
 
-        echo "WAGON_DEPENDENCY_REF=$WAGON_DEPENDENCY_REF" >> $GITHUB_ENV
+        RESOLVED_REF="${RESOLVED_REF:-master}"
+
+        echo "WAGON_DEPENDENCY_REF=$RESOLVED_REF" >> $GITHUB_ENV
       shell: bash
 
     - name: "Determine common branch and set branch name for wagon repo"

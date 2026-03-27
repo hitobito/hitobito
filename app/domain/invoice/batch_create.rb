@@ -101,10 +101,8 @@ class Invoice::BatchCreate
 
     Invoice.transaction do
       invoice.save!
-      invoice.invoice_items.select { |item| item.is_a?(Invoice::PeriodItem) }.each do |item|
-        subjects = item.subjects
-        InvoiceRun::ProcessedSubject.insert_all!(subjects)
-      end
+      invoice.invoice_items.select { |item| item.is_a?(Invoice::PeriodItem) }
+        .each { |item| InvoiceRun::ProcessedSubject.insert_all!(item.subjects) }
       true
     rescue
       raise ActiveRecord::Rollback

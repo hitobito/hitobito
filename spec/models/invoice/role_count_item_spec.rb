@@ -59,6 +59,11 @@ describe Invoice::RoleCountItem do
       item.dynamic_cost_parameters[:unit_cost] = nil
       expect(item).not_to be_valid
     end
+
+    it "is valid with unit_cost above 1000" do
+      item.dynamic_cost_parameters[:unit_cost] = "1000.00"
+      expect(item).to be_valid
+    end
   end
 
   context "#count" do
@@ -79,9 +84,8 @@ describe Invoice::RoleCountItem do
 
         Fabricate(Group::BottomGroup::Leader.name, group:)
         Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_two_one))
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(2)
+        expect(item.recalculate.count).to eq(2)
       end
 
       it "ignores inactive role" do
@@ -241,9 +245,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.recalculate.count).to eq(1)
       end
 
       it "ignores inactive role" do
@@ -351,9 +354,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.recalculate.count).to eq(1)
       end
 
       it "counts multiple roles of the same person and same group as one" do
@@ -403,9 +405,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group:, person:)
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.recalculate.count).to eq(1)
       end
 
       it "ignores inactive role" do
@@ -562,9 +563,8 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(0)
 
         Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
-        item.instance_variable_set(:@count, nil)
 
-        expect(item.count).to eq(1)
+        expect(item.recalculate.count).to eq(1)
       end
 
       it "ignores inactive role" do

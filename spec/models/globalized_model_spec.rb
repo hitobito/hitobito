@@ -11,6 +11,22 @@ describe "Globalized model" do
   let(:group) { groups(:top_layer) }
   let(:custom_content) { custom_contents(:assignment_assignee_notification) }
 
+  describe "#method_missing" do
+    let(:model_instance) { Event.new } # can be anything that includes globalized
+
+    it "returns nil for a translated attribute that isn't defined on this specific STI child" do
+      allow(model_instance).to receive(:translated_attribute_names).and_return([:title])
+
+      expect(model_instance.title).to be_nil
+    end
+
+    it "still raises NoMethodError for attributes not in the translation list" do
+      allow(model_instance).to receive(:translated_attribute_names).and_return([:title])
+
+      expect { model_instance.unknown_field }.to raise_error(NoMethodError)
+    end
+  end
+
   it "should create globalized accessors" do
     privacy_policy_titles = Globalized.languages.each_with_object({}) do |lang, hash|
       hash[:"privacy_policy_title_#{lang}"] = "Privacy policy title in #{lang}"

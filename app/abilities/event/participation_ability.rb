@@ -17,6 +17,8 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:any).may(:show_full, :update).for_participations_full_events
     permission(:any).may(:destroy).her_own_if_application_cancelable
 
+    permission(:any).may(:index).all # via API with session cookie
+
     permission(:group_full)
       .may(:show, :show_details, :show_full, :print, :create, :update, :destroy)
       .in_same_group

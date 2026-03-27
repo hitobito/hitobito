@@ -33,7 +33,7 @@ shared_examples "jsonapi authorized requests" do |person: :top_leader, required_
       Person.find_by(id: person_id)
     end
 
-    if defined?(person_id)
+    if defined?(person) && person
       it "returns 200 for person with correct role" do
         sign_in(current_user)
         make_request

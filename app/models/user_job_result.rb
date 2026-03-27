@@ -19,51 +19,17 @@
 #  person_id  :integer          not null
 #
 
-class AsyncDownloadFile < ApplicationRecord
-  class << self
-    FILENAME_REGEX = /\A(.*)_(\d+)-(\d+)\z/
-
-    def create_name(filename, person_id)
-      "#{filename.to_s.parameterize(preserve_case: true)}_#{Time.now.to_i}-#{person_id}"
-    end
-
-    def parse_filename(filename)
-      filename.match(FILENAME_REGEX)[1..]
-    end
-
-    def from_filename(filename, filetype = :txt)
-      return unless parseable?(filename)
-
-      name, timestamp, person_id = parse_filename(filename)
-
-      file = find_or_create_by(
-        name: name, timestamp: timestamp, person_id: person_id
-      )
-      file.update!(filetype: filetype)
-      file
-    end
-
-    def maybe_from_filename(filename, person_id, filetype)
-      if parseable?(filename)
-        from_filename(filename, filetype)
-      else
-        from_filename(create_name(filename, person_id), filetype)
-      end
-    end
-
-    def parseable?(filename)
-      filename =~ FILENAME_REGEX
-    end
-  end
+class UserJobResult < ApplicationRecord
+  belongs_to :delayed_job, class_name: "Delayed::Backend::ActiveRecord::Job", optional: true
 
   has_one_attached :generated_file
 
+  after_create_commit -> { broadcast_prepend_to "user_job_results" }
+  after_update_commit -> { broadcast_replace_to "user_job_results" }
+  after_destroy_commit -> { broadcast_remove_to "user_job_results" }
+
   before_destroy do
     generated_file.purge if generated_file.attached?
-  end
-
-  def filename
-    "#{name}.#{filetype}"
   end
 
   def to_s
@@ -89,7 +55,7 @@ class AsyncDownloadFile < ApplicationRecord
     io.write(data)
     io.rewind # make ActiveStorage's checksum-calculation deterministic
 
-    generated_file.attach(io: io, filename: filename.to_s)
+    generated_file.attach(io: io, filename:)
   end
 
   def read

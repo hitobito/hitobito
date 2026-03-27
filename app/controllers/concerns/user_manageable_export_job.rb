@@ -3,15 +3,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module AsyncDownload
-  def with_async_download_cookie(
-    format, name,
-    redirection_target: {returning: true},
-    render_command: nil
-  )
-    filename ||= AsyncDownloadFile.create_name(name, current_person.id)
-    Cookies::AsyncDownload.new(cookies).set(name: filename, type: format)
-    yield filename
+module UserManageableExportJob
+  def respond_to_export_job(redirection_target: {returning: true}, render_command: nil)
     flash[:notice] = translate(:export_enqueued, default: :"groups.export_enqueued")
 
     if render_command

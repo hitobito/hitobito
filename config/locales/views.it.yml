@@ -211,9 +211,9 @@ it:
     archive: "archiviare"
 
   dropdown/people_email_export:
-    button: "Export E-Mail Adressen"
-    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
-    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
+    button: "Esporta indirizzi e-mail"
+    emails_comma_separated: "Separati da virgola (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Separato da punto e virgola (Outlook)"
 
   dropdown/people_export:
     button: "esportare"
@@ -416,11 +416,11 @@ it:
       apply_until: "fino a %{date}"
     application_market:
       application:
-        modal_title: Wollen Sie diese Anmeldung bestätigen?
+        modal_title: Vuole confermare questa registrazione?
         confirm_and_send_mail: Confermare e inviare l'e-mail
         confirm_and_send_no_mail: Conferma senza e-mail
       participant:
-        modal_title: Wollen Sie diese Zuteilung entfernen?
+        modal_title: Vuole eliminare questa assegnazione?
         confirm_and_send_mail: Confermare e inviare l'e-mail
         confirm_and_send_no_mail: Conferma senza e-mail
       already_assigned: "Questa persona è già assegnata da un'altra parte."
@@ -1748,7 +1748,7 @@ it:
         person_not_blocked: Il login non è bloccato
 
       groups_and_roles_that_see_me:
-        deleted_groups: Gelöschte Gruppen
+        deleted_groups: Gruppi eliminati
 
       password_override:
         flashes:

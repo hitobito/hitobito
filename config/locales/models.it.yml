@@ -1504,7 +1504,7 @@ it:
       with_roles: Lettura dei dati anagrafici e delle autorizzazioni dell'utente. Per garantire che le autorizzazioni del vostro account possano essere memorizzate correttamente, il nostro sistema controlla i vostri dati anagrafici di autorizzazione e indirizzo, che non contengono altre informazioni personali.
       openid: Leggere il token di identità OpenID Connect (OIDC). Si tratta di informazioni utilizzate per autenticare l'utente. Ciò consente al nostro sistema di confermare l'identità del vostro account e di garantire che non vi siano accessi non autorizzati.
       api: Leggere tutte le persone, i gruppi, gli eventi, gli abbonamenti e le fatture a cui hai accesso tramite le interfacce JSON
-      events: Leggere tutti gli eventi a cui hai accesso
+      events: Lesen aller Events und Teilnahmen, auf die du Zugriff hast
       groups: Leggere tutti i gruppi a cui hai accesso
       people: Leggere tutte le persone a cui hai accesso
       invoices: Leggere tutte le fatture a cui hai accesso

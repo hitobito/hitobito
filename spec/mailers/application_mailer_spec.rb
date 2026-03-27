@@ -239,6 +239,12 @@ describe ApplicationMailer do
       it "has the sender per locale defined in the translation" do
         check_sender { Person::LoginMailer.login(recipient, sender, "abcdef") }
       end
+
+      it "does not include reply-to if it is already in the to-header" do
+        mail = Person::LoginMailer.login(recipient, recipient, "abcdef")
+
+        expect(mail.reply_to).to be_nil
+      end
     end
 
     describe Person::UserPasswordOverrideMailer do

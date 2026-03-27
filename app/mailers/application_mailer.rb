@@ -35,6 +35,8 @@ class ApplicationMailer < ActionMailer::Base
 
     headers[:to] = emails
     headers[:subject] ||= unescape_html(content.subject_with_values(values))
+    headers.delete(:reply_to) if headers[:to].include?(headers[:reply_to])
+
     mail(headers) do |format|
       format.html { render html: content.body_with_values(values), layout: true }
     end

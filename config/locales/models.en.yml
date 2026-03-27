@@ -1428,7 +1428,7 @@ en:
       with_roles: Read your base data and roles
       openid: Read your OIDC Identity Token
       api: Read all persons, groups, events, subscriptions and invoices to which you have access via the JSON interfaces
-      events: Read all events that you have access to
+      events: Lesen aller Events und Teilnahmen, auf die du Zugriff hast
       groups: Read all groups that you have access to
       people: Read all the people you have access to
       invoices: Read all invoices that you have access to

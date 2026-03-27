@@ -211,9 +211,9 @@ fr:
     archive: "Archiver"
 
   dropdown/people_email_export:
-    button: "Export E-Mail Adressen"
-    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
-    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
+    button: "Exporter les adresses e-mail"
+    emails_comma_separated: "Séparés par des virgules (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Séparés par un point-virgule (Outlook)"
 
   dropdown/people_export:
     button: "Exporter"
@@ -416,11 +416,11 @@ fr:
       apply_until: "jusqu'au %{date}"
     application_market:
       application:
-        modal_title: Wollen Sie diese Anmeldung bestätigen?
+        modal_title: Souhaitez-vous confirmer cette inscription ?
         confirm_and_send_mail: Confirmer et envoyer un e-mail
         confirm_and_send_no_mail: Confirmer sans e-mail
       participant:
-        modal_title: Wollen Sie diese Zuteilung entfernen?
+        modal_title: Souhaitez-vous supprimer cette attribution ?
         confirm_and_send_mail: Confirmer et envoyer un e-mail
         confirm_and_send_no_mail: Confirmer sans e-mail
       already_assigned: "Cette personne est déjà attribuée à un autre endroit."
@@ -1748,7 +1748,7 @@ fr:
         person_not_blocked: Le login n'est maintenant pas bloqué
 
       groups_and_roles_that_see_me:
-        deleted_groups: Gelöschte Gruppen
+        deleted_groups: Groupes supprimés
 
       password_override:
         flashes:
@@ -2174,9 +2174,9 @@ fr:
   tags:
     list:
       confirm_delete: >
-          Wollen Sie diesen Eintrag wirklich löschen? Dies löscht das Tag aus allen
-          Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet
-          wird.
+          Voulez-vous vraiment supprimer cette entrée ? Cela supprimera le tag de
+          tous les profils, abonnements et filtres de personnes dans lesquels il est
+          encore utilisé.
     multiselect_actions:
       merge_tags: Merge
     categories:

@@ -210,9 +210,9 @@ en:
     archive: "Archive"
 
   dropdown/people_email_export:
-    button: "Export E-Mail Adressen"
-    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
-    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
+    button: "Export email addresses"
+    emails_comma_separated: " Separated by commas (Apple Mail, Thunderbird, etc.)"
+    emails_semicolon_separated: "Separated by a semicolon (Outlook)"
 
   dropdown/people_export:
     button: "Export"
@@ -415,11 +415,11 @@ en:
       apply_until: "until %{date}"
     application_market:
       application:
-        modal_title: Wollen Sie diese Anmeldung bestätigen?
+        modal_title: Do you want to confirm this registration?
         confirm_and_send_mail: Bestätigen und E-Mail senden
         confirm_and_send_no_mail: Bestätigen ohne E-Mail
       participant:
-        modal_title: Wollen Sie diese Zuteilung entfernen?
+        modal_title: Do you want to remove this assignment?
         confirm_and_send_mail: Bestätigen und E-Mail senden
         confirm_and_send_no_mail: Bestätigen ohne E-Mail
       already_assigned: "This person was already assigned or registered for a different event."
@@ -1706,7 +1706,7 @@ en:
         person_not_blocked: Login is not locked
 
       groups_and_roles_that_see_me:
-        deleted_groups: Gelöschte Gruppen
+        deleted_groups: Deleted groups
 
       password_override:
         flashes:
@@ -2119,9 +2119,9 @@ en:
   tags:
     list:
       confirm_delete: >
-          Wollen Sie diesen Eintrag wirklich löschen? Dies löscht das Tag aus allen
-          Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet
-          wird.
+          Are you sure you want to delete this entry? This will remove the tag from
+          all user profiles, subscriptions, and user filters where it is still in
+          use.
     multiselect_actions:
       merge_tags: Merge
     categories:

@@ -79,7 +79,7 @@ module InvoicesHelper
   end
 
   def invoices_export_dropdown
-    Dropdown::Invoices.new(self, params, :download).export
+    Dropdown::Invoices.new(self, :download).export
   end
 
   def invoices_evaluation_export_dropdown
@@ -88,14 +88,14 @@ module InvoicesHelper
 
   def invoices_print_dropdown
     if parent.is_a?(InvoiceRun) && Message::LetterWithInvoice.exists?(invoice_run: parent)
-      Dropdown::LetterWithInvoice.new(self, params, :print).print
+      Dropdown::LetterWithInvoice.new(self, :print).print
     else
-      Dropdown::Invoices.new(self, params, :print).print
+      Dropdown::Invoices.new(self, :print).print
     end
   end
 
   def invoice_sending_dropdown
-    Dropdown::InvoiceSending.new(self, params)
+    Dropdown::InvoiceSending.new(self)
   end
 
   def invoice_history(invoice)

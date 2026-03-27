@@ -19,6 +19,8 @@
 #
 
 class Event::Role < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(r) { r.participation_id },
+                         main_type: Event::Participation.sti_name}
   # rubocop:disable Naming/ConstantName,Style/MutableConstant
 
   Permissions = [:event_full, :participations_full, :participations_read_details,
@@ -66,6 +68,7 @@ class Event::Role < ActiveRecord::Base
   after_update :update_participant_count, if: :type_previously_changed?
   before_destroy :protect_applying_participant
   after_destroy :destroy_participation_for_last
+  after_save :create_event_paper_trail_version, if: :saved_change_to_type?
 
   class << self
     def label
@@ -94,9 +97,17 @@ class Event::Role < ActiveRecord::Base
 
   ### INSTANCE METHODS
 
-  def to_s(_format = :default)
+  def to_s(format = :default)
     model_name = self.class.label
-    label? ? "#{label} (#{model_name})" : model_name
+
+    if format == :long
+      I18n.t("activerecord.attributes.event/role.string_long", role: model_name,
+        participation: participation.to_s)
+    elsif label?
+      "#{label} (#{model_name})"
+    else
+      model_name
+    end
   end
 
   def person
@@ -165,5 +176,16 @@ class Event::Role < ActiveRecord::Base
   def update_participant_count
     event ||= participation.event
     event&.refresh_participant_counts!
+  end
+
+  def create_event_paper_trail_version
+    PaperTrail::Version.create!(
+      item: self,
+      main: event,
+      event: previously_new_record? ? "create" : "update",
+      object: attributes.to_yaml,
+      object_changes: {"type" => saved_changes[:type]}.to_yaml,
+      whodunnit: PaperTrail.request.whodunnit
+    )
   end
 end

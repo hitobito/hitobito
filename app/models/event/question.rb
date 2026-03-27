@@ -27,15 +27,49 @@
 #
 
 class Event::Question < ActiveRecord::Base
+  has_paper_trail meta: {main_id: ->(q) { q.event_id },
+                         main_type: Event.sti_name}
+
   include Globalized
-  include I18nEnums
-
-  self.list_alphabetically = Settings.event.questions.list_alphabetically
-
   # ensure all translated attributes including subclasses are added here
   # as globalize will add it to the base class' translated_attribute_names
   # anyway and break sti subclasses
   translates :question, :choices
+
+  # To prevent issues of having paper trail versions when we don't want/need them, we add all
+  # translated attributes to the skip list and create own paper trail versions on the
+  # translation classes
+  paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                     globalize_attribute_names.map(&:to_s))
+
+  translation_class.class_eval do
+    has_paper_trail meta: {
+      main_id: ->(t) { t.globalized_model.event_id },
+      main_type: Event.sti_name
+    }
+
+    # This is used to display in log what language record actually changed. Currently those
+    # values are just the strings from settings.yml, so the log does not display translated
+    # language names
+    def to_s(format = :default)
+      locale.to_s
+    end
+  end
+
+  # Resync paper trail skip options after another translated attribute
+  # may have been added to a wagon
+  def translates(...)
+    super
+
+    return unless respond_to?(:paper_trail_options)
+
+    paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                  globalize_attribute_names.map(&:to_s))
+  end
+
+  include I18nEnums
+
+  self.list_alphabetically = Settings.event.questions.list_alphabetically
 
   belongs_to :event
   belongs_to :derived_from_question, class_name: "Event::Question", inverse_of: :derived_questions
@@ -98,6 +132,10 @@ class Event::Question < ActiveRecord::Base
     # use safe navigation so not to break records missing the
     # question text created before validation was added
     question&.truncate(30)
+  end
+
+  def to_s(format = :default)
+    label
   end
 
   def global?

@@ -300,6 +300,12 @@ de:
       event/date:
         one: Datum
         other: Daten
+      event/question:
+        one: Anmeldeangabe
+        other: Anmeldeangaben
+      event/answer:
+        one: Antwort auf Anmeldeangabe
+        other: Antworten auf Anmeldeangaben
       family_member:
         one: Familienmitglied
         other: Familienmitglieder
@@ -675,6 +681,7 @@ de:
         motto: Motto
         cost: Kosten
         contact: Kontaktperson
+        creator_id: Ersteller
         notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
         maximum_participants: Maximale Teilnehmerzahl
         minimum_participants: Minimale Teilnehmerzahl
@@ -849,6 +856,7 @@ de:
         answers: Fragen
         created_at: Anmeldedatum
         roles: Rolle
+        active: Aktiv
 
       event/question:
         question: Frage
@@ -881,7 +889,7 @@ de:
         type: Rolle
         participation: Person
         remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
-
+        string_long: "%{role} von %{participation}"
 
       family_member:
         kind: Verwandschaftsverhältnis

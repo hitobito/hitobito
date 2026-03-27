@@ -1090,6 +1090,34 @@ describe Event do
     end
   end
 
+  context "paper trails", versioning: true do
+    before do
+      event.save! # make sure visible_contact_attributes are not serialized and set on the first update
+      PaperTrail::Version.destroy_all
+    end
+
+    it "sets main to event on create" do
+      expect do
+        Event.create!(groups: [groups(:top_layer)], name: "super cool event",
+          dates: [Event::Date.new(start_at: 1.week.from_now)])
+      end.to change { PaperTrail::Version.count }.by(3) # creates version for event date and event name translation
+
+      version = PaperTrail::Version.where(item_type: Event.sti_name).order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(Event.last)
+    end
+
+    it "sets main to event on update" do
+      expect do
+        event.update!(name: "this name is different than the first one...")
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(event)
+    end
+  end
+
   def set_start_finish(event, start_at)
     start_at = Time.zone.parse(start_at)
     event.dates.create!(start_at: start_at, finish_at: start_at + 5.days)

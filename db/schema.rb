@@ -1339,6 +1339,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.datetime "created_at", precision: nil
     t.string "whodunnit_type", default: "Person", null: false
     t.string "mutation_id"
+    t.string "item_subtype"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
     t.index ["mutation_id"], name: "index_versions_on_mutation_id"

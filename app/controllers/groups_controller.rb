@@ -74,7 +74,9 @@ class GroupsController < CrudController
   end
 
   def export_subgroups
-    Export::SubgroupsExportJob.new(current_person.id, entry.id, filename: :subgroups_export).enqueue!
+    Export::SubgroupsExportJob.new(
+      current_person.id, entry.id, filename: :subgroups_export
+    ).enqueue!
     respond_to_export_job(redirection_target: entry)
   end
 

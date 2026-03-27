@@ -35,8 +35,10 @@ export default class extends Controller {
   submit(event) {
     const submit = document.querySelector("input[name=autosubmit]");
     this.#withAutosubmitValue(submit, event.target.name || "autosubmit", () => {
-      this.#withTurboFrame(event.target.dataset.turboFrame, () => {
-        this.element.requestSubmit();
+      this.#withoutFrontendFormValidation(() => {
+        this.#withTurboFrame(event.target.dataset.turboFrame, () => {
+          this.element.requestSubmit();
+        })
       })
     })
   }
@@ -53,6 +55,19 @@ export default class extends Controller {
     autosubmitElement.value = value;
     callback();
     autosubmitElement.value = previous;
+  }
+
+  /**
+   * In autosubmitted requests, we don't want to trigger frontend validation such as required
+   * fields. To make this work, we temporarily add a novalidate attribute to the form.
+   */
+  #withoutFrontendFormValidation(callback) {
+    const form = this.element.closest('form');
+    if (!form) return callback();
+    const previous = form.noValidate;
+    form.noValidate = true;
+    callback();
+    form.noValidate = previous;
   }
 
   /**

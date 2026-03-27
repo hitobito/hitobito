@@ -590,11 +590,17 @@ td.revoke {
   float: none;
 }
 
+.switcher-container {
+  display: inline-grid;
+  position: relative;
+}
+
 input.switcher {
-  // Cant be 0 pixels because then the nvda screen reader would read "blank" instead of the aria-label in firefox
-  height: 1px;
-  width: 1px;
   opacity: 0;
+  width: 40px;
+  height: 20px;
+  grid-row: 1;
+  grid-column: 1;
 
   & + label {
     display: inline-block;
@@ -603,8 +609,9 @@ input.switcher {
     text-indent: -5000px;
     height: 20px;
     width: 40px;
-    top: 10px;
     border-radius: 10px;
+    grid-row: 1;
+    grid-column: 1;
   }
 
   // switcher active background

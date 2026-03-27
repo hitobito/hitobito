@@ -6,11 +6,23 @@
 #  https://github.com/hitobito/hitobito.
 
 module People
+  ValidationError = Data.define(:model) do
+    def to_s = "#{label}: #{errors}"
+
+    private
+
+    def label = "#{model.class.model_name.human}(#{model.id})"
+
+    def errors = model.errors.full_messages.join(", ")
+  end
+
   class Merger
+    attr_reader :validation_errors
     def initialize(source, target, actor)
       @source = source
       @target = target
       @actor = actor
+      @validation_errors = []
     end
 
     def merge!
@@ -77,12 +89,19 @@ module People
       @source.send(assoc).each do |a|
         next if unique_attr && @target.send(assoc).pluck(unique_attr).include?(a.send(unique_attr))
 
-        if validate
-          a.update!(key => @target)
-        else
-          a.update_attribute!(key, @target)
-        end
+        update_assoicated_model(a, key, validate)
       end
+    end
+
+    def update_assoicated_model(a, key, validate)
+      if validate
+        a.update!(key => @target)
+      else
+        a.update_attribute!(key, @target)
+      end
+    rescue ActiveRecord::RecordInvalid
+      validation_errors << ValidationError.new(a)
+      a.update_attribute!(key, @target)
     end
 
     def merge_qualifications

@@ -4,6 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module RenderPeopleExports
+  include UserManageableExportJob
   extend ActiveSupport::Concern
 
   def render_pdf(people, group = nil, title = nil)
@@ -25,14 +26,13 @@ module RenderPeopleExports
   end
 
   def render_pdf_in_background(people, group, filename)
-    with_async_download_cookie(:pdf, filename) do |filename|
-      Export::LabelsJob.new(:pdf,
-        current_user.id,
-        Person.from(people.select("people.id AS person_id")).pluck(:person_id),
-        group.id,
-        params.slice(:label_format_id, :household, :address_type)
-        .merge(filename: filename)).enqueue!
-    end
+    Export::LabelsJob.new(:pdf,
+      current_user.id,
+      Person.from(people.select("people.id AS person_id")).pluck(:person_id),
+      group.id,
+      params.slice(:label_format_id, :household, :address_type)
+      .merge(filename: filename)).enqueue!
+    respond_to_export_job
   end
 
   private

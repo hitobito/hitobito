@@ -11,11 +11,12 @@
   %div{data: { 'additional-address-target' => 'toggle'}, class: ("hidden" if f.object.uses_contactable_name)}
     = f.labeled_input_field(:name)
   = f.labeled_input_field(:address_care_of)
-  = f.labeled(:street_and_number, label_class: "#{StandardFormBuilder::LABEL_CLASSES} required", class: 'd-flex') do
+  = f.labeled(:street, label_class: "#{StandardFormBuilder::LABEL_CLASSES} required", class: 'd-flex') do
     %div.col-9
       = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
-    %div.col-2.offset-1
-      = f.input_field(:housenumber, placeholder: 'No')
+    %div.col-2.ms-sm-auto.d-flex
+      = f.label(:housenumber, t('contactable.address_fields.housenumber'), class: 'col-form-label w-100')
+      = f.input_field(:housenumber)
   = f.labeled_input_field(:postbox)
 
   = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'd-flex') do

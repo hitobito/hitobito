@@ -14,7 +14,7 @@ describe "event/participation_contact_datas/_address_fields.html.haml" do
     allow(view).to receive(:f).and_return(StandardFormBuilder.new(:entry, participation_contact_data, view, {}))
   end
 
-  [:address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country].each do |attribute|
+  [:address_care_of, :postbox, :zip_code, :town, :country].each do |attribute|
     it "does not render input with id entry_#{attribute} when attribute is hidden" do
       event.update!(hidden_contact_attrs: [attribute])
       render locals: {entry: participation_contact_data, event:, group:}
@@ -22,15 +22,40 @@ describe "event/participation_contact_datas/_address_fields.html.haml" do
     end
   end
 
+  describe "street and housenumber" do
+    it "does not render either if both are hidden" do
+      event.update!(hidden_contact_attrs: [:street, :housenumber])
+      render locals: {entry: participation_contact_data, event:, group:}
+      expect(rendered).not_to have_selector("input#entry_street")
+      expect(rendered).not_to have_selector("input#entry_housenumber")
+    end
+
+    it "does render both if only street is hidden" do
+      event.update!(hidden_contact_attrs: [:housenumber])
+      render locals: {entry: participation_contact_data, event:, group:}
+      expect(rendered).to have_selector("input#entry_street")
+      expect(rendered).to have_selector("input#entry_housenumber")
+    end
+
+    it "does render both if only housenumber is hidden" do
+      event.update!(hidden_contact_attrs: [:housenumber])
+      render locals: {entry: participation_contact_data, event:, group:}
+      expect(rendered).to have_selector("input#entry_street")
+      expect(rendered).to have_selector("input#entry_housenumber")
+    end
+  end
+
   it "should render address label when only housenumber is hidden" do
     event.update!(hidden_contact_attrs: [:housenumber])
     render locals: {entry: participation_contact_data, event:, group:}
-    expect(rendered).to have_text("Adresse")
+    expect(rendered).to have_text("Strasse")
+    expect(rendered).to have_text("Nr.")
   end
 
   it "should not render address label if no address attributes are set to display" do
     event.update!(hidden_contact_attrs: [:housenumber, :street])
     render locals: {entry: participation_contact_data, event:, group:}
-    expect(rendered).to have_no_text("Adresse")
+    expect(rendered).to have_no_text("Strasse")
+    expect(rendered).to have_no_text("Nr.")
   end
 end

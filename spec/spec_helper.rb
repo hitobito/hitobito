@@ -10,6 +10,8 @@ unless ENV["NO_COVERAGE"]
   SimpleCov.start "rails"
 end
 
+Warning[:deprecated] = true
+
 ENV["RAILS_ENV"] = "test"
 ENV["RAILS_GROUPS"] = "assets"
 require File.expand_path("../config/environment", __dir__)

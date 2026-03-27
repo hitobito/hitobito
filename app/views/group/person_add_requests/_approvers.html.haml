@@ -8,9 +8,9 @@
 
 %h3= t('.title')
 
-%ul.unstyled.approvers-list.ms-2
+%ul.approvers-list
   - @possible_approvers.each do |approver|
-    %li.d-flex.align-items-center.mb-1
+    %li.d-flex.align-items-center.mb-2
       .switcher-container.me-2
         = check_box_tag("set_approver",
                         true,

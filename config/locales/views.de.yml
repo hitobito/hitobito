@@ -1567,6 +1567,7 @@ de:
         reload: Erneut prüfen
       action: Zusammenführen
       success: Die Personen Einträge wurden erfolgreich zusammengeführt.
+      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültigen Daten zusammengeführt.
     ignore:
       new:
         title: Duplikat wirklich ignorieren?

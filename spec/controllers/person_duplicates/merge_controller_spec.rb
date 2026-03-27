@@ -49,6 +49,21 @@ describe PersonDuplicates::MergeController do
       expect(flash[:notice]).to eq "Die Personen Einträge wurden erfolgreich zusammengeführt."
     end
 
+    it "sets flash error" do
+      sign_in(layer_leader)
+      note = Fabricate(:note, subject: person_1)
+      note.update_columns(text: nil) # make it invalid
+      expect(note).not_to be_valid
+      expect do
+        post :create, params: {group_id: layer.id, id: duplicate_entry.id, person_duplicate: {dst_person: "person_2"}}
+      end.to change { note.reload.subject }.to(person_2)
+      expect(response).to redirect_to(group_person_path(person_2.primary_group, person_2))
+      expect(flash[:notice]).to eq "Die Personen Einträge wurden trotz gewisser ungültigen Daten zusammengeführt."
+      expect(flash[:alert]).to eq [
+        "Notiz(#{note.id}): Text muss ausgefüllt werden"
+      ]
+    end
+
     it "is not possible to merge without write permission on at least one person" do
       sign_in(people(:top_leader))
 

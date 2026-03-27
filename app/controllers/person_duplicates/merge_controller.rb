@@ -19,13 +19,19 @@ module PersonDuplicates
 
       PersonDuplicate.transaction do
         entry.destroy!
-        People::Merger.new(source, destination, current_user).merge!
+        merger.merge!
       end
 
-      redirect_to group_person_path(destination.primary_group, destination), notice: success_message
+      redirect_to(
+        group_person_path(destination.primary_group, destination),
+        notice: success_message,
+        alert: merger.validation_errors.map(&:to_s)
+      )
     end
 
     private
+
+    def merger = @merger ||= People::Merger.new(source, destination, current_user)
 
     def rerender_form(status)
       render turbo_stream: turbo_stream.replace(
@@ -48,7 +54,8 @@ module PersonDuplicates
     end
 
     def success_message
-      I18n.t("person_duplicates.merge.success")
+      key = merger.validation_errors.any? ? "success_with_validation_errors" : "success"
+      I18n.t("person_duplicates.merge.#{key}")
     end
 
     def entry

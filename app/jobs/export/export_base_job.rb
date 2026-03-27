@@ -49,8 +49,4 @@ class Export::ExportBaseJob < BaseJob
   def data
     exporter.export(@format, entries, ability)
   end
-
-  def filename
-    @options.fetch(:filename)
-  end
 end

@@ -48,6 +48,7 @@ class Invoice::PeriodItem < InvoiceItem
     end
   end
 
+  attribute :count, :integer, default: nil
   attr_writer :groups, :people, :recipient_type
 
   # Forbid saving instances of this abstract class in the DB.
@@ -73,7 +74,7 @@ class Invoice::PeriodItem < InvoiceItem
   end
 
   def count
-    @count ||= scope.count
+    self[:count] ||= scope.count
   end
 
   # If used with a single recipient (cases 1 or 2 in the documentation comment on this
@@ -101,6 +102,12 @@ class Invoice::PeriodItem < InvoiceItem
 
   def template_item_id
     dynamic_cost_parameters[:template_item_id]
+  end
+
+  def recalculate
+    self[:count] = nil
+    @subjects = nil
+    super
   end
 
   private
@@ -152,10 +159,16 @@ class Invoice::PeriodItem < InvoiceItem
       .where(processed_subjects_table[:subject_id].eq(subjects_table[:id]))
       .where(subject_type: subject_type.sti_name)
       .where(item_id: template_item_id)
+      .merge(with_previous_invoice_to_same_recipient)
+  end
+
+  def with_previous_invoice_to_same_recipient
+    InvoiceRun::ProcessedSubject
       .joins("INNER JOIN invoices previous_invoice ON " \
         "#{InvoiceRun::ProcessedSubject.quoted_table_name}.invoice_id = previous_invoice.id")
       .where(Arel.sql("previous_invoice.recipient_id").eq(recipient_id_expression))
       .where(previous_invoice: {recipient_type: recipient_type})
+      .where.not(previous_invoice: {id: invoice&.id})
   end
 
   def active_condition(start_on, end_on)
@@ -175,7 +188,7 @@ class Invoice::PeriodItem < InvoiceItem
 
   def enforce_unit_cost_precision
     dynamic_cost_parameters[:unit_cost] = ActiveSupport::NumberHelper.number_to_currency(
-      dynamic_cost_parameters[:unit_cost], format: "%n"
+      dynamic_cost_parameters[:unit_cost], format: "%n", delimiter: ""
     )
   end
 

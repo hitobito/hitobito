@@ -1,4 +1,12 @@
 class TranslateInvoiceItems < ActiveRecord::Migration[8.0]
+  # Class stubs used because these classes have been removed from the codebase in the meantime,
+  # but in this migration some invoice items of that type may still be loaded before wagon migrations
+  # get to clean them up.
+  class InvoiceItem::FixedFee < InvoiceItem
+  end
+  class InvoiceItem::Roles < InvoiceItem::FixedFee
+  end
+
   def up
     remove_column :invoice_items, :search_column, if_exists: true
     say_with_time('creating translation table for period invoice template items') do

@@ -17,7 +17,7 @@ class Invoice::RoleCountItem < Invoice::PeriodItem
     # if they want to distinguish those.
     # However, if counting the roles for multiple recipients (ancestors) at the same time,
     # count occurrences for each ancestor separately.
-    @count ||= scope.count("DISTINCT(person_id, group_id, ancestor.id)")
+    self[:count] ||= scope.count("DISTINCT(person_id, group_id, ancestor.id)")
   end
 
   private

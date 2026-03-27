@@ -60,8 +60,6 @@ class InvoiceItem < ActiveRecord::Base
 
   delegate :group, to: :invoice # required for abilities
 
-  scope :list, -> { order(:name) }
-
   validates :name, presence: true
   validates :unit_cost, money: true, allow_nil: true
   validates :unit_cost, presence: true, unless: :dynamic

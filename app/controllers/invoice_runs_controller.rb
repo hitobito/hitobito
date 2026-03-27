@@ -180,7 +180,9 @@ class InvoiceRunsController < CrudController
   end
 
   def cancel_all_invoices
-    invoices.update_all(state: :cancelled, updated_at: Time.zone.now)
+    invoices.update_all(state: :cancelled, updated_at: Time.zone.now).tap do
+      InvoiceRun::ProcessedSubject.where(invoice_id: invoices.select(:id)).delete_all
+    end
   end
 
   def group = parent

@@ -72,12 +72,9 @@ module Authenticatable
   end
 
   def token_acceptable?(token)
-    token.acceptable?(:people) ||
-      token.acceptable?(:groups) ||
-      token.acceptable?(:events) ||
-      token.acceptable?(:invoices) ||
-      token.acceptable?(:mailing_lists) ||
-      token.acceptable?(:api)
+    %w[people groups events invoices mailing_lists event_participations api].any? do |scope|
+      token.acceptable?(scope)
+    end
   end
 
   def authenticate_person!(*args)

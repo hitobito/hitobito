@@ -1433,7 +1433,8 @@ de:
       with_roles: Lesen deiner Stammdaten und Rollen
       openid: Lesen deines OIDC Identity Tokens
       api: Lesen aller Personen, Gruppen, Events, Abos und Rechnungen auf die du Zugriff hast, via die JSON-Schnittstellen
-      events: Lesen aller Events und Teilnahmen, auf die du Zugriff hast
+      events: Lesen aller Events, auf die du Zugriff hast
+      event_participations: Lesen aller Event-Teilnahmen, auf die du Zugriff hast
       groups: Lesen aller Gruppen, auf die du Zugriff hast
       people: Lesen aller Personen, auf die du Zugriff hast
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast

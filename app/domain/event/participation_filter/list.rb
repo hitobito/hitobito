@@ -54,25 +54,8 @@ class Event::ParticipationFilter::List
   def apply_default_sort(records)
     records = records.order_by_role(event) if Settings.people.default_sort == "role"
 
-    records
-      .select(polymorphic_order_by_name_statement)
-      .order(polymorphic_order_by_name_statement)
+    records.order_by_name
       .select(Event::Participation.column_names)
-  end
-
-  def polymorphic_order_by_name_statement
-    person_order = Person.order_by_name_statement
-    guest_order = Event::Guest.order_by_name_statement
-
-    Arel.sql(
-      <<~SQL.squish
-        CASE event_participations.participant_type
-          WHEN 'Person' THEN #{person_order}
-          WHEN 'Event::Guest' THEN #{guest_order}
-          ELSE ''
-        END
-      SQL
-    )
   end
 
   def populate_counts(records)

@@ -11,11 +11,12 @@ module JsonApi
 
     def initialize(ability)
       @ability = ability
+
       case ability
       when Ability then define_abilities_from_person
       when TokenAbility then define_token_abilities
       when DoorkeeperTokenAbility
-        if token.acceptable?(:events)
+        if token.acceptable?(:event_participations)
           @ability = ability.user_ability
           define_abilities_from_person
         end

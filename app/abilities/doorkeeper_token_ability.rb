@@ -28,17 +28,21 @@ class DoorkeeperTokenAbility
 
   private
 
+  # rubocop:todo Metrics/CyclomaticComplexity
   def define_token_abilities
     define_group_abilities if token.acceptable?(:groups)
     define_event_abilities if token.acceptable?(:events)
+    define_event_participation_abilities if token.acceptable?(:event_participations)
     define_person_abilities if token.acceptable?(:people)
     define_invoice_abilities if token.acceptable?(:invoices)
     define_mailing_list_abilities if token.acceptable?(:mailing_lists)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def define_all_abilities
     define_group_abilities
     define_event_abilities
+    define_event_participation_abilities
     define_person_abilities
     define_invoice_abilities
     define_mailing_list_abilities
@@ -54,7 +58,13 @@ class DoorkeeperTokenAbility
     end
   end
 
+  # rubocop:todo Metrics/AbcSize
+  # rubocop:todo Metrics/MethodLength
   def define_event_abilities
+    can :list_available, Event do |e|
+      user_ability.can?(:list_available, e)
+    end
+
     can :index_events, Group do |g|
       user_ability.can?(:index_events, g)
     end
@@ -67,12 +77,28 @@ class DoorkeeperTokenAbility
       user_ability.can?(:show, e)
     end
 
-    can :show, Event::Participation do |p|
-      user_ability.can?(:show, p)
+    can :show, Event::Kind do
+      user_ability.can?(:list_available, Event)
     end
 
-    can :index_participations, Event do |e|
-      user_ability.can?(:index_participations, e)
+    can :show, Event::KindCategory do
+      user_ability.can?(:list_available, Event)
+    end
+
+    can :index, Event::Course do |p|
+      user_ability.can?(:index, p)
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
+
+  def define_event_participation_abilities
+    can :index, Event::Participation do |p|
+      user_ability.can?(:index, p)
+    end
+
+    can :show, Event::Participation do |p|
+      user_ability.can?(:show, p)
     end
   end
 

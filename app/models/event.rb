@@ -99,7 +99,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     :possible_states,
     :kind_class,
     :supports_invitations,
-    :uses_form_tabs
+    :uses_form_tabs,
+    :filterable_attrs
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -134,6 +135,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   self.supports_invitations = true
 
   self.uses_form_tabs = true
+
+  self.filterable_attrs = []
 
   model_stamper
   stampable stamper_class_name: :person,
@@ -216,24 +219,23 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     # Default scope for event lists
     def list
       subquery = joins(:dates, :translations)
-        .select("events.*", "event_dates.start_at")
-        .select(Event::Translation.column_names
-                                  .reject { |col|
-                  ["id", "event_id", "created_at",
-                    "updated_at"].include?(col)
-                }
-                                  .map { |col| "event_translations.#{col}" })
-        .preload_all_dates
+        .select("events.*", "event_dates.start_at", *list_translation_columns)
 
-      Event.select("*").from(subquery.unscope(:order).distinct_on(:id), :events).order_by_date
+      Event
+        .unscoped
+        .select("events.*")
+        .from(subquery.unscope(:order).distinct_on(:id), :events)
+        .order("start_at")
+        .preload(:dates)
+    end
+
+    def list_translation_columns
+      (Event::Translation.column_names - ["id", "event_id", "created_at", "updated_at"])
+        .map { |col| "event_translations.#{col}" }
     end
 
     def preload_all_dates
       all.extending(Event::PreloadAllDates)
-    end
-
-    def order_by_date
-      select(:start_at).order(:start_at)
     end
 
     # Events with at least one date in the given year
@@ -256,6 +258,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
           start_date: start_date, end_date: end_date).distinct
     end
 
+    # before or on start date
     def before_or_on(date, subquery = false)
       if subquery
         where(start_at: ..date.end_of_day)
@@ -264,12 +267,21 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       end
     end
 
+    # after or on start date
     def after_or_on(date, subquery = false)
       if subquery
         where(start_at: date.midnight..)
       else
         joins(:dates).where(event_dates: {start_at: date.midnight..})
       end
+    end
+
+    # after or on start or finish date
+    def since(date)
+      joins(:dates)
+        .where("(event_dates.finish_at IS NULL AND event_dates.start_at >= :date) OR " \
+              "(event_dates.finish_at IS NOT NULL AND event_dates.finish_at >= :date)",
+          date: date.beginning_of_day).distinct
     end
 
     # Events from groups in the hierarchy of the given user.
@@ -369,6 +381,13 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     def tags
       Event.tags_on(:tags).order(:name).pluck(:name)
+    end
+
+    def filter_attrs
+      filterable_attrs.map do |key, type|
+        type ||= columns_hash.fetch(key.to_s).type
+        [key.to_sym, {label: human_attribute_name(key), type: type}]
+      end.to_h
     end
   end
 

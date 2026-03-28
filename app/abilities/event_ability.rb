@@ -12,7 +12,7 @@ class EventAbility < AbilityDsl::Base
   on(Event) do # rubocop:todo Metrics/BlockLength
     class_side(:list_available, :typeahead).if_any_role
 
-    permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating
+    permission(:any).may(:show).in_same_layer_or_public_or_participating
 
     permission(:any)
       .may(:index_participations)
@@ -72,7 +72,7 @@ class EventAbility < AbilityDsl::Base
     for_self_or_manageds do
       # abilities which managers inherit from their managed children
       class_side(:list_available).if_any_role
-      permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating_or_public
+      permission(:any).may(:show).in_same_layer_or_public_or_participating
     end
   end
 
@@ -84,24 +84,20 @@ class EventAbility < AbilityDsl::Base
     for_self_or_manageds do
       # abilities which managers inherit from their managed children
       class_side(:list_available).everybody
-      permission(:any).may(:show).in_same_layer_or_globally_visible_or_participating_or_public
+      permission(:any).may(:show).in_same_layer_or_public_or_participating
     end
   end
 
-  def in_same_layer_or_globally_visible_or_participating
+  def in_same_layer_or_public_or_participating
     if_globally_visible_or_participating ||
       contains_any?(user.groups.map(&:layer_group_id), subject.groups.map(&:layer_group_id))
   end
 
-  def in_same_layer_or_globally_visible_or_participating_or_public
-    in_same_layer_or_globally_visible_or_participating || event.external_applications
-  end
-
   def if_globally_visible_or_participating
     subject.globally_visible? ||
+      subject.external_applications? ||
       subject.token_accessible?(user.shared_access_token) ||
-      participating ||
-      subject.external_applications?
+      participating
   end
 
   def for_qualify_event

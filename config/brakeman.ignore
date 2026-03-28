@@ -3,29 +3,6 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
-      "fingerprint": "39e07376e15a6bffb01f4a571fd6a089f4872cf483902bfc66190c97919a357c",
-      "check_name": "SQL",
-      "message": "Possible SQL injection",
-      "file": "app/domain/event/filter.rb",
-      "line": 26,
-      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
-      "code": "Arel.sql((sort_expression.gsub(/\\b\\w+\\./, \"\") or \"#{sort_expression.keys[0].gsub(/\\b\\w+\\./, \"\")} #{sort_expression.values[0]}\"))",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Event::Filter",
-        "method": "list_entries"
-      },
-      "user_input": "sort_expression.keys[0].gsub(/\\b\\w+\\./, \"\")",
-      "confidence": "Medium",
-      "cwe_id": [
-        89
-      ],
-      "note": "No SQL Injection possible here, because no user data is handled"
-    },
-    {
-      "warning_type": "SQL Injection",
-      "warning_code": 0,
       "fingerprint": "3a4aa5477a1a1e079bb24001f19c237f1075d2c547f3f814dcef0fa113de2d23",
       "check_name": "SQL",
       "message": "Possible SQL injection",

@@ -30,6 +30,10 @@ class PersonDecorator < ApplicationDecorator
     {id: id, label: h.h(name_with_address)}
   end
 
+  def as_basic_typeahead
+    {id: id, label: h.h(to_s)}
+  end
+
   def full_label
     label = to_s
     label << ", #{town}" if town?

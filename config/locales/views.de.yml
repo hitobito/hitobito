@@ -627,7 +627,7 @@ de:
           all: Alle
           only_with_places_available: Nur mit verfügbaren Plätzen
         select_states: Nach Status filtern
-        time_period: Im Zeitraum (optional)
+        time_period: Im Zeitraum von
         until: bis
       group_filter:
         all_layers: Alle Gruppen
@@ -717,6 +717,14 @@ de:
       rejected: "Kursfreigabe abgelehnt"
       missing: "Kursfreigabe ausstehend"
 
+  event/guests:
+    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
+    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
+
+  event/invitations:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
+
   event/kinds:
     global:
       link:
@@ -736,14 +744,6 @@ de:
     show:
       link:
         delete: "Anmeldung löschen"
-
-  event/guests:
-    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
-    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
-
-  event/invitations:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
-    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
 
   event/participation_decorator:
     tooltips:
@@ -770,6 +770,31 @@ de:
 
   event/roles:
     full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"
+
+  events/filters:
+    new:
+      title: "%{type} filtern"
+    form:
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+    general:
+      title: Allgemein
+    full_text:
+      q: Suchbegriff
+    state:
+      states: Status
+    leader:
+      leader: Geleitet von
+      current_user: aktuelle/-r Benutzer/-in
+    kind:
+      kind: Kursart
+    kind_category:
+      kind_category: Kurskategorie
+    attributes:
+      title: Attribute
 
   event_decorator:
     apply: "Anmelden"
@@ -815,14 +840,26 @@ de:
     duplicates: "Duplikate"
 
   filter_navigation/events:
-    all: "Alle"
+    deep: "Alle"
     layer: "nur %{layer}"
+    new_filter: "Neuer Filter..."
 
   filter_navigation/event/participations:
     predefined_filters:
       all: Alle Personen
       teamers: Leitungsteam
       participants: Teilnehmende
+
+  filters:
+    attributes:
+      match: enthält
+      not_match: enthält nicht
+      equal: ist genau
+      greater: grösser als
+      smaller: kleiner als
+      before: vor dem
+      after: nach dem
+      blank: ist leer
 
   full_text:
     index:
@@ -1991,14 +2028,6 @@ de:
 
     attributes:
       title: Felder
-      match: enthält
-      not_match: enthält nicht
-      equal: ist genau
-      greater: grösser als
-      smaller: kleiner als
-      before: vor dem
-      after: nach dem
-      blank: ist leer
 
     language:
       title: Sprache

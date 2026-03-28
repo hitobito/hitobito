@@ -43,7 +43,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     }
   ]
 
-  self.remember_params += [:year]
+  self.remember_params += [:year, :range, :filters]
 
   self.sort_mappings = {name: "event_translations.name", state: "events.state",
                          dates_full: "event_dates.start_at",
@@ -68,7 +68,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
       format.html { @events = entries_page(params[:page]) }
       format.csv { render_tabular_in_background(:csv) }
       format.xlsx { render_tabular_in_background(:xlsx) }
-      format.ics { render_ical(visible_entries) }
+      format.ics { render_ical(entries) }
       format.json { render_entries_json(entries_page(params[:page])) }
     end
   end
@@ -117,7 +117,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   private
 
   def list_entries
-    event_filter.list_entries.includes(:translations, :groups)
+    event_filter.entries
   end
 
   def build_entry
@@ -229,10 +229,10 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def for_typeahead(entries)
-    entries.map do |entry|
-      role_types = entry.role_types.sort { |type|
-        type.participant? ? 0 : 1
-      }.map { |type| {label: type.label, name: type.name} }
+    entries.joins(:translations).map do |entry|
+      role_types = entry.role_types
+        .sort { |type| type.participant? ? 0 : 1 }
+        .map { |type| {label: type.label, name: type.name} }
       {id: entry.id, label: entry.name, types: role_types}
     end
   end
@@ -328,29 +328,20 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def event_filter
-    if request.format.json?
-      Event::ApiFilter.new(group, params, year)
-    else
-      expression = sort_expression if sorting?
-      Event::Filter.new(group, params[:type], params[:filter], year, expression)
+    @event_filter ||= begin
+      params[:year] = year
+      params[:sort_expression] = sort_expression if sorting? && !request.format.json?
+      Events::Filter::GroupList.new(group, current_user, params)
     end
   end
 
   def entries_page(page_param)
-    page_scope = visible_entries.page(page_param)
+    page_scope = entries.page(page_param)
 
     if page_scope.size.zero?
-      visible_entries.page(1)
+      entries.page(1)
     else
       page_scope
-    end
-  end
-
-  def visible_entries
-    @visible_entries ||= begin
-      visible_entry_ids = entries.select(:id).select { |entry| can?(:show, entry) }.map(&:id)
-
-      entries.select("events.*").where(id: visible_entry_ids)
     end
   end
 end

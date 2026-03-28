@@ -53,11 +53,6 @@ module FilterHelper
     end
   end
 
-  def set_filter(filter_params = {})
-    anchor = filter_params.delete :anchor
-    params.to_unsafe_h.deep_merge(filter: filter_params, anchor: anchor)
-  end
-
   def direct_filter_date_field(attr, options = {})
     options[:class] ||= "date form-control form-control-sm w-50"
     options[:value] ||= params[attr]

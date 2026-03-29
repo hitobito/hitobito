@@ -8,7 +8,7 @@
 require "rails_helper"
 
 RSpec.describe "event_kind_categories#index", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:events] do
     let!(:kind_categories) { Event::KindCategory.create!([{label: "Event"}, {label: "Kurs"}]) }
     let(:params) { {} }
 

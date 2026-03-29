@@ -8,7 +8,7 @@
 require "rails_helper"
 
 RSpec.describe "mailing_lists#index", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:mailing_lists] do
     let(:params) { {} }
 
     subject(:make_request) do

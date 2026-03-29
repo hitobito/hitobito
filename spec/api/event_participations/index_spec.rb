@@ -8,7 +8,7 @@
 require "rails_helper"
 
 describe "event_participations#index", type: :request do
-  it_behaves_like "jsonapi authorized requests", required_flags: [:event_participations] do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:event_participations] do
     subject(:make_request) do
       jsonapi_get "/api/event_participations", params: params
     end

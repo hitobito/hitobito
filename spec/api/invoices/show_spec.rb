@@ -8,10 +8,9 @@
 require "rails_helper"
 
 RSpec.describe "invoices#show", type: :request do
-  it_behaves_like "jsonapi authorized requests", person: nil do
-    let(:token) { service_tokens(:permitted_bottom_layer_token).token }
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:invoices] do
     let(:params) { {} }
-    let(:invoice) { invoices(:invoice) }
+    let(:invoice) { invoices(:invoice).tap { |i| i.update(group: groups(:top_layer)) } }
 
     subject(:make_request) do
       jsonapi_get "/api/invoices/#{invoice.id}", params: params

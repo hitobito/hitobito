@@ -26,7 +26,7 @@ describe "self_registrations#create", type: :request do
       layer_group_id: group.layer_group_id)
   end
 
-  it_behaves_like "jsonapi authorized requests", person: :skip do
+  it_behaves_like "jsonapi authorized requests", person: nil do
     let(:payload) do
       {
         data: {

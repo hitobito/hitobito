@@ -11,27 +11,25 @@ describe "roles#create", type: :request do
   let(:group) { groups(:top_group) }
   let(:person) { people(:top_leader) }
 
-  it_behaves_like "jsonapi authorized requests", person: :asdf do
-    let(:payload) { {} }
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:groups, :people] do
+    let(:payload) {
+      {
+        data: {
+          type: "roles",
+          attributes: {
+            group_id: group.id,
+            person_id: person.id,
+            type: Group::TopGroup::Member.sti_name
+          }
+        }
+      }
+    }
 
     subject(:make_request) do
       jsonapi_post "/api/roles", payload
     end
 
     describe "basic create" do
-      let(:payload) do
-        {
-          data: {
-            type: "roles",
-            attributes: {
-              group_id: group.id,
-              person_id: person.id,
-              type: Group::TopGroup::Member.sti_name
-            }
-          }
-        }
-      end
-
       it "creates the resource" do
         expect {
           make_request

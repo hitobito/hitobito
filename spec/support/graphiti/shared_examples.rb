@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-shared_examples "jsonapi authorized requests" do |person: :top_leader, required_flags: []|
+shared_examples "jsonapi authorized requests" do |person: :top_leader, required_scopes: []|
   let(:service_token) { service_tokens(:permitted_top_layer_token) }
   let(:token) { service_token.token }
   let(:params) { {} }
@@ -18,7 +18,9 @@ shared_examples "jsonapi authorized requests" do |person: :top_leader, required_
   def response_body = @body ||= JSON.parse(response.body).deep_symbolize_keys
 
   context "without authentication" do
-    let(:token) { nil }
+    def jsonapi_headers
+      super.without("X-TOKEN")
+    end
 
     it "returns unauthorized" do
       make_request
@@ -27,27 +29,72 @@ shared_examples "jsonapi authorized requests" do |person: :top_leader, required_
     end
   end
 
-  context "with role based authentication" do
-    let(:current_user) do
-      person_id = ActiveRecord::FixtureSet.identify(person)
-      Person.find_by(id: person_id)
+  context "with service token based authentication" do
+    it "returns 200 for service token with correct scopes" do
+      make_request
+      expect(response.status).to be_between(200, 201).inclusive
     end
 
-    if defined?(person_id)
-      it "returns 200 for person with correct role" do
-        sign_in(current_user)
+    required_scopes.each do |scope|
+      it "returns unauthorized for token without #{scope}=true" do
+        service_token.update!(scope => false)
         make_request
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(403)
+        expect(json["errors"]).to include(include("code" => "forbidden"))
       end
     end
   end
 
-  required_flags.each do |flag|
-    it "returns unauthorized for token without #{flag}=true" do
-      service_token.update!(flag => false)
-      make_request
-      expect(response.status).to eq(403)
-      expect(json["errors"]).to include(include("code" => "forbidden"))
+  if person
+    context "with session cookie based authentication" do
+      def jsonapi_headers
+        super.without("X-TOKEN")
+      end
+
+      let(:current_user) { people(person) }
+
+      it "returns 200 for person with correct role" do
+        sign_in(current_user)
+        make_request
+        expect(response.status).to be_between(200, 201).inclusive
+      end
+    end
+
+    context "with OAuth based authentication" do
+      def jsonapi_headers
+        super.without("X-TOKEN").merge("Authorization" => "Bearer #{oauth_access_token&.token}")
+      end
+
+      let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
+      let(:oauth_app) { Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri) }
+      let(:current_user) { people(person) }
+      let(:oauth_access_token) do
+        Oauth::AccessToken.create!(
+          scopes: required_scopes.join(" "),
+          token: "PermittedOAuthAccessToken",
+          application_id: oauth_app.id,
+          resource_owner_id: current_user&.id
+        )
+      end
+
+      it "returns 200 for OAuth token with correct scopes" do
+        make_request
+        expect(response.status).to be_between(200, 201).inclusive
+      end
+
+      it "returns 200 for OAuth token with only api scope" do
+        oauth_access_token.update!(scopes: "api")
+        make_request
+        expect(response.status).to be_between(200, 201).inclusive
+      end
+
+      required_scopes.each do |scope|
+        it "returns unauthorized without scope #{scope}" do
+          oauth_access_token.update!(scopes: (required_scopes - [scope]).join(" "))
+          make_request
+          expect(response.status).to eq(403)
+        end
+      end
     end
   end
 end

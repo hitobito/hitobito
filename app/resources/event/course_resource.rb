@@ -19,8 +19,4 @@ class Event::CourseResource < EventResource
   belongs_to :kind, resource: Event::KindResource
   has_many :leaders, resource: Person::NameResource, writable: false,
     foreign_key: :leads_course_id
-
-  def base_scope
-    Event::Course.all.accessible_by(index_ability).includes(:groups, :translations).list
-  end
 end

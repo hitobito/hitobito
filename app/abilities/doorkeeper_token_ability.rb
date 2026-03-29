@@ -77,11 +77,11 @@ class DoorkeeperTokenAbility
       user_ability.can?(:show, e)
     end
 
-    can :show, Event::Kind do
+    can :read, Event::Kind do
       user_ability.can?(:list_available, Event)
     end
 
-    can :show, Event::KindCategory do
+    can :read, Event::KindCategory do
       user_ability.can?(:list_available, Event)
     end
 

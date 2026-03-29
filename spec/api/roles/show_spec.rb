@@ -8,9 +8,9 @@
 require "rails_helper"
 
 describe "roles#show", type: :request do
-  it_behaves_like "jsonapi authorized requests", person: nil do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:groups, :people] do
     let(:params) { {} }
-    let!(:role) { roles(:top_leader) }
+    let!(:role) { roles(:bottom_member) }
 
     subject(:make_request) do
       jsonapi_get "/api/roles/#{role.id}", params: params

@@ -8,12 +8,12 @@
 require "rails_helper"
 
 RSpec.describe "people#show", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:people] do
     let(:params) { {} }
-    let!(:person) { people(:top_leader) }
+    let!(:requested_person) { people(:top_leader) }
 
     subject(:make_request) do
-      jsonapi_get "/api/people/#{person.id}", params: params
+      jsonapi_get "/api/people/#{requested_person.id}", params: params
     end
 
     describe "basic fetch" do
@@ -22,7 +22,7 @@ RSpec.describe "people#show", type: :request do
         make_request
         expect(response.status).to eq(200)
         expect(d.jsonapi_type).to eq("people")
-        expect(d.id).to eq(person.id)
+        expect(d.id).to eq(requested_person.id)
       end
     end
   end

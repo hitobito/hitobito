@@ -8,7 +8,7 @@
 require "rails_helper"
 
 describe "roles#delete", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:groups, :people] do
     let!(:role) { roles(:bottom_member).tap { |r| r.update!(created_at: 1.year.ago) } }
     let(:payload) { {} }
 

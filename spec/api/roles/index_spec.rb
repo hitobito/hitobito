@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe "roles#index", type: :request do
-  it_behaves_like "jsonapi authorized requests", required_flags: [:people, :groups] do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:groups, :people] do
     let(:params) { {} }
     subject(:make_request) do
       jsonapi_get "/api/roles", params:

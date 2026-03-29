@@ -8,7 +8,7 @@
 require "rails_helper"
 
 describe "events#show", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:event_participations] do
     let(:participation) { event_participations(:top) }
 
     subject(:make_request) do

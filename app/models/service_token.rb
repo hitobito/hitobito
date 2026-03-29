@@ -48,6 +48,11 @@ class ServiceToken < ActiveRecord::Base
     layer_full
     layer_and_below_full]
 
+  NON_SCOPE_ATTRIBUTES = %w[
+    id name description permission last_access token
+    layer_group_id created_at updated_at
+  ]
+
   i18n_enum :permission, PERMISSIONS, queries: true
 
   # Required as a substitute user for PeopleFilter and JSON Api
@@ -64,6 +69,12 @@ class ServiceToken < ActiveRecord::Base
 
   def dynamic_user_ability
     @dynamic_user_ability ||= Ability.new(dynamic_user)
+  end
+
+  def self.possible_scopes
+    return [] unless ActiveRecord::Base.connection.data_source_exists?(table_name)
+
+    ServiceToken.column_names - NON_SCOPE_ATTRIBUTES
   end
 
   private

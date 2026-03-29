@@ -93,8 +93,7 @@ Doorkeeper.configure do
   # (disabled by default)
   #
   default_scopes :email
-  optional_scopes :name, :with_roles, :openid, :api,
-    :events, :event_participations, :groups, :people, :invoices, :mailing_lists
+  optional_scopes :name, :with_roles, :openid, :api # additional scopes are added in to_prepare below
 
   enforce_configured_scopes
 
@@ -238,6 +237,11 @@ Doorkeeper.configure do
 end
 
 Rails.application.config.to_prepare do
+  ServiceToken.possible_scopes.each do |scope|
+    Doorkeeper.configuration.scopes.add(scope)
+    Doorkeeper.configuration.optional_scopes.add(scope)
+  end
+
   if Doorkeeper::AuthorizationsController.respond_to? :layout
     # Only Authorization endpoint
     Doorkeeper::AuthorizationsController.layout "oauth"

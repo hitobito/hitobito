@@ -7,7 +7,7 @@
 
 class JsonApi::PeopleController < JsonApiController
   def index
-    authorize!(:index_people, Group)
+    authorize!(:index, Person)
     super
   end
 

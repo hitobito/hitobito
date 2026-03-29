@@ -28,8 +28,8 @@ describe TokenAbility do
         token.update!(people: true, permission: :layer_read)
       end
 
-      it "may index on layer people" do
-        is_expected.to be_able_to(:index_people, token.layer)
+      it "may index people" do
+        is_expected.to be_able_to(:index, Person)
       end
 
       it "may show on layer person" do
@@ -76,8 +76,8 @@ describe TokenAbility do
         token.update!(people: true, permission: :layer_full)
       end
 
-      it "may index on layer people" do
-        is_expected.to be_able_to(:index_people, token.layer)
+      it "may index people" do
+        is_expected.to be_able_to(:index, Person)
       end
 
       it "may show on layer person" do
@@ -120,13 +120,13 @@ describe TokenAbility do
       end
     end
 
-    context "layer_and_bellow_read" do
+    context "layer_and_below_read" do
       before do
         token.update!(people: true, permission: :layer_and_below_read)
       end
 
-      it "may index on layer people" do
-        is_expected.to be_able_to(:index_people, token.layer)
+      it "may index people" do
+        is_expected.to be_able_to(:index, Person)
       end
 
       it "may only show on layer person" do
@@ -169,13 +169,13 @@ describe TokenAbility do
       end
     end
 
-    context "layer_and_bellow_full" do
+    context "layer_and_below_full" do
       before do
         token.update!(people: true, permission: :layer_and_below_full)
       end
 
-      it "may index on layer people" do
-        is_expected.to be_able_to(:index_people, token.layer)
+      it "may index people" do
+        is_expected.to be_able_to(:index, Person)
       end
 
       it "may show and write on layer person" do

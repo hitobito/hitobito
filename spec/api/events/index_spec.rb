@@ -59,5 +59,39 @@ RSpec.describe "events#index", type: :request do
         expect(json).not_to have_key("included")
       end
     end
+
+    context "including contact" do
+      let(:event) { Event.first }
+      let(:params) { {include: "leaders,contact"} }
+
+      it "returns the event contact" do
+        event.update_attribute(:contact_id, people(:bottom_member).id)
+
+        make_request
+
+        expect(response.status).to eq(200)
+        data = json["data"]
+        contact_id = data[0]["relationships"]["contact"]["data"]["id"]
+        contact = json["included"].first { |inc| inc["type"] == "person" && inc.id == contact_id }
+        expect(contact["attributes"]["first_name"]).to eq("Bottom")
+        expect(contact["attributes"]["last_name"]).to eq("Member")
+        expect(contact["attributes"]["email"]).to eq(people(:bottom_member).email)
+      end
+
+      describe "without people scope" do
+        before { service_token.update!(people: false) }
+
+        it "does not return the event contact" do
+          event.update_attribute(:contact_id, people(:bottom_member).id)
+
+          make_request
+
+          expect(response.status).to eq(200)
+          data = json["data"]
+          expect(data[0]["relationships"]["contact"]["data"]).to be_nil
+          expect(json["included"]).to be_nil
+        end
+      end
+    end
   end
 end

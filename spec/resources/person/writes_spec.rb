@@ -15,7 +15,8 @@ describe PersonResource, type: :resource do
     RSpec::Mocks.with_temporary_scope do
       Graphiti.with_context(double({
         current_ability: ability,
-        entry: try(:person)
+        entry: try(:person),
+        current_scopes: ["api"]
       })) { example.run }
     end
   end

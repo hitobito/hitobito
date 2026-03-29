@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe MailingListResource, type: :resource do
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   describe "serialization" do
     let!(:mailing_list) { mailing_lists(:leaders) }
 

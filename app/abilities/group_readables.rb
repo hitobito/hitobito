@@ -6,8 +6,9 @@
 #  https://github.com/hitobito/hitobito
 
 class GroupReadables < GroupBasedReadables
-  def initialize(user)
-    super
+  def initialize(user, api_scopes: ["api"])
+    super(user)
+    return unless api_scopes.include?("groups") || api_scopes.include?("api")
 
     can :index, Group, accessible_groups
   end

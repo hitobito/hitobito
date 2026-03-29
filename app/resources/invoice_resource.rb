@@ -28,6 +28,6 @@ class InvoiceResource < ApplicationResource
   has_many :invoice_items
 
   def index_ability
-    JsonApi::InvoiceAbility.new(current_ability)
+    JsonApi::InvoiceAbility.new(current_ability, api_scopes: current_scopes)
   end
 end

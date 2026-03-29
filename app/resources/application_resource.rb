@@ -86,7 +86,7 @@ class ApplicationResource < Graphiti::Resource
   end
 
   delegate :can?, to: :current_ability
-  delegate :current_ability, to: :context
+  delegate :current_ability, :current_scopes, to: :context
 
   # Used to filter accessible models in `#base_scope`.
   def index_ability

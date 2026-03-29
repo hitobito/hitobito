@@ -12,6 +12,8 @@ describe InvoiceResource, type: :resource do
   let(:person) { people(:bottom_member) }
   let(:pens) { invoice_items(:pens) }
 
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   describe "updating" do
     def payload(**attrs)
       {

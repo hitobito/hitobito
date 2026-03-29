@@ -113,6 +113,6 @@ class GroupResource < ApplicationResource
   end
 
   def index_ability
-    GroupReadables.new(current_ability.user)
+    GroupReadables.new(current_ability.user, api_scopes: current_scopes)
   end
 end

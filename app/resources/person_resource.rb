@@ -66,7 +66,7 @@ class PersonResource < ApplicationResource
   filter :updated_at, :datetime
 
   def index_ability
-    PersonReadables.new(current_ability.user)
+    PersonReadables.new(current_ability.user, api_scopes: current_scopes)
   end
 
   private

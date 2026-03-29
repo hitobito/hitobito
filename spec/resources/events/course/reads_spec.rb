@@ -11,6 +11,8 @@ describe Event::CourseResource, type: :resource do
   include Rails.application.routes.url_helpers
   let(:course) { events(:top_course) }
 
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   describe "serialization" do
     before do
       params[:filter] = {id: {eq: course.id}}

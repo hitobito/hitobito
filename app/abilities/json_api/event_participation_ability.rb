@@ -9,18 +9,12 @@ module JsonApi
   class EventParticipationAbility
     include CanCan::Ability
 
-    def initialize(ability)
+    def initialize(ability, api_scopes: ["api"])
       @ability = ability
 
-      case ability
-      when Ability then define_abilities_from_person
-      when TokenAbility then define_token_abilities
-      when DoorkeeperTokenAbility
-        if token.acceptable?(:event_participations) || token.acceptable?(:api)
-          @ability = ability.user_ability
-          define_abilities_from_person
-        end
-      end
+      return unless api_scopes.include?("event_participations") || api_scopes.include?("api")
+
+      define_abilities_from_person
     end
 
     private
@@ -31,22 +25,18 @@ module JsonApi
     delegate :course_offerers, :participations, :events_with_permission, :permission_layer_ids,
       :permission_group_ids, to: :"ability.user_context"
 
-    def define_token_abilities
-      return unless token.event_participations
-
-      can :read, ::Event::Participation, {event: {groups: token_group_constraints}}
-    end
-
     def define_abilities_from_person # rubocop:disable Metrics/AbcSize
-      # herself
-      can_read_if(participant_type: "Person", participant_id: user.id)
+      if user.id
+        # herself
+        can_read_if(participant_type: "Person", participant_id: user.id)
 
-      # guests
-      can_read_if(participant_type: "Event::Guest", participant_id: guests_for_user.select(:id))
+        # guests
+        can_read_if(participant_type: "Event::Guest", participant_id: guests_for_user.select(:id))
 
-      # managers
-      can_read_if(participant_type: "Person",
-        participant_id: user.people_manageds.select(:managed_id))
+        # managers
+        can_read_if(participant_type: "Person",
+          participant_id: user.people_manageds.select(:managed_id))
+      end
 
       # from event roles and event.participations_visible
       can_read_if(event_id: participation_read_events)

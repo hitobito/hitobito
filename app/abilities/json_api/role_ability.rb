@@ -9,7 +9,9 @@ module JsonApi
   class RoleAbility
     include CanCan::Ability
 
-    def initialize(main_ability)
+    def initialize(main_ability, api_scopes: ["api"])
+      return if !(api_scopes.include?("groups") || api_scopes.include?("people")) &&
+        !api_scopes.include?("api")
       can :read, Role, person: full_readable_people(main_ability)
     end
 

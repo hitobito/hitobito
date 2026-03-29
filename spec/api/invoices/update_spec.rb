@@ -8,28 +8,25 @@
 require "rails_helper"
 
 RSpec.describe "invoices#show", type: :request do
-  it_behaves_like "jsonapi authorized requests", person: nil do
-    let(:token) { service_tokens(:permitted_bottom_layer_token).token }
-    let(:params) { {} }
-    let(:invoice) { invoices(:invoice) }
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:invoices] do
+    let(:payload) {
+      {
+        data: {
+          id: invoice.id.to_s,
+          type: "invoices",
+          attributes: {
+            state: "issued"
+          }
+        }
+      }
+    }
+    let(:invoice) { invoices(:invoice).tap { |i| i.update(group: groups(:top_layer)) } }
 
     subject(:make_request) do
       jsonapi_put "/api/invoices/#{invoice.id}", payload
     end
 
     describe "basic update" do
-      let(:payload) do
-        {
-          data: {
-            id: invoice.id.to_s,
-            type: "invoices",
-            attributes: {
-              state: "issued"
-            }
-          }
-        }
-      end
-
       it "updates the resource" do
         expect(InvoiceResource).to receive(:find).and_call_original
         expect {

@@ -8,7 +8,7 @@
 require "rails_helper"
 
 RSpec.describe "people#update", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:people] do
     let(:person) { people(:top_leader) }
     let(:payload) do
       {

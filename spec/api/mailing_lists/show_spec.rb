@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "mailing_lists#show", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:mailing_lists] do
     let(:params) { {} }
     let!(:mailing_list) { mailing_lists(:leaders) }
 

@@ -8,27 +8,25 @@
 require "rails_helper"
 
 describe "roles#update", type: :request do
-  it_behaves_like "jsonapi authorized requests", person: nil do
+  it_behaves_like "jsonapi authorized requests", required_scopes: [:groups, :people] do
     let(:role) { roles(:top_leader) }
-    let(:payload) { {} }
+    let(:payload) {
+      {
+        data: {
+          id: role.id.to_s,
+          type: "roles",
+          attributes: {
+            label: "Bobby"
+          }
+        }
+      }
+    }
 
     subject(:make_request) do
       jsonapi_put "/api/roles/#{role.id}", payload
     end
 
     describe "basic update" do
-      let(:payload) do
-        {
-          data: {
-            id: role.id.to_s,
-            type: "roles",
-            attributes: {
-              label: "Bobby"
-            }
-          }
-        }
-      end
-
       it "updates the resource" do
         expect(RoleResource).to receive(:find).and_call_original
         expect {

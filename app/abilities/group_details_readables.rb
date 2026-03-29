@@ -22,13 +22,4 @@ class GroupDetailsReadables < GroupReadables
       in_above_layer_condition(condition)
     end
   end
-
-  def in_above_layer_condition(condition)
-    layer_groups_above.each do |group|
-      condition.or(
-        "#{Group.quoted_table_name}.lft >= ? AND #{Group.quoted_table_name}.rgt <= ? ",
-        group.lft, group.rgt
-      )
-    end
-  end
 end

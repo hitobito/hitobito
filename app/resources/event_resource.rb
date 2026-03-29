@@ -56,26 +56,25 @@ class EventResource < ApplicationResource
   end
 
   filter :before_or_on, :date, single: true, only: [:eq] do
-    eq { |scope, date| scope.before_or_on(date, true) }
+    eq { |scope, date| scope.before_or_on(date) }
   end
 
   filter :after_or_on, :date, single: true, only: [:eq] do
-    eq { |scope, date| scope.after_or_on(date, true) }
+    eq { |scope, date| scope.after_or_on(date) }
   end
 
   filter :kind_category_id, :integer, only: [:eq] do
     eq do |scope, kind_category_ids|
-      # rubocop:todo Layout/LineLength
-      scope.select("events.*").joins(kind: :kind_category).where(kind: {kind_category_id: kind_category_ids})
-      # rubocop:enable Layout/LineLength
+      scope.select("events.*").joins(kind: :kind_category)
+        .where(kind: {kind_category_id: kind_category_ids})
     end
   end
 
   def base_scope
-    Event.accessible_by(index_ability).includes(:groups, :translations).list
+    super.includes(:groups, :translations)
   end
 
   def index_ability
-    JsonApi::EventAbility.new(current_ability)
+    EventReadables.new(current_ability.user)
   end
 end

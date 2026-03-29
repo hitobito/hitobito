@@ -54,6 +54,15 @@ class GroupBasedFetchables
     end
   end
 
+  def in_above_layer_condition(condition)
+    layer_groups_above.each do |group|
+      condition.or(
+        "#{Group.quoted_table_name}.lft >= ? AND #{Group.quoted_table_name}.rgt <= ? ",
+        group.lft, group.rgt
+      )
+    end
+  end
+
   def groups_same_group
     @groups_same_group ||= Group.where(id: group_ids_same_group)
   end

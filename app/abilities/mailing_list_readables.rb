@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-class MailingListReadables < GroupReadables
+class MailingListReadables < GroupBasedReadables
   self.same_group_permissions = [:group_full, :group_and_below_full]
   self.above_group_permissions = [:group_and_below_full]
   self.same_layer_permissions = [:layer_full, :layer_and_below_full]
@@ -32,15 +32,6 @@ class MailingListReadables < GroupReadables
       in_same_layer_condition(condition)
       in_above_layer_condition(condition)
       subscribable_condition(condition)
-    end
-  end
-
-  def in_above_layer_condition(condition)
-    layer_groups_above.each do |group|
-      condition.or(
-        "#{Group.quoted_table_name}.lft >= ? AND #{Group.quoted_table_name}.rgt <= ? ",
-        group.lft, group.rgt
-      )
     end
   end
 

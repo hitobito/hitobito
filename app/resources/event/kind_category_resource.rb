@@ -16,10 +16,8 @@ class Event::KindCategoryResource < ApplicationResource
   end
 
   def base_scope
-    Event::KindCategory.accessible_by(index_ability).where(deleted_at: nil).list
-  end
+    Event::KindCategory.none unless current_ability.can?(:list_available, ::Event)
 
-  def index_ability
-    JsonApi::EventAbility.new(current_ability)
+    Event::KindCategory.where(deleted_at: nil).list
   end
 end

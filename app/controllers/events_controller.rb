@@ -347,10 +347,8 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def visible_entries
-    @visible_entries ||= begin
-      visible_entry_ids = entries.select(:id).select { |entry| can?(:show, entry) }.map(&:id)
-
-      entries.select("events.*").where(id: visible_entry_ids)
-    end
+    @visible_entries ||= entries.select("events.*").where(id: Event.accessible_by(
+      EventReadables.new(current_ability.user, api_scopes: current_scopes)
+    ).select(:id))
   end
 end

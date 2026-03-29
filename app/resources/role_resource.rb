@@ -46,7 +46,7 @@ class RoleResource < ApplicationResource
   end
 
   def index_ability
-    JsonApi::RoleAbility.new(current_ability)
+    JsonApi::RoleAbility.new(current_ability, api_scopes: current_scopes)
   end
 
   private

@@ -9,7 +9,9 @@ module JsonApi
   class InvoiceAbility
     include CanCan::Ability
 
-    def initialize(main_ability)
+    def initialize(main_ability, api_scopes: ["api"])
+      return unless api_scopes.include?("invoices") || api_scopes.include?("api")
+
       can :index, Invoice, build_conditions(main_ability)
       can :index, InvoiceItem, {invoice: build_conditions(main_ability)}
     end

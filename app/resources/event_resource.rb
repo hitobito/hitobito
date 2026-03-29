@@ -75,6 +75,6 @@ class EventResource < ApplicationResource
   end
 
   def index_ability
-    EventReadables.new(current_ability.user)
+    EventReadables.new(current_ability.user, api_scopes: current_scopes)
   end
 end

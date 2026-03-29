@@ -30,6 +30,6 @@ class Event::ParticipationResource < ApplicationResource
   end
 
   def index_ability
-    JsonApi::EventParticipationAbility.new(current_ability)
+    JsonApi::EventParticipationAbility.new(current_ability, api_scopes: current_scopes)
   end
 end

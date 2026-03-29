@@ -10,6 +10,8 @@ require "spec_helper"
 describe GroupResource, type: :resource do
   include Rails.application.routes.url_helpers
 
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   describe "serialization" do
     let!(:group) { groups(:bottom_group_two_one) }
 

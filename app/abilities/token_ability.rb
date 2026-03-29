@@ -6,13 +6,15 @@
 class TokenAbility
   include CanCan::Ability
 
-  attr_reader :token
+  attr_reader :token, :user_ability
 
   delegate :dynamic_user_ability, to: :token
+  delegate :user_context, to: :user_ability
 
   def initialize(token)
     return if token.nil?
     @token = token
+    @user_ability = Ability.new(user)
 
     define_token_abilities
   end

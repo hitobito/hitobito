@@ -27,7 +27,7 @@ RSpec.describe "events#show", type: :request do
 
     describe "course" do
       let(:event) { events(:top_course) }
-      let(:params) { {include: "leaders"} }
+      let(:params) { {include: "leaders,contact"} }
 
       it "works" do
         expect(EventResource).to receive(:find).and_call_original
@@ -38,9 +38,39 @@ RSpec.describe "events#show", type: :request do
         expect(data["type"]).to eq("courses")
         expect(data["id"]).to eq(event.id.to_s)
         expect(data["relationships"]["leaders"]["data"].size).to eq(1)
-        leader = json["included"].first
-        expect(leader["type"]).to eq("person-name")
-        expect(leader["id"]).to eq(people(:bottom_member).id.to_s)
+        leader_id = data["relationships"]["leaders"]["data"][0]["id"]
+        leader = json["included"].first { |inc| inc["type"] == "person-name" && inc.id == leader_id }
+        expect(leader["attributes"]["first_name"]).to eq("Bottom")
+        expect(leader["attributes"]["last_name"]).to eq("Member")
+      end
+
+      it "returns the event contact" do
+        event.update_attribute(:contact_id, people(:bottom_member).id)
+
+        make_request
+
+        expect(response.status).to eq(200)
+        data = json["data"]
+        contact_id = data["relationships"]["contact"]["data"]["id"]
+        contact = json["included"].first { |inc| inc["type"] == "person" && inc.id == contact_id }
+        expect(contact["attributes"]["first_name"]).to eq("Bottom")
+        expect(contact["attributes"]["last_name"]).to eq("Member")
+        expect(contact["attributes"]["email"]).to eq(people(:bottom_member).email)
+      end
+
+      describe "without people scope" do
+        before { service_token.update!(people: false) }
+
+        it "does not return the event contact" do
+          event.update_attribute(:contact_id, people(:bottom_member).id)
+
+          make_request
+
+          expect(response.status).to eq(200)
+          data = json["data"]
+          expect(data["relationships"]["contact"]["data"]).to be_nil
+          expect(json["included"]).to be_nil
+        end
       end
     end
   end

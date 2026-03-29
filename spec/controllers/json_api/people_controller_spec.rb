@@ -320,7 +320,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
     context "with personal oauth access token" do
       context "authorized" do
-        let(:token) { Fabricate(:access_token, resource_owner_id: top_leader.id) }
+        let(:token) { Fabricate(:access_token, resource_owner_id: top_leader.id, scopes: "people") }
 
         before do
           allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
@@ -719,7 +719,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
     context "with personal oauth access token" do
       context "authorized" do
-        let(:token) { Fabricate(:access_token, resource_owner_id: bottom_member.id) }
+        let(:token) { Fabricate(:access_token, resource_owner_id: bottom_member.id, scopes: "people") }
 
         before do
           allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
@@ -1285,7 +1285,7 @@ describe JsonApi::PeopleController, type: [:request] do
     context "with personal oauth access token" do
       context "authorized" do
         let(:token_owner) { Fabricate(Group::BottomLayer::Leader.to_s, group: groups(:bottom_layer_one)).person }
-        let(:token) { Fabricate(:access_token, resource_owner_id: token_owner.id) }
+        let(:token) { Fabricate(:access_token, resource_owner_id: token_owner.id, scopes: "people") }
 
         before do
           allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }

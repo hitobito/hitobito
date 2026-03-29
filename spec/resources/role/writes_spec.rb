@@ -15,7 +15,10 @@ describe RoleResource, type: :resource do
 
   around do |example|
     RSpec::Mocks.with_temporary_scope do
-      Graphiti.with_context(double({current_ability: current_ability})) { example.run }
+      Graphiti.with_context(double({
+        current_ability: current_ability,
+        current_scopes: ["api"]
+      })) { example.run }
     end
   end
 

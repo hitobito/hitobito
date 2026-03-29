@@ -16,6 +16,9 @@ class Event::KindCategoryResource < ApplicationResource
   end
 
   def base_scope
+    unless current_scopes.include?("events") || current_scopes.include?("api")
+      return Event::KindCategory.none
+    end
     Event::KindCategory.none unless current_ability.can?(:list_available, ::Event)
 
     Event::KindCategory.where(deleted_at: nil).list

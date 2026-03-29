@@ -29,7 +29,6 @@ class TokenAbility
 
   # rubocop:todo Metrics/AbcSize
   def define_token_abilities # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
-    define_base_abilities
     define_person_abilities if token.people?
     define_register_people_abilities if token.register_people? && write_permission?
     define_event_abilities if token.events?
@@ -40,10 +39,6 @@ class TokenAbility
     define_mailing_list_abilities if token.mailing_lists?
   end
   # rubocop:enable Metrics/AbcSize
-
-  def define_base_abilities
-    can :index, Group
-  end
 
   def define_role_abilities
     can :index, Role
@@ -122,6 +117,8 @@ class TokenAbility
   end
 
   def define_group_abilities
+    can :index, Group
+
     can :show, Group do |g|
       token_layer_and_below.include?(g)
     end

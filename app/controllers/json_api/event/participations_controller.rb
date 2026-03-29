@@ -12,8 +12,8 @@ class JsonApi::Event::ParticipationsController < JsonApiController
   end
 
   def show
-    kind = Event::Participation.find(params[:id])
-    authorize!(:show, kind)
+    participation = Event::Participation.find(params[:id])
+    authorize!(:show, participation)
     super
   end
 end

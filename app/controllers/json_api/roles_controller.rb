@@ -7,7 +7,7 @@
 
 class JsonApi::RolesController < JsonApiController
   def index
-    authorize!(*index_authorization_args)
+    authorize!(:index, Role)
     super
   end
 
@@ -35,12 +35,5 @@ class JsonApi::RolesController < JsonApiController
 
   def entry
     @entry ||= Role.find(params[:id])
-  end
-
-  def index_authorization_args
-    case current_ability
-    when TokenAbility then [:index, Role]
-    else [:index_people, Group]
-    end
   end
 end

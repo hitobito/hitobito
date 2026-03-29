@@ -23,6 +23,6 @@ class InvoiceItemResource < ApplicationResource
   belongs_to :invoice
 
   def index_ability
-    JsonApi::InvoiceAbility.new(current_ability)
+    JsonApi::InvoiceAbility.new(current_ability, api_scopes: current_scopes)
   end
 end

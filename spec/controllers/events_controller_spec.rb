@@ -781,7 +781,7 @@ describe EventsController do
     end
 
     context "oauth" do
-      let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
+      let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id, scopes: "events") }
 
       before do
         allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }

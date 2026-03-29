@@ -38,6 +38,6 @@ class MailingListResource < ApplicationResource
   belongs_to :group, resource: GroupResource, writable: false
 
   def index_ability
-    MailingListReadables.new(current_ability.user)
+    MailingListReadables.new(current_ability.user, api_scopes: current_scopes)
   end
 end

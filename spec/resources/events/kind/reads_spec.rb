@@ -12,6 +12,7 @@ describe Event::KindResource, type: :resource do
 
   before do
     params[:filter] = {id: {eq: kind.id}}
+    allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"])
   end
 
   describe "serialization" do

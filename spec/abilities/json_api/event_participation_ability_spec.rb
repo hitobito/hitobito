@@ -239,7 +239,7 @@ describe JsonApi::EventParticipationAbility do
 
     def accessible_by(token, model_class = Event::Participation)
       token = service_tokens(token) unless token.is_a?(ServiceToken)
-      ability = described_class.new(TokenAbility.new(token))
+      ability = described_class.new(TokenAbility.new(token), api_scopes: permitted_top_layer_token.scopes)
       model_class.all.accessible_by(ability)
     end
 
@@ -265,7 +265,7 @@ describe JsonApi::EventParticipationAbility do
   end
 
   context "doorkeeper token" do
-    let(:application) { Fabricate(:application, scopes: "events") }
+    let(:application) { Fabricate(:application, scopes: "event_participations") }
 
     def accessible_by(person)
       token = Fabricate(:access_token, application:, scopes: "event_participations",

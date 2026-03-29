@@ -77,6 +77,10 @@ class ServiceToken < ActiveRecord::Base
     ServiceToken.column_names - NON_SCOPE_ATTRIBUTES
   end
 
+  def scopes
+    self.class.possible_scopes.select { |scope| send(scope) }
+  end
+
   private
 
   def generate_token!

@@ -9,8 +9,9 @@ class PersonReadables < GroupBasedReadables
 
   attr_reader :group, :roles_readable_for
 
-  def initialize(user, group = nil, include_ended_roles: false)
+  def initialize(user, group = nil, include_ended_roles: false, api_scopes: ["api"])
     super(user)
+    return unless api_scopes.include?("people") || api_scopes.include?("api")
 
     @group = group
     @roles_join = include_ended_roles ? [roles_with_ended_readable: :group] : [roles: :group]

@@ -13,6 +13,7 @@ describe RoleResource, type: :resource do
 
   before do
     allow(Graphiti.context[:object]).to receive(:can?).and_return(true)
+    allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"])
   end
 
   describe "serialization" do

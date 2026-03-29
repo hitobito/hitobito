@@ -29,10 +29,10 @@ class Person::NameResource < ApplicationResource
   end
 
   def base_scope
-    Person.only_public_data.order_by_name.accessible_by(index_ability)
+    super.only_public_data.order_by_name
   end
 
   def index_ability
-    PersonReadables.new(current_ability.user)
+    PersonReadables.new(current_ability.user, api_scopes: current_scopes)
   end
 end

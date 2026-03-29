@@ -11,8 +11,9 @@ class MailingListReadables < GroupBasedReadables
   self.same_layer_permissions = [:layer_full, :layer_and_below_full]
   self.above_layer_permissions = []
 
-  def initialize(user)
-    super
+  def initialize(user, api_scopes: ["api"])
+    super(user)
+    return unless api_scopes.include?("mailing_lists") || api_scopes.include?("api")
 
     can :index, MailingList, accessible_mailing_lists
   end

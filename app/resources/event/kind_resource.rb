@@ -23,10 +23,8 @@ class Event::KindResource < ApplicationResource
   belongs_to :kind_category, resource: Event::KindCategoryResource
 
   def base_scope
-    Event::Kind.accessible_by(index_ability).where(deleted_at: nil).list
-  end
+    Event::Kind.none unless current_ability.can?(:list_available, ::Event)
 
-  def index_ability
-    JsonApi::EventAbility.new(current_ability)
+    Event::Kind.where(deleted_at: nil).list
   end
 end

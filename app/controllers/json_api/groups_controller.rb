@@ -8,8 +8,7 @@
 class JsonApi::GroupsController < JsonApiController
   def index
     authorize!(:index, Group)
-    resources = resource_class.all(params)
-    render(jsonapi: resources)
+    super
   end
 
   def show

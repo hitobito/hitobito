@@ -108,11 +108,11 @@ class GroupResource < ApplicationResource
     raise CanCan::AccessDenied
   end
 
-  def index_ability
-    JsonApi::GroupAbility.new(current_ability)
-  end
-
   def base_scope
     super.without_deleted.without_archived.includes(:translations)
+  end
+
+  def index_ability
+    GroupReadables.new(current_ability.user)
   end
 end

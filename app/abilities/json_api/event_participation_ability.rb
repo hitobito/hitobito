@@ -16,7 +16,7 @@ module JsonApi
       when Ability then define_abilities_from_person
       when TokenAbility then define_token_abilities
       when DoorkeeperTokenAbility
-        if token.acceptable?(:event_participations)
+        if token.acceptable?(:event_participations) || token.acceptable?(:api)
           @ability = ability.user_ability
           define_abilities_from_person
         end

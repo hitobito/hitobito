@@ -471,6 +471,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   prepend Group::Paranoia
 
   def create_invoice_config
+    return if InvoiceConfig.where(group: self).exists?
     config = InvoiceConfig.new(group: self)
     config.save(validate: false) # otherwise the validations will block creation
   end

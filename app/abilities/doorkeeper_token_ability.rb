@@ -8,7 +8,7 @@ class DoorkeeperTokenAbility
 
   attr_reader :token, :user_ability
 
-  delegate :identifier, to: :user_ability
+  delegate :identifier, :user_context, to: :user_ability
 
   def user
     user_ability.user
@@ -29,21 +29,25 @@ class DoorkeeperTokenAbility
   private
 
   # rubocop:todo Metrics/CyclomaticComplexity
+  # rubocop:todo Metrics/AbcSize
   def define_token_abilities
     define_group_abilities if token.acceptable?(:groups)
     define_event_abilities if token.acceptable?(:events)
     define_event_participation_abilities if token.acceptable?(:event_participations)
     define_person_abilities if token.acceptable?(:people)
+    define_role_abilities if token.acceptable?(:groups) && token.acceptable?(:people)
     define_invoice_abilities if token.acceptable?(:invoices)
     define_mailing_list_abilities if token.acceptable?(:mailing_lists)
   end
   # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize
 
   def define_all_abilities
     define_group_abilities
     define_event_abilities
     define_event_participation_abilities
     define_person_abilities
+    define_role_abilities
     define_invoice_abilities
     define_mailing_list_abilities
   end
@@ -124,9 +128,45 @@ class DoorkeeperTokenAbility
     end
   end
 
+  # rubocop:todo Metrics/AbcSize
+  # rubocop:todo Metrics/MethodLength
+  def define_role_abilities
+    can :index, Role do |role|
+      user_ability.can?(:index, role.group) &&
+        user_ability.can?(:index, role.person)
+    end
+
+    can :show, Role do |role|
+      user_ability.can?(:show, role.group) &&
+        user_ability.can?(:show, role.person)
+    end
+    can :create, Role do |role|
+      user_ability.can?(:update, role.group) &&
+        user_ability.can?(:update, role.person)
+    end
+    can :update, Role do |role|
+      user_ability.can?(:update, role.group) &&
+        user_ability.can?(:update, role.person)
+    end
+    can :destroy, Role do |role|
+      user_ability.can?(:update, role.group) &&
+        user_ability.can?(:update, role.person)
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
+
   def define_invoice_abilities
+    can :index, Invoice do |i|
+      user_ability.can?(:index, i)
+    end
+
     can :show, Invoice do |i|
       user_ability.can?(:show, i)
+    end
+
+    can :update, Invoice do |i|
+      user_ability.can?(:update, i)
     end
 
     can :index_issued_invoices, Group do |g|
@@ -135,6 +175,10 @@ class DoorkeeperTokenAbility
   end
 
   def define_mailing_list_abilities
+    can :index, MailingList do |m|
+      user_ability.can?(:index, m)
+    end
+
     can :show, MailingList do |m|
       user_ability.can?(:show, m)
     end

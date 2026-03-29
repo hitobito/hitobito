@@ -94,7 +94,8 @@ class Ability
     if include_manageds
       user.manageds.each do |managed|
         user_context = AbilityDsl::UserContext.new(managed)
-        store = current_store.only_manager_inheritable
+        # Only consider permissions which the manager can inherit from the managed
+        store = current_store.filter_configs { |_, _, _, config| config.options[:include_manageds] }
 
         define_instance_side(store, user_context)
         define_class_side(store, user_context)

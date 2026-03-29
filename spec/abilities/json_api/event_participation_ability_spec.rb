@@ -268,9 +268,9 @@ describe JsonApi::EventParticipationAbility do
     let(:application) { Fabricate(:application, scopes: "event_participations") }
 
     def accessible_by(person)
-      token = Fabricate(:access_token, application:, scopes: "event_participations",
+      token = Fabricate(:access_token, application:, scopes: ["event_participations"],
         resource_owner_id: person.id)
-      ability = described_class.new(DoorkeeperTokenAbility.new(token))
+      ability = described_class.new(DoorkeeperTokenAbility.new(token), api_scopes: token.scopes)
       Event::Participation.all.accessible_by(ability)
     end
 

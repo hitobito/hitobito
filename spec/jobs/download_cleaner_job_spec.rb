@@ -8,17 +8,26 @@ require "spec_helper"
 describe DownloadCleanerJob do
   subject { DownloadCleanerJob.new }
 
+  let(:person) { people(:top_leader) }
+
+  let(:user) { people(:top_leader) }
+  let(:group) { groups(:top_layer) }
+  let(:event_filter) { Event::Filter.new(group, nil, "all", 2012, false) }
+
+  before do
+    allow(Auth).to receive(:current_person).and_return(person)
+  end
+
   it "removes files and gets rescheduled" do
     subject.perform
     expect(subject.delayed_jobs).to be_exists
   end
 
   it "removes files older than one day" do
-    download_file("file", Time.zone.now.to_i)
-    download_file("file", (1.day.ago + 1.hour).to_i)
-
-    download_file("file", (1.day.ago - 1.hour).to_i)
-    download_file("file", (1.day.ago - 14.hours).to_i)
+    download_file(Time.zone.now)
+    download_file(1.day.ago + 1.hour)
+    download_file(1.day.ago - 1.hour)
+    download_file(1.day.ago - 14.hours)
 
     expect do
       subject.perform_internal
@@ -27,8 +36,14 @@ describe DownloadCleanerJob do
 
   private
 
-  def download_file(filename, time)
-    file = UserJobResult.from_filename("#{filename}_#{time}-1234")
+  def download_file(time)
+    job = Export::EventsExportJob.new(:csv, user.id, group.id, event_filter.to_h, filename: "event_export")
+
+    travel_to(time) do
+      job.enqueue!
+    end
+
+    file = job.user_job_result
     file.write("testfilecontent")
     file
   end

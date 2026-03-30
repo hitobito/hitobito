@@ -9,7 +9,7 @@ class PersonResource < ApplicationResource
   primary_endpoint "people", [:index, :show, :update]
 
   def authorize_update(model)
-    if model.changed_attribute_names_to_save & ["gender", "birthday"]
+    if (model.changed_attribute_names_to_save & ["gender", "birthday"]).present?
       # show_details ability is required additionally for updating gender, birthday
       update_ability.authorize!(:show_details, model)
     end

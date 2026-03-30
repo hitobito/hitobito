@@ -28,7 +28,7 @@ class VariousAbility < AbilityDsl::Base
   end
 
   on(Event::Kind) do
-    class_side(:index).if_admin_and_course_types_present
+    class_side(:index, :show).all
     permission(:admin).may(:manage).if_course_types_present
   end
 
@@ -38,7 +38,7 @@ class VariousAbility < AbilityDsl::Base
   end
 
   on(Event::KindCategory) do
-    class_side(:index).if_admin_and_course_types_present
+    class_side(:index, :show).all
     permission(:admin).may(:manage).if_course_types_present
   end
 

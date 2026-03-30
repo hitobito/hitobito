@@ -13,13 +13,9 @@ describe RoleResource, type: :resource do
   let(:group) { role.group }
   let(:current_ability) { Ability.new(person) }
 
-  around do |example|
-    RSpec::Mocks.with_temporary_scope do
-      Graphiti.with_context(double({
-        current_ability: current_ability,
-        current_scopes: ["api"]
-      })) { example.run }
-    end
+  before do
+    allow(Graphiti.context[:object]).to receive(:current_ability).and_return(current_ability)
+    allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"])
   end
 
   describe "creating" do
@@ -74,6 +70,8 @@ describe RoleResource, type: :resource do
 
       it "cannot create when token has layer_read only" do
         token.update!(permission: :layer_read)
+        allow(Graphiti.context[:object]).to receive(:current_ability)
+          .and_return(TokenAbility.new(token))
         expect {
           expect(instance.save).to eq(true)
         }.to raise_error(CanCan::AccessDenied)
@@ -81,6 +79,8 @@ describe RoleResource, type: :resource do
 
       it "cannot create when token has layer_and_below_read only" do
         token.update!(permission: :layer_and_below_read)
+        allow(Graphiti.context[:object]).to receive(:current_ability)
+          .and_return(TokenAbility.new(token))
         expect {
           expect(instance.save).to eq(true)
         }.to raise_error(CanCan::AccessDenied)
@@ -102,6 +102,8 @@ describe RoleResource, type: :resource do
 
         it "cannot create role with layer_full permission" do
           token.update!(permission: :layer_full)
+          allow(Graphiti.context[:object]).to receive(:current_ability)
+            .and_return(TokenAbility.new(token))
 
           expect {
             expect(instance.save).to eq(true)

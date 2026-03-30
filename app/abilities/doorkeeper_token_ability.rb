@@ -11,6 +11,8 @@
 # If the access token has the scope :api, this is treated the same as if all
 # API scopes (like :people, :groups, ...) were set.
 class DoorkeeperTokenAbility < Ability
+  include ApiScopeAbility
+
   attr_reader :token
 
   def initialize(doorkeeper_token)
@@ -21,32 +23,16 @@ class DoorkeeperTokenAbility < Ability
 
   private
 
-  def define_user_abilities(current_store, current_user_context, include_manageds = true)
-    # Only consider permissions which match the service token scope settings
-    limited_store = current_store.filter_configs do |_, subject_class, _, _|
-      model_acceptable?(subject_class)
-    end
-
-    super(limited_store, current_user_context, include_manageds)
-  end
-
-  def model_acceptable?(model)
-    case model_base_class(model)
-    when "Role"
-      acceptable?(:groups) && acceptable?(:people)
-    when "Event::Kind", "Event::KindCategory"
-      acceptable?(:events)
-    when "InvoiceItem"
-      acceptable?(:invoices)
-    else
-      scope = model_base_class(model).gsub("::", "").pluralize.underscore
-      ServiceToken.possible_scopes.include?(scope) && acceptable?(scope)
-    end
-  end
-
-  def model_base_class(model) = model.respond_to?(:base_class) ? model.base_class.name : model.name
-
   def acceptable?(scope)
     token.acceptable?(scope) || token.acceptable?(:api)
+  end
+
+  def write_permission?
+    # Allow to inherit abilities with write permission for OAuth access tokens.
+    # There is currently no way to disable the writing capabilities of an OAuth
+    # access token like we have with service tokens.
+    # This does not mean that the token is allowed to write anywhere, it just means
+    # it's allowed to write where the user is allowed to write.
+    true
   end
 end

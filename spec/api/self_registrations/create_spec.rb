@@ -258,7 +258,7 @@ describe "self_registrations#create", type: :request do
     end
 
     describe "in group with inactive self registration" do
-      before { allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false) }
+      before { group.update(self_registration_role_type: nil) }
 
       it "raises 403 forbidden" do
         expect {

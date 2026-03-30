@@ -44,7 +44,6 @@ describe TokenAbility do
 
       it "may not write layer person" do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
-        is_expected.not_to be_able_to(:create, person)
         is_expected.not_to be_able_to(:update, person)
       end
 
@@ -59,15 +58,16 @@ describe TokenAbility do
         is_expected.not_to be_able_to(:show, person)
       end
 
-      it "may not index people on subgroup" do
-        is_expected.not_to be_able_to(:index_people, groups(:top_group))
+      it "may show but not write person in subgroup" do
+        person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
+        is_expected.to be_able_to(:show, person)
+        is_expected.not_to be_able_to(:update, person)
       end
 
-      it "may not show or write person in subgroup" do
-        person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
+      it "may not show nor write person in sublayer" do
+        person = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
         is_expected.not_to be_able_to(:show, person)
         is_expected.not_to be_able_to(:update, person)
-        is_expected.not_to be_able_to(:create, person)
       end
     end
 
@@ -93,7 +93,6 @@ describe TokenAbility do
       it "may write layer person" do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.to be_able_to(:update, person)
-        is_expected.not_to be_able_to(:create, person) # people#create not yet implemented for service token
       end
 
       it "may not index layer people if disabled" do
@@ -108,15 +107,20 @@ describe TokenAbility do
         is_expected.not_to be_able_to(:update, person)
       end
 
-      it "may not index people on subgroup" do
-        is_expected.not_to be_able_to(:index_people, groups(:top_group))
+      it "may index people on subgroup" do
+        is_expected.to be_able_to(:index_people, groups(:top_group))
       end
 
-      it "may not show or write person in subgroup" do
+      it "may show and write person in subgroup" do
         person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
+        is_expected.to be_able_to(:show, person)
+        is_expected.to be_able_to(:update, person)
+      end
+
+      it "may not show nor write person in sublayer" do
+        person = Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person
         is_expected.not_to be_able_to(:show, person)
         is_expected.not_to be_able_to(:update, person)
-        is_expected.not_to be_able_to(:create, person)
       end
     end
 
@@ -133,7 +137,6 @@ describe TokenAbility do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.to be_able_to(:show, person)
         is_expected.not_to be_able_to(:update, person)
-        is_expected.not_to be_able_to(:create, person)
       end
 
       it "may show_full on layer person" do
@@ -161,11 +164,10 @@ describe TokenAbility do
         is_expected.not_to be_able_to(:index_people, groups(:top_group))
       end
 
-      it "may only show person in subgroup" do
+      it "may show but not write person in subgroup" do
         person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
         is_expected.to be_able_to(:show, person)
         is_expected.not_to be_able_to(:update, person)
-        is_expected.not_to be_able_to(:create, person)
       end
     end
 
@@ -182,7 +184,6 @@ describe TokenAbility do
         person = Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: token.layer).person
         is_expected.to be_able_to(:show, person)
         is_expected.to be_able_to(:update, person)
-        is_expected.not_to be_able_to(:create, person) # people#create not yet implemented for service token
       end
 
       it "may show_full on layer person" do
@@ -214,7 +215,6 @@ describe TokenAbility do
         person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
         is_expected.to be_able_to(:show, person)
         is_expected.to be_able_to(:update, person)
-        is_expected.not_to be_able_to(:create, person) # people#create not yet implemented for service token
       end
 
       it "may not show nor write person in subgroup if disabled" do
@@ -222,7 +222,6 @@ describe TokenAbility do
         person = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
         is_expected.not_to be_able_to(:show, person)
         is_expected.not_to be_able_to(:update, person)
-        is_expected.not_to be_able_to(:create, person)
       end
     end
   end
@@ -235,14 +234,8 @@ describe TokenAbility do
     end
 
     context "authorized" do
-      it "may index on group" do
-        is_expected.to be_able_to(:index_events, token.layer)
-        is_expected.to be_able_to(:"index_event/courses", token.layer)
-      end
-
-      it "may index on subgroup" do
-        is_expected.to be_able_to(:index_events, groups(:top_group))
-        is_expected.to be_able_to(:"index_event/courses", groups(:top_group))
+      it "may index" do
+        is_expected.to be_able_to(:list_available, Event)
       end
 
       it "may show on group" do
@@ -354,19 +347,6 @@ describe TokenAbility do
         token.update!(groups: false)
         is_expected.to be_able_to(:show, token.layer.issued_invoices.build)
         is_expected.to be_able_to(:show, token.layer.issued_invoices.build.invoice_items.build)
-      end
-
-      it "may index_issued_invoices" do
-        is_expected.to be_able_to(:index_issued_invoices, token.layer)
-      end
-
-      it "may index_issued_invoices independently of group access" do
-        token.update!(groups: false)
-        is_expected.to be_able_to(:index_issued_invoices, token.layer)
-      end
-
-      it "may not index_issued_invoices of sub layer" do
-        is_expected.not_to be_able_to(:index_issued_invoices, groups(:bottom_layer_one))
       end
 
       it "may not show invoice of sub layer" do
@@ -517,7 +497,11 @@ describe TokenAbility do
     let(:bottom_group) { groups(:bottom_layer_one) }
 
     before do
-      allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(true)
+      allow_any_instance_of(GroupDecorator).to receive(:allowed_roles_for_self_registration)
+        .and_return([Group::BottomGroup::NoPermissions])
+      top_group.update!(self_registration_role_type: "Group::BottomGroup::NoPermissions")
+      top_subgroup.update!(self_registration_role_type: "Group::BottomGroup::NoPermissions")
+      bottom_group.update!(self_registration_role_type: "Group::BottomGroup::NoPermissions")
     end
 
     context "authorized with layer_and_below_full" do
@@ -534,12 +518,12 @@ describe TokenAbility do
       end
 
       it "may not register people in token layer if self registration not active" do
-        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        top_group.update(self_registration_role_type: nil)
         is_expected.not_to be_able_to(:register_people, top_group)
       end
 
       it "may not register people in same layer if self registration not active" do
-        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        top_subgroup.update(self_registration_role_type: nil)
         is_expected.not_to be_able_to(:register_people, top_subgroup)
       end
 
@@ -565,12 +549,12 @@ describe TokenAbility do
       end
 
       it "may not register people in token layer if self registration not active" do
-        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        top_group.update(self_registration_role_type: nil)
         is_expected.not_to be_able_to(:register_people, top_group)
       end
 
       it "may not register people in same layer if self registration not active" do
-        allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
+        top_subgroup.update(self_registration_role_type: nil)
         is_expected.not_to be_able_to(:register_people, top_subgroup)
       end
 

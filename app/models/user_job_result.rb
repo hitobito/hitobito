@@ -65,4 +65,52 @@ class UserJobResult < ApplicationRecord
     end
     data
   end
+
+  def report_in_progress
+    update!(status: "in_progress")
+  end
+
+  def report_success(total_attempts)
+    update!(
+        status: "success",
+        end_timestamp: Time.now.to_i,
+        attempts: total_attempts
+    )
+    broadcast_notification
+  end
+
+  def report_error(used_attempts)
+    update!(
+      status: "planned",
+      attempts: used_attempts,
+      progress: (reports_progress ? 0 : nil)
+    )
+  end
+
+  def report_failure
+    update!(
+      status: "error",
+      end_timestamp: Time.now.to_i
+    )
+    broadcast_notification
+  end
+
+  def report_progress(current_iteration, iteration_count)
+    if reports_progress
+      progress = (100.to_f / iteration_count) * (current_iteration + 1)
+      progress = (0 if progress < 0) || (100 if progress > 100) || progress
+      update!(progress:)
+    end
+  end
+
+  private
+
+  def broadcast_notification
+    Turbo::StreamsChannel.broadcast_append_to(
+      "user_job_result_notifications",
+      partial: "user_job_results/user_job_result_notification",
+      locals: {user_job_result: self},
+      target: "user-job-result-notification-placeholder"
+    )
+  end
 end

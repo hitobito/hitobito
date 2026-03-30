@@ -17,8 +17,6 @@ describe Event::ParticipationResource, type: :resource do
     let(:serialized_attrs) do
       [
         :event_id,
-        :participant_id,
-        :participant_type,
         :additional_information,
         :application_id,
         :active,

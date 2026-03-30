@@ -93,5 +93,65 @@ RSpec.describe "events#index", type: :request do
         end
       end
     end
+
+    context "including participations" do
+      let(:event) { events(:top_course) }
+      let(:participation) { event_participations(:top) }
+      let(:params) { {include: "participations", filter: {id: event.id}} }
+
+      it "includes participations" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(json["data"][0]["relationships"]["participations"]["data"].size).to eq(1)
+        expect(json["included"][0]["id"]).to eq participation.id.to_s
+      end
+
+      it "has empty participations data for include if token lacks permission" do
+        service_token.update!(event_participations: false)
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(json["data"][0]["relationships"]["participations"]["data"]).to be_empty
+        expect(json).not_to have_key("included")
+      end
+
+      context "including participant" do
+        let(:bottom_member) { people(:bottom_member) }
+        let(:params) { {include: "participations.participant", filter: {id: event.id}} }
+
+        it "can include person" do
+          make_request
+          expect(response.status).to eq(200), response.body
+          expect(json["data"][0]["relationships"]["participations"]["data"].size).to eq(1)
+          expect(json["included"][0]["relationships"]["participant"]["data"]["type"]).to eq "people"
+          expect(json["included"][0]["relationships"]["participant"]["data"]["id"]).to eq bottom_member.id.to_s
+          expect(json["included"].last["id"]).to eq bottom_member.id.to_s
+        end
+
+        it "can include guest" do
+          guest = Fabricate(:event_guest, main_applicant: participation, first_name: "Guest1")
+          Fabricate(:event_participation, event: participation.event, participant: guest, active: true)
+          make_request
+          expect(response.status).to eq(200), response.body
+          expect(json["data"][0]["relationships"]["participations"]["data"].size).to eq(2)
+          guest_participation = json["included"].find { |inc|
+            inc["type"] == "event_participations" &&
+              inc["relationships"]["participant"]["data"]["type"] == "event_guests"
+          }
+          expect(guest_participation["relationships"]["participant"]["data"]["id"]).to eq guest.id.to_s
+          guest_data = json["included"].find { |inc| inc["type"] == "event_guests" }
+          expect(guest_data["id"]).to eq guest.id.to_s
+          expect(guest_data["attributes"]["first_name"]).to eq guest.first_name
+          expect(guest_data["attributes"]["email"]).to eq guest.email
+        end
+
+        it "may not see included person if token has no permission" do
+          service_token.update(people: false)
+          make_request
+          expect(response.status).to eq(200), response.body
+          expect(json["data"][0]["relationships"]["participations"]["data"].size).to eq(1)
+          expect(json["included"][0]["relationships"]["participant"]["data"]).to be_nil
+        end
+      end
+    end
   end
 end

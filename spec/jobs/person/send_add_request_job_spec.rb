@@ -44,7 +44,7 @@ describe Person::SendAddRequestJob do
 
     mail = double("mail")
     expect(mail).to receive(:deliver_now)
-    expect(Person::AddRequestMailer).to receive(:ask_responsibles).with(request, [r1, r2]).and_return(mail)
+    expect(Person::AddRequestMailer).to receive(:ask_responsibles).with(request, match_array([r1, r2])).and_return(mail)
     job.perform
   end
 
@@ -57,7 +57,7 @@ describe Person::SendAddRequestJob do
 
     mail = double("mail")
     expect(mail).to receive(:deliver_now)
-    expect(Person::AddRequestMailer).to receive(:ask_responsibles).with(request, [r1, r2]).and_return(mail)
+    expect(Person::AddRequestMailer).to receive(:ask_responsibles).with(request, match_array([r1, r2])).and_return(mail)
     job.perform
   end
 end

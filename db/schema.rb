@@ -1330,6 +1330,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.string "status"
     t.integer "attempts"
     t.bigint "delayed_job_id"
+    t.boolean "reports_progress", default: false, null: false
     t.index ["delayed_job_id"], name: "index_user_job_results_on_delayed_job_id"
   end
 

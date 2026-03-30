@@ -12,8 +12,6 @@ class Event::ParticipationResource < ApplicationResource
 
   with_options writable: false, filterable: false, sortable: false do
     attribute :event_id, :integer, filterable: true
-    attribute :participant_id, :integer, filterable: true
-    attribute :participant_type, :string, filterable: true
     attribute :application_id, :integer
     attribute :active, :boolean
     attribute :qualified, :boolean
@@ -23,6 +21,12 @@ class Event::ParticipationResource < ApplicationResource
   end
 
   belongs_to :event
+  polymorphic_belongs_to :participant do
+    group_by(:participant_type) do
+      on(:Person)
+      on(:"Event::Guest")
+    end
+  end
   has_many :roles
 
   def base_scope

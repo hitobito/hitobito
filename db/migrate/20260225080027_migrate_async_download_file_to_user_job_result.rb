@@ -13,6 +13,7 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
       t.string :status
       t.integer :attempts
       t.references :delayed_job, foreign_key: false
+      t.boolean :reports_progress, default: false, null: false
     end
   end
 end

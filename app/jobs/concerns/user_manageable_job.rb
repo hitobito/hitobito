@@ -25,36 +25,24 @@ module UserManageableJob
   end
 
   def before(delayed_job)
-    user_job_result&.update!(status: "in_progress")
+    user_job_result&.report_in_progress
     super
   end
 
   def success(job)
-    user_job_result&.update!(
-      status: "success",
-      end_timestamp: Time.now.to_i,
-      attempts: job.attempts + 1
-    )
-    broadcast_notification
+    user_job_result&.report_success(job.attempts + 1)
     super if defined?(super)
+  end
+
+
+  def error(job, exception, payload = parameters)
+    user_job_result&.report_error(job.attempts + 1)
+    super
   end
 
   def failure(job)
-    user_job_result&.update!(
-      status: "error",
-      end_timestamp: Time.now.to_i
-    )
-    broadcast_notification
+    user_job_result&.report_failure
     super if defined?(super)
-  end
-
-  def error(job, exception, payload = parameters)
-    user_job_result&.update!(
-      status: "planned",
-      attempts: job.attempts + 1,
-      progress: (reports_progress ? 0 : nil)
-    )
-    super
   end
 
   # Report the progess of the job which is then shown as a progress bar on the
@@ -67,10 +55,7 @@ module UserManageableJob
   # <tt>current_iteration</tt>: The current iteration
   # <tt>iteration_count</tt>: The total iterations after which the job will be done
   def report_progress(current_iteration, iteration_count)
-    if reports_progress
-      progress = (100.to_f / iteration_count) * (current_iteration + 1)
-      user_job_result&.update!(progress:)
-    end
+    user_job_result&.report_progress(current_iteration, iteration_count)
   end
 
   def user_job_result
@@ -78,15 +63,6 @@ module UserManageableJob
   end
 
   private
-
-  def broadcast_notification
-    Turbo::StreamsChannel.broadcast_append_to(
-      "user_job_result_notifications",
-      partial: "user_job_results/user_job_result_notification",
-      locals: {user_job_result:},
-      target: "user-job-result-notification-placeholder"
-    )
-  end
 
   def create_default_user_job_result
     UserJobResult.create!(
@@ -97,7 +73,8 @@ module UserManageableJob
       status: "planned",
       start_timestamp: Time.now.to_i,
       attempts: 0,
-      filename: filename_with_timestamp
+      filename: filename_with_timestamp,
+      reports_progress: reports_progress
     )
   end
 

@@ -26,8 +26,8 @@ describe InvoiceAbility do
         is_expected.to be_able_to(:index, Invoice)
       end
 
-      it "may not index InvoiceItem" do
-        is_expected.not_to be_able_to(:index, InvoiceItem)
+      it "may index InvoiceItem" do
+        is_expected.to be_able_to(:index, InvoiceItem)
       end
 
       it "may not manage" do

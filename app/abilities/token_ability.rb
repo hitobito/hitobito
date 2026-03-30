@@ -1,26 +1,30 @@
-#  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class TokenAbility
-  include CanCan::Ability
+# A token ability is like a normal ability, except it is based on a service token
+# and simulates a "dynamic user" for calculating the permissions.
+# Also, a service token has a permission (e.g. layer_and_below_full) which is
+# applied to the simulated user, and allowed scopes (e.g. :people, :groups, ...)
+# which limit the permissions that are actually granted.
+class TokenAbility < Ability
+  include ApiScopeAbility
 
-  attr_reader :token, :user_ability
+  attr_reader :token
 
   delegate :dynamic_user_ability, to: :token
-  delegate :user_context, to: :user_ability
 
   def initialize(token)
     return if token.nil?
     @token = token
-    @user_ability = Ability.new(user)
+    super(token.dynamic_user)
 
-    define_token_abilities
-  end
-
-  def user
-    token.dynamic_user
+    # Service tokens, unlike normal users, may not use the self registration API outside
+    # of their permission range (e.g. layer_full or layer_and_below_full). Therefore,
+    # we declare this permission as a separate `can` instead of inheriting this permission
+    # from the dynamic_user.
+    can :register_people, Group, id: registerable_groups if can_register_people?
   end
 
   def identifier
@@ -29,133 +33,22 @@ class TokenAbility
 
   private
 
-  # rubocop:todo Metrics/AbcSize
-  def define_token_abilities # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
-    define_person_abilities if token.people?
-    define_register_people_abilities if token.register_people? && write_permission?
-    define_event_abilities if token.events?
-    define_group_abilities if token.groups?
-    define_role_abilities if token.people? && token.groups?
-    define_invoice_abilities if token.invoices?
-    define_event_participation_abilities if token.event_participations?
-    define_mailing_list_abilities if token.mailing_lists?
-  end
-  # rubocop:enable Metrics/AbcSize
+  def acceptable?(scope) = token.send(:"#{scope}?")
 
-  def define_role_abilities
-    can :index, Role
-    can :show, Role do |role|
-      dynamic_user_ability.can? :show_full, role.person
-    end
-    can [:create, :update, :destroy], Role do |role|
-      dynamic_user_ability.can?(:update, role.group) &&
-        dynamic_user_ability.can?(:update, role.person)
-    end
-  end
+  def write_permission? = token.permission =~ /_full$/
 
-  # rubocop:todo Metrics/CyclomaticComplexity
-  def define_person_abilities # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
-    below_permissions =
-      token.layer_and_below_read? || token.layer_and_below_full?
-    groups = below_permissions ? token_layer_and_below : [token.layer]
+  def can_register_people? = write_permission? && acceptable?(:register_people)
 
-    can :show, [Person, PersonDecorator] do |p|
-      Role.where(person: p, group: groups).present? &&
-        dynamic_user_ability.can?(:show, p)
+  def registerable_groups
+    groups = case token.permission.to_sym
+    when :layer_and_below_full
+      token.layer.self_and_descendants
+    when :layer_full
+      token.layer.groups_in_same_layer
+    else
+      Group.none
     end
 
-    can :show_full, [Person, PersonDecorator] do |p|
-      Role.where(person: p, group: groups).present? &&
-        dynamic_user_ability.can?(:show_full, p)
-    end
-
-    can :show_details, [Person, PersonDecorator] do |p|
-      Role.where(person: p, group: groups).present? &&
-        dynamic_user_ability.can?(:show_details, p)
-    end
-
-    can :index_people, Group do |g|
-      groups.include?(g)
-    end
-
-    can :update, [Person, PersonDecorator] do |p|
-      Role.where(person: p, group: groups).present? &&
-        dynamic_user_ability.can?(:update, p)
-    end
-  end
-  # rubocop:enable Metrics/CyclomaticComplexity
-
-  def define_register_people_abilities
-    groups = token.layer_and_below_full? ? token_layer_and_below : token.layer.groups_in_same_layer
-    can :register_people, Group,
-      {id: groups.filter(&:self_registration_active?).map(&:id)}
-  end
-
-  def define_event_abilities
-    can :list_available, Event
-
-    can :show, Event do |e|
-      e.groups.any? { |g| token_layer_and_below.include?(g) }
-    end
-
-    can :index_events, Group do |g|
-      token_layer_and_below.include?(g)
-    end
-
-    can :"index_event/courses", Group do |g|
-      token_layer_and_below.include?(g)
-    end
-
-    can :read, Event::Kind
-    can :read, Event::KindCategory
-  end
-
-  def define_event_participation_abilities
-    can :read, Event::Participation
-
-    can :index_participations, Event do |event|
-      event.groups.collect(&:layer_group).any? { |g| token.layer == g }
-    end
-  end
-
-  def define_group_abilities
-    can :index, Group
-
-    can :show, Group do |g|
-      token_layer_and_below.include?(g)
-    end
-
-    can :show_details, Group do |g|
-      token_layer_and_below.include?(g)
-    end
-  end
-
-  def define_invoice_abilities
-    can :index_issued_invoices, Group do |group|
-      token.layer == group
-    end
-
-    can [:read, :update], Invoice, {group: {layer_group_id: token.layer.id}}
-    can [:read, :update], InvoiceItem, {invoice: {group: {layer_group_id: token.layer.id}}}
-  end
-
-  def define_mailing_list_abilities
-    can :index, MailingList
-
-    can :show, MailingList do |mailing_list|
-      token.layer.layer_group == mailing_list.group.layer_group
-    end
-
-    can :index_subscriptions, MailingList do |mailing_list|
-      token.layer.layer_group == mailing_list.group.layer_group
-    end
-  end
-
-  def token_layer_and_below
-    token.layer.self_and_descendants
-  end
-
-  def write_permission?
-    token.permission =~ /_full$/
+    groups.self_registration_active.pluck(:id)
   end
 end

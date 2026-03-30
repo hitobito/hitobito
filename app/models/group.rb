@@ -213,6 +213,10 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   scope :without_archived, -> { where(archived_at: nil) }
   scope :without_deleted, -> { where(deleted_at: nil) }
   scope :without_archived_or_deleted, -> { without_archived.without_deleted }
+  scope :self_registration_active, -> do
+    active.where(self_registration_role_type:
+      GroupDecorator.all_allowed_roles_for_self_registration.map(&:sti_name))
+  end
 
   ### CLASS METHODS
 
@@ -359,9 +363,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def validate_self_registration_role_type
     return if self_registration_role_type.blank? ||
-      # rubocop:todo Layout/LineLength
-      decorate.allowed_roles_for_self_registration.map(&:sti_name).include?(self_registration_role_type)
-    # rubocop:enable Layout/LineLength
+      decorate.allowed_roles_for_self_registration.map(&:sti_name)
+        .include?(self_registration_role_type)
 
     errors.add(:self_registration_role_type, :inclusion)
   end

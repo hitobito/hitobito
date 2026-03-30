@@ -7,6 +7,7 @@
 
 class Export::InvoicesJob < Export::ExportBaseJob
   self.parameters = PARAMETERS + [:invoice_ids]
+  self.reports_progress = true
 
   def initialize(format, user_id, invoice_ids, options)
     super(format, user_id, options)
@@ -29,7 +30,7 @@ class Export::InvoicesJob < Export::ExportBaseJob
     case @format
     when :pdf
       Export::Pdf::Invoice.render_multiple(entries, @options.merge({
-        user_job_result: user_job_result
+        job: self
       }))
     when :csv
       Export::Tabular::Invoices::List.csv(entries)

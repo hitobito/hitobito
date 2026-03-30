@@ -23,7 +23,7 @@ module Export::Pdf::Messages
     def initialize(letter, options = {})
       @letter = letter
       @options = options
-      @user_job_result = options.delete(:user_job_result)
+      @job = options.delete(:job)
       @body_font_size = Settings.messages.body_font_size
     end
 
@@ -50,7 +50,7 @@ module Export::Pdf::Messages
     def build_pdf
       customize
       recipients.each_with_index do |recipient, position|
-        reporter&.report(position)
+        @job.report_progress(position, recipients.size)
         render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
       end
@@ -79,19 +79,6 @@ module Export::Pdf::Messages
     end
 
     private
-
-    def reporter
-      return unless @user_job_result
-
-      @reporter ||= init_reporter
-    end
-
-    def init_reporter
-      Export::ProgressReporter.new(
-        @user_job_result,
-        recipients.size
-      )
-    end
 
     def render_options
       @options.to_h.merge(

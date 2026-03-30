@@ -95,6 +95,15 @@ class UserJobResult < ApplicationRecord
     broadcast_notification
   end
 
+  # Report the progess of the job which is then shown as a progress bar on the
+  # user job results view. This could for example be used in a loop that iterates
+  # through files or sends out mails.
+  #
+  # Attention: The <tt>reports_progress</tt> class attribute has to be set to a truthy value
+  # on the job class for progress to actually be reported.
+  #
+  # <tt>current_iteration</tt>: The current iteration
+  # <tt>iteration_count</tt>: The total iterations after which the job will be done
   def report_progress(current_iteration, iteration_count)
     if reports_progress
       progress = (100.to_f / iteration_count) * (current_iteration + 1)

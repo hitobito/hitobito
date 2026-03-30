@@ -5,6 +5,7 @@
 
 module UserManageableJob
   extend ActiveSupport::Concern
+  delegate :report_progress, to: :@user_job_result
 
   prepended do
     class_attribute :job_name, default: name
@@ -25,37 +26,24 @@ module UserManageableJob
   end
 
   def before(delayed_job)
-    user_job_result&.report_in_progress
+    user_job_result.report_in_progress
     super
   end
 
   def success(job)
-    user_job_result&.report_success(job.attempts + 1)
+    user_job_result.report_success(job.attempts + 1)
     super if defined?(super)
   end
 
 
   def error(job, exception, payload = parameters)
-    user_job_result&.report_error(job.attempts + 1)
+    user_job_result.report_error(job.attempts + 1)
     super
   end
 
   def failure(job)
-    user_job_result&.report_failure
+    user_job_result.report_failure
     super if defined?(super)
-  end
-
-  # Report the progess of the job which is then shown as a progress bar on the
-  # user job results view. This could for example be used in a loop that iterates
-  # through files or sends out mails.
-  #
-  # Attention: The <tt>reports_progress</tt> class attribute has to be set to a truthy value
-  # on the job class for progress to actually be reported.
-  #
-  # <tt>current_iteration</tt>: The current iteration
-  # <tt>iteration_count</tt>: The total iterations after which the job will be done
-  def report_progress(current_iteration, iteration_count)
-    user_job_result&.report_progress(current_iteration, iteration_count)
   end
 
   def user_job_result

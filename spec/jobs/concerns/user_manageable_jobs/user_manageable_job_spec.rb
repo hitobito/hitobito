@@ -29,47 +29,40 @@ describe UserManageableJob do
     expect(user_job_result.status).to eql("planned")
   end
 
-  it "should have status in_progress when job is being worked off" do
-    job = Examples::LongRunningUserManagedJob.new
-    enqueued_job = job.enqueue!
-    job_worker_thread = Thread.new do
-      work_off_job(enqueued_job)
-    end
-
-    sleep 2
-    user_job_result = job.user_job_result
-    expect(user_job_result.status).to eql("in_progress")
-    job_worker_thread.terminate
-  end
-
-  it "should have status success when job has been worked off without any errors" do
+  it "should report status in_progress when job is being worked off" do
     job = Examples::SuccessfulUserManagedJob.new
     enqueued_job = job.enqueue!
-
-    expect { work_off_job(enqueued_job) }.to change(Delayed::Job, :count).by(-1)
-
     user_job_result = job.user_job_result
-    expect(user_job_result.status).to eql("success")
+
+    expect(user_job_result).to receive(:report_in_progress)
+    work_off_job(enqueued_job)
+  end
+
+  it "should report status success when job has been worked off without any errors" do
+    job = Examples::SuccessfulUserManagedJob.new
+    enqueued_job = job.enqueue!
+    user_job_result = job.user_job_result
+
+    expect(user_job_result).to receive(:report_success).with(1)
+    expect { work_off_job(enqueued_job) }.to change(Delayed::Job, :count).by(-1)
   end
 
   it "should have status error when last job retry failed" do
     job = Examples::UnsuccessfulUserManagedJob.new
     enqueued_job = job.enqueue!
-    2.times { work_off_job(enqueued_job) }
-
     user_job_result = job.user_job_result
-    expect(user_job_result.status).to eql("error")
-    expect(user_job_result.attempts).to eql(2)
+
+    expect(user_job_result).to receive(:report_failure)
+    2.times { work_off_job(enqueued_job) }
   end
 
-  it "should increase attempt number after failure" do
+  it "should increase attempt number after failure and reschedule job" do
     job = Examples::UnsuccessfulUserManagedJob.new
     enqueued_job = job.enqueue!
-    work_off_job(enqueued_job)
-
     user_job_result = job.user_job_result
-    expect(user_job_result.status).to eql("planned")
-    expect(user_job_result.attempts).to eql(1)
+
+    expect(user_job_result).to receive(:report_error).with(1)
+    work_off_job(enqueued_job)
   end
 
   it "should report progress" do

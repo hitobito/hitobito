@@ -70,7 +70,7 @@ module UserManageableJob
     filename = @options&.dig(:filename)
     return unless filename
 
-    "#{filename.to_s.parameterize(preserve_case: true)}_#{Time.now.to_i}.#{filetype}"
+    "#{filename}_#{Time.now.to_i}"
   end
 
   def filetype

@@ -34,7 +34,7 @@ class UserJobResult < ApplicationRecord
   def to_s
     partial = " (#{progress}%)" if progress.present?
 
-    "<AsyncDownloadFile##{id}: #{filename}#{partial}>"
+    "<UserJobResult##{id}: #{filename}#{partial}>"
   end
 
   def downloadable?(person)
@@ -63,6 +63,15 @@ class UserJobResult < ApplicationRecord
       data = data.force_encoding(Settings.csv.encoding)
     end
     data
+  end
+
+  def filename=(filename)
+    normalized_filename = filename.to_s.parameterize(preserve_case: true)
+    super(normalized_filename)
+  end
+
+  def filename
+    "#{super}.#{filetype}"
   end
 
   def report_in_progress

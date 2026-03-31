@@ -8,6 +8,9 @@
 class RoleResource < ApplicationResource
   primary_endpoint "roles", [:index, :create, :show, :update, :destroy]
 
+  self.readable_class = JsonApi::RoleAbility
+  self.acceptable_scopes += %w[people groups]
+
   with_options writable: false do
     attribute :created_at, :datetime
     attribute :updated_at, :datetime
@@ -43,10 +46,6 @@ class RoleResource < ApplicationResource
       # so we skip this.
       # Note: this might lead to a performance penalty.
     end
-  end
-
-  def index_ability
-    JsonApi::RoleAbility.new(current_ability, api_scopes: current_scopes)
   end
 
   private

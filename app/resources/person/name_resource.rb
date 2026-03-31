@@ -8,6 +8,8 @@
 class Person::NameResource < ApplicationResource
   self.model = ::Person
   self.type = "person-name"
+  self.readable_class = PersonReadables
+  self.acceptable_scopes += %w[people]
 
   class_attribute :course_leader_roles
   self.course_leader_roles = [Event::Role::Leader]
@@ -30,9 +32,5 @@ class Person::NameResource < ApplicationResource
 
   def base_scope
     super.only_public_data.order_by_name
-  end
-
-  def index_ability
-    PersonReadables.new(current_ability.user, api_scopes: current_scopes)
   end
 end

@@ -11,10 +11,8 @@ class EventReadables < GroupBasedReadables
   self.same_layer_permissions = [:any]
   self.above_layer_permissions = [:layer_and_below_full]
 
-  def initialize(user, api_scopes: ["api"])
-    super(user)
-    return unless api_scopes.include?("events") || api_scopes.include?("api")
-
+  def initialize(user)
+    super
     can :read, Event, accessible_events
   end
 

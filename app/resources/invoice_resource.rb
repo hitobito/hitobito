@@ -8,6 +8,9 @@
 class InvoiceResource < ApplicationResource
   primary_endpoint "invoices", [:index, :show, :update]
 
+  self.readable_class = JsonApi::InvoiceAbility
+  self.acceptable_scopes += %w[invoices]
+
   with_options filterable: false, sortable: false do
     attribute :title, :string
     attribute :description, :string
@@ -26,8 +29,4 @@ class InvoiceResource < ApplicationResource
   belongs_to :recipient, resource: PersonResource
 
   has_many :invoice_items
-
-  def index_ability
-    JsonApi::InvoiceAbility.new(current_ability, api_scopes: current_scopes)
-  end
 end

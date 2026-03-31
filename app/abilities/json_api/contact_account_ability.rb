@@ -16,10 +16,8 @@ module JsonApi
       AdditionalAddress
     ]
 
-    attr_reader :main_ability
-
-    def initialize(main_ability)
-      @main_ability = main_ability
+    def initialize(user)
+      @user = user
 
       # Person ContactAccounts
       # allow reading public contacts of people on which the user has :show permission
@@ -42,28 +40,30 @@ module JsonApi
 
     private
 
+    attr_reader :user
+
     def readable_people
-      Person.accessible_by(PersonReadables.new(main_ability.user))
+      Person.accessible_by(PersonReadables.new(user))
         .unscope(:select)
     end
 
     def details_readable_people
-      Person.accessible_by(PersonDetailsReadables.new(main_ability.user))
+      Person.accessible_by(PersonDetailsReadables.new(user))
         .unscope(:select)
     end
 
     def details_writable_people
       details_readable_people
-        .accessible_by(PersonWritables.new(main_ability.user))
+        .accessible_by(PersonWritables.new(user))
         .unscope(:select)
     end
 
     def readable_groups
-      Group.accessible_by(GroupReadables.new(main_ability.user))
+      Group.accessible_by(GroupReadables.new(user))
     end
 
     def details_readable_groups
-      Group.accessible_by(GroupDetailsReadables.new(main_ability.user))
+      Group.accessible_by(GroupDetailsReadables.new(user))
     end
   end
 end

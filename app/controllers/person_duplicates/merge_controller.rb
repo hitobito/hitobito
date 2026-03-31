@@ -19,10 +19,14 @@ module PersonDuplicates
 
       PersonDuplicate.transaction do
         entry.destroy!
-        People::Merger.new(source, destination, current_user).merge!
+        merger.merge!
       end
 
-      redirect_to group_person_path(destination.primary_group, destination), notice: success_message
+      redirect_to(
+        group_person_path(destination.primary_group, destination),
+        notice: success_message,
+        alert: merger.validation_errors.map(&:to_s)
+      )
     end
 
     private
@@ -48,11 +52,20 @@ module PersonDuplicates
     end
 
     def success_message
-      I18n.t("person_duplicates.merge.success")
+      key = merger.validation_errors.any? ? "success_with_validation_errors" : "success"
+      I18n.t("person_duplicates.merge.#{key}")
+    end
+
+    def merger
+      @merger ||= People::Merger.new(source, destination, current_user)
     end
 
     def entry
       @entry ||= PersonDuplicate.find(params[:id])
+    end
+
+    def group
+      @group ||= Group.find(params[:group_id])
     end
 
     def authorize_action
@@ -60,10 +73,6 @@ module PersonDuplicates
         raise CanCan::AccessDenied.new
       end
       authorize!(:manage_person_duplicates, group)
-    end
-
-    def group
-      @group ||= Group.find(params[:group_id])
     end
   end
 end

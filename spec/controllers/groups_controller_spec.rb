@@ -361,7 +361,7 @@ describe GroupsController do
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
-      allow(token).to receive(:acceptable?) { true }
+      allow(token).to receive(:acceptable?) { |scope| scope.to_s == "groups" }
       allow(token).to receive(:accessible?) { true }
     end
 

@@ -205,6 +205,30 @@ describe Event::ParticipationsController do
       get :index, params: {group_id: groups(:bottom_layer_one), event_id: course.id}
     end
 
+    describe "oauth token access" do
+      let(:top_leader) { people(:top_leader) }
+      before { top_leader.confirm }
+
+      let(:token) { Fabricate(:access_token, resource_owner_id: top_leader.id) }
+
+      before do
+        allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
+        allow(token).to receive(:accessible?) { true }
+      end
+
+      it "indexes accessible with events scope" do
+        allow(token).to receive(:acceptable?) { |scope| scope.to_s == "events" }
+        get :index, params: {group_id: groups(:bottom_layer_one), event_id: course.id}
+        is_expected.to render_template("index")
+      end
+
+      it "indexes accessible with api scope" do
+        allow(token).to receive(:acceptable?) { |scope| scope.to_s == "api" }
+        get :index, params: {group_id: groups(:bottom_layer_one), event_id: course.id}
+        is_expected.to render_template("index")
+      end
+    end
+
     def create(*roles)
       roles.map do |role_class|
         role = Fabricate(:event_role, type: role_class.sti_name)

@@ -1058,18 +1058,39 @@ describe PeopleController do
 
     before do
       allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
-      allow(token).to receive(:acceptable?) { true }
       allow(token).to receive(:accessible?) { true }
     end
 
-    it "shows page" do
-      get :show, params: {group_id: group.id, id: top_leader.id}
-      is_expected.to render_template("show")
+    context "with people scope" do
+      before do
+        allow(token).to receive(:acceptable?) { |scope| scope.to_s == "people" }
+      end
+
+      it "shows page" do
+        get :show, params: {group_id: group.id, id: top_leader.id}
+        is_expected.to render_template("show")
+      end
+
+      it "indexes page" do
+        get :index, params: {group_id: group.id}
+        is_expected.to render_template("index")
+      end
     end
 
-    it "indexes page" do
-      get :index, params: {group_id: group.id}
-      is_expected.to render_template("index")
+    context "with api scope" do
+      before do
+        allow(token).to receive(:acceptable?) { |scope| scope.to_s == "api" }
+      end
+
+      it "shows page" do
+        get :show, params: {group_id: group.id, id: top_leader.id}
+        is_expected.to render_template("show")
+      end
+
+      it "indexes page" do
+        get :index, params: {group_id: group.id}
+        is_expected.to render_template("index")
+      end
     end
 
     context "bottom_group" do
@@ -1078,6 +1099,7 @@ describe PeopleController do
       before do
         @member = Fabricate(Group::BottomGroup::Member.sti_name, group: group).person
         @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
+        allow(token).to receive(:acceptable?) { |scope| scope.to_s == "people" }
       end
 
       it "shows only leader in list" do

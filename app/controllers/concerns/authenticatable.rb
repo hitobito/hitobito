@@ -66,15 +66,7 @@ module Authenticatable
   def doorkeeper_sign_in
     token = token_authentication.oauth_token
     return unless token&.accessible?
-    return head(:forbidden) unless token_acceptable?(token)
-
     sign_in token, store: false
-  end
-
-  def token_acceptable?(token)
-    %w[people groups events invoices mailing_lists event_participations api].any? do |scope|
-      token.acceptable?(scope)
-    end
   end
 
   def authenticate_person!(*args)

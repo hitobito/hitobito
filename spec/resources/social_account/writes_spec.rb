@@ -16,12 +16,7 @@ describe SocialAccountResource, type: :resource do
     Fabricate(Group::BottomLayer::Leader.name.to_sym, person: Fabricate(:person), group: groups(:bottom_layer_one))
   }
   let(:person) { role.person }
-
-  around do |example|
-    RSpec::Mocks.with_temporary_scope do
-      Graphiti.with_context(double({current_ability: Ability.new(user)})) { example.run }
-    end
-  end
+  let(:ability) { Ability.new(user) }
 
   describe "creating" do
     let(:payload) do

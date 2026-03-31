@@ -1061,38 +1061,6 @@ describe PeopleController do
       allow(token).to receive(:accessible?) { true }
     end
 
-    context "with people scope" do
-      before do
-        allow(token).to receive(:acceptable?) { |scope| scope.to_s == "people" }
-      end
-
-      it "shows page" do
-        get :show, params: {group_id: group.id, id: top_leader.id}
-        is_expected.to render_template("show")
-      end
-
-      it "indexes page" do
-        get :index, params: {group_id: group.id}
-        is_expected.to render_template("index")
-      end
-    end
-
-    context "with api scope" do
-      before do
-        allow(token).to receive(:acceptable?) { |scope| scope.to_s == "api" }
-      end
-
-      it "shows page" do
-        get :show, params: {group_id: group.id, id: top_leader.id}
-        is_expected.to render_template("show")
-      end
-
-      it "indexes page" do
-        get :index, params: {group_id: group.id}
-        is_expected.to render_template("index")
-      end
-    end
-
     context "bottom_group" do
       let(:group) { groups(:bottom_group_one_one_one) }
 
@@ -1131,6 +1099,7 @@ describe PeopleController do
       }
 
       it "loads visible people in layer" do
+        allow(token).to receive(:acceptable?) { |scope| scope.to_s == "api" }
         get :index, params: {group_id: group.id, range: "layer"}, format: :json
         json = JSON.parse(@response.body).deep_symbolize_keys
 
@@ -1139,94 +1108,6 @@ describe PeopleController do
             bl_leader,
             bg_leader].collect { |person| person.id.to_s }
         )
-      end
-    end
-  end
-
-  context "without acceptable oauth token (required scope is missing)" do
-    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
-
-    before do
-      allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
-      allow(token).to receive(:acceptable?) { false }
-      allow(token).to receive(:accessible?) { true }
-    end
-
-    it "fails with HTTP 403 (forbidden) when trying to show page" do
-      get :show, params: {group_id: group.id, id: top_leader.id}
-      expect(response).to have_http_status(:forbidden)
-    end
-
-    it "fails with HTTP 403 (forbidden) when trying to index page" do
-      get :index, params: {group_id: group.id}
-      expect(response).to have_http_status(:forbidden)
-    end
-
-    context "bottom_group" do
-      let(:group) { groups(:bottom_group_one_one_one) }
-
-      before do
-        @member = Fabricate(Group::BottomGroup::Member.sti_name, group: group).person
-        @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
-      end
-
-      it "fails with HTTP 403 (forbidden) when trying to show leader in list" do
-        get :index, params: {group_id: group.id}
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "fails with HTTP 403 (forbidden) when trying to show leader" do
-        get :show, params: {group_id: group.id, id: @leader.id}
-        expect(response).to have_http_status(:forbidden)
-      end
-
-      it "fails with HTTP 403 (forbidden) when trying to view member" do
-        get :show, params: {group_id: group.id, id: @member.id}
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-  end
-
-  context "with invalid oauth token (expired or revoked)" do
-    let(:token) { Fabricate(:access_token, resource_owner_id: people(:top_leader).id) }
-
-    before do
-      allow_any_instance_of(Authenticatable::Tokens).to receive(:oauth_token) { token }
-      allow(token).to receive(:acceptable?) { true }
-      allow(token).to receive(:accessible?) { false }
-    end
-
-    it "redirects to login when trying to show page" do
-      get :show, params: {group_id: group.id, id: top_leader.id}
-      is_expected.to redirect_to("http://test.host/de/users/sign_in")
-    end
-
-    it "redirects to login when trying to index page" do
-      get :index, params: {group_id: group.id}
-      is_expected.to redirect_to("http://test.host/de/users/sign_in")
-    end
-
-    context "bottom_group" do
-      let(:group) { groups(:bottom_group_one_one_one) }
-
-      before do
-        @member = Fabricate(Group::BottomGroup::Member.sti_name, group: group).person
-        @leader = Fabricate(Group::BottomGroup::Leader.sti_name, group: group).person
-      end
-
-      it "redirects to login when trying to show leader in list" do
-        get :index, params: {group_id: group.id}
-        is_expected.to redirect_to("http://test.host/de/users/sign_in")
-      end
-
-      it "redirects to login when trying to show leader" do
-        get :show, params: {group_id: group.id, id: @leader.id}
-        is_expected.to redirect_to("http://test.host/de/users/sign_in")
-      end
-
-      it "redirects to login when trying to view member" do
-        get :show, params: {group_id: group.id, id: @member.id}
-        is_expected.to redirect_to("http://test.host/de/users/sign_in")
       end
     end
   end

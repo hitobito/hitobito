@@ -12,10 +12,9 @@ describe JsonApi::RoleAbility do
   let(:person) { Fabricate(:person) }
   let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group, person: person) }
 
-  let(:main_ability) { Ability.new(user) }
   let(:user) { Fabricate(:person) }
 
-  subject { JsonApi::RoleAbility.new(main_ability) }
+  subject { JsonApi::RoleAbility.new(user) }
 
   context "when having `show_full` permission on person" do
     let!(:user_role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: group, person: user) }

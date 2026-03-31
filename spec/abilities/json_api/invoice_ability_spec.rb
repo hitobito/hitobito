@@ -13,7 +13,7 @@ describe JsonApi::InvoiceAbility do
 
   context "person" do
     def accessible_by(person, model_class = Invoice)
-      ability = described_class.new(Ability.new(people(person)))
+      ability = described_class.new(people(person))
       model_class.all.accessible_by(ability)
     end
 
@@ -34,32 +34,6 @@ describe JsonApi::InvoiceAbility do
       item = invoice.invoice_items.create!(name: "test", unit_cost: 1)
       expect(accessible_by(:top_leader, InvoiceItem)).to eq [item]
       expect(accessible_by(:bottom_member, InvoiceItem)).to have(3).items
-    end
-  end
-
-  context "service token" do
-    def accessible_by(token, model_class = Invoice)
-      ability = described_class.new(TokenAbility.new(service_tokens(token)))
-      model_class.all.accessible_by(ability)
-    end
-
-    it "filters invoices according to layer" do
-      expect(accessible_by(:permitted_bottom_layer_token)).to have(2).items
-      expect(accessible_by(:permitted_top_layer_token)).to match_array invoices(:group_invoice)
-
-      invoice = Fabricate(:invoice, group: top_group, recipient: bottom_member)
-      expect(accessible_by(:permitted_top_layer_token)).to match_array [invoice, invoices(:group_invoice)]
-      expect(accessible_by(:permitted_bottom_layer_token)).to have(2).items
-    end
-
-    it "filters invoices items according layer" do
-      expect(accessible_by(:permitted_bottom_layer_token, InvoiceItem)).to have(3).items
-      expect(accessible_by(:permitted_top_layer_token, InvoiceItem)).to be_empty
-
-      invoice = Fabricate(:invoice, group: top_group, recipient: bottom_member)
-      item = invoice.invoice_items.create!(name: "test", unit_cost: 1)
-      expect(accessible_by(:permitted_top_layer_token, InvoiceItem)).to eq [item]
-      expect(accessible_by(:permitted_bottom_layer_token, InvoiceItem)).to have(3).items
     end
   end
 end

@@ -8,9 +8,8 @@
 require "spec_helper"
 
 describe JsonApi::ContactAccountAbility do
-  subject { JsonApi::ContactAccountAbility.new(main_ability) }
+  subject(:ability) { JsonApi::ContactAccountAbility.new(main_ability.user) }
 
-  let(:main_ability) { Ability.new(user) }
   let(:user) { Fabricate(:person) }
   let(:group) { groups(:bottom_layer_one) }
 
@@ -18,6 +17,7 @@ describe JsonApi::ContactAccountAbility do
     let(:person) { Fabricate(:person) }
     let!(:role) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group, person: person) }
     let(:phone_number) { Fabricate(:phone_number, contactable: person) }
+    let(:main_ability) { Ability.new(user) }
 
     context "when having `show_details` permission on contactable" do
       before do
@@ -75,6 +75,7 @@ describe JsonApi::ContactAccountAbility do
 
   context "Group contactable" do
     let(:contact_account) { Fabricate(:phone_number, contactable: group) }
+    let(:main_ability) { Ability.new(user) }
 
     context "when having `read` permission on contactable" do
       let(:group) { groups(:top_group) }

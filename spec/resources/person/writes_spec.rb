@@ -11,16 +11,6 @@ describe PersonResource, type: :resource do
   let(:user) { user_role.person }
   let(:ability) { Ability.new(user) }
 
-  around do |example|
-    RSpec::Mocks.with_temporary_scope do
-      Graphiti.with_context(double({
-        current_ability: ability,
-        entry: try(:person),
-        current_scopes: ["api"]
-      })) { example.run }
-    end
-  end
-
   describe "creating" do
     let!(:user_role) {
       Fabricate(Group::BottomLayer::Leader.name, person: Fabricate(:person), group: groups(:bottom_layer_one))
@@ -68,6 +58,10 @@ describe PersonResource, type: :resource do
 
     let(:instance) do
       PersonResource.find(payload)
+    end
+
+    before do
+      allow(context).to receive(:entry).and_return(person)
     end
 
     it "works" do
@@ -119,6 +113,7 @@ describe PersonResource, type: :resource do
         payload[:data][:attributes][:gender] = "w"
         payload[:data][:attributes][:birthday] = new_birthday.to_json
 
+        allow(context).to receive(:entry).and_return(person)
         expect {
           expect(instance.update_attributes).to eq(true)
         }.to change { person.reload.updated_at }

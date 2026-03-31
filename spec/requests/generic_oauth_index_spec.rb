@@ -115,7 +115,7 @@ RSpec.describe "OAuth index", type: :request do
         let(:token) { Fabricate(:access_token, application: application, resource_owner_id: user.id) }
 
         it "fails with 403 (forbidden)" do
-          get url, headers: {Authorization: "Bearer " + token.token}
+          get url, headers: {Authorization: "Bearer " + token.token, Accept: "application/json"}
           expect(response).to have_http_status(:forbidden)
         end
       end

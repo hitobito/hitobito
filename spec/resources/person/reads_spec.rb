@@ -13,8 +13,6 @@ describe PersonResource, type: :resource do
   let(:top_group) { groups(:top_group) }
   let(:bottom_layer_one) { groups(:bottom_layer_one) }
 
-  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
-
   describe "serialization" do
     let!(:person) { Fabricate(:person, birthday: Time.zone.today, gender: "m") }
     let!(:role) { Fabricate(Group::BottomLayer::Member.name, person: person, group: bottom_layer_one) }

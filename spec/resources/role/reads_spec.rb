@@ -11,11 +11,6 @@ describe RoleResource, type: :resource do
   let!(:role) { roles(:bottom_member) }
   let(:person) { user_role.person }
 
-  before do
-    allow(Graphiti.context[:object]).to receive(:can?).and_return(true)
-    allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"])
-  end
-
   describe "serialization" do
     def serialized_attrs
       [:person_id, :group_id, :label, :type, :created_at, :updated_at, :start_on, :end_on]

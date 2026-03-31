@@ -7,6 +7,7 @@
 
 class Event::KindCategoryResource < ApplicationResource
   primary_endpoint "event_kind_categories", [:index, :show]
+  self.acceptable_scopes += %w[events]
 
   self.type = "event_kind_categories"
 

@@ -10,6 +10,8 @@ class Event::KindResource < ApplicationResource
 
   self.type = :event_kinds
 
+  self.acceptable_scopes += %w[events]
+
   with_options writable: false, filterable: false, sortable: false do
     attribute :label, :string
     attribute :short_name, :string

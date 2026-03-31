@@ -137,6 +137,19 @@ class JsonApiController < ActionController::API
     end
   end
 
+  # Called from resource to engage readables if scope is allowed
+  def current_scopes
+    @current_scopes ||= if current_person
+      ["api"]
+    elsif current_service_token
+      current_service_token.scopes
+    elsif current_oauth_token
+      current_oauth_token.scopes.map(&:to_s)
+    else
+      []
+    end
+  end
+
   private
 
   def user_session?

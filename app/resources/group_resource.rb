@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupResource < ApplicationResource
+  self.readable_class = GroupReadables
+  self.acceptable_scopes += %w[groups]
+
   primary_endpoint "groups", [:index, :show]
 
   with_options writable: false do # rubocop:disable Metrics/BlockLength
@@ -110,9 +113,5 @@ class GroupResource < ApplicationResource
 
   def base_scope
     super.without_deleted.without_archived.includes(:translations)
-  end
-
-  def index_ability
-    GroupReadables.new(current_ability.user, api_scopes: current_scopes)
   end
 end

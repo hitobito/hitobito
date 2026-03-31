@@ -9,21 +9,18 @@ module JsonApi
   class EventParticipationAbility
     include CanCan::Ability
 
-    def initialize(ability, api_scopes: ["api"])
-      @ability = ability
-
-      return unless api_scopes.include?("event_participations") || api_scopes.include?("api")
+    def initialize(user)
+      @user_context = AbilityDsl::UserContext.new(user)
 
       define_abilities_from_person
     end
 
     private
 
-    attr_reader :ability
+    attr_reader :user_context
 
-    delegate :user, :token, to: :ability
-    delegate :course_offerers, :participations, :events_with_permission, :permission_layer_ids,
-      :permission_group_ids, to: :"ability.user_context"
+    delegate :user, :course_offerers, :participations, :events_with_permission,
+      :permission_layer_ids, :permission_group_ids, to: :user_context
 
     def define_abilities_from_person # rubocop:disable Metrics/AbcSize
       if user.id
@@ -75,7 +72,7 @@ module JsonApi
     def active_participations = user.event_participations.active.joins(:event)
 
     def permission_layer_ids(*permissions)
-      permissions.flat_map { |permission| ability.user_context.permission_layer_ids(permission) }
+      permissions.flat_map { |permission| user_context.permission_layer_ids(permission) }
     end
 
     def self_and_below_lft_ranges
@@ -85,14 +82,6 @@ module JsonApi
       Group
         .where(id: group_ids)
         .pluck(:lft, :rgt).map { |min, max| Range.new(min, max) }
-    end
-
-    def token_group_constraints
-      if token.permission.exclude?("and_below")
-        {layer_group_id: token.layer.id}
-      else
-        {lft: (token.layer.lft..token.layer.rgt)}
-      end
     end
   end
 end

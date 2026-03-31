@@ -7,6 +7,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class ApplicationResource < Graphiti::Resource
+  class_attribute :readable_class
+  class_attribute :acceptable_scopes, default: []
+
   # Must be set when no corresponding model/query
   self.abstract_class = true
 
@@ -41,11 +44,16 @@ class ApplicationResource < Graphiti::Resource
   before_save :authorize_update, only: [:update]
   before_destroy :authorize_destroy
 
+  # Limits accessible resources, specify readable_class or override
   def base_scope
-    # accessible_by selects a subset of attributes. We need to select all attributes,
-    # otherwise saving the resource will error when validating unselected attrs.
-    # This is achieved by `unscope(:select)`.
-    super.accessible_by(index_ability).unscope(:select)
+    fail "No readable_class defined for #{name}" unless readable_class
+
+    return super.none unless scope_accepted?
+    super.accessible_by(readable_class.new(current_ability.user)).unscope(:select)
+  end
+
+  def scope_accepted?
+    ((%w[api] + acceptable_scopes) & current_scopes).any?
   end
 
   def authorize_create(model)
@@ -87,17 +95,6 @@ class ApplicationResource < Graphiti::Resource
 
   delegate :can?, to: :current_ability
   delegate :current_ability, :current_scopes, to: :context
-
-  # Used to filter accessible models in `#base_scope`.
-  def index_ability
-    # We require a specific implementation for index_ability in each resource class,
-    # because our normal abilities run in memory, which would perform very badly
-    # when building the base_scope for the JSON API. (We'd need to load all models
-    # from the DB into memory, filter there, and send a complete list of allowed
-    # IDs back to the DB.)
-    raise "implement index_ability in the resource class"
-  end
-
   # Meant to be extended in specific resources
   def create_ability
     current_ability

@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class PersonResource < ApplicationResource
+  self.readable_class = PersonReadables
+  self.acceptable_scopes += %w[people]
+
   primary_endpoint "people", [:index, :show, :update]
 
   def authorize_update(model)
@@ -64,10 +67,6 @@ class PersonResource < ApplicationResource
   end
 
   filter :updated_at, :datetime
-
-  def index_ability
-    PersonReadables.new(current_ability.user, api_scopes: current_scopes)
-  end
 
   private
 

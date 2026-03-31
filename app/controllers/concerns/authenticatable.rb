@@ -28,18 +28,6 @@ module Authenticatable
     end
   end
 
-  def current_scopes
-    @current_scopes ||= if current_person
-      ["api"]
-    elsif current_service_token
-      current_service_token.scopes
-    elsif current_oauth_token
-      current_oauth_token.scopes
-    else
-      []
-    end
-  end
-
   private
 
   def current_person

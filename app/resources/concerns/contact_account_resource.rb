@@ -13,6 +13,9 @@ module ContactAccountResource
   extend ActiveSupport::Concern
 
   included do
+    self.readable_class = JsonApi::ContactAccountAbility
+    self.acceptable_scopes += %w[people]
+
     attribute(:label, :string) { @object.translated_label }
     attribute :public, :boolean
 
@@ -39,9 +42,5 @@ module ContactAccountResource
     # Destroying a contact counts as updating the contactable
     destroy_ability.authorize!(:update, model.contactable)
     destroy_ability.authorize!(:show_details, model.contactable)
-  end
-
-  def index_ability
-    JsonApi::ContactAccountAbility.new(current_ability)
   end
 end

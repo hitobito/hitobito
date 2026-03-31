@@ -8,6 +8,9 @@
 class Event::ParticipationResource < ApplicationResource
   primary_endpoint "event_participations", [:index, :show]
 
+  self.readable_class = JsonApi::EventParticipationAbility
+  self.acceptable_scopes += %w[event_participations]
+
   self.type = :event_participations
 
   with_options writable: false, filterable: false, sortable: false do
@@ -31,9 +34,5 @@ class Event::ParticipationResource < ApplicationResource
 
   def base_scope
     super.list.active
-  end
-
-  def index_ability
-    JsonApi::EventParticipationAbility.new(current_ability, api_scopes: current_scopes)
   end
 end

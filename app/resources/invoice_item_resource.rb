@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceItemResource < ApplicationResource
+  self.readable_class = JsonApi::InvoiceAbility
+  self.acceptable_scopes += %w[invoices]
+
   with_options filterable: false, sortable: false do
     attribute :invoice_id, :integer, filterable: true
     attribute :name, :string
@@ -21,8 +24,4 @@ class InvoiceItemResource < ApplicationResource
   end
 
   belongs_to :invoice
-
-  def index_ability
-    JsonApi::InvoiceAbility.new(current_ability, api_scopes: current_scopes)
-  end
 end

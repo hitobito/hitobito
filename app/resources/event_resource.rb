@@ -8,6 +8,9 @@
 class EventResource < ApplicationResource
   primary_endpoint "events", [:index, :show]
 
+  self.readable_class = EventReadables
+  self.acceptable_scopes += %w[events]
+
   self.polymorphic = [
     "EventResource",
     "Event::CourseResource"
@@ -72,9 +75,5 @@ class EventResource < ApplicationResource
 
   def base_scope
     super.includes(:groups, :translations)
-  end
-
-  def index_ability
-    EventReadables.new(current_ability.user, api_scopes: current_scopes)
   end
 end

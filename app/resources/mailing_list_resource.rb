@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailingListResource < ApplicationResource
+  self.readable_class = MailingListReadables
+  self.acceptable_scopes += %w[mailing_lists]
+
   primary_endpoint "mailing_lists", [:index, :show]
 
   attribute :name, :string
@@ -36,8 +39,4 @@ class MailingListResource < ApplicationResource
   end
 
   belongs_to :group, resource: GroupResource, writable: false
-
-  def index_ability
-    MailingListReadables.new(current_ability.user, api_scopes: current_scopes)
-  end
 end

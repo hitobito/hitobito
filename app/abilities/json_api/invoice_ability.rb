@@ -9,25 +9,19 @@ module JsonApi
   class InvoiceAbility
     include CanCan::Ability
 
-    def initialize(main_ability, api_scopes: ["api"])
-      return unless api_scopes.include?("invoices") || api_scopes.include?("api")
-
-      can :index, Invoice, build_conditions(main_ability)
-      can :index, InvoiceItem, {invoice: build_conditions(main_ability)}
+    def initialize(user)
+      @user_context = AbilityDsl::UserContext.new(user)
+      can :index, Invoice, build_conditions
+      can :index, InvoiceItem, {invoice: build_conditions}
     end
 
     private
 
-    def build_conditions(main_ability)
-      layer_group_ids = read_layer_ids(main_ability)
-      {group: {layer_group_id: layer_group_ids, archived_at: nil}}
-    end
+    attr_reader :user_context
 
-    def read_layer_ids(main_ability)
-      case main_ability
-      when TokenAbility then [main_ability.token.layer.id] if main_ability.token.invoices?
-      else main_ability.user_context.permission_layer_ids(:finance)
-      end
+    def build_conditions
+      layer_group_ids = user_context.permission_layer_ids(:finance)
+      {group: {layer_group_id: layer_group_ids, archived_at: nil}}
     end
   end
 end

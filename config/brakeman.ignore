@@ -105,7 +105,7 @@
     {
       "warning_type": "Unmaintained Dependency",
       "warning_code": 123,
-      "fingerprint": "40be17ee84017c91503dab23873e24bdd71665ab665bf6f351cfc09ff83e6582",
+      "fingerprint": "edf687f759ec9765bd5db185dbc615c80af77d6e7e19386fc42934e7a80307af",
       "check_name": "EOLRuby",
       "message": "Support for Ruby 3.2.6 ends on 2026-03-31",
       "file": ".ruby-version",
@@ -115,7 +115,7 @@
       "render_path": null,
       "location": null,
       "user_input": null,
-      "confidence": "Medium",
+      "confidence": "High",
       "cwe_id": [
         1104
       ],

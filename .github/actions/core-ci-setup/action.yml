@@ -47,7 +47,8 @@ runs:
 
     - name: 'Bundle install'
       run: |
-        bundle install --jobs 4 --retry 3 --path vendor/bundle
+        bundle config set path 'vendor/bundle'
+        bundle install --jobs 4 --retry 3
       shell: bash
 
     - name: 'Make changes to Gemfile.lock transparent'

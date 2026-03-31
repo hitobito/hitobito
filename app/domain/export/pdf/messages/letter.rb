@@ -50,7 +50,7 @@ module Export::Pdf::Messages
     def build_pdf
       customize
       recipients.each_with_index do |recipient, position|
-        @job.report_progress(position, recipients.size)
+        @job&.report_progress(position, recipients.size)
         render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
       end

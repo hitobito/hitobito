@@ -18,6 +18,7 @@ module People
 
   class Merger
     attr_reader :validation_errors
+
     def initialize(source, target, actor)
       @source = source
       @target = target

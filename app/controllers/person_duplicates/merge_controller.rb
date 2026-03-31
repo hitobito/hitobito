@@ -31,8 +31,6 @@ module PersonDuplicates
 
     private
 
-    def merger = @merger ||= People::Merger.new(source, destination, current_user)
-
     def rerender_form(status)
       render turbo_stream: turbo_stream.replace(
         "edit_person_duplicate_#{entry.id}",
@@ -58,8 +56,16 @@ module PersonDuplicates
       I18n.t("person_duplicates.merge.#{key}")
     end
 
+    def merger
+      @merger ||= People::Merger.new(source, destination, current_user)
+    end
+
     def entry
       @entry ||= PersonDuplicate.find(params[:id])
+    end
+
+    def group
+      @group ||= Group.find(params[:group_id])
     end
 
     def authorize_action
@@ -67,10 +73,6 @@ module PersonDuplicates
         raise CanCan::AccessDenied.new
       end
       authorize!(:manage_person_duplicates, group)
-    end
-
-    def group
-      @group ||= Group.find(params[:group_id])
     end
   end
 end

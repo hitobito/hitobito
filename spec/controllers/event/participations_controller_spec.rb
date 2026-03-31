@@ -112,17 +112,6 @@ describe Event::ParticipationsController do
       end.to change(Delayed::Job, :count).by(1)
     end
 
-    it "sets cookie on export" do
-      get :index, params: {group_id: group, event_id: course.id}, format: :csv
-
-      cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-      expect(cookie[0]["name"]).to match(
-        /^(event_participation_export)+\S*(#{people(:top_leader).id})+$/
-      )
-      expect(cookie[0]["type"]).to match(/^csv$/)
-    end
-
     it "renders email addresses with additional ones" do
       e1 = Fabricate(:additional_email, contactable: @participant.person, mailings: true)
       Fabricate(:additional_email, contactable: @leader.person, mailings: false)

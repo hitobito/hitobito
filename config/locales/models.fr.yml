@@ -92,8 +92,8 @@ fr:
         readonly: ne peut pas être modifié
         cannot_be_later_than_today: ne peut pas être plus tard qu'aujourd'hui
         is_not_a_decimal_number: doit être un nombre décimal
-        year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
-        year_must_be_after_1900: muss eine Jahreszahl ab 1900 enthalten
+        year_must_be_four_digits: ne doit pas comporter plus de quatre chiffres pour l'année
+        year_must_be_after_1900: doit comporter une année à partir de 1900
       models:
         cors_origin:
           attributes:
@@ -700,8 +700,8 @@ fr:
         phone_numbers: Numéros de téléphone
         social_accounts: Réseaux sociaux
         additional_emails: Adresses e-mail supplémentaires
-        additional_addresses: Weitere Adressen
-        language: Sprache
+        additional_addresses: Autres adresses
+        language: Langue
         layer_group: Niveau
         parent_id: Groupe de parents
         layer_group_id: Niveau
@@ -965,7 +965,7 @@ fr:
         uid: Client ID
         secret: Client secret
         redirect_uri: Rediriger les URIs
-        description: Beschreibung
+        description: Description
         additional_audiences: Autres audiences
         skip_consent_screen: Sauter le consentement
 
@@ -1505,8 +1505,8 @@ fr:
       with_roles: Lecture de vos données de base d'adresse et des permissions. Pour que les autorisations de votre compte puissent être enregistrées correctement, notre système vérifie les autorisations et les données de base de l'adresse, qui ne contiennent aucune autre information personnelle.
       openid: Lecture de votre OpenID Connect (OIDC) Identity Tokens. Il s'agit d'une information utilisée pour authentifier votre utilisateur. Cela permet à notre système de confirmer l'identité de votre compte et de s'assurer qu'aucun accès non autorisé n'a lieu.
       api: Lire toutes les personnes, groupes, événements, abonnements et factures auxquels tu as accès via les interfaces JSON
-      events: Lesen aller Events, auf die du Zugriff hast
-      event_participations: Lesen aller Event-Teilnahmen, auf die du Zugriff hast
+      events: Consulter tous les événements auxquels tu as accès
+      event_participations: Consulter toutes les participations à des événements auxquelles tu as accès
       groups: Lire tous les groupes auxquels tu as accès
       people: Lire toutes les personnes auxquelles tu as accès
       invoices: Lire toutes les factures auxquelles tu as accès

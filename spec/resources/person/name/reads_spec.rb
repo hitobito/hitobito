@@ -8,8 +8,6 @@
 require "spec_helper"
 
 describe Person::NameResource, type: :resource do
-  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
-
   describe "serialization" do
     def serialized_attrs
       [

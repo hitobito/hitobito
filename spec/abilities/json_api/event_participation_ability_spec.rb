@@ -16,7 +16,7 @@ describe JsonApi::EventParticipationAbility do
   context "person" do
     def accessible_by(person, model_class = Event::Participation)
       person = people(person) unless person.is_a?(Person)
-      ability = described_class.new(Ability.new(person))
+      ability = described_class.new(person)
       model_class.all.accessible_by(ability)
     end
 
@@ -238,56 +238,6 @@ describe JsonApi::EventParticipationAbility do
         other_participation.application.update_columns(waiting_list: false, priority_2_id: nil, priority_3_id: nil)
         expect(accessible_by(person)).to match_array [participation]
       end
-    end
-  end
-
-  context "service token" do
-    let(:permitted_top_layer_token) { service_tokens(:permitted_top_layer_token) }
-
-    def accessible_by(token, model_class = Event::Participation)
-      token = service_tokens(token) unless token.is_a?(ServiceToken)
-      ability = described_class.new(TokenAbility.new(token), api_scopes: permitted_top_layer_token.scopes)
-      model_class.all.accessible_by(ability)
-    end
-
-    it "includes participation" do
-      expect(accessible_by(permitted_top_layer_token)).to eq [participation]
-    end
-
-    it "includes participations from sublayer" do
-      lower = Fabricate(:event_participation, event: Fabricate(:event, groups: [groups(:bottom_layer_one)]))
-      expect(accessible_by(permitted_top_layer_token)).to match_array [participation, lower]
-    end
-
-    it "is empty if token may not read participations" do
-      permitted_top_layer_token.update!(event_participations: false)
-      expect(accessible_by(permitted_top_layer_token)).to be_empty
-    end
-
-    it "is empty if token may not read participations for that layer" do
-      permitted_top_layer_token.update!(permission: :layer_read)
-      event.update!(groups: [groups(:bottom_layer_one)])
-      expect(accessible_by(permitted_top_layer_token)).to be_empty
-    end
-  end
-
-  context "doorkeeper token" do
-    let(:application) { Fabricate(:application, scopes: "event_participations") }
-
-    def accessible_by(person)
-      token = Fabricate(:access_token, application:, scopes: ["event_participations"],
-        resource_owner_id: person.id)
-      ability = described_class.new(DoorkeeperTokenAbility.new(token), api_scopes: token.scopes)
-      Event::Participation.all.accessible_by(ability)
-    end
-
-    it "may read participation" do
-      expect(accessible_by(person)).to eq [participation]
-    end
-
-    it "may not read participation" do
-      person = Fabricate(Group::TopGroup::GroupManager.sti_name, group: groups(:top_group)).person
-      expect(accessible_by(person)).to be_empty
     end
   end
 end

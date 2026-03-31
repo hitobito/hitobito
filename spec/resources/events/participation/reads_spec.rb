@@ -11,8 +11,6 @@ describe Event::ParticipationResource, type: :resource do
   let(:participation) { event_participations(:top) }
   let(:event) { participation.event }
 
-  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
-
   describe "serialization" do
     let(:serialized_attrs) do
       [

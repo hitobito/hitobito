@@ -11,12 +11,6 @@ describe RoleResource, type: :resource do
   let(:role) { roles(:top_leader) }
   let(:person) { role.person }
   let(:group) { role.group }
-  let(:current_ability) { Ability.new(person) }
-
-  before do
-    allow(Graphiti.context[:object]).to receive(:current_ability).and_return(current_ability)
-    allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"])
-  end
 
   describe "creating" do
     let(:payload) do
@@ -49,7 +43,7 @@ describe RoleResource, type: :resource do
     end
 
     context "other user" do
-      let(:current_ability) { Ability.new(people(:bottom_member)) }
+      let(:ability) { Ability.new(people(:bottom_member)) }
 
       it "cannot create when not able to update person or group" do
         expect {
@@ -134,7 +128,7 @@ describe RoleResource, type: :resource do
     end
 
     context "other user" do
-      let(:current_ability) { Ability.new(people(:bottom_member)) }
+      let(:ability) { Ability.new(people(:bottom_member)) }
 
       it "cannot update non writable person" do
         expect {
@@ -179,7 +173,7 @@ describe RoleResource, type: :resource do
     end
 
     context "other user" do
-      let(:current_ability) { Ability.new(people(:bottom_member)) }
+      let(:ability) { Ability.new(people(:bottom_member)) }
 
       it "cannot destroy non writable person" do
         expect {

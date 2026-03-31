@@ -12,8 +12,6 @@ describe EventResource, type: :resource do
   let(:event) { events(:top_event) }
   let(:course) { events(:top_course) }
 
-  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
-
   describe "serialization" do
     before do
       params[:filter] = {id: {eq: event.id}}

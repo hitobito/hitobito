@@ -12,9 +12,10 @@ module ResourceSpecHelper
     let(:ability) { Ability.new(person) }
     let(:person) { people(:top_leader) }
     let(:url_options) { {host: "example.com"} }
+    let(:current_scopes) { %w[api] }
 
     let(:context) do
-      double(current_ability: ability, url_options: url_options).tap do |context|
+      double(current_ability: ability, url_options:, current_scopes:).tap do |context|
         context.extend(Rails.application.routes.url_helpers)
       end
     end

@@ -11,8 +11,6 @@ describe InvoiceResource, type: :resource do
   let(:invoice) { invoices(:invoice) }
   let(:person) { people(:bottom_member) }
 
-  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
-
   describe "serialization" do
     def serialized_attrs
       [

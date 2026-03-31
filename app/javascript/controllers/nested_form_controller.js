@@ -19,11 +19,24 @@ export default class extends NestedForm {
     this.#handleAddButtonVisibility()
   }
 
-  add(event) {
+  add(e) {
     if (this.#getVisibleFieldsCount() >= this.limitValue) {
       return
     }
-    super.add(event)
+
+    // Generate a unique ID using timestamp (integer as string)
+    // Rails strong parameters automatically permit integer-like strings for nested attributes
+    const uniqueId = new Date().getTime().toString()
+
+    const placeholder = `NEW_${this.assocValue.toUpperCase()}_RECORD`
+    const content = this.templateTarget.innerHTML.replace(new RegExp(placeholder, 'g'), uniqueId)
+
+    // Insert the new fields
+    this.targetTarget.insertAdjacentHTML("beforebegin", content)
+
+    const event = new CustomEvent("rails-nested-form:add", { bubbles: true })
+    this.element.dispatchEvent(event)
+
     this.#setFocusOnFirstFieldInLastWrapper()
     this.#handleAddButtonVisibility()
   }

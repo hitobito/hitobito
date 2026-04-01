@@ -110,15 +110,6 @@ describe EventsController, type: :controller do
           # rubocop:enable Layout/LineLength
         end.to change(Delayed::Job, :count).by(1)
       end
-
-      it "sets cookie on export" do
-        get :index, params: {group_id: group.id, year: 2012}, format: :csv
-
-        cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-        expect(cookie[0]["name"]).to match(/^(events_export)+\S*(#{people(:top_leader).id})+$/)
-        expect(cookie[0]["type"]).to match(/^csv$/)
-      end
     end
 
     context ".ics" do

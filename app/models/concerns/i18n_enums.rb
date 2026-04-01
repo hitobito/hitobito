@@ -31,13 +31,7 @@ module I18nEnums
       end
 
       if validations
-        validate do
-          allowed = possible.call(self) || []
-          value = send(attr)
-          if value.present? && !allowed.include?(value)
-            errors.add(attr, :inclusion, value: value)
-          end
-        end
+        validates attr, inclusion: {in: possible, allow_nil: true}
       end
 
       define_method(:"#{attr}_label") do |value = nil|

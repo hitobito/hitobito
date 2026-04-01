@@ -94,13 +94,20 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   include Event::ContactAttrs
   include FullTextSearchable
   include Globalized
-  translates :application_conditions, :description, :name, :signature_confirmation_text
 
   # To prevent issues of having paper trail versions when we don't want/need them, we add all
   # translated attributes to the skip list and create own paper trail versions on the
   # translation classes
-  paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
-                                     globalize_attribute_names.map(&:to_s))
+  # Resync paper trail skip options after another translated attribute
+  # may have been added to a wagon
+  def self.translates(...)
+    super
+
+    paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                    globalize_attribute_names.map(&:to_s))
+  end
+
+  translates :application_conditions, :description, :name, :signature_confirmation_text
 
   translation_class.class_eval do
     has_paper_trail meta: {
@@ -114,17 +121,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     def to_s(format = :default)
       locale.to_s
     end
-  end
-
-  # Resync paper trail skip options after another translated attribute
-  # may have been added to a wagon
-  def translates(...)
-    super
-
-    return unless respond_to?(:paper_trail_options)
-
-    paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
-                                  globalize_attribute_names.map(&:to_s))
   end
 
   ### ATTRIBUTES

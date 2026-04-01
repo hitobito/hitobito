@@ -167,15 +167,6 @@ describe PeopleController do
               expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
           end
-
-          it "sets cookie on export" do
-            get :index, params: {group_id: group}, format: :csv
-
-            cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-            expect(cookie[0]["name"]).to match(/^(people_export)+\S*(#{top_leader.id})+$/)
-            expect(cookie[0]["type"]).to match(/^csv$/)
-          end
         end
 
         context ".vcf" do

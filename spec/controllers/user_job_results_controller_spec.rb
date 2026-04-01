@@ -23,7 +23,7 @@ describe UserJobResultsController do
       expected_user_job_results = [user_job_result]
       unexpected_user_job_results = []
       3.times { expected_user_job_results << create_test_user_job_result(person.id) }
-      3.times { unexpected_user_job_results  << create_test_user_job_result(1234) }
+      3.times { unexpected_user_job_results << create_test_user_job_result(1234) }
 
       get :index
       user_job_results = assigns(:user_job_results)

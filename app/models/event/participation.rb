@@ -97,6 +97,28 @@ class Event::Participation < ActiveRecord::Base
   ### CLASS METHODS
 
   class << self
+    def order_by_name
+      with_person_participants
+        .with_guest_participants
+        .select(order_by_name_statement)
+        .order(order_by_name_statement)
+    end
+
+    def order_by_name_statement
+      person_order = Person.order_by_name_statement
+      guest_order = Event::Guest.order_by_name_statement
+
+      Arel.sql(
+        <<~SQL.squish
+          CASE event_participations.participant_type
+            WHEN 'Person' THEN #{person_order}
+            WHEN 'Event::Guest' THEN #{guest_order}
+            ELSE ''
+          END
+        SQL
+      )
+    end
+
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
       joins(:roles)

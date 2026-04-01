@@ -14,13 +14,14 @@ describe Event::QualificationsController do
 
   let(:group) { event.groups.first }
 
-  let!(:participant_1) { create_participation(Event::Course::Role::Participant) }
-  let!(:participant_2) { create_participation(Event::Course::Role::Participant) }
+  let!(:participant_1) { create_participation(Event::Course::Role::Participant, last_name: "BB") }
+  let!(:participant_2) { create_participation(Event::Course::Role::Participant, last_name: "AA") }
   let!(:helper_1) { create_participation(Event::Role::Helper) }
   let!(:leader_1) { create_participation(Event::Role::Leader) }
 
-  def create_participation(role)
+  def create_participation(role, last_name: nil)
     participation = Fabricate(:event_participation, event: event, active: true)
+    participation.person.update!(last_name: last_name)
     Fabricate(role.name.to_sym, participation: participation)
     participation.reload
   end
@@ -39,6 +40,10 @@ describe Event::QualificationsController do
 
       it { expect(assigns(:participants).size).to eq(2) }
       it { expect(assigns(:leaders).size).to eq(1) }
+
+      it "orders by name" do
+        expect(assigns(:participants).pluck(:id)).to eq [participant_2.id, participant_1.id]
+      end
 
       context "with qualifiable helpers" do
         around do |spec|

@@ -12,13 +12,10 @@ export default class extends Controller {
   static targets = ["field"]
 
   sourceChanged(event) {
-    const fieldName = event.target.name;
-    const fieldValue = event.target.value;
-    const url = this.element.dataset.url;
+    const url = new URL(this.element.dataset.url, window.location.origin);
+    url.searchParams.set(event.target.name, event.target.value);
 
-    const queryParam = encodeURIComponent(fieldName) + "=" + encodeURIComponent(fieldValue);
-
-    fetch(`${url}?${queryParam}`, {
+    fetch(url, {
       headers: { "Accept": "application/json" }
     })
     .then(response => response.json())

@@ -32,6 +32,20 @@ class UserJobResult < ApplicationRecord
     generated_file.purge if generated_file.attached?
   end
 
+  def self.create_default!(person_id, job_name, filename, filetype, reports_progress)
+    create!(
+      person_id:,
+      name: job_name,
+      filename:,
+      filetype: filetype || :txt,
+      reports_progress:,
+      progress: (reports_progress ? 0 : nil),
+      status: "planned",
+      attempts: 0,
+      start_timestamp: Time.now.to_i,
+    )
+  end
+
   def to_s
     partial = " (#{progress}%)" if progress.present?
 

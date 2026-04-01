@@ -30,7 +30,7 @@
         = f.input_field(:recipient_street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
       %div.col-2.ms-sm-auto.d-flex
         = f.label(:recipient_housenumber, t('contactable.address_fields.housenumber'), class: 'col-form-label w-100')
-        = f.input_field(:recipient_housenumber, placeholder: 'No')
+        = f.input_field(:recipient_housenumber)
     = f.labeled_input_field(:recipient_postbox, autocomplete: :off)
 
     = f.labeled(:zip_code, t('contactable.fields.zip_town'), class: 'd-flex', mark_as_required: true) do

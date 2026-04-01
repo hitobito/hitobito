@@ -11,7 +11,7 @@
       = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url }) if event.show_contact_attr?(:street)
     %div.col-2.ms-sm-auto.d-flex
       = f.label(:housenumber, t('contactable.address_fields.housenumber'), class: 'col-form-label w-100')
-      = f.input_field(:housenumber, placeholder: 'No')
+      = f.input_field(:housenumber)
 = f.labeled_input_field(:postbox) if event.show_contact_attr?(:postbox)
 = f.labeled_input_field(:zip_code) if event.show_contact_attr?(:zip_code)
 = f.labeled_input_field(:town) if event.show_contact_attr?(:town)

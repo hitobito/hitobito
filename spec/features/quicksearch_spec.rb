@@ -56,6 +56,7 @@ describe "Quicksearch", js: true do
     Fabricate(:phone_number, contactable: people(:top_leader), number: "+41 79 123 45 67")
     sign_in
     visit root_path
+    expect(page).to have_content("Top Leader")
     fill_in "quicksearch", with: "+41 79"
     send_keys(:enter)
     expect(page).to have_current_path("/full?q=%2B41%2079")

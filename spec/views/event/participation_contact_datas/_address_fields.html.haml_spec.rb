@@ -25,12 +25,14 @@ describe "event/participation_contact_datas/_address_fields.html.haml" do
   it "should render address label when only housenumber is hidden" do
     event.update!(hidden_contact_attrs: [:housenumber])
     render locals: {entry: participation_contact_data, event:, group:}
-    expect(rendered).to have_text("Adresse")
+    expect(rendered).to have_text("Strasse")
+    expect(rendered).to have_text("Nr.")
   end
 
   it "should not render address label if no address attributes are set to display" do
     event.update!(hidden_contact_attrs: [:housenumber, :street])
     render locals: {entry: participation_contact_data, event:, group:}
-    expect(rendered).to have_no_text("Adresse")
+    expect(rendered).to have_no_text("Strasse")
+    expect(rendered).to have_no_text("Nr.")
   end
 end

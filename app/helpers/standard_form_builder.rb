@@ -13,6 +13,7 @@
 # All field methods may be prefixed with 'labeled_' in order to render
 # a standard label with them.
 class StandardFormBuilder < ActionView::Helpers::FormBuilder
+  include ActionView::Helpers::NumberHelper
   include Globalized::GlobalizedInputFieldHelpers
 
   REQUIRED_MARK = ' <span class="required">*</span>'.html_safe
@@ -123,11 +124,16 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options[:size] ||= 10
     add_css_class(html_options, "mw-100 mw-md-15ch #{FORM_CONTROL}")
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
+
     text_field(attr, html_options)
   end
   alias_method :integer_field, :number_field
   alias_method :float_field, :number_field
-  alias_method :decimal_field, :number_field
+
+  def decimal_field(attr, html_options = {})
+    html_options[:value] ||= number_with_precision(object.send(attr))
+    number_field(attr, html_options)
+  end
 
   # Render a standard string field with column contraints.
   def string_field(attr, html_options = {})

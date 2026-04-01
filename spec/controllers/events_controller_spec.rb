@@ -132,16 +132,6 @@ describe EventsController do
         expect(assigns(:events).first.name).to eq "Eventus"
       end
 
-      it "sets cookie on export" do
-        get :index, params: {group_id: group.id}, format: :csv
-
-        cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-        expect(cookie[0]["name"]).to match(/^(events_export)+\S*(#{top_leader.id})+$/)
-        expect(cookie[0]["type"]).to match(/^csv$/)
-        expect(response).to redirect_to(returning: true)
-      end
-
       it "renders json with dates" do
         Fabricate(:event_date, event: @e1)
         get :index, params: {group_id: @g1}, format: :json

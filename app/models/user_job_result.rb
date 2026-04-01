@@ -42,7 +42,7 @@ class UserJobResult < ApplicationRecord
       progress: (reports_progress ? 0 : nil),
       status: "planned",
       attempts: 0,
-      start_timestamp: Time.now.to_i,
+      start_timestamp: Time.now.to_i
     )
   end
 

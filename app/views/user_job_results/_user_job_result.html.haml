@@ -19,4 +19,4 @@
       = "#{t('.attempts')}: #{user_job_result.attempts}/#{Delayed::Worker.max_attempts}"
     .col-1
       - if user_job_result.generated_file.attached?
-        = link_to(icon("download", {filled: true}), "/downloads/#{user_job_result.id}")
+        = link_to(icon("download", {filled: true}), "/user_job_results/#{user_job_result.id}/download_attachment")

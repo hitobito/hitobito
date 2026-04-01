@@ -1584,6 +1584,7 @@ it:
         reload: Controlla di nuovo
       action: Merge
       success: Le registrazioni delle persone sono state unite con successo.
+      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültiger Daten zusammengeführt.
     ignore:
       new:
         title: Ignorare realmente il duplicato?

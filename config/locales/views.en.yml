@@ -1546,6 +1546,7 @@ en:
         reload: Erneut prüfen
       action: Merge
       success: Merge successful
+      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültiger Daten zusammengeführt.
     ignore:
       new:
         title: Ignore duplicate?

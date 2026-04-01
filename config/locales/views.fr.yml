@@ -1587,6 +1587,7 @@ fr:
         reload: Vérifier à nouveau
       action: Merge
       success: Les données des personnes ont été fusionnées avec succès.
+      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültiger Daten zusammengeführt.
     ignore:
       new:
         title: Voulez-vous vraiment ignorer le doublon?

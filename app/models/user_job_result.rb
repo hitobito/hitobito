@@ -81,9 +81,9 @@ class UserJobResult < ApplicationRecord
 
   def report_success(total_attempts)
     update!(
-        status: "success",
-        end_timestamp: Time.now.to_i,
-        attempts: total_attempts
+      status: "success",
+      end_timestamp: Time.now.to_i,
+      attempts: total_attempts
     )
     broadcast_notification
   end

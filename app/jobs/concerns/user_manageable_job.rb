@@ -35,7 +35,6 @@ module UserManageableJob
     super if defined?(super)
   end
 
-
   def error(job, exception, payload = parameters)
     user_job_result.report_error(job.attempts + 1)
     super

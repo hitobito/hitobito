@@ -23,7 +23,6 @@ describe UserJobResult do
   let(:other_person) { Person.new(id: 23) }
   let(:data) { SecureRandom.base64(128) }
 
-
   subject do
     described_class.create!(
       name: "A test job",

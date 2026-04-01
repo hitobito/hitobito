@@ -14,10 +14,12 @@ module UserManageableJob
   end
 
   def enqueue!
-    @person_id = @user_id || Auth.current_person&.id
-    raise "User manageable jobs must be called from context with auth user" unless @person_id
+    person_id = @user_id || Auth.current_person&.id
+    raise "User manageable jobs must be called from context with auth user" unless person_id
 
-    user_job_result = create_default_user_job_result
+    user_job_result = UserJobResult.create_default!(
+      person_id, job_name, @options&.dig(:filename), @format, reports_progress
+    )
     @user_job_result_id = user_job_result.id
 
     delayed_job = super
@@ -47,36 +49,5 @@ module UserManageableJob
 
   def user_job_result
     @user_job_result ||= UserJobResult.find(@user_job_result_id)
-  end
-
-  private
-
-  def create_default_user_job_result
-    UserJobResult.create!(
-      name: job_name,
-      filetype: filetype,
-      progress: default_progress,
-      person_id: @person_id,
-      status: "planned",
-      start_timestamp: Time.now.to_i,
-      attempts: 0,
-      filename: filename_with_timestamp,
-      reports_progress: reports_progress
-    )
-  end
-
-  def filename_with_timestamp
-    filename = @options&.dig(:filename)
-    return unless filename
-
-    "#{filename}_#{Time.now.to_i}"
-  end
-
-  def filetype
-    @format || :txt
-  end
-
-  def default_progress
-    reports_progress ? 0 : nil
   end
 end

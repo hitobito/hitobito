@@ -17,38 +17,75 @@
 require "spec_helper"
 
 describe UserJobResult do
-  let(:raw_filename) { "subscriptions to blørbaëls rants" }
   let(:person_id) { 42 }
   let(:person) { Person.new(id: person_id) }
   let(:other_person) { Person.new(id: 23) }
+  let(:job_name) { "A test job" }
+  let(:filename) { "subscriptions_to-blorbaels-rants" }
+  let(:filetype) { "csv" }
+  let(:reports_progress) { false }
   let(:data) { SecureRandom.base64(128) }
 
   subject do
-    described_class.create!(
-      name: "A test job",
-      filetype: "txt",
-      progress: nil,
-      person_id: person_id,
-      status: "planned",
-      start_timestamp: Time.now.to_i,
-      attempts: 0,
-      filename: "subscriptions_to-blorbaels-rants_1651700845",
-      reports_progress: false
-    )
+    UserJobResult.create_default!(person_id, job_name, filename, filetype, reports_progress)
   end
 
-  it "appends filetype to filename in getter" do
-    expect(subject.filename).to eql "subscriptions_to-blorbaels-rants_1651700845.txt"
+  describe "#create_default!" do
+    it "should create instance with correct values" do
+      freeze_time
+
+      expect(subject.person_id).to eql(person_id)
+      expect(subject.name).to eql(job_name)
+      expect(subject.filename).to eql("#{filename}.#{filetype}")
+      expect(subject.filetype).to eql(filetype)
+      expect(subject.reports_progress).to eql(reports_progress)
+      expect(subject.progress).to be_nil
+      expect(subject.status).to eql("planned")
+      expect(subject.attempts).to eql(0)
+      expect(subject.start_timestamp).to eql(Time.now.to_i.to_s)
+    end
+
+    context "when reports_progress is true" do
+      let(:reports_progress) { true }
+
+      it "should have 0 as default progress" do
+        expect(subject.progress).to eql(0)
+      end
+    end
+
+    context "when filetype is nil" do
+      let(:filetype) { nil }
+
+      it "should use txt as default" do
+        expect(subject.filetype).to eql("txt")
+      end
+    end
   end
 
-  it "normalizes filename in setter" do
-    subject.filename = "A filename with  many   spaces"
-    expect(subject.filename).to eql "A-filename-with-many-spaces.txt"
+  describe "filename handling" do
+    it "should append filetype to filename in getter" do
+      expect(subject.filename).to eql "#{filename}.#{filetype}"
+    end
+
+    it "should normalize filename in setter" do
+      subject.filename = "A filename with  many   spaces"
+
+      expect(subject.filename).to eql "A-filename-with-many-spaces.csv"
+    end
+
+    context "when using #create_default!" do
+      let(:filename) { "A filename with  many   spaces" }
+
+      it "should normalize filename" do
+        expect(subject.filename).to eql "A-filename-with-many-spaces.csv"
+      end
+    end
   end
 
-  context "state reporting" do
+  describe "state reporting" do
     it "should correctly change model state when reporting in progress" do
       subject.report_in_progress
+
       expect(subject.end_timestamp).to be_nil
       expect(subject.status).to eql("in_progress")
       expect(subject.attempts).to eql(0)
@@ -57,6 +94,7 @@ describe UserJobResult do
     it "should correctly change model state when reporting success" do
       freeze_time
       subject.report_success(1)
+
       expect(subject.end_timestamp).to eql(Time.now.to_i.to_s)
       expect(subject.status).to eql("success")
       expect(subject.attempts).to eql(1)
@@ -64,8 +102,9 @@ describe UserJobResult do
 
     it "should correctly change model state when reporting error" do
       subject.report_error(3)
-      expect(subject.status).to eql("planned")
+
       expect(subject.end_timestamp).to be_nil
+      expect(subject.status).to eql("planned")
       expect(subject.attempts).to eql(3)
     end
 
@@ -73,15 +112,17 @@ describe UserJobResult do
       freeze_time
       subject.update!(attempts: 3)
       subject.report_failure
-      expect(subject.status).to eql("error")
+
       expect(subject.end_timestamp).to eql(Time.now.to_i.to_s)
+      expect(subject.status).to eql("error")
       expect(subject.attempts).to eql(3)
     end
   end
 
-  context "progress reporting" do
+  describe "progress reporting" do
     it "should not report progress when reports_progress is false" do
       subject.report_progress(49, 100)
+
       expect(subject.progress).to be_nil
     end
 
@@ -97,6 +138,7 @@ describe UserJobResult do
         subject.report_progress(i, 1000)
         calculated_progress_values << subject.progress
       end
+
       expect(calculated_progress_values.uniq).to match_array((0..100).to_a)
     end
 
@@ -112,6 +154,7 @@ describe UserJobResult do
         subject.report_progress(i, 1000)
         calculated_progress_values << subject.progress
       end
+
       expect(calculated_progress_values.uniq).to match_array((0..100).step(10).to_a)
     end
 
@@ -130,7 +173,7 @@ describe UserJobResult do
     end
   end
 
-  context "broadcasting notifications" do
+  describe "broadcasting notifications" do
     it "should broadcast notification when reporting success" do
       expect { subject.report_success(1) }.to have_broadcasted_to("user_job_result_notifications")
     end
@@ -140,7 +183,7 @@ describe UserJobResult do
     end
   end
 
-  context "download permissions" do
+  describe "download permissions" do
     it "knows if the file is downloadable for a person" do
       file_double = double("attachement")
       expect(subject).to receive(:generated_file).and_return(file_double)
@@ -154,7 +197,7 @@ describe UserJobResult do
     end
   end
 
-  context "attachment reading and writing" do
+  describe "attachment reading and writing" do
     it "allows writing data" do
       expect do
         subject.write(data)
@@ -162,14 +205,16 @@ describe UserJobResult do
     end
 
     it "allows reading data" do
+      subject.update!(filetype: :txt)
       subject.write(data)
+
       expect(subject.read).to eql(data)
     end
 
     it "encodes data as csv when reading from csv file" do
-      subject.update!(filetype: :csv)
       subject.write(data)
       read_data = subject.read
+
       expect(read_data).to eql(data)
       expect(read_data.encoding.to_s).to eql(Settings.csv.encoding)
     end

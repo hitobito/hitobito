@@ -11,4 +11,17 @@ class UserJobResultsController < ApplicationController
       UserJobResult.includes([:generated_file_attachment]).where(person_id: current_person.id)
     render "index"
   end
+
+  def download_attachment
+    user_job_result = UserJobResult.find_by(id: params[:id])
+    if user_job_result&.downloadable?(current_person)
+      redirect_to rails_blob_path(
+        user_job_result.generated_file,
+        filename: user_job_result.filename,
+        disposition: "attachment"
+      )
+    else
+      render "errors/404", status: :not_found
+    end
+  end
 end

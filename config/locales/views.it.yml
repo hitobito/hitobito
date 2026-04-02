@@ -1313,11 +1313,6 @@ it:
       wait_for_downloads: "Il download viene preparato, prego attendere"
       cancel_downloads: "Interrompere il download"
 
-    synchronization:
-      wait_for_synchronization: "I vostri dati vengono ora inviati a MailChimp. Potrebbe volerci un attimo. Dopo di che l'elenco selezionato con i contatti di hitobito verrà aggiornato. "
-      synchronization_failed: "Durante l'invio dei dati a MailChimp si è verificato un errore"
-      cancel_synchronization: "Interrompere l'esportazione"
-
   mailing_lists:
     subscriber_lists:
       create:

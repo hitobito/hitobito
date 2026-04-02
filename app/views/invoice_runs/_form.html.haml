@@ -21,7 +21,8 @@
 
   = f.fields_for :invoice, entry.invoice do |fi|
     = render "invoices/message_template", f: fi, group: entry
-    = fi.labeled_input_field :title, help: t('.recipient_info', count: entry.recipients(current_user).count), data: { message_template_target: :title }
+    -# NOTE: title belongs to InvoiceRun (f), not Invoice (fi). The InvoiceRun's title is copied to each generated Invoice.
+    = f.labeled_input_field :title, help: t('.recipient_info', count: entry.recipients(current_user).count), data: { message_template_target: :title }
     = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
     = fi.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose

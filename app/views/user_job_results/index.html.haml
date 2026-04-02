@@ -3,8 +3,12 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
+= paginate @user_job_results
+
 = turbo_stream_from "user_job_results"
 - title t(".title")
 #user_job_results
   - @user_job_results.each do |user_job_result|
     = render "user_job_result", user_job_result:
+
+= paginate @user_job_results

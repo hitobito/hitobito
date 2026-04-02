@@ -1,0 +1,17 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= f.fields_for(:course_kind_category) do |fields|
+  .row.mb-2
+    = fields.label(:id, ti('.kind_category'), class: "col-form-label col-md-3 col-xl-2")
+    .col-md-9.mw-63ch
+      - categories = Event::KindCategory.list
+      = fields.select(:id,
+                      options_from_collection_for_select(categories, :id, :to_s, Array(filter.chain.dig(:course_kind_category, :id))),
+                      {},
+                      class: "form-select form-select-sm w-100",
+                      multiple: true,
+                      data: { tom_select_no_results_value: t("global.no_list_entries"),
+                              controller: "tom-select" })

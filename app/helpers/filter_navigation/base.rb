@@ -29,21 +29,34 @@ module FilterNavigation
     private
 
     def dropdown_item
-      if dropdown.items.present?
-        content_tag(:li,
-          class: "dropdown nav-link border-start border-light
-                      rounded-0 py-0 px-3 #{"active" if dropdown.active}") do
-          template.in_button_group { dropdown.to_s }
-        end
+      case dropdown.items.size
+      when 0 then nil
+      when 1
+        item = dropdown.items.first
+        build_list_item(item.label, item.url)
+      else
+        build_dropdown_item
+      end
+    end
+
+    def build_dropdown_item
+      content_tag(:li,
+        class: "dropdown nav-link border-start border-light
+                rounded-0 py-0 px-3 #{"active" if dropdown.active}") do
+        template.in_button_group { dropdown.to_s }
       end
     end
 
     def item(label, url, count = nil)
+      @main_items << build_list_item(label, url, count)
+    end
+
+    def build_list_item(label, url, count = nil)
       caption = count ? "#{label} (#{count})" : label
-      @main_items << content_tag(:li,
+      content_tag(:li, class: "nav-item border-start border-light") do
         link_to(caption, url, class: "nav-link rounded-0 py-1 px-3
-                                         mr-0 #{"active" if active_label == label}"),
-        class: "nav-item border-start border-light")
+                                      mr-0 #{"active" if active_label == label}")
+      end
     end
   end
 

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Events::Filter
-  class DateRange < Filter::Base
+  class DateRange < Base
     self.permitted_args = [:since, :until]
 
     def apply(scope)

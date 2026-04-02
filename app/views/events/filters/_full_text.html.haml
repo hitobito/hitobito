@@ -1,0 +1,10 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= f.fields_for(:full_text) do |fields|
+  .row.mb-2
+    = fields.label(:q, ti('.q'), class: "col-form-label col-md-3 col-xl-2")
+    .col-md-9.mw-63ch
+      = fields.text_field(:q, value: filter.chain.dig(:full_text, :q), class: "form-control form-control-sm")

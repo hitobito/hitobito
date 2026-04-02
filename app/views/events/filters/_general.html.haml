@@ -1,0 +1,16 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= render 'full_text', f: f
+
+= render 'state', f: f
+
+- if filter.event_type.attr_used?(:kind_id)
+  = render 'kind_category', f: f
+  = render 'kind', f: f
+
+= render 'leader', f: f
+
+= render_extensions 'general', locals: { f: f }

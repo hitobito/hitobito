@@ -20,6 +20,18 @@ class Events::Filter::GroupList < Events::Filter::List
       .slice(:filters, :range, :type, :year, :start_date, :end_date, :sort_expression)
   end
 
+  def type
+    params[:type]
+  end
+
+  def year
+    params[:year]
+  end
+
+  def event_type
+    @event_type ||= Event.subclasses.find { |sc| sc.name == type } || Event
+  end
+
   private
 
   def default_order(events)

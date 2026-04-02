@@ -43,7 +43,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     }
   ]
 
-  self.remember_params += [:year]
+  self.remember_params += [:year, :range, :filters]
 
   self.sort_mappings = {name: "event_translations.name", state: "events.state",
                          dates_full: "event_dates.start_at",
@@ -328,9 +328,11 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def event_filter
-    params[:year] = year
-    params[:sort_expression] = sort_expression if sorting? && !request.format.json?
-    Events::Filter::GroupList.new(group, current_user, params)
+    @event_filter ||= begin
+      params[:year] = year
+      params[:sort_expression] = sort_expression if sorting? && !request.format.json?
+      Events::Filter::GroupList.new(group, current_user, params)
+    end
   end
 
   def entries_page(page_param)

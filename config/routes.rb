@@ -50,7 +50,8 @@ Hitobito::Application.routes.draw do
 
     get "/people/query" => "person/query#index", as: :query_people
     get "/people/query_household/(:person_id)" => "person/query_household#index",
-      as: :query_household
+        as: :query_household
+
     get "/people/company_name" => "person/company_name#index", as: :query_company_name
     get "/people/:id" => "person/top#show", as: :person
     get "/events/:id" => "event/top#show", as: :event
@@ -236,6 +237,13 @@ Hitobito::Application.routes.draw do
           get "simple" => "events#index"
           get "course" => "events#index", type: "Event::Course"
           get "typeahead" => "events#typeahead"
+
+          scope module: "events", only: [:new, :create] do
+            resources :filters, path: "simple/filters", as: "events_simple_filters", type: "Event"
+            resources :filters, path: "course/filters", as: "events_course_filters", type: "Event::Course"
+
+            get "query_leaders/:year" => "query_leaders#index", as: :query_leaders
+          end
         end
 
         scope module: "event" do

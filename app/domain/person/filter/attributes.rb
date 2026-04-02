@@ -4,24 +4,15 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::Filter::Attributes < Person::Filter::Base
-  def initialize(attr, args)
-    @attr = attr
-    @args = args
-  end
+  include Filter::Attributes
+
+  self.model_class = Person
 
   def apply(scope)
-    scope.where(raw_sql_condition(scope)).merge(years_scope)
+    super.merge(years_scope)
   end
 
   private
-
-  def constraints
-    @constraints ||= @args.values.select { |tuple| applicable?(tuple) }
-  end
-
-  def applicable?(tuple)
-    tuple[:key].present? && (tuple[:value].present? || tuple[:constraint] == "blank")
-  end
 
   def years_constraint
     @years_constraint ||= constraints.find { |tuple| tuple[:key] == "years" }
@@ -62,96 +53,5 @@ class Person::Filter::Attributes < Person::Filter::Base
 
   def years_blank_scope(value)
     Person.where(birthday: nil)
-  end
-
-  def raw_sql_condition(scope) # rubocop:todo Metrics/AbcSize
-    generic_constraints.map do |v|
-      key, constraint, value = v.to_h.symbolize_keys.slice(:key, :constraint, :value).values
-      next unless Person.filter_attrs.key?(key.to_sym)
-      type = Person.filter_attrs[key.to_sym][:type]
-      begin
-        parsed_value = (type == :date) ? Date.parse(value) : value
-      rescue TypeError, Date::Error
-        parsed_value = Time.zone.now.to_date
-      end
-
-      attribute_condition_sql(key, parsed_value, constraint, scope)
-    end.compact.join(" AND ")
-  end
-
-  def attribute_condition_sql(key, value, constraint, scope)
-    if Person.column_names.include?(key)
-      persisted_attribute_condition_sql(key, value, constraint)
-    else
-      unpersisted_attribute_condition_sql(key, value, constraint, scope)
-    end
-  end
-
-  # include is not a selectable constraint in the current version of the filter view,
-  # it is implemented to filter by id's internally for invoice_runs
-  def persisted_attribute_condition_sql(key, value, constraint)
-    sql_string = case constraint
-    when /match/ then match_search_sql(key, value, constraint)
-    when /blank/ then "COALESCE(TRIM(people.#{key}::text), '') #{sql_comparator(constraint)} ?"
-    when /include/ then "people.#{key} IN (?)"
-    else "people.#{key} #{sql_comparator(constraint)} ?"
-    end
-
-    ActiveRecord::Base.sanitize_sql_array([sql_string, sql_value(key, value, constraint)])
-  end
-
-  def match_search_sql(key, value, constraint)
-    if value.is_a?(Numeric)
-      "CAST(people.#{key} AS TEXT) #{sql_comparator(constraint)} ?"
-    else
-      "people.#{key} #{sql_comparator(constraint)} ?"
-    end
-  end
-
-  def sql_comparator(constraint)
-    case constraint.to_s
-    when "match" then "LIKE"
-    when "not_match" then "NOT LIKE"
-    when "greater", "after" then ">"
-    when "smaller", "before" then "<"
-    when "equal", "blank" then "="
-    else raise("unexpected constraint: #{constraint.inspect}")
-    end
-  end
-
-  def sql_value(key, value, constraint)
-    case constraint.to_s
-    when "match", "not_match"
-      "%#{ActiveRecord::Base.send(:sanitize_sql_like, value.to_s.strip)}%"
-    when "blank" then ""
-    when "include" then value
-    # rubocop:todo Layout/LineLength
-    when "equal", "greater", "smaller", "before", "after" then (key == "email") ? value.downcase : value
-    # rubocop:enable Layout/LineLength
-    else raise("unexpected constraint: #{constraint.inspect}")
-    end
-  end
-
-  def unpersisted_attribute_condition_sql(key, value, constraint, scope)
-    people_ids = scope.map do |p|
-      p.id if matching_attribute?(p.send(key), value, constraint)
-    end.compact.join(",")
-
-    people_ids = -1 if people_ids.blank?
-
-    <<~SQL
-      people.id IN (#{people_ids})
-    SQL
-  end
-
-  def matching_attribute?(attribute, value, constraint) # rubocop:todo Metrics/CyclomaticComplexity
-    case constraint
-    when "match" then attribute.to_s =~ /#{value}/
-    when "not_match" then attribute.to_s !~ /#{value}/
-    when "greater" then attribute && attribute.to_i > value.to_i
-    when "smaller" then attribute && attribute.to_i < value.to_i
-    when "blank" then attribute.blank?
-    else attribute.to_s == value
-    end
   end
 end

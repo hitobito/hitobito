@@ -11,6 +11,21 @@ class Events::Filter::Chain < Filter::Chain
     Events::Filter::State,
     Events::Filter::PlacesAvailable,
     Events::Filter::Groups,
-    Events::Filter::CourseKindCategory
+    Events::Filter::CourseKind,
+    Events::Filter::CourseKindCategory,
+    Events::Filter::FullText,
+    Events::Filter::Leader,
+    Events::Filter::Attributes
   ]
+
+  attr_reader :event_type
+
+  def initialize(event_type, params = nil)
+    @event_type = event_type
+    super(params)
+  end
+
+  def init_filter(type, attr, args)
+    type.new(attr, args, event_type)
+  end
 end

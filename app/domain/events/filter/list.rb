@@ -18,4 +18,12 @@ class Events::Filter::List < Filter::List
   def accessible_scope
     Event.accessible_by(EventReadables.new(user))
   end
+
+  def init_filter_chain(filters)
+    filter_chain_class.new(event_type, filters)
+  end
+
+  def event_type
+    nil
+  end
 end

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Events::Filter
-  class PlacesAvailable < Filter::Base
+  class PlacesAvailable < Base
     self.permitted_args = [:value]
 
     def apply(scope)

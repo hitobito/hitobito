@@ -11,6 +11,10 @@ class Events::Filter::CourseList < Events::Filter::List
     super.preload(additional_course_includes)
   end
 
+  def event_type
+    Event::Course
+  end
+
   private
 
   def default_order(scope)

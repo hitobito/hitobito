@@ -1,0 +1,26 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- title ti(:"title", type: filter.event_type.label_plural)
+
+= form_for(:filters, url: filter_path) do |f|
+
+  = render 'search_button'
+
+  = hidden_field_tag :year, filter.year
+
+  = render 'range'
+
+  .accordion.mb-3
+    = render(layout: 'panel', locals: { kind: :general, open: true }) do
+      = render 'general', f: f
+
+    - if filter.event_type.filterable_attrs.present?
+      = render(layout: 'panel', locals: { kind: :attributes }) do
+        = render 'attributes'
+
+    = render_extensions :panel, locals: { f: f }
+
+  = render 'search_button'

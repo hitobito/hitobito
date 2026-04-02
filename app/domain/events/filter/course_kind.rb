@@ -6,21 +6,21 @@
 #  https://github.com/hitobito/hitobito.
 
 module Events::Filter
-  class Groups < Base
-    self.permitted_args = [:ids]
+  class CourseKind < Base
+    self.permitted_args = [:id]
 
     def apply(scope)
-      scope.with_group_id(group_ids)
+      scope.where(kind_id: kind_ids)
     end
 
     def blank?
-      group_ids.blank?
+      !Event::Course.attr_used?(:kind_id) || kind_ids.blank?
     end
 
     private
 
-    def group_ids
-      args[:ids].to_a.compact_blank
+    def kind_ids
+      Array(args[:id]).compact_blank.map(&:to_i)
     end
   end
 end

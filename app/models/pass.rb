@@ -8,13 +8,18 @@
 class Pass < ActiveRecord::Base
   include I18nEnums
 
+  STATES = %w[eligible ended revoked].freeze
+  i18n_enum :state, STATES, scopes: true, queries: true
+
+  ### ASSOCIATIONS
+
   belongs_to :person
   belongs_to :pass_definition
   has_many :pass_installations, class_name: "Wallets::PassInstallation", dependent: :destroy
 
-  STATES = %w[eligible ended revoked].freeze
-  i18n_enum :state, STATES, scopes: true, queries: true
+  ### VALIDATIONS
 
+  validates_by_schema
   validates :person_id, uniqueness: {scope: :pass_definition_id}
   validates :state, inclusion: {in: ["eligible"]}, on: :create
 end

@@ -95,7 +95,7 @@ describe Wallets::PassInstallation do
     end
   end
 
-  context "scope needs_sync" do
+  context "::needs_sync" do
     it "includes installations with needs_sync flag" do
       installation.needs_sync = true
       installation.save!

@@ -40,7 +40,7 @@ class CreatePassesTables < ActiveRecord::Migration[8.0]
       t.references :person, null: false, index: false
       t.references :pass_definition, null: false, index: false
       t.string :state, default: "eligible", null: false
-      t.date :valid_from
+      t.date :valid_from, null: false
       t.date :valid_until
       t.timestamps
     end
@@ -62,7 +62,8 @@ class CreatePassesTables < ActiveRecord::Migration[8.0]
 
     add_index :wallets_pass_installations, [:pass_id, :wallet_type],
       unique: true, name: "idx_wallets_pass_installations_unique"
-    add_index :wallets_pass_installations, :needs_sync, name: "idx_wallets_pass_installations_needs_sync"
+    add_index :wallets_pass_installations, :needs_sync,
+      name: "idx_wallets_pass_installations_needs_sync"
 
     create_table :wallets_apple_device_registrations do |t|
       t.references :pass_installation, null: false, index: false

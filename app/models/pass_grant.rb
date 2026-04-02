@@ -8,14 +8,20 @@
 class PassGrant < ActiveRecord::Base
   include RelatedRoleType::Assigners
 
+  ### ASSOCIATIONS
+
   belongs_to :pass_definition
   belongs_to :grantor, polymorphic: true # Group (Event in future phase)
   has_many :related_role_types, as: :relation, dependent: :destroy
 
-  # Future: include RelatedQualificationType::Assigners (WP 13)
+  # Future: include RelatedQualificationType::Assigners (qualification-based passes).
   # Future: has_many :related_qualification_types, as: :relation, dependent: :destroy
 
-  # Extracted as method for Future Phase extensibility (WP 13: qualification-based passes).
+  ### VALIDATIONS
+
+  validates_by_schema
+
+  # Extracted as method for Future Phase extensibility (qualification-based passes).
   # Will become: has_role_types_or_qualification_types
   validate :has_eligibility_criteria
   validates :grantor_id, uniqueness: {scope: [:pass_definition_id, :grantor_type]}

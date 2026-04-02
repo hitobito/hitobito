@@ -6,8 +6,13 @@
 #  https://github.com/hitobito/hitobito
 
 class Wallets::AppleWallet::DeviceRegistration < ActiveRecord::Base
+  ### ASSOCIATIONS
+
   belongs_to :pass_installation, class_name: "Wallets::PassInstallation"
 
+  ### VALIDATIONS
+
+  validates_by_schema
   validates :device_library_identifier, presence: true, uniqueness: {scope: :pass_installation_id}
   validates :push_token, presence: true
 end

@@ -7,6 +7,9 @@
 
 class PassDefinition < ActiveRecord::Base
   include Globalized
+  translates :name, :description
+
+  ### ASSOCIATIONS
 
   belongs_to :owner, polymorphic: true # Group (Event in future phase)
   has_many :pass_grants, dependent: :destroy
@@ -14,8 +17,9 @@ class PassDefinition < ActiveRecord::Base
   has_many :pass_installations, class_name: "Wallets::PassInstallation",
     through: :passes
 
-  translates :name, :description
+  ### VALIDATIONS
 
+  validates_by_schema
   validates :name, presence: true
   validates :template_key, presence: true,
     inclusion: {in: ->(_) { Passes::TemplateRegistry.available_keys }}

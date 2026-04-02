@@ -134,4 +134,48 @@ describe MessagesController do
       expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
     end
   end
+
+  context "preview" do
+    let(:bottom_member) { people(:bottom_member) }
+
+    context "letter" do
+      let(:message) { messages(:letter) }
+
+      it "redirects to message when recipients are empty" do
+        get :show, format: :pdf,
+          # rubocop:todo Layout/LineLength
+          params: {preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id}
+        # rubocop:enable Layout/LineLength
+        expect(response).to redirect_to message.path_args
+        expect(flash[:alert]).to eq "Empfängerliste ist leer, kann kein PDF erstellen."
+      end
+
+      it "renders file" do
+        expect(Export::Pdf::Messages::Letter).to receive(:new).with(anything,
+          {background: Settings.messages.pdf.preview}).and_call_original
+        Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
+        get :show, format: :pdf,
+          # rubocop:todo Layout/LineLength
+          params: {preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id}
+        # rubocop:enable Layout/LineLength
+        expect(response.header["Content-Disposition"]).to match(/preview-information.pdf/)
+        expect(response.media_type).to eq("application/pdf")
+      end
+    end
+
+    context "letter_with_invoice" do
+      let(:message) { messages(:with_invoice) }
+
+      it "renders file" do
+        invoice_configs(:top_layer).update(payment_slip: :qr)
+        Subscription.create!(mailing_list: message.mailing_list, subscriber: bottom_member)
+        get :show, format: :pdf,
+          # rubocop:todo Layout/LineLength
+          params: {preview: true, id: message.id, mailing_list_id: message.mailing_list.id, group_id: message.mailing_list.group.id}
+        # rubocop:enable Layout/LineLength
+        expect(response.header["Content-Disposition"]).to match(/preview-rechnung-mitgliedsbeitrag.pdf/)
+        expect(response.media_type).to eq("application/pdf")
+      end
+    end
+  end
 end

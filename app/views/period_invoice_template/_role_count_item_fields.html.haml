@@ -6,10 +6,10 @@
 = f.label :role_types, class: "col-form-label pb-1 required"
 %div{ data: { controller: "role-types" } }
   .role-types-summary{ data: { role_types_target: "summary" } }
-  %button.btn.btn-sm.btn-link.px-0.mb-4{ type: :button, data: { bs_toggle: "modal", bs_target: "#role-types-#{f.object.id || "NEW_RECORD"}" } }
+  %button.btn.btn-sm.btn-link.px-0.mb-4{ type: :button, data: { bs_toggle: "modal", bs_target: "#role-types-#{f.object.id || "NEW_ITEMS_RECORD"}" } }
     = t(".choose_role_types")
 
-  .modal{ id: "role-types-#{f.object.id || "NEW_RECORD"}", data: { role_types_target: "modal" } }
+  .modal{ id: "role-types-#{f.object.id || "NEW_ITEMS_RECORD"}", data: { role_types_target: "modal" } }
     .modal-dialog.modal-xl
       .modal-content
         .modal-header

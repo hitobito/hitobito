@@ -380,8 +380,11 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
               data: {action: "nested-form#add"})) +
             content_tag(:template, data: {nested_form_target: "template"}) do
               content_tag(:div, class: "fields", data: {new_record: true}) do
+                # Use a unique placeholder that includes the association name to avoid
+                # collision when this template is nested inside another template
+                placeholder = "NEW_#{assoc.to_s.upcase}_RECORD"
                 fields_for(assoc, object.send(assoc).try(:new) || options[:model_object],
-                  child_index: "NEW_RECORD") do |fields|
+                  child_index: placeholder) do |fields|
                   (block ? capture(fields,
                     &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
                 end

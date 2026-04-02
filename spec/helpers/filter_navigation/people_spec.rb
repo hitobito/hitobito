@@ -6,26 +6,15 @@
 require "spec_helper"
 
 describe "FilterNavigation::People" do
-  let(:template) do
-    double("template").tap do |t|
-      allow(t).to receive_messages(can?: true)
-      allow(t).to receive_messages(group_people_path: "people_path")
-      allow(t).to receive_messages(group_people_filter_path: "people_filter_path")
-      allow(t).to receive_messages(edit_group_people_filter_path: "edit_people_filter_path")
-      allow(t).to receive_messages(new_group_people_filter_path: "new_group_people_filter_path")
-      allow(t).to receive_messages(link_action_destroy: "<a destroy>")
-      allow(t).to receive_messages(icon: "<i>")
-      allow(t).to receive_messages(ti: "delete")
-      allow(t).to receive_messages(t: "global.link.edit")
-      allow(t).to receive_messages(t: "global.link.delete")
-      allow(t).to receive_messages(safe_join: ["<i>", " ", "global.link.edit"])
-      allow(t).to receive_messages(safe_join: ["<i>", " ", "global.link.delete"])
-      allow(t).to receive(:link_to) { |label, path| "<a href='#{path}'>#{label}</a>" }
-      allow(t).to receive(:content_tag) { |tag, content, options| "<#{tag} #{options.inspect}>#{content}</#{tag}>" }
-    end
-  end
+  include LayoutHelper
+  include UtilityHelper
+  include I18nHelper
 
-  subject { FilterNavigation::People.new(template, group, Person::Filter::List.new(group, nil)) }
+  subject { FilterNavigation::People.new(self, group, Person::Filter::List.new(group, nil)) }
+
+  def can?(*_args)
+    true
+  end
 
   context "top layer" do
     let(:group) { groups(:top_layer).decorate }
@@ -112,7 +101,7 @@ describe "FilterNavigation::People" do
           nil,
           name: "Leaders",
           filters: {role: {role_type_ids: role_types.map(&:type_id)}})
-        FilterNavigation::People.new(template, group, filter)
+        FilterNavigation::People.new(self, group, filter)
       end
 
       its(:main_items) { should have(2).items }

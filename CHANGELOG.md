@@ -3,6 +3,7 @@
 ## unreleased
 
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
+- Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
 
 ## Version 2.8
 

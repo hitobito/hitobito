@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Events::Filter
-  class State < Filter::Base
+  class State < Base
     self.permitted_args = [:states]
 
     def apply(scope)
@@ -28,7 +28,9 @@ module Events::Filter
     end
 
     def possible_states
-      Event::Course.possible_states.map(&:to_s)
+      return [] unless event_type.respond_to?(:possible_states)
+
+      event_type.possible_states.map(&:to_s)
     end
   end
 end

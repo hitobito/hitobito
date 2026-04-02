@@ -1,0 +1,9 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+.btn-toolbar
+  .btn-group
+    = button_tag(t('global.button.search'), class: 'btn btn-sm btn-primary', value: 'search')
+  = link_to(t('global.button.cancel'), events_list_path, class: 'ms-3 mt-1')

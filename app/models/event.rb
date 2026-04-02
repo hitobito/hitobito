@@ -131,7 +131,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     :possible_states,
     :kind_class,
     :supports_invitations,
-    :uses_form_tabs
+    :uses_form_tabs,
+    :filterable_attrs
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -166,6 +167,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   self.supports_invitations = true
 
   self.uses_form_tabs = true
+
+  self.filterable_attrs = [:name, :description, :location]
 
   model_stamper
   stampable stamper_class_name: :person,
@@ -402,6 +405,14 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     def tags
       Event.tags_on(:tags).order(:name).pluck(:name)
+    end
+
+    def filter_attrs
+      filterable_attrs.map do |key, type|
+        type = :string if translated_attribute_names.include?(key.to_sym)
+        type ||= columns_hash.fetch(key.to_s).type
+        [key.to_sym, {label: human_attribute_name(key), type: type}]
+      end.to_h
     end
   end
 

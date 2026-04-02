@@ -10,7 +10,7 @@ require "spec_helper"
 describe Events::Filter::State do
   let(:base_scope) { Event.all }
 
-  subject(:filter) { described_class.new(:state, params) }
+  subject(:filter) { described_class.new(:state, params, Event::Course) }
 
   let!(:event_created) do
     Fabricate(:course, state: "created")

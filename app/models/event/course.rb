@@ -82,6 +82,8 @@ class Event::Course < Event
 
   self.kind_class = Event::Kind
 
+  self.filterable_attrs += [:number]
+
   # Used for Event::CourseResource
   attr_accessor :leaders
 

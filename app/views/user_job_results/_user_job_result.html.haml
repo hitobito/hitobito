@@ -12,11 +12,11 @@
     .col-3
       = job_progress_bar(user_job_result.progress)
     .col-3
-      = "#{t('.start_timestamp')}: #{job_timestamp(user_job_result.start_timestamp)}"
+      = "#{UserJobResult.human_attribute_name('start_timestamp')}: #{job_timestamp(user_job_result.start_timestamp)}"
       %br
-      = "#{t('.end_timestamp')}: #{job_timestamp(user_job_result.end_timestamp)}"
+      = "#{UserJobResult.human_attribute_name('end_timestamp')}: #{job_timestamp(user_job_result.end_timestamp)}"
     .col-1
-      = "#{t('.attempts')}: #{user_job_result.attempts}/#{Delayed::Worker.max_attempts}"
+      = "#{UserJobResult.human_attribute_name('attempts')}: #{user_job_result.attempts}/#{Delayed::Worker.max_attempts}"
     .col-1
       - if user_job_result.generated_file.attached?
         = link_to(icon("download", {filled: true}), "/user_job_results/#{user_job_result.id}/download_attachment")

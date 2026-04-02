@@ -35,6 +35,19 @@ class MessagesController < CrudController
 
   before_action :authorize_duplicate, only: :new
 
+  def show
+    respond_to do |format|
+      format.html
+      format.pdf do
+        if preview?
+          render_pdf_preview
+        else
+          render_pdf_in_background
+        end
+      end
+    end
+  end
+
   def new
     assign_attributes_from_duplication_source if duplication_source.present?
     super

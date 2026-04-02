@@ -27,7 +27,7 @@ describe :period_invoice_templates, js: true do
   context "create" do
     let(:new_path) { new_group_period_invoice_template_path(group) }
 
-    it "allows to create a period invoice template" do
+    it "allows to create a period invoice template with multiple items" do
       visit new_path
       expect(page).not_to have_text "Rollentypen"
 
@@ -36,19 +36,38 @@ describe :period_invoice_templates, js: true do
 
       click_link "Rechnungsposten hinzufügen"
       click_link "Rollen-Zählung"
-      expect(page).to have_text "Rollentypen"
+      expect(page).to have_text "Entfernen", count: 1
 
-      fill_in "Name*", with: "Normaler Preis"
-      fill_in "Preis*", with: "10"
+      within all("#items_fields .fields").last do
+        fill_in "Name*", with: "Normaler Preis"
+        fill_in "Preis*", with: "10"
 
-      click_button "Rollentypen auswählen"
-      expect(page).to have_content "Schliessen"
-      check "Local Secretary"
-      check "Secretary"
-      click_button "Schliessen"
+        click_button "Rollentypen auswählen"
+        expect(page).to have_content "Schliessen"
+        check "Local Secretary"
+        check "Secretary"
+        click_button "Schliessen"
 
-      expect(page).to have_no_content "Schliessen"
-      expect(page).to have_content "Secretary, Local Secretary"
+        expect(page).to have_no_content "Schliessen"
+        expect(page).to have_content "Secretary, Local Secretary"
+      end
+
+      click_link "Rechnungsposten hinzufügen"
+      click_link "Rollen-Zählung"
+      expect(page).to have_text "Entfernen", count: 2
+
+      within all("#items_fields .fields").last do
+        fill_in "Name*", with: "Ermässigter Preis"
+        fill_in "Preis*", with: "5"
+
+        click_button "Rollentypen auswählen"
+        expect(page).to have_content "Schliessen"
+        first(:checkbox, "Local Guide").check
+        click_button "Schliessen"
+
+        expect(page).to have_no_content "Schliessen"
+        expect(page).to have_content "Local Guide"
+      end
 
       click_button "Speichern"
 
@@ -56,12 +75,17 @@ describe :period_invoice_templates, js: true do
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
       expect(entry.recipient_group_type).to eq "Group::TopLayer"
-      expect(entry.items.length).to be 1
+      expect(entry.items.length).to be 2
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("10.00")
       expect(entry.items[0].dynamic_cost_parameters[:role_types]).to match_array([
         Group::TopGroup::Secretary.name,
         Group::TopGroup::LocalSecretary.name
+      ])
+      expect(entry.items[1].name).to eq("Ermässigter Preis")
+      expect(entry.items[1].dynamic_cost_parameters[:unit_cost]).to eq("5.00")
+      expect(entry.items[1].dynamic_cost_parameters[:role_types]).to match_array([
+        Group::TopGroup::LocalGuide.name
       ])
     end
 

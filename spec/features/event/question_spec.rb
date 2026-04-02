@@ -38,12 +38,165 @@ describe EventsController, js: true do
     page.all(".fields").find { |question_element| question_element.text.start_with?(question.question) }
   end
 
+  def add_question_with_choices(question_text:, disclosure:, multiple_choices:, choices:)
+    within("#application_questions") do
+      click_link I18n.t("global.associations.add")
+    end
+
+    within(all(".fields[data-new-record='true']").last) do
+      fill_in "Frage", with: question_text
+      choose Event::Question.disclosure_labels[disclosure]
+
+      multiple_choices ? check("Mehrfachauswahl") : uncheck("Mehrfachauswahl")
+
+      choices.each do |choice_text|
+        click_link I18n.t("event.questions.add_choice")
+        all("input[name*='[choice]']").last.set(choice_text)
+      end
+    end
+  end
+
+  def setup_test_questions
+    # Navigate to application questions tab
+    click_link I18n.t("event.participations.application_answers")
+
+    # Add all test questions
+    test_questions.each do |question_data|
+      add_question_with_choices(**question_data)
+    end
+  end
+
+  def verify_all_questions_present
+    click_link I18n.t("event.participations.application_answers")
+    expect(page).to have_text(I18n.t("events.form.explain_application_questions"))
+
+    test_questions.each do |question_data|
+      verify_question(question_data)
+    end
+  end
+
+  def verify_question(question_data)
+    question_fields = find_field("Frage", with: question_data[:question_text]).ancestor(".fields")
+    within(question_fields) do
+      verify_question_options(question_data)
+      verify_choices(question_data[:choices])
+    end
+  end
+
+  def verify_question_options(question_data)
+    disclosure = question_data[:disclosure]
+    disclosure_label = Event::Question.disclosure_labels[disclosure]
+    expect(page).to have_checked_field(disclosure_label)
+    if question_data[:multiple_choices]
+      expect(page).to have_checked_field("Mehrfachauswahl")
+    else
+      expect(page).to have_unchecked_field("Mehrfachauswahl")
+    end
+  end
+
+  def verify_choices(choices)
+    choices.each do |expected_choice|
+      expect(page).to have_field("Antwortmöglichkeit", with: expected_choice)
+    end
+  end
+
   describe "application_questions" do
+    let(:test_questions) do
+      [
+        {
+          question_text: "Question 1 - Optional Single",
+          disclosure: :optional,
+          multiple_choices: false,
+          choices: ["Q1 Choice 1", "Q1 Choice 2"]
+        },
+        {
+          question_text: "Question 2 - Required Multiple",
+          disclosure: :required,
+          multiple_choices: true,
+          choices: ["Q2 Choice 1", "Q2 Choice 2", "Q2 Choice 3"]
+        },
+        {
+          question_text: "Question 3 - Hidden Single",
+          disclosure: :hidden,
+          multiple_choices: false,
+          choices: ["Q3 Choice 1", "Q3 Choice 2"]
+        },
+        {
+          question_text: "Question 4 - Optional Free Text",
+          disclosure: :optional,
+          multiple_choices: false,
+          choices: []
+        }
+      ]
+    end
+
     before do
       Settings.event.participations.delete_answers_after_months = 6
       Settings.event.participations.manual_sensitive_option = true
       Event::Question.delete_all
       sign_in
+    end
+
+    it "should preserve all questions with options and choices when validation fails" do
+      visit new_group_event_path(groups(:top_layer).id, event: {type: "Event::Course"})
+
+      setup_test_questions
+
+      # Submit without required fields (will fail validation)
+      click_save
+      expect(page).to have_text("muss ausgefüllt werden")
+
+      verify_all_questions_present
+    end
+
+    it "should save all questions with options and choices" do
+      visit new_group_event_path(groups(:top_layer).id, event: {type: "Event::Course"})
+
+      # Fill in required event fields
+      fill_in :event_name, with: "Test Event"
+      fill_in "Beschreibung", with: "Test Description"
+      select "SLK", from: "Kursart"
+
+      # Navigate to dates tab and add a date
+      click_link I18n.t("activerecord.models.event/date.other")
+      fill_in :event_dates_attributes_0_start_at_date, with: 10.days.from_now.strftime("%d.%m.%Y")
+
+      setup_test_questions
+
+      # Save the event
+      click_save
+
+      # Verify event was created
+      expect(page).to have_text("Test Event")
+
+      # Edit the event to verify all questions and choices were saved
+      click_link I18n.t("global.link.edit")
+      click_link I18n.t("event.participations.application_answers")
+
+      verify_all_questions_present
+    end
+
+    it "should show all choices when editing an existing event with translated choices" do
+      event.questions.create!(
+        question: "Testquestion",
+        choices_de: "Antwort 1,Antwort 2,Antwort 3",
+        choices_en: "Choice 1,Choice 2,Choice 3",
+        choices_fr: "Réponse 1,Réponse 2,Réponse 3",
+        choices_it: "Risposta 1,Risposta 2,Risposta 3",
+        disclosure: :required
+      )
+
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_link I18n.t("event.participations.application_answers")
+
+      # Verify all 3 choices are rendered in the form
+      expect(page).to have_field("Antwortmöglichkeit", with: "Antwort 1")
+      expect(page).to have_field("Antwortmöglichkeit", with: "Antwort 2")
+      expect(page).to have_field("Antwortmöglichkeit", with: "Antwort 3")
+
+      # Count only the choice fields (inside #choices_fields, not the parent question field)
+      choice_fields = page.all("#choices_fields > .fields", visible: true)
+      expect(choice_fields.count).to eq(3)
     end
 
     it "should show choices as nested_form" do

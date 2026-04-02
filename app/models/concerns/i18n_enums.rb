@@ -31,7 +31,7 @@ module I18nEnums
       end
 
       if validations
-        validates attr, inclusion: {in: possible, allow_nil: true}
+        validates attr, inclusion: {in: possible, allow_blank: true}
       end
 
       define_method(:"#{attr}_label") do |value = nil|

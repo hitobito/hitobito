@@ -110,4 +110,45 @@ describe Event::Role do
       end.to change { Event::Participation.count }.by(-1)
     end
   end
+
+  context "paper trails", versioning: true do
+    let(:event) { events(:top_course) }
+    let!(:role) { Event::Role::Treasurer.create!(event:, participation: event_participations(:top)) }
+
+    before do
+      PaperTrail::Version.destroy_all
+    end
+
+    it "sets main to participation on create" do
+      expect do
+        Event::Role::Treasurer.create!(event:, participation: event_participations(:top))
+      end.to change { PaperTrail::Version.count }.by(2)
+
+      version = PaperTrail::Version.where(main_type: Event::Participation.sti_name).order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(event_participations(:top))
+    end
+
+    it "sets main to participation on update" do
+      expect do
+        role.update!(label: "Leader (Actually I'm not a leader)")
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(event_participations(:top))
+    end
+
+    it "creates paper trail version on event on state change" do
+      expect do
+        role.update!(type: Event::Role::Cook.sti_name)
+      end.to change { PaperTrail::Version.where(main: event).count }.by(1)
+    end
+
+    it "does not create paper trails version on event when state did not change" do
+      expect do
+        role.update!(label: "something")
+      end.not_to change { PaperTrail::Version.where(main: event).count }
+    end
+  end
 end

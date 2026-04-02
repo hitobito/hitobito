@@ -37,7 +37,7 @@ module Sheet
         view.can?(:history, person)
       end)
 
-    tab "people.tabs.log",
+    tab "global.tabs.log",
       :log_group_person_path,
       if: (lambda do |view, _group, person|
         view.can?(:log, person)

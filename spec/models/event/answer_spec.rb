@@ -89,6 +89,29 @@ describe Event::Answer do
         end.to eq(3)
       end
     end
+
+    context "paper trails", versioning: true do
+      it "sets main to participation on create with event update" do
+        expect do
+          participation.answers.create!(answer: "Foo", question: participation.event.questions.first)
+        end.to change { PaperTrail::Version.count }.by(1)
+
+        version = PaperTrail::Version.order(:created_at, :id).last
+        expect(version.event).to eq("update")
+        expect(version.main).to eq(participation)
+      end
+
+      it "sets main to participation on update" do
+        answer = participation.answers.create!(answer: "Foo", question: participation.event.questions.first)
+        expect do
+          answer.update!(answer: "some other answer, still wrong tho")
+        end.to change { PaperTrail::Version.count }.by(1)
+
+        version = PaperTrail::Version.order(:created_at, :id).last
+        expect(version.event).to eq("update")
+        expect(version.main).to eq(participation)
+      end
+    end
   end
 
   describe "answer escaping" do

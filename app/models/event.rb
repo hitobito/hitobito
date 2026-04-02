@@ -65,6 +65,11 @@
 #
 # The same event may be attached to multiple groups of the same kind.
 class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
+  has_paper_trail meta: {main_id: ->(e) { e.id },
+                         main_type: sti_name},
+    skip: [:id, :shared_access_token, :applicant_count, :participant_count,
+      :teamer_count, :updated_at, :updater_id, :type]
+
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
   require_dependency "event/date"
@@ -89,7 +94,34 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   include Event::ContactAttrs
   include FullTextSearchable
   include Globalized
+
+  # To prevent issues of having paper trail versions when we don't want/need them, we add all
+  # translated attributes to the skip list and create own paper trail versions on the
+  # translation classes
+  # Resync paper trail skip options after another translated attribute
+  # may have been added to a wagon
+  def self.translates(...)
+    super
+
+    paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                    globalize_attribute_names.map(&:to_s))
+  end
+
   translates :application_conditions, :description, :name, :signature_confirmation_text
+
+  translation_class.class_eval do
+    has_paper_trail meta: {
+      main_id: ->(t) { t.event_id },
+      main_type: Event.sti_name
+    }
+
+    # This is used to display in log what language record actually changed. Currently those
+    # values are just the strings from settings.yml, so the log does not display translated
+    # language names
+    def to_s(format = :default)
+      locale.to_s
+    end
+  end
 
   ### ATTRIBUTES
 

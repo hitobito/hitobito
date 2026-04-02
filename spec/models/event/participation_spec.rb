@@ -261,4 +261,29 @@ describe Event::Participation do
       expect(subject.person.email).to eq subject.participant.email
     end
   end
+
+  context "paper trails", versioning: true do
+    let(:event) { events(:top_course) }
+
+    it "sets main to participation on create" do
+      expect do
+        event.participations.create!(person: people(:top_leader))
+      end.to change { PaperTrail::Version.count }.by(4) # Creates three versions for event answers
+
+      version = PaperTrail::Version.where(item_type: Event::Participation.sti_name).order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(Event::Participation.last)
+    end
+
+    it "sets main to participation on update" do
+      participation = event.participations.create!(person: people(:top_leader))
+      expect do
+        participation.update!(additional_information: "you still don't know much about me.")
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(participation)
+    end
+  end
 end

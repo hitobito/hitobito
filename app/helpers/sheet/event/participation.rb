@@ -7,6 +7,16 @@ module Sheet
   class Event
     class Participation < Base
       self.parent_sheet = Sheet::Event
+
+      tab "global.tabs.info",
+        :group_event_participation_path,
+        if: :show_details
+
+      tab "global.tabs.log",
+        :log_group_event_participation_path,
+        if: (lambda do |view, _group, event, participation|
+          view.can?(:update, participation)
+        end)
     end
   end
 end

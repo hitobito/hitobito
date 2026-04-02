@@ -51,6 +51,12 @@ module Sheet
         view.can?(:index_invitations, event)
       end)
 
+    tab "global.tabs.log",
+      :log_group_event_path,
+      if: (lambda do |view, _group, event|
+        view.can?(:update, event)
+      end)
+
     def link_url
       view.group_event_path(parent_sheet.entry.id, entry.id)
     end

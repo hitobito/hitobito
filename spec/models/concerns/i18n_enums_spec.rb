@@ -41,6 +41,23 @@ describe I18nEnums do
     expect(person).not_to be_valid
   end
 
+  it "does not add any validations if validations false is passed" do
+    fake_person_class = Class.new(ActiveRecord::Base) do
+      include I18nEnums
+      self.table_name = "people"
+
+      def self.apply_enum_test
+        i18n_enum :gender, ["m", "f"], validations: false
+      end
+    end
+
+    fake_person = fake_person_class.new
+    fake_person.gender = "this is not a gender at all"
+
+    expect(fake_person).to be_valid
+    expect(fake_person.errors[:gender]).to be_empty
+  end
+
   it "has class side method to return all labels" do
     expect(Person.gender_labels).to eq(m: "männlich", w: "weiblich")
   end

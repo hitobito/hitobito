@@ -1321,11 +1321,6 @@ fr:
       wait_for_downloads: "Les téléchargements sont en cours de préparation, prière d'attendre."
       cancel_downloads: "interrompre les téléchargements"
 
-    synchronization:
-      wait_for_synchronization: "Vos données sont actuellement envoyées à MailChimp. Cela peut prendre un moment. Ensuite, la liste sélectionnée avec les contacts de hitobito sera mise à jour."
-      synchronization_failed: "Une erreur s'est produite lors de l'envoi des données à MailChimp. (%{error})."
-      cancel_synchronization: "Annuler l'exportation"
-
   mailing_lists:
     subscriber_lists:
       create:

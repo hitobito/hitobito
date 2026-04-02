@@ -2295,20 +2295,6 @@ en:
     cannot_create: Please select an existing tag
     no_entry: (none)
 
-  user_job_results:
-    index:
-      title: Job overview
-    user_job_result:
-      no_progress_provided: This Job doesnt provide a progress
-      start_timestamp: Start time
-      end_timestamp: End time
-      attempts: Attempts
-      status:
-        planned: Planned
-        in_progress: In progress
-        success: Successfully completed
-        error: An error occurred during processing
-
   version:
     attribute_change:
       from_to: "%{attr} has been changed from <i>%{from}</i> to <i>%{to}</i>."

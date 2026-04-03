@@ -6,7 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::ExportBaseJob < BaseJob
-  PARAMETERS = [:locale, :format, :exporter, :user_id, :options].freeze
+  prepend UserManageableJob
+
+  PARAMETERS = parameters + [:locale, :format, :exporter, :user_id, :options].freeze
 
   attr_reader :exporter
 
@@ -41,20 +43,10 @@ class Export::ExportBaseJob < BaseJob
   end
 
   def export_file
-    async_download_file.write(data, force_encoding: @options.fetch(:encoding, nil))
+    user_job_result.write(data, force_encoding: @options.fetch(:encoding, nil))
   end
 
   def data
     exporter.export(@format, entries, ability)
-  end
-
-  def filename
-    @options.fetch(:filename)
-  end
-
-  private
-
-  def async_download_file
-    @async_download_file ||= AsyncDownloadFile.maybe_from_filename(filename, @user_id, @format)
   end
 end

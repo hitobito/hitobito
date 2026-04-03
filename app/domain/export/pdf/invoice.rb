@@ -8,12 +8,12 @@ module Export::Pdf
     MARGIN = 2.cm
 
     class Runner
-      def initialize(invoices, async_download_file)
+      def initialize(invoices, job)
         @invoices = invoices
         # rubocop:todo Layout/LineLength
         @invoice_config = invoices.first.invoice_config # we assume that all invoices have the same invoice config
         # rubocop:enable Layout/LineLength
-        @async_download_file = async_download_file
+        @job = job
         @metadata = {first_pages_of_invoices: [], pages_with_payment_slip: []}
       end
 
@@ -30,25 +30,12 @@ module Export::Pdf
           LocaleSetter.with_locale(person: invoice.recipient.then {
             _1.is_a?(Person) ? _1 : nil
           }) do
-            reporter&.report(position)
+            @job&.report_progress(position, @invoices.size)
             invoice_page(pdf, invoice, options)
             pdf.start_new_page unless invoice == @invoices.last
           end
         end
         pdf
-      end
-
-      def reporter
-        return unless @async_download_file
-
-        @reporter ||= init_reporter
-      end
-
-      def init_reporter
-        Export::ProgressReporter.new(
-          @async_download_file,
-          @invoices.size
-        )
       end
 
       def invoice_page(pdf, invoice, options) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
@@ -95,13 +82,13 @@ module Export::Pdf
     self.runner = Runner
 
     def self.render(invoice, options)
-      async_download_file = options.delete(:async_download_file)
-      runner.new([invoice], async_download_file).render(options)
+      job = options.delete(:job)
+      runner.new([invoice], job).render(options)
     end
 
     def self.render_multiple(invoices, options)
-      async_download_file = options.delete(:async_download_file)
-      runner.new(invoices, async_download_file).render(options)
+      job = options.delete(:job)
+      runner.new(invoices, job).render(options)
     end
   end
 end

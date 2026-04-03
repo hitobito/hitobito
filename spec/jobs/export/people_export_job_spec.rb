@@ -11,19 +11,19 @@ describe Export::PeopleExportJob do
   subject do
     Export::PeopleExportJob.new(format, user.id, group.id, {},
       household: household, full: full,
-      selection: selection, filename: filename)
+      selection: selection, filename: "people_export")
   end
 
   let(:user) { Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person }
   let(:group) { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
-  let(:filename) { AsyncDownloadFile.create_name("people_export", user.id) }
+  let(:file) { subject.user_job_result }
 
   before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+    subject.enqueue!
   end
 
   context "creates a CSV-Export" do

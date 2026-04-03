@@ -1261,10 +1261,8 @@ de:
       wait_for_downloads: "Die Downloads werden vorbereitet, bitte warten."
       cancel_downloads: "Downloads abbrechen"
 
-    synchronization:
+  mailchimp_synchronizations:
       wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein."
-      synchronization_failed: "Beim Senden der Daten an MailChimp ist ein Fehler aufgetreten (%{error})."
-      cancel_synchronization: "Export abbrechen"
 
   mailing_lists:
     subscriber_lists:
@@ -2293,6 +2291,20 @@ de:
     add_tag: Tag hinzufügen
     cannot_create: Bitte wähle einen bestehenden Tag aus
     no_entry: (keine)
+
+  user_job_results:
+    index:
+      title: Jobübersicht
+    user_job_result:
+      no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
+      status:
+        planned: In der Warteschlange
+        in_progress: In Bearbeitung
+        success: Erfolgreich abgeschlossen
+        error: Bei der Bearbeitung trat ein Fehler auf
+    user_job_result_notification:
+      job_success: Job erfolgreich abgeschlossen
+      job_error: Fehler bei Jobausführung aufgetreten
 
   version:
     attribute_change:

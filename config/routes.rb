@@ -421,9 +421,6 @@ Hitobito::Application.routes.draw do
 
     get "changelog" => "changelog#index"
 
-    get "downloads/:id" => "async_downloads#show"
-    get "downloads/:id/exists" => "async_downloads#exists?"
-
     get "synchronizations/:id" => "async_synchronizations#show"
 
     resources :assignments, only: [:new, :create]
@@ -432,6 +429,9 @@ Hitobito::Application.routes.draw do
       resource :preview, only: [:show], module: :messages
       resource :dispatch, only: [:create, :show], module: :messages
     end
+
+    get "user_job_results" => "user_job_results#index"
+    get "user_job_results/:id/download_attachment" => "user_job_results#download_attachment"
   end # scope locale
 
   get "/api", to: "json_api/documentation#index"

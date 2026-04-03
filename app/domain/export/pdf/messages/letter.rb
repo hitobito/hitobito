@@ -23,7 +23,7 @@ module Export::Pdf::Messages
     def initialize(letter, options = {})
       @letter = letter
       @options = options
-      @async_download_file = options.delete(:async_download_file)
+      @job = options.delete(:job)
       @body_font_size = Settings.messages.body_font_size
     end
 
@@ -50,7 +50,7 @@ module Export::Pdf::Messages
     def build_pdf
       customize
       recipients.each_with_index do |recipient, position|
-        reporter&.report(position)
+        @job&.report_progress(position, recipients.size)
         render_sections(recipient)
         pdf.start_new_page unless last?(recipient)
       end
@@ -79,19 +79,6 @@ module Export::Pdf::Messages
     end
 
     private
-
-    def reporter
-      return unless @async_download_file
-
-      @reporter ||= init_reporter
-    end
-
-    def init_reporter
-      Export::ProgressReporter.new(
-        @async_download_file,
-        recipients.size
-      )
-    end
 
     def render_options
       @options.to_h.merge(

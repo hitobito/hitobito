@@ -1417,6 +1417,11 @@ de:
         included_calendar_tags: Nur mit Tags
         excluded_calendar_tags: Ausgeschlossene Tags
 
+      user_job_result:
+        start_timestamp: Startzeitpunkt
+        end_timestamp: Endzeitpunkt
+        attempts: Versuche
+
   api:
     errors:
       resources:

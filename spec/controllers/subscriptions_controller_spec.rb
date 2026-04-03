@@ -47,15 +47,6 @@ describe SubscriptionsController do
       end.to change(Delayed::Job, :count).by(1)
     end
 
-    it "sets cookie on export" do
-      get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :csv
-
-      cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-      expect(cookie[0]["name"]).to match(/^(subscriptions)+\S*(#{people(:top_leader).id})+$/)
-      expect(cookie[0]["type"]).to match(/^csv$/)
-    end
-
     it "exports vcf files" do
       get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :vcf
       expect(@response.media_type).to eq("text/vcard")

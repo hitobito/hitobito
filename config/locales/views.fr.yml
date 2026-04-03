@@ -12,6 +12,7 @@ fr:
     unknown: Inconnu
     nobody: personne
     all: Tous
+    empty: Leer
 
     from: de
     until: à
@@ -74,7 +75,7 @@ fr:
     tabs:
       info: Informations
       settings: Paramètres
-      logs: Journal
+      log: Log
 
     search:
       placeholder: "Recherche..."
@@ -2318,6 +2319,7 @@ fr:
       create: "%{model} <i>%{label}</i> a été ajouté."
       update: "%{model} <i>%{label}</i> a été mis à jour : %{changeset}"
       destroy: "%{model} <i>%{label}</i> a été effacé."
+      removed: "%{model} <i>%{label}</i> wurde entfernt."
 
       person/add_request:
         create: "La demande d'accès pour <i>%{label}</i> a été établie."

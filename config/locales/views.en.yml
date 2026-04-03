@@ -12,6 +12,7 @@ en:
     unknown: unknown
     nobody: nobody
     all: all
+    empty: Leer
 
     from: from
     until: to
@@ -73,6 +74,7 @@ en:
     tabs:
       info: Info
       settings: Settings
+      log: Log
 
     search:
       placeholder: "Search..."
@@ -2261,6 +2263,7 @@ en:
       create: "%{model} <i>%{label}</i> has been added."
       update: "%{model} <i>%{label}</i> has been updated: %{changeset}"
       destroy: "%{model} <i>%{label}</i> has been deleted."
+      removed: "%{model} <i>%{label}</i> wurde entfernt."
 
       person/add_request:
         create: "Access for <i>%{label}</i> requested."

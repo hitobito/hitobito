@@ -12,6 +12,7 @@ it:
     unknown: Sconosciuto
     nobody: nessuno
     all: Tutti
+    empty: Leer
 
     from: Dal
     until: Al
@@ -74,6 +75,7 @@ it:
     tabs:
       info: Informazioni
       settings: Admin
+      log: Log
 
     search:
       placeholder: "Cercare..."
@@ -2316,6 +2318,7 @@ it:
       create: "%{model} <i>%{label}</i> è stato aggiunto."
       update: "%{model} <i>%{label}</i> è stato aggiornato: %{changeset}"
       destroy: "%{model} <i>%{label}</i> è stato cancellato."
+      removed: "%{model} <i>%{label}</i> wurde entfernt."
 
       person/add_request:
         create: "La richiesta d'accesso per <i>%{label}</i> è stata inviata."

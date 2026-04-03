@@ -261,6 +261,10 @@ namespace :dev do
   end
 
   namespace :passes do
+    # This cannot be a regular seed script in db/seeds/development/ because core seeds run
+    # before wagon seeds, and the root group is only created during wagon seeding. A seed script
+    # placed in the core would find no root group and return early. Instead, this task is invoked
+    # automatically after wagon:seed via an enhance block in lib/tasks/wagon.rake.
     desc "Seed a PassDefinition on the root group with a grant covering all available role types"
     task seed_definition: :environment do
       abort("This is for development purposes only.") unless Rails.env.development?

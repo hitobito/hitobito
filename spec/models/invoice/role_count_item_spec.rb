@@ -33,9 +33,7 @@ describe Invoice::RoleCountItem do
   def create_previous_invoice_item(invoice, item_attrs = attrs)
     prev_item = described_class.new(**attrs.except(:invoice))
     prev_item.invoice = invoice
-    prev_item.unit_cost ||= prev_item.unit_cost # set the value
-    prev_item.count # set the value
-    prev_item.save!
+    prev_item.recalculate!
 
     prev_item
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_02_155152) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_07_160043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -632,8 +632,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_02_155152) do
     t.integer "invoice_id", null: false
     t.text "description"
     t.decimal "vat_rate", precision: 5, scale: 2
-    t.decimal "unit_cost", precision: 12, scale: 2, null: false
-    t.integer "count", default: 1, null: false
+    t.decimal "unit_cost", precision: 12, scale: 2
+    t.integer "count", default: 1
     t.string "cost_center"
     t.string "account"
     t.string "type", default: "InvoiceItem", null: false

@@ -1807,6 +1807,7 @@ en:
 
     tabs:
       history: History
+      log: Log
       security_tools: Security
       colleagues: Colleagues
       invoices: Invoices

@@ -21,8 +21,12 @@ class PassDefinition < ActiveRecord::Base
 
   validates_by_schema
   validates :name, presence: true
+
+  # template_key: Identifies the template bundle (PDF renderer, wallet view, data provider).
   validates :template_key, presence: true,
     inclusion: {in: ->(_) { Passes::TemplateRegistry.available_keys }}
+
+  # background_color: Hex color (#rrggbb) for pass background in wallet and PDF rendering.
   validates :background_color, presence: true,
     format: {with: /\A#[0-9a-fA-F]{6}\z/, message: :invalid_hex_color}
 

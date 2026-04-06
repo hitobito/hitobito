@@ -6,7 +6,11 @@
 #  https://github.com/hitobito/hitobito
 
 class Wallets::PassInstallation < ActiveRecord::Base
+  # authentication_token: Secret token for authenticating Apple Wallet web service requests.
+  # Generated once on creation and used by Apple to authenticate update requests.
   has_secure_token :authentication_token, length: 32
+
+  attr_readonly :authentication_token
 
   ### ASSOCIATIONS
 

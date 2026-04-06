@@ -914,7 +914,7 @@ fr:
     tabs:
       deleted: "Eléments effacés"
       statistics: "Statistiques"
-      logs: Journal
+      logs: Log
     export_enqueued: "L'exportation est lancée en arrière-plan et téléchargée une fois terminée."
     statistics:
       title: Statistiques
@@ -1819,7 +1819,7 @@ fr:
 
     tabs:
       history: Historique
-      log: Journal
+      log: Log
       security_tools: Sécurité
       colleagues: Collaborateurs/collaboratrices
       invoices: Factures

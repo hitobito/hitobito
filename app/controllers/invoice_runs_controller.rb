@@ -181,7 +181,7 @@ class InvoiceRunsController < CrudController
 
   def cancel_all_invoices
     invoices.update_all(state: :cancelled, updated_at: Time.zone.now).tap do
-      InvoiceRun::ProcessedSubject.where(invoice_id: invoices.select(:id)).delete_all
+      InvoiceRun::ProcessedSubject.where(item_id: invoices.flat_map(&:invoice_item_ids)).delete_all
     end
   end
 

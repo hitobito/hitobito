@@ -49,14 +49,14 @@ module Messages
       # Uses RFC 5322 group syntax (https://datatracker.ietf.org/doc/html/rfc5322#section-3.4)
       def set_undisclosed_recipients
         # We want to circumvent the normal parsing of address header values of the mail gem.
-        # So we use a plain StructuredField instead of the regular ToField and we add the
+        # So we use a OptionalField instead of the regular ToField and we add the
         # header manually instead of using the setter.
         # The gem's api allows us to replace a header field by name. So we first make sure
         # the header exists, then we replace it with the correct value.
         # Using #insert_field directly without the to header preexisting does not work as
-        # StructuredField does not implement the method #<() which is used by #insert_field.
-        # @mail.to = ""
-        undisclosed = Mail::StructuredField.new("To", "Undisclosed recipients:;")
+        # OptionalField does not implement the method #<() which is used by #insert_field.
+        @mail.to = "" # ← makes sure the To header exists, so we can replace it later
+        undisclosed = Mail::OptionalField.new("To", "Undisclosed recipients:;")
         @mail.header.fields.replace_field(undisclosed)
       end
 

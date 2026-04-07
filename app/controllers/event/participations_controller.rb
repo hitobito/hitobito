@@ -358,9 +358,22 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def load_answers
-    @answers = entry.answers.list
-    if entry.application
-      @application = Event::ApplicationDecorator.decorate(entry.application)
+    # Use .to_a to work with in-memory answer objects, preserving unsaved changes
+    # on validation failure. Using the .list scope would trigger a DB reload via JOIN,
+    # discarding any user input not yet persisted (see #3833).
+    answers = entry.answers.to_a
+    # Eager-load question translations on the already-materialized array.
+    ActiveRecord::Associations::Preloader.new(records: answers,
+      associations: {question: :translations}).call
+    @answers = sorted_answers(answers)
+    @application = Event::ApplicationDecorator.decorate(entry.application) if entry.application
+  end
+
+  def sorted_answers(answers)
+    if Event::Question.list_alphabetically
+      answers.sort_by { |a| a.question.to_s.downcase }
+    else
+      answers.sort_by(&:question_id)
     end
   end
 

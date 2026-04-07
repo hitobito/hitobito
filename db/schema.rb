@@ -1253,6 +1253,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
     t.boolean "mailing_lists", default: false, null: false
     t.string "permission", default: "layer_read", null: false
     t.boolean "register_people", default: false, null: false
+    t.boolean "qualifications", default: false, null: false
   end
 
   create_table "sessions", id: :serial, force: :cascade do |t|

@@ -59,6 +59,8 @@ class PersonResource < ApplicationResource
   end
 
   has_many :roles, writable: false
+  has_many :qualifications, writable: false
+
   polymorphic_has_many :phone_numbers, as: :contactable
   polymorphic_has_many :social_accounts, as: :contactable
   polymorphic_has_many :additional_emails, as: :contactable

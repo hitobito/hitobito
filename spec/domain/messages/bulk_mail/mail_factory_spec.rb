@@ -43,6 +43,24 @@ describe Messages::BulkMail::MailFactory do
     # rubocop:enable Layout/LineLength
   end
 
+  it "sets To header to 'Undisclosed recipients:;' when empty" do
+    raw_mail = bulk_mail_message.raw_source.gsub(/^To:.*\n/, "")
+    bulk_mail_message.raw_source = raw_mail
+
+    expect(mail.encoded).to include("To: Undisclosed recipients:;")
+  end
+
+  it "does not modify To header when already present" do
+    expect(mail.encoded).to include("To: leaders@localhost")
+  end
+
+  it "sets To header when mail was sent via BCC" do
+    raw_mail = bulk_mail_message.raw_source.gsub(/^To:.*\n/, "Bcc: leaders@localhost\n")
+    bulk_mail_message.raw_source = raw_mail
+
+    expect(mail.encoded).to include("To: Undisclosed recipients:;")
+  end
+
   private
 
   def mail

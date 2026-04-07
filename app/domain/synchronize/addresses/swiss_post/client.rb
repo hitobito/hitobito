@@ -25,11 +25,12 @@ module Synchronize::Addresses::SwissPost
       make_request("/createfile", read_path: "CreateFileResult.FileToken")
     end
 
-    def run_batch(input_file_token, output_file_token)
+    def run_batch(input_file_token, output_file_token, stats_tokens = {})
+      payload = build_run_batch_payload(input_file_token, output_file_token, stats_tokens)
       make_request(
         "/runbatch",
         method: :post,
-        payload: build_run_batch_payload(input_file_token, output_file_token),
+        payload: payload,
         content_type: "application/json",
         read_path: "RunBatchResult.BatchToken"
       )
@@ -42,7 +43,13 @@ module Synchronize::Addresses::SwissPost
 
     def download_file(output_token)
       make_request("/downloadfile/#{output_token}",
-        read_path: nil).body.force_encoding(Config::ENCODING).encode("UTF-8")
+        read_path: nil).body.force_encoding(Config.encoding).encode("UTF-8")
+    end
+
+    def create_stats_files
+      Config::STATS_FILES.keys.map do |key|
+        [key, create_file]
+      end.to_h.symbolize_keys
     end
 
     private
@@ -55,21 +62,17 @@ module Synchronize::Addresses::SwissPost
       read_path ? JSON.parse(response.body).dig(*read_path.split(".")) : response
     end
 
-    def build_run_batch_payload(input_file_token, output_file_token)
-      {
-        key: config.batch_key,
-        replaceItems: [
-          {
-            Search: "{###INPUTFILE###}",
-            Replacement: input_file_token
-          },
+    def build_run_batch_payload(input_file_token, output_file_token, stats_tokens = {})
+      items = [
+        {Search: "{###INPUTFILE###}", Replacement: input_file_token},
+        {Search: "{###OUTPUTFILE###}", Replacement: output_file_token}
+      ]
 
-          {
-            Search: "{###OUTPUTFILE###}",
-            Replacement: output_file_token
-          }
-        ]
-      }.to_json
+      items += stats_tokens.map do |key, token|
+        {Search: Config::STATS_FILES[key], Replacement: token}
+      end
+
+      {key: config.batch_key, replaceItems: items}.to_json
     end
 
     def endpoint(path) = [Config.host, Config.path, path].join

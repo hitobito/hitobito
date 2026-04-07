@@ -74,18 +74,60 @@ describe AddressSynchronizationJob do
       job.perform
     end
 
-    it "uploads TSV file with both people" do
-      stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
-        data = parse_upload(req)
-        expect(data.headers).to eq ["KDNR (QSTAT)", "Firma", "Vorname", "Nachname", "c/o", "Strasse", "Hausnummer",
-          "Postfach", "PLZ", "Ort"]
-        expect(data.entries.size).to eq 2
-        expect(data.entries.first.to_h.values).to eq ["382461928", nil, "Bottom", "Member", nil, "Greatstreet", "345",
-          nil, "3456", "Greattown"]
-        expect(data.entries.second.to_h.values).to eq ["572407901", nil, "Top", "Leader", nil, "Greatstreet", "345",
-          nil, "3456", "Greattown"]
+    describe "uploading TSV" do
+      it "uploads standard fields" do
+        stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
+          data = parse_upload(req)
+          expect(data.headers).to eq [
+            "CustomID_01_in", "Company_in", "Prename_in", "Prename2_in", "Name_in", "MaidenName_in",
+            "AddressAddition_in", "CoAddress_in", "StreetName_in", "HouseNo_in", "HouseNoAddition_in", "Floor_in",
+            "ZIPCode_in", "ZIPAddition_in", "TownName_in", "Canton_in", "CountryCode_in", "PoBoxTerm_in", "PoBoxNo_in",
+            "PoBoxZIP_in", "PoBoxZIPAddition_in", "PoBoxTownName_in", "PassThrough_01", "PassThrough_02",
+            "PassThrough_03", "PassThrough_04", "PassThrough_05", "PassThrough_06", "PassThrough_07", "PassThrough_08",
+            "PassThrough_09", "PassThrough_10"
+          ]
+
+          expect(data.entries.size).to eq 2
+          expect(data.entries.first.to_h.values).to eq [
+            nil, nil, "Bottom", nil, "Member", nil, nil, nil, "Greatstreet", "345", nil, nil, "3456", nil, "Greattown",
+            nil, "CH", nil, nil, nil, nil, nil, "382461928", nil, nil, nil, nil, nil, nil, nil, nil, nil
+          ]
+
+          expect(data.entries.second.to_h.values).to eq [
+            nil, nil, "Top", nil, "Leader", nil, nil, nil, "Greatstreet", "345", nil, nil, "3456", nil, "Greattown",
+            nil, nil, nil, nil, nil, nil, nil, "572407901", nil, nil, nil, nil, nil, nil, nil, nil, nil
+          ]
+        end
+        job.perform
       end
-      job.perform
+
+      it "fields might be customized on generator" do
+        allow(Synchronize::Addresses::SwissPost::Generator).to receive(:fields).and_return(
+          {
+            "KDNR (QSTAT)": :id,
+            Firma: :company,
+            Vorname: :first_name,
+            Nachname: :last_name,
+            "c/o": :address_care_of,
+            Strasse: :street,
+            Hausnummer: :housenumber,
+            Postfach: :postbox,
+            PLZ: :zip_code,
+            Ort: :town
+          }
+        )
+        stub_api_request(:post, "/uploadfile", response: {UploadFileResult: {FileToken: :in}}.to_json).with do |req|
+          data = parse_upload(req)
+          expect(data.headers).to eq ["KDNR (QSTAT)", "Firma", "Vorname", "Nachname", "c/o", "Strasse", "Hausnummer",
+            "Postfach", "PLZ", "Ort"]
+          expect(data.entries.size).to eq 2
+          expect(data.entries.first.to_h.values).to eq ["382461928", nil, "Bottom", "Member", nil, "Greatstreet", "345",
+            nil, "3456", "Greattown"]
+          expect(data.entries.second.to_h.values).to eq ["572407901", nil, "Top", "Leader", nil, "Greatstreet", "345",
+            nil, "3456", "Greattown"]
+        end
+        job.perform
+      end
     end
 
     it "only uploads person once" do

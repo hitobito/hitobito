@@ -7,7 +7,6 @@
 
 module Synchronize::Addresses::SwissPost
   class Config
-    ENCODING = "Windows-1252"
     COL_SEP = "\t"
     ROW_SEP = "\r\n"
     LOG_CATEGORY = "cleanup"
@@ -15,6 +14,18 @@ module Synchronize::Addresses::SwissPost
     FILE_PATH = Rails.root.join("config", "post-address-sync.yml")
     KEYS = %w[host path username password query_key batch_key
       person_constraints role_types excluded_tags].freeze
+
+    BATCH_WITH_STATS = "eirene_maintenance_v2_L"
+
+    STATS_FILES = {
+      stats_file_de: "{###STATISTICFILE_DE###}",
+      stats_file_fr: "{###STATISTICFILE_FR###}",
+      stats_file_it: "{###STATISTICFILE_IT###}",
+      stats_file_en: "{###STATISTICFILE_EN###}",
+      stats_file_xml: "{###STATISTICFILE_XML###}"
+    }
+
+    class_attribute :encoding, default: "UTF-8"
 
     class << self
       def exist?
@@ -26,6 +37,8 @@ module Synchronize::Addresses::SwissPost
           config[key]
         end
       end
+
+      def with_stats? = batch_key.downcase == BATCH_WITH_STATS.downcase
 
       private
 

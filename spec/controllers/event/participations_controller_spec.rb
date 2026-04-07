@@ -661,6 +661,28 @@ describe Event::ParticipationsController do
         expect(flash[:warning]).to be_nil
       end
 
+      it "preserves given answers on create when required answer is missing" do
+        course.questions.first.update!(disclosure: :required)
+        second_question = course.questions.second
+
+        post :create,
+          params: {
+            group_id: group.id,
+            event_id: course.id,
+            event_participation: {
+              answers_attributes: {
+                "0" => {question_id: course.questions.first.id, answer: ""},
+                "1" => {question_id: second_question.id, answer: "meine Antwort"}
+              }
+            }
+          }
+
+        expect(response).to render_template("new")
+        answers = assigns(:answers)
+        given_answer = answers.find { |a| a.question_id == second_question.id }
+        expect(given_answer.answer).to eq("meine Antwort")
+      end
+
       it "fails for invalid event role" do
         expect do
           post :create, params: {
@@ -807,6 +829,44 @@ describe Event::ParticipationsController do
           expect(flash[:warning]).to be_nil
         end
       end
+    end
+  end
+
+  context "PUT update" do
+    let(:event) { events(:top_event) }
+    let(:user) { people(:top_leader) }
+    let(:q1) { Fabricate(:event_question, event: event, disclosure: :required) }
+    let(:q2) { Fabricate(:event_question, event: event, disclosure: :optional) }
+    let!(:existing) do
+      p = Fabricate(:event_participation, event: event, participant: user)
+      p.answers.find_by(question_id: q1.id).update!(answer: "Ja")
+      p.answers.find_by(question_id: q2.id).update!(answer: "alte Antwort")
+      p
+    end
+
+    before { sign_in(user) }
+
+    it "preserves changed answers when required answer is cleared" do
+      a1 = existing.answers.find_by(question_id: q1.id)
+      a2 = existing.answers.find_by(question_id: q2.id)
+
+      put :update,
+        params: {
+          group_id: event.groups.first.id,
+          event_id: event.id,
+          id: existing.id,
+          event_participation: {
+            answers_attributes: {
+              "0" => {id: a1.id, question_id: q1.id, answer: ""},
+              "1" => {id: a2.id, question_id: q2.id, answer: "neue Antwort"}
+            }
+          }
+        }
+
+      expect(response).to render_template("edit")
+      answers = assigns(:answers)
+      changed_answer = answers.find { |a| a.question_id == q2.id }
+      expect(changed_answer.answer).to eq("neue Antwort")
     end
   end
 

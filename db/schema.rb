@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_09_053540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1253,6 +1253,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.boolean "mailing_lists", default: false, null: false
     t.string "permission", default: "layer_read", null: false
     t.boolean "register_people", default: false, null: false
+    t.boolean "qualifications", default: false, null: false
   end
 
   create_table "sessions", id: :serial, force: :cascade do |t|

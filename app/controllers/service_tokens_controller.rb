@@ -18,6 +18,7 @@ class ServiceTokensController < CrudController
     :events,
     :invoices,
     :event_participations,
+    :qualifications,
     :mailing_lists,
     :permission,
     cors_origins_attributes: [:id, :origin, :_destroy]

@@ -78,4 +78,17 @@ describe QualificationAbility do
       end
     end
   end
+
+  describe "index on class" do
+    let(:user) { Fabricate(:person) }
+
+    subject { Ability.new(user) }
+
+    it "is permitted without roles as used by json api and controlled via readables" do
+      is_expected.to be_able_to(:index, Qualification)
+      expect(Qualification.accessible_by(JsonApi::QualificationAbility.new(user))).to be_empty
+      qualification = Fabricate(:qualification, person: user)
+      expect(Qualification.accessible_by(JsonApi::QualificationAbility.new(user))).to eq [qualification]
+    end
+  end
 end

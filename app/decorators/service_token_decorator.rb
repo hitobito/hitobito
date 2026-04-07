@@ -7,7 +7,8 @@ class ServiceTokenDecorator < ApplicationDecorator
   decorates :service_token
 
   class_attribute :kinds
-  self.kinds = %i[people register_people groups events invoices event_participations mailing_lists]
+  self.kinds = %i[people register_people groups events invoices event_participations mailing_lists
+    qualifications]
 
   def abilities
     safe_join(kinds.map do |ability|

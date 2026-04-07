@@ -56,8 +56,10 @@ module Messages
         # Using #insert_field directly without the to header preexisting does not work as
         # StructuredField does not implement the method #<() which is used by #insert_field.
         # @mail.to = ""
-        undisclosed = Mail::StructuredField.new("To", "Undisclosed recipients:;")
-        @mail.header.fields.replace_field(undisclosed)
+        field = Mail::Field.new("To", "Undisclosed recipients:;")
+        undisclosed = Mail::OptionalField.new("To", "Undisclosed recipients:;")
+        field.instance_variable_set(:@field, undisclosed)
+        @mail.header.fields.replace_field(field)
       end
 
       def sender_via_mailinglist

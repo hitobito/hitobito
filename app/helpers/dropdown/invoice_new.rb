@@ -119,6 +119,7 @@ module Dropdown
 
     def finance_groups
       @finance_groups ||= Group.where(id: current_ability.user_finance_layer_ids)
+        .where.associated(:invoice_config)
         .includes(invoice_config: :logo_attachment)
     end
 

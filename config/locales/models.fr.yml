@@ -327,6 +327,14 @@ fr:
         one: date
         many: Dates
         other: Dates
+      event/question:
+        one: Anmeldeangabe
+        many: Anmeldeangaben
+        other: Anmeldeangaben
+      event/answer:
+        one: Antwort auf Anmeldeangabe
+        many: Antworten auf Anmeldeangaben
+        other: Antworten auf Anmeldeangaben
       family_member:
         one: Membre de la famille
         many: Membres de la famille
@@ -744,6 +752,7 @@ fr:
         motto: Thème
         cost: Coûts
         contact: 'Personne de contact '
+        creator_id: Ersteller
         notify_contact_on_participations: Informer par e-mail la personne de contact lors d'une connexion
         maximum_participants: Nombre maximal de participants
         minimum_participants: Nombre minimal de participants
@@ -918,6 +927,7 @@ fr:
         answers: Questions
         created_at: Date d'inscription
         roles: Rôle
+        active: Aktiv
 
       event/question:
         question: Question
@@ -950,7 +960,7 @@ fr:
         type: Rôle
         participation: Personne
         remove_participant_role: Supprimer le rôle éventuel de participant.
-
+        string_long: "%{role} von %{participation}"
 
       family_member:
         kind: Lien de parenté

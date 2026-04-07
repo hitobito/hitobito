@@ -63,6 +63,11 @@ describe Dropdown::InvoiceNew do
       expect(item.disabled_msg).to eq nil
     end
 
+    it "does not add groups without invoice_config" do
+      groups(:top_layer).invoice_config.destroy!
+      expect(dropdown.items).to have(0).item
+    end
+
     it "adds disabled item for finance_group with invalid invoice_config" do
       InvoiceConfig.update_all(payment_slip: "qr", payee_name: nil)
       expected_path = new_invoice_path

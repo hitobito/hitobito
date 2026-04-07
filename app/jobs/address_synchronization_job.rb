@@ -35,11 +35,13 @@ class AddressSynchronizationJob < CursorBasedPagingJob
     super
   end
 
-  def process_next_batch
+  def process_next_batch # rubocop:disable Metrics/AbcSize
     super do
       result_token = client.create_file
       upload_token = client.upload_file(generate_data(batch))
-      batch_token = client.run_batch(upload_token, result_token)
+      stats_tokens = client.create_stats_files if config.with_stats?
+
+      batch_token = client.run_batch(upload_token, result_token, stats_tokens.to_h)
 
       {
         batch_token:,

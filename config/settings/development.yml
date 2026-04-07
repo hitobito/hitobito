@@ -9,6 +9,9 @@ mailchimp:
 auth:
   skip_2fa: true
 
+address_sync:
+  enabled: true
+
 payment_providers:
   - name: postfinance-test
     url: https://isotest.postfinance.ch/ebicsweb/ebicsweb

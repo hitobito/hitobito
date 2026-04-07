@@ -20,7 +20,6 @@ module Synchronize::Addresses::SwissPost
       last_name: "Name",
       address_care_of: "CoAddress",
       street: "StreetName",
-      housenumber: "HouseNo",
       zip_code: "ZIPCode",
       town: "TownName"
     }
@@ -54,9 +53,10 @@ module Synchronize::Addresses::SwissPost
     attr_reader :data, :invalid_tag, :updated_people_ids
 
     def each_potential_update
-      people = Person.where(id: data.pluck("KDNR")).index_by(&:id)
+      remote_identifier = Generator.fields.invert[:id].to_s
+      people = Person.where(id: data.pluck(remote_identifier)).index_by(&:id)
       data.each do |row|
-        person = people[row["KDNR"].to_i]
+        person = people[row[remote_identifier].to_i]
         yield person, row["QSTAT"], row if person
       end
     end
@@ -66,6 +66,7 @@ module Synchronize::Addresses::SwissPost
         [target, row[source]]
       end.to_h
       person.attributes = attrs
+      person.housenumber = read_housenumber(row)
       person.postbox = row["POBoxTerm"].present? ? read_postbox(row) : nil
 
       if person.save
@@ -73,6 +74,10 @@ module Synchronize::Addresses::SwissPost
       else
         create_tag_and_log_error(person)
       end
+    end
+
+    def read_housenumber(row)
+      [row["HouseNo"], row["HouseNoAddition"]].compact_blank.join
     end
 
     def read_postbox(row)

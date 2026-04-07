@@ -7,18 +7,42 @@
 
 module Synchronize::Addresses::SwissPost
   class Generator
-    FIELDS = {
-      id: "KDNR (QSTAT)",
-      company: "Firma",
-      first_name: "Vorname",
-      last_name: "Nachname",
-      address_care_of: "c/o",
-      street: "Strasse",
-      housenumber: "Hausnummer",
-      postbox: "Postfach",
-      zip_code: "PLZ",
-      town: "Ort"
+    class_attribute :fields, default: {
+      CustomID_01_in: nil,
+      Company_in: :company,
+      Prename_in: :first_name,
+      Prename2_in: nil,
+      Name_in: :last_name,
+      MaidenName_in: nil,
+      AddressAddition_in: nil,
+      CoAddress_in: :address_care_of,
+      StreetName_in: :street,
+      HouseNo_in: :housenumber,
+      HouseNoAddition_in: :housenumber_addition,
+      Floor_in: nil,
+      ZIPCode_in: :zip_code,
+      ZIPAddition_in: nil,
+      TownName_in: :town,
+      Canton_in: nil,
+      CountryCode_in: :country,
+      PoBoxTerm_in: nil,
+      PoBoxNo_in: nil,
+      PoBoxZIP_in: nil,
+      PoBoxZIPAddition_in: nil,
+      PoBoxTownName_in: nil,
+      PassThrough_01: :id,
+      PassThrough_02: nil,
+      PassThrough_03: nil,
+      PassThrough_04: nil,
+      PassThrough_05: nil,
+      PassThrough_06: nil,
+      PassThrough_07: nil,
+      PassThrough_08: nil,
+      PassThrough_09: nil,
+      PassThrough_10: nil
     }
+
+    HOUSENUMBER_REGEX = /(\d+)\s?([a-zA-Z]+)?/
 
     def initialize(scope, invalid_tag)
       @scope = scope
@@ -26,7 +50,7 @@ module Synchronize::Addresses::SwissPost
     end
 
     def generate
-      data.encode(Config::ENCODING)
+      data.encode(Config.encoding)
     end
 
     private
@@ -35,7 +59,7 @@ module Synchronize::Addresses::SwissPost
 
     def data
       CSV.generate(col_sep: Config::COL_SEP, row_sep: Config::ROW_SEP) do |csv|
-        csv << FIELDS.values
+        csv << fields.keys
 
         scope.find_each do |person|
           values = values_from(person)
@@ -44,17 +68,22 @@ module Synchronize::Addresses::SwissPost
       end
     end
 
-    def values_from(person)
-      values = FIELDS.keys.map do |key|
-        respond_to?(key, true) ? send(key, person) : person.send(key)
+    def values_from(person) # rubocop:disable Metrics/CyclomaticComplexity
+      values = fields.values.map do |field|
+        next field if field.nil?
+        respond_to?(field, true) ? send(field, person) : person.send(field)
       end
 
-      values if values.all? { |v| v.to_s.encode(Config::ENCODING) }
+      values if values.all? { |v| v.to_s.encode(Config.encoding) }
     rescue Encoding::UndefinedConversionError
+      handle_conversion_error(person)
+      false
+    end
+
+    def handle_conversion_error(person)
       message = "Die Personendaten zu #{person}(#{person.id}) konnten nicht übertragen werden"
       create_log_entry(person, message)
       create_tag(person.taggings, message, invalid_tag)
-      false
     end
 
     def create_tag(taggings, message, tag)
@@ -70,6 +99,14 @@ module Synchronize::Addresses::SwissPost
         level: :warn,
         message:
       )
+    end
+
+    def housenumber(person)
+      person.housenumber.to_s[HOUSENUMBER_REGEX, 1]
+    end
+
+    def housenumber_addition(person)
+      person.housenumber.to_s[HOUSENUMBER_REGEX, 2]
     end
 
     def company(person)

@@ -47,6 +47,17 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
         .and change { top_leader.zip_code }.to("1234")
     end
 
+    it "combines two fields for housenumber with suffix" do
+      expect do
+        process_with do |data|
+          data.entries.last["HouseNo"] = "321"
+          data.entries.last["HouseNoAddition"] = "c"
+          data.entries.last["ZIPCode"] = "1234"
+        end
+      end.to change { top_leader.reload.housenumber }.from("345").to("321c")
+        .and change { top_leader.zip_code }.to("1234")
+    end
+
     it "uses liberal parsing allowing quotes in values" do
       expect do
         process_with do |data|

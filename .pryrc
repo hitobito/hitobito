@@ -26,13 +26,13 @@ def list_callbacks(klass, skip_procs: true, skip_validations: true)
 end
 # rubocop:enable Metrics/CyclomaticComplexity
 
-def gr(resource, scope: nil, params: {}, ability: nil, as: Role.first.person)
+def gr(resource, model_scope: nil, params: {}, ability: nil, as: Role.first.person, scope: %w[api])
   raise "#{resource} is not a resource class" unless resource <= ApplicationResource
 
-  context = OpenStruct.new(current_ability: ability || Ability.new(as))
+  context = OpenStruct.new(current_ability: ability || Ability.new(as), current_scopes: scope)
   Graphiti.with_context(context, params: params) do
     action_controller_params = ActionController::Parameters.new(params)
-    resources = resource.all(action_controller_params, scope || resource.new.base_scope)
+    resources = resource.all(action_controller_params, model_scope || resource.new.base_scope)
     JSON.parse(resources.to_jsonapi).deep_symbolize_keys
   end
 end

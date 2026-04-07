@@ -5,6 +5,7 @@
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
 - Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
 - API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito/hitobito_sac_cas#2314)
+- Qualifkationen wurden in das JSON:API integriert (hitobito_bdp#12)
 
 ## Version 2.8
 

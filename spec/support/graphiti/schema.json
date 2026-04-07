@@ -3160,6 +3160,11 @@
           "description": null,
           "resource": "RoleResource"
         },
+        "qualifications": {
+          "type": "has_many",
+          "description": null,
+          "resource": "QualificationResource"
+        },
         "phone_numbers": {
           "type": "has_many",
           "description": null,
@@ -3316,6 +3321,179 @@
         }
       },
       "relationships": {},
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "QualificationKindResource",
+      "type": "qualification_kinds",
+      "graphql_entrypoint": "qualificationKinds",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "validity": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "reactivateable": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "required_training_days": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {},
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "QualificationResource",
+      "type": "qualifications",
+      "graphql_entrypoint": "qualifications",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "person_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "qualification_kind_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "start_at": {
+          "type": "date",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "finish_at": {
+          "type": "date",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "qualified_at": {
+          "type": "date",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "origin": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "person_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "qualification_kind_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "person": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "qualification_kind": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "QualificationKindResource"
+        }
+      },
       "stats": {
         "total": [
           "count"
@@ -3861,6 +4039,22 @@
         },
         "update": {
           "resource": "PersonResource"
+        }
+      }
+    },
+    "/api/qualifications": {
+      "actions": {
+        "index": {
+          "resource": "QualificationResource"
+        },
+        "show": {
+          "resource": "QualificationResource"
+        },
+        "create": {
+          "resource": "QualificationResource"
+        },
+        "destroy": {
+          "resource": "QualificationResource"
         }
       }
     },

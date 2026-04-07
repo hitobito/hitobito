@@ -282,13 +282,31 @@ describe PersonResource, type: :resource do
     end
 
     describe "roles" do
+      let!(:role1) { Fabricate(Group::BottomLayer::Member.name, person: person, group: bottom_layer_one) }
+      let!(:role2) { Fabricate(Group::BottomLayer::Member.name, person: person, group: bottom_layer_one) }
+
       before { params[:include] = "roles" }
 
       it "it works" do
         render
         roles = d[0].sideload(:roles)
-        expect(roles).to have(1).items
-        expect(roles.first.id).to eq role.id
+        # person already has one role from let!(:role) in the parent context
+        expect(roles).to have(3).items
+        expect(roles.map(&:id)).to include(role1.id, role2.id, role.id)
+      end
+    end
+
+    describe "qualifications" do
+      let!(:qualification1) { Fabricate(:qualification, person: person) }
+      let!(:qualification2) { Fabricate(:qualification, person: person) }
+
+      before { params[:include] = "qualifications" }
+
+      it "it works" do
+        render
+        qualifications = d[0].sideload(:qualifications)
+        expect(qualifications).to have(2).items
+        expect(qualifications.map(&:id)).to match_array [qualification1.id, qualification2.id]
       end
     end
 

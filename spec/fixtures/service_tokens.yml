@@ -40,6 +40,7 @@ permitted_top_layer_token:
   event_participations: true
   mailing_lists: true
   register_people: false
+  qualifications: true
 
 permitted_bottom_layer_token:
   layer: bottom_layer_one

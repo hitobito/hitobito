@@ -46,14 +46,14 @@ class ApplicationResource < Graphiti::Resource
 
   # Limits accessible resources, specify readable_class or override
   def base_scope
-    fail "No readable_class defined for #{name}" unless readable_class
+    fail "No readable_class defined for #{self.class.name}" unless readable_class
 
     return super.none unless scope_accepted?
     super.accessible_by(readable_class.new(current_ability.user)).unscope(:select)
   end
 
   def scope_accepted?
-    ((%w[api] + acceptable_scopes) & current_scopes).any?
+    ((%w[api] + acceptable_scopes) & current_scopes.to_a).any?
   end
 
   def authorize_create(model)

@@ -469,6 +469,7 @@ Hitobito::Application.routes.draw do
     resources :invoices, only: [:index, :show, :update]
     resources :roles, except: [:edit, :new]
     resources :mailing_lists, only: [:index, :show]
+    resources :qualifications, only: [:index, :show, :create, :destroy]
   end
 
   # The priority is based upon order of creation:

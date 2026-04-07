@@ -19,7 +19,7 @@ describe EventsController do
       let(:date) do
         {label: "foo", start_at_date: Time.zone.today, finish_at_date: Time.zone.today}
       end
-      let(:question) { {question: "foo?", choices: "1,2,3,4", disclosure: :optional} }
+      let(:question) { {question: "foo?", choices: "1,2,3,4", required: false} }
 
       it "creates new event course with dates" do
         sign_in(people(:top_leader))
@@ -255,6 +255,7 @@ describe EventsController do
       it "duplicates other course" do
         sign_in(people(:top_leader))
         source = events(:top_course)
+        source.init_questions
 
         get :new, params: {group_id: source.groups.first.id, source_id: source.id}
 
@@ -287,7 +288,7 @@ describe EventsController do
       let(:date) do
         {label: "foo", start_at_date: Time.zone.today, finish_at_date: Time.zone.today}
       end
-      let(:question) { {question: "foo?", choices: "1,2,3,4", disclosure: :optional} }
+      let(:question) { {question: "foo?", choices: "1,2,3,4", required: false} }
 
       it "creates new event course with dates" do
         sign_in(people(:top_leader))
@@ -335,10 +336,10 @@ describe EventsController do
         let(:ga) { event_questions(:ga) }
         let(:global_question_attributes) {
           {
-            derived_from_question_id: ga.id,
+            event_question_template_id: event_question_templates(:ga_template).id,
             question: ga.question,
             choices: ga.choices,
-            disclosure: ga.disclosure
+            required: ga.required
           }
         }
         let(:event) { assigns(:event) }
@@ -454,9 +455,9 @@ describe EventsController do
       end
 
       it "creates, updates and destroys questions" do
-        q1 = event.questions.create!(question: "Who?", disclosure: :optional)
-        q2 = event.questions.create!(question: "What?", disclosure: :optional)
-        q3 = event.questions.create!(question: "Payed?", disclosure: :optional, admin: true)
+        q1 = event.questions.create!(question: "Who?", required: false)
+        q2 = event.questions.create!(question: "What?", required: false)
+        q3 = event.questions.create!(question: "Payed?", required: false, admin: true)
 
         expect do
           put :update, params: {
@@ -468,9 +469,9 @@ describe EventsController do
                 name: "1"
               },
               application_questions_attributes: {
-                q1.id.to_s => {id: q1.id, question: "Whoo?", disclosure: :optional, choices_attributes: {}},
+                q1.id.to_s => {id: q1.id, question: "Whoo?", required: false, choices_attributes: {}},
                 q2.id.to_s => {id: q2.id, _destroy: true, choices_attributes: {}},
-                "999" => {question: "How much?", disclosure: :optional, choices_attributes: {
+                "999" => {question: "How much?", required: false, choices_attributes: {
                   "1" => {choice: "1", choice_en: "", choice_fr: "", choice_it: ""},
                   "2" => {choice: "2", choice_en: "", choice_fr: "", choice_it: ""},
                   "3" => {choice: "3", choice_en: "", choice_fr: "", choice_it: ""}
@@ -478,7 +479,7 @@ describe EventsController do
               },
               admin_questions_attributes: {
                 q3.id.to_s => {id: q3.id, _destroy: true, choices_attributes: {}},
-                "999" => {question: "Powned?", disclosure: :optional, choices_attributes: {
+                "999" => {question: "Powned?", required: false, choices_attributes: {
                   "1" => {choice: "ja", choice_en: "", choice_fr: "", choice_it: ""},
                   "2" => {choice: "nein", choice_en: "", choice_fr: "", choice_it: ""}
                 }}
@@ -503,8 +504,8 @@ describe EventsController do
       end
 
       it "question choices stay deleted when form is invalid after deleting all choices" do
-        q1 = event.questions.create!(question: "Who?", disclosure: :optional, choices: "all,some")
-        q2 = event.questions.create!(question: "Payed?", disclosure: :optional, admin: true, choices: "yes,no")
+        q1 = event.questions.create!(question: "Who?", required: false, choices: "all,some")
+        q2 = event.questions.create!(question: "Payed?", required: false, admin: true, choices: "yes,no")
 
         put :update, params: {
           group_id: group.id,
@@ -512,13 +513,13 @@ describe EventsController do
           event: {
             name: "",
             application_questions_attributes: {
-              q1.id.to_s => {id: q1.id, question: "Who?", disclosure: :optional, choices_attributes: {
+              q1.id.to_s => {id: q1.id, question: "Who?", required: false, choices_attributes: {
                 "1" => {choice: "all", choice_en: "", choice_fr: "", choice_it: "", _destroy: true},
                 "2" => {choice: "some", choice_en: "", choice_fr: "", choice_it: "", _destroy: true}
               }}
             },
             admin_questions_attributes: {
-              q2.id.to_s => {id: q2.id, question: "Payed?", disclosure: :optional, choices_attributes: {
+              q2.id.to_s => {id: q2.id, question: "Payed?", required: false, choices_attributes: {
                 "1" => {choice: "yes", choice_en: "", choice_fr: "", choice_it: "", _destroy: true},
                 "2" => {choice: "no", choice_en: "", choice_fr: "", choice_it: "", _destroy: true}
               }}
@@ -537,10 +538,10 @@ describe EventsController do
           event: {
             name: "",
             application_questions_attributes: {
-              q1.id.to_s => {id: q1.id, question: "Who?", disclosure: :optional}
+              q1.id.to_s => {id: q1.id, question: "Who?", required: false}
             },
             admin_questions_attributes: {
-              q2.id.to_s => {id: q2.id, question: "Payed?", disclosure: :optional}
+              q2.id.to_s => {id: q2.id, question: "Payed?", required: false}
             }
           }
         }

@@ -643,7 +643,7 @@ describe Event::ParticipationsController do
 
       it "fails if required answers are missing" do
         expect_any_instance_of(described_class).not_to receive(:set_success_notice)
-        course.questions.first.update!(disclosure: :required)
+        course.questions.first.update!(required: true)
 
         post :create,
           params: {
@@ -928,7 +928,7 @@ describe Event::ParticipationsController do
     end
 
     def make_request(person, answer, other_person_id = nil)
-      question = course.questions.create!(question: "dummy", disclosure: :required)
+      question = course.questions.create!(question: "dummy", required: true)
       sign_in(person)
 
       attrs = {answers_attributes: {
@@ -982,7 +982,7 @@ describe Event::ParticipationsController do
       event.questions.create!(
         question: "Terms and Conditions? Do you speak it?",
         choices: "yep",
-        disclosure: :required
+        required: true
       )
     end
 

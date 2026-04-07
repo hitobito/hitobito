@@ -4,7 +4,7 @@
 -# https://github.com/hitobito/hitobito.
 
 = f.hidden_field(:type)
-= f.hidden_field(:derived_from_question_id)
+= f.hidden_field(:event_question_template_id)
 
 - # lookup if a partial for the question type and render it if it exists.
 - # `lookup_context.find_all` needs the partial including the leading underscore,
@@ -13,9 +13,7 @@
 - if lookup_context.find_all(File.join(partial_path, '_fields')).any?
   = render partial: File.join(partial_path, 'fields'), locals: { f: f }
 
-= f.labeled(:disclosure) do
-  - Event::Question::DISCLOSURE_VALUES.each do |key|
-    = f.inline_radio_button(:disclosure, key, f.object.disclosure_label(key))
+= f.labeled_input_field(:required, caption: t('event.questions.required_caption'))
 
 - if Settings.event.participations.manual_sensitive_option
   - delete_answers_after_months = Settings.event.participations.delete_answers_after_months

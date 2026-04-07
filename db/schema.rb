@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_17_085059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -362,6 +362,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.index ["event_id"], name: "index_event_participations_filters_on_event_id"
   end
 
+  create_table "event_question_templates", force: :cascade do |t|
+    t.bigint "group_id", null: false
+    t.bigint "question_id", null: false
+    t.string "event_type"
+    t.boolean "default", default: false, null: false
+    t.boolean "inherit", default: false, null: false
+    t.index ["group_id"], name: "index_event_question_templates_on_group_id"
+    t.index ["question_id"], name: "index_event_question_templates_on_question_id"
+  end
+
   create_table "event_question_translations", force: :cascade do |t|
     t.integer "event_question_id", null: false
     t.string "locale", null: false
@@ -377,13 +387,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.integer "event_id"
     t.boolean "multiple_choices", default: false, null: false
     t.boolean "admin", default: false, null: false
-    t.string "disclosure"
     t.string "type", null: false
-    t.integer "derived_from_question_id"
-    t.string "event_type"
     t.boolean "sensitive", default: true, null: false
-    t.index ["derived_from_question_id"], name: "index_event_questions_on_derived_from_question_id"
+    t.boolean "required", default: false, null: false
+    t.bigint "event_question_template_id"
     t.index ["event_id"], name: "index_event_questions_on_event_id"
+    t.index ["event_question_template_id"], name: "index_event_questions_on_event_question_template_id"
   end
 
   create_table "event_role_type_orders", force: :cascade do |t|

@@ -7,6 +7,8 @@
 
 module Sheet
   class Calendar < Base
-    self.parent_sheet = Sheet::Group
+    def parent_sheet
+      create_parent(Sheet::Group)
+    end
   end
 end

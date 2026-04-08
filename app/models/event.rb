@@ -449,20 +449,16 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     places_available? || waiting_list_available?
   end
 
-  def init_questions(disclosure: nil) # rubocop:todo Metrics/AbcSize
-    application_questions << Question.global
-      .where(event_type: [self.class.sti_name, nil])
-      .where.not(id: application_questions.map(&:derived_from_question_id))
-      .application
-      .list
-      .map { |question| question.derive(disclosure: disclosure) }
+  def init_questions
+    application_questions << Event::QuestionTemplate
+      .joins(:question)
+      .where(default: true, event_type: [self.class.sti_name, nil], question: {admin: false})
+      .map { _1.derive_question }
 
-    admin_questions << Question.global
-      .where(event_type: [self.class.sti_name, nil])
-      .where.not(id: admin_questions.map(&:derived_from_question_id))
-      .admin
-      .list
-      .map { |question| question.derive(disclosure: disclosure) }
+    admin_questions << Event::QuestionTemplate
+      .joins(:question)
+      .where(default: true, event_type: [self.class.sti_name, nil], question: {admin: true})
+      .map { _1.derive_question }
   end
 
   def course?

@@ -7,24 +7,24 @@
 
 require "spec_helper"
 
-describe Person::TopController do
+describe Event::TopController do
   let(:top_leader) { people(:top_leader) }
+  let(:event) { events(:top_course) }
 
   before { sign_in(top_leader) }
 
   context "GET show" do
     context "html" do
-      it "keeps flash, does not add .html to url" do
-        get :show, params: {id: top_leader.id}
-        is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id, format: nil))
+      it "redirects to group event path" do
+        get :show, params: {id: event.id}
+        is_expected.to redirect_to(group_event_path(event.groups.first, event, format: :html))
       end
     end
 
     context "json with token" do
       it "forwards token param in redirect" do
-        get :show, params: {id: top_leader.id, token: "secret", format: :json}
-        is_expected.to redirect_to(group_person_path(top_leader.primary_group_id, top_leader.id,
-          format: :json, token: "secret"))
+        get :show, params: {id: event.id, token: "secret", format: :json}
+        is_expected.to redirect_to(group_event_path(event.groups.first, event, format: :json, token: "secret"))
       end
     end
   end

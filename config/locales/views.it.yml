@@ -12,6 +12,7 @@ it:
     unknown: Sconosciuto
     nobody: nessuno
     all: Tutti
+    empty: Leer
 
     from: Dal
     until: Al
@@ -74,6 +75,7 @@ it:
     tabs:
       info: Informazioni
       settings: Admin
+      log: Log
 
     search:
       placeholder: "Cercare..."
@@ -949,7 +951,6 @@ it:
     tabs:
       deleted: "Cancellato"
       statistics: "Statistica"
-      logs: Log
     export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     statistics:
       title: Statistica
@@ -1621,6 +1622,7 @@ it:
         reload: Controlla di nuovo
       action: Merge
       success: Le registrazioni delle persone sono state unite con successo.
+      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültiger Daten zusammengeführt.
     ignore:
       new:
         title: Ignorare realmente il duplicato?
@@ -1856,7 +1858,6 @@ it:
 
     tabs:
       history: Azioni
-      log: Log
       security_tools: Sicurezza
       colleagues: Collaboratore
       invoices: Fatture
@@ -2346,6 +2347,7 @@ it:
       create: "%{model} <i>%{label}</i> è stato aggiunto."
       update: "%{model} <i>%{label}</i> è stato aggiornato: %{changeset}"
       destroy: "%{model} <i>%{label}</i> è stato cancellato."
+      removed: "%{model} <i>%{label}</i> wurde entfernt."
 
       person/add_request:
         create: "La richiesta d'accesso per <i>%{label}</i> è stata inviata."

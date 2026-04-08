@@ -47,7 +47,8 @@ describe Pass do
       other = Pass.new(
         person: people(:top_leader),
         pass_definition: other_def,
-        state: :eligible
+        state: :eligible,
+        valid_from: Time.zone.today
       )
       expect(other).to be_valid
     end

@@ -10,14 +10,7 @@ require "spec_helper"
 describe Wallets::PassInstallation do
   let(:pass) { Fabricate.build(:pass, person: people(:top_leader)) }
 
-  subject(:installation) do
-    Wallets::PassInstallation.new(
-      pass: pass,
-      wallet_type: :google,
-      state: :active,
-      locale: "de"
-    )
-  end
+  subject(:installation) { Fabricate.build(:wallets_pass_installation, pass:) }
 
   it "is valid with default attributes" do
     expect(installation).to be_valid
@@ -32,66 +25,41 @@ describe Wallets::PassInstallation do
 
     it "validates only one installation per pass and wallet_type" do
       installation.save!
-      duplicate = Wallets::PassInstallation.new(
-        pass: pass,
-        wallet_type: :google,
-        locale: "de"
-      )
+      duplicate = Fabricate.build(:wallets_pass_installation, pass:)
       expect(duplicate).not_to be_valid
       expect(duplicate.errors[:pass_id]).to be_present
     end
 
     it "allows same pass with different wallet_type" do
       installation.save!
-      other = Wallets::PassInstallation.new(
-        pass: pass,
-        wallet_type: :apple,
-        locale: "de"
-      )
+      other = Fabricate.build(:wallets_pass_installation, pass:, wallet_type: :apple)
       expect(other).to be_valid
     end
   end
 
   context "authentication token" do
-    it "generates authentication_token for apple installations before validation" do
-      apple = Wallets::PassInstallation.new(
-        pass: pass,
-        wallet_type: :apple,
-        locale: "de"
-      )
-      apple.valid?
-      expect(apple.authentication_token).to be_present
-      expect(apple.authentication_token.length).to eq(64)
-    end
-
-    it "is invalid without authentication_token for apple installations" do
-      apple = Wallets::PassInstallation.new(
-        pass: pass,
-        wallet_type: :apple,
-        locale: "de",
-        authentication_token: nil
-      )
-      # bypass before_validation to test the validation directly
-      allow(apple).to receive(:generate_authentication_token)
-      expect(apple).not_to be_valid
-      expect(apple.errors[:authentication_token]).to be_present
-    end
-
-    it "does not generate authentication_token for google installations" do
-      google = Wallets::PassInstallation.new(
-        pass: pass,
-        wallet_type: :google,
-        locale: "de"
-      )
-      google.valid?
-      expect(google.authentication_token).to be_nil
+    it "generates authentication_token automatically" do
+      new_installation = Fabricate.build(:wallets_pass_installation, pass:)
+      new_installation.valid?
+      expect(new_installation.authentication_token).to be_present
+      expect(new_installation.authentication_token.length).to eq(32)
     end
 
     it "does not overwrite existing authentication_token" do
-      installation.wallet_type = :apple
       installation.authentication_token = "custom-token"
       installation.save!
       expect(installation.authentication_token).to eq("custom-token")
+    end
+
+    it "enforces uniqueness of authentication_token" do
+      installation.save!
+
+      duplicate = Fabricate.build(:wallets_pass_installation,
+        pass: Fabricate.build(:pass, person: people(:bottom_member)),
+        authentication_token: installation.authentication_token)
+
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:authentication_token]).to be_present
     end
   end
 

@@ -21,4 +21,9 @@ module ViewHelpers
       end
     end
   end
+
+  def pretty_print_html(html)
+    doc = Nokogiri::XML(html.to_s, &:noblanks)
+    puts doc
+  end
 end

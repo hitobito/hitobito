@@ -7,11 +7,10 @@
 
 module Dropdown
   class InvoiceSending < Base
-    attr_reader :params, :path, :invoice_run_id
+    attr_reader :path, :invoice_run_id
 
-    def initialize(template, params)
+    def initialize(template)
       super(template, translate(:button), :envelope)
-      @params = params
       @invoice_run_id = template.invoice_run&.id
       init_items
     end

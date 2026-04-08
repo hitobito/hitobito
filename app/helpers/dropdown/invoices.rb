@@ -5,12 +5,10 @@
 
 module Dropdown
   class Invoices < Base
-    attr_reader :params, :user
+    delegate :params, to: :template
 
-    def initialize(template, params, type)
+    def initialize(template, type)
       super(template, translate(type), type)
-      @params = params
-      @user = template.current_user
     end
 
     def print
@@ -20,9 +18,12 @@ module Dropdown
 
     def export
       label_links
-      csv_links
+      add_export_links(:csv)
+      add_export_links(:xlsx)
       self
     end
+
+    def user = template.current_user
 
     private
 
@@ -37,6 +38,18 @@ module Dropdown
       if LabelFormat.exists?
         Dropdown::LabelItems.new(self, item_options.merge(household: false)).add
       end
+    end
+
+    def add_export_links(format)
+      item = add_item(translate(format), "#")
+      item.sub_items << Item.new(
+        Invoice.model_name.human(count: 2),
+        export_path(format)
+      )
+      item.sub_items << Item.new(
+        translate(:payments_without_invoice_csv),
+        payment_export_path(format, {state: :without_invoice})
+      )
     end
 
     def csv_links

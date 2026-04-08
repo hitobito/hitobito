@@ -12,7 +12,6 @@ en:
     unknown: unknown
     nobody: nobody
     all: all
-    empty: Leer
 
     from: from
     until: to
@@ -74,7 +73,6 @@ en:
     tabs:
       info: Info
       settings: Settings
-      log: Log
 
     search:
       placeholder: "Search..."
@@ -941,6 +939,7 @@ en:
     tabs:
       deleted: "Deleted"
       statistics: "Statistics"
+      logs: Log
     export_enqueued: "Export is started in the background and downloaded after completion."
     statistics:
       title: Statistics
@@ -1584,7 +1583,6 @@ en:
         reload: Erneut prüfen
       action: Merge
       success: Merge successful
-      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültiger Daten zusammengeführt.
     ignore:
       new:
         title: Ignore duplicate?
@@ -1807,6 +1805,7 @@ en:
 
     tabs:
       history: History
+      log: Log
       security_tools: Security
       colleagues: Colleagues
       invoices: Invoices
@@ -2292,7 +2291,6 @@ en:
       create: "%{model} <i>%{label}</i> has been added."
       update: "%{model} <i>%{label}</i> has been updated: %{changeset}"
       destroy: "%{model} <i>%{label}</i> has been deleted."
-      removed: "%{model} <i>%{label}</i> wurde entfernt."
 
       person/add_request:
         create: "Access for <i>%{label}</i> requested."

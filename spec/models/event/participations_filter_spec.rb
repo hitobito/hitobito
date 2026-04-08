@@ -23,6 +23,6 @@ describe Event::ParticipationsFilter do
   let(:participations_filter) { Event::ParticipationsFilter.new(event: event, participant_type: "all") }
 
   it "returns all active groups of certain group_type at certain date" do
-    expect(participations_filter.to_params.to_s).to eq "{:filters=>{:participant_type=>\"all\"}}"
+    expect(participations_filter.to_params).to eq({filters: {participant_type: "all"}})
   end
 end

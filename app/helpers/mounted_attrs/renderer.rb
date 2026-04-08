@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2023-2026, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 module MountedAttrs
   class Renderer
     def initialize(entry, template)
@@ -8,7 +15,7 @@ module MountedAttrs
     def render
       return if attrs_by_category.empty?
 
-      content = ""
+      content = +"" # keep this particular string mutable as we collect data in it.
       attrs_by_category.each do |c, configs|
         content << content_tag(:h2, category_label(c))
         content << render_attrs(entry, *configs.map(&:attr_name))

@@ -169,6 +169,7 @@ it:
       caption_used_for_invoices: Utilizzo per le fatture
 
     address_fields:
+      housenumber: No.
       updates_household_address: L'indirizzo viene attualizzato per l'intera economia domestica
 
   custom_content_decorator:

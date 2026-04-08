@@ -31,6 +31,8 @@ module Synchronize::Addresses::SwissPost
       liberal_parsing: true
     }
 
+    class_attribute :remote_identifier
+
     def initialize(text, invalid_tag)
       @data = parse(text)
       @invalid_tag = invalid_tag
@@ -53,7 +55,7 @@ module Synchronize::Addresses::SwissPost
     attr_reader :data, :invalid_tag, :updated_people_ids
 
     def each_potential_update
-      remote_identifier = Generator.fields.invert[:id].to_s
+      remote_identifier = self.class.remote_identifier || Generator.fields.invert[:id].to_s
       people = Person.where(id: data.pluck(remote_identifier)).index_by(&:id)
       data.each do |row|
         person = people[row[remote_identifier].to_i]

@@ -20,14 +20,17 @@ namespace :address do
 
       versions = PaperTrail::Version
         .where(whodunnit_type: "AddressSynchronizationJob")
+        .where.not(object_changes: nil)
         .includes(:item)
       CSV.open(file, "wb") do |csv|
         csv << %w[version_id log zip_was zip_new changeset changed_at]
         versions.find_each do |version|
           person = version.main
+          next unless person
+
           csv << [
             version.id,
-            log_group_person_url(person.primary_group, person, locale: :de, host:),
+            log_group_person_url(person.primary_group || Group.root, person, locale: :de, host:),
             version.changeset["zip_code"].to_a.first,
             version.changeset["zip_code"].to_a.last,
             version.changeset,

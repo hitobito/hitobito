@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_07_160043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -632,8 +632,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
     t.integer "invoice_id", null: false
     t.text "description"
     t.decimal "vat_rate", precision: 5, scale: 2
-    t.decimal "unit_cost", precision: 12, scale: 2, null: false
-    t.integer "count", default: 1, null: false
+    t.decimal "unit_cost", precision: 12, scale: 2
+    t.integer "count", default: 1
     t.string "cost_center"
     t.string "account"
     t.string "type", default: "InvoiceItem", null: false
@@ -645,12 +645,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_15_123000) do
   create_table "invoice_run_processed_subjects", force: :cascade do |t|
     t.string "subject_type", null: false
     t.bigint "subject_id", null: false
+    t.bigint "template_item_id", null: false
     t.bigint "item_id", null: false
-    t.bigint "invoice_id", null: false
-    t.index ["invoice_id"], name: "index_invoice_run_processed_subjects_on_invoice_id"
     t.index ["item_id"], name: "index_invoice_run_processed_subjects_on_item_id"
-    t.index ["subject_id", "subject_type", "item_id", "invoice_id"], name: "index_processed_subjects", unique: true
-    t.index ["subject_type", "subject_id"], name: "index_invoice_run_processed_subjects_on_subject"
+    t.index ["subject_type", "subject_id", "template_item_id", "item_id"], name: "index_processed_subjects"
+    t.index ["subject_type", "subject_id", "template_item_id"], name: "index_unique_processed_subjects", unique: true
+    t.index ["template_item_id"], name: "index_invoice_run_processed_subjects_on_template_item_id"
   end
 
   create_table "invoice_run_translations", force: :cascade do |t|

@@ -30,6 +30,14 @@ describe Invoice::RoleCountItem do
 
   subject(:item) { described_class.new(**attrs) }
 
+  def create_previous_invoice_item(invoice, item_attrs = attrs)
+    prev_item = described_class.new(**attrs.except(:invoice))
+    prev_item.invoice = invoice
+    prev_item.recalculate!
+
+    prev_item
+  end
+
   context "validation" do
     it "is valid" do
       expect(item).to be_valid
@@ -135,8 +143,12 @@ describe Invoice::RoleCountItem do
       it "ignores roles which were processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group:)
         previous_invoice = Fabricate(:invoice, recipient: group, group:)
-        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+
+        InvoiceRun::ProcessedSubject.create(
+          subject_type: "Person", subject_id: role.person_id,
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id
+        )
 
         expect(item.count).to eq(0)
       end
@@ -144,8 +156,11 @@ describe Invoice::RoleCountItem do
       it "ignores roles in subgroups which were processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
         previous_invoice = Fabricate(:invoice, recipient: group, group:)
-        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+        InvoiceRun::ProcessedSubject.create(
+          subject_type: "Person", subject_id: role.person_id,
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id
+        )
 
         expect(item.count).to eq(0)
       end
@@ -153,8 +168,11 @@ describe Invoice::RoleCountItem do
       it "counts roles even when subject with different id was processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group:)
         previous_invoice = Fabricate(:invoice, recipient: group, group:)
-        InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+        InvoiceRun::ProcessedSubject.create(
+          subject_type: "Person", subject_id: role.person_id + 1,
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id
+        )
 
         expect(item.count).to eq(1)
       end
@@ -163,7 +181,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:)
         previous_invoice = Fabricate(:invoice, recipient: group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -172,7 +191,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:)
         previous_invoice = Fabricate(:invoice, recipient: group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id + 1)
 
         expect(item.count).to eq(1)
       end
@@ -181,7 +201,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:)
         previous_invoice = Fabricate(:invoice, recipient_id: group.id + 1, recipient_type: "Group", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -190,7 +211,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:)
         previous_invoice = Fabricate(:invoice, recipient_id: group.id, recipient_type: "Person", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -288,7 +310,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(0)
       end
@@ -297,7 +320,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(0)
       end
@@ -306,7 +330,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -315,7 +340,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -324,7 +350,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id + 1)
 
         expect(item.count).to eq(1)
       end
@@ -333,7 +360,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient_id: recipient_group.id + 1, recipient_type: "Group", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -342,7 +370,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient_id: recipient_group.id, recipient_type: "Person", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -454,7 +483,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
         previous_invoice = Fabricate(:invoice, recipient: person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(0)
       end
@@ -463,7 +493,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one), person:)
         previous_invoice = Fabricate(:invoice, recipient: person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(0)
       end
@@ -472,7 +503,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
         previous_invoice = Fabricate(:invoice, recipient: person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -481,7 +513,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
         previous_invoice = Fabricate(:invoice, recipient: person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -490,7 +523,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
         previous_invoice = Fabricate(:invoice, recipient: person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id + 1)
 
         expect(item.count).to eq(1)
       end
@@ -499,7 +533,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
         previous_invoice = Fabricate(:invoice, recipient_id: person.id + 1, recipient_type: "Person", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -508,7 +543,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
         previous_invoice = Fabricate(:invoice, recipient_id: person.id, recipient_type: "Group", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -608,7 +644,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(0)
       end
@@ -618,7 +655,8 @@ describe Invoice::RoleCountItem do
           person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(0)
       end
@@ -627,7 +665,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -636,7 +675,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -645,7 +685,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id + 1)
 
         expect(item.count).to eq(1)
       end
@@ -654,7 +695,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient_id: recipient_person.id + 1, recipient_type: "Person", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -663,7 +705,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient_id: recipient_person.id, recipient_type: "Group", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.count).to eq(1)
       end
@@ -731,9 +774,9 @@ describe Invoice::RoleCountItem do
         item.instance_variable_set(:@subjects, nil)
 
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
-          {subject_id: role2.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
-          {subject_id: role3.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id},
+          {subject_id: role2.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id},
+          {subject_id: role3.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -755,7 +798,7 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
           start_on: 12.months.ago, end_on: 10.months.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -767,7 +810,7 @@ describe Invoice::RoleCountItem do
       it "searches deep within the group" do
         role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -780,7 +823,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to eq([])
       end
@@ -789,7 +833,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one))
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to eq([])
       end
@@ -798,10 +843,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to eq([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -809,10 +855,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to eq([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -820,10 +867,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id + 1)
 
         expect(item.subjects).to eq([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -831,10 +879,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient_id: recipient_group.id + 1, recipient_type: "Group", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to eq([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -842,10 +891,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient_id: recipient_group.id, recipient_type: "Person", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to eq([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -859,7 +909,7 @@ describe Invoice::RoleCountItem do
         item.instance_variable_set(:@subjects, nil)
 
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -869,7 +919,7 @@ describe Invoice::RoleCountItem do
         Fabricate(Group::BottomGroup::Leader.name, group: recipient_group, person: role1.person,
           start_on: 2.days.ago, end_on: 1.day.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role1.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -879,8 +929,8 @@ describe Invoice::RoleCountItem do
         role2 = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group,
           start_on: 2.days.ago, end_on: 1.day.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
-          {subject_id: role2.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role1.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id},
+          {subject_id: role2.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -891,8 +941,8 @@ describe Invoice::RoleCountItem do
         role2 = Fabricate(Group::BottomGroup::Leader.name, group: group2, person: role1.person,
           start_on: 2.days.ago, end_on: 1.day.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
-          {subject_id: role2.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role1.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id},
+          {subject_id: role2.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -904,7 +954,7 @@ describe Invoice::RoleCountItem do
         Fabricate(Group::BottomGroup::Member.name, group: recipient_group, person: role1.person,
           start_on: 2.days.ago, end_on: 1.day.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role1.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
     end
@@ -926,7 +976,7 @@ describe Invoice::RoleCountItem do
         item.instance_variable_set(:@subjects, nil)
 
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -948,7 +998,7 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:,
           person: recipient_person, start_on: 12.months.ago, end_on: 10.months.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -962,7 +1012,7 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group: groups(:bottom_group_one_one_one),
           person: recipient_person)
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -975,7 +1025,8 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to eq([])
       end
@@ -985,7 +1036,8 @@ describe Invoice::RoleCountItem do
           person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to eq([])
       end
@@ -994,10 +1046,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id + 1,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -1005,10 +1058,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Group", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -1016,10 +1070,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id + 1)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id + 1)
 
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -1027,10 +1082,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient_id: recipient_person.id + 1, recipient_type: "Person", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -1038,10 +1094,11 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient_id: recipient_person.id, recipient_type: "Group", group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
-          invoice_id: previous_invoice.id, item_id: template_item_id)
+          item_id: create_previous_invoice_item(previous_invoice).id,
+          template_item_id: template_item_id)
 
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -1051,7 +1108,7 @@ describe Invoice::RoleCountItem do
         Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
           start_on: 2.days.ago, end_on: 1.day.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -1061,7 +1118,7 @@ describe Invoice::RoleCountItem do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person,
           start_on: 2.days.ago, end_on: 1.day.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -1072,8 +1129,8 @@ describe Invoice::RoleCountItem do
         role2 = Fabricate(Group::BottomGroup::Leader.name, group: group2, person: recipient_person,
           start_on: 2.days.ago, end_on: 1.day.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role1.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id},
-          {subject_id: role2.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role1.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id},
+          {subject_id: role2.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
 
@@ -1085,7 +1142,7 @@ describe Invoice::RoleCountItem do
         Fabricate(Group::BottomGroup::Member.name, group:, person: recipient_person,
           start_on: 2.days.ago, end_on: 1.day.ago)
         expect(item.subjects).to match_array([
-          {subject_id: role.person_id, subject_type: "Person", item_id: 1337, invoice_id: item.invoice.id}
+          {subject_id: role.person_id, subject_type: "Person", template_item_id: 1337, item_id: item.id}
         ])
       end
     end

@@ -1269,7 +1269,7 @@ fr:
           many: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_group_type_help: Tous les groupes de ce type situés dans ou sous %{group} recevront une facture. Sont exclus les groupes qui avaient déjà été supprimés ou archivés à la date de début de la période de facturation.
+      recipient_source_group_type_help: Tous les groupes de ce type situés dans ou sous %{group} recevront une facture. Sont exclus les groupes qui avaient déjà été supprimés ou archivés à la date de début de la période de facturation.
     new:
       title: Définir une facture collective
     actions_index:

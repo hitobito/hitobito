@@ -7,7 +7,9 @@
   = hidden_field_tag :autosubmit
   = f.labeled_input_fields :name, :start_on, :end_on
 
-  = f.labeled_collection_select(:recipient_group_type, entry.group.class.child_types, :to_s, ->(group_type) { group_type.model_name.human(count: 2) }, {}, class: "form-select form-select-sm", disabled: entry.invoice_runs.any?, help_inline: t(".recipient_group_type_help", group: entry.group), data: { action: "change->autosubmit#submit", turbo_frame: :period_invoice_template_items })
+  = f.fields_for(:recipient_source, entry.recipient_source || GroupsFilter.new) do |fields|
+    = hidden_field_tag("period_invoice_template[recipient_source_attributes][type]", "GroupsFilter")
+    = fields.labeled_collection_select(:group_type, entry.group.class.child_types, :to_s, ->(group_type) { group_type.model_name.human(count: 2) }, { include_blank: false }, label: PeriodInvoiceTemplate.human_attribute_name(:recipient_source), class: "form-select form-select-sm", disabled: entry.invoice_runs.any?, help_inline: t(".recipient_source_group_type_help", group: entry.group), data: { action: "change->autosubmit#submit", turbo_frame: :period_invoice_template_items })
 
   = turbo_frame_tag :period_invoice_template_items, target: :_top do
     = f.labeled t("activerecord.attributes.period_invoice_template.items"), mark_as_required: true, label_class: "col-md-3 col-xl-2 align-self-baseline", class: "align-self-baseline" do

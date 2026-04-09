@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_09_153100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -537,9 +537,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
   end
 
   create_table "groups_filters", force: :cascade do |t|
-    t.string "group_type"
-    t.date "active_at"
-    t.bigint "parent_id"
+    t.string "group_type", null: false
+    t.date "active_at", default: -> { "now()" }, null: false
+    t.bigint "parent_id", null: false
     t.index ["parent_id"], name: "index_groups_filters_on_parent_id"
   end
 
@@ -1116,7 +1116,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
     t.string "name", null: false
     t.date "start_on", null: false
     t.date "end_on"
-    t.string "recipient_group_type"
     t.bigint "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

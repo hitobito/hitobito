@@ -989,6 +989,9 @@ de:
         inscribe: Einschreiben
         description: Hier kannst du dich für die Gruppe einschreiben.
 
+  groups_filter:
+    description: "Alle %{group_type_plural} in %{parent}"
+
   group/deleted_people:
     list:
       confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
@@ -1256,7 +1259,7 @@ de:
           one: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_source_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
     new:
       title: Sammelrechnung definieren
     actions_index:

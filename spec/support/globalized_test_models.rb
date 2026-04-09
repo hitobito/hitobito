@@ -40,11 +40,12 @@ module GlobalizedTestModels
     def initialize(name, klass)
       @name = name
       @klass = klass
+      @options = {}
     end
 
     attr_reader :name
-
     attr_reader :klass
+    attr_reader :options
   end
 
   class ValidatorsTestModel < ActiveRecord::Base

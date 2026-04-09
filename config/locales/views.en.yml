@@ -12,6 +12,7 @@ en:
     unknown: unknown
     nobody: nobody
     all: all
+    empty: Leer
 
     from: from
     until: to
@@ -73,6 +74,7 @@ en:
     tabs:
       info: Info
       settings: Settings
+      log: Log
 
     search:
       placeholder: "Search..."
@@ -624,7 +626,7 @@ en:
           all: All
           only_with_places_available: Nur mit verfügbaren Plätzen
         select_states: Filter by status
-        time_period: Period (optional)
+        time_period: Im Zeitraum von
         until: To
       group_filter:
         all_layers: All groups
@@ -710,6 +712,14 @@ en:
       rejected: "Course approval declined"
       missing: "Course approval due"
 
+  event/guests:
+    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
+    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
+
+  event/invitations:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
+
   event/kinds:
     global:
       link:
@@ -729,14 +739,6 @@ en:
     show:
       link:
         delete: "Delete application"
-
-  event/guests:
-    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
-    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
-
-  event/invitations:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
-    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
 
   event/participation_decorator:
     tooltips:
@@ -763,6 +765,31 @@ en:
 
   event/roles:
     full_entry_label: "Role <i>%{role}</i> for <i>%{person}</i>"
+
+  events/filters:
+    new:
+      title: "%{type} filtern"
+    form:
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+    general:
+      title: Allgemein
+    full_text:
+      q: Suchbegriff
+    state:
+      states: Status
+    leader:
+      leader: Geleitet von
+      current_user: aktuelle/-r Benutzer/-in
+    kind:
+      kind: Kursart
+    kind_category:
+      kind_category: Kurskategorie
+    attributes:
+      title: Felder
 
   event_decorator:
     apply: "Register"
@@ -808,14 +835,26 @@ en:
     duplicates: "Duplicates"
 
   filter_navigation/events:
-    all: "all"
+    deep: "Alle"
     layer: "only %{layer}"
+    filter: "Filter..."
 
   filter_navigation/event/participations:
     predefined_filters:
       all: All people
       teamers: Leaders
       participants: Participants
+
+  filters:
+    attributes:
+      match: enthält
+      not_match: enthält nicht
+      equal: ist genau
+      greater: grösser als
+      smaller: kleiner als
+      before: vor dem
+      after: nach dem
+      blank: ist leer
 
   full_text:
     index:
@@ -902,7 +941,6 @@ en:
     tabs:
       deleted: "Deleted"
       statistics: "Statistics"
-      logs: Log
     export_enqueued: "Export is started in the background and downloaded after completion."
     statistics:
       title: Statistics
@@ -1546,6 +1584,7 @@ en:
         reload: Erneut prüfen
       action: Merge
       success: Merge successful
+      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültiger Daten zusammengeführt.
     ignore:
       new:
         title: Ignore duplicate?
@@ -1768,7 +1807,6 @@ en:
 
     tabs:
       history: History
-      log: Log
       security_tools: Security
       colleagues: Colleagues
       invoices: Invoices
@@ -1951,14 +1989,6 @@ en:
 
     attributes:
       title: Fields
-      match: contains
-      not_match: enthält nicht
-      equal: is equal
-      greater: bigger than
-      smaller: smaller than
-      before: vor dem
-      after: nach dem
-      blank: ist leer
 
     language:
       title: Language
@@ -2262,6 +2292,7 @@ en:
       create: "%{model} <i>%{label}</i> has been added."
       update: "%{model} <i>%{label}</i> has been updated: %{changeset}"
       destroy: "%{model} <i>%{label}</i> has been deleted."
+      removed: "%{model} <i>%{label}</i> wurde entfernt."
 
       person/add_request:
         create: "Access for <i>%{label}</i> requested."

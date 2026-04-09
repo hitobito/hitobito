@@ -74,7 +74,7 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung wurde erfolgreich erstellt"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
-      expect(entry.recipient_group_type).to eq "Group::TopLayer"
+      expect(entry.recipient_source.group_type).to eq "Group::TopLayer"
       expect(entry.items.length).to be 2
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("10.00")
@@ -125,10 +125,10 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_no_content "Schliessen"
       expect(page).to have_content "Secretary, Local Secretary"
 
-      select "Bottom Layer", from: "Empfängergruppen"
+      select "Bottom Layer", from: "Rechnungsempfänger"
       expect(page).to have_no_content "Local Secretary"
       # select remains focused, indicating only the items part of the form has been replaced
-      expect(page.active_element).to match_selector(:select, "Empfängergruppen")
+      expect(page.active_element).to match_selector(:select, "Rechnungsempfänger")
 
       click_button "Rollentypen auswählen"
       expect(page).to have_content "Schliessen"
@@ -145,7 +145,7 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung wurde erfolgreich erstellt"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
-      expect(entry.recipient_group_type).to eq "Group::BottomLayer"
+      expect(entry.recipient_source.group_type).to eq "Group::BottomLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("10.00")
@@ -157,8 +157,10 @@ describe :period_invoice_templates, js: true do
   end
 
   context "update" do
-    let(:period_invoice_template) { Fabricate(:period_invoice_template, recipient_group_type: Group::TopLayer.name) }
+    let(:period_invoice_template) { Fabricate(:period_invoice_template) }
     let(:edit_path) { edit_group_period_invoice_template_path(group, period_invoice_template) }
+
+    before { period_invoice_template.recipient_source.update!(group_type: Group::TopLayer.name) }
 
     it "allows to create a period invoice template" do
       visit edit_path
@@ -190,7 +192,7 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung - edited wurde erfolgreich aktualisiert"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
-      expect(entry.recipient_group_type).to eq "Group::TopLayer"
+      expect(entry.recipient_source.group_type).to eq "Group::TopLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("100.00")
@@ -245,10 +247,10 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_no_content "Local Guide"
       expect(page).to have_content "Secretary, Local Secretary"
 
-      select "Bottom Layer", from: "Empfängergruppen"
+      select "Bottom Layer", from: "Rechnungsempfänger"
       expect(page).to have_no_content "Local Secretary"
       # select remains focused, indicating only the items part of the form has been replaced
-      expect(page.active_element).to match_selector(:select, "Empfängergruppen")
+      expect(page.active_element).to match_selector(:select, "Rechnungsempfänger")
 
       click_button "Rollentypen auswählen"
       expect(page).to have_content "Schliessen"
@@ -265,7 +267,7 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung - edited wurde erfolgreich aktualisiert"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
-      expect(entry.recipient_group_type).to eq "Group::BottomLayer"
+      expect(entry.recipient_source.group_type).to eq "Group::BottomLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("100.00")

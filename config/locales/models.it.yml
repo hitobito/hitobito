@@ -215,7 +215,7 @@ it:
               attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
         period_invoice_template:
           attributes:
-            recipient_group_type:
+            recipient_source:
               readonly_due_to_existing_invoice_runs: non può più essere modificato, poiché esistono già cicli di fatturazione
             end_on:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
@@ -1449,7 +1449,7 @@ it:
         name: Denominazione
         start_on: Inizio del periodo contabile
         end_on: Fine del periodo contabile
-        recipient_group_type: Gruppi di destinatari
+        recipients: Destinatari
         items: Voci contabili
 
       period_invoice_template/item:

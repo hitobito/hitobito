@@ -32,4 +32,10 @@ describe Invoice::Filter do
     filtered = Invoice::Filter.new(invoice_run_id: 1).apply(Invoice)
     expect(filtered.count).to eq 1
   end
+
+  it "does not filter by year for singular invoices" do
+    invoice.update(issued_at: 5.year.ago)
+    filtered = Invoice::Filter.new(ids: invoice.id, singular: true).apply(Invoice)
+    expect(filtered.count).to eq 1
+  end
 end

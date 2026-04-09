@@ -326,14 +326,6 @@ it:
         one: data
         many: Date
         other: Date
-      event/question:
-        one: Anmeldeangabe
-        many: Anmeldeangaben
-        other: Anmeldeangaben
-      event/answer:
-        one: Antwort auf Anmeldeangabe
-        many: Antworten auf Anmeldeangaben
-        other: Antworten auf Anmeldeangaben
       family_member:
         one: Membri della famiglia
         many: Membri della famiglia
@@ -751,7 +743,6 @@ it:
         motto: Tema
         cost: Costi
         contact: Persona di contatto
-        creator_id: Ersteller
         notify_contact_on_participations: Avvisare della nuova registrazione via e-mail la persona di contatto
         maximum_participants: Numero massimo di partecipanti
         minimum_participants: Numero minimo di partecipanti
@@ -926,7 +917,6 @@ it:
         answers: Domande
         created_at: Data di iscrizione
         roles: Ruolo
-        active: Aktiv
 
       event/question:
         question: Domanda
@@ -959,7 +949,7 @@ it:
         type: Ruolo
         participation: Persona
         remove_participant_role: Rimuovere qualsiasi ruolo partecipante
-        string_long: "%{role} von %{participation}"
+
 
       family_member:
         kind: Relazione

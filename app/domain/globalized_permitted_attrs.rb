@@ -64,19 +64,25 @@ class GlobalizedPermittedAttrs
   #   => { questions_attributes: [:label, :text, :text_en, :text_fr, :text_it] }
   def permit_hash(permitted_attr, klass)
     permitted_attr.map do |k, v|
-      if k.end_with?("_attributes") && (model_class = relation_class_from_name(k, klass))
-        case v
-        when Array
-          permit_relation_array(k, v, model_class)
-        when Hash
-          {k => permit_hash(v, model_class)}
-        else
-          {k => v}
-        end
-      else
-        {k => v}
-      end
+      next {k => v} unless k.end_with?("_attributes")
+      permit_nested_attributes(klass, k, v)
     end.reduce(:merge)
+  end
+
+  def permit_nested_attributes(klass, relation_name, permitted_attrs)
+    assoc = get_association(relation_name, klass)
+    return {relation_name => permitted_attrs} unless assoc
+    # For polymorphic associations, we don't know the target type, so don't try to be smart.
+    return {relation_name => permitted_attrs} if assoc.options[:polymorphic]
+
+    case permitted_attrs
+    when Array
+      permit_relation_array(relation_name, permitted_attrs, assoc.klass)
+    when Hash
+      {relation_name => permit_hash(permitted_attrs, assoc.klass)}
+    else
+      {relation_name => permitted_attrs}
+    end
   end
 
   # Handles nested attributes that are specified as an array.
@@ -92,17 +98,17 @@ class GlobalizedPermittedAttrs
     {relation_name => updated_relation_array}
   end
 
-  # Extracts the model class for a nested association from its relation name.
+  # Extracts the association metadata for a nested association from its relation name.
   # Strips the '_attributes' suffix and looks up the association reflection.
   #
   # Example:
-  #   relation_class_from_name(:questions_attributes, Event)
-  #   => Event::Question
-  def relation_class_from_name(relation_name, klass)
-    relation = relation_name.to_s.sub(/_[^_]*$/, "").to_sym
+  #   get_association(:questions_attributes, Event)
+  #   => #<ActiveRecord::Reflection::HasManyReflection:0x000073ee4207fab8>
+  def get_association(relation_name, klass)
+    relation = relation_name.to_s.sub(/_attributes$/, "").to_sym
     klass.reflect_on_all_associations.find do |reflection|
       reflection.name == relation
-    end&.klass
+    end
   end
 
   # Checks if an attribute should be expanded to include globalized variants.

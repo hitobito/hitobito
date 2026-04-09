@@ -1236,7 +1236,7 @@ en:
           one: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_group_type_help: All groups of this type in or below %{group} will receive an invoice. This does not apply to groups that had already been deleted or archived by the start date of the billing period.
+      recipient_source_group_type_help: All groups of this type in or below %{group} will receive an invoice. This does not apply to groups that had already been deleted or archived by the start date of the billing period.
     new:
       title: Define a collective invoice
     actions_index:

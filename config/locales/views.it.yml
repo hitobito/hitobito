@@ -630,7 +630,7 @@ it:
           all: tutti
           only_with_places_available: Solo con posti disponibili
         select_states: Filtrare secondo lo stato
-        time_period: Nel periodo di tempo (opzionale)
+        time_period: Im Zeitraum von
         until: fino a
       group_filter:
         all_layers: Tutti i gruppi
@@ -716,6 +716,14 @@ it:
       rejected: "Attivazione del corso rifiutata"
       missing: "Attivazione del corso in sospeso"
 
+  event/guests:
+    guest_added_successfully: "%{guest} è stato aggiunto come ospite."
+    not_allowed_due_to_guest_limit: "Non è possibile aggiungere altri ospiti a questo evento."
+
+  event/invitations:
+    export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
+    description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
+
   event/kinds:
     global:
       link:
@@ -735,14 +743,6 @@ it:
     show:
       link:
         delete: "cancellare iscrizione"
-
-  event/guests:
-    guest_added_successfully: "%{guest} è stato aggiunto come ospite."
-    not_allowed_due_to_guest_limit: "Non è possibile aggiungere altri ospiti a questo evento."
-
-  event/invitations:
-    export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
-    description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
 
   event/participation_decorator:
     tooltips:
@@ -769,6 +769,31 @@ it:
 
   event/roles:
     full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"
+
+  events/filters:
+    new:
+      title: "%{type} filtern"
+    form:
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+    general:
+      title: Allgemein
+    full_text:
+      q: Suchbegriff
+    state:
+      states: Status
+    leader:
+      leader: Geleitet von
+      current_user: aktuelle/-r Benutzer/-in
+    kind:
+      kind: Kursart
+    kind_category:
+      kind_category: Kurskategorie
+    attributes:
+      title: Felder
 
   event_decorator:
     apply: "Iscriversi"
@@ -818,14 +843,26 @@ it:
     duplicates: "Duplicati"
 
   filter_navigation/events:
-    all: "Tutti"
+    deep: "Alle"
     layer: "solo %{layer}"
+    filter: "Filter..."
 
   filter_navigation/event/participations:
     predefined_filters:
       all: tutte le persone
       teamers: Gruppo di direzione
       participants: partecipanti
+
+  filters:
+    attributes:
+      match: enthält
+      not_match: enthält nicht
+      equal: ist genau
+      greater: grösser als
+      smaller: kleiner als
+      before: vor dem
+      after: nach dem
+      blank: ist leer
 
   full_text:
     index:
@@ -2005,14 +2042,6 @@ it:
 
     attributes:
       title: Campi
-      match: contiene
-      not_match: non contiene niente
-      equal: è esattamente
-      greater: più grande di
-      smaller: più piccolo di
-      before: prima del
-      after: dopo il
-      blank: è vuoto
 
     language:
       title: Lingua

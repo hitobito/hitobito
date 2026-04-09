@@ -7,6 +7,8 @@ class QualificationAbility < AbilityDsl::Base
   on(Qualification) do
     permission(:layer_full).may(:create, :destroy).in_course_layer
     permission(:layer_and_below_full).may(:create, :destroy).in_course_layer_or_below
+
+    class_side(:index).everybody # for JSON API access
   end
 
   def in_course_layer

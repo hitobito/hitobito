@@ -610,4 +610,17 @@ describe TokenAbility do
       end
     end
   end
+
+  describe :qualifications do
+    let(:token) { Fabricate(:service_token, layer: groups(:top_layer)) }
+
+    it "may not index without qualifications flag" do
+      is_expected.not_to be_able_to(:index, Qualification)
+    end
+
+    it "may index if qualifications flag is set" do
+      token.update(qualifications: true)
+      is_expected.to be_able_to(:index, Qualification)
+    end
+  end
 end

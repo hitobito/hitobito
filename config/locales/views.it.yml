@@ -1263,7 +1263,7 @@ it:
           many: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_group_type_help: Tutti i gruppi di questo tipo presenti in %{group} o al di sotto di esso riceveranno una fattura. Sono esclusi i gruppi che erano già stati eliminati o archiviati alla data di inizio del periodo di fatturazione.
+      recipient_source_group_type_help: Tutti i gruppi di questo tipo presenti in %{group} o al di sotto di esso riceveranno una fattura. Sono esclusi i gruppi che erano già stati eliminati o archiviati alla data di inizio del periodo di fatturazione.
     new:
       title: Definire la fattura collettive
     actions_index:

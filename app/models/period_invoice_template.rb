@@ -11,6 +11,7 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
 
   has_many :items, dependent: :destroy, class_name: "PeriodInvoiceTemplate::Item",
     inverse_of: :period_invoice_template
+  accepts_nested_attributes_for :recipient_source
   accepts_nested_attributes_for :items, allow_destroy: true
 
   validates :name, :start_on, :items, presence: true
@@ -19,20 +20,40 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
     on_or_after: :start_on,
     on_or_after_message: :must_be_later_than_start_on,
     if: -> { start_on.present? }
-  validates :recipient_group_type, presence: true, inclusion: {in: ->(entry) {
-    entry.group.class.child_types.map(&:name)
-  }}
-  validate :assert_changes_to_recipient_group_allowed
+  validate :assert_valid_recipient_source
+  validate :assert_changes_to_recipient_source_allowed
 
   def to_s
     name
   end
 
+  def build_recipient_source(params)
+    unless InvoiceRun::RECIPIENT_TYPES.include?(params[:type])
+      errors.add("recipient_source.type")
+      return
+    end
+    self.recipient_source = params.delete(:type).constantize.new(params)
+  end
+
+  def recipient_group_type
+    return recipient_source.group_type.safe_constantize if recipient_source.is_a?(GroupsFilter)
+    group.class
+  end
+
   private
 
-  def assert_changes_to_recipient_group_allowed
-    if recipient_group_type_changed? && invoice_runs.any?
-      errors.add(:recipient_group_type, :readonly_due_to_existing_invoice_runs)
+  def assert_valid_recipient_source
+    if recipient_source.class.name == "GroupsFilter"
+      unless group.class.child_types.map(&:name).include?(recipient_source.group_type)
+        recipient_source.errors.add(:group_type)
+        errors.add(:recipient_source)
+      end
+    end
+  end
+
+  def assert_changes_to_recipient_source_allowed
+    if recipient_source.changes_to_save.present? && invoice_runs.any?
+      errors.add(:recipient_source, :readonly_due_to_existing_invoice_runs)
     end
   end
 end

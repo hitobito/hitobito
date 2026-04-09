@@ -6,7 +6,6 @@
 #  name                  :string           not null
 #  start_on              :date             not null
 #  end_on                :date
-#  recipient_group_type  :string
 #  group_id              :integer          not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
@@ -29,7 +28,6 @@ Fabricator(:period_invoice_template) do
   start_on { Time.zone.yesterday }
   end_on { Time.zone.now.next_year }
   group { Group.root }
-  recipient_group_type { Group::BottomLayer.name }
   recipient_source {
     GroupsFilter.new(parent: Group.root, group_type: Group::BottomLayer.name, active_at: Time.zone.today)
   }

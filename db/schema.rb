@@ -934,6 +934,47 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
     t.string "nonce", null: false
   end
 
+  create_table "pass_definition_translations", force: :cascade do |t|
+    t.bigint "pass_definition_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.text "description"
+    t.index ["locale"], name: "index_pass_definition_translations_on_locale"
+    t.index ["pass_definition_id"], name: "index_pass_definition_translations_on_pass_definition_id"
+  end
+
+  create_table "pass_definitions", force: :cascade do |t|
+    t.string "owner_type", null: false
+    t.bigint "owner_id", null: false
+    t.string "template_key", default: "default", null: false
+    t.string "background_color", default: "#ffffff", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_type", "owner_id"], name: "index_pass_definitions_on_owner"
+  end
+
+  create_table "pass_grants", force: :cascade do |t|
+    t.bigint "pass_definition_id", null: false
+    t.string "grantor_type", null: false
+    t.bigint "grantor_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pass_definition_id", "grantor_type", "grantor_id"], name: "idx_pass_grants_unique", unique: true
+  end
+
+  create_table "passes", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "pass_definition_id", null: false
+    t.string "state", default: "eligible", null: false
+    t.date "valid_from", null: false
+    t.date "valid_until"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id", "pass_definition_id"], name: "idx_passes_unique", unique: true
+  end
+
   create_table "payees", force: :cascade do |t|
     t.bigint "person_id"
     t.bigint "payment_id", null: false
@@ -1343,6 +1384,30 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
     t.index ["mutation_id"], name: "index_versions_on_mutation_id"
+  end
+
+  create_table "wallets_apple_device_registrations", force: :cascade do |t|
+    t.bigint "pass_installation_id", null: false
+    t.string "device_library_identifier", null: false
+    t.string "push_token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_library_identifier", "pass_installation_id"], name: "idx_wallets_apple_device_reg_unique", unique: true
+  end
+
+  create_table "wallets_pass_installations", force: :cascade do |t|
+    t.bigint "pass_id", null: false
+    t.integer "wallet_type", null: false
+    t.integer "state", default: 0, null: false
+    t.string "locale", null: false
+    t.string "authentication_token"
+    t.datetime "last_synced_at"
+    t.text "sync_error"
+    t.boolean "needs_sync", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["needs_sync"], name: "idx_wallets_pass_installations_needs_sync"
+    t.index ["pass_id", "wallet_type"], name: "idx_wallets_pass_installations_unique", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

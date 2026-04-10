@@ -1,0 +1,24 @@
+#  Copyright (c) 2026, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito
+
+# == Schema Information
+#
+# Table name: pass_definitions
+#
+#  id               :bigint           not null, primary key
+#  background_color :string           not null
+#  description      :text
+#  name             :string           not null
+#  owner_type       :string           not null
+#  template_key     :string           not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  owner_id         :bigint           not null
+#
+
+top_layer_pass:
+  owner: top_layer (Group)
+  template_key: default
+  background_color: "#0066cc"

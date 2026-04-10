@@ -67,3 +67,10 @@ Rake::Task["wagon:migrate"].enhance do
   Rake::Task["wagon:schema_dump"].execute unless Rails.env.production?
   SearchColumnBuilder.new.run
 end
+
+# Seed development-only data that depends on wagon seeds (e.g. the root group) having run first.
+# We enhance wagon:seed here in core rather than adding a script to db/seeds/development/,
+# because core seed scripts execute before wagon seeds and would find no root group yet.
+Rake::Task["wagon:seed"].enhance do
+  Rake::Task["dev:passes:seed_definition"].invoke if Rails.env.development?
+end

@@ -66,6 +66,8 @@ class PersonResource < ApplicationResource
     polymorphic_has_many :additional_addresses, as: :contactable
   end
 
+  has_many :event_participations, resource: Event::ParticipationResource, writable: false
+
   filter :updated_at, :datetime
 
   private

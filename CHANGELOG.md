@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.9
 
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
 - Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)

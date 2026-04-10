@@ -1,0 +1,247 @@
+#  Copyright (c) 2026, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+require "spec_helper"
+
+describe Passes::Subscribers do
+  # Fixture hierarchy (nested-set lft/rgt):
+  #
+  # top_layer (1..18)
+  # ├── bottom_layer_one (2..9)
+  # │   ├── bottom_group_one_one (3..6)
+  # │   │   └── bottom_group_one_one_one (4..5)
+  # │   └── bottom_group_one_two (7..8)
+  # ├── bottom_layer_two (10..13)
+  # │   └── bottom_group_two_one (11..12)
+  # ├── top_group (14..15)
+  # └── toppers (16..17)
+
+  let(:top_leader) { people(:top_leader) }
+  let(:bottom_member) { people(:bottom_member) }
+
+  let(:definition) { Fabricate(:pass_definition, owner: groups(:top_layer)) }
+  let(:subscribers) { described_class.new(definition) }
+
+  def create_grant(grantor:, role_types:)
+    Fabricate(:pass_grant,
+      pass_definition: definition,
+      grantor: grantor).tap do |g|
+      g.role_types = role_types.map(&:sti_name)
+    end
+  end
+
+  def create_role(person:, group:, type:, start_on: nil, end_on: nil, archived_at: nil)
+    Fabricate(:role,
+      person: person,
+      group: group,
+      type: type.sti_name,
+      start_on: start_on,
+      end_on: end_on,
+      archived_at: archived_at)
+  end
+
+  describe "#people" do
+    it "returns people with matching active roles in grant subtree" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
+
+      # top_leader has Group::TopGroup::Leader in top_group (fixture)
+      expect(subscribers.people).to include(top_leader)
+    end
+
+    it "returns people from child groups within the subtree" do
+      create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::BottomGroup::Member])
+
+      person = Fabricate(:person)
+      create_role(person: person, group: groups(:bottom_group_one_one), type: Group::BottomGroup::Member)
+
+      expect(subscribers.people).to include(person)
+    end
+
+    it "excludes people from groups outside the subtree" do
+      create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::BottomGroup::Member])
+
+      person = Fabricate(:person)
+      create_role(person: person, group: groups(:bottom_group_two_one), type: Group::BottomGroup::Member)
+
+      expect(subscribers.people).not_to include(person)
+    end
+
+    it "excludes people with non-matching role types" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Secretary])
+
+      # top_leader has Leader, not Secretary
+      expect(subscribers.people).not_to include(top_leader)
+    end
+
+    it "excludes archived roles" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
+
+      person = Fabricate(:person)
+      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
+        archived_at: 1.day.ago)
+
+      expect(subscribers.people).not_to include(person)
+    end
+
+    it "excludes ended roles (end_on in the past)" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
+
+      person = Fabricate(:person)
+      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
+        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
+
+      expect(subscribers.people).not_to include(person)
+    end
+
+    it "returns distinct people even with multiple matching grants" do
+      create_grant(grantor: groups(:top_layer), role_types: [Group::TopGroup::Leader])
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
+
+      people = subscribers.people.to_a
+      expect(people.count { |p| p.id == top_leader.id }).to eq(1)
+    end
+
+    it "returns Person.none when definition has no grants" do
+      expect(subscribers.people).to eq(Person.none)
+    end
+
+    it "handles multiple grants with different role types" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
+      create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::BottomLayer::Member])
+
+      result = subscribers.people
+      expect(result).to include(top_leader)
+      expect(result).to include(bottom_member)
+    end
+  end
+
+  describe "#member?" do
+    it "returns true when person has matching active role" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
+
+      expect(subscribers.member?(top_leader)).to be true
+    end
+
+    it "returns false when person has no matching role" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Secretary])
+
+      expect(subscribers.member?(top_leader)).to be false
+    end
+
+    it "returns false for person with ended role" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
+
+      person = Fabricate(:person)
+      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
+        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
+
+      expect(subscribers.member?(person)).to be false
+    end
+
+    it "returns false for person with archived role" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
+
+      person = Fabricate(:person)
+      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
+        archived_at: 1.day.ago)
+
+      expect(subscribers.member?(person)).to be false
+    end
+  end
+
+  describe "#matching_roles_including_ended" do
+    it "includes ended roles" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
+
+      person = Fabricate(:person)
+      ended_role = create_role(person: person, group: groups(:top_group),
+        type: Group::TopGroup::Member,
+        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
+
+      expect(subscribers.matching_roles_including_ended(person)).to include(ended_role)
+    end
+
+    it "includes archived roles" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
+
+      person = Fabricate(:person)
+      archived_role = create_role(person: person, group: groups(:top_group),
+        type: Group::TopGroup::Member, archived_at: 1.day.ago)
+
+      expect(subscribers.matching_roles_including_ended(person)).to include(archived_role)
+    end
+
+    it "includes active roles" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
+
+      expect(subscribers.matching_roles_including_ended(top_leader)).to include(roles(:top_leader))
+    end
+
+    it "excludes roles from outside the grant subtree" do
+      create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::BottomGroup::Member])
+
+      person = Fabricate(:person)
+      outside_role = create_role(person: person, group: groups(:bottom_group_two_one),
+        type: Group::BottomGroup::Member,
+        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
+
+      expect(subscribers.matching_roles_including_ended(person)).not_to include(outside_role)
+    end
+
+    it "returns empty relation when no grants exist" do
+      expect(subscribers.matching_roles_including_ended(top_leader)).to be_empty
+    end
+  end
+
+  describe ".affected_passes" do
+    it "finds passes affected by a role change" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
+      pass = Fabricate(:pass,
+        person: top_leader, pass_definition: definition, state: :eligible)
+
+      role = roles(:top_leader)
+      result = described_class.affected_passes(top_leader, role: role)
+      expect(result).to include(pass)
+    end
+
+    it "finds passes when grantor encompasses the role's group" do
+      create_grant(grantor: groups(:top_layer), role_types: [Group::TopGroup::Leader])
+      pass = Fabricate(:pass,
+        person: top_leader, pass_definition: definition, state: :eligible)
+
+      role = roles(:top_leader)
+      result = described_class.affected_passes(top_leader, role: role)
+      expect(result).to include(pass)
+    end
+
+    it "excludes passes with non-matching role type" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Secretary])
+      pass = Fabricate(:pass,
+        person: top_leader, pass_definition: definition, state: :eligible)
+
+      role = roles(:top_leader) # Leader, not Secretary
+      result = described_class.affected_passes(top_leader, role: role)
+      expect(result).not_to include(pass)
+    end
+
+    it "excludes passes when role's group is outside grantor subtree" do
+      create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::TopGroup::Leader])
+      pass = Fabricate(:pass,
+        person: top_leader, pass_definition: definition, state: :eligible)
+
+      role = roles(:top_leader) # in top_group, outside bottom_layer_one
+      result = described_class.affected_passes(top_leader, role: role)
+      expect(result).not_to include(pass)
+    end
+
+    it "returns empty when person has no passes" do
+      create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Leader])
+
+      role = roles(:top_leader)
+      result = described_class.affected_passes(top_leader, role: role)
+      expect(result).to be_empty
+    end
+  end
+end

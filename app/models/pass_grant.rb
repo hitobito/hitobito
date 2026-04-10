@@ -26,6 +26,10 @@ class PassGrant < ActiveRecord::Base
   validate :has_eligibility_criteria
   validates :grantor_id, uniqueness: {scope: [:pass_definition_id, :grantor_type]}
 
+  ### SCOPES
+
+  scope :group_grants, -> { where(grantor_type: "Group") }
+
   private
 
   def has_eligibility_criteria

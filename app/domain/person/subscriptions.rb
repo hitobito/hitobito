@@ -101,8 +101,7 @@ class Person::Subscriptions
   def related_role_type_condition
     <<~SQL.squish
       related_role_types.role_type = ? AND
-      groups.lft <= ? AND
-      groups.rgt >= ? AND
+      #{Group.above_or_at_condition("?", "?")} AND
       #{subscription_tags_condition}
     SQL
   end

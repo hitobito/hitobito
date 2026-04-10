@@ -135,9 +135,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
           person = d.find { |p| p.id == contactable_person.id }
 
-          expect(person.relationships.size).to eq(6)
+          expect(person.relationships.size).to eq(7)
           expect(person.relationships.keys).to match_array(%w[
             phone_numbers social_accounts additional_emails roles primary_group layer_group
+            event_participations
           ])
         end
 
@@ -240,9 +241,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
           person = d.find { |p| p.id == contactable_person.id }
 
-          expect(person.relationships.size).to eq(6)
+          expect(person.relationships.size).to eq(7)
           expect(person.relationships.keys).to match_array(%w[
             phone_numbers social_accounts additional_emails roles primary_group layer_group
+            event_participations
           ])
         end
 
@@ -361,9 +363,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
           person = d.find { |p| p.id == contactable_person.id }
 
-          expect(person.relationships.size).to eq(6)
+          expect(person.relationships.size).to eq(7)
           expect(person.relationships.keys).to match_array(%w[
             phone_numbers social_accounts additional_emails roles primary_group layer_group
+            event_participations
           ])
         end
 
@@ -561,9 +564,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
           person = d
 
-          expect(person.relationships.size).to eq(6)
+          expect(person.relationships.size).to eq(7)
           expect(person.relationships.keys).to match_array(%w[
             phone_numbers social_accounts additional_emails roles primary_group layer_group
+            event_participations
           ])
         end
 
@@ -659,9 +663,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(response).to have_http_status(200)
 
-          expect(d.relationships.size).to eq(6)
+          expect(d.relationships.size).to eq(7)
           expect(d.relationships.keys).to match_array(%w[
             phone_numbers social_accounts additional_emails roles primary_group layer_group
+            event_participations
           ])
         end
 
@@ -767,9 +772,10 @@ describe JsonApi::PeopleController, type: [:request] do
 
           expect(response).to have_http_status(200)
 
-          expect(d.relationships.size).to eq(6)
+          expect(d.relationships.size).to eq(7)
           expect(d.relationships.keys).to match_array(%w[
             phone_numbers social_accounts additional_emails roles primary_group layer_group
+            event_participations
           ])
         end
 

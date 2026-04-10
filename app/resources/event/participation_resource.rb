@@ -15,6 +15,8 @@ class Event::ParticipationResource < ApplicationResource
 
   with_options writable: false, filterable: false, sortable: false do
     attribute :event_id, :integer, filterable: true
+    attribute :participant_id, :integer, filterable: true
+    attribute :participant_type, :string, filterable: true
     attribute :application_id, :integer
     attribute :active, :boolean
     attribute :qualified, :boolean

@@ -57,5 +57,11 @@ RSpec.describe "people#index", type: :request do
         expect(d.find { |person| person.id == people(:top_leader).id }.relationships[:layer_group][:data]).to be_nil
       end
     end
+
+    it "returns people with event_participations" do
+      jsonapi_get "/api/people", params: {include: "event_participations"}
+      expect(response.status).to eq(200), response.body
+      expect(response_body.dig(:included, 0, :type)).to eq "event_participations"
+    end
   end
 end

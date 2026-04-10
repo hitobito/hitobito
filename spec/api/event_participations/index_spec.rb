@@ -23,6 +23,23 @@ describe "event_participations#index", type: :request do
       end
     end
 
+    describe "filtering by participant id and type" do
+      let(:participation) { event_participations(:top) }
+
+      let(:params) { {
+        "filter[participant_id]": participation.participant_id,
+        "filter[participant_type]": "Person"
+      } }
+
+      it "works" do
+        expect(Event::ParticipationResource).to receive(:all).and_call_original
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:jsonapi_type).uniq).to match_array(%w[event_participations])
+        expect(d.map(&:id)).to match_array(participation.id)
+      end
+    end
+
     it "returns participations with roles" do
       jsonapi_get "/api/event_participations", params: {include: "roles"}
       expect(response.status).to eq(200), response.body

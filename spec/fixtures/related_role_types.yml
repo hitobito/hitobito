@@ -26,3 +26,13 @@ leader_groups_bottom_group:
   relation: leaders_group
   relation_type: Subscription
   role_type: Group::BottomGroup::Leader
+
+top_layer_grant_top_group_leader:
+  relation: top_layer_grant
+  relation_type: PassGrant
+  role_type: Group::TopGroup::Leader
+
+top_layer_grant_top_layer_leader:
+  relation: top_layer_grant
+  relation_type: PassGrant
+  role_type: Group::TopLayer::Leader

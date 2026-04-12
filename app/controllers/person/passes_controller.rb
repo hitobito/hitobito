@@ -73,7 +73,7 @@ class Person::PassesController < ApplicationController
   end
 
   def pass
-    @pass ||= person.passes.find_by!(pass_definition: pass_definition)
+    @pass ||= person.passes.find_by!(pass_definition: pass_definition).decorate
   end
 
   def person

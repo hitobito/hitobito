@@ -1304,10 +1304,6 @@ de:
       info: "Du bist jetzt als %{user} angemeldet"
       end: "Imitation beenden"
 
-    file_download:
-      wait_for_downloads: "Die Downloads werden vorbereitet, bitte warten."
-      cancel_downloads: "Downloads abbrechen"
-
   mailchimp_synchronizations:
       wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein."
 

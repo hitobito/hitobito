@@ -1288,10 +1288,6 @@ en:
       info: "You are logged in as %{user}"
       end: "End imitation"
 
-    file_download:
-      wait_for_downloads: "The downloads are being prepared, please wait."
-      cancel_downloads: "Cancel downloads"
-
   mailing_lists:
     subscriber_lists:
       create:

@@ -143,9 +143,18 @@ jobs:
         run: |
           BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/hitobito/${{ matrix.wagon.repo }}.git"
-          git fetch origin "$BRANCH_NAME"
-          git checkout "$BRANCH_NAME" || git checkout -b "$BRANCH_NAME" --track "origin/$BRANCH_NAME"
-          git pull --rebase origin "$BRANCH_NAME"
+
+          # Check if the branch exists on the remote wagon repo
+          REMOTE_EXISTS=$(git ls-remote --heads origin "$BRANCH_NAME")
+
+          if [ -n "$REMOTE_EXISTS" ]; then
+            git fetch origin "$BRANCH_NAME"
+            git checkout "$BRANCH_NAME"
+            git pull --rebase origin "$BRANCH_NAME"
+          else
+            git checkout -b "$BRANCH_NAME" || git checkout "$BRANCH_NAME"
+          fi
+
           git push origin "$BRANCH_NAME"
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
 

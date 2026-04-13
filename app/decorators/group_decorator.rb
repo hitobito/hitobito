@@ -141,6 +141,16 @@ class GroupDecorator < ApplicationDecorator
       .last
   end
 
+  def show_new_period_invoice_template_for_groups?
+    # Meant to be overridden in wagons
+    true
+  end
+
+  def show_new_period_invoice_template_for_people?
+    # Meant to be overridden in wagons
+    true
+  end
+
   private
 
   def archived_suffix

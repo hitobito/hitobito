@@ -65,9 +65,26 @@ describe PeriodInvoiceTemplate::RoleCountItem do
     end
   end
 
-  context "to_invoice_item" do
+  context "to_invoice_item_for_groups" do
     it "passes on params" do
-      result = item.to_invoice_item
+      result = item.to_invoice_item_for_groups
+      expect(result).to be_an_instance_of(Invoice::RoleCountItem)
+      expect(result.attributes.with_indifferent_access).to include({
+        dynamic_cost_parameters: {
+          template_item_id: item.id,
+          period_start_on: period_invoice_template.start_on,
+          period_end_on: period_invoice_template.end_on,
+          role_types: [Group::TopGroup::Leader.name],
+          unit_cost: 10.50
+        }
+      })
+      expect(result.attributes).to include(item.attributes.slice(:account, :cost_center, :name))
+    end
+  end
+
+  context "to_invoice_item_for_people" do
+    it "passes on params" do
+      result = item.to_invoice_item_for_people
       expect(result).to be_an_instance_of(Invoice::RoleCountItem)
       expect(result.attributes.with_indifferent_access).to include({
         dynamic_cost_parameters: {

@@ -35,7 +35,7 @@ describe :period_invoice_templates, js: true do
       fill_in "Rechnungsperiode Start", with: "1.1.2020"
 
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Entfernen", count: 1
 
       within all("#items_fields .fields").last do
@@ -53,7 +53,7 @@ describe :period_invoice_templates, js: true do
       end
 
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Entfernen", count: 2
 
       within all("#items_fields .fields").last do
@@ -74,7 +74,7 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung wurde erfolgreich erstellt"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
-      expect(entry.recipient_group_type).to eq "Group::TopLayer"
+      expect(entry.recipient_source.group_type).to eq "Group::TopLayer"
       expect(entry.items.length).to be 2
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("10.00")
@@ -110,7 +110,7 @@ describe :period_invoice_templates, js: true do
       fill_in "Rechnungsperiode Start", with: "1.1.2020"
 
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Rollentypen"
 
       fill_in "Name*", with: "Normaler Preis"
@@ -125,10 +125,10 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_no_content "Schliessen"
       expect(page).to have_content "Secretary, Local Secretary"
 
-      select "Bottom Layer", from: "Empfängergruppen"
+      select "Bottom Layer", from: "Rechnungsempfänger"
       expect(page).to have_no_content "Local Secretary"
       # select remains focused, indicating only the items part of the form has been replaced
-      expect(page.active_element).to match_selector(:select, "Empfängergruppen")
+      expect(page.active_element).to match_selector(:select, "Rechnungsempfänger")
 
       click_button "Rollentypen auswählen"
       expect(page).to have_content "Schliessen"
@@ -145,7 +145,7 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung wurde erfolgreich erstellt"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
-      expect(entry.recipient_group_type).to eq "Group::BottomLayer"
+      expect(entry.recipient_source.group_type).to eq "Group::BottomLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("10.00")
@@ -154,11 +154,69 @@ describe :period_invoice_templates, js: true do
         Group::BottomLayer::BasicPermissionsOnly.name
       ])
     end
+
+    it "allows to create a period invoice template with person recipients" do
+      visit new_group_period_invoice_template_path(group, recipient_source_type: "PeopleFilter")
+      expect(page).not_to have_text "Empfängergruppen"
+      expect(page).to have_text group.name
+      expect(page).not_to have_text "Rollentypen"
+
+      fill_in "Bezeichnung", with: "Mitgliedsrechnung"
+      fill_in "Rechnungsperiode Start", with: "1.1.2020"
+
+      click_link "Rechnungsposten hinzufügen"
+      click_link "Rollen-Abrechnung"
+      expect(page).to have_text "Entfernen", count: 1
+
+      within all("#items_fields .fields").last do
+        fill_in "Name*", with: "Normaler Preis"
+        fill_in "Preis*", with: "10"
+
+        click_button "Rollentypen auswählen"
+        expect(page).to have_content "Schliessen"
+        check "Local Secretary"
+        check "Secretary"
+        click_button "Schliessen"
+
+        expect(page).to have_no_content "Schliessen"
+        expect(page).to have_content "Secretary, Local Secretary"
+      end
+
+      click_link "Rechnungsposten hinzufügen"
+      click_link "Rollen-Abrechnung"
+      expect(page).to have_text "Entfernen", count: 2
+
+      within all("#items_fields .fields").last do
+        fill_in "Name*", with: "Ermässigter Preis"
+        fill_in "Preis*", with: "5"
+
+        click_button "Rollentypen auswählen"
+        expect(page).to have_content "Schliessen"
+        first(:checkbox, "Local Guide").check
+        click_button "Schliessen"
+
+        expect(page).to have_no_content "Schliessen"
+        expect(page).to have_content "Local Guide"
+      end
+
+      click_button "Speichern"
+
+      expect(page).to have_text "Sammelrechnung Mitgliedsrechnung wurde erfolgreich erstellt"
+      expect(page).to have_text "Personen in #{group.name}"
+      entry = group.period_invoice_templates.first
+      expect(entry).not_to be_nil
+      expect(entry.recipient_source_type).to eq "PeopleFilter"
+      expect(entry.recipient_source.group_id).to eq group.id
+      expect(entry.recipient_source.range).to eq "deep"
+      expect(entry.recipient_source.visible).to be_falsey
+    end
   end
 
   context "update" do
-    let(:period_invoice_template) { Fabricate(:period_invoice_template, recipient_group_type: Group::TopLayer.name) }
+    let(:period_invoice_template) { Fabricate(:period_invoice_template) }
     let(:edit_path) { edit_group_period_invoice_template_path(group, period_invoice_template) }
+
+    before { period_invoice_template.recipient_source.update!(group_type: Group::TopLayer.name) }
 
     it "allows to create a period invoice template" do
       visit edit_path
@@ -169,7 +227,7 @@ describe :period_invoice_templates, js: true do
 
       click_link "Entfernen"
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Rollentypen"
 
       fill_in "Name*", with: "Normaler Preis"
@@ -190,7 +248,7 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung - edited wurde erfolgreich aktualisiert"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
-      expect(entry.recipient_group_type).to eq "Group::TopLayer"
+      expect(entry.recipient_source.group_type).to eq "Group::TopLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("100.00")
@@ -229,7 +287,7 @@ describe :period_invoice_templates, js: true do
 
       click_link "Entfernen"
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Rollentypen"
 
       fill_in "Name*", with: "Normaler Preis"
@@ -245,10 +303,10 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_no_content "Local Guide"
       expect(page).to have_content "Secretary, Local Secretary"
 
-      select "Bottom Layer", from: "Empfängergruppen"
+      select "Bottom Layer", from: "Rechnungsempfänger"
       expect(page).to have_no_content "Local Secretary"
       # select remains focused, indicating only the items part of the form has been replaced
-      expect(page.active_element).to match_selector(:select, "Empfängergruppen")
+      expect(page.active_element).to match_selector(:select, "Rechnungsempfänger")
 
       click_button "Rollentypen auswählen"
       expect(page).to have_content "Schliessen"
@@ -265,7 +323,7 @@ describe :period_invoice_templates, js: true do
       expect(page).to have_text "Sammelrechnung Mitgliedsrechnung - edited wurde erfolgreich aktualisiert"
       entry = group.period_invoice_templates.first
       expect(entry).not_to be_nil
-      expect(entry.recipient_group_type).to eq "Group::BottomLayer"
+      expect(entry.recipient_source.group_type).to eq "Group::BottomLayer"
       expect(entry.items.length).to be 1
       expect(entry.items[0].name).to eq("Normaler Preis")
       expect(entry.items[0].dynamic_cost_parameters[:unit_cost]).to eq("100.00")

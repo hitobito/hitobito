@@ -35,7 +35,10 @@ describe PeriodInvoiceTemplatesController do
           period_invoice_template: {
             name: "Test",
             start_on: start,
-            recipient_group_type: Group::BottomLayer.name,
+            recipient_source_attributes: {
+              type: GroupsFilter.name,
+              group_type: Group::BottomLayer.name
+            },
             items_attributes: {
               "0": {
                 name: "Invoice item",
@@ -65,7 +68,10 @@ describe PeriodInvoiceTemplatesController do
           period_invoice_template: {
             name: "Test",
             start_on: start,
-            recipient_group_type: Group::BottomLayer.name,
+            recipient_source_attributes: {
+              type: GroupsFilter.name,
+              group_type: Group::BottomLayer.name
+            },
             items_attributes: {
               "0": {
                 name: "Invoice item",
@@ -92,7 +98,10 @@ describe PeriodInvoiceTemplatesController do
           period_invoice_template: {
             # name: "Test",
             # start_on: Time.zone.now,
-            # recipient_group_type: Group::BottomLayer.name,
+            # recipient_source_attributes: {
+            #   type: GroupsFilter.name,
+            #   group_type: Group::BottomLayer.name
+            # },
             items_attributes: {
               "0": {
                 # name: "Invoice item",
@@ -111,7 +120,6 @@ describe PeriodInvoiceTemplatesController do
       expect(period_invoice_template.errors.messages).to eq({
         name: ["muss ausgefüllt werden"],
         start_on: ["muss ausgefüllt werden"],
-        recipient_group_type: ["muss ausgefüllt werden", "ist kein gültiger Wert"],
         "items.name": ["muss ausgefüllt werden"],
         "items.unit_cost": ["muss ausgefüllt werden"],
         "items.role_types": ["muss ausgefüllt werden"]
@@ -139,10 +147,13 @@ describe PeriodInvoiceTemplatesController do
           id: period_invoice_template.id,
           period_invoice_template: {
             start_on: start,
-            recipient_group_type: Group::TopLayer.name
+            recipient_source_attributes: {
+              type: GroupsFilter.name,
+              group_type: Group::TopLayer.name
+            }
           }
         }
-      end.to change { period_invoice_template.reload.recipient_group_type }
+      end.to change { period_invoice_template.reload.recipient_source.group_type }
       entry = period_invoice_template.reload
       expect(entry.recipient_source_type).to eq GroupsFilter.name
       expect(entry.recipient_source.group_type).to eq Group::TopLayer.name

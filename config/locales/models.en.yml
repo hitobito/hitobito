@@ -212,7 +212,7 @@ en:
               attached_unless_disabled: 'must be specified if a logo position is selected'
         period_invoice_template:
           attributes:
-            recipient_group_type:
+            recipient_source:
               readonly_due_to_existing_invoice_runs: cannot be changed anymore, as invoice runs already exist
             end_on:
               must_be_later_than_start_on: cannot be before the start of the accounting period
@@ -371,8 +371,8 @@ en:
         one: Sammelrechnung
         other: Sammelrechnungen
       period_invoice_template/role_count_item:
-        one: Rollen-Zählung
-        other: Rollen-Zählungen
+        one: Rollen-Abrechnung
+        other: Rollen-Abrechnungen
       oauth/application:
         one: OAuth application
         other: OAuth applications
@@ -1371,7 +1371,7 @@ en:
         name: Description
         start_on: Start of accounting period
         end_on: End of accounting period
-        recipient_group_type: Recipient groups
+        recipient_source: Recipients
         items: Invoice item
 
       period_invoice_template/item:

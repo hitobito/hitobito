@@ -6,7 +6,6 @@
 #  name                  :string           not null
 #  start_on              :date             not null
 #  end_on                :date
-#  recipient_group_type  :string
 #  group_id              :integer          not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
@@ -52,23 +51,23 @@ describe PeriodInvoiceTemplate do
     expect(messages).to include("Rechnungsperiode Ende kann nicht vor Rechnungsperiode Start sein")
   end
 
-  it "validates recipient_group_type" do
-    period_invoice_template.recipient_group_type = nil
+  it "validates recipient_source.group_type" do
+    period_invoice_template.recipient_source.group_type = nil
     expect(period_invoice_template).not_to be_valid
     expect(messages).to include("Empfängergruppen muss ausgefüllt werden")
-    period_invoice_template.recipient_group_type = "foobar"
+    period_invoice_template.recipient_source.group_type = "foobar"
     expect(period_invoice_template).not_to be_valid
-    expect(messages).to include("Empfängergruppen ist kein gültiger Wert")
-    period_invoice_template.recipient_group_type = Group::TopLayer.name
+    expect(messages).to include("Empfängergruppen muss ausgefüllt werden")
+    period_invoice_template.recipient_source.group_type = Group::TopLayer.name
     expect(period_invoice_template).to be_valid
   end
 
-  it "prevents changes to recipient_group_type when invoice runs are present" do
-    period_invoice_template.recipient_group_type = Group::TopLayer.name
+  it "prevents changes to recipient_source when invoice runs are present" do
+    period_invoice_template.recipient_source.group_type = Group::TopLayer.name
     expect(period_invoice_template).to be_valid
     period_invoice_template.invoice_runs.build
     expect(period_invoice_template).not_to be_valid
-    expect(messages).to include("Empfängergruppen darf nicht mehr verändert werden, da bereits " \
+    expect(messages).to include("Rechnungsempfänger darf nicht mehr verändert werden, da bereits " \
       "Rechnungsläufe existieren")
   end
 

@@ -216,7 +216,7 @@ fr:
               attached_unless_disabled: 'doit être indiqué si une position de logo est sélectionnée'
         period_invoice_template:
           attributes:
-            recipient_group_type:
+            recipient_source:
               readonly_due_to_existing_invoice_runs: ne doit plus être modifié, car des cycles de facturation existent déjà
             end_on:
               must_be_later_than_start_on: ne peut pas être antérieur au début de la période comptable
@@ -424,9 +424,9 @@ fr:
         many: Sammelrechnungen
         other: Sammelrechnungen
       period_invoice_template/role_count_item:
-        one: Rollen-Zählung
-        many: Rollen-Zählungen
-        other: Rollen-Zählungen
+        one: Rollen-Abrechnung
+        many: Rollen-Abrechnungen
+        other: Rollen-Abrechnungen
       oauth/application:
         one: Application OAuth
         many: Applications OAuth
@@ -1450,7 +1450,7 @@ fr:
         name: Désignation
         start_on: Début de la période comptable
         end_on: Fin de la période comptable
-        recipient_group_type: Groupes de destinataires
+        recipient_source: Destinataires
         items: Postes de factures
 
       period_invoice_template/item:

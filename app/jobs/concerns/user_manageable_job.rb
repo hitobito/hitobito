@@ -5,7 +5,7 @@
 
 module UserManageableJob
   extend ActiveSupport::Concern
-  delegate :report_progress, to: :@user_job_result
+  delegate :report_progress, to: :user_job_result
 
   prepended do
     class_attribute :job_name, default: name

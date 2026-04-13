@@ -713,6 +713,31 @@ describe Export::Pdf::Invoice do
     end
   end
 
+  context "when passing job in options" do
+    let(:job) do
+      job = Examples::SuccessfulUserManagedJob.new
+      job.enqueue!
+      job
+    end
+
+    before do
+      allow(Auth).to receive(:current_person).and_return(people(:top_leader))
+    end
+
+    it "should report progress with one invoice" do
+      expect(job.user_job_result).to receive(:report_progress).once
+
+      described_class.render(invoice, payment_slip: true, articles: true, reminders: false, job:)
+    end
+
+    it "should report progress with multiple invoices" do
+      expect(job.user_job_result).to receive(:report_progress).twice
+
+      described_class.render_multiple([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
+        articles: true, reminders: false, job:)
+    end
+  end
+
   context "group invoices" do
     let(:invoice) do
       Invoice.create!(

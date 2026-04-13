@@ -424,9 +424,9 @@ fr:
         many: Sammelrechnungen
         other: Sammelrechnungen
       period_invoice_template/role_count_item:
-        one: Rollen-Zählung
-        many: Rollen-Zählungen
-        other: Rollen-Zählungen
+        one: Rollen-Abrechnung
+        many: Rollen-Abrechnungen
+        other: Rollen-Abrechnungen
       oauth/application:
         one: Application OAuth
         many: Applications OAuth

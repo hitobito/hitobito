@@ -1260,11 +1260,13 @@ de:
           other: "%{count} Empfänger gefunden."
     form:
       recipient_source_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_source_people_filter_parent_group_help: Alle Personen, die während der Rechnungsperiode eine aktive Rolle in %{group} hatten, bekommen eine Rechnung.
     new:
       title: Sammelrechnung definieren
     actions_index:
       link:
-        add: Neue Sammelrechnung definieren
+        add_for_groups: Neue Sammelrechnung an Gruppen
+        add_for_people: Neue Sammelrechnung an Personen
     tabs:
       info: Info
       invoice_runs: Rechnungsläufe
@@ -1976,6 +1978,9 @@ de:
       status_off: Nicht vorhanden
       blocked: Blockiert
       not_blocked: Nicht blockiert
+
+  people_filter:
+    description: "Personen in %{group}"
 
   participations:
     destroy:

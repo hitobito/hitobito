@@ -35,7 +35,7 @@ describe :period_invoice_templates, js: true do
       fill_in "Rechnungsperiode Start", with: "1.1.2020"
 
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Entfernen", count: 1
 
       within all("#items_fields .fields").last do
@@ -53,7 +53,7 @@ describe :period_invoice_templates, js: true do
       end
 
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Entfernen", count: 2
 
       within all("#items_fields .fields").last do
@@ -110,7 +110,7 @@ describe :period_invoice_templates, js: true do
       fill_in "Rechnungsperiode Start", with: "1.1.2020"
 
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Rollentypen"
 
       fill_in "Name*", with: "Normaler Preis"
@@ -154,6 +154,62 @@ describe :period_invoice_templates, js: true do
         Group::BottomLayer::BasicPermissionsOnly.name
       ])
     end
+
+    it "allows to create a period invoice template with person recipients" do
+      visit new_group_period_invoice_template_path(group, recipient_source_type: "PeopleFilter")
+      expect(page).not_to have_text "Empfängergruppen"
+      expect(page).to have_text group.name
+      expect(page).not_to have_text "Rollentypen"
+
+      fill_in "Bezeichnung", with: "Mitgliedsrechnung"
+      fill_in "Rechnungsperiode Start", with: "1.1.2020"
+
+      click_link "Rechnungsposten hinzufügen"
+      click_link "Rollen-Abrechnung"
+      expect(page).to have_text "Entfernen", count: 1
+
+      within all("#items_fields .fields").last do
+        fill_in "Name*", with: "Normaler Preis"
+        fill_in "Preis*", with: "10"
+
+        click_button "Rollentypen auswählen"
+        expect(page).to have_content "Schliessen"
+        check "Local Secretary"
+        check "Secretary"
+        click_button "Schliessen"
+
+        expect(page).to have_no_content "Schliessen"
+        expect(page).to have_content "Secretary, Local Secretary"
+      end
+
+      click_link "Rechnungsposten hinzufügen"
+      click_link "Rollen-Abrechnung"
+      expect(page).to have_text "Entfernen", count: 2
+
+      within all("#items_fields .fields").last do
+        fill_in "Name*", with: "Ermässigter Preis"
+        fill_in "Preis*", with: "5"
+
+        click_button "Rollentypen auswählen"
+        expect(page).to have_content "Schliessen"
+        first(:checkbox, "Local Guide").check
+        click_button "Schliessen"
+
+        expect(page).to have_no_content "Schliessen"
+        expect(page).to have_content "Local Guide"
+      end
+
+      click_button "Speichern"
+
+      expect(page).to have_text "Sammelrechnung Mitgliedsrechnung wurde erfolgreich erstellt"
+      expect(page).to have_text "Personen in #{group.name}"
+      entry = group.period_invoice_templates.first
+      expect(entry).not_to be_nil
+      expect(entry.recipient_source_type).to eq "PeopleFilter"
+      expect(entry.recipient_source.group_id).to eq group.id
+      expect(entry.recipient_source.range).to eq "deep"
+      expect(entry.recipient_source.visible).to be_falsey
+    end
   end
 
   context "update" do
@@ -171,7 +227,7 @@ describe :period_invoice_templates, js: true do
 
       click_link "Entfernen"
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Rollentypen"
 
       fill_in "Name*", with: "Normaler Preis"
@@ -231,7 +287,7 @@ describe :period_invoice_templates, js: true do
 
       click_link "Entfernen"
       click_link "Rechnungsposten hinzufügen"
-      click_link "Rollen-Zählung"
+      click_link "Rollen-Abrechnung"
       expect(page).to have_text "Rollentypen"
 
       fill_in "Name*", with: "Normaler Preis"

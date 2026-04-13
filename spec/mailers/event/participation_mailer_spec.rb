@@ -115,23 +115,36 @@ describe Event::ParticipationMailer do
     subject { mail.body }
 
     it "renders the headers" do
-      expect(mail.subject).to eq "Anlass: Teilnehmer-/in hat sich angemeldet"
       expect(mail.to).to eq(["bottom_member@example.com"])
       expect(mail.from).to eq(["noreply@localhost"])
-    end
-
-    it { is_expected.to match(/Hallo/) }
-
-    it "contains participation url" do
-      # rubocop:todo Layout/LineLength
-      is_expected.to match(%r{test.host/groups/#{event.groups.first.id}/events/#{event.id}/participations/#{participation.id}})
-      # rubocop:enable Layout/LineLength
     end
 
     it "sends to all email addresses of recipient" do
       recipient.update!(email: nil)
       e1 = Fabricate(:additional_email, contactable: recipient, mailings: true, public: true)
       expect(mail.to).to eq [e1.email]
+    end
+
+    describe "subject and body" do
+      it "inform that participation is not yet active" do
+        expect(mail.subject).to eq "Anlass: Teilnehmer-/in hat sich vorangemeldet"
+        expect(mail.body).to match("Top Leader hat sich für den Anlass \"Eventus\" vorangemeldet")
+        expect(mail.body).to include(group_event_participation_url(event.groups.first, event, participation))
+      end
+
+      it "inform that participation is active" do
+        participation.update!(active: true)
+        expect(mail.subject).to eq "Anlass: Teilnehmer-/in hat sich angemeldet"
+        expect(mail.body).to match("Top Leader hat sich für den Anlass \"Eventus\" angemeldet")
+        expect(mail.body).to include(group_event_participation_url(event.groups.first, event, participation))
+      end
+
+      it "inform that participation is on waiting list" do
+        Fabricate(:event_application, participation:, waiting_list: true)
+        expect(mail.subject).to eq "Anlass: Teilnehmer-/in hat sich in der Warteliste eingetragen"
+        expect(mail.body).to match("Top Leader hat sich für den Anlass \"Eventus\" in der Warteliste eingetragen")
+        expect(mail.body).to include(group_event_participation_url(event.groups.first, event, participation))
+      end
     end
   end
 

@@ -53,6 +53,12 @@ CustomContent.seed(
   { key: Event::ParticipationMailer::CONTENT_NOTIFICATION,
     placeholders_required: 'event-name, participant-name',
     placeholders_optional: 'event-details, application-url, participation-details' },
+  { key: Event::ParticipationMailer::CONTENT_NOTIFICATION_PENDING,
+    placeholders_required: 'event-name, participant-name',
+    placeholders_optional: 'event-details, application-url, participation-details' },
+  { key: Event::ParticipationMailer::CONTENT_NOTIFICATION_WAITING_LIST,
+    placeholders_required: 'event-name, participant-name',
+    placeholders_optional: 'event-details, application-url, participation-details' },
   { key: Event::ParticipationMailer::CONTENT_APPROVAL,
     placeholders_required: 'participant-name, event-details, application-url',
     placeholders_optional: 'recipient-names' },
@@ -137,6 +143,8 @@ blocked_person_interval_id = CustomContent.get(Person::SecurityToolsController::
 participation_confirmation_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CONFIRMATION).id
 participation_pending_id = CustomContent.get(Event::ParticipationMailer::CONTENT_PENDING).id
 participation_notification_id = CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION).id
+participation_notification_pending_id = CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION_PENDING).id
+participation_notification_waiting_list_id = CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION_WAITING_LIST).id
 participation_approval_id = CustomContent.get(Event::ParticipationMailer::CONTENT_APPROVAL).id
 cancel_application_id = CustomContent.get(Event::ParticipationMailer::CONTENT_CANCEL).id
 temp_login_id = CustomContent.get(Event::RegisterMailer::CONTENT_REGISTER_LOGIN).id
@@ -512,6 +520,46 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: participation_notification_id,
    locale: 'it',
    label: 'Evento: E-Mail Participante ha registrato'},
+
+  {custom_content_id: participation_notification_pending_id,
+  locale: 'de',
+  label: 'Anlass: E-Mail Teilnehmer-/in hat sich vorangemeldet',
+  subject: 'Anlass: Teilnehmer-/in hat sich vorangemeldet',
+  body: 'Hallo<br><br>' \
+        '{participant-name} hat sich für den Anlass "{event-name}" vorangemeldet:<br><br>' \
+        '{application-url}<br>' },
+
+  {custom_content_id: participation_notification_pending_id,
+  locale: 'fr',
+  label: 'Événement: E-Mail Participant/-e a pré-enregistré' },
+
+  {custom_content_id: participation_notification_pending_id,
+  locale: 'en',
+  label: 'Event: E-Mail Participant has pre-registerd' },
+
+  {custom_content_id: participation_notification_pending_id,
+  locale: 'it',
+  label: 'Evento: E-Mail Participante ha pre-registrato'},
+
+  {custom_content_id: participation_notification_waiting_list_id,
+  locale: 'de',
+  label: 'Anlass: E-Mail Teilnehmer-/in hat sich in der Warteliste eingetragen',
+  subject: 'Anlass: Teilnehmer-/in hat sich in der Warteliste eingetragen',
+  body: 'Hallo<br><br>' \
+        '{participant-name} hat sich für den Anlass "{event-name}" in der Warteliste eingetragen:<br><br>' \
+        '{application-url}<br>' },
+
+  {custom_content_id: participation_notification_waiting_list_id,
+  locale: 'fr',
+  label: 'Événement: E-Mail Participant/-e s\'est ilnscrit/-e sur la liste d\'attante' },
+
+  {custom_content_id: participation_notification_waiting_list_id,
+  locale: 'en',
+  label: 'Event: E-Mail Participant has pre-registerd' },
+
+  {custom_content_id: participation_notification_waiting_list_id,
+  locale: 'it',
+  label: 'Evento: E-Mail Partecipante si è iscritto alla lista d\'attesa'},
 
   {custom_content_id: cancel_application_id,
    locale: 'de',

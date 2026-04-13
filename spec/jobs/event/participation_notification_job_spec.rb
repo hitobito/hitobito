@@ -46,7 +46,7 @@ describe Event::ParticipationNotificationJob do
         subject.perform
 
         expect(ActionMailer::Base.deliveries.size).to eq(1)
-        expect(ActionMailer::Base.deliveries.first.subject).to eq("Anlass: Teilnehmer-/in hat sich angemeldet")
+        expect(ActionMailer::Base.deliveries.first.subject).to eq("Anlass: Teilnehmer-/in hat sich vorangemeldet")
       end
     end
 

@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Spezifische E-Mails je nach Zustand der Teilnahme (Nicht zugeteilt, Zugeteilt, Warteliste) (hitobito/hitobito_sww#289)
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
 - Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
 

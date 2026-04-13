@@ -14,7 +14,8 @@
 # will be passed to actual concrete invoice items when generating an invoice
 # run containing actual invoices.
 # As such, they have mostly the same columns as invoice items.
-# In order to actually calculate counts and prices, the #to_invoice_item method
+# In order to actually calculate counts and prices, the
+# #to_invoice_item_for_groups r #to_invoice_item_for_people method
 # is used to get an invoice item that can perform the calculation.
 class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   include Globalized
@@ -37,16 +38,12 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
     invoice_item_class.dynamic_cost_parameter_definitions
   end
 
-  def to_invoice_item(invoice: nil, recipient_groups: period_invoice_template.group_id)
-    invoice_item_class.for_groups(
-      recipient_groups,
-      **name_attrs.merge(cost_center:, account:, vat_rate:, invoice:, unit_cost: unit_cost,
-        dynamic_cost_parameters: dynamic_cost_parameters.merge({
-          template_item_id: id,
-          period_start_on: period_invoice_template.start_on,
-          period_end_on: period_invoice_template.end_on
-        }))
-    )
+  def to_invoice_item_for_groups(invoice: nil, recipient_groups: period_invoice_template.group_id)
+    invoice_item_class.for_groups(recipient_groups, **invoice_item_attrs(invoice:))
+  end
+
+  def to_invoice_item_for_people(invoice: nil, recipient_people: Person.none)
+    invoice_item_class.for_people(recipient_people, **invoice_item_attrs(invoice:))
   end
 
   def invoice_item_class
@@ -72,5 +69,14 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   def name_attrs
     attributes.with_indifferent_access
       .slice(:name, *Globalized.globalized_names_for_attr(:name, true))
+  end
+
+  def invoice_item_attrs(invoice: nil)
+    name_attrs.merge(cost_center:, account:, vat_rate:, invoice:, unit_cost: unit_cost,
+      dynamic_cost_parameters: dynamic_cost_parameters.merge({
+        template_item_id: id,
+        period_start_on: period_invoice_template.start_on,
+        period_end_on: period_invoice_template.end_on
+      }))
   end
 end

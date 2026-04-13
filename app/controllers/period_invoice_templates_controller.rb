@@ -6,6 +6,8 @@
 class PeriodInvoiceTemplatesController < CrudController
   self.nesting = Group
 
+  helper_method :group
+
   self.permitted_attrs = [:name, :start_on, :end_on,
     {
       recipient_source_attributes: [:type, :group_type]
@@ -36,13 +38,42 @@ class PeriodInvoiceTemplatesController < CrudController
     end
   end
 
+  def group = parent
+
   private
 
   def assign_attributes
     super
     if entry.recipient_source.is_a?(GroupsFilter)
-      entry.recipient_source.active_at = entry.start_on
-      entry.recipient_source.parent_id = entry.group_id
+      entry.recipient_source.attributes = group_recipient_source_attributes
+    elsif entry.recipient_source.is_a?(PeopleFilter)
+      entry.recipient_source.attributes = person_recipient_source_attributes
     end
+  end
+
+  def group_recipient_source_attributes
+    {
+      active_at: entry.start_on,
+      parent_id: entry.group_id
+    }
+  end
+
+  def person_recipient_source_attributes
+    {
+      filter_chain: people_filter_chain,
+      group_id: entry.group_id,
+      range: "deep",
+      visible: false
+    }
+  end
+
+  def people_filter_chain
+    {role: {
+      role_types: [],
+      kind: "active",
+      start_at: entry.start_on.to_s,
+      finish_at: entry.end_on.to_s,
+      include_archived: true
+    }}
   end
 end

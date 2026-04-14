@@ -187,7 +187,6 @@ describe Invoice::BatchCreate do
       run = InvoiceRun.new(recipient_source: mailing_list, group: group, title: :title)
       invoice = Fabricate.build(:invoice, title: "invoice", group: group)
       invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name: "membership",
-        unit_cost: 10,
         dynamic_cost_parameters: {
           template_item_id: period_invoice_template.items.first.id,
           period_start_on: 1.year.ago,
@@ -196,23 +195,23 @@ describe Invoice::BatchCreate do
           role_types: Group::BottomLayer::BasicPermissionsOnly.name
         })
       run.invoice = invoice
-      recipients = run.recipients(person)
 
+      recipients = run.recipients(person)
+      template_item_id = period_invoice_template.items.first.id
       allow_any_instance_of(Invoice::RoleCountItem).to receive(:subjects).and_return([
-        {subject_id: recipients.first.id, subject_type: "Person", invoice_id: 999998,
-         item_id: period_invoice_template.items.first.id},
-        {subject_id: recipients.second.id, subject_type: "Person", invoice_id: 999999,
-         item_id: period_invoice_template.items.first.id}
+        {subject_id: recipients.first.id, subject_type: "Person", template_item_id:, item_id: 12345},
+        {subject_id: recipients.second.id, subject_type: "Person", template_item_id:, item_id: 12346}
       ])
+
       allow(InvoiceRun::ProcessedSubject).to receive(:insert_all!).and_wrap_original do |m, *args|
         @saved = @saved ? (raise ActiveRecord::RecordNotUnique.new("Test exception")) : m.call(*args)
       end
 
       expect do
         Invoice::BatchCreate.new(run, person).call
+        expect(run.invalid_recipient_ids).to have(1).item
       end.to change { group.issued_invoices.count }.by(1)
         .and change { group.invoice_items.count }.by(1)
-      expect(run.invalid_recipient_ids).to have(1).item
     end
 
     it "does not create period invoices with total cost zero" do

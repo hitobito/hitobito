@@ -86,8 +86,8 @@ class Invoice::PeriodItem < InvoiceItem
       {
         subject_id: subject.id,
         subject_type: subject_type.sti_name,
-        item_id: template_item_id,
-        invoice_id: invoice.id
+        template_item_id: template_item_id,
+        item_id: id
       }
     end
   end
@@ -158,14 +158,16 @@ class Invoice::PeriodItem < InvoiceItem
     InvoiceRun::ProcessedSubject
       .where(processed_subjects_table[:subject_id].eq(subjects_table[:id]))
       .where(subject_type: subject_type.sti_name)
-      .where(item_id: template_item_id)
+      .where(template_item_id: template_item_id)
       .merge(with_previous_invoice_to_same_recipient)
   end
 
   def with_previous_invoice_to_same_recipient
+    table_name = InvoiceRun::ProcessedSubject.quoted_table_name
+
     InvoiceRun::ProcessedSubject
-      .joins("INNER JOIN invoices previous_invoice ON " \
-        "#{InvoiceRun::ProcessedSubject.quoted_table_name}.invoice_id = previous_invoice.id")
+      .joins("INNER JOIN invoice_items prev_items ON #{table_name}.item_id = prev_items.id")
+      .joins("INNER JOIN invoices previous_invoice ON prev_items.invoice_id = previous_invoice.id")
       .where(Arel.sql("previous_invoice.recipient_id").eq(recipient_id_expression))
       .where(previous_invoice: {recipient_type: recipient_type})
       .where.not(previous_invoice: {id: invoice&.id})

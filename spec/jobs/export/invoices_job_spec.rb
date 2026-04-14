@@ -8,10 +8,9 @@
 require "spec_helper"
 
 describe Export::InvoicesJob do
-  subject { described_class.new(format, user.id, invoice_ids, filename: filename) }
+  subject { described_class.new(format, user.id, invoice_ids, filename: "rechnungen") }
 
-  let(:filename) { UserJobResult.create_name("rechnungen", user.id) }
-  let(:pdf) { UserJobResult.from_filename(filename, format) }
+  let(:pdf) { subject.user_job_result }
 
   let(:group) { groups(:top_group) }
   let(:user) { people(:top_leader) }
@@ -23,6 +22,10 @@ describe Export::InvoicesJob do
 
   let(:invoices_in_order) do
     invoice_ids.map { |id| Invoice.find(id) }
+  end
+
+  before do
+    subject.enqueue!
   end
 
   context "creates a PDF export, it" do

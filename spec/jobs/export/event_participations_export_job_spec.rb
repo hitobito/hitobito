@@ -8,21 +8,17 @@ require "spec_helper"
 describe Export::EventParticipationsExportJob do
   subject {
     Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id,
-      params.merge(filename: filename))
+      params.merge(filename: "event_participation_export"))
   }
 
   let(:participation) { event_participations(:top) }
   let(:user) { participation.person }
   let(:other_user) { Fabricate(:person, first_name: "Other", last_name: "Member", household_key: 1) }
   let(:event) { participation.event }
-  let(:filename) { UserJobResult.create_name("event_participation_export", user.id) }
 
   let(:params) { {filter: "all"} }
 
-  let(:file) do
-    UserJobResult
-      .from_filename(filename, format)
-  end
+  let(:file) { subject.user_job_result }
 
   before do
     SeedFu.quiet = true
@@ -30,6 +26,7 @@ describe Export::EventParticipationsExportJob do
 
     other_participation = Event::Participation.create(event: event, active: true, person: other_user)
     Event::Role::Participant.create(participation: other_participation)
+    subject.enqueue!
   end
 
   context "creates a CSV-Export" do

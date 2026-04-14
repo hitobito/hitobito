@@ -17,7 +17,7 @@ describe :user_job_results, js: true do
 
   it "should show all job information" do
     job = Examples::SuccessfulUserManagedJob.new
-    work_off_job(job.enqueue!)
+    enqueue_and_run_job(job)
     visit user_job_results_path
 
     expect(page).to have_css(".fas.fa-circle-check")
@@ -32,7 +32,7 @@ describe :user_job_results, js: true do
 
   it "should show progress bar for successful job with progress" do
     job = Examples::UserManagedJobWithProgress.new
-    work_off_job(job.enqueue!)
+    enqueue_and_run_job(job)
     visit user_job_results_path
 
     expect(page).to have_css(".fas.fa-circle-check")
@@ -43,7 +43,7 @@ describe :user_job_results, js: true do
 
   it "should show download icon if file is downloadable" do
     job = Examples::UserManagedJobWithProgress.new
-    work_off_job(job.enqueue!)
+    enqueue_and_run_job(job)
     allow(job).to receive(:downloadable?).and_return(true)
     visit user_job_results_path
 
@@ -55,7 +55,7 @@ describe :user_job_results, js: true do
     expect(page).not_to have_content("Custom job name")
 
     job = Examples::SuccessfulUserManagedJob.new
-    work_off_job(job.enqueue!)
+    enqueue_and_run_job(job)
 
     expect(page).to have_content("Custom job name")
   end
@@ -66,7 +66,7 @@ describe :user_job_results, js: true do
     expect(page).not_to have_content("Job erfolgreich abgeschlossen")
 
     job = Examples::SuccessfulUserManagedJob.new
-    work_off_job(job.enqueue!)
+    enqueue_and_run_job(job)
 
     expect(page).to have_content("Job erfolgreich abgeschlossen")
   end
@@ -78,7 +78,7 @@ describe :user_job_results, js: true do
 
     job = Examples::UnsuccessfulUserManagedJob.new
     enqueued_job = job.enqueue!
-    2.times { work_off_job(enqueued_job) }
+    2.times { run_enqueued_job(enqueued_job) }
 
     expect(page).to have_content("Fehler bei Jobausführung aufgetreten")
   end

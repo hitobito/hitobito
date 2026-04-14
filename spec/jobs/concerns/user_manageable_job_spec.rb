@@ -34,7 +34,7 @@ describe UserManageableJob do
     user_job_result = job.user_job_result
 
     expect(user_job_result).to receive(:report_in_progress)
-    work_off_job(enqueued_job)
+    run_enqueued_job(enqueued_job)
   end
 
   it "should report status success when job has been worked off without any errors" do
@@ -43,7 +43,7 @@ describe UserManageableJob do
     user_job_result = job.user_job_result
 
     expect(user_job_result).to receive(:report_success).with(1)
-    expect { work_off_job(enqueued_job) }.to change(Delayed::Job, :count).by(-1)
+    expect { run_enqueued_job(enqueued_job) }.to change(Delayed::Job, :count).by(-1)
   end
 
   it "should increase attempt number after failure and reschedule job" do
@@ -52,7 +52,7 @@ describe UserManageableJob do
     user_job_result = job.user_job_result
 
     expect(user_job_result).to receive(:report_error).with(1)
-    work_off_job(enqueued_job)
+    run_enqueued_job(enqueued_job)
   end
 
   it "should have status error when last job retry failed" do
@@ -61,7 +61,7 @@ describe UserManageableJob do
     user_job_result = job.user_job_result
 
     expect(user_job_result).to receive(:report_failure)
-    2.times { work_off_job(enqueued_job) }
+    2.times { run_enqueued_job(enqueued_job) }
   end
 
   it "should report progress" do
@@ -70,7 +70,7 @@ describe UserManageableJob do
     user_job_result = job.user_job_result
 
     expect(user_job_result).to receive(:report_progress).exactly(5).times
-    work_off_job(enqueued_job)
+    run_enqueued_job(enqueued_job)
   end
 
   it "should use custom job name if set" do

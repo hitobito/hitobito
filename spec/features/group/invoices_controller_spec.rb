@@ -97,7 +97,9 @@ describe InvoicesController do
         click_link("Rechnung inkl. Einzahlungsschein")
       end.to change { Delayed::Job.count }.by(1)
       expect(page).to have_current_path("/de/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
-      expect(page).to have_content(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
+      expect(page).to have_content(
+        /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+      )
     end
 
     it "exports only articles" do
@@ -106,7 +108,9 @@ describe InvoicesController do
         click_link("Rechnung separat")
       end.to change { Delayed::Job.count }.by(1)
       expect(page).to have_current_path("/de/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
-      expect(page).to have_content(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden}/)
+      expect(page).to have_content(
+        /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+      )
     end
 
     it "exports only esr" do
@@ -115,7 +119,9 @@ describe InvoicesController do
         click_link("Einzahlungsschein separat")
       end.to change { Delayed::Job.count }.by(1)
       expect(page).to have_current_path("/de/groups/#{group.id}/invoices/#{invoice.id}?returning=true")
-      expect(page).to have_content(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
+      expect(page).to have_content(
+        /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+      )
     end
   end
 

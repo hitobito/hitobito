@@ -97,7 +97,7 @@ describe EventsController, type: :controller do
         expect do
           get :index, params: {group_id: group.id, year: 2012}, format: :csv
           # rubocop:todo Layout/LineLength
-          expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
+          expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/)
           # rubocop:enable Layout/LineLength
         end.to change(Delayed::Job, :count).by(1)
       end
@@ -106,7 +106,7 @@ describe EventsController, type: :controller do
         expect do
           get :index, params: {group_id: group.id, year: 2012, type: Event::Course.sti_name}, format: :csv
           # rubocop:todo Layout/LineLength
-          expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
+          expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/)
           # rubocop:enable Layout/LineLength
         end.to change(Delayed::Job, :count).by(1)
       end

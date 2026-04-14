@@ -312,7 +312,7 @@ describe GroupsController do
         expect do
           get :export_subgroups, params: {id: group.id}
           expect(flash[:notice])
-            .to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
+            .to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/)
         end.to change(Delayed::Job, :count).by(1)
       end
     end

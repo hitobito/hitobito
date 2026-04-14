@@ -144,7 +144,7 @@ describe PeopleController do
 
             expect(response).to redirect_to(returning: true)
             # rubocop:todo Layout/LineLength
-            expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+            expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
             # rubocop:enable Layout/LineLength
           end
 
@@ -152,7 +152,7 @@ describe PeopleController do
             expect do
               get :index, params: {group_id: group}, format: :csv
               # rubocop:todo Layout/LineLength
-              expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+              expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
               # rubocop:enable Layout/LineLength
               expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
@@ -162,7 +162,7 @@ describe PeopleController do
             expect do
               get :index, params: {group_id: group}, format: :xlsx
               # rubocop:todo Layout/LineLength
-              expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+              expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
               # rubocop:enable Layout/LineLength
               expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
@@ -1172,7 +1172,7 @@ describe PeopleController do
 
     it "GET#index exports to csv using TableDisplay" do
       get :index, params: {group_id: group, selection: true}, format: :csv
-      expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+      expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/)
       expect(Delayed::Job.last.payload_object.send(:exporter)).to eq Export::Tabular::People::TableDisplays
     end
 

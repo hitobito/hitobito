@@ -98,7 +98,7 @@ describe Event::ParticipationsController do
       expect do
         get :index, params: {group_id: group, event_id: course.id}, format: :csv
         expect(flash[:notice]).to match(
-          /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+          /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/
         )
       end.to change(Delayed::Job, :count).by(1)
     end
@@ -107,7 +107,7 @@ describe Event::ParticipationsController do
       expect do
         get :index, params: {group_id: group, event_id: course.id}, format: :xlsx
         expect(flash[:notice]).to match(
-          /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+          /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/
         )
       end.to change(Delayed::Job, :count).by(1)
     end
@@ -1195,7 +1195,7 @@ describe Event::ParticipationsController do
     it "GET#index exports to csv using TableDisplay" do
       get :index, params: {group_id: group.id, event_id: course.id, selection: true}, format: :csv
       expect(flash[:notice]).to match(
-        /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+        /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden/
       )
       expect(Delayed::Job.last.payload_object.send(:exporter))
         .to eq Export::Tabular::Event::Participations::TableDisplays

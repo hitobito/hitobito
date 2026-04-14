@@ -1079,6 +1079,18 @@
           "writable": false,
           "description": null
         },
+        "participant_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "participant_type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "application_id": {
           "type": "integer",
           "readable": true,
@@ -1141,6 +1153,32 @@
             "gte",
             "lt",
             "lte"
+          ]
+        },
+        "participant_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "participant_type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
           ]
         }
       },
@@ -3136,6 +3174,11 @@
           "type": "has_many",
           "description": null,
           "resource": "AdditionalEmailResource"
+        },
+        "event_participations": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::ParticipationResource"
         }
       },
       "stats": {

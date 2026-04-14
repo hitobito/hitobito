@@ -211,6 +211,9 @@ fr:
     move: "Déplacer"
     merge: "Fusionner"
     archive: "Archiver"
+    delete: Löschen
+    edit_service_token: API-Keys
+    edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
     button: "Exporter les adresses e-mail"
@@ -632,7 +635,7 @@ fr:
           all: Tous
           only_with_places_available: Seulement avec des places disponibles
         select_states: Filtrer d'après le statut
-        time_period: Sur la période (optionnel)
+        time_period: Im Zeitraum von
         until: au
       group_filter:
         all_layers: Tous les groupes
@@ -718,6 +721,14 @@ fr:
       rejected: "Autorisation du cours refusée"
       missing: "Autorisation du cours en cours"
 
+  event/guests:
+    guest_added_successfully: "%{guest} a été ajouté avec succès en tant qu'invité."
+    not_allowed_due_to_guest_limit: "Tu ne peux pas ajouter d'autres invités à cette événement."
+
+  event/invitations:
+    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
+    description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via la page%{model_name}. Elles ne reçoivent pas de mail automatique."
+
   event/kinds:
     global:
       link:
@@ -737,14 +748,6 @@ fr:
     show:
       link:
         delete: "Effacer l'inscription"
-
-  event/guests:
-    guest_added_successfully: "%{guest} a été ajouté avec succès en tant qu'invité."
-    not_allowed_due_to_guest_limit: "Tu ne peux pas ajouter d'autres invités à cette événement."
-
-  event/invitations:
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
-    description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via la page%{model_name}. Elles ne reçoivent pas de mail automatique."
 
   event/participation_decorator:
     tooltips:
@@ -771,6 +774,31 @@ fr:
 
   event/roles:
     full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
+
+  events/filters:
+    new:
+      title: "%{type} filtern"
+    form:
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+    general:
+      title: Allgemein
+    full_text:
+      q: Suchbegriff
+    state:
+      states: Status
+    leader:
+      leader: Geleitet von
+      current_user: aktuelle/-r Benutzer/-in
+    kind:
+      kind: Kursart
+    kind_category:
+      kind_category: Kurskategorie
+    attributes:
+      title: Felder
 
   event_decorator:
     apply: "Inscription"
@@ -820,14 +848,26 @@ fr:
     duplicates: "Duplicatas"
 
   filter_navigation/events:
-    all: "Tous"
+    deep: "Alle"
     layer: "uniquement %{layer}"
+    filter: "Filter..."
 
   filter_navigation/event/participations:
     predefined_filters:
       all: Toutes les personnes
       teamers: Maîtrise
       participants: Participants
+
+  filters:
+    attributes:
+      match: enthält
+      not_match: enthält nicht
+      equal: ist genau
+      greater: grösser als
+      smaller: kleiner als
+      before: vor dem
+      after: nach dem
+      blank: ist leer
 
   full_text:
     index:
@@ -2006,14 +2046,6 @@ fr:
 
     attributes:
       title: Champ
-      match: contient
-      not_match: ne contient pas
-      equal: est précis
-      greater: plus grand que
-      smaller: plus petit que
-      before: avant le
-      after: après le
-      blank: est vide
 
     language:
       title: Langue

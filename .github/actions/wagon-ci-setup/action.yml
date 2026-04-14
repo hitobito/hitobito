@@ -173,7 +173,8 @@ runs:
 
     - name: "Bundle install core"
       run: |
-        bundle install --jobs 4 --retry 3 --path vendor/bundle
+        bundle config set path 'vendor/bundle'
+        bundle install --jobs 4 --retry 3
       working-directory: hitobito
       shell: bash
 
@@ -189,7 +190,8 @@ runs:
         for d in $hitobito_dir/../hitobito_*; do
           cd $d
           cp -v $hitobito_dir/Gemfile.lock ./
-          bundle install --jobs 4 --retry 3 --path vendor/bundle
+          bundle config set path 'vendor/bundle'
+          bundle install --jobs 4 --retry 3
         done
       working-directory: hitobito
       shell: bash

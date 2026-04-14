@@ -29,7 +29,7 @@ module TableDisplays::People
     def layer_group(target, target_attr)
       if template && target.respond_to?(target_attr)
         template.format_attr(target, target_attr)
-      else
+      elsif target.is_a?(Person)
         target.layer_group&.name
       end
     end

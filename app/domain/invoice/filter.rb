@@ -19,7 +19,10 @@ class Invoice::Filter
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
     scope = filter_by_ids(scope)
     scope = filter_by_invoice_run_id(scope)
-    scope = scope.draft_or_issued(from: params[:from], to: params[:to])
+
+    unless params[:singular]
+      scope = scope.draft_or_issued(from: params[:from], to: params[:to])
+    end
 
     cancelled? ? scope : scope.visible
   end

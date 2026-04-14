@@ -237,6 +237,9 @@ Doorkeeper.configure do
 end
 
 Rails.application.config.to_prepare do
+  next unless ActiveRecord::Base.connection.active? rescue false
+  next unless ActiveRecord::Base.connection.data_source_exists?('service_tokens')
+
   ServiceToken.possible_scopes.each do |scope|
     Doorkeeper.configuration.scopes.add(scope)
     Doorkeeper.configuration.optional_scopes.add(scope)

@@ -9,6 +9,8 @@
     = ff.labeled_boolean_field :company
   = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline'
 
+  = render_extensions "new_user_fields", locals: { f: ff }
+
   - if f.object.steps.one?
     = render 'groups/self_registration/adult_consent_field', f: ff
     = field_set_tag(nil, class: 'privacy-policy-fields') do

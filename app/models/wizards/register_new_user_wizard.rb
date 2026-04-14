@@ -7,6 +7,9 @@
 class Wizards::RegisterNewUserWizard < Wizards::Base
   self.steps = [Wizards::Steps::NewUserForm]
 
+  attr_reader :group
+  delegate :self_registration_role_type, to: :group
+
   def initialize(group:, current_ability: nil, current_step: 0, **params)
     super(current_step:, current_ability:, **params)
     @group = group
@@ -60,7 +63,7 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
   end
 
   def build_role(person)
-    @role = person.roles.build(group: group, type: group.self_registration_role_type)
+    @role = person.roles.build(group: group, type: self_registration_role_type)
   end
 
   def person_attributes
@@ -94,6 +97,4 @@ class Wizards::RegisterNewUserWizard < Wizards::Base
       end
     end
   end
-
-  attr_reader :group
 end

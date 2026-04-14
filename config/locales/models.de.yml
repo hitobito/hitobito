@@ -1449,7 +1449,7 @@ de:
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast
       mailing_lists: Lesen aller Abos, auf die du Zugriff hast
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
-      register_people: Erstellen von Personen via SelbstRegistrierung
+      register_people: Erstellen von Personen via Selbstregistrierung
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:

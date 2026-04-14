@@ -8,12 +8,12 @@ module Export::Pdf
     MARGIN = 2.cm
 
     class Runner
-      def initialize(invoices, async_download_file)
+      def initialize(invoices, user_job_result)
         @invoices = invoices
         # rubocop:todo Layout/LineLength
         @invoice_config = invoices.first.invoice_config # we assume that all invoices have the same invoice config
         # rubocop:enable Layout/LineLength
-        @async_download_file = async_download_file
+        @user_job_result = user_job_result
         @metadata = {first_pages_of_invoices: [], pages_with_payment_slip: []}
       end
 
@@ -39,14 +39,14 @@ module Export::Pdf
       end
 
       def reporter
-        return unless @async_download_file
+        return unless @user_job_result
 
         @reporter ||= init_reporter
       end
 
       def init_reporter
         Export::ProgressReporter.new(
-          @async_download_file,
+          @user_job_result,
           @invoices.size
         )
       end
@@ -95,13 +95,13 @@ module Export::Pdf
     self.runner = Runner
 
     def self.render(invoice, options)
-      async_download_file = options.delete(:async_download_file)
-      runner.new([invoice], async_download_file).render(options)
+      user_job_result = options.delete(:user_job_result)
+      runner.new([invoice], user_job_result).render(options)
     end
 
     def self.render_multiple(invoices, options)
-      async_download_file = options.delete(:async_download_file)
-      runner.new(invoices, async_download_file).render(options)
+      user_job_result = options.delete(:user_job_result)
+      runner.new(invoices, user_job_result).render(options)
     end
   end
 end

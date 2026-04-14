@@ -10,8 +10,8 @@ require "spec_helper"
 describe Export::InvoicesJob do
   subject { described_class.new(format, user.id, invoice_ids, filename: filename) }
 
-  let(:filename) { AsyncDownloadFile.create_name("rechnungen", user.id) }
-  let(:pdf) { AsyncDownloadFile.from_filename(filename, format) }
+  let(:filename) { UserJobResult.create_name("rechnungen", user.id) }
+  let(:pdf) { UserJobResult.from_filename(filename, format) }
 
   let(:group) { groups(:top_group) }
   let(:user) { people(:top_leader) }

@@ -8,8 +8,8 @@ require "spec_helper"
 describe Export::InvitationsExportJob do
   subject { Export::InvitationsExportJob.new(format, user.id, course.id, filename: filename) }
 
-  let(:filename) { AsyncDownloadFile.create_name("invitations_export", user.id) }
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
+  let(:filename) { UserJobResult.create_name("invitations_export", user.id) }
+  let(:file) { UserJobResult.from_filename(filename, format) }
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }

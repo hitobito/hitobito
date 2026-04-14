@@ -11,8 +11,8 @@ describe Export::SubgroupsExportJob do
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
   let(:year) { 2012 }
-  let(:file) { AsyncDownloadFile.from_filename(filename, :csv) }
-  let(:filename) { AsyncDownloadFile.create_name("subgroups_export", user.id) }
+  let(:file) { UserJobResult.from_filename(filename, :csv) }
+  let(:filename) { UserJobResult.create_name("subgroups_export", user.id) }
 
   context "creates a CSV-Export" do
     it "and saves it" do

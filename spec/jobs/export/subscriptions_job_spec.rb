@@ -15,11 +15,11 @@ describe Export::SubscriptionsJob do
 
   let(:mailing_list) { mailing_lists(:info) }
   let(:user) { people(:top_leader) }
-  let(:filename) { AsyncDownloadFile.create_name("subscription_export", user.id) }
+  let(:filename) { UserJobResult.create_name("subscription_export", user.id) }
 
   let(:group) { groups(:top_layer) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
+  let(:file) { UserJobResult.from_filename(filename, format) }
 
   before do
     SeedFu.quiet = true

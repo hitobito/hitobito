@@ -10,8 +10,8 @@ require "spec_helper"
 describe Export::PaymentsExportJob do
   subject { described_class.new(format, user.id, payment_ids, filename: filename) }
 
-  let(:filename) { AsyncDownloadFile.create_name("payments_export", user.id) }
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
+  let(:filename) { UserJobResult.create_name("payments_export", user.id) }
+  let(:file) { UserJobResult.from_filename(filename, format) }
 
   let(:user) { people(:top_leader) }
   let(:payment_ids) do

@@ -9,9 +9,9 @@ class UserJobResultsController < ApplicationController
   def index
     @user_job_results =
       UserJobResult.includes([:generated_file_attachment])
-      .where(person_id: current_person.id)
-      .order(start_timestamp: :desc)
-      .page(params[:page])
+        .where(person_id: current_person.id)
+        .order(start_timestamp: :desc)
+        .page(params[:page])
 
     render "index"
   end

@@ -233,7 +233,7 @@ describe Export::Pdf::Messages::Letter do
 
       expect(job.user_job_result).to receive(:report_progress).once
 
-      described_class.new(letter, { job: }).render
+      described_class.new(letter, {job:}).render
     end
 
     it "should report progress with multiple recipients" do
@@ -242,7 +242,7 @@ describe Export::Pdf::Messages::Letter do
 
       expect(job.user_job_result).to receive(:report_progress).twice
 
-      described_class.new(letter, { job: }).render
+      described_class.new(letter, {job:}).render
     end
   end
 

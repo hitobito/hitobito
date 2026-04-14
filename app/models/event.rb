@@ -449,20 +449,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     places_available? || waiting_list_available?
   end
 
-  def init_questions(disclosure: nil) # rubocop:todo Metrics/AbcSize
-    application_questions << Question.global
-      .where(event_type: [self.class.sti_name, nil])
-      .where.not(id: application_questions.map(&:derived_from_question_id))
-      .application
-      .list
-      .map { |question| question.derive(disclosure: disclosure) }
-
-    admin_questions << Question.global
-      .where(event_type: [self.class.sti_name, nil])
-      .where.not(id: admin_questions.map(&:derived_from_question_id))
-      .admin
-      .list
-      .map { |question| question.derive(disclosure: disclosure) }
+  def init_questions
+    application_questions << derive_questions_from_templates
+    admin_questions << derive_questions_from_templates(admin: true)
   end
 
   def course?
@@ -533,6 +522,16 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   private
+
+  def derive_questions_from_templates(admin: false)
+    Event::QuestionTemplate
+      .joins(:question)
+      .where(default: true,
+        event_type: [self.class.sti_name, nil],
+        question: {admin: admin},
+        group_id: groups.map(&:layer_group_id))
+      .map { _1.derive_question }
+  end
 
   def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity
     master = groups.try(:first)

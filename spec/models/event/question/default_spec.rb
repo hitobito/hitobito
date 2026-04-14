@@ -12,17 +12,14 @@
 #  id                       :integer          not null, primary key
 #  admin                    :boolean          default(FALSE), not null
 #  choices                  :string
-#  disclosure               :string
 #  event_type               :string
 #  multiple_choices         :boolean          default(FALSE), not null
 #  question                 :text
 #  type                     :string           not null
-#  derived_from_question_id :integer
 #  event_id                 :integer
 #
 # Indexes
 #
-#  index_event_questions_on_derived_from_question_id  (derived_from_question_id)
 #  index_event_questions_on_event_id                  (event_id)
 #
 
@@ -70,13 +67,13 @@ describe Event::Question::Default do
     end
 
     it "may be required" do
-      subject.disclosure = :required
+      subject.required = true
 
       is_expected.to be_valid
     end
 
     it "may be optional" do
-      subject.disclosure = :optional
+      subject.required = false
 
       is_expected.to be_valid
     end
@@ -146,7 +143,7 @@ describe Event::Question::Default do
 
     context "validates answers to single-answer questions correctly: " do
       describe "a non-required question" do
-        let(:question) { Fabricate(:event_question, disclosure: :optional, choices: "Ja") }
+        let(:question) { Fabricate(:event_question, required: false, choices: "Ja") }
 
         subject(:no_answer_given) { build_answer("0") } # no choice
 

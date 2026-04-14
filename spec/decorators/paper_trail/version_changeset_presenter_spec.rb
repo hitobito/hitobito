@@ -66,11 +66,30 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
     expect(string).to eq("Sprache wurde von <i>Deutsch</i> auf <i>Französisch</i> geändert.")
   end
 
+  # We currently have to add a custom i18n key for this spec because there is no example for this case anymore.
+  # disclosure on event_questions was a good example before but was removed.
+  #
+  # For having this test case we add the enum values back, if the core ever gets another model with the
+  # enum translations on the base model and the model having sti subtypes, this can be replaced.
   it "translates i18n_enum values from base type if subtype does not have own translation" do
-    version.update!(item: event_questions(:top_ov), item_subtype: "Event::Question::Default")
-    string = presenter.attribute_change(:disclosure, "hidden", "optional")
+    I18n.backend.store_translations(:de, {
+      activerecord: {
+        attributes: {
+          "event/question": {
+            custom_enum_attribute: "Nicht existierendes Attribut",
+            custom_enum_attributes: {
+              hidden: "Nicht angezeigt",
+              optional: "Optional"
+            }
+          }
+        }
+      }
+    })
 
-    expect(string).to eq("Antwortangabe wurde von <i>Nicht angezeigt</i> auf <i>Optional</i> geändert.")
+    version.update!(item: event_questions(:top_ov), item_subtype: "Event::Question::Default")
+    string = presenter.attribute_change(:custom_enum_attribute, :hidden, :optional)
+
+    expect(string).to eq("Nicht existierendes Attribut wurde von <i>Nicht angezeigt</i> auf <i>Optional</i> geändert.")
   end
 
   it "translates attribute label of translated attributes" do

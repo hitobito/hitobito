@@ -862,26 +862,20 @@ de:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        disclosure: Antwortangabe
+        required: Obligatorisch
         sensitive: Sensibel
-        disclosures:
-          required: Obligatorisch
-          optional: Optional
-          hidden: Nicht angezeigt
 
       admin_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
-        disclosure: Antwortangabe
 
       application_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
         required: Antwort obligatorisch
-        disclosure: Antwortangabe
 
       event/role:
         label: Bezeichnung

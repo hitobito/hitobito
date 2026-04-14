@@ -15,17 +15,8 @@
       = f.inline_radio_button(:permission, :layer_and_below_full, model_class.human_attribute_name(:layer_and_below_full))
 
     = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, class: 'd-flex flex-column') do
-      = f.boolean_field(:people, caption: model_class.human_attribute_name(:people))
-      = f.boolean_field(:register_people, caption: model_class.human_attribute_name(:register_people))
-      = f.boolean_field(:groups, caption: model_class.human_attribute_name(:groups))
-      = f.boolean_field(:events, caption: model_class.human_attribute_name(:events))
-      - if parent.layer?
-        = f.boolean_field(:invoices, caption: model_class.human_attribute_name(:invoices))
-      = f.boolean_field(:event_participations, caption: model_class.human_attribute_name(:event_participations))
-      = f.boolean_field(:mailing_lists, caption: model_class.human_attribute_name(:mailing_lists))
-      = f.boolean_field(:qualifications, caption: model_class.human_attribute_name(:qualifications))
-
-      = render_extensions :fields, locals: { f: f }
+      - ServiceToken.possible_scopes.each do |scope|
+        = f.boolean_field(scope.to_sym, caption: model_class.human_attribute_name(scope.to_sym))
 
   = f.labeled_inline_fields_for :cors_origins do |nested_f|
     - nested_f.input_field(:origin, placeholder: 'https://example.org', class: 'd-inline ')

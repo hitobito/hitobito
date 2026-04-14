@@ -12,14 +12,7 @@ class ServiceTokensController < CrudController
   self.permitted_attrs = [
     :name,
     :description,
-    :people,
-    :register_people,
-    :groups,
-    :events,
-    :invoices,
-    :event_participations,
-    :qualifications,
-    :mailing_lists,
+    *ServiceToken.possible_scopes.map(&:to_sym),
     :permission,
     cors_origins_attributes: [:id, :origin, :_destroy]
   ]

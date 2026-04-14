@@ -8,14 +8,14 @@ require "spec_helper"
 describe DownloadCleanerJob do
   subject { DownloadCleanerJob.new }
 
-  let(:person) { people(:top_leader) }
-
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
-  let(:event_filter) { Event::Filter.new(group, nil, "all", 2012, false) }
+  let(:filter) do
+    {range: "all", year: "2012"}
+  end
 
   before do
-    allow(Auth).to receive(:current_person).and_return(person)
+    allow(Auth).to receive(:current_person).and_return(user)
   end
 
   it "removes files and gets rescheduled" do
@@ -37,7 +37,7 @@ describe DownloadCleanerJob do
   private
 
   def download_file(time)
-    job = Export::EventsExportJob.new(:csv, user.id, group.id, event_filter.to_h, filename: "event_export")
+    job = Export::EventsExportJob.new(:csv, user.id, group.id, filter, filename: "event_export")
 
     travel_to(time) do
       job.enqueue!

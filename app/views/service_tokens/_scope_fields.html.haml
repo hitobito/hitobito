@@ -1,0 +1,7 @@
+- #  Copyright (c) 2026, BdP and DPSG. This file is part of
+- #  hitobito and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito.
+
+- ServiceToken.possible_scopes.each do |scope|
+  = f.boolean_field(scope.to_sym, caption: model_class.human_attribute_name(scope.to_sym))

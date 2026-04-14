@@ -211,6 +211,9 @@ it:
     move: "spostare"
     merge: "raggruppare"
     archive: "archiviare"
+    delete: Löschen
+    edit_service_token: API-Keys
+    edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
     button: "Esporta indirizzi e-mail"

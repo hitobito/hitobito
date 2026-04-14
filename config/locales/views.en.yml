@@ -210,6 +210,9 @@ en:
     move: "Move"
     merge: "Merge"
     archive: "Archive"
+    delete: Löschen
+    edit_service_token: API-Keys
+    edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
     button: "Export email addresses"

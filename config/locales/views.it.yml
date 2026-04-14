@@ -707,7 +707,6 @@ it:
     preconditions: "qualifiche necessarie"
     tabs:
       participants: "partecipanti"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
 
   event/applications:
     approved: "L'iscrizione è stata accettata"
@@ -725,7 +724,6 @@ it:
     not_allowed_due_to_guest_limit: "Non è possibile aggiungere altri ospiti a questo evento."
 
   event/invitations:
-    export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
     description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
 
   event/kinds:
@@ -740,7 +738,6 @@ it:
     success: "%{full_entry_label} è stato creato con successo."
     success_for_external_manager: "%{full_entry_label} è stato salvato con successo."
     instructions: "per l'iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all'indirizzo corrispondente"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     waiting_list: "Tutti i posti sono attualmente occupati, l'iscrizione è in lista d'attesa."
     pending: "È stata creata una pre-registrazione per %{full_entry_label}. La partecipazione non è ancora definitiva e deve essere confermata dall'amministrazione dell'evento."
 
@@ -955,7 +952,6 @@ it:
     tabs:
       deleted: "Cancellato"
       statistics: "Statistica"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     statistics:
       title: Statistica
       description: "%{subject} in %{groups}"
@@ -1103,7 +1099,6 @@ it:
         esr_number_heading: Riferimento
         currency: Valuta
         amount: Importo
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
     recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
     evaluations:
       show:
@@ -1244,7 +1239,6 @@ it:
       other: "%{count} fatture sono state annullate."
 
   payments:
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
     create:
       flash:
         success: Pagamento sopra i %{amount} è stato registrato
@@ -1481,7 +1475,6 @@ it:
         unknown_recipient: Destinatario sconosciuto
         retrieved: Ricevere
         bounce_rejected: Rimbalzo rifiutato
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
     show:
       recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
     export:
@@ -1950,7 +1943,6 @@ it:
       add_role: Aggiungi ruolo
       set_main_group: Impostare il gruppo principale
 
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
     export_email_needed: "Per l'esportazione è necessario un indirizzo e-mail"
 
     multiselect_actions:
@@ -2325,7 +2317,6 @@ it:
     subscription:
       only_persons_with: "Solo persone con"
       persons_excluded_with: "Escludere le persone con:"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
 
   taggable:
     add_tag: Aggiungere tag

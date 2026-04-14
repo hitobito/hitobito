@@ -709,7 +709,6 @@ fr:
     preconditions: "qualifications requises"
     tabs:
       participants: "Participants"
-    export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
 
   event/applications:
     approved: "L'inscription a été autorisée."
@@ -727,7 +726,6 @@ fr:
     not_allowed_due_to_guest_limit: "Tu ne peux pas ajouter d'autres invités à cette événement."
 
   event/invitations:
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
     description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via la page%{model_name}. Elles ne reçoivent pas de mail automatique."
 
   event/kinds:
@@ -742,7 +740,6 @@ fr:
     success: "%{full_entry_label} a été ajouté avec succès."
     success_for_external_manager: "%{full_entry_label} a été créé avec succès."
     instructions: "Pour l'inscription définitive, tu dois imprimer cette page en utilisant l'option <i>imprimer</i>, puis la signer et l'envoyer par poste à l'adresse indiquée."
-    export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
     waiting_list: "Toutes les places sont actuellement prises, l'inscription est sur la liste d'attente."
     pending: " Une pré-entrée a été créée pour  %{full_entry_label}. La participation n'est pas encore définitive et doit être confirmée par la direction de l'événement."
 
@@ -957,7 +954,6 @@ fr:
     tabs:
       deleted: "Eléments effacés"
       statistics: "Statistiques"
-    export_enqueued: "L'exportation est lancée en arrière-plan et téléchargée une fois terminée."
     statistics:
       title: Statistiques
       description: "%{subject} in %{groups}"
@@ -1105,7 +1101,6 @@ fr:
         esr_number_heading: Numéro de référence
         currency: Devise
         amount: Montant
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
     recipients_empty: La liste des destinataires est vide. Impossible de créer un PDF.
     evaluations:
       show:
@@ -1246,7 +1241,6 @@ fr:
       other: "%{count} factures ont été annulées."
 
   payments:
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
     create:
       flash:
         success: La facture supérieur à %{amount} saisie.
@@ -1483,7 +1477,6 @@ fr:
         unknown_recipient: Destinataire inconnu
         retrieved: Recevoir
         bounce_rejected: Bounce refusé
-    export_enqueued: "L'export est démarré en arrière-plan et sera téléchargé après complétion."
     show:
       recipients_empty: La liste de distribution est vide, aucun PDF ne peut être créé.
     export:
@@ -1951,7 +1944,6 @@ fr:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
 
-    export_enqueued: "L'exportation commence en arrière-plan et sera téléchargé après avoir été complété."
     export_email_needed: "Adresse e-mail requise pour l'export."
 
     multiselect_actions:
@@ -2326,7 +2318,6 @@ fr:
     subscription:
       only_persons_with: "Seulement personnes avec:"
       persons_excluded_with: "Personnes exclues avec:"
-    export_enqueued: "L'exportation commence en arrière-plan et sera téléchargé après avoir été complété."
 
   taggable:
     add_tag: Rajouter un tag

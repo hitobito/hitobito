@@ -84,7 +84,7 @@ describe UserJobResult do
 
   describe "state reporting" do
     it "should correctly change model state when reporting in progress" do
-      subject.report_in_progress
+      subject.report_in_progress!
 
       expect(subject.end_timestamp).to be_nil
       expect(subject.status).to eql("in_progress")
@@ -93,7 +93,7 @@ describe UserJobResult do
 
     it "should correctly change model state when reporting success" do
       freeze_time
-      subject.report_success(1)
+      subject.report_success!(1)
 
       expect(subject.end_timestamp).to eql(Time.now.to_i.to_s)
       expect(subject.status).to eql("success")
@@ -101,7 +101,7 @@ describe UserJobResult do
     end
 
     it "should correctly change model state when reporting error" do
-      subject.report_error(3)
+      subject.report_error!(3)
 
       expect(subject.end_timestamp).to be_nil
       expect(subject.status).to eql("planned")
@@ -111,7 +111,7 @@ describe UserJobResult do
     it "should correctly change model state when reporting failure" do
       freeze_time
       subject.update!(attempts: 3)
-      subject.report_failure
+      subject.report_failure!
 
       expect(subject.end_timestamp).to eql(Time.now.to_i.to_s)
       expect(subject.status).to eql("error")
@@ -175,11 +175,11 @@ describe UserJobResult do
 
   describe "broadcasting notifications" do
     it "should broadcast notification when reporting success" do
-      expect { subject.report_success(1) }.to have_broadcasted_to("user_job_result_notifications")
+      expect { subject.report_success!(1) }.to have_broadcasted_to("user_job_result_notifications")
     end
 
     it "should broadcast notification when reporting failure" do
-      expect { subject.report_failure }.to have_broadcasted_to("user_job_result_notifications")
+      expect { subject.report_failure! }.to have_broadcasted_to("user_job_result_notifications")
     end
   end
 

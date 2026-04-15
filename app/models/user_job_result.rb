@@ -89,11 +89,11 @@ class UserJobResult < ApplicationRecord
     "#{super}.#{filetype}"
   end
 
-  def report_in_progress
+  def report_in_progress!
     update!(status: "in_progress")
   end
 
-  def report_success(total_attempts)
+  def report_success!(total_attempts)
     update!(
       status: "success",
       end_timestamp: Time.now.to_i,
@@ -102,7 +102,7 @@ class UserJobResult < ApplicationRecord
     broadcast_notification
   end
 
-  def report_error(used_attempts)
+  def report_error!(used_attempts)
     update!(
       status: "planned",
       attempts: used_attempts,
@@ -110,7 +110,7 @@ class UserJobResult < ApplicationRecord
     )
   end
 
-  def report_failure
+  def report_failure!
     update!(
       status: "error",
       end_timestamp: Time.now.to_i

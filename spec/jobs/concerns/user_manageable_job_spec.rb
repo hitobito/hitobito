@@ -33,7 +33,7 @@ describe UserManageableJob do
     enqueued_job = job.enqueue!
     user_job_result = job.user_job_result
 
-    expect(user_job_result).to receive(:report_in_progress)
+    expect(user_job_result).to receive(:report_in_progress!)
     run_enqueued_job(enqueued_job)
   end
 
@@ -42,7 +42,7 @@ describe UserManageableJob do
     enqueued_job = job.enqueue!
     user_job_result = job.user_job_result
 
-    expect(user_job_result).to receive(:report_success).with(1)
+    expect(user_job_result).to receive(:report_success!).with(1)
     expect { run_enqueued_job(enqueued_job) }.to change(Delayed::Job, :count).by(-1)
   end
 
@@ -51,7 +51,7 @@ describe UserManageableJob do
     enqueued_job = job.enqueue!
     user_job_result = job.user_job_result
 
-    expect(user_job_result).to receive(:report_error).with(1)
+    expect(user_job_result).to receive(:report_error!).with(1)
     run_enqueued_job(enqueued_job)
   end
 
@@ -60,7 +60,7 @@ describe UserManageableJob do
     enqueued_job = job.enqueue!
     user_job_result = job.user_job_result
 
-    expect(user_job_result).to receive(:report_failure)
+    expect(user_job_result).to receive(:report_failure!)
     2.times { run_enqueued_job(enqueued_job) }
   end
 

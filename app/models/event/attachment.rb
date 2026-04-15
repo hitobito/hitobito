@@ -42,7 +42,9 @@ class Event::Attachment < ActiveRecord::Base
   scope :visible_for_participants, -> { where(visibility: [:participants, :global]) }
   scope :visible_globally, -> { where(visibility: :global) }
 
-  def to_s
+  def to_s(format = :default)
+    return file.filename if format == :long
+
     file
   end
 

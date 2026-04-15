@@ -944,14 +944,12 @@ it:
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         required: Risposta obbligatoria
-        disclosure: Impostazione
 
       application_questions:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
         required: Risposta obbligatoria
-        disclosure: Impostazione
 
       event/role:
         label: Descrizione

@@ -27,15 +27,15 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
         :_destroy
       ],
       application_questions_attributes: [
-        :id, :question, :choices, :multiple_choices, :disclosure, :type,
-        :derived_from_question_id, :_destroy,
+        :id, :question, :choices, :multiple_choices, :type,
+        :required, :event_question_template_id, :_destroy,
         {
           choices_attributes: [:choice, :_destroy]
         }
       ],
       admin_questions_attributes: [
-        :id, :question, :choices, :multiple_choices, :disclosure, :type,
-        :derived_from_question_id, :_destroy,
+        :id, :question, :choices, :multiple_choices, :type,
+        :required, :event_question_template_id, :_destroy,
         {
           choices_attributes: [:choice, :_destroy]
         }
@@ -97,10 +97,6 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     entry.dates.build if entry.dates.empty? # allow wagons to use derived dates
     entry.init_questions
     respond_with(entry)
-  end
-
-  def edit
-    entry.init_questions(disclosure: :hidden)
   end
 
   def update
@@ -208,10 +204,6 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     participation.person = person
 
     entry.application_possible? && can?(:new, participation)
-  end
-
-  def init_questions
-    entry.init_questions
   end
 
   def render_tabular_in_background(format, name = :events_export)

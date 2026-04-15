@@ -20,9 +20,15 @@
 #
 
 class UserJobResult < ApplicationRecord
+  include I18nEnums
+
+  STATUSES = %w[planned in_progress success failure].freeze
+
   belongs_to :delayed_job, class_name: "Delayed::Backend::ActiveRecord::Job", optional: true
 
   has_one_attached :generated_file
+
+  i18n_enum :status, STATUSES, queries: true
 
   after_create_commit -> { broadcast_prepend_to "user_job_results" }
   after_update_commit -> { broadcast_replace_to "user_job_results" }

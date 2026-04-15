@@ -1430,6 +1430,11 @@ de:
         start_timestamp: Startzeitpunkt
         end_timestamp: Endzeitpunkt
         attempts: Versuche
+        statuses:
+          planned: In der Warteschlange
+          in_progress: In Bearbeitung
+          success: Erfolgreich abgeschlossen
+          error: Bei der Bearbeitung trat ein Fehler auf
 
   api:
     errors:

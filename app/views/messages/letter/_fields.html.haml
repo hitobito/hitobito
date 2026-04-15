@@ -6,14 +6,7 @@
 - if entry.class.sti_name == Message::Letter.sti_name
   = f.labeled_collection_select :send_to_households, message_send_to_household_options, :first, :last, {}, { data: { remote: true, url: group_mailing_list_recipient_counts_path(message_type: entry.type), 'on-page-load': true, spin: '#recipient-count-spinner .spinner' }, class: 'form-select form-select-sm' }
 = f.labeled_input_fields :date_location_text, :subject
-= f.labeled_collection_select :shipping_method, message_letter_shipping_methods(entry), :first, :last, {},  { class: 'form-select form-select-sm' }
-= f.labeled(:pp_post) do
-  .input-group.input-group-sm
-    %span.input-group-text
-      = 'P.P.'
-    = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
-    %span.input-group-text
-      = 'Post CH AG'
+= render 'shippable/shipping_fields', f: f
 = f.labeled_input_field :donation_confirmation if entry.invoice?
 = render_extensions :fields, locals: { f: f }
 = f.labeled_collection_select :salutation, Salutation.all, :first, :last, { include_blank: I18n.t('global.associations.no_entry') }, { class: 'form-select form-select-sm' }

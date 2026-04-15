@@ -33,8 +33,17 @@ import { Controller } from "@hotwired/stimulus";
       groups. Objects should contain a value and a label property.
       If not set, the optgroups from the HTML are used.
 
-    data-tom-select-optgroups-header-value: A String representing a valid js function body that
-      returns an anonymous function. It takes the opt group header and an escape function
+    data-tom-select-render-option-function-value: A String representing a valid js function.
+      The function takes an option and an escape function
+      and renders the corresponding html string. Use the escape function prevent XSS attacks, see
+      https://tom-select.js.org/docs (Section Render Templates). A working examples looks like this
+
+        return function(data, escape) {
+          return `<div>${escape(data.label)}</div>`
+        }
+
+    data-tom-select-render-optgroup-function-value: A String representing a valid js function.
+      The function takes an opt group header and an escape function
       and renders the corresponding html string. Use the escape function prevent XSS attacks, see
       https://tom-select.js.org/docs (Section Render Templates). A working examples looks like this
 
@@ -69,7 +78,8 @@ export default class extends Controller {
     selected: { type: Array },
     noResults: { type: String, default: "No results found." },
     maxOptions: { type: Number, default: null }, // no limit by default (null)
-    optgroupsHeader: String,
+    renderOptgroupFunction: String,
+    renderOptionFunction: String,
   };
 
   connect() {
@@ -102,8 +112,12 @@ export default class extends Controller {
     if (this.optionsValue.length) options.options = this.optionsValue;
     if (this.optgroupsValue.length) options.optgroups = this.optgroupsValue;
     if (this.selectedValue.length) options.items = this.selectedValue;
-    if (this.optgroupsHeaderValue.length)
-      options.render.optgroup_header = Function(this.optgroupsHeaderValue)();
+    if (this.renderOptgroupFunctionValue.length)
+      options.render.optgroup_header = Function(
+        this.renderOptgroupFunctionValue,
+      )();
+    if (this.renderOptionFunctionValue.length)
+      options.render.option = Function(this.renderOptionFunctionValue)();
 
     return options;
   }

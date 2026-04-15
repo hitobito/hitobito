@@ -324,45 +324,31 @@ describe Event do
         event.dates.create!(start_at: "2012-3-3")
         expect(Event.after_or_on(Date.new(2012, 3, 2))).to have(1).items
       end
-    end
-
-    context ".upcoming" do
-      subject { Event.upcoming }
-
-      it "does not find past events" do
-        set_start_finish(event, "2010-12-31 17:00")
-        is_expected.not_to be_present
-      end
-
-      it "does find upcoming event" do
-        event.dates.create(start_at: 2.days.from_now, finish_at: 5.days.from_now)
-        is_expected.to eq [event]
-      end
 
       it "does find running event" do
         event.dates.create(start_at: 2.days.ago, finish_at: Time.zone.now)
-        is_expected.to eq [event]
+        expect(Event.after_or_on).to eq [event]
       end
 
       it "does find event ending at 5 to 12" do
         event.dates.create(start_at: 2.days.ago,
           finish_at: Time.zone.now.midnight + 23.hours + 55.minutes)
-        is_expected.to eq [event]
+        expect(Event.after_or_on).to eq [event]
       end
 
       it "does not find event ending at 5 past 12" do
         event.dates.create(start_at: 2.days.ago, finish_at: Time.zone.now.midnight - 5.minutes)
-        is_expected.to be_blank
+        expect(Event.after_or_on).to be_blank
       end
 
       it "does find event with only start date" do
         event.dates.create(start_at: 1.day.from_now)
-        is_expected.to eq [event]
+        expect(Event.after_or_on).to eq [event]
       end
 
       it "does find event with only start date" do
         event.dates.create(start_at: Time.zone.now.midnight + 5.minutes)
-        is_expected.to eq [event]
+        expect(Event.after_or_on).to eq [event]
       end
     end
 

@@ -1,5 +1,7 @@
 class RenameItemIdToTemplateItemIdOnInvoiceRunProcessedSubjects < ActiveRecord::Migration[8.0]
   def change
+    InvoiceRun::ProcessedSubject.delete_all
+
     change_table :invoice_run_processed_subjects do |t|
       t.remove_index [:subject_id, :subject_type, :item_id, :invoice_id], name: "index_processed_subjects", unique: true
       t.remove_index [:subject_type, :subject_id], name: "index_invoice_run_processed_subjects_on_subject"

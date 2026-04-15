@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module UserJobResultsHelper
-  def job_status_icon(status)
+  def job_status_icon(user_job_result)
     icon_names_by_status = {
       planned: "circle-notch",
       in_progress: "spinner",
@@ -12,9 +12,9 @@ module UserJobResultsHelper
       error: "circle-xmark"
     }
 
-    icon_name = icon_names_by_status[status]
-    icon_options = {filled: true, "data-bs-toggle": "tooltip", title: t(".status.#{status}")}
-    icon_options[:class] = "fa-spin-pulse" if status == :in_progress
+    icon_name = icon_names_by_status[user_job_result.status.to_sym]
+    icon_options = {filled: true, "data-bs-toggle": "tooltip", title: user_job_result.status_label}
+    icon_options[:class] = "fa-spin-pulse" if user_job_result.in_progress?
 
     icon(icon_name, icon_options)
   end

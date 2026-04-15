@@ -168,11 +168,11 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   self.uses_form_tabs = true
 
-  self.filterable_attrs = [:name, :description, :location]
+  self.filterable_attrs = [:name, :description, :location,
+    :application_opening_at, :application_closing_at]
 
   model_stamper
-  stampable stamper_class_name: :person,
-    deleter: false
+  stampable stamper_class_name: :person, deleter: false
 
   ### ASSOCIATIONS
 
@@ -209,9 +209,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   ### VALIDATIONS
 
-  # rubocop:todo Layout/LineLength
-  # canceled_reason is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden inside a wagon
-  # rubocop:enable Layout/LineLength
+  # canceled_reason is used as enum in hitobito_sac_cas.
+  # validates_by_schema cannot be overridden inside a wagon
   # because of the loading order, so it must be excluded in the core instead
   validates_by_schema except: [:canceled_reason]
   # name is a translated attribute and thus needs to be validated explicitly
@@ -284,28 +283,31 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Event with start and end-date overlay
     def between(start_date, end_date)
+      return none if start_date.nil? || end_date.nil?
+
       joins(:dates)
         .where("event_dates.start_at <= :end_date AND event_dates.finish_at >= :start_date " \
               "OR event_dates.start_at <= :end_date AND event_dates.start_at >= :start_date",
-          start_date: start_date, end_date: end_date).distinct
+          start_date: start_date.beginning_of_day, end_date: end_date.end_of_day)
+        .distinct
     end
 
-    # before or on start date
     def before_or_on(date)
-      joins(:dates).where(event_dates: {start_at: ..date.end_of_day})
+      joins(:dates).where(event_dates: {start_at: ..date.end_of_day}).distinct
     end
 
-    # after or on start date
-    def after_or_on(date)
-      joins(:dates).where(event_dates: {start_at: date.midnight..})
-    end
-
-    # after or on start or finish date
-    def since(date)
+    def after_or_on(date = Time.zone.today)
       joins(:dates)
         .where("(event_dates.finish_at IS NULL AND event_dates.start_at >= :date) OR " \
               "(event_dates.finish_at IS NOT NULL AND event_dates.finish_at >= :date)",
-          date: date.beginning_of_day).distinct
+          date: date.beginning_of_day)
+        .distinct
+    end
+    alias_method :upcoming, :after_or_on
+
+    # Events ran in the past, i.e. events finished before the given date.
+    def in_the_past(date = Time.zone.today)
+      where.not(id: after_or_on(date).select(:event_id))
     end
 
     # Events from groups in the hierarchy of the given user.
@@ -318,18 +320,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       joins(:groups).where(groups: {id: group_ids})
     end
 
-    # Events running now or in the future.
-    def upcoming(midnight = Time.zone.now.midnight)
-      joins(:dates)
-        .where("event_dates.start_at >= ? OR event_dates.finish_at >= ?", midnight, midnight)
-    end
-
-    # Events ran in the past
-    def in_the_past(midnight = Time.zone.now.midnight)
-      where.not(id: Event::Date.where("finish_at IS NULL OR finish_at >= ?", midnight)
-        .select(:event_id))
-    end
-
     # Events that are open for applications.
     def application_possible
       today = Time.zone.today
@@ -340,9 +330,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     end
 
     def places_available
-      # rubocop:todo Layout/LineLength
-      where("(COALESCE(events.maximum_participants, 0) = 0) OR (participant_count < events.maximum_participants)")
-      # rubocop:enable Layout/LineLength
+      where("(COALESCE(events.maximum_participants, 0) = 0) OR " \
+            "(participant_count < events.maximum_participants)")
     end
 
     # Is the given attribute used in the current STI class

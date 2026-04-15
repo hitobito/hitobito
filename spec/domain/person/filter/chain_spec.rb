@@ -25,7 +25,7 @@ describe Person::Filter::Chain do
     it "includes all present filters" do
       chain = Person::Filter::Chain.new(role: {role_type_ids: "2-6-9"},
         qualification: {qualification_kind_ids: []})
-      expect(chain.to_params).to eq({role: {role_type_ids: "2-6-9"}})
+      expect(chain.to_params).to eq({"role" => {role_type_ids: "2-6-9"}})
     end
   end
 

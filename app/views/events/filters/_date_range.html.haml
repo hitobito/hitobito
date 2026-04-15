@@ -1,0 +1,21 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= f.fields_for(:date_range) do |fields|
+  .row.mb-2
+    = fields.label(:since, ti('.date_range_since'), class: "col-form-label col-md-3 col-xl-2")
+    .col-md-9.mw-63ch
+      .d-flex.align-items-center
+        .input-group
+          %span.input-group-text= icon(:"calendar-alt")
+          = fields.text_field(:since,
+                              value: filter.chain.dig(:date_range, :since),
+                              class: "form-control form-control-sm date")
+        .ml-2= ti('.until')
+        .input-group.ms-2
+          %span.input-group-text= icon(:"calendar-alt")
+          = fields.text_field(:until,
+                              value: filter.chain.dig(:date_range, :until),
+                              class: "form-control form-control-sm date")

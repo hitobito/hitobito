@@ -22,7 +22,7 @@
 class UserJobResult < ApplicationRecord
   include I18nEnums
 
-  STATUSES = %w[planned in_progress success failure].freeze
+  STATUSES = %w[planned in_progress success error].freeze
 
   belongs_to :delayed_job, class_name: "Delayed::Backend::ActiveRecord::Job", optional: true
 

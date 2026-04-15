@@ -35,11 +35,4 @@ class DoorkeeperTokenAbility < Ability
     # it's allowed to write where the user is allowed to write.
     true
   end
-
-  def acceptable_special_case?(subject_class_name, action)
-    if subject_class_name == "Group" && action == :register_people
-      return write_permission? && acceptable?(:register_people)
-    end
-    super
-  end
 end

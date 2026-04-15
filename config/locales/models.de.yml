@@ -1240,6 +1240,8 @@ de:
         cost_centers: Kostenstellen
         accounts: Konten
         payments: Zahlungseingänge
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       invoice_article:
         number: Artikelnummer
@@ -1307,6 +1309,8 @@ de:
         recipients_paid: Empfänger Bezahlt
         amount_total: Betrag insgesamt
         amount_paid: Betrag bezahlt
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       # used for nested attributes
       invoice_items:

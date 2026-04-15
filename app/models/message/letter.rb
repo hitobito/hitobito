@@ -42,13 +42,12 @@
 #
 
 class Message::Letter < Message
+  include Shippable
+
   has_rich_text :body
   self.icon = :"envelope-open-text"
 
-  SHIPPING_METHODS = %w[own normal priority].freeze
-  i18n_enum :shipping_method, SHIPPING_METHODS, scopes: true, queries: true
   validates :subject, presence: true
-  validates :shipping_method, inclusion: {in: SHIPPING_METHODS}
 
   validates :body, presence: true
 

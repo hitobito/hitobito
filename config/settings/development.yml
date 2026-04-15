@@ -6,6 +6,9 @@
 mailchimp:
   enabled: false
 
+messages:
+  enable_writing: true
+
 auth:
   skip_2fa: true
 

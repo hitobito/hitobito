@@ -6,18 +6,17 @@
 require "spec_helper"
 
 describe UserJobResultsHelper do
-  # Source - https://stackoverflow.com/a/23655457
-  # Posted by Sebastian vom Meer
-  # Retrieved 2026-03-02, License - CC BY-SA 3.0
-  before { helper.instance_variable_set(:@virtual_path, "user_job_results.user_job_result") }
+  let(:user_job_result) { UserJobResult.create_default!(people(:top_leader).id, "Testjob", nil, :txt, false) }
 
   it "icon for status in_progress should have spin animation class" do
-    icon = Capybara::Node::Simple.new(helper.job_status_icon(:in_progress))
+    user_job_result.report_in_progress!
+    icon = Capybara::Node::Simple.new(helper.job_status_icon(user_job_result))
     expect(icon).to have_css(".fa-spin-pulse")
   end
 
   it "icons that are not for status in_progress should not have spin animation class" do
-    icon = Capybara::Node::Simple.new(helper.job_status_icon(:success))
+    user_job_result.report_success!(1)
+    icon = Capybara::Node::Simple.new(helper.job_status_icon(user_job_result))
     expect(icon).not_to have_css(".fa-spin-pulse")
   end
 

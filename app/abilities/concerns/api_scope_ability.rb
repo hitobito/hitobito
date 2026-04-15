@@ -61,6 +61,19 @@ module ApiScopeAbility
   # In some cases, the accessed model does not match the required scope,
   # e.g. the people scope can grant a permission on Group, :index_people
   def acceptable_special_case?(subject_class_name, action)
+    return true if legacy_api_special_case?(subject_class_name, action)
+
+    case [subject_class_name, action.to_sym]
+    when ["Group", :register_people]
+      write_permission? && acceptable?(:register_people)
+    end
+  end
+
+  # These permissions are used in the legacy API only.
+  # The JSON:API does not nest e.g. people inside groups, so it checks
+  # `can?(:index, Person)` and uses PersonReadables instead of checking
+  # `can?(:index_people, group)`
+  def legacy_api_special_case?(subject_class_name, action)
     case [subject_class_name, action.to_sym]
     when ["Group", :index_people]
       acceptable?(:people)

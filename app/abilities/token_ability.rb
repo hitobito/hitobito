@@ -20,10 +20,6 @@ class TokenAbility < Ability
     @token = token
     super(token.dynamic_user)
 
-    # Service tokens, unlike normal users, may not use the self registration API outside
-    # of their permission range (e.g. layer_full or layer_and_below_full). Therefore,
-    # we declare this permission as a separate `can` instead of inheriting this permission
-    # from the dynamic_user.
     can :register_people, Group, id: registerable_groups if can_register_people?
   end
 
@@ -32,6 +28,15 @@ class TokenAbility < Ability
   end
 
   private
+
+  def acceptable_special_case?(subject_class_name, action)
+    # Service tokens, unlike normal users, may not use the self registration API outside
+    # their permission range (e.g. layer_full or layer_and_below_full). Therefore,
+    # we declare this permission as a separate `can` instead of inheriting this permission
+    # from the dynamic_user.
+    return false if subject_class_name == "Group" && action == :register_people
+    super
+  end
 
   def acceptable?(scope) = token.send(:"#{scope}?")
 

@@ -1403,6 +1403,7 @@ en:
         event_participations: Participants in events
         mailing_lists: Subscribers to mailing lists
         cors_origins: Hosts with API access
+        qualifications: Qualifikationen
 
       calendar:
         name: Name
@@ -1443,6 +1444,8 @@ en:
       invoices: Read all invoices that you have access to
       mailing_lists: Read all subscriptions to which you have access
       nextcloud: Reading your Nextcloud groups and your display name
+      register_people: Erstellen von Personen via Selbstregistrierung
+      qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:
     messages:

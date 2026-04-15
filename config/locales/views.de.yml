@@ -787,6 +787,9 @@ de:
         group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
     general:
       title: Allgemein
+    date_range:
+      date_range_since: Zeitraum von
+      until: bis
     full_text:
       q: Suchbegriff
     state:

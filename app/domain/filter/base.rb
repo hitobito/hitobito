@@ -21,7 +21,7 @@ class Filter::Base
   attr_reader :attr, :args
 
   def initialize(attr, args)
-    @attr = attr
+    @attr = attr.to_s
     @args = args.slice(*permitted_args)
   end
 
@@ -30,7 +30,7 @@ class Filter::Base
   end
 
   def blank?
-    args.blank?
+    args.blank? || args.values.all?(&:blank?)
   end
 
   # Returns a serializable, persistable representation of this filter.

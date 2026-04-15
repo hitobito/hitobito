@@ -6,7 +6,7 @@
 .container-fluid.text-center.bg-light.m-2.p-3{id: dom_id(user_job_result)}
   .row
     .col-1
-      = job_status_icon(user_job_result.status.to_sym)
+      = job_status_icon(user_job_result)
     .col-3
       = user_job_result.name
     .col-3

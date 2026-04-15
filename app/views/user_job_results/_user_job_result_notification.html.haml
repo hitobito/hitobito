@@ -4,7 +4,7 @@
 -# https://github.com/hitobito/hitobito.
 
 %div.toast{"data-controller": "user-job-result-notification"}
-  .toast-header{class: "bg-#{user_job_result.status == 'success' ? 'info' : 'danger'}"}
-    %strong= t(".job_#{user_job_result.status}")
+  .toast-header{class: class_names("bg-info": user_job_result.success?, "bg-danger": user_job_result.failure?)}
+    %strong= user_job_result.status_label
   .toast-body
     = user_job_result.name

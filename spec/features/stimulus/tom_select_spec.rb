@@ -84,6 +84,31 @@ describe "TomSelect Stimulus Controller", js: true do
         expect(page).to have_selector(".ts-dropdown .option .muted", text: "Description 0")
         expect(page).to have_selector(".ts-dropdown .option", count: 5)
       end
+
+      it "renders custom option" do
+        options = 5.times.map do |i|
+          {id: i, label: "Custom Option #{i}", color: "##{i}#{i}0000"}
+        end
+        render = <<~JS
+          return function(data, escape) {
+            return `<div><span style="color: ${data.color};">●</span> ${escape(data.label)}</div>`
+          }
+        JS
+        visit "/tom_select?data-tom-select-options-value=#{ERB::Util.url_encode(options.to_json)}&" \
+          "data-tom-select-render-option-function-value=#{ERB::Util.url_encode(render)}&" \
+          "data-tom-select-selected-value=[2]"
+
+        expect(page).to have_selector(".ts-wrapper", visible: true)
+
+        expect(page).to have_selector(".ts-control .item", text: "Custom Option 2")
+
+        find(".ts-control").click
+        expect(page).to have_selector(".ts-dropdown .option", text: "● Custom Option 0")
+        expect(page).to have_selector(".ts-dropdown .option span[style='color: #000000;']", text: "●")
+        expect(page).to have_selector(".ts-dropdown .option", text: "● Custom Option 1")
+        expect(page).to have_selector(".ts-dropdown .option span[style='color: #110000;']", text: "●")
+        expect(page).to have_selector(".ts-dropdown .option", count: 5)
+      end
     end
 
     context "optgroups" do
@@ -120,7 +145,7 @@ describe "TomSelect Stimulus Controller", js: true do
         ]
         visit "/tom_select?data-tom-select-options-value=#{ERB::Util.url_encode(options.to_json)}&" \
           "data-tom-select-optgroups-value=#{ERB::Util.url_encode(optgroups.to_json)}&" \
-          "data-tom-select-optgroups-header-value=return function(data, escape) { " \
+          "data-tom-select-render-optgroup-function-value=return function(data, escape) { " \
               "return `<h1>${escape(data.label)}</h1>` }"
 
         expect(page).to have_selector(".ts-wrapper", visible: true)

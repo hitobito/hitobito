@@ -24,9 +24,7 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
   end
 
   def to_s
-    content_tag(:div,
-      class: 'filter_attribute_form d-flex align-items-center
-              justify-content-between mb-2 controls controls-row') do
+    content_tag(:div, class: "filter_attribute_form d-flex mb-2 controls controls-row") do
       attribute_key_hidden_field +
         attribute_key_field +
         attribute_constraint_field +
@@ -58,7 +56,7 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
   end
 
   def attribute_key_field
-    content_tag(:div, class: "col") do
+    content_tag(:div) do
       select_tag(
         "#{filter_name_prefix}[key]",
         options_from_collection_for_select(keys_for_select, :last, :first, key),
@@ -75,7 +73,7 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
   end
 
   def attribute_constraint_field
-    content_tag(:div, class: "col") do
+    content_tag(:div, class: "ms-3") do
       select_tag(
         "#{filter_name_prefix}[constraint]",
         options_from_collection_for_select(
@@ -84,7 +82,7 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
           :first,
           constraint
         ),
-        html_options.merge(class: "attribute_constraint_dropdown ms-3 form-select form-select-sm")
+        html_options.merge(class: "attribute_constraint_dropdown form-select form-select-sm")
       )
     end
   end
@@ -108,7 +106,7 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
   end
 
   def attribute_value_field
-    content_tag(:div, class: "col") do
+    content_tag(:div, class: "col-3 ms-3") do
       if type
         send(:"#{type}_field")
       else
@@ -161,7 +159,7 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
     link_to(
       icon(:"trash-alt", filled: false),
       "#",
-      class: "remove_filter_attribute col lh-lg ms-5"
+      class: "remove_filter_attribute lh-lg ms-3"
     )
   end
 

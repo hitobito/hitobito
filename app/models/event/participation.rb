@@ -50,23 +50,21 @@ class Event::Participation < ActiveRecord::Base
   scope :list, -> { order(:created_at) }
 
   scope :with_person_participants, -> {
-    # rubocop:todo Layout/LineLength
-    joins("LEFT JOIN people ON event_participations.participant_type = 'Person' AND event_participations.participant_id = people.id")
-    # rubocop:enable Layout/LineLength
+    joins("LEFT JOIN people ON " \
+          "event_participations.participant_type = 'Person' AND " \
+          "event_participations.participant_id = people.id")
   }
 
   scope :with_guest_participants, -> {
-    # rubocop:todo Layout/LineLength
-    joins("LEFT JOIN event_guests ON event_participations.participant_type = 'Event::Guest' AND event_participations.participant_id = event_guests.id")
-    # rubocop:enable Layout/LineLength
+    joins("LEFT JOIN event_guests ON " \
+          "event_participations.participant_type = 'Event::Guest' AND " \
+          "event_participations.participant_id = event_guests.id")
   }
 
   scope :guests_of, ->(main_participant) {
-    joins(<<~SQL.squish)
-      INNER JOIN event_guests
-        ON event_participations.participant_type = 'Event::Guest'
-        AND event_participations.participant_id = event_guests.id
-    SQL
+    joins("INNER JOIN event_guests " \
+          "ON event_participations.participant_type = 'Event::Guest' " \
+          "AND event_participations.participant_id = event_guests.id")
       .where(participant_type: "Event::Guest")
       .where("event_guests.main_applicant_id = ?", main_participant.id) # rubocop:disable Rails/WhereEquals
   }
@@ -128,9 +126,8 @@ class Event::Participation < ActiveRecord::Base
     def order_by_role(event_type)
       joins(:roles)
         .select("event_participations.*", :order_weight)
-        # rubocop:todo Layout/LineLength
-        .joins("INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name")
-        # rubocop:enable Layout/LineLength
+        .joins("INNER JOIN event_role_type_orders " \
+               "ON event_roles.type = event_role_type_orders.name")
         .order("event_role_type_orders.order_weight ASC")
     end
 
@@ -143,12 +140,12 @@ class Event::Participation < ActiveRecord::Base
     end
 
     def upcoming
-      joins(:event).merge(Event.upcoming(::Time.zone.today)).distinct
+      joins(:event).merge(Event.upcoming).distinct
     end
 
     # used in sac_cas wagon
     def in_the_past
-      joins(:event).merge(Event.in_the_past(::Time.zone.today))
+      joins(:event).merge(Event.in_the_past)
     end
   end
 

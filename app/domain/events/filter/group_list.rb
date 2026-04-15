@@ -10,6 +10,7 @@ class Events::Filter::GroupList < Events::Filter::List
   attr_reader :group, :range
 
   def initialize(group, user, params = {})
+    normalize_date_filters(params)
     super(user, params)
     @group = group
     @range = params[:range]
@@ -26,6 +27,10 @@ class Events::Filter::GroupList < Events::Filter::List
 
   def year
     params[:year]
+  end
+
+  def custom_date_range?
+    chain[:date_range].present?
   end
 
   def event_type
@@ -52,9 +57,15 @@ class Events::Filter::GroupList < Events::Filter::List
   end
 
   def base_scope
-    Event.with_group_id(relevant_group_ids)
-      .where(type: params[:type])
-      .then { |scope| filter_by_date(scope) }
+    if custom_date_range?
+      group_events
+    else
+      group_events.in_year(year)
+    end
+  end
+
+  def group_events
+    Event.with_group_id(relevant_group_ids).where(type: params[:type])
   end
 
   def relevant_group_ids
@@ -66,25 +77,16 @@ class Events::Filter::GroupList < Events::Filter::List
     end
   end
 
-  def filter_by_date(scope)
-    start_date = parse_date(params[:start_date])
-    end_date = parse_date(params[:end_date])
-    start_time = (start_date || Time.zone.now).beginning_of_day
+  def normalize_date_filters(params) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+    # start_date and end_date params are only used by legacy api requests
+    start_date = params[:start_date].presence
+    end_date = params[:end_date].presence
+    return if start_date.blank? && end_date.blank?
 
-    if start_date.nil? && end_date.nil?
-      scope.in_year(params[:year])
-    elsif end_date
-      scope.between(start_time, end_date.end_of_day)
-    else
-      scope.upcoming(start_time)
-    end
-  end
-
-  private
-
-  def parse_date(date_string)
-    date_string.try(:to_date)
-  rescue ArgumentError
-    nil
+    start_date ||= Time.zone.today if end_date
+    params[:filters] ||= {}
+    params[:filters][:date_range] ||= {}
+    params[:filters][:date_range][:since] ||= start_date
+    params[:filters][:date_range][:until] ||= end_date
   end
 end

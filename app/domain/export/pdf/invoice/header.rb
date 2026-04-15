@@ -16,6 +16,7 @@ module Export::Pdf::Invoice
 
       render_logo if invoice.invoice_config.logo_enabled?
 
+      render_shipping_info
       render_address
     end
 
@@ -45,6 +46,41 @@ module Export::Pdf::Invoice
 
     def address_x_position
       address_position((invoice.logo_position == "left") ? "right" : "left")
+    end
+
+    def render_shipping_info
+      if invoice.pp_post.present? || !invoice.own?
+        pdf.move_down 36.mm
+        render_shipping_info_post_logo unless invoice.own?
+        render_shipping_info_text
+        render_shipping_info_line
+      end
+    end
+
+    def render_shipping_info_text
+      shipping_method, text_height = shipping_methods[invoice.shipping_method.to_sym]
+      text = "#{shipping_method}<font size='8'>#{invoice.pp_post}</font>"
+      position = [0, cursor + (text_height * 0.75)]
+      text_box(text, inline_format: true, overflow: :truncate, single_line: true, at: position)
+    end
+
+    def render_shipping_info_line
+      pdf.move_down 4.mm
+      pdf.stroke do
+        pdf.horizontal_line 0, 58.mm
+      end
+    end
+
+    def render_shipping_info_post_logo(width: 58.mm)
+      text_box("Post CH AG", align: :center, size: 7.pt, width: width, at: [0, cursor + 12.pt])
+    end
+
+    def shipping_methods
+      {
+        own: ["", 8.pt],
+        normal: ["<b><font size='12'>P.P.</font></b> ", 12.pt],
+        priority: ["<b><font size='12'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt]
+      }
     end
   end
 end

@@ -33,6 +33,8 @@
 #
 
 class InvoiceRun < ActiveRecord::Base
+  include I18nEnums
+  include Shippable
   include Globalized
 
   translates :title

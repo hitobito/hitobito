@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_15_070232) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -677,6 +677,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "period_invoice_template_id"
+    t.string "shipping_method", default: "own"
+    t.string "pp_post"
     t.index ["creator_id"], name: "index_invoice_runs_on_creator_id"
     t.index ["group_id"], name: "index_invoice_runs_on_group_id"
     t.index ["period_invoice_template_id"], name: "index_invoice_runs_on_period_invoice_template_id"
@@ -730,6 +732,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_09_141747) do
     t.string "recipient_address_care_of"
     t.string "recipient_postbox"
     t.string "recipient_type"
+    t.string "shipping_method", default: "own"
+    t.string "pp_post"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_run_id"], name: "index_invoices_on_invoice_run_id"

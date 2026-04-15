@@ -41,6 +41,8 @@
       .shown.ms-0
         = f.country_field :recipient_country
 
+  = render 'shippable/shipping_fields', f: f
+
   = f.labeled_input_field :payment_information, rows: 2
   - if entry.qr?
     = f.labeled_input_field :payment_purpose, rows: 2

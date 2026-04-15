@@ -21,6 +21,7 @@ class InvoiceRunsController < CrudController
       :payment_purpose,
       :hide_total,
       :issued_at,
+      :shipping_method, :pp_post,
       invoice_items_attributes: [
         :name,
         :description,

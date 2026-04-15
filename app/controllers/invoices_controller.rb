@@ -29,6 +29,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
     :recipient_address_care_of, :recipient_street, :recipient_housenumber, :recipient_postbox,
     :recipient_town, :recipient_zip_code, :recipient_country,
     :payment_information, :payment_purpose, :hide_total,
+    :shipping_method, :pp_post,
     invoice_items_attributes: [
       :id,
       :name,

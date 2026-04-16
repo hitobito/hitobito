@@ -532,6 +532,15 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       (!application_closing_at? || application_closing_at >= Time.zone.today)
   end
 
+  def start_at
+    dates.map(&:start_at).min
+  end
+
+  # Event dates can have no finish_at date, if so, we want to return the latest start_at date
+  def finish_at
+    dates.flat_map { [_1.start_at, _1.finish_at] }.compact.max
+  end
+
   private
 
   def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity

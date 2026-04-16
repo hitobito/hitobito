@@ -127,7 +127,7 @@ class InvoiceRunsController < CrudController
   end
 
   def invoices
-    Invoice::Filter.new(params).apply_or_none(group.issued_invoices)
+    Invoice::Filter.new(params.merge(filter_params)).apply_or_none(group.issued_invoices)
   end
 
   def flash_message(action: action_name, count: nil, title: nil)
@@ -202,5 +202,17 @@ class InvoiceRunsController < CrudController
     model_params&.permit(GlobalizedPermittedAttrs.new(
       InvoiceRun, [:title]
     ).permitted_attrs) || {}
+  end
+
+  def filter_params
+    {
+      from: params[:from] || "1.1.#{default_filter_year}",
+      to: params[:to] || "31.12.#{default_filter_year}",
+      ids: params[:ids] || []
+    }
+  end
+
+  def default_filter_year
+    entry&.created_at&.year || Time.zone.today.year
   end
 end

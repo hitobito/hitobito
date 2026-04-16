@@ -352,6 +352,16 @@ describe InvoiceRunsController do
       expect(flash[:notice][1]).to match(/Rechnung \d+-\d+ wird im Hintergrund per E-Mail verschickt./)
     end
 
+    it "PUT#update uses year of invoice_run created_at as default filter_param from and to" do
+      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new,
+        created_at: 10.years.ago)
+      invoice = Invoice.create!(group: group, title: "test", recipient: person, invoice_run: invoice_run)
+
+      expect(Invoice::Filter).to receive(:new).with(hash_including(from: "1.1.#{10.years.ago.year}",
+        to: "31.12.#{10.years.ago.year}")).and_call_original
+      post :update, params: {group_id: group.id, invoice_run_id: invoice_run.id, ids: invoice.id}
+    end
+
     describe "DELETE#destroy" do
       it "informs if no invoice has been selected" do
         delete :destroy, params: {group_id: group.id}

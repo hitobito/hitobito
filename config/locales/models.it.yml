@@ -528,7 +528,8 @@ it:
 
       additional_address:
         translated_label: Denominazione
-        street_and_number: Strada/Numero civico
+        street_and_number: Strada/Numero civico # can be removed with next release
+        street: Strasse
         housenumber: Numero civico
         postbox: Postfach
         zip_code: CAP
@@ -1481,6 +1482,7 @@ it:
         event_participations: Partecipanti ad eventi
         mailing_lists: Abbonate/i a mailing lists
         cors_origins: host con accesso API
+        qualifications: Qualifikationen
 
       calendar:
         name: Nome
@@ -1521,6 +1523,8 @@ it:
       invoices: Leggere tutte le fatture a cui hai accesso
       mailing_lists: Leggere tutti gli abbonamenti a cui hai accesso
       nextcloud: Leggi i tuoi gruppi Nextcloud e il tuo nome visualizzato
+      register_people: Erstellen von Personen via Selbstregistrierung
+      qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:
     messages:

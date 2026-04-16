@@ -7,7 +7,7 @@ module PaperTrail
   class VersionAssociationChangePresenter
     attr_reader :version, :h
 
-    delegate :event, :changeset, :item, :item_type, :main_type, :main_id, to: :version
+    delegate :event, :changeset, :item, :item_type, :item_id, :main_type, :main_id, to: :version
 
     def initialize(version, view_context)
       @version = version
@@ -108,7 +108,11 @@ module PaperTrail
     def item_class = @item_class ||= version.item_type.constantize
 
     def label_with_fallback(item)
-      item.to_s(:long)
+      if item.respond_to?(:translation_class)
+        item_class.find_by(id: item_id).to_s(:long)
+      else
+        item.to_s(:long)
+      end
     rescue
       I18n.t("global.unknown")
     end

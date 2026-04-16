@@ -15,7 +15,7 @@ class Event::LogController < ApplicationController
     @versions = event_related_versions
       .changed
       .reorder(created_at: :desc, id: :desc)
-      .includes(:item)
+      .includes(item: [:translations, :participant])
       .page(params[:page])
   end
 

@@ -7,7 +7,7 @@ module Examples
     def perform
       5.times do |i|
         Rails.logger.debug "Working..."
-        report_progress(i, 5)
+        report_progress!(i, 5)
       end
     end
   end

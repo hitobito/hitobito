@@ -30,7 +30,7 @@ module Export::Pdf
           LocaleSetter.with_locale(person: invoice.recipient.then {
             _1.is_a?(Person) ? _1 : nil
           }) do
-            @job&.report_progress(position, @invoices.size)
+            @job&.report_progress!(position, @invoices.size)
             invoice_page(pdf, invoice, options)
             pdf.start_new_page unless invoice == @invoices.last
           end

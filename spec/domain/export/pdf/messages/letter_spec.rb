@@ -231,7 +231,7 @@ describe Export::Pdf::Messages::Letter do
     it "should report progress with one recipient" do
       Messages::LetterDispatch.new(letter).run
 
-      expect(job.user_job_result).to receive(:report_progress).once
+      expect(job.user_job_result).to receive(:report_progress!).once
 
       described_class.new(letter, {job:}).render
     end
@@ -240,7 +240,7 @@ describe Export::Pdf::Messages::Letter do
       Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:top_leader))
       Messages::LetterDispatch.new(letter).run
 
-      expect(job.user_job_result).to receive(:report_progress).twice
+      expect(job.user_job_result).to receive(:report_progress!).twice
 
       described_class.new(letter, {job:}).render
     end

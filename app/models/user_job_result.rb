@@ -133,7 +133,7 @@ class UserJobResult < ApplicationRecord
   #
   # <tt>current_iteration</tt>: The current iteration
   # <tt>iteration_count</tt>: The total iterations after which the job will be done
-  def report_progress(current_iteration, iteration_count)
+  def report_progress!(current_iteration, iteration_count)
     if reports_progress
       progress = (100.to_f / iteration_count) * (current_iteration + 1)
       progress = (0 if progress < 0) || (100 if progress > 100) || progress

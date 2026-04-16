@@ -529,7 +529,8 @@ fr:
 
       additional_address:
         translated_label: Désignation
-        street_and_number: Rue/Numéro
+        street_and_number: Rue/Numéro # can be removed with next release
+        street: Strasse
         housenumber: Numéro de la maison
         postbox: Postfach
         zip_code: CP

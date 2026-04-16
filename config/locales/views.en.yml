@@ -168,6 +168,7 @@ en:
       caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
+      housenumber: Nr.
       updates_household_address: address will be updated for the household
 
   custom_content_decorator:

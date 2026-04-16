@@ -456,7 +456,8 @@ en:
 
       additional_address:
         translated_label: Bezeichnung
-        street_and_number: Strasse/Nummer
+        street_and_number: Strasse/Nummer # can be removed with next release
+        street: Strasse
         housenumber: Number
         postbox: Postfach
         zip_code: Postal Code

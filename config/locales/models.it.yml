@@ -528,7 +528,8 @@ it:
 
       additional_address:
         translated_label: Denominazione
-        street_and_number: Strada/Numero civico
+        street_and_number: Strada/Numero civico # can be removed with next release
+        street: Strasse
         housenumber: Numero civico
         postbox: Postfach
         zip_code: CAP

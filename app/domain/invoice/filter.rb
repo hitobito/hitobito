@@ -60,7 +60,7 @@ class Invoice::Filter
   end
 
   def filter_by_ids(relation)
-    return relation if params[:ids].blank? || all_invoices?
+    return relation if params[:ids].nil? || all_invoices?
 
     relation.where(id: invoice_ids)
   end
@@ -70,8 +70,6 @@ class Invoice::Filter
   end
 
   def invoice_ids
-    # return [] if all_invoices?
-
     @invoice_ids = params[:ids].to_s.split(",")
   end
 end

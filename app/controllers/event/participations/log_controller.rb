@@ -17,7 +17,7 @@ class Event::Participations::LogController < ApplicationController
       .changed
       .where(version_conditions)
       .reorder("created_at DESC, id DESC")
-      .includes(:item)
+      .includes(item: [:translations, {question: :translations}])
       .page(params[:page])
   end
 

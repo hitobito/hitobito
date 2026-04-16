@@ -101,7 +101,7 @@ class Event::Role < ActiveRecord::Base
     model_name = self.class.label
 
     if format == :long
-      I18n.t("activerecord.attributes.event/role.string_long", role: model_name,
+      I18n.t("activerecord.attributes.event/role.string_long", role: type.safe_constantize&.label,
         participation: participation.to_s)
     elsif label?
       "#{label} (#{model_name})"

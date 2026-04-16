@@ -725,13 +725,13 @@ describe Export::Pdf::Invoice do
     end
 
     it "should report progress with one invoice" do
-      expect(job.user_job_result).to receive(:report_progress).once
+      expect(job.user_job_result).to receive(:report_progress!).once
 
       described_class.render(invoice, payment_slip: true, articles: true, reminders: false, job:)
     end
 
     it "should report progress with multiple invoices" do
-      expect(job.user_job_result).to receive(:report_progress).twice
+      expect(job.user_job_result).to receive(:report_progress!).twice
 
       described_class.render_multiple([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
         articles: true, reminders: false, job:)

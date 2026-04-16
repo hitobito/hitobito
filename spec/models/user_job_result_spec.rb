@@ -121,7 +121,7 @@ describe UserJobResult do
 
   describe "progress reporting" do
     it "should not report progress when reports_progress is false" do
-      subject.report_progress(49, 100)
+      subject.report_progress!(49, 100)
 
       expect(subject.progress).to be_nil
     end
@@ -135,7 +135,7 @@ describe UserJobResult do
       calculated_progress_values << subject.progress
 
       list.each do |i|
-        subject.report_progress(i, 1000)
+        subject.report_progress!(i, 1000)
         calculated_progress_values << subject.progress
       end
 
@@ -151,7 +151,7 @@ describe UserJobResult do
       calculated_progress_values << subject.progress
 
       list.step(100) do |i|
-        subject.report_progress(i, 1000)
+        subject.report_progress!(i, 1000)
         calculated_progress_values << subject.progress
       end
 
@@ -160,14 +160,14 @@ describe UserJobResult do
 
     it "should not allow progress over 100" do
       subject.update!(reports_progress: true)
-      subject.report_progress(150, 100)
+      subject.report_progress!(150, 100)
 
       expect(subject.progress).to eql(100)
     end
 
     it "should not allow progress under 0" do
       subject.update!(reports_progress: true)
-      subject.report_progress(-100, 100)
+      subject.report_progress!(-100, 100)
 
       expect(subject.progress).to eql(0)
     end

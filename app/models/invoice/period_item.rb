@@ -132,6 +132,10 @@ class Invoice::PeriodItem < InvoiceItem
     raise "implement in subclass"
   end
 
+  def active_condition(start_on, end_on)
+    raise "implement in subclass"
+  end
+
   # The recipient is the model which receives and pays the invoice.
   # For membership invoices, the recipients are usually groups or people.
   def recipient_type
@@ -171,11 +175,6 @@ class Invoice::PeriodItem < InvoiceItem
       .where(Arel.sql("previous_invoice.recipient_id").eq(recipient_id_expression))
       .where(previous_invoice: {recipient_type: recipient_type})
       .where.not(previous_invoice: {id: invoice&.id})
-  end
-
-  def active_condition(start_on, end_on)
-    # Assumes the base_scope is already joined to the :role which the counted models belong to
-    Role.active(start_on..end_on)
   end
 
   def groups

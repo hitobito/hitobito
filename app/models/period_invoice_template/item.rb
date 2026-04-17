@@ -37,7 +37,7 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
     invoice_item_class.dynamic_cost_parameter_definitions
   end
 
-  def to_invoice_item(invoice: nil, recipient_groups: period_invoice_template.group_id)
+  def to_invoice_item(invoice: nil, recipient_groups: period_invoice_template.group_id, attrs: {})
     invoice_item_class.for_groups(
       recipient_groups,
       **name_attrs.merge(cost_center:, account:, vat_rate:, invoice:, unit_cost: unit_cost,
@@ -45,7 +45,7 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
           template_item_id: id,
           period_start_on: period_invoice_template.start_on,
           period_end_on: period_invoice_template.end_on
-        }))
+        })).deep_merge(attrs)
     )
   end
 

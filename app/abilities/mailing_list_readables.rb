@@ -30,6 +30,7 @@ class MailingListReadables < GroupBasedReadables
       append_group_conditions(condition)
       in_above_layer_condition(condition)
       subscribable_condition(condition)
+      service_token_condition(condition)
     end
   end
 
@@ -41,6 +42,13 @@ class MailingListReadables < GroupBasedReadables
     else
       # When logged in with a service token
       condition.or("#{MailingList.quoted_table_name}.subscribable_for = ?", "anyone")
+    end
+  end
+
+  def service_token_condition(condition)
+    unless user.persisted?
+      groups_in_same_layer = user.roles.first.group.layer_group.groups_in_same_layer.select(:id)
+      condition.or("#{MailingList.quoted_table_name}.group_id IN (?)", groups_in_same_layer)
     end
   end
 end

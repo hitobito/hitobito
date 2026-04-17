@@ -1407,7 +1407,7 @@ de:
         events: Anlässe
         invoices: Rechnungen
         event_participations: Teilnehmende von Anlässen
-        mailing_lists: Abonnent/-innen von Mailinglisten
+        mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: Hosts mit API-Zugriff
         qualifications: Qualifikationen
 

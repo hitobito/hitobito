@@ -420,21 +420,25 @@ describe TokenAbility do
   describe :mailing_lists do
     let(:mailing_list) { mailing_lists(:leaders) }
 
-    context "authorized" do
-      let(:token) { service_tokens(:permitted_top_layer_token) }
+    ServiceToken::PERMISSIONS.each do |permission|
+      context "authorized with #{permission}" do
+        let(:token) { service_tokens(:permitted_top_layer_token) }
 
-      it "may show" do
-        is_expected.to be_able_to(:show, mailing_list)
-      end
+        before { token.update!(permission: permission) }
 
-      it "may show for list below" do
-        list = groups(:top_group).mailing_lists.create!(name: "list")
-        is_expected.to be_able_to(:show, list)
-      end
+        it "may show" do
+          is_expected.to be_able_to(:show, mailing_list)
+        end
 
-      it "may not show for list in sub layer" do
-        list = groups(:bottom_layer_one).mailing_lists.create!(name: "list")
-        is_expected.not_to be_able_to(:show, list)
+        it "may show for list in same layer" do
+          list = groups(:top_group).mailing_lists.create!(name: "list")
+          is_expected.to be_able_to(:show, list)
+        end
+
+        it "may not show for list in sub layer" do
+          list = groups(:bottom_layer_one).mailing_lists.create!(name: "list")
+          is_expected.not_to be_able_to(:show, list)
+        end
       end
     end
 

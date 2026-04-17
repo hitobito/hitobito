@@ -21,6 +21,15 @@ class TokenAbility < Ability
     super(token.dynamic_user)
 
     can :register_people, Group, id: registerable_groups if can_register_people?
+
+    # Mailing lists can only be read by normal users with _full permission, see #964.
+    # For service tokens however, it would be unintuitive to require write permission
+    # for reading mailing lists. So we allow service tokens separately.
+    # However, granting read access on sub-layers would enable privilege escalation, so
+    # we grant it only on the current layer, even when the token has layer_and_below_*.
+    if acceptable?(:mailing_lists)
+      can :show, MailingList, group_id: token.layer.groups_in_same_layer.pluck(:id)
+    end
   end
 
   def identifier

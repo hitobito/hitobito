@@ -52,16 +52,19 @@ describe :user_job_results, js: true do
 
   it "should update user job results live" do
     visit user_job_results_path
-    expect(page).not_to have_content("Custom job name")
 
-    job = Examples::SuccessfulUserManagedJob.new
-    enqueue_and_run_job(job)
+    within "#user_job_results" do
+      expect(page).not_to have_content("Custom job name")
 
-    expect(page).to have_content("Custom job name")
+      job = Examples::SuccessfulUserManagedJob.new
+      enqueue_and_run_job(job)
+
+      expect(page).to have_content("Custom job name")
+    end
   end
 
   it "should show notification when job has successfully completed" do
-    visit user_job_results_path
+    visit root_path
 
     expect(page).not_to have_content("Job erfolgreich abgeschlossen")
 
@@ -81,5 +84,22 @@ describe :user_job_results, js: true do
     2.times { run_enqueued_job(enqueued_job) }
 
     expect(page).to have_content("Fehler bei Jobausführung aufgetreten")
+  end
+
+  it "should show user job results for jobs that were enqueued from another job" do
+    allow(Auth).to receive(:current_person).and_call_original
+    visit user_job_results_path
+    expect(page).to have_content("Jobübersicht")
+
+    job = Examples::UserManagedParentJob.new
+    job.user_id = top_leader.id
+
+    enqueue_and_run_job(job)
+    delayed_job_spec_worker.work_off
+
+    within "#user_job_results" do
+      expect(page).to have_content("Parent Job", count: 1)
+      expect(page).to have_content("Child Job", count: 3)
+    end
   end
 end

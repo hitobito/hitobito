@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe RecurringJob do
+  include DelayedJobSpecHelper
+
   subject { RecurringJob.new }
 
   its(:interval) { should == 15.minutes }
@@ -30,7 +32,7 @@ describe RecurringJob do
     subject.enqueue!(run_at: now)
     expect(subject).to be_scheduled
 
-    Delayed::Worker.new.work_off
+    delayed_job_spec_worker.work_off
 
     expect(subject).to be_scheduled
     expect(subject.delayed_jobs.count).to eq(1)
@@ -44,7 +46,7 @@ describe RecurringJob do
     now = Time.zone.now
     subject.enqueue!(run_at: now)
 
-    Delayed::Worker.new.work_off
+    delayed_job_spec_worker.work_off
 
     expect(subject).to be_scheduled
     expect(subject.delayed_jobs.count).to eq(1)
@@ -56,7 +58,7 @@ describe RecurringJob do
     subject.enqueue!(run_at: 1.month.ago)
     expect(subject).to be_scheduled
 
-    Delayed::Worker.new.work_off
+    delayed_job_spec_worker.work_off
 
     expect(subject).to be_scheduled
     expect(subject.delayed_jobs.count).to eq(1)
@@ -72,7 +74,7 @@ describe RecurringJob do
     subject.enqueue!(run_at: now)
     subject.enqueue!(run_at: now)
 
-    Delayed::Worker.new.work_off
+    delayed_job_spec_worker.work_off
 
     expect(subject).to be_scheduled
     expect(subject.delayed_jobs.count).to eq(1)

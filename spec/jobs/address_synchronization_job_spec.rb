@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe AddressSynchronizationJob do
+  include DelayedJobSpecHelper
+
   let(:config) {
     {
       host: "https://addr.example.com",
@@ -251,7 +253,7 @@ describe AddressSynchronizationJob do
         stub_api_request(:get, "/downloadfile/out", response: result.encode("Windows-1252"))
         expect do
           travel_to(1.minute.from_now) do
-            Delayed::Worker.new.work_off
+            delayed_job_spec_worker.work_off
           end
         end.to change { top_leader.reload.housenumber.to_i }.to(123)
           .and change { ActiveStorage::Attachment.count }.by(1)

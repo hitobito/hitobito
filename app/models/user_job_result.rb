@@ -30,9 +30,9 @@ class UserJobResult < ApplicationRecord
 
   i18n_enum :status, STATUSES, queries: true
 
-  after_create_commit -> { broadcast_prepend_to "user_job_results" }
   after_update_commit -> { broadcast_replace_to "user_job_results" }
-  after_destroy_commit -> { broadcast_remove_to "user_job_results" }
+  after_create_commit -> { broadcast_refresh_to "user_job_results" }
+  after_destroy_commit -> { broadcast_refresh_to "user_job_results" }
 
   before_destroy do
     generated_file.purge if generated_file.attached?

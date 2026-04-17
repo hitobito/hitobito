@@ -12,6 +12,7 @@
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
     %meta{name: 'turbo-cache-control', content: 'no-cache'}
     %meta{name: 'turbo-prefetch', content: 'false'}
+    = turbo_refreshes_with method: :morph, scroll: :preserve
 
     = csrf_meta_tag
     = wagon_favicon_pack_tag 'favicon.ico'

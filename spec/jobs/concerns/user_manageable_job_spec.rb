@@ -48,7 +48,7 @@ describe UserManageableJob do
     end
 
     it "should not create user job result when enqueing of delayed job fails" do
-      job = Examples::UnenqueueableJob.new
+      job = Examples::UnenqueueableUserManagedJob.new
 
       expect { job.enqueue! }
         .to raise_exception("Test exception: Something went wrong while enqueueing job")
@@ -146,15 +146,11 @@ describe UserManageableJob do
       job = Examples::UserManagedParentJob.new
       job.user_id = person.id
 
-      worker = Delayed::Worker.new
-      worker.max_run_time = 10.seconds
-      worker.max_attempts = 1
-
       expect { enqueue_and_run_job(job) }
         .to change { Delayed::Job.count }.by(3)
         .and change { UserJobResult.where(person_id: person.id).count }.by(4)
 
-      expect { worker.work_off }.to change { Delayed::Job.count }.by(-3)
+      expect(delayed_job_spec_worker.work_off).to match_array([3, 0])
     end
   end
 end

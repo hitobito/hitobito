@@ -13,7 +13,12 @@ module UserManageableJob
   end
 
   def enqueue!(options={})
-    person_id = Auth.current_person&.id || options.delete(:person_id)
+    # @person_id is set in #initialize of ExportBaseJob
+    # For jobs that are not export jobs, we fall back to Auth.current_person,
+    # which is the currently logged in or imitated user,
+    # For contexts where there is no logged in user, e.g. if a job is to be enqueued from another job,
+    # person_id can be passed in the options hash
+    person_id = @person_id || Auth.current_person&.id || options.delete(:person_id)
 
     return super unless person_id
 

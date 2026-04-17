@@ -41,12 +41,32 @@ module Examples
     end
   end
 
-  class UnenqueueableJob < BaseJob
+  class UnenqueueableUserManagedJob < BaseJob
     prepend UserManageableJob
 
     def enqueue!
       raise "Test exception: Something went wrong while enqueueing job"
     end
+
+    def perform
+      Rails.logger.debug "Working..."
+    end
+  end
+
+  class UserManagedParentJob < BaseJob
+    prepend UserManageableJob
+
+    def perform
+      3.times do
+        child_job = UserManagedChildJob.new
+        child_job.user_id = @user_id
+        child_job.enqueue!
+      end
+    end
+  end
+
+  class UserManagedChildJob < BaseJob
+    prepend UserManageableJob
 
     def perform
       Rails.logger.debug "Working..."

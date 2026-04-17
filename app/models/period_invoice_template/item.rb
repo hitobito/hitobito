@@ -38,12 +38,13 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
     invoice_item_class.dynamic_cost_parameter_definitions
   end
 
-  def to_invoice_item_for_groups(invoice: nil, recipient_groups: period_invoice_template.group_id)
-    invoice_item_class.for_groups(recipient_groups, **invoice_item_attrs(invoice:))
+  def to_invoice_item_for_groups(invoice: nil, recipient_groups: period_invoice_template.group_id,
+    attrs: {})
+    invoice_item_class.for_groups(recipient_groups, **invoice_item_attrs(invoice:, attrs:))
   end
 
-  def to_invoice_item_for_people(invoice: nil, recipient_people: Person.none)
-    invoice_item_class.for_people(recipient_people, **invoice_item_attrs(invoice:))
+  def to_invoice_item_for_people(invoice: nil, recipient_people: Person.none, attrs: {})
+    invoice_item_class.for_people(recipient_people, **invoice_item_attrs(invoice:, attrs:))
   end
 
   def invoice_item_class
@@ -71,12 +72,12 @@ class PeriodInvoiceTemplate::Item < ActiveRecord::Base
       .slice(:name, *Globalized.globalized_names_for_attr(:name, true))
   end
 
-  def invoice_item_attrs(invoice: nil)
+  def invoice_item_attrs(invoice: nil, attrs: {})
     name_attrs.merge(cost_center:, account:, vat_rate:, invoice:, unit_cost: unit_cost,
       dynamic_cost_parameters: dynamic_cost_parameters.merge({
         template_item_id: id,
         period_start_on: period_invoice_template.start_on,
         period_end_on: period_invoice_template.end_on
-      }))
+      })).deep_merge(attrs)
   end
 end

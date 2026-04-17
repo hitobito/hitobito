@@ -30,7 +30,7 @@ describe Invoice::RoleCountItem do
 
   subject(:item) { described_class.new(**attrs) }
 
-  def create_previous_invoice_item(invoice, item_attrs = attrs)
+  def create_previous_invoice_item(invoice)
     prev_item = described_class.new(**attrs.except(:invoice))
     prev_item.invoice = invoice
     prev_item.recalculate!

@@ -17,7 +17,7 @@ module Examples
 
     def perform
       Rails.logger.debug "Working..."
-      raise "Something went wrong during job execution"
+      raise "Test exception: Something went wrong during job execution"
     end
   end
 
@@ -38,6 +38,18 @@ module Examples
       loop do
         Rails.logger.debug "Working..."
       end
+    end
+  end
+
+  class UnenqueueableJob < BaseJob
+    prepend UserManageableJob
+
+    def enqueue!
+      raise "Test exception: Something went wrong while enqueueing job"
+    end
+
+    def perform
+      Rails.logger.debug "Working..."
     end
   end
 end

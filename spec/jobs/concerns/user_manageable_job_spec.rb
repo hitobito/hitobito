@@ -15,6 +15,24 @@ describe UserManageableJob do
       allow(Auth).to receive(:current_person).and_return(person)
     end
 
+    it "should enqueue job" do
+      job = Examples::SuccessfulUserManagedJob.new
+
+      expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+    end
+
+    it "should not enqueue job when creating user job result fails" do
+      job = Examples::SuccessfulUserManagedJob.new
+      allow(UserJobResult)
+        .to receive(:create_default!)
+        .and_raise("Test exception: Could not create user job result")
+
+      expect { job.enqueue! }
+        .to raise_exception("Test exception: Could not create user job result")
+        .and change { UserJobResult.count }.by(0)
+        .and change { Delayed::Job.count }.by(0)
+    end
+
     it "should create default user job result when enqueued" do
       job = Examples::SuccessfulUserManagedJob.new
 
@@ -22,17 +40,20 @@ describe UserManageableJob do
       job.enqueue!
     end
 
-    it "should not enqueue delayed job when creating user job result fails" do
-    end
-
-    it "should not create user job result when enqueing of delayed job fails" do
-    end
-
-    it "should have reference to user job result when job is enqueued" do
+    it "should have reference to user job result when enqueued" do
       job = Examples::SuccessfulUserManagedJob.new
       job.enqueue!
 
       expect(job.user_job_result).not_to be_nil
+    end
+
+    it "should not create user job result when enqueing of delayed job fails" do
+      job = Examples::UnenqueueableJob.new
+
+      expect { job.enqueue! }
+        .to raise_exception("Test exception: Something went wrong while enqueueing job")
+        .and change { UserJobResult.count }.by(0)
+        .and change { Delayed::Job.count }.by(0)
     end
 
     it "should report status in_progress when job is being worked off" do
@@ -79,6 +100,20 @@ describe UserManageableJob do
       expect(user_job_result).to receive(:report_progress!).exactly(5).times
       run_enqueued_job(enqueued_job)
     end
+
+    it "should use custom job name if set" do
+      job = Examples::SuccessfulUserManagedJob.new
+      job.enqueue!
+      user_job_result = job.user_job_result
+      expect(user_job_result.name).to eql("Custom job name")
+    end
+
+    it "should use class name as job name if custom name is not set" do
+      job = Examples::UnsuccessfulUserManagedJob.new
+      job.enqueue!
+      user_job_result = job.user_job_result
+      expect(user_job_result.name).to eql("Examples::UnsuccessfulUserManagedJob")
+    end
   end
 
   context "without logged in person" do
@@ -102,21 +137,7 @@ describe UserManageableJob do
       enqueued_job = Examples::UnsuccessfulUserManagedJob.new.enqueue!
       run_enqueued_job(enqueued_job)
 
-      expect(enqueued_job.last_error).to include("Something went wrong during job execution")
+      expect(enqueued_job.last_error).to include("Test exception: Something went wrong during job execution")
     end
-  end
-
-  it "should use custom job name if set" do
-    job = Examples::SuccessfulUserManagedJob.new
-    job.enqueue!
-    user_job_result = job.user_job_result
-    expect(user_job_result.name).to eql("Custom job name")
-  end
-
-  it "should use class name as job name if custom name is not set" do
-    job = Examples::UnsuccessfulUserManagedJob.new
-    job.enqueue!
-    user_job_result = job.user_job_result
-    expect(user_job_result.name).to eql("Examples::UnsuccessfulUserManagedJob")
   end
 end

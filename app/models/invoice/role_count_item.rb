@@ -30,4 +30,8 @@ class Invoice::RoleCountItem < Invoice::PeriodItem
     Role.with_inactive.joins(:group).joins(:person).where(type: role_types)
       .select(person_id: :id, group_id: :group_id, ancestor: {id: :ancestor_id}).distinct
   end
+
+  def active_condition(start_on, end_on)
+    Role.active(start_on..end_on)
+  end
 end

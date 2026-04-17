@@ -32,6 +32,7 @@ Fabricator(:period_invoice_template) do
     GroupsFilter.new(parent: Group.root, group_type: Group::BottomLayer.name, active_at: Time.zone.today)
   }
   before_create do |period_invoice_template|
+    next unless defined?(Group::BottomLayer::LocalGuide) # skip in wagons
     if period_invoice_template.items.empty?
       period_invoice_template.items.build(type: PeriodInvoiceTemplate::RoleCountItem.name, name: "Mitgliedsbeitrag",
         dynamic_cost_parameters: {unit_cost: "5", role_types: [Group::BottomLayer::LocalGuide.name]})

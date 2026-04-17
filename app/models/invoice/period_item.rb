@@ -132,6 +132,10 @@ class Invoice::PeriodItem < InvoiceItem
     raise "implement in subclass"
   end
 
+  def active_condition(start_on, end_on)
+    raise "implement in subclass"
+  end
+
   # The recipient is the model which receives and pays the invoice.
   # For membership invoices, the recipients are usually groups or people.
   def recipient_type
@@ -139,14 +143,28 @@ class Invoice::PeriodItem < InvoiceItem
   end
 
   def group_condition
-    # Assumes the base_scope is already joined to the :group which the counted models belong to
+    # This joins the "ancestor" group to the query. In the case of group invoices, the ancestor
+    # is the invoice recipient group in. In the case of invoices addressed to individual people,
+    # the ancestor is just the invoice sender group.
+    # Typically, for each ancestor group, ultimately a separate invoice will be generated.
+    # Therefore, all calculations are done per ancestor group / in the context of each ancestor
+    # group. Any DISTINCT statements in the business logic for deduplicating subjects should
+    # keep rows with separate ancestor.id separate. E.g. if a period item should only count each
+    # person once, what we actually mean is it should cound each person once per ancestor group:
+    # select("people.id", "ancestor.id AS ancestor_id").distinct
+    #
+    # The above would also hold true already for the #groups of a period item. However, the
+    # ancestor groups are the mechanism used to implement deep search efficiently. If only
+    # layer-local search or local search is required, this method can be overridden accordingly.
+    #
+    # Assumes the base_scope is already joined to the :group which the subjects belong to.
     Group.joins(
       "INNER JOIN groups ancestor ON ancestor.lft <= groups.lft AND ancestor.rgt > groups.lft"
     ).where(ancestor: {id: groups})
   end
 
   def people_condition
-    # Assumes the base_scope is already joined to the :person which the counted models belong to
+    # Assumes the base_scope is already joined to the :person which the subjects belong to.
     Person.where(id: people)
   end
 
@@ -171,11 +189,6 @@ class Invoice::PeriodItem < InvoiceItem
       .where(Arel.sql("previous_invoice.recipient_id").eq(recipient_id_expression))
       .where(previous_invoice: {recipient_type: recipient_type})
       .where.not(previous_invoice: {id: invoice&.id})
-  end
-
-  def active_condition(start_on, end_on)
-    # Assumes the base_scope is already joined to the :role which the counted models belong to
-    Role.active(start_on..end_on)
   end
 
   def groups

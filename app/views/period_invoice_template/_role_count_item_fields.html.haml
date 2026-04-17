@@ -3,6 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+= render "period_invoice_templates/shared_item_fields", f: f
 = f.label :role_types, class: "col-form-label pb-1 required"
 %div{ data: { controller: "role-types" } }
   .role-types-summary{ data: { role_types_target: "summary" } }

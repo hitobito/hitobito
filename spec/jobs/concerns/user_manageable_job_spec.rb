@@ -140,4 +140,21 @@ describe UserManageableJob do
       expect(enqueued_job.last_error).to include("Test exception: Something went wrong during job execution")
     end
   end
+
+  context "nested jobs" do
+    it "should enqueue jobs from another job and correctly assign them to a user" do
+      job = Examples::UserManagedParentJob.new
+      job.user_id = person.id
+
+      worker = Delayed::Worker.new
+      worker.max_run_time = 10.seconds
+      worker.max_attempts = 1
+
+      expect { enqueue_and_run_job(job) }
+        .to change { Delayed::Job.count }.by(3)
+        .and change { UserJobResult.where(person_id: person.id).count }.by(4)
+
+      expect { worker.work_off }.to change { Delayed::Job.count }.by(-3)
+    end
+  end
 end

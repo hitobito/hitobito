@@ -56,6 +56,8 @@ module Examples
   class UserManagedParentJob < BaseJob
     prepend UserManageableJob
 
+    self.job_name = "Parent Job"
+
     def perform
       3.times do
         child_job = UserManagedChildJob.new
@@ -67,6 +69,8 @@ module Examples
 
   class UserManagedChildJob < BaseJob
     prepend UserManageableJob
+
+    self.job_name = "Child Job"
 
     def perform
       Rails.logger.debug "Working..."

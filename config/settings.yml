@@ -88,10 +88,16 @@ social_account:
   custom_label:
     enabled: true
   predefined_labels:
+    - WhatsApp
+    - YouTube
     - Facebook
-    - MSN
-    - Skype
-    - Twitter
+    - Instagram
+    - Snapchat
+    - LinkedIn
+    - Pinterest
+    - Reddit
+    - X (Twitter)
+    - TikTok
     - Webseite
     - Andere
 

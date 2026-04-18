@@ -155,7 +155,7 @@ fr:
 
     social_account_fields:
       placeholder_value: Site internet, identifiant Skype, lien vers un profil...
-      placeholder_type: Type (Skype, Facebook...)
+      placeholder_type: Type (Instagram, Facebook...)
 
     additional_email_fields:
       placeholder_value: Courriel

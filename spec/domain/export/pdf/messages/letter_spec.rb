@@ -212,6 +212,40 @@ describe Export::Pdf::Messages::Letter do
     end
   end
 
+  context "when passing job in options" do
+    let(:job) do
+      job = Examples::SuccessfulUserManagedJob.new
+      job.enqueue!
+      job
+    end
+
+    before do
+      allow(Auth).to receive(:current_person).and_return(people(:top_leader))
+
+      Subscription.create!(mailing_list: list,
+        subscriber: group,
+        role_types: [Group::BottomGroup::Member])
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:bottom_member))
+    end
+
+    it "should report progress with one recipient" do
+      Messages::LetterDispatch.new(letter).run
+
+      expect(job.user_job_result).to receive(:report_progress!).once
+
+      described_class.new(letter, {job:}).render
+    end
+
+    it "should report progress with multiple recipients" do
+      Fabricate(Group::BottomGroup::Member.name, group: group, person: people(:top_leader))
+      Messages::LetterDispatch.new(letter).run
+
+      expect(job.user_job_result).to receive(:report_progress!).twice
+
+      described_class.new(letter, {job:}).render
+    end
+  end
+
   context "household addresses" do
     let(:housemate1) do
       Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "DE", zip_code: "12345")

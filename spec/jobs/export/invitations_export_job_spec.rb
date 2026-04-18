@@ -6,10 +6,7 @@
 require "spec_helper"
 
 describe Export::InvitationsExportJob do
-  subject { Export::InvitationsExportJob.new(format, user.id, course.id, filename: filename) }
-
-  let(:filename) { AsyncDownloadFile.create_name("invitations_export", user.id) }
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
+  subject { Export::InvitationsExportJob.new(format, user.id, course.id, filename: "invitations_export") }
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
@@ -34,9 +31,10 @@ describe Export::InvitationsExportJob do
     let(:format) { :csv }
 
     it "and saves it" do
+      subject.enqueue!
       subject.perform
 
-      lines = file.read.lines
+      lines = subject.user_job_result.read.lines
       expect(lines.size).to eq(3)
     end
   end

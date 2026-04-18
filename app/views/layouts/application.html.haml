@@ -12,6 +12,7 @@
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
     %meta{name: 'turbo-cache-control', content: 'no-cache'}
     %meta{name: 'turbo-prefetch', content: 'false'}
+    = turbo_refreshes_with method: :morph, scroll: :preserve
 
     = csrf_meta_tag
     = wagon_favicon_pack_tag 'favicon.ico'
@@ -25,12 +26,12 @@
     = yield(:head)
 
   %body{class: ('is-logged-out' unless person_signed_in?), data: { controller: 'remote-autocomplete' } }
+    = turbo_stream_from "user_job_result_notifications"
     %a#jump-to-content.bg-dark.text-light.mt-5.ml-5.p-2{href: "#main-content"}= t("global.jump_to_content")
     = render 'layouts/environment_header'
     #modal-placeholder
+    #user-job-result-notification-placeholder.toast-container.position-fixed.top-0.end-0.p-3
     %main
-      = render 'layouts/file_download' if current_user
-      = render 'layouts/synchronization' if current_user
       - if origin_user
         = render 'layouts/user_impersonation'
 
@@ -51,6 +52,7 @@
                 = render 'layouts/quicksearch'
               - else
                 = render 'layouts/languages'
+              = link_to icon('bars-progress'), user_job_results_path
               = link_to current_user, person_home_path(current_user), class: (render_nav? ? 'd-none d-md-block' : nil)
               = link_to t('layouts.nav.sign_out'), sign_out_path, 'data-method': :delete, class: (render_nav? ? 'd-none d-md-block' : nil)
             - elsif current_user.nil? # nil without login, false on error

@@ -72,6 +72,9 @@ de:
         one: "Ein Fehler verhinderte das Speichern dieses Eintrages:"
         other: "%{count} Fehler verhinderten das Speichern dieses Eintrages:"
 
+    export:
+      enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+
     tabs:
       info: Info
       settings: Einstellungen
@@ -710,7 +713,6 @@ de:
     preconditions: "Erforderliche Qualifikationen"
     tabs:
       participants: "Teilnehmende"
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 
   event/applications:
     approved: "Die Anmeldung wurde freigegeben."
@@ -728,7 +730,6 @@ de:
     not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
 
   event/invitations:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
 
   event/kinds:
@@ -743,7 +744,6 @@ de:
     success: "%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
     success_for_external_manager: "%{full_entry_label} wurde erfolgreich erstellt."
     instructions: "Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken."
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     waiting_list: "Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste."
     pending: "Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
 
@@ -953,7 +953,6 @@ de:
     tabs:
       deleted: "Gelöscht"
       statistics: "Statistiken"
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     statistics:
       title: Statistiken
       description: "%{subject} in %{groups}"
@@ -1103,7 +1102,6 @@ de:
         esr_number_heading: Referenznummer
         currency: Währung
         amount: Betrag
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
     evaluations:
       show:
@@ -1234,7 +1232,6 @@ de:
       other: "%{count} Rechnungen wurden storniert."
 
   payments:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     create:
       flash:
         success: Zahlung über %{amount} wurde erfasst.
@@ -1298,14 +1295,8 @@ de:
       info: "Du bist jetzt als %{user} angemeldet"
       end: "Imitation beenden"
 
-    file_download:
-      wait_for_downloads: "Die Downloads werden vorbereitet, bitte warten."
-      cancel_downloads: "Downloads abbrechen"
-
-    synchronization:
+  mailchimp_synchronizations:
       wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein."
-      synchronization_failed: "Beim Senden der Daten an MailChimp ist ein Fehler aufgetreten (%{error})."
-      cancel_synchronization: "Export abbrechen"
 
   mailing_lists:
     subscriber_lists:
@@ -1472,7 +1463,6 @@ de:
         unknown_recipient: Empfänger unbekannt
         retrieved: Empfangen
         bounce_rejected: Bounce abgelehnt
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     show:
       recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
     export:
@@ -1941,7 +1931,6 @@ de:
       add_role: Rolle hinzufügen
       set_main_group: Hauptgruppe setzen
 
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     export_email_needed: "Für den Export wird eine E-Mail Adresse benötigt."
 
     multiselect_actions:
@@ -2320,12 +2309,20 @@ de:
     subscription:
       only_persons_with: "Nur Personen mit:"
       persons_excluded_with: "Personen ausschliessen mit:"
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 
   taggable:
     add_tag: Tag hinzufügen
     cannot_create: Bitte wähle einen bestehenden Tag aus
     no_entry: (keine)
+
+  user_job_results:
+    index:
+      title: Jobübersicht
+    user_job_result:
+      no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
+    user_job_result_notification:
+      job_success: Job erfolgreich abgeschlossen
+      job_error: Fehler bei Jobausführung aufgetreten
 
   version:
     attribute_change:

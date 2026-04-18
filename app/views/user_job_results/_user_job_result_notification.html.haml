@@ -1,0 +1,10 @@
+-# Copyright (c) 2012-2026, Puzzle ITC. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+%div.toast{"data-controller": "user-job-result-notification"}
+  .toast-header{class: class_names("bg-info": user_job_result.success?, "bg-danger": user_job_result.error?)}
+    %strong= t(".job_#{user_job_result.status}")
+  .toast-body
+    = user_job_result.name

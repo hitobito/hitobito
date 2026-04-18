@@ -703,7 +703,6 @@ en:
     preconditions: "Required qualifications"
     tabs:
       participants: "Participants"
-    export_enqueued: "Export is started in the background and downloaded after completion."
 
   event/applications:
     approved: "The application was approved."
@@ -721,7 +720,6 @@ en:
     not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
 
   event/invitations:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
 
   event/kinds:
@@ -736,7 +734,6 @@ en:
     success: "%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary."
     success_for_external_manager: "%{full_entry_label} was successfully created."
     instructions: "For the definite registration you have to print the confirmation of participation by<i>printing</i>, sign it and send it by mail to the corresponding address."
-    export_enqueued: "Export is started in the background and downloaded after completion."
     waiting_list: "All places are currently taken, registration is on the waiting list."
     pending: "Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
 
@@ -945,7 +942,6 @@ en:
     tabs:
       deleted: "Deleted"
       statistics: "Statistics"
-    export_enqueued: "Export is started in the background and downloaded after completion."
     statistics:
       title: Statistics
       description: "%{subject}in %{groups} "
@@ -1091,7 +1087,6 @@ en:
         esr_number_heading: Reference
         currency: Currency
         amount: Invoice
-    export_enqueued: "Export is started in the background and downloaded after completion."
     recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
     evaluations:
       show:
@@ -1218,7 +1213,6 @@ en:
       other: "%{count} Invoices have been cancelled."
 
   payments:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     create:
       flash:
         success: Payment of %{amount}has been registered.
@@ -1281,15 +1275,6 @@ en:
     user_impersonation:
       info: "You are logged in as %{user}"
       end: "End imitation"
-
-    file_download:
-      wait_for_downloads: "The downloads are being prepared, please wait."
-      cancel_downloads: "Cancel downloads"
-
-    synchronization:
-      wait_for_synchronization: "Your data is currently being sent to MailChimp. This may take a moment. After that, the selected list will be updated with contacts from hitobito."
-      synchronization_failed: "Error (%{error}) occured while sending data to MailChimp."
-      cancel_synchronization: "Cancel export"
 
   mailing_lists:
     subscriber_lists:
@@ -1455,7 +1440,6 @@ en:
         unknown_recipient: Sender unknown
         retrieved: Empfangen
         bounce_rejected: Bounce abgelehnt
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     show:
       recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
     export:
@@ -1906,7 +1890,6 @@ en:
       add_role: Add role
       set_main_group: Set main group
 
-    export_enqueued: "Export is started in the background and downloaded after completion."
     export_email_needed: "Email needed for export."
 
     multiselect_actions:
@@ -2279,7 +2262,6 @@ en:
     subscription:
       only_persons_with: "Only people with:"
       persons_excluded_with: "Exclude people with:"
-    export_enqueued: "Export is started in the background and downloaded after completion."
 
   taggable:
     add_tag: Add tag

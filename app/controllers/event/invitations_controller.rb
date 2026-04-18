@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::InvitationsController < CrudController
-  include AsyncDownload
+  include UserManageableExportJob
 
   self.permitted_attrs = [:event_id, :person_id, :participation_type]
 
@@ -63,12 +63,11 @@ class Event::InvitationsController < CrudController
   end
 
   def render_tabular_in_background(format, name = :invitation_export)
-    with_async_download_cookie(format, name) do |filename|
-      Export::InvitationsExportJob.new(format,
-        current_person.id,
-        event.id,
-        filename: filename).enqueue!
-    end
+    Export::InvitationsExportJob.new(format,
+      current_person.id,
+      event.id,
+      filename: name).enqueue!
+    respond_to_export_job
   end
 
   def ability

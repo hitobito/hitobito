@@ -54,12 +54,15 @@ describe "Quicksearch", js: true do
   it "finds results when special characters in search term when confirming with enter" do
     allow_any_instance_of(FullTextController).to receive(:only_result).and_return(nil)
     Fabricate(:phone_number, contactable: people(:top_leader), number: "+41 79 123 45 67")
-    sign_in
-    visit root_path
+    within "#content" do
+      expect(page).to have_content("Top Leader")
+    end
     fill_in "quicksearch", with: "+41 79"
     send_keys(:enter)
     expect(page).to have_current_path("/full?q=%2B41%2079")
-    expect(page).to have_content("Top Leader")
+    within "#content" do
+      expect(page).to have_content("Leader Top")
+    end
   end
 
   it "does display event links when event does not have a name" do

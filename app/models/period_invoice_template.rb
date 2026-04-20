@@ -27,6 +27,23 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
     name
   end
 
+  # Custom builder method for the polymorphic recipient_source association.
+  #
+  # accepts_nested_attributes_for does not work out of the box with polymorphic
+  # belongs_to associations because it cannot determine which class to instantiate.
+  # This method is automatically called by Rails when processing nested attributes
+  # (via recipient_source_attributes=) and handles the instantiation of the correct
+  # recipient_source type (GroupsFilter, PeopleFilter, etc.) based on the :type parameter.
+  def build_recipient_source(params)
+    unless InvoiceRun::RECIPIENT_TYPES.include?(params[:type])
+      errors.add("recipient_source.type")
+      return
+    end
+    type = params.delete(:type).constantize
+    self.recipient_source ||= type.new(params)
+    self.recipient_source.attributes = params
+  end
+
   def recipient_group_type
     return recipient_source.group_type.safe_constantize if recipient_source.is_a?(GroupsFilter)
     group.class

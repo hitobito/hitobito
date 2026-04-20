@@ -15,7 +15,7 @@
 # run containing actual invoices.
 # As such, they have mostly the same columns as invoice items.
 # In order to actually calculate counts and prices, the
-# #to_invoice_item_for_groups r #to_invoice_item_for_people method
+# #to_invoice_item_for_groups or #to_invoice_item_for_people method
 # is used to get an invoice item that can perform the calculation.
 class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   include Globalized

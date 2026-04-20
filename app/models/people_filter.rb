@@ -41,7 +41,7 @@ class PeopleFilter < ActiveRecord::Base
   end
 
   def to_s(_format = :default)
-    name
+    name || I18n.t("people_filter.description", group: group.to_s)
   end
 
   def filter_chain=(value)

@@ -214,7 +214,7 @@ de:
               attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
         period_invoice_template:
           attributes:
-            recipient_group_type:
+            recipient_source:
               readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
@@ -373,8 +373,8 @@ de:
         one: Sammelrechnung
         other: Sammelrechnungen
       period_invoice_template/role_count_item:
-        one: Rollen-Zählung
-        other: Rollen-Zählungen
+        one: Rollen-Abrechnung
+        other: Rollen-Abrechnungen
       oauth/application:
         one: OAuth Applikation
         other: OAuth Applikationen
@@ -1377,7 +1377,7 @@ de:
         name: Bezeichnung
         start_on: Rechnungsperiode Start
         end_on: Rechnungsperiode Ende
-        recipient_group_type: Empfängergruppen
+        recipient_source: Rechnungsempfänger
         items: Rechnungsposten
 
       period_invoice_template/item:
@@ -1389,6 +1389,9 @@ de:
 
       period_invoice_template/role_count_item:
         role_types: Rollentypen
+
+      recipient_source:
+        group_type: Empfängergruppen
 
       service_token:
         name: Name

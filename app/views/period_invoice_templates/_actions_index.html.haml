@@ -1,0 +1,7 @@
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= action_button(ti(:"link.add_for_groups"), new_polymorphic_path(path_args(model_class)), "plus") if can?(:new, model_class) && group.decorate.show_new_period_invoice_template_for_groups?
+= action_button(ti(:"link.add_for_people"), new_polymorphic_path(path_args(model_class), recipient_source_type: "PeopleFilter"), "plus") if can?(:new, model_class) && group.decorate.show_new_period_invoice_template_for_people?

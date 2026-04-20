@@ -7,12 +7,10 @@
 
 module Dropdown
   class Invoices::Evaluation < Base
-    attr_reader :params, :user
+    delegate :params, to: :template
 
     def initialize(template, params, type)
       super(template, translate(type), type)
-      @params = params
-      @user = template.current_user
     end
 
     def export

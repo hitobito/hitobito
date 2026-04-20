@@ -224,15 +224,30 @@ describe InvoicesController do
       expect(response.media_type).to eq("application/pdf")
     end
 
-    it "exports csv" do
-      update_issued_at_to_current_year
+    describe "tabular exports" do
+      let(:expected_ids) { [invoice.id, invoices(:sent).id] }
+      let(:now) { Time.zone.now }
+      let(:options) { {filename: "rechnungen_#{now.to_i}-#{person.id}"} }
 
-      expected_ids = [invoice.id, invoices(:sent).id]
-      expect(Export::InvoicesJob).to receive(:new).with(:csv, anything, expected_ids, anything).and_call_original
+      before do
+        update_issued_at_to_current_year
+        freeze_time
+      end
 
-      expect do
-        get :index, params: {group_id: group.id}, format: :csv
-      end.to change { Delayed::Job.count }.by(1)
+      it "exports csv" do
+        expect(Export::InvoicesJob).to receive(:new).with(:csv, anything, expected_ids, options).and_call_original
+
+        expect do
+          get :index, params: {group_id: group.id}, format: :csv
+        end.to change { Delayed::Job.count }.by(1)
+      end
+      it "exports xlsx" do
+        expect(Export::InvoicesJob).to receive(:new).with(:xlsx, anything, expected_ids, options).and_call_original
+
+        expect do
+          get :index, params: {group_id: group.id}, format: :xlsx
+        end.to change { Delayed::Job.count }.by(1)
+      end
     end
 
     it "renders json" do
@@ -326,12 +341,27 @@ describe InvoicesController do
       get :show, params: {group_id: group.id, id: invoice.id, reminders: false}, format: :pdf
     end
 
-    it "exports csv" do
-      expect(Export::InvoicesJob).to receive(:new).with(:csv, anything, [invoice.id], anything).and_call_original
+    describe "tabular exports" do
+      let(:now) { Time.zone.now }
+      let(:options) { {filename: "#{invoice.filename("")}_#{now.to_i}-#{person.id}"} }
 
-      expect do
-        get :show, params: {group_id: group.id, id: invoice.id}, format: :csv
-      end.to change { Delayed::Job.count }.by(1)
+      before { freeze_time }
+
+      it "exports csv" do
+        expect(Export::InvoicesJob).to receive(:new).with(:csv, anything, [invoice.id], options).and_call_original
+
+        expect do
+          get :show, params: {group_id: group.id, id: invoice.id}, format: :csv
+        end.to change { Delayed::Job.count }.by(1)
+      end
+
+      it "exports xslx" do
+        expect(Export::InvoicesJob).to receive(:new).with(:xlsx, anything, [invoice.id], options).and_call_original
+
+        expect do
+          get :show, params: {group_id: group.id, id: invoice.id}, format: :xlsx
+        end.to change { Delayed::Job.count }.by(1)
+      end
     end
 
     it "renders json" do

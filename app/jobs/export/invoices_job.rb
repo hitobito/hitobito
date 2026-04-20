@@ -14,7 +14,7 @@ class Export::InvoicesJob < Export::ExportBaseJob
   end
 
   def format_supported?
-    %i[pdf csv].include? @format
+    %i[pdf csv xlsx].include? @format
   end
 
   def entries
@@ -33,6 +33,8 @@ class Export::InvoicesJob < Export::ExportBaseJob
       }))
     when :csv
       Export::Tabular::Invoices::List.csv(entries)
+    when :xlsx
+      Export::Tabular::Invoices::List.xlsx(entries)
     end
   end
 end

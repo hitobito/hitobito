@@ -49,7 +49,8 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
     respond_to do |format|
       format.html { super }
       format.pdf { generate_pdf(list_entries.includes(:invoice_items)) }
-      format.csv { render_invoices_csv(list_entries.includes(:invoice_items)) }
+      format.csv { render_tabular_in_background(:csv, list_entries.includes(:invoice_items)) }
+      format.xlsx { render_tabular_in_background(:xlsx, list_entries.includes(:invoice_items)) }
       format.json {
         render_entries_json(
           list_entries.includes(:invoice_items, :payments, :payment_reminders)
@@ -63,7 +64,8 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
     respond_to do |format|
       format.html { build_payment }
       format.pdf { generate_pdf([entry]) }
-      format.csv { render_invoices_csv([entry]) }
+      format.csv { render_tabular_in_background(:csv, [entry]) }
+      format.xlsx { render_tabular_in_background(:xlsx, [entry]) }
       format.json { render_entry_json }
     end
   end
@@ -140,15 +142,11 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def render_invoices_csv(invoices)
-    format = :csv
-
-    with_async_download_cookie(format, filename(format, invoices)) do |filename|
+  def render_tabular_in_background(format, invoices)
+    with_async_download_cookie(format, filename(invoices)) do |filename|
       Export::InvoicesJob.new(
-        format,
-        current_person.id,
-        invoices.map(&:id),
-        filename: filename
+        format, current_person.id, invoices.map(&:id),
+        {filename:}
       ).enqueue!
     end
   end
@@ -159,7 +157,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       render_pdf_in_background(letter)
     else
       format = :pdf
-      with_async_download_cookie(format, filename(format, invoices)) do |filename|
+      with_async_download_cookie(format, filename(invoices)) do |filename|
         Export::InvoicesJob.new(
           format,
           current_person.id,
@@ -170,11 +168,11 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def filename(extension, invoices)
+  def filename(invoices)
     if invoices.size > 1
-      "#{t("activerecord.models.invoice.other").downcase}.#{extension}"
+      t("activerecord.models.invoice.other").downcase
     else
-      invoices.first.filename(extension)
+      invoices.first.filename(nil)
     end
   end
 

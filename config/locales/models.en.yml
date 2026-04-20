@@ -1402,7 +1402,7 @@ en:
         events: Events
         invoices: Invoices
         event_participations: Participants in events
-        mailing_lists: Subscribers to mailing lists
+        mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: Hosts with API access
         qualifications: Qualifikationen
 

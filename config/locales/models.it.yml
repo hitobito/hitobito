@@ -1480,7 +1480,7 @@ it:
         events: Eventi
         invoices: Fatture
         event_participations: Partecipanti ad eventi
-        mailing_lists: Abbonate/i a mailing lists
+        mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: host con accesso API
         qualifications: Qualifikationen
 

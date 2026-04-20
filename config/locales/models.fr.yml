@@ -1481,7 +1481,7 @@ fr:
         events: Événements
         invoices: Factures
         event_participations: Participants d'évènements
-        mailing_lists: Abonné·e·s des mailing listes
+        mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: ordinateurs hôte avec accès via une interface
         qualifications: Qualifikationen
 

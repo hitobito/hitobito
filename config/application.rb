@@ -111,8 +111,13 @@ module Hitobito
 
     config.middleware.insert_before Rack::ETag, Rack::Deflater
 
-    config.cache_store = :mem_cache_store, { compress: true,
+    if ENV["REDIS_URL"].present?
+      additonal_redis_options = YAML.load("{ #{ENV['RAILS_REDIS_CACHE_CONFIG']} }").symbolize_keys
+      config.cache_store = :redis_cache_store, { url: ENV["REDIS_URL"] }.merge(additonal_redis_options)
+    else
+      config.cache_store = :mem_cache_store, { compress: true,
                                              namespace: ENV['RAILS_HOST_NAME'] || 'hitobito' }
+    end
 
     config.active_storage.variant_processor = :vips
 

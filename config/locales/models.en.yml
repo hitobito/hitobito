@@ -213,7 +213,7 @@ en:
         period_invoice_template:
           attributes:
             recipient_source:
-              readonly_due_to_existing_invoice_runs: cannot be changed anymore, as invoice runs already exist
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: cannot be before the start of the accounting period
         role:
@@ -1372,7 +1372,7 @@ en:
         name: Description
         start_on: Start of accounting period
         end_on: End of accounting period
-        recipient_source: Recipients
+        recipient_source: Rechnungsempfänger
         items: Invoice item
 
       period_invoice_template/item:
@@ -1384,6 +1384,9 @@ en:
 
       period_invoice_template/role_count_item:
         role_types: role type
+
+      recipient_source:
+        group_type: Empfängergruppen
 
       service_token:
         name: Name

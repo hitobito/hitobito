@@ -216,7 +216,7 @@ it:
         period_invoice_template:
           attributes:
             recipient_source:
-              readonly_due_to_existing_invoice_runs: non può più essere modificato, poiché esistono già cicli di fatturazione
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
@@ -1450,7 +1450,7 @@ it:
         name: Denominazione
         start_on: Inizio del periodo contabile
         end_on: Fine del periodo contabile
-        recipients: Destinatari
+        recipient_source: Rechnungsempfänger
         items: Voci contabili
 
       period_invoice_template/item:
@@ -1462,6 +1462,9 @@ it:
 
       period_invoice_template/role_count_item:
         role_types: Tipo di rullo
+
+      recipient_source:
+        group_type: Empfängergruppen
 
       service_token:
         name: Cognome

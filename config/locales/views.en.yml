@@ -253,6 +253,7 @@ en:
     original_invoice: "Originalrechnung inkl. Einzahlungsschein"
     articles_only: "Invoice separately"
     csv: "CSV"
+    xlsx: "Excel"
     pdf: "PSD"
     payments_without_invoice_csv: "Non-matched payments"
 
@@ -981,6 +982,9 @@ en:
         inscribe: Register
         description: Hier kannst du dich für die Gruppe einschreiben.
 
+  groups_filter:
+    description: "Alle %{group_type_plural} in %{parent}"
+
   group/deleted_people:
     list:
       confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
@@ -1240,12 +1244,14 @@ en:
           one: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_source_group_type_help: All groups of this type in or below %{group} will receive an invoice. This does not apply to groups that had already been deleted or archived by the start date of the billing period.
+      recipient_source_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_source_people_filter_parent_group_help: Alle Personen, die während der Rechnungsperiode eine aktive Rolle in %{group} hatten, bekommen eine Rechnung.
     new:
       title: Define a collective invoice
     actions_index:
       link:
-        add: Define a new collective invoice
+        add_for_groups: Neue Sammelrechnung an Gruppen
+        add_for_people: Neue Sammelrechnung an Personen
     tabs:
       info: Info
       invoice_runs: Billing run
@@ -1938,6 +1944,9 @@ en:
       status_off: Nicht vorhanden
       blocked: blocked
       not_blocked: Not blocked
+
+  people_filter:
+    description: "Personen in %{group}"
 
   participations:
     destroy:

@@ -254,6 +254,7 @@ fr:
     original_invoice: "Facture originale avec bulletin de versement"
     articles_only: "Facture séparée"
     csv: "CSV"
+    xlsx: "Excel"
     pdf: "PDF"
     payments_without_invoice_csv: "Paiements non assignables"
 
@@ -993,6 +994,9 @@ fr:
         inscribe: Inscription
         description: Ici, tu peux t'inscrire au groupe.
 
+  groups_filter:
+    description: "Alle %{group_type_plural} in %{parent}"
+
   group/deleted_people:
     list:
       confirm_delete: "Toutes les données sur %{person} vont être définitivement effacées, y compris les participations et les qualifications. N'efface cette personne que si personne n'aura jamais plus besoin de ces données. "
@@ -1269,12 +1273,14 @@ fr:
           many: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_source_group_type_help: Tous les groupes de ce type situés dans ou sous %{group} recevront une facture. Sont exclus les groupes qui avaient déjà été supprimés ou archivés à la date de début de la période de facturation.
+      recipient_source_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_source_people_filter_parent_group_help: Alle Personen, die während der Rechnungsperiode eine aktive Rolle in %{group} hatten, bekommen eine Rechnung.
     new:
       title: Définir une facture collective
     actions_index:
       link:
-        add: Définir une nouvelle facture collective
+        add_for_groups: Neue Sammelrechnung an Gruppen
+        add_for_people: Neue Sammelrechnung an Personen
     tabs:
       info: Informations
       invoice_runs: Série de factures
@@ -1992,6 +1998,9 @@ fr:
       status_off: Non existant
       blocked: Bloqué
       not_blocked: Non bloqué
+
+  people_filter:
+    description: "Personen in %{group}"
 
   participations:
     destroy:

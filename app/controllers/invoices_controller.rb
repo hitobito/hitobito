@@ -170,7 +170,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def filename(invoices)
-    if invoices.size > 1
+    if invoices.size != 1
       t("activerecord.models.invoice.other").downcase
     else
       invoices.first.filename(nil)

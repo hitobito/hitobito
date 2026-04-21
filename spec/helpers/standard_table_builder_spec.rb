@@ -51,18 +51,18 @@ describe "StandardTableBuilder" do
   end
 
   specify "two x two table" do
-    dom = <<-FIN
-      <table>
-      <thead>
-      <tr><th>Upcase</th><th>Size</th></tr>
-      </thead>
-    <tbody>
-      <tr><td>FOO</td><td>3 chars</td></tr>
-      <tr><td>BAHR</td><td>4 chars</td></tr>
-      </tbody>
-      </table>
+    dom = <<~FIN
+        <table>
+        <thead>
+        <tr><th>Upcase</th><th>Size</th></tr>
+        </thead>
+      <tbody>
+        <tr><td>FOO</td><td>3 chars</td></tr>
+        <tr><td>BAHR</td><td>4 chars</td></tr>
+        </tbody>
+        </table>
     FIN
-    dom.gsub!(/[\n\t]/, "").gsub!(/\s{2,}/, "")
+    # dom = dom.gsub(/[\n\t]/, "").gsub(/\s{2,}/, "")
 
     table.attrs :upcase, :size
 
@@ -70,7 +70,7 @@ describe "StandardTableBuilder" do
   end
 
   specify "table with before and after cells" do
-    dom = <<-FIN
+    dom = <<~FIN
       <table>
       <thead>
       <tr><th class='left'>head</th><th>Upcase</th><th>Size</th><th></th></tr>
@@ -91,7 +91,6 @@ describe "StandardTableBuilder" do
       </tbody>
       </table>
     FIN
-    dom.gsub!(/[\n\t]/, "").gsub!(/\s{2,}/, "")
 
     table.col("head", class: "left") { |e| link_to e, "/" }
     table.attrs :upcase, :size
@@ -101,7 +100,7 @@ describe "StandardTableBuilder" do
   end
 
   specify "empty entries collection renders empty table" do
-    dom = <<-FIN
+    dom = <<~FIN
       <table>
       <thead>
       <tr><th class='left'>head</th><th>Upcase</th><th>Size</th><th></th></tr>
@@ -110,7 +109,6 @@ describe "StandardTableBuilder" do
       </tbody>
       </table>
     FIN
-    dom.gsub!(/[\n\t]/, "").gsub!(/\s{2,}/, "")
 
     table = StandardTableBuilder.new([], self)
     table.col("head", class: "left") { |e| link_to e, "/" }

@@ -358,6 +358,7 @@ create)
   rails generate wagon "$wagon_name"
 
   new_wagon_dir="../hitobito_$wagon_name"
+  mkdir -p "$new_wagon_dir"
 
   mv -nfv vendor/wagons/$wagon_name/* "$new_wagon_dir"
   mv -nfv vendor/wagons/$wagon_name/.{ruby-version,rubocop.yml,gitignore} "$new_wagon_dir"

@@ -11,7 +11,7 @@ require "pathname"
 
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
-  USED_RUBY_VERSION = "3.2.6"
+  USED_RUBY_VERSION = "4.0.2"
   USED_NODE_VERSION = "16.15.0"
   USED_YARN_VERSION = "1.22.19"
 
@@ -92,9 +92,9 @@ class Setup
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{primary_wagon || wagon}_dev
-      export RAILS_TEST_DB_NAME=hit_#{wagon ? wagon : "core"}_test
+      export RAILS_TEST_DB_NAME=hit_#{wagon || "core"}_test
       export RAILS_TMPDIR=#{root.join("../", wagon ? "hitobito_#{wagon}" : "", "tmp")}
-      export SPRING_APPLICATION_ID=hit_#{wagon ? wagon : "core"}
+      export SPRING_APPLICATION_ID=hit_#{wagon || "core"}
       export PRIMARY_WAGON=#{primary_wagon}
       #{'export WAGONS="' + wagons.join(" ") + '"' if wagons.any?}
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(", ") : "just the core"}"
@@ -114,7 +114,7 @@ class Setup
     YOUTH_DEPENDENT_WAGONS.product([%w[youth]]).to_h.merge({
       "tenants" => %w[generic],
       "bdp" => %w[pfadi_de],
-      "dpsg" => %w[pfadi_de],
+      "dpsg" => %w[pfadi_de]
     })
   end
 

@@ -1,7 +1,5 @@
 .invoice-state {
   background: $gray-lighter;
-  margin-left: -20px;
-  margin-right: -20px;
   padding: 10px 21px;
 
   .invoice-state-table {
@@ -13,6 +11,7 @@
       font-weight: normal;
       text-align: left;
     }
+
     tr td,
     tr th {
       padding-right: 30px;
@@ -28,15 +27,19 @@
         font-size: 6px;
         padding-right: 5px;
       }
+
       td.red:first-child {
         color: $red;
       }
+
       td.blue:first-child {
         color: $blue;
       }
+
       td.green:first-child {
         color: $green;
       }
+
       td:nth-child(2) {
         padding-right: 20px;
         color: $gray;
@@ -50,6 +53,7 @@
   .invoice-info {
     margin-top: 20px;
     width: 100%;
+
     .invoice-payment {
       float: right;
     }
@@ -79,9 +83,11 @@
       table {
         float: right;
         width: 250px;
+
         tr {
           border-bottom: 1px solid $gray-light;
         }
+
         tr:first-child {
           border-bottom: none;
         }
@@ -102,10 +108,10 @@
   margin-top: -2rem;
 }
 
-.invoices-filter + div + div {
+.invoices-filter+div+div {
   margin-top: 20px;
 }
 
-.invoice-evaluation-actions > div {
+.invoice-evaluation-actions>div {
   margin-bottom: 0.3rem;
 }

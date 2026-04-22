@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)
 - Konfigurierbare Ausweise mit Apple und Google Wallet Integration (#3911)
 - Gruppen Sammelrechnungen können kopiert werden (#3754)
 - Spezifische E-Mails je nach Zustand der Teilnahme (Nicht zugeteilt, Zugeteilt, Warteliste) (hitobito_sww#289)

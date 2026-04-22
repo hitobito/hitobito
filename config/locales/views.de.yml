@@ -921,6 +921,13 @@ de:
       approvers:
         title: "Benachrichtigungen an"
 
+    statistics:
+      people:
+        title: Personenstatistik
+      show:
+        not_found: "Die angeforderte Statistik wurde nicht gefunden."
+        not_available_for_group: "Diese Statistik ist für diese Gruppe nicht verfügbar."
+
   groups:
     actions_show:
       export_subgroups: "CSV Untergruppen"
@@ -957,11 +964,17 @@ de:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     statistics:
       title: Statistiken
+      none_available: "Auf dieser Gruppe sind keine Statistiken verfügbar."
+      not_found: "Die angeforderte Statistik wurde nicht gefunden."
+      not_available_for_group: "Diese Statistik ist für diese Gruppe nicht verfügbar."
       description: "%{subject} in %{groups}"
       year: Jahrgang
       age: Alter
       count: Anzahl
       distribution: Verteilung
+      people:
+        title: Personenstatistik
+        description: "%{subject} in %{groups}"
     self_registration:
       alert:
         not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.

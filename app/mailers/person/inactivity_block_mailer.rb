@@ -10,9 +10,7 @@ class Person::InactivityBlockMailer < ApplicationMailer
 
   def inactivity_block_warning(recipient)
     @recipient = recipient
-    values = values_for_placeholders(CONTENT_INACTIVITY_BLOCK_WARNING)
-
-    custom_content_mail(recipient.email, CONTENT_INACTIVITY_BLOCK_WARNING, values)
+    compose(recipient.email, CONTENT_INACTIVITY_BLOCK_WARNING)
   end
 
   private

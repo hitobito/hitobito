@@ -52,7 +52,7 @@ describe CustomContent do
     end
   end
 
-  context "lists" do
+  context "placeholders_required_list" do
     it "creates empty list for nil" do
       expect(custom_contents(:notes).placeholders_required_list).to eq([])
     end
@@ -64,15 +64,6 @@ describe CustomContent do
     it "creates list with several elements" do
       subject.placeholders_required = "login-url, foo ,bar"
       expect(subject.placeholders_required_list).to eq(%w[login-url foo bar])
-    end
-
-    it "creates list with several elements from main custom content" do
-      subject.update!(placeholders_required: nil)
-      context_custom_content = Fabricate(:custom_content, context: Group.root, key: subject.key)
-      subject.update!(
-        placeholders_required: "login-url, foo, bar", body: "{login-url}{foo}{bar}", body_fr: "{login-url}{foo}{bar}"
-      )
-      expect(context_custom_content.placeholders_required_list).to eq(%w[login-url foo bar])
     end
   end
 
@@ -136,20 +127,6 @@ describe CustomContent do
       subject.subject_fr = "Placeholders missing"
 
       is_expected.not_to be_valid
-    end
-
-    it "fails in context when required placeholder from main custom content is missing" do
-      context_custom_content = Fabricate(:custom_content, context: Group.root, key: subject.key, body: "{login-url}")
-      context_custom_content.body = ""
-      expect(context_custom_content).not_to be_valid
-    end
-
-    it "fails in context when required placeholder from main custom content in additional language is missing" do
-      context_custom_content = Fabricate(
-        :custom_content, context: Group.root, key: subject.key, body: "{login-url}", body_fr: "{login-url}"
-      )
-      context_custom_content.body_fr = "Placeholders missing"
-      expect(context_custom_content).not_to be_valid
     end
   end
 

@@ -1,6 +1,13 @@
 class RefillStructuredAddressesForNecessaryInvoices < ActiveRecord::Migration[8.0]
+  # Define local models to avoid loading full models with concerns that reference
+  # columns (like shipping_method) that may not exist yet in tenant schemas
+  class MigrationInvoice < ActiveRecord::Base
+    self.table_name = "invoices"
+    belongs_to :recipient, polymorphic: true
+  end
+
   def up
-    Invoice.transaction do
+    MigrationInvoice.transaction do
       relevant_invoices.find_each do |invoice|
         # I dont know how exactly but there are invoices to recipient_ids that arent found. Presumably the people got deleted
         next unless invoice.recipient
@@ -13,10 +20,9 @@ class RefillStructuredAddressesForNecessaryInvoices < ActiveRecord::Migration[8.
   end
 
   def relevant_invoices
-    Invoice.where(created_at: year_range,
-      recipient_type: Person.sti_name)
+    MigrationInvoice.where(created_at: year_range, recipient_type: "Person")
       .where("recipient_id IS NOT NULL")
-      .includes(:recipient, :invoice_items, :invoice_run, recipient: :additional_addresses)
+      .includes(:recipient)
   end
 
   def year_range

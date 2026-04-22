@@ -11,6 +11,8 @@ module Export::Pdf::AddressRenderers
   included do
     class_attribute :left_address_x, default: 0
     class_attribute :right_address_x, default: 290
+    class_attribute :address_box_width, default: 58.mm
+    class_attribute :address_box_height, default: 60
   end
 
   def address_position(position)

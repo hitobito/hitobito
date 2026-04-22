@@ -75,16 +75,6 @@ module MessagesHelper
     Salutation.all[message.salutation] || I18n.t("global.associations.no_entry")
   end
 
-  def format_message_shipping_method(message)
-    message.shipping_method_label
-  end
-
-  def message_letter_shipping_methods(message)
-    Message::Letter::SHIPPING_METHODS.map do |shipping_method|
-      [shipping_method, message.shipping_method_label(shipping_method)]
-    end
-  end
-
   def message_send_to_household_options
     [[false, t(".send_to_households_options.false")],
       [true, t(".send_to_households_options.true")]]

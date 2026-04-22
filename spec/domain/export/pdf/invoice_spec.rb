@@ -1202,4 +1202,35 @@ describe Export::Pdf::Invoice do
       end
     end
   end
+
+  context "pp_post and shipment_method" do
+    it "renders pp row" do
+      invoice.update!(pp_post: "CH-3000")
+      expect(text_with_position).to include([57, 697, "CH-3000"])
+      expect(text_with_position).to include([57, 675, "Top Leader"])
+      expect(text_with_position).to include([347, 685, "Rechnungsnummer:"])
+    end
+
+    it "renders pp row and post header" do
+      invoice.update!(pp_post: "CH-3000", shipping_method: :normal)
+      expect(text_with_position).to include([120, 708, "Post CH AG"])
+      expect(text_with_position).to include([57, 696, "P.P."])
+      expect(text_with_position).to include([78, 696, " "])
+      expect(text_with_position).to include([81, 696, "CH-3000"])
+      expect(text_with_position).to include([57, 675, "Top Leader"])
+      expect(text_with_position).to include([347, 685, "Rechnungsnummer:"])
+    end
+
+    it "renders pp row and post header with priority" do
+      invoice.update!(pp_post: "CH-3000", shipping_method: :priority)
+      expect(text_with_position).to include([120, 708, "Post CH AG"])
+      expect(text_with_position).to include([57, 696, "P.P."])
+      expect(text_with_position).to include([78, 696, " "])
+      expect(text_with_position).to include([81, 696, "A"])
+      expect(text_with_position).to include([97, 696, " "])
+      expect(text_with_position).to include([100, 696, "CH-3000"])
+      expect(text_with_position).to include([57, 675, "Top Leader"])
+      expect(text_with_position).to include([347, 685, "Rechnungsnummer:"])
+    end
+  end
 end

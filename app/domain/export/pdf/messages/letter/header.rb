@@ -8,10 +8,10 @@
 class Export::Pdf::Messages::Letter
   class Header < Section
     include Export::Pdf::AddressRenderers
+    include Export::Pdf::ShippingInfoRenderers
 
     LOGO_BOX = [450, 40].freeze
-    ADDRESS_BOX = [58.mm, 60].freeze
-    SHIPPING_INFO_BOX = [ADDRESS_BOX.first, 24].freeze
+    ADDRESS_BOX = [address_box_width, address_box_height].freeze
 
     delegate :group, to: "letter"
 
@@ -19,9 +19,8 @@ class Export::Pdf::Messages::Letter
       stamped :render_logo_right
 
       offset_cursor_from_top 60.mm
-      bounding_box(address_position(group.letter_address_position), width: ADDRESS_BOX.first) do
-        stamped :render_shipping_info
-
+      bounding_box(address_position(group.letter_address_position), width: address_box_width) do
+        stamped :render_shipping_info_block
         pdf.move_down 4.mm # 3mm + 1mm from text baseline, according to post factsheet
         render_address(recipient)
       end
@@ -33,6 +32,10 @@ class Export::Pdf::Messages::Letter
     end
 
     private
+
+    def render_shipping_info_block
+      render_shipping_info(letter, width: address_box_width)
+    end
 
     def render_date_location_text
       offset_cursor_from_top 97.5.mm
@@ -55,40 +58,10 @@ class Export::Pdf::Messages::Letter
       ).render
     end
 
-    def render_address(recipient, width: ADDRESS_BOX.first, height: ADDRESS_BOX.second)
+    def render_address(recipient, width: address_box_width, height: address_box_height)
       bounding_box([0, cursor], width: width, height: height) do
         text recipient.address
       end
-    end
-
-    def render_shipping_info(width: SHIPPING_INFO_BOX.first, height: SHIPPING_INFO_BOX.second)
-      render_shipping_info_post_logo(width) unless letter.own?
-      render_shipping_info_text(width, height)
-      render_shipping_info_line unless shipping_info_empty?
-    end
-
-    def render_shipping_info_post_logo(width)
-      text_box("Post CH AG", align: :center, size: 7.pt, width: width, at: [0, cursor + 18.pt])
-    end
-
-    def render_shipping_info_text(width, height)
-      shipping_method, text_height = shipping_methods[letter.shipping_method.to_sym]
-      text_box("#{shipping_method}<font size='8'>#{letter.pp_post}</font>",
-        inline_format: true, overflow: :truncate, single_line: true,
-        width: width, height: height, at: [0, cursor + (text_height * 0.75)])
-    end
-
-    def render_shipping_info_line
-      pdf.stroke do
-        pdf.move_down 1.mm
-        # post factsheet: max. 11 cm, start and end of the line MUST be visible in the window
-        pdf.horizontal_line 0, ADDRESS_BOX.first
-        pdf.move_up 1.mm
-      end
-    end
-
-    def shipping_info_empty?
-      letter.own? && letter.pp_post.to_s.strip.blank?
     end
 
     def logo_attachment
@@ -117,12 +90,6 @@ class Export::Pdf::Messages::Letter
 
     def address_present?(group)
       [:address, :town].all? { |a| group.send(a)&.strip.present? }
-    end
-
-    def shipping_methods
-      {own: ["", 8.pt],
-       normal: ["<b><font size='12'>P.P.</font></b> ", 12.pt],
-       priority: ["<b><font size='12'>P.P.</font> <font size='24pt'>A</font></b> ", 24.pt]}
     end
   end
 end

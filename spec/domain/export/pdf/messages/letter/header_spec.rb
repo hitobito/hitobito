@@ -33,18 +33,18 @@ describe Export::Pdf::Messages::Letter::Header do
 
   let(:shipping_info_with_position_left) do
     [
-      [71, 668, "P.P."],
-      [93, 668, " "],
+      [71, 671, "P.P."],
+      [93, 671, " "],
       [134, 682, "Post CH AG"],
-      [95, 668, "CH-3030 Bern, Belpstrasse 37"]
+      [95, 671, "CH-3030 Bern, Belpstrasse 37"]
     ]
   end
   let(:shipping_info_with_position_right) do
     [
       [424, 682, "Post CH AG"],
-      [361, 668, "P.P."],
-      [383, 668, " "],
-      [385, 668, "CH-3030 Bern, Belpstrasse 37"]
+      [361, 671, "P.P."],
+      [383, 671, " "],
+      [385, 671, "CH-3030 Bern, Belpstrasse 37"]
     ]
   end
 
@@ -175,12 +175,12 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
         pdf.start_new_page
         subject.render(recipient)
-        expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info]
+        expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info_block]
         expect(text_with_position_without_shipping_info).to eq [
           [71, 651, "Top Leader"],
           [71, 626, "Greattown"],
-          [71, 654, "Top Leader"],
-          [71, 629, "Greattown"]
+          [71, 657, "Top Leader"],
+          [71, 632, "Greattown"]
         ]
       end
 
@@ -189,12 +189,12 @@ describe Export::Pdf::Messages::Letter::Header do
         subject.render(recipient)
         pdf.start_new_page
         subject.render(recipient)
-        expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info]
+        expect(stamps.keys).to eq [:render_logo_right, :render_shipping_info_block]
         expect(text_with_position_without_shipping_info).to eq [
           [71, 651, "Top Leader"],
           [71, 626, "Greattown"],
-          [71, 654, "Top Leader"],
-          [71, 629, "Greattown"]
+          [71, 657, "Top Leader"],
+          [71, 632, "Greattown"]
         ]
       end
 

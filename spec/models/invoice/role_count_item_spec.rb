@@ -187,7 +187,7 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(1)
       end
 
-      it "counts roles even when subject with different item_id was processed before" do
+      it "counts roles even when subject with different template_item_id was processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group:)
         previous_invoice = Fabricate(:invoice, recipient: group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
@@ -346,7 +346,7 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(1)
       end
 
-      it "counts roles even when subject with different item_id was processed before" do
+      it "counts roles even when subject with different template_item_id was processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
@@ -519,7 +519,7 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(1)
       end
 
-      it "counts roles even when subject with different item_id was processed before" do
+      it "counts roles even when subject with different template_item_id was processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person:)
         previous_invoice = Fabricate(:invoice, recipient: person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
@@ -681,7 +681,7 @@ describe Invoice::RoleCountItem do
         expect(item.count).to eq(1)
       end
 
-      it "counts roles even when subject with different item_id was processed before" do
+      it "counts roles even when subject with different template_item_id was processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
@@ -863,7 +863,7 @@ describe Invoice::RoleCountItem do
         ])
       end
 
-      it "counts roles even when subject with different item_id was processed before" do
+      it "counts roles even when subject with different template_item_id was processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group: recipient_group)
         previous_invoice = Fabricate(:invoice, recipient: recipient_group, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,
@@ -1066,7 +1066,7 @@ describe Invoice::RoleCountItem do
         ])
       end
 
-      it "counts roles even when subject with different item_id was processed before" do
+      it "counts roles even when subject with different template_item_id was processed before" do
         role = Fabricate(Group::BottomGroup::Leader.name, group:, person: recipient_person)
         previous_invoice = Fabricate(:invoice, recipient: recipient_person, group:)
         InvoiceRun::ProcessedSubject.create(subject_type: "Person", subject_id: role.person_id,

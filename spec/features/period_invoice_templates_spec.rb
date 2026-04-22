@@ -218,7 +218,7 @@ describe :period_invoice_templates, js: true do
 
     before { period_invoice_template.recipient_source.update!(group_type: Group::TopLayer.name) }
 
-    it "allows to create a period invoice template" do
+    it "allows to update a period invoice template" do
       visit edit_path
       expect(page).to have_text "Rollentypen"
       expect(page).to have_text "Local Guide"

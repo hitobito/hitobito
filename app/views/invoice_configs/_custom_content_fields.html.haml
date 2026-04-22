@@ -7,6 +7,6 @@
 = f.input_field :subject
 = label_tag(:body, t('.body'), class: "my-2")
 = f.rich_text_area :body, rows: 20
-= f.help_block(CustomContent.get(InvoiceMailer::CONTENT_INVOICE_NOTIFICATION)&.decorate&.available_placeholders)
+= f.help_block(@custom_content_template&.available_placeholders)
 = content_tag(:div) do
   = link_to(t(".remove"), "javascript:void(0)", data: { action: "nested-form#remove" }, class: "mt-3")

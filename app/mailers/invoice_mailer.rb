@@ -27,7 +27,7 @@ class InvoiceMailer < ApplicationMailer
     attachments[invoice.filename] = generate_pdf
 
     custom_content_mail(@invoice.recipient_email, CONTENT_INVOICE_NOTIFICATION,
-      values_for_placeholders(CONTENT_INVOICE_NOTIFICATION),
+      values_for_placeholders(CONTENT_INVOICE_NOTIFICATION, context: @invoice.invoice_config),
       mail_headers(@sender, @invoice.invoice_config.email),
       context: @invoice.invoice_config)
   end

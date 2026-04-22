@@ -39,13 +39,13 @@ class Event::ParticipationMailer < ApplicationMailer
     @event = event
     @person = person
 
-    custom_content_mail(@person, CONTENT_CANCEL, values_for_placeholders(CONTENT_CANCEL))
+    compose(@person, CONTENT_CANCEL)
   end
 
   def notify_contact(participation, recipient)
     @participation = participation
 
-    compose([recipient], CONTENT_NOTIFICATION)
+    compose(recipient, CONTENT_NOTIFICATION)
   end
 
   private

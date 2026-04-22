@@ -7,4 +7,6 @@
 
 class InvoiceRun::ProcessedSubject < ActiveRecord::Base
   self.table_name = "invoice_run_processed_subjects"
+
+  belongs_to :item, class_name: "InvoiceItem"
 end

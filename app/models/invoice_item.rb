@@ -57,6 +57,8 @@ class InvoiceItem < ActiveRecord::Base
   after_destroy :recalculate_invoice!
 
   belongs_to :invoice
+  has_many :processed_subjects, class_name: "InvoiceRun::ProcessedSubject", foreign_key: "item_id",
+    inverse_of: :item, dependent: :destroy
 
   delegate :group, to: :invoice # required for abilities
 

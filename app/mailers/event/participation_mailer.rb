@@ -8,6 +8,8 @@
 class Event::ParticipationMailer < ApplicationMailer
   CONTENT_CONFIRMATION = "event_application_confirmation"
   CONTENT_NOTIFICATION = "event_application_notification"
+  CONTENT_NOTIFICATION_PENDING = "event_application_notification_pending"
+  CONTENT_NOTIFICATION_WAITING_LIST = "event_application_notification_waiting_list"
   CONTENT_APPROVAL = "event_application_approval"
   CONTENT_CANCEL = "event_cancel_application"
   CONTENT_PENDING = "event_application_pending"
@@ -45,7 +47,15 @@ class Event::ParticipationMailer < ApplicationMailer
   def notify_contact(participation, recipient)
     @participation = participation
 
-    compose([recipient], CONTENT_NOTIFICATION)
+    key = if @participation.waiting_list?
+      CONTENT_NOTIFICATION_WAITING_LIST
+    elsif @participation.pending?
+      CONTENT_NOTIFICATION_PENDING
+    else
+      CONTENT_NOTIFICATION
+    end
+
+    compose([recipient], key)
   end
 
   private

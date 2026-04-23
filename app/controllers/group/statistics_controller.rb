@@ -15,7 +15,7 @@ class Group::StatisticsController < ApplicationController
 
   def index
     if available_statistics.empty?
-      redirect_to group_path(group), alert: t("groups.statistics.none_available")
+      redirect_with_alert(:none_available)
     else
       # Redirect zur ersten verfügbaren Statistik
       redirect_to group_statistic_path(group, available_statistics.first.key)

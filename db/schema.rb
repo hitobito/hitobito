@@ -1323,18 +1323,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_070232) do
 
   create_table "user_job_results", force: :cascade do |t|
     t.string "job_name", null: false
-    t.string "filetype", default: "txt", null: false
-    t.integer "progress", default: 0, null: false
+    t.string "filetype", null: false
+    t.integer "progress", null: false
     t.integer "person_id", null: false
-    t.datetime "start_timestamp", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.datetime "start_timestamp", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "filename"
     t.datetime "end_timestamp"
-    t.string "status", default: "planned", null: false
-    t.integer "attempts", default: 0, null: false
+    t.string "status", null: false
+    t.integer "attempts", null: false
     t.integer "max_attempts", null: false
-    t.boolean "reports_progress", default: false, null: false
+    t.boolean "reports_progress", null: false
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|

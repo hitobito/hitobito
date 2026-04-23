@@ -30,7 +30,7 @@ module UserManageableJob
         filename: @options&.dig(:filename),
         filetype: @format,
         reports_progress:,
-        max_attempts: try(:max_attempts) || Delayed::Worker.max_attempts
+        max_attempts: try(:max_attempts)
       })
       @user_job_result_id = user_job_result.id
 

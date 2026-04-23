@@ -24,14 +24,13 @@ class UserJobResult < ApplicationRecord
 
   STATUSES = %w[planned in_progress success error].freeze
 
-  attribute :start_timestamp, default: Time.current
-
   i18n_enum :status, STATUSES, queries: true
 
   has_one_attached :generated_file
 
   validates_by_schema
 
+  after_initialize :set_default_values, if: :new_record?
   after_update_commit -> { broadcast_replace_to "user_job_results" }
   after_create_commit -> { broadcast_refresh_to "user_job_results" }
   after_destroy_commit -> { broadcast_refresh_to "user_job_results" }
@@ -126,13 +125,23 @@ class UserJobResult < ApplicationRecord
   # <tt>iteration_count</tt>: The total iterations after which the job will be done
   def report_progress!(current_iteration, iteration_count)
     if reports_progress
-      progress = (100.to_f / iteration_count) * (current_iteration + 1)
+      progress = ((100.to_f / iteration_count) * (current_iteration + 1)).round
       progress = (0 if progress < 0) || (100 if progress > 100) || progress
       update!(progress:)
     end
   end
 
   private
+
+  def set_default_values
+    self.start_timestamp ||= Time.current
+    self.status ||= "planned"
+    self.filetype ||= "txt"
+    self.attempts ||= 0
+    self.max_attempts ||= Delayed::Worker.max_attempts
+    self.reports_progress = false if self.reports_progress.nil?
+    self.progress ||= 0
+  end
 
   def broadcast_notification
     Turbo::StreamsChannel.broadcast_append_to(

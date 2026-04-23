@@ -12,10 +12,10 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
 
       t.string :filename
       t.datetime :end_timestamp
-      t.string :status, null: false, default: :planned
-      t.integer :attempts, null: false, default: 0
+      t.string :status, null: false
+      t.integer :attempts, null: false
       t.integer :max_attempts, null: false
-      t.boolean :reports_progress, default: false, null: false
+      t.boolean :reports_progress, null: false
     end
 
     reversible do |dir|
@@ -39,9 +39,5 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
 
     change_column_null(:user_job_results, :filetype, false)
     change_column_null(:user_job_results, :progress, false)
-
-    change_column_default(:user_job_results, :filetype, from: nil, to: "txt")
-    change_column_default(:user_job_results, :progress, from: nil, to: 0)
-    change_column_default(:user_job_results, :start_timestamp, from: nil, to: -> { "CURRENT_TIMESTAMP" })
   end
 end

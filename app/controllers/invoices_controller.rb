@@ -171,7 +171,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def filename(extension, invoices)
-    if invoices.size > 1
+    if invoices.size != 1
       "#{t("activerecord.models.invoice.other").downcase}.#{extension}"
     else
       invoices.first.filename(extension)

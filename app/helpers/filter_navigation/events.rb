@@ -8,6 +8,7 @@
 module FilterNavigation
   class Events < Base
     delegate :params, to: :template
+    delegate :name, to: :filter
 
     attr_reader :group, :filter
 
@@ -22,35 +23,39 @@ module FilterNavigation
     private
 
     def init_labels
-      @active_label = if filter.chain.present?
-        translate(:filter)
+      @active_label = if name.present?
+        dropdown.activate(name)
+      elsif filter.chain.present?
+        translate(:filter).tap do |label|
+          dropdown.activate(label)
+        end
       else
-        label_for_filter(params.fetch(:range, "deep"))
+        label_for_range(params.fetch(:range, "deep"))
       end
     end
 
     def init_items
+      range_item("deep")
       if group.layer? && group.has_sublayers?
-        filter_item("deep")
-        filter_item("layer")
+        range_item("layer")
       end
       init_dropdown_links
     end
 
-    def filter_item(name)
-      item(label_for_filter(name), filter_path(name))
+    def range_item(name)
+      item(label_for_range(name), range_filter_path(name))
     end
 
-    def label_for_filter(filter)
-      template.t("filter_navigation/events.#{filter}", layer: @group.layer_group.name)
+    def label_for_range(range)
+      template.t("filter_navigation/events.#{range}", layer: @group.layer_group.name)
     end
 
-    def filter_path(name)
+    def range_filter_path(name)
       template.url_for(
         params
           .to_unsafe_h
           .merge(range: name, only_path: true)
-          .except(:filters, :returning)
+          .except(:filters, :returning, :name)
       )
     end
 

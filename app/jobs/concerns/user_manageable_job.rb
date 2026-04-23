@@ -24,15 +24,17 @@ module UserManageableJob
     return super unless person_id
 
     ActiveRecord::Base.transaction do
-      user_job_result = UserJobResult.create_default!(
-        person_id, job_name, @options&.dig(:filename), @format, reports_progress
-      )
+      user_job_result = UserJobResult.create!({
+        person_id:,
+        job_name:,
+        filename: @options&.dig(:filename),
+        filetype: @format,
+        reports_progress:,
+        max_attempts: try(:max_attempts) || Delayed::Worker.max_attempts
+      })
       @user_job_result_id = user_job_result.id
 
-      delayed_job = super
-      user_job_result.update!(delayed_job:)
-
-      delayed_job
+      super
     end
   end
 

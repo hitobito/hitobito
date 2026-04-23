@@ -7,4 +7,4 @@
   .toast-header{class: class_names("bg-info": user_job_result.success?, "bg-danger": user_job_result.error?)}
     %strong= t(".job_#{user_job_result.status}")
   .toast-body
-    = user_job_result.name
+    = user_job_result.job_name

@@ -21,7 +21,7 @@ describe UserJobResultsHelper do
   end
 
   it "should use correct format for job timestamp" do
-    timestamp = Time.new(2000, 1, 1, 3).to_i
+    timestamp = Time.new(2000, 1, 1, 3)
     job_timestamp = helper.job_timestamp(timestamp)
     expect(job_timestamp).to eql("01.01.2000 03:00")
   end

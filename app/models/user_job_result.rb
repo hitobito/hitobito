@@ -24,11 +24,13 @@ class UserJobResult < ApplicationRecord
 
   STATUSES = %w[planned in_progress success error].freeze
 
-  belongs_to :delayed_job, class_name: "Delayed::Backend::ActiveRecord::Job", optional: true
+  attribute :start_timestamp, default: Time.current
+
+  i18n_enum :status, STATUSES, queries: true
 
   has_one_attached :generated_file
 
-  i18n_enum :status, STATUSES, queries: true
+  validates_by_schema
 
   after_update_commit -> { broadcast_replace_to "user_job_results" }
   after_create_commit -> { broadcast_refresh_to "user_job_results" }
@@ -36,20 +38,6 @@ class UserJobResult < ApplicationRecord
 
   before_destroy do
     generated_file.purge if generated_file.attached?
-  end
-
-  def self.create_default!(person_id, job_name, filename, filetype, reports_progress)
-    create!(
-      person_id:,
-      name: job_name,
-      filename:,
-      filetype: filetype || :txt,
-      reports_progress:,
-      progress: (reports_progress ? 0 : nil),
-      status: "planned",
-      attempts: 0,
-      start_timestamp: Time.now.to_i
-    )
   end
 
   def to_s
@@ -92,7 +80,10 @@ class UserJobResult < ApplicationRecord
   end
 
   def filename
-    "#{super}.#{filetype}"
+    filename = super
+    return unless filename
+
+    "#{filename}.#{filetype}"
   end
 
   def report_in_progress!
@@ -102,7 +93,7 @@ class UserJobResult < ApplicationRecord
   def report_success!(total_attempts)
     update!(
       status: "success",
-      end_timestamp: Time.now.to_i,
+      end_timestamp: Time.current,
       attempts: total_attempts
     )
     broadcast_notification
@@ -112,14 +103,14 @@ class UserJobResult < ApplicationRecord
     update!(
       status: "planned",
       attempts: used_attempts,
-      progress: (reports_progress ? 0 : nil)
+      progress: 0
     )
   end
 
   def report_failure!
     update!(
       status: "error",
-      end_timestamp: Time.now.to_i
+      end_timestamp: Time.current
     )
     broadcast_notification
   end

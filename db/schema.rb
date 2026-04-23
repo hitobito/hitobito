@@ -1322,20 +1322,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_070232) do
   end
 
   create_table "user_job_results", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "filetype"
-    t.integer "progress"
+    t.string "job_name", null: false
+    t.string "filetype", default: "txt", null: false
+    t.integer "progress", default: 0, null: false
     t.integer "person_id", null: false
-    t.string "start_timestamp", null: false
+    t.datetime "start_timestamp", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "filename"
-    t.string "end_timestamp"
-    t.string "status"
-    t.integer "attempts"
-    t.bigint "delayed_job_id"
+    t.datetime "end_timestamp"
+    t.string "status", default: "planned", null: false
+    t.integer "attempts", default: 0, null: false
+    t.integer "max_attempts", null: false
     t.boolean "reports_progress", default: false, null: false
-    t.index ["delayed_job_id"], name: "index_user_job_results_on_delayed_job_id"
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|

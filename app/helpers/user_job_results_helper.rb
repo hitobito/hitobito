@@ -20,8 +20,6 @@ module UserJobResultsHelper
   end
 
   def job_progress_bar(progress)
-    return t(".no_progress_provided") unless progress
-
     content_tag(
       :div, nil, class: "progress", role: "progressbar",
       "aria-valuenow": progress, "aria-valuemin": "0", "aria-valuemax": "100"
@@ -33,6 +31,6 @@ module UserJobResultsHelper
   def job_timestamp(timestamp)
     return "-" unless timestamp
 
-    I18n.l(Time.zone.at(timestamp.to_i), format: :date_time)
+    I18n.l(timestamp, format: :date_time)
   end
 end

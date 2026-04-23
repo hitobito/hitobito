@@ -32,7 +32,7 @@ class PeriodInvoiceTemplates::InvoiceRunsController < InvoiceRunsController
   end
 
   def assign_invoice_items
-    entry.invoice.invoice_items = period_invoice_template.items.map do |item|
+    entry.invoice.invoice_items = period_invoice_template.items.flat_map do |item|
       if period_invoice_template.recipient_source_type == "PeopleFilter"
         item.to_invoice_item_for_people(recipient_people: recipient_people)
       else

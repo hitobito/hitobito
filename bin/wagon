@@ -198,7 +198,7 @@ gemfile)
   bundle check || bundle install
   $0 configs Gemfile.lock
 
-  if [ -n "${BUNDLE_GEMFILE}" ]; then
+  if [ -n "${BUNDLE_GEMFILE:-}" ]; then
     $0 configs "${BUNDLE_GEMFILE}.lock"
   fi
   ;;

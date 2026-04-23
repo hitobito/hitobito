@@ -11,6 +11,7 @@ describe EventsController, js: true do
   let(:event) do
     event = Fabricate(:course, kind: event_kinds(:slk), groups: [groups(:top_group)])
     event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
+    event.init_questions
     event
   end
 
@@ -154,7 +155,8 @@ describe EventsController, js: true do
       visit edit_group_event_path(event.groups.first, event)
       click_on "Anmeldeangaben"
       expect(find("#event_application_questions_attributes_0_question+p").text).to eq "Ich habe folgendes ÖV Abo"
-      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "A question?"
+      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "Ich bin Vegetarier"
+      expect(find("#event_application_questions_attributes_2_question+p").text).to eq "A question?"
     end
   end
 end

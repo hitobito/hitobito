@@ -873,14 +873,12 @@ en:
         choices: Possible answers
         multiple_choices: Multiple choice
         required: Reply mandatory
-        disclosure: Antwortangabe
 
       application_questions:
         question: Question
         choices: Possible answers
         multiple_choices: Multiple choice
         required: Reply mandatory
-        disclosure: Antwortangabe
 
       event/role:
         label: Description

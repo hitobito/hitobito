@@ -32,7 +32,7 @@ ARG PRE_BUILD_SCRIPT="\
      rm -rf hitobito/.git; \
      mv hitobito/* hitobito/.?* .; \
      mkdir -p vendor/wagons; \
-     for wagon_dir in hitobito_*; do if [[ -d \$wagon_dir ]]; then rm -r \$wagon_dir/.git && mv \$wagon_dir vendor/wagons/; fi; done; \
+     for wagon_dir in hitobito_*; do if [[ -d \$wagon_dir ]]; then rm -rf \$wagon_dir/.git && mv \$wagon_dir vendor/wagons/; fi; done; \
      rm -rf hitobito; \
      cp -v Wagonfile.production Wagonfile; \
      bundle lock; \

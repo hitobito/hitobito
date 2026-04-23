@@ -79,7 +79,7 @@ class UserJobResult < ApplicationRecord
 
   def filename
     filename = super
-    return unless filename
+    return if filename.blank?
 
     "#{filename}.#{filetype}"
   end

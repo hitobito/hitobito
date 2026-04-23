@@ -41,18 +41,6 @@ module Examples
     end
   end
 
-  class UnenqueueableUserManagedJob < BaseJob
-    prepend UserManageableJob
-
-    def enqueue!
-      raise "Test exception: Something went wrong while enqueueing job"
-    end
-
-    def perform
-      Rails.logger.debug "Working..."
-    end
-  end
-
   class UserManagedParentJob < BaseJob
     prepend UserManageableJob
 

@@ -24,14 +24,14 @@ module UserManageableJob
     return super unless person_id
 
     ActiveRecord::Base.transaction do
-      user_job_result = UserJobResult.create!({
+      user_job_result = UserJobResult.create!(
         person_id:,
         job_name:,
         filename: @options&.dig(:filename),
         filetype: @format,
         reports_progress:,
         max_attempts: try(:max_attempts)
-      })
+      )
       @user_job_result_id = user_job_result.id
 
       super

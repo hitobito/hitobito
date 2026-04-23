@@ -21,22 +21,28 @@ describe UserManageableJob do
       expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
     end
 
-    it "should not enqueue job when creating user job result fails" do
+    it "should create user job result when enqueued" do
       job = Examples::SuccessfulUserManagedJob.new
-      allow(UserJobResult)
-        .to receive(:create_default!)
-        .and_raise("Test exception: Could not create user job result")
 
-      expect { job.enqueue! }
-        .to raise_exception("Test exception: Could not create user job result")
-        .and change { UserJobResult.count }.by(0)
-        .and change { Delayed::Job.count }.by(0)
+      expect(UserJobResult).to receive(:create!).with({
+        person_id: person.id,
+        job_name: "Custom job name",
+        filename: nil,
+        filetype: nil,
+        reports_progress: false,
+        max_attempts: nil
+      }).and_call_original
+
+      job.enqueue!
     end
 
-    it "should create default user job result when enqueued" do
+    it "should create user job result with job specific number of max attempts" do
       job = Examples::SuccessfulUserManagedJob.new
+      job.define_singleton_method(:max_attempts) { 3 }
 
-      expect(UserJobResult).to receive(:create_default!).and_call_original
+      expect(UserJobResult).to receive(:create!)
+        .with(hash_including(max_attempts: 3))
+        .and_call_original
       job.enqueue!
     end
 
@@ -47,8 +53,23 @@ describe UserManageableJob do
       expect(job.user_job_result).not_to be_nil
     end
 
+    it "should not enqueue job when creating user job result fails" do
+      job = Examples::SuccessfulUserManagedJob.new
+      allow(UserJobResult)
+        .to receive(:create!)
+        .and_raise("Test exception: Could not create user job result")
+
+      expect { job.enqueue! }
+        .to raise_exception("Test exception: Could not create user job result")
+        .and change { UserJobResult.count }.by(0)
+        .and change { Delayed::Job.count }.by(0)
+    end
+
     it "should not create user job result when enqueing of delayed job fails" do
-      job = Examples::UnenqueueableUserManagedJob.new
+      job = Examples::UnsuccessfulUserManagedJob.new
+      job.define_singleton_method(:enqueue!) do
+        raise "Test exception: Something went wrong while enqueueing job"
+      end
 
       expect { job.enqueue! }
         .to raise_exception("Test exception: Something went wrong while enqueueing job")
@@ -105,14 +126,14 @@ describe UserManageableJob do
       job = Examples::SuccessfulUserManagedJob.new
       job.enqueue!
       user_job_result = job.user_job_result
-      expect(user_job_result.name).to eql("Custom job name")
+      expect(user_job_result.job_name).to eql("Custom job name")
     end
 
     it "should use class name as job name if custom name is not set" do
       job = Examples::UnsuccessfulUserManagedJob.new
       job.enqueue!
       user_job_result = job.user_job_result
-      expect(user_job_result.name).to eql("Examples::UnsuccessfulUserManagedJob")
+      expect(user_job_result.job_name).to eql("Examples::UnsuccessfulUserManagedJob")
     end
   end
 
@@ -120,7 +141,7 @@ describe UserManageableJob do
     it "should not create user job result when enqueued" do
       job = Examples::SuccessfulUserManagedJob.new
 
-      expect(UserJobResult).not_to receive(:create_default!)
+      expect(UserJobResult).not_to receive(:create!)
       job.enqueue!
       expect(job.instance_variable_get(:@user_job_result_id)).to be_nil
     end

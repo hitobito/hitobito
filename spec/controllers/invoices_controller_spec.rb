@@ -250,6 +250,29 @@ describe InvoicesController do
       end
     end
 
+    it "handles exporting only one invoice" do
+      expected_ids = [invoice.id]
+      expected_options = {filename: /^Rechnung[-_].*/i}
+
+      expect(Export::InvoicesJob).to receive(:new)
+        .with(:csv, anything, expected_ids, expected_options).and_call_original
+
+      expect do
+        get :index, params: {group_id: group.id, state: :draft}, format: :csv
+      end.to change { Delayed::Job.count }.by(1)
+    end
+
+    it "handles exporting no invoices" do
+      expected_options = {filename: /^rechnungen[-_].*/i}
+
+      expect(Export::InvoicesJob).to receive(:new)
+        .with(:csv, anything, [], expected_options).and_call_original
+
+      expect do
+        get :index, params: {group_id: group.id, q: "dummy"}, format: :csv
+      end.to change { Delayed::Job.count }.by(1)
+    end
+
     it "renders json" do
       update_issued_at_to_current_year
       get :index, params: {group_id: group.id}, format: :json

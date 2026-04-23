@@ -23,11 +23,14 @@ class InvoiceConfigsController < CrudController
 
   before_render_form :build_payment_reminder_configs
   before_render_form :build_payment_provider_configs
+  before_render_form :custom_content_template
 
   before_save :set_custom_content_attributes
   before_save :define_changed_payment_provider_configs
   after_save :initialize_payment_providers
   after_save :persist_custom_content_body
+
+  decorates :custom_content_template
 
   private
 
@@ -66,6 +69,13 @@ class InvoiceConfigsController < CrudController
 
     entry.custom_content.label = "Rechnung Template from #{entry.class} with id: #{entry.id}"
     entry.custom_content.key = InvoiceMailer::CONTENT_INVOICE_NOTIFICATION
+    entry.custom_content.attributes =
+      custom_content_template.attributes.slice("placeholders_optional", "placholders_required")
+  end
+
+  def custom_content_template
+    @custom_content_template ||=
+      CustomContent.find_by(key: InvoiceMailer::CONTENT_INVOICE_NOTIFICATION)
   end
 
   def missing_payment_reminder_levels

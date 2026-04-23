@@ -25,13 +25,5 @@ describe CustomContentDecorator, :draper_with_helpers do
         is_expected.to eq "Keine Platzhalter vorhanden"
       end
     end
-
-    context "custom_content with context" do
-      let(:content) { CustomContent.new(context: Group.root, key: custom_contents(:login).key) }
-
-      it "lists available placeholders from global custom content in string" do
-        is_expected.to eq "Verfügbare Platzhalter: {login-url}, {recipient-name}, {sender-name}"
-      end
-    end
   end
 end

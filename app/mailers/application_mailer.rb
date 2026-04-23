@@ -23,28 +23,37 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
-  def compose(recipients, content_key)
-    values = values_for_placeholders(content_key)
-    custom_content_mail(recipients, content_key, values) if recipients.present?
+  def compose(recipients, content_key, context: nil)
+    values = values_for_placeholders(content_key, context:)
+    custom_content_mail(recipients, content_key, values, context:) if recipients.present?
   end
 
   def custom_content_mail(recipients, content_key, values, headers = {}, context: nil) # rubocop:disable Metrics/AbcSize
-    content = CustomContent.get(content_key, context:)
-    emails = Array(use_mailing_emails(recipients)).reject { |email| Bounce.blocked?(email) }
+    emails = unblocked_emails(recipients)
     return if emails.none? && message.cc.blank? && message.bcc.blank?
 
     headers[:to] = emails
+    content = custom_content(content_key, context:)
     headers[:subject] ||= unescape_html(content.subject_with_values(values))
     mail(headers) do |format|
       format.html { render html: content.body_with_values(values), layout: true }
     end
   end
 
-  def values_for_placeholders(content_key)
-    content = CustomContent.get(content_key)
+  def values_for_placeholders(content_key, context: nil)
+    content = custom_content(content_key, context:)
     content.placeholders_list.index_with do |token|
       send(:"placeholder_#{token.underscore}")
     end
+  end
+
+  def custom_content(key, context: nil)
+    @custom_contents ||= {}
+    @custom_contents[[key, context]] ||= CustomContent.get(key, context:)
+  end
+
+  def unblocked_emails(recipients)
+    Array(use_mailing_emails(recipients)).reject { |email| Bounce.blocked?(email) }
   end
 
   def use_mailing_emails(recipients)

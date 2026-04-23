@@ -150,7 +150,7 @@ describe UserManageableJob do
         .to change { Delayed::Job.count }.by(3)
         .and change { UserJobResult.where(person_id: person.id).count }.by(4)
 
-      expect(delayed_job_spec_worker.work_off).to match_array([3, 0])
+      expect(Delayed::Worker.new.work_off).to match_array([3, 0])
     end
   end
 end

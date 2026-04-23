@@ -8,15 +8,18 @@
     .col-1
       = job_status_icon(user_job_result)
     .col-3
-      = user_job_result.name
+      = user_job_result.job_name
     .col-3
-      = job_progress_bar(user_job_result.progress)
+      - if user_job_result.reports_progress
+        = job_progress_bar(user_job_result.progress)
+      - else
+        = t(".no_progress_provided")
     .col-3
       = "#{UserJobResult.human_attribute_name('start_timestamp')}: #{job_timestamp(user_job_result.start_timestamp)}"
       %br
       = "#{UserJobResult.human_attribute_name('end_timestamp')}: #{job_timestamp(user_job_result.end_timestamp)}"
     .col-1
-      = "#{UserJobResult.human_attribute_name('attempts')}: #{user_job_result.attempts}/#{Delayed::Worker.max_attempts}"
+      = "#{UserJobResult.human_attribute_name('attempts')}: #{user_job_result.attempts}/#{user_job_result.max_attempts}"
     .col-1
       - if user_job_result.generated_file.attached?
         = link_to(icon("download", {filled: true}), "/user_job_results/#{user_job_result.id}/download_attachment")

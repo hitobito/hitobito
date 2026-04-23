@@ -27,38 +27,45 @@ describe UserJobResult do
   let(:data) { SecureRandom.base64(128) }
 
   subject do
-    UserJobResult.create_default!(person_id, job_name, filename, filetype, reports_progress)
+    UserJobResult.create!(person_id:, job_name:, filename:, filetype:, reports_progress:)
   end
 
-  describe "#create_default!" do
-    it "should create instance with correct values" do
+  describe "default values" do
+    it "should set correct default values when values are not passed" do
       freeze_time
+      user_job_result = UserJobResult.create!(person_id:, job_name:)
 
-      expect(subject.person_id).to eql(person_id)
-      expect(subject.name).to eql(job_name)
-      expect(subject.filename).to eql("#{filename}.#{filetype}")
-      expect(subject.filetype).to eql(filetype)
-      expect(subject.reports_progress).to eql(reports_progress)
-      expect(subject.progress).to be_nil
-      expect(subject.status).to eql("planned")
-      expect(subject.attempts).to eql(0)
-      expect(subject.start_timestamp).to eql(Time.now.to_i.to_s)
+      check_default_values(user_job_result)
     end
 
-    context "when reports_progress is true" do
-      let(:reports_progress) { true }
+    it "should set correct default values when values are passed as nil" do
+      freeze_time
+      user_job_result = UserJobResult.create!(
+        person_id:,
+        job_name:,
+        filetype: nil,
+        start_timestamp: nil,
+        status: nil,
+        attempts: nil,
+        max_attempts: nil,
+        reports_progress: nil,
+        progress: nil
+      )
 
-      it "should have 0 as default progress" do
-        expect(subject.progress).to eql(0)
-      end
+      check_default_values(user_job_result)
     end
 
-    context "when filetype is nil" do
-      let(:filetype) { nil }
-
-      it "should use txt as default" do
-        expect(subject.filetype).to eql("txt")
-      end
+    def check_default_values(user_job_result)
+      expect(user_job_result.person_id).to eql(person_id)
+      expect(user_job_result.job_name).to eql(job_name)
+      expect(user_job_result.filename).to be_nil
+      expect(user_job_result.filetype).to eql("txt")
+      expect(user_job_result.reports_progress).to eql(false)
+      expect(user_job_result.progress).to be_zero
+      expect(user_job_result.status).to eql("planned")
+      expect(user_job_result.attempts).to be_zero
+      expect(user_job_result.max_attempts).to eql(Delayed::Worker.max_attempts)
+      expect(user_job_result.start_timestamp).to eql(Time.current)
     end
   end
 
@@ -67,18 +74,23 @@ describe UserJobResult do
       expect(subject.filename).to eql "#{filename}.#{filetype}"
     end
 
+    # Tested because we append the filetype to the filename
+    it "should have no filename when filename is nil" do
+      subject.update!(filename: nil)
+
+      expect(subject.filename).to be_nil
+    end
+
+    it "should have no filename when filename is blank" do
+      subject.update!(filename: "")
+
+      expect(subject.filename).to be_nil
+    end
+
     it "should normalize filename in setter" do
       subject.filename = "A filename with  many   spaces"
 
       expect(subject.filename).to eql "A-filename-with-many-spaces.csv"
-    end
-
-    context "when using #create_default!" do
-      let(:filename) { "A filename with  many   spaces" }
-
-      it "should normalize filename" do
-        expect(subject.filename).to eql "A-filename-with-many-spaces.csv"
-      end
     end
   end
 
@@ -95,7 +107,7 @@ describe UserJobResult do
       freeze_time
       subject.report_success!(1)
 
-      expect(subject.end_timestamp).to eql(Time.now.to_i.to_s)
+      expect(subject.end_timestamp).to eql(Time.current)
       expect(subject.status).to eql("success")
       expect(subject.attempts).to eql(1)
     end
@@ -113,7 +125,7 @@ describe UserJobResult do
       subject.update!(attempts: 3)
       subject.report_failure!
 
-      expect(subject.end_timestamp).to eql(Time.now.to_i.to_s)
+      expect(subject.end_timestamp).to eql(Time.current)
       expect(subject.status).to eql("error")
       expect(subject.attempts).to eql(3)
     end
@@ -123,7 +135,7 @@ describe UserJobResult do
     it "should not report progress when reports_progress is false" do
       subject.report_progress!(49, 100)
 
-      expect(subject.progress).to be_nil
+      expect(subject.progress).to be_zero
     end
 
     it "should correctly set progress with 1 percent steps" do

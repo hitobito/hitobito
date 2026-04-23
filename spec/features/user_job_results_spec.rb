@@ -52,6 +52,7 @@ describe :user_job_results, js: true do
 
   it "should update user job results live" do
     visit user_job_results_path
+    expect(page).to have_content("Jobübersicht")
 
     within "#user_job_results" do
       expect(page).not_to have_content("Custom job name")
@@ -95,11 +96,51 @@ describe :user_job_results, js: true do
     job.user_id = top_leader.id
 
     enqueue_and_run_job(job)
-    delayed_job_spec_worker.work_off
+    Delayed::Worker.new.work_off
 
     within "#user_job_results" do
       expect(page).to have_content("Parent Job", count: 1)
       expect(page).to have_content("Child Job", count: 3)
+    end
+  end
+
+  it "should update pagination when jobs are enqueued" do
+    allow(Kaminari.config).to receive(:default_per_page).and_return(2)
+    job = Examples::SuccessfulUserManagedJob.new
+    visit user_job_results_path
+    expect(page).to have_content("Jobübersicht")
+
+    within "#content" do
+      job.job_name = "First job"
+      2.times { job.enqueue! }
+
+      expect(page).to have_content("First job", count: 2)
+      expect(page).not_to have_content("Letzte")
+
+      job.job_name = "Second job"
+      job.enqueue!
+
+      expect(page).to have_content("First job", count: 1)
+      expect(page).to have_content("Second job", count: 1)
+      expect(page).to have_content("Letzte")
+
+      # Go to second page of pagination
+      click_link("2", match: :first)
+      expect(page).to have_content("First job", count: 1)
+      expect(page).not_to have_content("Second job")
+      expect(page).to have_content("Erste")
+
+      job.enqueue!
+
+      expect(page).to have_content("First job", count: 2)
+      expect(page).not_to have_content("Second job")
+      expect(page).to have_content("Erste")
+
+      # Go back to first page of pagination
+      click_link("1", match: :first)
+      expect(page).to have_content("Second job", count: 2)
+      expect(page).not_to have_content("First job")
+      expect(page).to have_content("Letzte")
     end
   end
 end

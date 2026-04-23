@@ -32,7 +32,7 @@ describe RecurringJob do
     subject.enqueue!(run_at: now)
     expect(subject).to be_scheduled
 
-    delayed_job_spec_worker.work_off
+    Delayed::Worker.new.work_off
 
     expect(subject).to be_scheduled
     expect(subject.delayed_jobs.count).to eq(1)
@@ -46,7 +46,7 @@ describe RecurringJob do
     now = Time.zone.now
     subject.enqueue!(run_at: now)
 
-    delayed_job_spec_worker.work_off
+    Delayed::Worker.new.work_off
 
     expect(subject).to be_scheduled
     expect(subject.delayed_jobs.count).to eq(1)
@@ -58,7 +58,7 @@ describe RecurringJob do
     subject.enqueue!(run_at: 1.month.ago)
     expect(subject).to be_scheduled
 
-    delayed_job_spec_worker.work_off
+    Delayed::Worker.new.work_off
 
     expect(subject).to be_scheduled
     expect(subject.delayed_jobs.count).to eq(1)
@@ -74,7 +74,7 @@ describe RecurringJob do
     subject.enqueue!(run_at: now)
     subject.enqueue!(run_at: now)
 
-    delayed_job_spec_worker.work_off
+    Delayed::Worker.new.work_off
 
     expect(subject).to be_scheduled
     expect(subject.delayed_jobs.count).to eq(1)

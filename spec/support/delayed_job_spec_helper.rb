@@ -11,13 +11,6 @@ module DelayedJobSpecHelper
   end
 
   def run_enqueued_job(job_instance)
-    delayed_job_spec_worker.run(job_instance)
-  end
-
-  def delayed_job_spec_worker(max_run_time: 10.seconds, max_attempts: 2)
-    worker = Delayed::Worker.new
-    worker.max_run_time = max_run_time
-    worker.max_attempts = max_attempts
-    worker
+    Delayed::Worker.new.run(job_instance)
   end
 end

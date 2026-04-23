@@ -36,7 +36,7 @@ describe MailchimpSynchronizationJob do
 
     subject.enqueue!
 
-    delayed_job_spec_worker.work_off
+    Delayed::Worker.new.work_off
     mailing_list.reload
 
     expect(mailing_list.mailchimp_syncing).to be false
@@ -51,7 +51,7 @@ describe MailchimpSynchronizationJob do
     subject.enqueue!
 
     expect do
-      delayed_job_spec_worker.work_off
+      Delayed::Worker.new.work_off
     end.to change { HitobitoLogEntry.count }.by(1)
     mailing_list.reload
     log = HitobitoLogEntry.last
@@ -72,7 +72,7 @@ describe MailchimpSynchronizationJob do
 
     mailing_list.update!(mailchimp_api_key: nil)
     expect_any_instance_of(Synchronize::Mailchimp::Synchronizator).not_to receive(:perform)
-    delayed_job_spec_worker.work_off
+    Delayed::Worker.new.work_off
     expect(mailing_list.mailchimp_syncing).to be false
   end
 
@@ -80,14 +80,14 @@ describe MailchimpSynchronizationJob do
     it "syncs per default" do
       expect_any_instance_of(Synchronize::Mailchimp::Synchronizator).to receive(:perform)
       subject.enqueue!
-      delayed_job_spec_worker.work_off
+      Delayed::Worker.new.work_off
     end
 
     it "may be overridden via setting" do
       expect(FeatureGate).to receive(:enabled?).with("mailchimp").and_return(false)
       expect_any_instance_of(Synchronize::Mailchimp::Synchronizator).not_to receive(:perform)
       subject.enqueue!
-      delayed_job_spec_worker.work_off
+      Delayed::Worker.new.work_off
     end
   end
 end

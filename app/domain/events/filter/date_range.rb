@@ -10,29 +10,39 @@ module Events::Filter
     self.permitted_args = [:since, :until]
 
     def apply(scope)
-      if start_date && end_date
-        scope.joins(:dates).between(start_date, end_date)
-      elsif start_date
-        scope.joins(:dates).since(start_date)
-      elsif end_date
-        scope.joins(:dates).before_or_on(end_date)
+      if since_date && until_date
+        scope.between(since_date, until_date)
+      elsif since_date
+        scope.after_or_on(since_date)
+      elsif until_date
+        scope.before_or_on(until_date)
       else
         scope
       end
     end
 
-    private
-
-    def start_date
-      date_or_default(args[:since])
+    def blank?
+      !since_date && !until_date
     end
 
-    def end_date
-      date_or_default(args[:until])
+    private
+
+    def since_date
+      return @since if defined?(@since)
+
+      @since = date_or_default(args[:since])
+    end
+
+    def until_date
+      return @until if defined?(@until)
+
+      @until = date_or_default(args[:until])
     end
 
     def date_or_default(date)
-      Date.parse(date)
+      return Date.parse(date) if date.is_a?(String)
+
+      date.to_date
     rescue
       nil
     end

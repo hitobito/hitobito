@@ -1236,6 +1236,8 @@ en:
         cost_centers: Cost centers
         accounts: Accounts
         payments: Payments
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       invoice_article:
         number: Article Nr
@@ -1303,6 +1305,8 @@ en:
         recipients_paid: Recipient paid
         amount_total: Total amount
         amount_paid: Amount paid
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       # used for nested attributes
       invoice_items:

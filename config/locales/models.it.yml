@@ -1314,6 +1314,8 @@ it:
         cost_centers: Centro di costo
         accounts: Conti
         payments: Entrate pagamenti
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       invoice_article:
         number: Numero dell'articolo
@@ -1381,6 +1383,8 @@ it:
         recipients_paid: Destinatario pagato
         amount_total: Importo complessivo
         amount_paid: Importo pagato
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       # used for nested attributes
       invoice_items:

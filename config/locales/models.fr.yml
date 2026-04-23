@@ -1315,6 +1315,8 @@ fr:
         cost_centers: Postes
         accounts: Comptes
         payments: Encaissements
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       invoice_article:
         number: Numéro d'article
@@ -1382,6 +1384,8 @@ fr:
         recipients_paid: Destinataire payé
         amount_total: Montant total
         amount_paid: Montant payé
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       # used for nested attributes
       invoice_items:

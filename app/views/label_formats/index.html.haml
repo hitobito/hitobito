@@ -9,21 +9,22 @@
   %h2= I18n.t('label_formats.own_labels')
   = render 'list'
 
-  %h2
+  %h2.d-flex.align-items-center
     = I18n.t('label_formats.global_labels')
     - if can?(:update_settings, current_user)
       &nbsp;
-      = check_box_tag(:show_global_label_formats,
-                    true,
-                    current_user.show_global_label_formats,
-                    id: 'show_global_label_formats',
-                    'aria-label': t('label_formats.global_labels_activated'),
-                    'role': 'switch',
-                    class: 'switcher',
-                    data: { remote: true,
-                            url: label_format_settings_path,
-                            method: :put })
-      %label{for: 'show_global_label_formats'}
+      .switcher-container
+        = check_box_tag(:show_global_label_formats,
+                      true,
+                      current_user.show_global_label_formats,
+                      id: 'show_global_label_formats',
+                      'aria-label': t('label_formats.global_labels_activated'),
+                      'role': 'switch',
+                      class: 'switcher',
+                      data: { remote: true,
+                              url: label_format_settings_path,
+                              method: :put })
+        %label{for: 'show_global_label_formats'}
 
   .global-formats{ style: element_visible(current_user.show_global_label_formats) }
     = render 'list', entries: @global_entries, global: true

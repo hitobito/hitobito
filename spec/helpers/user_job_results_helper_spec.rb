@@ -6,7 +6,15 @@
 require "spec_helper"
 
 describe UserJobResultsHelper do
-  let(:user_job_result) { UserJobResult.create_default!(people(:top_leader).id, "Testjob", nil, :txt, false) }
+  let(:user_job_result) do
+    UserJobResult.create!(
+      person_id: people(:top_leader).id,
+      job_name: "Testjob",
+      filename: nil,
+      filetype: :txt,
+      reports_progress: false
+    )
+  end
 
   it "icon for status in_progress should have spin animation class" do
     user_job_result.report_in_progress!
@@ -21,7 +29,7 @@ describe UserJobResultsHelper do
   end
 
   it "should use correct format for job timestamp" do
-    timestamp = Time.new(2000, 1, 1, 3)
+    timestamp = Time.zone.parse("01.01.2000 03:00")
     job_timestamp = helper.job_timestamp(timestamp)
     expect(job_timestamp).to eql("01.01.2000 03:00")
   end

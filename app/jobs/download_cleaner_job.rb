@@ -19,6 +19,6 @@ class DownloadCleanerJob < RecurringJob
   end
 
   def older_than_a_day
-    UserJobResult.arel_table[:start_timestamp].lt(1.day.ago.to_i)
+    UserJobResult.arel_table[:start_timestamp].lt(1.day.ago)
   end
 end

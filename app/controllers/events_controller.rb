@@ -7,7 +7,7 @@
 
 class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   include YearBasedPaging
-  include AsyncDownload
+  include UserManageableExportJob
   include Api::JsonPaging
   include Tags
 
@@ -215,13 +215,12 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def render_tabular_in_background(format, name = :events_export)
-    with_async_download_cookie(format, name) do |filename|
-      Export::EventsExportJob.new(format,
-        current_person.id,
-        group.id,
-        event_filter.to_h,
-        filename: filename).enqueue!
-    end
+    Export::EventsExportJob.new(format,
+      current_person.id,
+      group.id,
+      event_filter.to_h,
+      filename: name).enqueue!
+    respond_to_export_job
   end
 
   def render_ical(entries)

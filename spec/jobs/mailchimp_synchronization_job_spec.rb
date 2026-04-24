@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe MailchimpSynchronizationJob do
+  include DelayedJobSpecHelper
+
   let(:group) { groups(:top_group) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group, mailchimp_api_key: "abc-us1") }
   let(:now) { Time.zone.now }

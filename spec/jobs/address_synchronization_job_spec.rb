@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe AddressSynchronizationJob do
+  include DelayedJobSpecHelper
+
   let(:config) {
     {
       host: "https://addr.example.com",

@@ -79,6 +79,7 @@ gem "rack-mini-profiler", require: false
 gem "rails-i18n"
 gem "rails_autolink"
 gem "redcarpet"
+gem "redis"
 gem "remotipart"
 gem "rest-client"
 gem "rexml"

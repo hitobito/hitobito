@@ -110,16 +110,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_070232) do
     t.index ["person_id"], name: "index_assignments_on_person_id"
   end
 
-  create_table "async_download_files", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "filetype"
-    t.integer "progress"
-    t.integer "person_id", null: false
-    t.string "timestamp", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "background_job_log_entries", force: :cascade do |t|
     t.bigint "job_id", null: false
     t.string "job_name", null: false
@@ -1329,6 +1319,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_070232) do
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "user_job_results", force: :cascade do |t|
+    t.string "job_name", null: false
+    t.string "filetype", null: false
+    t.integer "progress", null: false
+    t.integer "person_id", null: false
+    t.datetime "start_timestamp", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "filename"
+    t.datetime "end_timestamp"
+    t.string "status", null: false
+    t.integer "attempts", null: false
+    t.integer "max_attempts", null: false
+    t.boolean "reports_progress", null: false
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|

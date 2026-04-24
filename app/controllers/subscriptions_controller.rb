@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class SubscriptionsController < CrudController
+  include UserManageableExportJob
   include RenderPeopleExports
-  include AsyncDownload
 
   self.nesting = Group, MailingList
 
@@ -63,12 +63,11 @@ class SubscriptionsController < CrudController
   end
 
   def render_tabular_in_background(format)
-    with_async_download_cookie(format, "subscriptions_#{mailing_list.id}") do |filename|
-      Export::SubscriptionsJob.new(format,
-        current_person.id,
-        mailing_list.id,
-        tabular_params(filename: filename)).enqueue!
-    end
+    Export::SubscriptionsJob.new(format,
+      current_person.id,
+      mailing_list.id,
+      tabular_params(filename: "subscriptions_#{mailing_list.id}")).enqueue!
+    respond_to_export_job
   end
 
   def tabular_params(**opts)

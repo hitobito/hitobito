@@ -8,7 +8,6 @@
 class MessagesController < CrudController
   include RenderMessagesExports
   include YearBasedPaging
-  include AsyncDownload
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text] # rubocop:disable Style/MutableConstant meant to be extended
   PERMITTED_LETTER_ATTRS = [:subject, :body, :salutation, :send_to_households, # rubocop:disable Style/MutableConstant meant to be extended

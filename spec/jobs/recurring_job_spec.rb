@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe RecurringJob do
+  include DelayedJobSpecHelper
+
   subject { RecurringJob.new }
 
   its(:interval) { should == 15.minutes }

@@ -143,17 +143,17 @@ describe PeopleController do
             end.to change(Delayed::Job, :count).by(1)
 
             expect(response).to redirect_to(returning: true)
-            # rubocop:todo Layout/LineLength
-            expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
-            # rubocop:enable Layout/LineLength
+            expect(flash[:notice]).to match(
+              /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+            )
           end
 
           it "exports csv" do
             expect do
               get :index, params: {group_id: group}, format: :csv
-              # rubocop:todo Layout/LineLength
-              expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
-              # rubocop:enable Layout/LineLength
+              expect(flash[:notice]).to match(
+                /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+              )
               expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
           end
@@ -161,20 +161,11 @@ describe PeopleController do
           it "exports xlsx" do
             expect do
               get :index, params: {group_id: group}, format: :xlsx
-              # rubocop:todo Layout/LineLength
-              expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
-              # rubocop:enable Layout/LineLength
+              expect(flash[:notice]).to match(
+                /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+              )
               expect(response).to redirect_to(returning: true)
             end.to change(Delayed::Job, :count).by(1)
-          end
-
-          it "sets cookie on export" do
-            get :index, params: {group_id: group}, format: :csv
-
-            cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-            expect(cookie[0]["name"]).to match(/^(people_export)+\S*(#{top_leader.id})+$/)
-            expect(cookie[0]["type"]).to match(/^csv$/)
           end
         end
 
@@ -1181,7 +1172,9 @@ describe PeopleController do
 
     it "GET#index exports to csv using TableDisplay" do
       get :index, params: {group_id: group, selection: true}, format: :csv
-      expect(flash[:notice]).to match(/Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./)
+      expect(flash[:notice]).to match(
+        /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+      )
       expect(Delayed::Job.last.payload_object.send(:exporter)).to eq Export::Tabular::People::TableDisplays
     end
 

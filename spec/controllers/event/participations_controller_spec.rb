@@ -98,7 +98,7 @@ describe Event::ParticipationsController do
       expect do
         get :index, params: {group_id: group, event_id: course.id}, format: :csv
         expect(flash[:notice]).to match(
-          /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+          /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
         )
       end.to change(Delayed::Job, :count).by(1)
     end
@@ -107,20 +107,9 @@ describe Event::ParticipationsController do
       expect do
         get :index, params: {group_id: group, event_id: course.id}, format: :xlsx
         expect(flash[:notice]).to match(
-          /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+          /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
         )
       end.to change(Delayed::Job, :count).by(1)
-    end
-
-    it "sets cookie on export" do
-      get :index, params: {group_id: group, event_id: course.id}, format: :csv
-
-      cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-      expect(cookie[0]["name"]).to match(
-        /^(event_participation_export)+\S*(#{people(:top_leader).id})+$/
-      )
-      expect(cookie[0]["type"]).to match(/^csv$/)
     end
 
     it "renders email addresses with additional ones" do
@@ -1206,7 +1195,7 @@ describe Event::ParticipationsController do
     it "GET#index exports to csv using TableDisplay" do
       get :index, params: {group_id: group.id, event_id: course.id, selection: true}, format: :csv
       expect(flash[:notice]).to match(
-        /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+        /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
       )
       expect(Delayed::Job.last.payload_object.send(:exporter))
         .to eq Export::Tabular::Event::Participations::TableDisplays

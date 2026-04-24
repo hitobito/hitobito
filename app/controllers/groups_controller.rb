@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupsController < CrudController
-  include AsyncDownload
+  include UserManageableExportJob
 
   # Respective group attrs are added in corresponding instance method.
   self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [
@@ -74,9 +74,10 @@ class GroupsController < CrudController
   end
 
   def export_subgroups
-    with_async_download_cookie(:csv, :subgroups_export, redirection_target: entry) do |filename|
-      Export::SubgroupsExportJob.new(current_person.id, entry.id, filename: filename).enqueue!
-    end
+    Export::SubgroupsExportJob.new(
+      current_person.id, entry.id, filename: :subgroups_export
+    ).enqueue!
+    respond_to_export_job(redirection_target: entry)
   end
 
   def person_notes

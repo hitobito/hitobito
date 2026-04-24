@@ -41,6 +41,10 @@ WebMock.disable_net_connect!(
   ]
 )
 
+# Delayed job worker configuration
+Delayed::Worker.max_attempts = 2
+Delayed::Worker.max_run_time = 10.seconds
+
 # Maintain test schema for core and wagon specs
 ActiveRecord::Migration.maintain_test_schema!
 

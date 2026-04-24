@@ -7,6 +7,7 @@
 
 class Export::MessageJob < Export::ExportBaseJob
   self.parameters = PARAMETERS + [:message_id]
+  self.reports_progress = true
 
   def initialize(format, user_id, message_id, options)
     super(format, user_id, options)
@@ -23,7 +24,7 @@ class Export::MessageJob < Export::ExportBaseJob
     case @format
     when :pdf
       message.exporter_class.new(message, {
-        async_download_file: async_download_file,
+        job: self,
         stamped: true
       }).render
     end

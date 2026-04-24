@@ -13,5 +13,10 @@ describe MailchimpSynchronizationsController do
         post :create, params: {group_id: group.id, mailing_list_id: mailing_list.id}
       end.to change(Delayed::Job, :count).by(1)
     end
+
+    it "sets flash message" do
+      post :create, params: {group_id: group.id, mailing_list_id: mailing_list.id}
+      expect(flash[:notice]).to be_present
+    end
   end
 end

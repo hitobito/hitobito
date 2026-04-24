@@ -6,7 +6,7 @@
 class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   include Api::JsonPaging
   include RenderMessagesExports
-  include AsyncDownload
+  include UserManageableExportJob
 
   decorates :invoice
 
@@ -144,12 +144,11 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def render_tabular_in_background(format, invoices)
-    with_async_download_cookie(format, filename(invoices)) do |filename|
-      Export::InvoicesJob.new(
-        format, current_person.id, invoices.map(&:id),
-        {filename:}
-      ).enqueue!
-    end
+    Export::InvoicesJob.new(
+      format, current_person.id, invoices.map(&:id),
+      {filename: filename(invoices)}
+    ).enqueue!
+    respond_to_export_job
   end
 
   def render_invoices_pdf(invoices)
@@ -158,14 +157,13 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       render_pdf_in_background(letter)
     else
       format = :pdf
-      with_async_download_cookie(format, filename(invoices)) do |filename|
-        Export::InvoicesJob.new(
-          format,
-          current_person.id,
-          invoices.map(&:id),
-          pdf_options.merge({filename: filename})
-        ).enqueue!
-      end
+      Export::InvoicesJob.new(
+        format,
+        current_person.id,
+        invoices.map(&:id),
+        pdf_options.merge({filename: filename(invoices)})
+      ).enqueue!
+      respond_to_export_job
     end
   end
 

@@ -458,7 +458,7 @@ GEM
     netrc (0.11.0)
     niceql (0.6.2)
     nio4r (2.7.4)
-    nokogiri (1.18.10-x86_64-linux-gnu)
+    nokogiri (1.19.1-x86_64-linux-gnu)
       racc (~> 1.4)
     oat (0.6.1)
     open_api-schema_validator (0.2.0)

@@ -143,15 +143,24 @@ class Invoice::PeriodItem < InvoiceItem
   end
 
   def group_condition
-    # This joins the "ancestor" group to the query. In the case of group invoices, the ancestor
-    # is the invoice recipient group in. In the case of invoices addressed to individual people,
-    # the ancestor is just the invoice sender group.
+    # This joins the "ancestor" group to the query. In the case of group invoices (case 1 in
+    # the documentation comment on this class), the ancestor is the recipient of the invoice.
+    # In the case of invoices addressed to individual people (case 2), the ancestor is just
+    # the invoice sender group. In case 3, when calculating the preview counts for a whole
+    # list of recipient groups, each of these recipient groups is a separate ancestor.
     # Typically, for each ancestor group, ultimately a separate invoice will be generated.
-    # Therefore, all calculations are done per ancestor group / in the context of each ancestor
-    # group. Any DISTINCT statements in the business logic for deduplicating subjects should
-    # keep rows with separate ancestor.id separate. E.g. if a period item should only count each
-    # person once, what we actually mean is it should cound each person once per ancestor group:
-    # select("people.id", "ancestor.id AS ancestor_id").distinct
+    #
+    # Example: The root group sends membership invoices to all its Vereine, counting specific
+    # membership roles in subgroups of these Vereine. Then, each Verein is an ancestor, joined
+    # onto the groups of the membership roles. So during the preview count calculation of the
+    # whole invoice run (case 3), there are multiple ancestors present at the same time, while
+    # in the final invoices (case 1), only one ancestor per invoice is present.
+    #
+    # Therefore, all calculations in period items are done per ancestor group / in the context
+    # of each ancestor group. Any DISTINCT statements in the business logic for deduplicating
+    # subjects should keep rows with separate ancestor.id separate. E.g. if a period item
+    # should only count each person once, what we actually mean is it should count each person
+    # once per ancestor group: select("people.id", "ancestor.id AS ancestor_id").distinct
     #
     # The above would also hold true already for the #groups of a period item. However, the
     # ancestor groups are the mechanism used to implement deep search efficiently. If only

@@ -1200,6 +1200,8 @@ en:
         recipient_email: Recipient e-mail
         recipient_company_name: Company name
         recipient_name: Name
+        recipient_first_name: First name
+        recipient_last_name: Last name
         recipient_address_care_of: additional address line
         recipient_postbox: P.O. Box
         recipient_country: Country

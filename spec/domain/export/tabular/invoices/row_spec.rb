@@ -45,6 +45,8 @@ describe Export::Tabular::Invoices::Row do
        "amount_paid" => "0.00",
        "recipient_company_name" => nil,
        "recipient_name" => "Top Leader",
+       "recipient_first_name" => "Top",
+       "recipient_last_name" => "Leader",
        "recipient_address_care_of" => nil,
        "recipient_street" => "Greatstreet",
        "recipient_housenumber" => "345",
@@ -74,7 +76,8 @@ describe Export::Tabular::Invoices::Row do
   it "returns deprecated recipient address for old invoices" do
     invoice.assign_attributes(
       deprecated_recipient_address: "Old Address Format",
-      recipient_name: nil,
+      recipient_first_name: nil,
+      recipient_last_name: nil,
       recipient_street: nil,
       recipient_town: nil,
       recipient_zip_code: nil,

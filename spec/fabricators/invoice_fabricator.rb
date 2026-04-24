@@ -51,7 +51,8 @@
 
 Fabricator(:invoice) do
   title { Faker::Name.name }
-  recipient_name { Faker::Name.name }
+  recipient_first_name { Faker::Name.first_name }
+  recipient_last_name { Faker::Name.last_name }
   recipient_street { Faker::Address.street_address }
   recipient_zip_code { Faker::Address.zip_code[0..3] }
   recipient_town { Faker::Address.city }

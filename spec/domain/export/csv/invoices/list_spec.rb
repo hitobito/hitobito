@@ -22,9 +22,9 @@ describe Export::Tabular::Invoices::List do
       "Empfänger Adresse", "Verschickt am", "Fällig am", "Betrag",
       "MwSt.", "Rechnungsbetrag", "Bezahlt",
       "Kostenstellen", "Konten", "Zahlungseingänge",
-      "Empfänger Firmenname", "Empfänger Name", "Empfänger zusätz. Adresszeile",
-      "Empfänger Strasse", "Empfänger Hausnummer", "Empfänger Postfach", "Empfänger PLZ",
-      "Empfänger Ort", "Empfänger Land", "Zahlungsempfänger Name", "Zahlungsempfänger Strasse",
+      "Empfänger Firmenname", "Empfänger Name", "Empfänger Vorname", "Empfänger Nachname",
+      "Empfänger zusätz. Adresszeile", "Empfänger Strasse", "Empfänger Hausnummer", "Empfänger Postfach",
+      "Empfänger PLZ", "Empfänger Ort", "Empfänger Land", "Zahlungsempfänger Name", "Zahlungsempfänger Strasse",
       "Zahlungsempfänger Hausnummer", "Zahlungsempfänger PLZ", "Zahlungsempfänger Ort",
       "Zahlungsempfänger Land"
     ]
@@ -52,6 +52,8 @@ describe Export::Tabular::Invoices::List do
     its(["Fällig am"]) { should.nil? }
     its(["Empfänger Firmenname"]) { should == invoices(:invoice).recipient_company_name }
     its(["Empfänger Name"]) { should == invoices(:invoice).recipient_name }
+    its(["Empfänger Vorname"]) { should == invoices(:invoice).recipient_first_name }
+    its(["Empfänger Nachname"]) { should == invoices(:invoice).recipient_last_name }
     its(["Empfänger zusätz. Adresszeile"]) { should == invoices(:invoice).recipient_address_care_of }
     its(["Empfänger Strasse"]) { should == invoices(:invoice).recipient_street }
     its(["Empfänger Hausnummer"]) { should == invoices(:invoice).recipient_housenumber }
@@ -86,7 +88,8 @@ describe Export::Tabular::Invoices::List do
     its(["Beschreibung"]) { should.nil? }
     its(["Empfänger Adresse"]) { should.nil? }
     its(["Empfänger Firmenname"]) { should == invoice.recipient_company_name }
-    its(["Empfänger Name"]) { should == invoice.recipient_name }
+    its(["Empfänger Vorname"]) { should == invoice.recipient_first_name }
+    its(["Empfänger Nachname"]) { should == invoice.recipient_last_name }
     its(["Empfänger zusätz. Adresszeile"]) { should == invoice.recipient_address_care_of }
     its(["Empfänger Strasse"]) { should == invoice.recipient_street }
     its(["Empfänger Hausnummer"]) { should == invoice.recipient_housenumber }

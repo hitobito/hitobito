@@ -31,15 +31,17 @@ describe UserJobResult do
   end
 
   describe "default values" do
-    it "should set correct default values when values are not passed" do
+    before do
       freeze_time
+    end
+
+    it "should set correct default values when values are not passed" do
       user_job_result = UserJobResult.create!(person_id:, job_name:)
 
       check_default_values(user_job_result)
     end
 
     it "should set correct default values when values are passed as nil" do
-      freeze_time
       user_job_result = UserJobResult.create!(
         person_id:,
         job_name:,
@@ -55,17 +57,37 @@ describe UserJobResult do
       check_default_values(user_job_result)
     end
 
+    it "should not override values with default values when they are passed" do
+      user_job_result_attributes = {
+        person_id:,
+        job_name:,
+        filetype: "csv",
+        start_timestamp: 10.days.ago,
+        status: "in_progress",
+        attempts: 3,
+        max_attempts: 42,
+        reports_progress: true,
+        progress: 50
+      }
+
+      user_job_result = UserJobResult.create!(user_job_result_attributes)
+
+      expect(user_job_result).to have_attributes(user_job_result_attributes)
+    end
+
     def check_default_values(user_job_result)
-      expect(user_job_result.person_id).to eql(person_id)
-      expect(user_job_result.job_name).to eql(job_name)
-      expect(user_job_result.filename).to be_nil
-      expect(user_job_result.filetype).to eql("txt")
-      expect(user_job_result.reports_progress).to eql(false)
-      expect(user_job_result.progress).to be_zero
-      expect(user_job_result.status).to eql("planned")
-      expect(user_job_result.attempts).to be_zero
-      expect(user_job_result.max_attempts).to eql(Delayed::Worker.max_attempts)
-      expect(user_job_result.start_timestamp).to eql(Time.current)
+      expect(user_job_result).to have_attributes(
+        person_id: person_id,
+        job_name: job_name,
+        filename: nil,
+        filetype: "txt",
+        reports_progress: false,
+        progress: 0,
+        status: "planned",
+        attempts: 0,
+        max_attempts: Delayed::Worker.max_attempts,
+        start_timestamp: Time.current
+      )
     end
   end
 

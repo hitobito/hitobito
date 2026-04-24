@@ -134,13 +134,19 @@ class UserJobResult < ApplicationRecord
   private
 
   def set_default_values
-    self.start_timestamp ||= Time.current
-    self.status ||= "planned"
-    self.filetype ||= "txt"
-    self.attempts ||= 0
-    self.max_attempts ||= Delayed::Worker.max_attempts
-    self.reports_progress = false if self.reports_progress.nil?
-    self.progress ||= 0
+    default_values = {
+      start_timestamp: Time.current,
+      status: "planned",
+      filetype: "txt",
+      attempts: 0,
+      max_attempts: Delayed::Worker.max_attempts,
+      progress: 0
+    }
+
+    default_values.each do |k, v|
+      send("#{k}=", v) unless send(k)
+    end
+    self.reports_progress = false if reports_progress.nil?
   end
 
   def broadcast_notification

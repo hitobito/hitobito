@@ -57,8 +57,12 @@ describe UserJobResultsController do
   end
 
   def create_test_user_job_result(person_id)
-    UserJobResult.create_default!(
-      person_id, "A test job", "subscriptions_to-blorbaels-rants", "txt", false
+    UserJobResult.create!(
+      person_id:,
+      job_name: "A test job",
+      filename: "subscriptions_to-blorbaels-rants",
+      filetype: "txt",
+      reports_progress: false
     )
   end
 end

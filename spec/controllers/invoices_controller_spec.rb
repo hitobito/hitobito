@@ -366,7 +366,7 @@ describe InvoicesController do
 
     describe "tabular exports" do
       let(:now) { Time.zone.now }
-      let(:options) { {filename: "#{invoice.filename("")}"} }
+      let(:options) { {filename: invoice.filename("").to_s} }
 
       before { freeze_time }
 

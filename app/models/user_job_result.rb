@@ -144,7 +144,7 @@ class UserJobResult < ApplicationRecord
     }
 
     default_values.each do |k, v|
-      send("#{k}=", v) unless send(k)
+      send(:"#{k}=", v) unless send(k)
     end
     self.reports_progress = false if reports_progress.nil?
   end

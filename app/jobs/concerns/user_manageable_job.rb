@@ -13,15 +13,9 @@ module UserManageableJob
   end
 
   def enqueue!
-    current_person = Auth.current_person
-    raise "User manageable jobs must be called from context with auth user" unless current_person
+    raise "User manageable jobs must be called from context with auth user" unless @user_id
 
-    user_job_result = UserJobResult.create!(
-      person_id: current_person.id, name: job_name,
-      status: "planned", start_timestamp: Time.now.to_i,
-      attempts: 0, progress: (reports_progress ? 0 : nil),
-      filetype: @format || :txt
-    )
+    user_job_result = create_default_user_job_result
     @user_job_result_id = user_job_result.id
 
     delayed_job = super
@@ -62,6 +56,15 @@ module UserManageableJob
     super
   end
 
+  # Report the progess of the job which is then shown as a progress bar on the
+  # user job results view. This could for example be used in a loop that iterates
+  # through files or sends out mails.
+  #
+  # Attention: The <tt>reports_progress</tt> class attribute has to be set to a truthy value
+  # on the job class for progress to actually be reported.
+  #
+  # <tt>current_iteration</tt>: The current iteration
+  # <tt>iteration_count</tt>: The total iterations after which the job will be done
   def report_progress(current_iteration, iteration_count)
     if reports_progress
       progress = (100.to_f / iteration_count) * (current_iteration + 1)
@@ -82,5 +85,33 @@ module UserManageableJob
       locals: {user_job_result:},
       target: "user-job-result-notification-placeholder"
     )
+  end
+
+  def create_default_user_job_result
+    UserJobResult.create!(
+      name: job_name,
+      filetype: filetype,
+      progress: default_progress,
+      person_id: @user_id,
+      status: "planned",
+      start_timestamp: Time.now.to_i,
+      attempts: 0,
+      filename: filename_with_timestamp
+    )
+  end
+
+  def filename_with_timestamp
+    filename = @options[:filename]
+    return unless filename
+
+    "#{filename.to_s.parameterize(preserve_case: true)}_#{Time.now.to_i}.#{filetype}"
+  end
+
+  def filetype
+    @format || :txt
+  end
+
+  def default_progress
+    reports_progress ? 0 : nil
   end
 end

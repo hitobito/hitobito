@@ -5,8 +5,8 @@
 
 class PaymentsController < CrudController
   include FormatHelper
-  include AsyncDownload
   include ActionView::Helpers::NumberHelper
+  include UserManageableExportJob
 
   self.nesting = [Group, Invoice]
   self.permitted_attrs = [:amount, :received_at]
@@ -37,10 +37,8 @@ class PaymentsController < CrudController
 
   def render_tabular_entries_in_background(format)
     return_path = group_invoices_path(params[:group_id])
-    with_async_download_cookie(format, :payment_export,
-      redirection_target: return_path) do |filename|
-      render_tabular_in_background(format, filename)
-    end
+    render_tabular_in_background(format, :payment_export)
+    respond_to_export_job(redirection_target: return_path)
   end
 
   def render_tabular_in_background(format, filename)

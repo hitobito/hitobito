@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module RenderMessagesExports
+  include UserManageableExportJob
   extend ActiveSupport::Concern
 
   def render_pdf_preview(letter = entry)
@@ -26,9 +27,8 @@ module RenderMessagesExports
   end
 
   def render_in_background(letter, format, name)
-    with_async_download_cookie(format, name) do |filename|
-      Export::MessageJob.new(format, current_person.id, letter.id, {filename: filename}).enqueue!
-    end
+    Export::MessageJob.new(format, current_person.id, letter.id, {filename: name}).enqueue!
+    respond_to_export_job
   end
 
   private

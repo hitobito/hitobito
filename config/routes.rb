@@ -93,7 +93,7 @@ Hitobito::Application.routes.draw do
       post "self_inscription" => "groups/self_inscription#create"
 
       FeatureGate.if("groups.statistics") do
-        resources :statistics, only: [:index], module: :group
+        resources :statistics, only: [:index, :show], module: :group, param: :key
       end
 
       get "log" => "group/log#index"

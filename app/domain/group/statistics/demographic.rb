@@ -1,44 +1,46 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017-2022, Katholische Landjugendbewegung Paderborn. This file is part of
+#  Copyright (c) 2017-2026, Katholische Landjugendbewegung Paderborn. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-#
 
-class Group::Demographic
+class Group::Statistics::Demographic < Group::Statistics::Base
+  self.key = :people
+  self.permitted_params = [:year]
+
   AgeGroup = Struct.new(:year, :age, :count, :relative_count, keyword_init: true)
 
   NIL_SORT_VALUE = 10_000
 
-  def initialize(layer, year_now = Time.zone.now.year)
-    raise ArgumentError, "#{layer} should be a layer" unless layer.layer?
-
-    @now = year_now
-    @layer = layer
-  end
-
   def age_groups
-    @age_groups ||= build_age_groups(@layer, @now)
+    @age_groups ||= build_age_groups
   end
 
-  def max_relative_count
-    @max_relative_count ||= age_groups.map(&:relative_count).max
+  def year
+    @year ||= filter_params[:year]&.to_i || Date.current.year
   end
 
   def total_count
     @total_count ||= age_groups.map(&:count).sum
   end
 
+  def max_relative_count
+    @max_relative_count ||= age_groups.map(&:relative_count).max
+  end
+
+  def group_names
+    layer.groups_in_same_layer.map(&:to_s)
+  end
+
   private
 
-  def build_age_groups(layer, now)
+  def build_age_groups
     years(layer)
       .yield_self { |years| histogram(years) }
-      .map do |year, (count, relative_count)|
-        age = year.nil? ? nil : now - year
-
-        AgeGroup.new(year: year, age: age, count: count, relative_count: relative_count)
+      .map do |birth_year, (count, relative_count)|
+        age = birth_year.nil? ? nil : year - birth_year
+        AgeGroup.new(year: birth_year, age: age, count: count, relative_count: relative_count)
       end
   end
 

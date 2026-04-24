@@ -3,12 +3,13 @@
 ## unreleased
 
 - Spezifische E-Mails je nach Zustand der Teilnahme (Nicht zugeteilt, Zugeteilt, Warteliste) (hitobito/hitobito_sww#289)
-- Optionale PP-Zeile auf Rechnungen (hitobito/hitobito_swb#246)
-- Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
+- Optionale PP-Zeile auf Rechnungen (hitobito_swb#246)
+- Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito_sac_cas#2366)
 - Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
-- API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito/hitobito_sac_cas#2314)
+- API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito_sac_cas#2314)
 - Qualifkationen wurden in das JSON:API integriert (hitobito_bdp#12)
 - Rechnungen können neu auch als Excel (XLSX) exportiert werden (hitobito_sww#288)
+- Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)
 
 ## Version 2.8
 
@@ -25,7 +26,7 @@
 - Alle Passwortfelder haben neu die Option das Passwort anzeigen zu lassen (hitobito_sac_cas#2291)
 - In allen Umgebungen welche nach bestimmter Zeit automatisch Antworten auf Eventfragen löschen, werden künftig nur noch als „sensibel“ markierte Antworten entfernt, wobei alle Fragen ab sofort standardmässig als sensibel voreingestellt sind. (hitobito_sac_cas#2299)
 - In der JSON:API kann neu nach aktiven Rollen gefiltert werden. Möglich ist sowohl das Filtern mit `?filter[active]` nach Rollen die heute aktiv sind, als auch mit `?filter[active]=YYYY-MM-DD` nach Rollen die in der Vergangenheit oder Zukunft aktiv sind/waren. Dabei werden aber immer nur Rollen ausgegeben, die zum heutigen Zeitpunkt immer noch lesbar sind (hitobito_pfadi_de#37)
-- Bei Anlässen/Kursen/etc. ist neu das Profilfoto der Kontaktperson als Anzeigeoption auswählbar. Standardmässig ist dies abgewählt. (hitobito/hitobito_sac_cas#2318)
+- Bei Anlässen/Kursen/etc. ist neu das Profilfoto der Kontaktperson als Anzeigeoption auswählbar. Standardmässig ist dies abgewählt. (hitobito_sac_cas#2318)
 - Nach dem Login wird nun konsistent die Sprache von vor dem Login weiterverwendet. Merci @Visualstudiocodetest! (#4023)
 - Jahreszahlen an diversen Orten sind jetzt eingeschränkt auf 4 Stellen. Merci @Visualstudiocodetest! (#4024)
 - Die Haushalts-ID ist neu in der API verfügbar. Merci @B52-Bomber! (#4025)
@@ -76,7 +77,7 @@
 - Profilbild, letztes Aktualisierungsdatum und zusätzliche Angaben zu Personen sowie der Typ von Rollen sind neu in der JSON:API verfügbar (#3612, hitobito_bdp#17)
 - Abmeldelinks werden nur für Abos angezeigt, für welche sich Personen selbst an-/abmelden können (hitobito_sac_cas#2018)
 - Haushalts-Exporte beinhalten jetzt immer die neuen Felder: Strasse und Hausnummer (#2705)
-- Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet, um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)
+- Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet, um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito_sac_cas#1278)
 - Für PDF-Generierung wird nun die Schriftart "Noto Sans (Latin, Cyrillic and Greek)" als Fallback Schriftart verwendet (#2372)
 - Für eine bessere Unterstützung von Sonderzeichen, wird in PDFs von QR-Code-Rechnungen jetzt die Schrift Liberation Sans verwendet (#3622)
 - Etiketten-Exporte beinhalten zusätzlich: Strasse, Hausnummer, zusätzliche Adresszeile und Postfach. (#2717)
@@ -86,7 +87,7 @@
 
 - Texte und Hilfetexte verwenden nun den Inhalt einer Fallback Sprache, wenn die gewünschte Sprache leer ist
 - Personen Adressen können mit der Schweizer Post abgeglichen werden
-- Beim Zusammenführen von Duplikaten wird auch der Haushalt berücksichtigt (hitobito/hitobito_sww#275)
+- Beim Zusammenführen von Duplikaten wird auch der Haushalt berücksichtigt (hitobito_sww#275)
 - Referenznummer von Rechnung wird neu auch auf Empfangsschein angezegit (hitobito_sww#238)
 - Sortierung von Rechnungstabelle wird bei PDF Exports beachtet (hitobito_sww#237)
 - Beim zusammenführen von Duplikaten werden neu auch Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen, Anfragen und Qualifikationen übernommen (hitobito_sww#139)

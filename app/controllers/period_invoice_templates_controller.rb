@@ -6,7 +6,7 @@
 class PeriodInvoiceTemplatesController < CrudController
   self.nesting = Group
 
-  helper_method :group
+  helper_method :group, :placeholder
 
   self.permitted_attrs = [:name, :start_on, :end_on,
     {
@@ -41,6 +41,10 @@ class PeriodInvoiceTemplatesController < CrudController
   def group = parent
 
   private
+
+  def placeholder(attr, suffix: nil)
+    PeriodInvoiceTemplate::Item.human_attribute_name(attr) + suffix.to_s
+  end
 
   def assign_attributes
     super

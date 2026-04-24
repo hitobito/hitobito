@@ -5,14 +5,14 @@
 
 %h3= f.object.class.model_name.human
 .mb-2
-  = f.input_field :name, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:name) + "*", class: "mw-md-90ch"
+  = f.input_field :name, placeholder: placeholder(:name, suffix: "*"), class: "mw-md-90ch"
 .d-flex.flex-row.gap-2.mb-2
   .input-group.input-group-sm
-    = f.input_field :unit_cost, name: f.object_name + "[dynamic_cost_parameters][unit_cost]", value: number_to_currency(f.object.unit_cost, format: "%n", delimiter: ""), placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:unit_cost) + "*", class: "text-end"
+    = f.input_field :unit_cost, name: f.object_name + "[dynamic_cost_parameters][unit_cost]", value: number_to_currency(f.object.unit_cost, format: "%n", delimiter: ""), placeholder: placeholder(:unit_cost, suffix: "*"), class: "text-end"
     .input-group-text= entry.group.invoice_config.currency
   .input-group.input-group-sm
-    = f.input_field :vat_rate, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:vat_rate), class: "text-end mw-md-90ch"
+    = f.input_field :vat_rate, placeholder: placeholder(:vat_rate), class: "text-end mw-md-90ch"
     .input-group-text= "%"
 .d-flex.flex-row.gap-2
-  = f.input_field :cost_center, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:cost_center), class: "mb-2"
-  = f.input_field :account, placeholder: PeriodInvoiceTemplate::Item.human_attribute_name(:account), class: "mb-2"
+  = f.input_field :cost_center, placeholder: placeholder(:cost_center), class: "mb-2"
+  = f.input_field :account, placeholder: placeholder(:account), class: "mb-2"

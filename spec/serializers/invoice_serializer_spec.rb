@@ -111,7 +111,8 @@ describe InvoiceSerializer do
     it "returns deprecated recipient address for old invoices" do
       invoice.assign_attributes(
         deprecated_recipient_address: "Old Address Format",
-        recipient_name: nil,
+        recipient_first_name: nil,
+        recipient_last_name: nil,
         recipient_street: nil,
         recipient_town: nil,
         recipient_zip_code: nil,

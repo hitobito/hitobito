@@ -23,7 +23,8 @@ describe InvoiceMailer do
     invoice.update(recipient: nil, recipient_email: "test@example.com")
     invoice.update_columns(
       recipient_company_name: nil,
-      recipient_name: nil,
+      recipient_first_name: nil,
+      recipient_last_name: nil,
       recipient_address_care_of: nil,
       recipient_street: nil,
       recipient_housenumber: nil,

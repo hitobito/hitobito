@@ -9,6 +9,7 @@
 - API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito/hitobito_sac_cas#2314)
 - Qualifkationen wurden in das JSON:API integriert (hitobito_bdp#12)
 - Rechnungen können neu auch als Excel (XLSX) exportiert werden (hitobito_sww#288)
+- Vor- und Nachname des Rechnungsempfängers werden neu strukturiert in separaten Feldern gespeichert (#4164)
 
 ## Version 2.8
 

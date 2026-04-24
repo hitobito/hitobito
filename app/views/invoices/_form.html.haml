@@ -23,7 +23,8 @@
     = f.labeled_input_field :recipient_email
 
     = f.labeled_input_field :recipient_company_name
-    = f.labeled_input_field :recipient_name
+    = f.labeled_input_field :recipient_first_name
+    = f.labeled_input_field :recipient_last_name
     = f.labeled_input_field(:recipient_address_care_of, autocomplete: :off)
     = f.labeled(:street, Person.human_attribute_name(:street), class: 'd-flex', mark_as_required: true) do
       %div.col-9

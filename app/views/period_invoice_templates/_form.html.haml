@@ -5,7 +5,8 @@
 
 = entry_form(buttons_top: false, data: { controller: "period-invoice-template-form autosubmit", period_invoice_template_form_wrapper_selector_value: "#items_fields .fields", period_invoice_template_form_assoc_value: "items" }) do |f|
   = hidden_field_tag :autosubmit
-  = f.labeled_input_fields :name, :start_on, :end_on
+  = f.labeled_input_fields :name
+  = render "period_fields", f:
 
   - if params[:recipient_source_type] == "PeopleFilter" || entry.recipient_source_type == "PeopleFilter"
     = f.labeled :recipient_source, mark_as_required: true, label_class: "col-md-3 col-xl-2 align-self-baseline", class: "align-self-baseline" do

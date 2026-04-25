@@ -201,6 +201,10 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     "#{title}(#{sequence_number}): #{total}"
   end
 
+  def recipient_name
+    [recipient_first_name, recipient_last_name].map(&:to_s).join(" ").strip.presence
+  end
+
   def remindable?
     STATES_REMINDABLE.include?(state)
   end

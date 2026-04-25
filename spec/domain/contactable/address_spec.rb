@@ -260,7 +260,8 @@ describe Contactable::Address do
 
         expect(attributes).to eq({
           recipient_company_name: nil,
-          recipient_name: "Top Leader",
+          recipient_first_name: person.first_name,
+          recipient_last_name: person.last_name,
           recipient_address_care_of: nil,
           recipient_housenumber: "345",
           recipient_street: "Greatstreet",
@@ -289,7 +290,8 @@ describe Contactable::Address do
 
         expect(attributes).to eq({
           recipient_company_name: nil,
-          recipient_name: "Foo Bar",
+          recipient_first_name: "",
+          recipient_last_name: "Foo Bar",
           recipient_address_care_of: "Office",
           recipient_housenumber: "12a",
           recipient_postbox: "Postfach",
@@ -312,6 +314,53 @@ describe Contactable::Address do
         person.company = false
 
         expect(attributes[:recipient_company_name]).to be_nil
+      end
+
+      it "uses first_name and last_name attributes" do
+        person.update!(first_name: "Jane", last_name: "Smith")
+        person.country = "CH"
+
+        expect(attributes).to eq({
+          recipient_company_name: nil,
+          recipient_first_name: "Jane",
+          recipient_last_name: "Smith",
+          recipient_address_care_of: nil,
+          recipient_housenumber: "345",
+          recipient_street: "Greatstreet",
+          recipient_postbox: nil,
+          recipient_town: "Greattown",
+          recipient_zip_code: "3456",
+          recipient_country: "CH"
+        })
+      end
+
+      it "stores full name in last_name when addressable is AdditionalAddress" do
+        build_additional_address(
+          {
+            label: nil,
+            name: "Office Address",
+            uses_contactable_name: false,
+            street: "Officestrasse",
+            housenumber: "99",
+            zip_code: 8000,
+            town: "Zurich",
+            invoices: true
+          }
+        )
+        person.country = "CH"
+
+        expect(attributes).to eq({
+          recipient_company_name: nil,
+          recipient_first_name: "",
+          recipient_last_name: "Office Address",
+          recipient_address_care_of: nil,
+          recipient_housenumber: "99",
+          recipient_street: "Officestrasse",
+          recipient_postbox: nil,
+          recipient_town: "Zurich",
+          recipient_zip_code: "8000",
+          recipient_country: "CH"
+        })
       end
     end
 
@@ -493,12 +542,13 @@ describe Contactable::Address do
     describe "#invoice_recipient_address_attributes" do
       subject(:attributes) { address.invoice_recipient_address_attributes }
 
-      it "returns qr code address" do
+      it "returns qr code address with group.name as recipient_last_name" do
         group.country = "CH"
 
         expect(attributes).to eq({
           recipient_company_name: nil,
-          recipient_name: "TopGroup",
+          recipient_first_name: "",
+          recipient_last_name: "TopGroup",
           recipient_address_care_of: nil,
           recipient_housenumber: "345",
           recipient_street: "Greatstreet",
@@ -527,7 +577,8 @@ describe Contactable::Address do
 
         expect(attributes).to eq({
           recipient_company_name: nil,
-          recipient_name: "Foo Bar",
+          recipient_first_name: "",
+          recipient_last_name: "Foo Bar",
           recipient_address_care_of: "Office",
           recipient_housenumber: "12a",
           recipient_postbox: "Postfach",

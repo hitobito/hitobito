@@ -41,10 +41,12 @@ class Contactable::Address
   # Used to populate invoices#recipient_* fields, may be overridden in wagons
   def invoice_recipient_address_attributes
     with_invoice_addressable do
+      recipient_first_name, recipient_last_name = recipient_name_parts
       {
         recipient_address_care_of: address_care_of,
         recipient_company_name: company? ? company_name : nil,
-        recipient_name: full_name.to_s.squish,
+        recipient_first_name: recipient_first_name,
+        recipient_last_name: recipient_last_name,
         recipient_street: street,
         recipient_housenumber: housenumber,
         recipient_postbox: postbox,
@@ -52,6 +54,18 @@ class Contactable::Address
         recipient_town: town,
         recipient_country: country || default_country
       }
+    end
+  end
+
+  private
+
+  def recipient_name_parts
+    # If addressable is a Person with first_name and last_name, use those
+    if addressable.respond_to?(:first_name) && addressable.respond_to?(:last_name)
+      [addressable.first_name.to_s, addressable.last_name.to_s]
+    else
+      # Otherwise, store full name in last_name, first_name stays blank
+      ["", full_name.to_s.squish]
     end
   end
 

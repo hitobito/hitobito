@@ -11,8 +11,8 @@ module Export::Tabular::Invoices
 
     CUSTOM_METHODS = %w[cost_centers accounts payments]
 
-    ADDRESS_ATTRS = %w[recipient_company_name recipient_name
-      recipient_address_care_of recipient_street recipient_housenumber
+    ADDRESS_ATTRS = %w[recipient_company_name recipient_name recipient_first_name
+      recipient_last_name recipient_address_care_of recipient_street recipient_housenumber
       recipient_postbox recipient_zip_code recipient_town recipient_country
       payee_name payee_street payee_housenumber payee_zip_code payee_town
       payee_country]
@@ -27,6 +27,10 @@ module Export::Tabular::Invoices
     def recipient_company_name_label = recipient_label(:company_name)
 
     def recipient_name_label = recipient_label(:name)
+
+    def recipient_first_name_label = recipient_label(:first_name)
+
+    def recipient_last_name_label = recipient_label(:last_name)
 
     def recipient_address_care_of_label = recipient_label(:address_care_of)
 

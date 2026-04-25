@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_15_070232) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_24_135223) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -716,7 +716,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_070232) do
     t.bigint "invoice_run_id"
     t.string "reference", null: false
     t.boolean "hide_total", default: false, null: false
-    t.string "recipient_name"
     t.string "recipient_street"
     t.string "recipient_housenumber"
     t.string "recipient_zip_code"
@@ -734,6 +733,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_15_070232) do
     t.string "recipient_type"
     t.string "shipping_method", default: "own"
     t.string "pp_post"
+    t.string "recipient_first_name"
+    t.string "recipient_last_name"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_run_id"], name: "index_invoices_on_invoice_run_id"

@@ -1278,6 +1278,8 @@ it:
         recipient_email: Email del destinatario
         recipient_company_name: Nome della ditta
         recipient_name: Nome
+        recipient_first_name: Nome
+        recipient_last_name: Cognome
         recipient_address_care_of: Riga dell'indirizzo aggiuntiva
         recipient_postbox: Casella postale
         recipient_country: Nazione

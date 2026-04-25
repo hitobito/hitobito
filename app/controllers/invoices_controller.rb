@@ -25,11 +25,11 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   self.search_columns = [:title, :sequence_number, "groups.name", "groups.email",
     "people.last_name", "people.first_name", "people.email", "people.company_name"]
   self.permitted_attrs = [:title, :description, :state, :due_at, :issued_at,
-    :recipient_type, :recipient_id, :recipient_email, :recipient_company_name, :recipient_name,
-    :recipient_address_care_of, :recipient_street, :recipient_housenumber, :recipient_postbox,
-    :recipient_town, :recipient_zip_code, :recipient_country,
-    :payment_information, :payment_purpose, :hide_total,
-    :shipping_method, :pp_post,
+    :recipient_type, :recipient_id, :recipient_email, :recipient_company_name,
+    :recipient_first_name, :recipient_last_name, :recipient_address_care_of,
+    :recipient_street, :recipient_housenumber, :recipient_postbox, :recipient_town,
+    :recipient_zip_code, :recipient_country, :payment_information, :payment_purpose,
+    :hide_total, :shipping_method, :pp_post,
     invoice_items_attributes: [
       :id,
       :name,

@@ -12,6 +12,7 @@ module Dropdown
     def initialize(template)
       super(template, translate(:button), :envelope)
       @invoice_run_id = template.invoice_run&.id
+      @filter_params = filter_params
       init_items
     end
 
@@ -28,8 +29,16 @@ module Dropdown
 
     def add_item(key, options = {})
       group = template.parent.is_a?(Group) ? template.parent : template.parent.group
-      path = template.group_invoice_run_path(group, options)
+      path = template.group_invoice_run_path(group, options.merge(@filter_params))
       super(translate(key), path, data: {method: :put, checkable: true})
+    end
+
+    def filter_params
+      if template.respond_to?(:filter_params)
+        template.filter_params
+      else
+        {}
+      end
     end
   end
 end

@@ -277,8 +277,8 @@ describe InvoiceRunsController do
       expect(response).to redirect_to group_invoice_runs_path(group)
     end
 
-    it "PUT#update informs if not invoice has been selected" do
-      post :update, params: {group_id: group.id}
+    it "PUT#update informs if no invoice has been selected" do
+      post :update, params: {group_id: group.id, from: 1.year.from_now, to: 2.years.from_now}
       expect(response).to redirect_to group_invoices_path(group, returning: true)
       expect(flash[:alert]).to include "Es muss mindestens eine Rechnung ausgewählt werden."
     end
@@ -364,7 +364,7 @@ describe InvoiceRunsController do
 
     describe "DELETE#destroy" do
       it "informs if no invoice has been selected" do
-        delete :destroy, params: {group_id: group.id}
+        delete :destroy, params: {group_id: group.id, from: 1.year.from_now, to: 2.years.from_now}
         expect(response).to redirect_to group_invoices_path(group, returning: true)
         expect(flash[:alert]).to include "Zuerst muss eine Rechnung ausgewählt werden."
       end

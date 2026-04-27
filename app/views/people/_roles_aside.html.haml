@@ -27,6 +27,7 @@
                     %tr
                       %td
                         = role.decorate.for_aside
+                      = render_extensions :roles_aside_row, locals: { role:, index: }
                       %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
                       %td= link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)
 

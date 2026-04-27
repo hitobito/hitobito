@@ -22,18 +22,8 @@
     = f.hidden_field :group_id
 
   = f.labeled(:type) do
-    #role_type_select.shown.ms-0
-      = collection_select(:role,
-                          :type,
-                          GroupDecorator.decorate(@group).possible_roles(person: entry.person),
-                          :sti_name,
-                          :label,
-                          roles_type_select_options(@group, entry),
-                          { class: 'form-select form-select-sm',
-                            data: { remote: true,
-                                    url: details_group_roles_path(@group),
-                                    placeholder: ta(:please_select),
-                                    chosen_no_results: t('global.chosen_no_results') } })
+    #role_type_select.ms-0
+      = render "type_select"
 
   = f.labeled(:label) do
     = f.input_field(:label,

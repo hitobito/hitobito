@@ -162,6 +162,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     type = extract_model_attr(:type)
     attrs = {}
     attrs[:start_on] = extract_date(:start_on) if model_params&.key?(:start_on)
+    attrs[:start_on] ||= Time.zone.today
     attrs[:end_on] = extract_date(:end_on) if model_params&.key?(:end_on)
 
     return Role.new(attrs) if type.blank?

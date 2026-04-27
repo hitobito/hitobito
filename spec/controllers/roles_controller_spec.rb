@@ -384,6 +384,7 @@ describe RolesController do
       end.to change { Role.with_inactive.count }.by(1)
       is_expected.to redirect_to(group_person_path(group, person))
       expect(Role.with_inactive.find(role.id)).not_to be_active
+      expect(Role.with_inactive.last.start_on).to eq Time.zone.today
       # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Rolle <i>Member (bis #{Date.current.yesterday.strftime("%d.%m.%Y")})</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
       # rubocop:enable Layout/LineLength
@@ -399,6 +400,19 @@ describe RolesController do
       # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
       # rubocop:enable Layout/LineLength
+    end
+
+    it "hard destroys and creates new future role if type changes and role has future start_on" do
+      role.update_attribute(:start_on, 1.week.from_now)
+      expect do
+        put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
+      end.not_to change { Role.with_inactive.count }
+      is_expected.to redirect_to(group_person_path(group, person))
+      expect(Role.with_inactive.where(id: role.id)).not_to be_exists
+      expect(Role.with_inactive.last.start_on).to eq 1.week.from_now.to_date
+      expect(flash[:notice]).to eq(
+        "Rolle <i>Member</i> für <i>#{person}</i> in <i>TopGroup</i> zu <i>Leader</i> geändert."
+      )
     end
 
     it "terminates and creates new role if type and group changes" do

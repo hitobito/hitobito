@@ -212,8 +212,8 @@ en:
               attached_unless_disabled: 'must be specified if a logo position is selected'
         period_invoice_template:
           attributes:
-            recipient_group_type:
-              readonly_due_to_existing_invoice_runs: cannot be changed anymore, as invoice runs already exist
+            recipient_source:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: cannot be before the start of the accounting period
         role:
@@ -371,8 +371,8 @@ en:
         one: Sammelrechnung
         other: Sammelrechnungen
       period_invoice_template/role_count_item:
-        one: Rollen-Zählung
-        other: Rollen-Zählungen
+        one: Rollen-Abrechnung
+        other: Rollen-Abrechnungen
       oauth/application:
         one: OAuth application
         other: OAuth applications
@@ -1236,6 +1236,8 @@ en:
         cost_centers: Cost centers
         accounts: Accounts
         payments: Payments
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       invoice_article:
         number: Article Nr
@@ -1303,6 +1305,8 @@ en:
         recipients_paid: Recipient paid
         amount_total: Total amount
         amount_paid: Amount paid
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       # used for nested attributes
       invoice_items:
@@ -1372,7 +1376,7 @@ en:
         name: Description
         start_on: Start of accounting period
         end_on: End of accounting period
-        recipient_group_type: Recipient groups
+        recipient_source: Rechnungsempfänger
         items: Invoice item
 
       period_invoice_template/item:
@@ -1384,6 +1388,9 @@ en:
 
       period_invoice_template/role_count_item:
         role_types: role type
+
+      recipient_source:
+        group_type: Empfängergruppen
 
       service_token:
         name: Name
@@ -1402,7 +1409,7 @@ en:
         events: Events
         invoices: Invoices
         event_participations: Participants in events
-        mailing_lists: Subscribers to mailing lists
+        mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: Hosts with API access
         qualifications: Qualifikationen
 

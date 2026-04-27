@@ -215,8 +215,8 @@ it:
               attached_unless_disabled: 'deve essere specificato se si seleziona una posizione del logo'
         period_invoice_template:
           attributes:
-            recipient_group_type:
-              readonly_due_to_existing_invoice_runs: non può più essere modificato, poiché esistono già cicli di fatturazione
+            recipient_source:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
@@ -423,9 +423,9 @@ it:
         many: Sammelrechnungen
         other: Sammelrechnungen
       period_invoice_template/role_count_item:
-        one: Rollen-Zählung
-        many: Rollen-Zählungen
-        other: Rollen-Zählungen
+        one: Rollen-Abrechnung
+        many: Rollen-Abrechnungen
+        other: Rollen-Abrechnungen
       oauth/application:
         one: Applicazioni OAuth
         many: Applicazioni OAuth
@@ -1314,6 +1314,8 @@ it:
         cost_centers: Centro di costo
         accounts: Conti
         payments: Entrate pagamenti
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       invoice_article:
         number: Numero dell'articolo
@@ -1381,6 +1383,8 @@ it:
         recipients_paid: Destinatario pagato
         amount_total: Importo complessivo
         amount_paid: Importo pagato
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       # used for nested attributes
       invoice_items:
@@ -1450,7 +1454,7 @@ it:
         name: Denominazione
         start_on: Inizio del periodo contabile
         end_on: Fine del periodo contabile
-        recipient_group_type: Gruppi di destinatari
+        recipient_source: Rechnungsempfänger
         items: Voci contabili
 
       period_invoice_template/item:
@@ -1462,6 +1466,9 @@ it:
 
       period_invoice_template/role_count_item:
         role_types: Tipo di rullo
+
+      recipient_source:
+        group_type: Empfängergruppen
 
       service_token:
         name: Cognome
@@ -1480,7 +1487,7 @@ it:
         events: Eventi
         invoices: Fatture
         event_participations: Partecipanti ad eventi
-        mailing_lists: Abbonate/i a mailing lists
+        mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: host con accesso API
         qualifications: Qualifikationen
 

@@ -216,8 +216,8 @@ fr:
               attached_unless_disabled: 'doit être indiqué si une position de logo est sélectionnée'
         period_invoice_template:
           attributes:
-            recipient_group_type:
-              readonly_due_to_existing_invoice_runs: ne doit plus être modifié, car des cycles de facturation existent déjà
+            recipient_source:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
             end_on:
               must_be_later_than_start_on: ne peut pas être antérieur au début de la période comptable
         role:
@@ -424,9 +424,9 @@ fr:
         many: Sammelrechnungen
         other: Sammelrechnungen
       period_invoice_template/role_count_item:
-        one: Rollen-Zählung
-        many: Rollen-Zählungen
-        other: Rollen-Zählungen
+        one: Rollen-Abrechnung
+        many: Rollen-Abrechnungen
+        other: Rollen-Abrechnungen
       oauth/application:
         one: Application OAuth
         many: Applications OAuth
@@ -1315,6 +1315,8 @@ fr:
         cost_centers: Postes
         accounts: Comptes
         payments: Encaissements
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       invoice_article:
         number: Numéro d'article
@@ -1382,6 +1384,8 @@ fr:
         recipients_paid: Destinataire payé
         amount_total: Montant total
         amount_paid: Montant payé
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
 
       # used for nested attributes
       invoice_items:
@@ -1451,7 +1455,7 @@ fr:
         name: Désignation
         start_on: Début de la période comptable
         end_on: Fin de la période comptable
-        recipient_group_type: Groupes de destinataires
+        recipient_source: Rechnungsempfänger
         items: Postes de factures
 
       period_invoice_template/item:
@@ -1463,6 +1467,9 @@ fr:
 
       period_invoice_template/role_count_item:
         role_types: Type de rôle
+
+      recipient_source:
+        group_type: Empfängergruppen
 
       service_token:
         name: Nom
@@ -1481,7 +1488,7 @@ fr:
         events: Événements
         invoices: Factures
         event_participations: Participants d'évènements
-        mailing_lists: Abonné·e·s des mailing listes
+        mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: ordinateurs hôte avec accès via une interface
         qualifications: Qualifikationen
 

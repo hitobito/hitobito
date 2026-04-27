@@ -30,9 +30,8 @@ class UserJobResult < ApplicationRecord
   validates_by_schema
 
   after_initialize :set_default_values, if: :new_record?
-  after_update_commit -> { broadcast_replace_to "user_job_results" }
-  after_create_commit -> { broadcast_refresh_to "user_job_results" }
-  after_destroy_commit -> { broadcast_refresh_to "user_job_results" }
+  after_update_commit -> { broadcast_replace_to(stream_name) }
+  after_commit -> { broadcast_refresh_to(stream_name) }, on: %i[create destroy]
 
   before_destroy do
     generated_file.purge if generated_file.attached?
@@ -148,9 +147,13 @@ class UserJobResult < ApplicationRecord
     self.reports_progress = false if reports_progress.nil?
   end
 
+  def stream_name
+    "person_#{person_id}_user_job_result_updates"
+  end
+
   def broadcast_notification
-    Turbo::StreamsChannel.broadcast_append_to(
-      "user_job_result_notifications",
+    broadcast_append_to(
+      stream_name,
       partial: "user_job_results/user_job_result_notification",
       locals: {user_job_result: self},
       target: "user-job-result-notification-placeholder"

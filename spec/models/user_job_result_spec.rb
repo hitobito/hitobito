@@ -198,13 +198,45 @@ describe UserJobResult do
     end
   end
 
-  describe "broadcasting notifications" do
+  describe "broadcasting" do
+    it "should broadcast on create" do
+      expect { subject }
+        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
+        .with(a_string_matching(/action="refresh"/))
+    end
+
+    it "should broadcast on update" do
+      user_job_result = subject
+
+      expect { subject.update!(status: "in_progress") }
+        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
+        .with(a_string_matching(/target="user_job_result_#{user_job_result.id}"/))
+    end
+
+    it "should broadcast on destroy" do
+      user_job_result = subject
+
+      expect { user_job_result.destroy! }
+        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
+        .with(a_string_matching(/action="refresh"/))
+    end
+
     it "should broadcast notification when reporting success" do
-      expect { subject.report_success!(1) }.to have_broadcasted_to("user_job_result_notifications")
+      user_job_result = subject
+
+      expect(user_job_result).to receive(:broadcast_notification).and_call_original
+      expect { user_job_result.report_success!(1) }
+        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
+        .with(a_string_matching(/target="user-job-result-notification-placeholder"/))
     end
 
     it "should broadcast notification when reporting failure" do
-      expect { subject.report_failure! }.to have_broadcasted_to("user_job_result_notifications")
+      user_job_result = subject
+
+      expect(user_job_result).to receive(:broadcast_notification).and_call_original
+      expect { user_job_result.report_failure! }
+        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
+        .with(a_string_matching(/target="user-job-result-notification-placeholder"/))
     end
   end
 

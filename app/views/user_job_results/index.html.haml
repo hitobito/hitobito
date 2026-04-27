@@ -5,7 +5,6 @@
 
 = paginate @user_job_results
 
-= turbo_stream_from "user_job_results"
 - title t(".title")
 #user_job_results
   - @user_job_results.each do |user_job_result|

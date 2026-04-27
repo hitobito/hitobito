@@ -61,7 +61,7 @@ jobs:
       fail-fast: false
       matrix:
         instance: ${{ fromJSON(needs.find-instances.outputs.instances) }}
-      max-parallel: 5 # needed so we don't occupy all the runners
+      max-parallel: 2 # don't occupy all the runners and reduce load on deployment infra (harbor, openshift)
     uses: ./.github/workflows/release.yml
     with:
       composition: hitobito/ose_composition_${{ matrix.instance }}

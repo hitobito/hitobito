@@ -1,5 +1,13 @@
-# 2.16
+# 2.17
+## Features und Improvements
+* **Auftrag / Auftragsmangement**
+    * **Tab "Positionen":**
+        * Inaktive Portfolio- & Dienstleistungs-Einträge werden nun herausgefiltert
+* **Zeitfreigabe:** Neu wird die Erinnerung per E-Mail am letzten Arbeitstag des Monats versendet, wenn die Zeiten noch nicht freigegeben wurden.
 
+* **API**: Der Employee-API wurde das Feld `ldapname` hinzugefügt.
+
+# 2.16
 ## Features und Improvements
 * **Auftrag / Auftragsmanagement**
 	* **Tab "Positionen"**:

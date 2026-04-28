@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Puzzletime
-  VERSION = '2.16'
+  VERSION = '2.17'
 end

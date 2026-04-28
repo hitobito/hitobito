@@ -97,6 +97,28 @@ describe InvoiceRun do
       .and change(subject, :recipients_paid).from(0).to(1)
   end
 
+  it "#update_paid and #update_total update also invalid invoice_runs" do
+    subject.update(group: group, title: :title, recipient_source: PeopleFilter.new)
+
+    invoice = subject.invoices.create!(title: :title, recipient: person, total: 10, group: group)
+    subject.invoices.create!(title: :title, recipient: other_person, total: 20, group: group)
+    invoice.payments.create!(amount: 10)
+
+    subject.title = ""
+    subject.save(validate: false)
+    subject.reload
+
+    expect(subject).to be_invalid
+
+    expect do
+      subject.update_paid
+      subject.update_total
+      subject.reload
+    end.to change(subject, :amount_paid).from(0).to(10)
+      .and change(subject, :recipients_paid).from(0).to(1)
+      .and change(subject, :recipients_total).from(0).to(2)
+  end
+
   it "#to_s returns title" do
     subject.title = "A big invoice"
     expect(subject.to_s).to eq "A big invoice"

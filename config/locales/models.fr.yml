@@ -1279,6 +1279,8 @@ fr:
         recipient_email: E-mail du destinataire
         recipient_company_name: Nom de l'entreprise
         recipient_name: Nom
+        recipient_first_name: Prénom
+        recipient_last_name: Nom
         recipient_address_care_of: ligne d'adresse supplémentaire
         recipient_postbox: Case postale
         recipient_country: Pays

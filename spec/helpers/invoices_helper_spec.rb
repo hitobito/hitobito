@@ -22,7 +22,8 @@ describe InvoicesHelper do
         recipient_email: nil,
         deprecated_recipient_address: nil,
         recipient_company_name: nil,
-        recipient_name: nil,
+        recipient_first_name: nil,
+        recipient_last_name: nil,
         recipient_address_care_of: nil,
         recipient_street: nil,
         recipient_housenumber: nil,
@@ -34,8 +35,9 @@ describe InvoicesHelper do
     end
 
     it "renders person info" do
-      invoice.update_columns(recipient_name: "Top Leader", recipient_street: "Greatstreet",
-        recipient_housenumber: "345", recipient_zip_code: "3456", recipient_town: "Greattown")
+      invoice.update_columns(recipient_first_name: "Top", recipient_last_name: "Leader",
+        recipient_street: "Greatstreet", recipient_housenumber: "345",
+        recipient_zip_code: "3456", recipient_town: "Greattown")
 
       dom = Capybara::Node::Simple.new(invoice_receiver_address(invoice))
 
@@ -46,7 +48,8 @@ describe InvoicesHelper do
     end
 
     it "works with deprecated recipient address" do
-      invoice.update_columns(recipient_name: nil, recipient_street: nil, recipient_housenumber: nil,
+      invoice.update_columns(recipient_first_name: nil, recipient_last_name: nil,
+        recipient_street: nil, recipient_housenumber: nil,
         recipient_zip_code: nil, recipient_town: nil,
         deprecated_recipient_address: "Top Leader\nGreatstreet 345\n3456 Greattown")
 
@@ -73,7 +76,8 @@ describe InvoicesHelper do
 
     it "returns person name if present" do
       invoice.recipient = nil
-      invoice.recipient_name = "Top Leader Name"
+      invoice.recipient_first_name = "Top"
+      invoice.recipient_last_name = "Leader Name"
 
       dom = Capybara::Node::Simple.new(format_invoice_recipient(invoice))
 
@@ -82,7 +86,8 @@ describe InvoicesHelper do
 
     it "returns company name if present" do
       invoice.recipient = nil
-      invoice.recipient_name = "Top Leader Name"
+      invoice.recipient_first_name = "Top"
+      invoice.recipient_last_name = "Leader Name"
       invoice.recipient_company_name = "Top Leader Company"
 
       dom = Capybara::Node::Simple.new(format_invoice_recipient(invoice))
@@ -92,7 +97,8 @@ describe InvoicesHelper do
 
     it "returns first line of deprecated recipient address" do
       invoice.recipient = nil
-      invoice.recipient_name = nil
+      invoice.recipient_first_name = nil
+      invoice.recipient_last_name = nil
       invoice.deprecated_recipient_address = "Deprecated Top Leader\nAddress\nTown"
 
       dom = Capybara::Node::Simple.new(format_invoice_recipient(invoice))

@@ -111,7 +111,8 @@ describe Invoice do
   end
 
   it "does not validate the structured address if issued_at in 2025 and no recipient, no structured address" do
-    invoice = Invoice.create(title: "invoice", recipient_name: "Max Muster",
+    invoice = Invoice.create(title: "invoice", recipient_first_name: "Max",
+      recipient_last_name: "Muster",
       group: group, created_at: Date.new(2025, 2, 12))
     expect(invoice).to be_valid
   end
@@ -123,7 +124,8 @@ describe Invoice do
       recipient_email: nil,
       deprecated_recipient_address: nil,
       recipient_company_name: nil,
-      recipient_name: nil,
+      recipient_first_name: nil,
+      recipient_last_name: nil,
       recipient_address_care_of: nil,
       recipient_street: nil,
       recipient_housenumber: nil,
@@ -519,6 +521,33 @@ describe Invoice do
 
     it "returns nil when no reminder is present" do
       expect(invoice.latest_reminder).to be_nil
+    end
+  end
+
+  describe "#recipient_name" do
+    it "returns concatenated first and last name" do
+      invoice = Invoice.new(recipient_first_name: "John", recipient_last_name: "Doe")
+      expect(invoice.recipient_name).to eq("John Doe")
+    end
+
+    it "returns just last name when first name is blank" do
+      invoice = Invoice.new(recipient_first_name: "", recipient_last_name: "Smith")
+      expect(invoice.recipient_name).to eq("Smith")
+    end
+
+    it "returns just first name when last name is blank" do
+      invoice = Invoice.new(recipient_first_name: "Jane", recipient_last_name: "")
+      expect(invoice.recipient_name).to eq("Jane")
+    end
+
+    it "returns empty string when both are blank" do
+      invoice = Invoice.new(recipient_first_name: "", recipient_last_name: "")
+      expect(invoice.recipient_name).to be_nil
+    end
+
+    it "handles nil values gracefully" do
+      invoice = Invoice.new(recipient_first_name: nil, recipient_last_name: nil)
+      expect(invoice.recipient_name).to be_nil
     end
   end
 

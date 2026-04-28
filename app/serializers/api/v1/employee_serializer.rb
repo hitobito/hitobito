@@ -16,7 +16,8 @@ module Api
                   :nationalities,
                   :graduation,
                   :city,
-                  :birthday
+                  :birthday,
+                  :ldapname
 
       attribute :is_employed do |employee|
         !employee.current_employment.nil?

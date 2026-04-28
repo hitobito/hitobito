@@ -17,7 +17,9 @@
 class PortfolioItem < ApplicationRecord
   has_many :accounting_posts
 
-  scope :list, -> { order(:name) }
+  scope :list, -> { order(active: :desc, name: :asc) }
+  scope :active, -> { where(active: true) }
+  scope :active_or_selected, ->(selected) { where(active: true).or(where(id: selected)) }
 
   protect_if :accounting_posts, 'Der Eintrag kann nicht gelöscht werden, da ihm noch Budgetpositionen zugeordnet sind'
 
@@ -25,6 +27,8 @@ class PortfolioItem < ApplicationRecord
   validates :name, uniqueness: true
 
   def to_s
-    name
+    return name if active
+
+    "#{name} (inaktiv)"
   end
 end

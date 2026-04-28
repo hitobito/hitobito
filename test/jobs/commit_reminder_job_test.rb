@@ -33,6 +33,15 @@ class CommitReminderJobTest < ActiveJob::TestCase
     end
   end
 
+  test 'perform does not send mail if not last working day' do
+    # 28. August 2025 ist ein Donnerstag und somit vorletzter Arbeitstag
+    travel_to Date.new(2025, 8, 28) do
+      setup_employee
+      EmployeeMailer.expects(:worktime_commit_reminder_mail).never
+      CommitReminderJob.new.perform
+    end
+  end
+
   test 'perform respects holidays' do
     # Feiertag am 31. Dezember 2025 (Mittwoch)
     Holiday.create!(holiday_date: Date.new(2025, 12, 31), musthours_day: 0)

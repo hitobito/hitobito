@@ -11,12 +11,24 @@ class CommitReminderJob < CronJob
   def perform
     return unless last_working_day_of_month?
 
-    Employee.active_employed_current_month.pending_worktimes_commit.where(worktimes_commit_reminder: true).find_each do |employee|
-      EmployeeMailer.worktime_commit_reminder_mail(employee).deliver_now
-    end
+    employees =
+      Employee
+      .active_employed_current_month
+      .pending_worktimes_commit
+      .where(worktimes_commit_reminder: true)
+
+    send_mails_to(employees)
   end
 
   private
+
+  def send_mails_to(employees)
+    employees.find_each do |employee|
+      EmployeeMailer
+        .worktime_commit_reminder_mail(employee)
+        .deliver_now
+    end
+  end
 
   def last_working_day_of_month?
     target_day = Date.current.end_of_month

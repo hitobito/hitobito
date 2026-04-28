@@ -473,7 +473,7 @@ COMPLETION
 help | *)
   echo "USAGE: $0 [activate] <WAGON>|core"
   echo "       $0 [clone|bootstrap] <WAGON>"
-  echo "       $0 [create-datbase|reset-database|test-prepare|update-copyright]"
+  echo "       $0 [create-database|reset-database|test-prepare|update-copyright]"
   echo "       $0 [spec|build] <WAGON>"
   echo "       $0 [spec-all|reset-test-database|overwritten-in-wagon]"
   echo "       $0 [grep] <TERM>"

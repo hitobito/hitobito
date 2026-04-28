@@ -76,14 +76,17 @@ class InvoiceRun < ActiveRecord::Base
   end
 
   def update_paid
-    update(amount_paid: invoices.joins(:payments).sum("payments.amount"),
-      recipients_paid: invoices.where(state: [:payed, :excess]).count)
+    update_columns(
+      amount_paid: invoices.joins(:payments).sum("payments.amount"),
+      recipients_paid: invoices.where(state: [:payed, :excess]).count
+    )
   end
 
   def update_total
-    total_sum = invoices.visible.sum(&:total)
-    total_count = invoices.visible.pluck(:recipient_id).count
-    update(amount_total: total_sum, recipients_total: total_count)
+    update_columns(
+      amount_total: invoices.visible.sum(&:total),
+      recipients_total: invoices.visible.count(:recipient_id)
+    )
   end
 
   def recipient_source_label

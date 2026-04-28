@@ -118,9 +118,9 @@ class Employee < ApplicationRecord
 
   # logic should match CompletableHelper#recently_completed
   scope :pending_worktimes_commit, lambda {
-                                     where("committed_worktimes_at < date_trunc('month', now()) - '1 day'::interval").or(where(committed_worktimes_at: nil))
+                                     where('committed_worktimes_at < ? OR committed_worktimes_at IS NULL', Time.zone.today.end_of_month)
                                    }
-  scope :active_employed_last_month, -> { joins(:employments).merge(Employment.active.during(Period.previous_month)) }
+  scope :active_employed_current_month, -> { joins(:employments).merge(Employment.active.during(Period.current_month)) }
 
   attr_accessor :remaining_vacations, :sort_col # used for multiabsence and not persisted
 

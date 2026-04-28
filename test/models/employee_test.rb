@@ -156,15 +156,18 @@ class EmployeeTest < ActiveSupport::TestCase
   end
 
   test '#pending_worktimes_commit scope' do
+    this_month = Time.zone.today.end_of_month
+    last_month = 1.month.ago.end_of_month
+
     Employee.update_all(committed_worktimes_at: nil)
 
     assert_predicate Employee.pending_worktimes_commit, :present?
 
-    Employee.update_all(committed_worktimes_at: Time.zone.today.beginning_of_month - 1.day)
+    Employee.update_all(committed_worktimes_at: this_month)
 
     assert_predicate Employee.pending_worktimes_commit, :blank?
 
-    Employee.update_all(committed_worktimes_at: Time.zone.today.beginning_of_month - 2.days)
+    Employee.update_all(committed_worktimes_at: last_month)
 
     assert_predicate Employee.pending_worktimes_commit, :present?
   end

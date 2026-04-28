@@ -85,8 +85,30 @@ module MountedAttr
 
     private
 
-    # `attr_type` should be a type symbol registered with the ActiveModel type registry.
-    # See `ActiveModel::Type` for default types or register your own.
+    # Defines a mounted attribute that is stored in the `mounted_attributes` polymorphic table.
+    #
+    # The attr_type should be a type symbol registered with the ActiveModel type registry.
+    # See `ActiveModel::Type` for default types (e.g., :string, :integer, :boolean, :decimal,
+    # :date, :datetime) or register your own custom types.
+    #
+    # Available options:
+    #   :null       - Whether the attribute can be null (default: true).
+    #                 When false, adds presence validation (or inclusion validation for booleans).
+    #   :enum       - Array of allowed values. Adds inclusion validation.
+    #   :default    - Default value for the attribute. Applied before validation if nil.
+    #                 Type-casted according to attr_type.
+    #   :category   - Category for grouping attributes. Used by `mounted_attr_configs_by_category`.
+    #   :readonly   - Whether the attribute is read-only (default: false).
+    #                 Read-only attributes are excluded from `permitted_mounted_attr_names`.
+    #   :precision  - Required for :decimal type. Total number of digits (before and after decimal).
+    #   :scale      - Required for :decimal type. Number of digits after the decimal point.
+    #
+    # Examples:
+    #   mounted_attr :nickname, :string
+    #   mounted_attr :score, :integer, null: false, default: 0
+    #   mounted_attr :status, :string, enum: %w[active inactive], category: :settings
+    #   mounted_attr :amount, :decimal, precision: 10, scale: 2, null: false
+    #   mounted_attr :calculated_value, :integer, readonly: true
     def mounted_attr(attr, attr_type, options = {})
       config = mounted_attr_registry.register(self, attr, attr_type, options)
 

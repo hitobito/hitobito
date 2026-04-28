@@ -170,7 +170,7 @@ describe Invoice::BatchUpdate do
     end
 
     it "uses current locale when invoice recipient is external" do
-      sent.update_columns(due_at: 31.days.ago, recipient_id: nil, recipient_name: "Foobar")
+      sent.update_columns(due_at: 31.days.ago, recipient_id: nil, recipient_last_name: "Foobar")
       update([sent], person)
 
       expect(sent.payment_reminders.first.title).to eq "title"

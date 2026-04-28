@@ -52,7 +52,7 @@ class PortfolioItemRevenueReportTest < ActiveSupport::TestCase
 
     r = report
 
-    assert_equal [mobile, web], r.entries.to_a
+    assert_equal [web, mobile], r.entries.to_a
     assert_equal({ [web.id, Date.new(2000, 7, 1)] => 6.0,
                    [web.id, Date.new(2000, 8, 1)] => 3.0,
                    [mobile.id, Date.new(2000, 7, 1)] => 170.0 }, r.ordertime_hours)

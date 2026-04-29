@@ -10,14 +10,13 @@
 
     %table.table.table-basic
       %tbody
-        - @passes.each do |membership|
+        - @passes.each do |pass|
           %tr
             %td
               %strong
                 = icon('id-card')
-                = link_to group_person_pass_path(@group, entry, membership.pass_definition) do
-                  = membership.pass_definition.name
+                = link_to pass.pass_definition.name, group_person_pass_path(@group, entry, pass)
             %td
-              - if membership.valid_until.present?
-                = t('activerecord.attributes.pass.valid_until')
-                = l(membership.valid_until)
+              - if pass.valid_until.present?
+                = Pass.human_attribute_name(:valid_until)
+                = l(pass.valid_until)

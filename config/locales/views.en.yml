@@ -1768,7 +1768,6 @@ en:
         add_to_google_wallet: Google Wallet
         add_to_apple_wallet: Apple Wallet
         download_pdf: Print
-        no_passes: No passes available.
 
   person/csv_imports:
     invalid_file: Please select a valid CSV file.

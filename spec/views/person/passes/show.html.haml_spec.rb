@@ -18,14 +18,14 @@ describe "person/passes/show.html.haml" do
   let(:current_user) { person }
 
   before do
-    assign(:group, group)
-    assign(:person, person)
     assign(:pass, pass.decorate)
-    assign(:pass_definition, definition)
-    allow(controller).to receive(:current_user).and_return(current_user)
-    allow(view).to receive(:current_user).and_return(current_user)
-    allow(view).to receive(:google_wallet_configured?).and_return(false)
-    allow(view).to receive(:apple_wallet_configured?).and_return(false)
+    allow(view).to receive_messages(
+      entry: pass,
+      parents: [group, person],
+      sortable?: true,
+      google_wallet_configured?: false,
+      apple_wallet_configured?: false
+    )
     # Stub the template partial to avoid rendering the full card template
     allow(view).to receive(:pass_template_partial).and_return("people/passes/_show_stub")
     allow(view).to receive(:render).and_call_original

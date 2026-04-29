@@ -32,9 +32,8 @@ describe Passes::Subscribers do
     end
   end
 
-  def create_role(person:, group:, type:, start_on: nil, end_on: nil, archived_at: nil)
+  def create_role(group:, type:, start_on: nil, end_on: nil, archived_at: nil)
     Fabricate(:role,
-      person: person,
       group: group,
       type: type.sti_name,
       start_on: start_on,
@@ -53,8 +52,7 @@ describe Passes::Subscribers do
     it "returns people from child groups within the subtree" do
       create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::BottomGroup::Member])
 
-      person = Fabricate(:person)
-      create_role(person: person, group: groups(:bottom_group_one_one), type: Group::BottomGroup::Member)
+      person = create_role(group: groups(:bottom_group_one_one), type: Group::BottomGroup::Member).person
 
       expect(subscribers.people).to include(person)
     end
@@ -62,8 +60,7 @@ describe Passes::Subscribers do
     it "excludes people from groups outside the subtree" do
       create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::BottomGroup::Member])
 
-      person = Fabricate(:person)
-      create_role(person: person, group: groups(:bottom_group_two_one), type: Group::BottomGroup::Member)
+      person = create_role(group: groups(:bottom_group_two_one), type: Group::BottomGroup::Member).person
 
       expect(subscribers.people).not_to include(person)
     end
@@ -78,9 +75,8 @@ describe Passes::Subscribers do
     it "excludes archived roles" do
       create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
 
-      person = Fabricate(:person)
-      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
-        archived_at: 1.day.ago)
+      person = create_role(group: groups(:top_group), type: Group::TopGroup::Member,
+        archived_at: 1.day.ago).person
 
       expect(subscribers.people).not_to include(person)
     end
@@ -88,9 +84,8 @@ describe Passes::Subscribers do
     it "excludes ended roles (end_on in the past)" do
       create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
 
-      person = Fabricate(:person)
-      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
-        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
+      person = create_role(group: groups(:top_group), type: Group::TopGroup::Member,
+        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date).person
 
       expect(subscribers.people).not_to include(person)
     end
@@ -133,9 +128,8 @@ describe Passes::Subscribers do
     it "returns false for person with ended role" do
       create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
 
-      person = Fabricate(:person)
-      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
-        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
+      person = create_role(group: groups(:top_group), type: Group::TopGroup::Member,
+        start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date).person
 
       expect(subscribers.member?(person)).to be false
     end
@@ -143,9 +137,8 @@ describe Passes::Subscribers do
     it "returns false for person with archived role" do
       create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
 
-      person = Fabricate(:person)
-      create_role(person: person, group: groups(:top_group), type: Group::TopGroup::Member,
-        archived_at: 1.day.ago)
+      person = create_role(group: groups(:top_group), type: Group::TopGroup::Member,
+        archived_at: 1.day.ago).person
 
       expect(subscribers.member?(person)).to be false
     end
@@ -155,22 +148,20 @@ describe Passes::Subscribers do
     it "includes ended roles" do
       create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
 
-      person = Fabricate(:person)
-      ended_role = create_role(person: person, group: groups(:top_group),
+      ended_role = create_role(group: groups(:top_group),
         type: Group::TopGroup::Member,
         start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
 
-      expect(subscribers.matching_roles_including_ended(person)).to include(ended_role)
+      expect(subscribers.matching_roles_including_ended(ended_role.person)).to include(ended_role)
     end
 
     it "includes archived roles" do
       create_grant(grantor: groups(:top_group), role_types: [Group::TopGroup::Member])
 
-      person = Fabricate(:person)
-      archived_role = create_role(person: person, group: groups(:top_group),
+      archived_role = create_role(group: groups(:top_group),
         type: Group::TopGroup::Member, archived_at: 1.day.ago)
 
-      expect(subscribers.matching_roles_including_ended(person)).to include(archived_role)
+      expect(subscribers.matching_roles_including_ended(archived_role.person)).to include(archived_role)
     end
 
     it "includes active roles" do
@@ -182,12 +173,11 @@ describe Passes::Subscribers do
     it "excludes roles from outside the grant subtree" do
       create_grant(grantor: groups(:bottom_layer_one), role_types: [Group::BottomGroup::Member])
 
-      person = Fabricate(:person)
-      outside_role = create_role(person: person, group: groups(:bottom_group_two_one),
+      outside_role = create_role(group: groups(:bottom_group_two_one),
         type: Group::BottomGroup::Member,
         start_on: 2.months.ago.to_date, end_on: 1.day.ago.to_date)
 
-      expect(subscribers.matching_roles_including_ended(person)).not_to include(outside_role)
+      expect(subscribers.matching_roles_including_ended(outside_role.person)).not_to include(outside_role)
     end
 
     it "returns empty relation when no grants exist" do

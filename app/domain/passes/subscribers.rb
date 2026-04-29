@@ -14,29 +14,12 @@ module Passes
     # All people eligible for this definition.
     # Joins through pass_grants → grantor group's nested-set bounds → role types.
     def people
-      grants = group_grants_with_types
-      return Person.none if grants.empty?
-
-      conditions = grants.map { |lft, rgt, rt| role_in_or_below_condition(rt, lft, rgt) }
+      return Person.none if grant_conditions.empty?
 
       Person.joins(roles: :group)
         .where(roles: {archived_at: nil})
-        .where(conditions.join(" OR "))
+        .where(grant_conditions)
         .distinct
-    end
-
-    # Is this person eligible for this definition?
-    def member?(person)
-      grants = group_grants_with_types
-      return false if grants.empty?
-
-      conditions = grants.map { |lft, rgt, rt| role_in_or_below_condition(rt, lft, rgt) }
-
-      person.roles
-        .without_archived
-        .joins(:group)
-        .where(conditions.join(" OR "))
-        .exists?
     end
 
     # Like member? but includes ended AND archived roles.
@@ -45,15 +28,14 @@ module Passes
     # it is NOT revoked. Only hard-deleted roles (absent from DB) lead
     # to revocation.
     def matching_roles_including_ended(person)
-      grants = group_grants_with_types
-      return person.roles.none if grants.empty?
-
-      conditions = grants.map { |lft, rgt, rt| role_in_or_below_condition(rt, lft, rgt) }
+      return Role.none if grant_conditions.empty?
 
       person.roles.with_inactive
         .joins(:group)
-        .where(conditions.join(" OR "))
+        .where(grant_conditions)
     end
+
+    def member?(person) = people.where(id: person.id).exists?
 
     # Find Pass records affected by a role change (for Role callbacks, WP 4b).
     # Joins through pass_grants to find grants whose grantor encompasses the role's group.
@@ -67,6 +49,12 @@ module Passes
     end
 
     private
+
+    def grant_conditions
+      @grant_conditions ||= group_grants_with_types.map do |lft, rgt, rt|
+        role_in_or_below_condition(rt, lft, rgt)
+      end.join(" OR ")
+    end
 
     def group_grants_with_types
       @group_grants_with_types ||= definition.pass_grants

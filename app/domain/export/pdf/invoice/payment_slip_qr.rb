@@ -22,11 +22,33 @@ module Export::Pdf::Invoice
 
     HEIGHT_WITHOUT_MARGIN = HEIGHT - MARGIN
 
+    # Renders the QR payment slip according to the Swiss QR Bill standard v2.3
+    # (in force since 21 November 2025).
+    #
+    # IMPORTANT — address rules for the QR code and Zahlteil:
+    # Only the structured address type «S» is permitted (type «K» / combined address was
+    # retired on 22 November 2025). The structured address contains exactly these fields:
+    #   Name, Strasse / Postfach, Hausnummer, PLZ, Ort, Land (ISO 2-letter code)
+    #
+    # Fields such as c/o lines (address_care_of) or any supplemental address line
+    # (address_addition, sww-292) are explicitly **excluded** from the Zahlteil and
+    # from the QR code payload. The Swiss QR Bill Implementation Guidelines state that
+    # c/o addresses and P.O. box details are irrelevant for the payment part and must
+    # only appear in the invoice header / letter body — never in the QR code.
+    #
+    # References:
+    #   Swiss QR Bill Implementation Guidelines v2.3
+    #   https://www.six-group.com/dam/download/banking-services/standardization/qr-bill/ig-qr-bill-v2.3-de.pdf
+    #   Section 4.2.2 Datenelemente, S. 28 ff. (Adresstyp «S»)
+    #   Section on c/o / Postfach: irrelevant for Zahlteil (§ 4.2 Hinweis)
+    #
+    #   Delta Guide v2.3 (describes what changed from v2.2, incl. mandatory structured address)
+    #   https://www.six-group.com/dam/download/banking-services/standardization/qr-bill/ig-qr-bill-delta-guide-v2.3-de.pdf
     def render # rubocop:disable Metrics/MethodLength
       start_new_page if cursor < HEIGHT_WITHOUT_MARGIN
 
       stamped :separators
-
+0
       font FONT_FAMILY do
         font_size(8) do
           receipt do

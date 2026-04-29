@@ -68,4 +68,20 @@ describe PassDefinition do
     expect(template.wallet_data_provider).to eq(Passes::WalletDataProvider)
     expect(template.pdf_class).to be_present
   end
+
+  context "callbacks" do
+    it "enqueues PassPopulateJob after create" do
+      expect { definition.save! }.to have_enqueued_mail.or(
+        change { Delayed::Job.where("handler LIKE '%PassPopulateJob%'").count }.by(1)
+      )
+    end
+
+    it "calls DefinitionChangeHandler after update" do
+      definition.save!
+      handler = instance_double(Passes::DefinitionChangeHandler, handle_update: nil)
+      allow(Passes::DefinitionChangeHandler).to receive(:new).with(definition).and_return(handler)
+      definition.update!(background_color: "#123456")
+      expect(handler).to have_received(:handle_update)
+    end
+  end
 end

@@ -63,7 +63,8 @@ describe :user_job_results, js: true do
         expect(page).not_to have_content("Job enqueued by current user")
         expect(page).not_to have_content("Job enqueued by other user")
 
-        run_job_by_current_and_other_user(Examples::SuccessfulUserManagedJob)
+        enqueue_job_by_current_and_other_user(Examples::SuccessfulUserManagedJob)
+        expect(Delayed::Worker.new.work_off).to eql([2, 0])
 
         expect(page).to have_content("Job enqueued by current user")
         expect(page).not_to have_content("Job enqueued by other user")
@@ -77,7 +78,8 @@ describe :user_job_results, js: true do
       expect(page).not_to have_content("Job enqueued by current user")
       expect(page).not_to have_content("Job enqueued by other user")
 
-      run_job_by_current_and_other_user(Examples::SuccessfulUserManagedJob)
+      enqueue_job_by_current_and_other_user(Examples::SuccessfulUserManagedJob)
+      expect(Delayed::Worker.new.work_off).to eql([2, 0])
 
       expect(page).to have_content("Job erfolgreich abgeschlossen", count: 1)
       expect(page).to have_content("Job enqueued by current user")
@@ -91,26 +93,24 @@ describe :user_job_results, js: true do
       expect(page).not_to have_content("Job enqueued by current user")
       expect(page).not_to have_content("Job enqueued by other user")
 
-      run_job_by_current_and_other_user(Examples::UnsuccessfulUserManagedJob)
+      enqueue_job_by_current_and_other_user(Examples::UnsuccessfulUserManagedJob)
+      expect(Delayed::Worker.new.work_off).to eql([0, 2])
 
       expect(page).to have_content("Fehler bei Jobausführung aufgetreten", count: 1)
       expect(page).to have_content("Job enqueued by current user")
       expect(page).not_to have_content("Job enqueued by other user")
     end
 
-    def run_job_by_current_and_other_user(job_class)
+    def enqueue_job_by_current_and_other_user(job_class)
       user_job = job_class.new
       user_job.job_name = "Job enqueued by current user"
-      enqueued_user_job = user_job.enqueue!
+      user_job.enqueue!
 
       allow(Auth).to receive(:current_person).and_return(people(:bottom_member))
       other_user_job = job_class.new
       user_job.job_name = "Job enqueued by other user"
-      enqueued_other_user_job = other_user_job.enqueue!
+      other_user_job.enqueue!
       allow(Auth).to receive(:current_person).and_return(top_leader)
-
-      expect { run_enqueued_job(enqueued_other_user_job) }.to change { Delayed::Job.count }.by(-1)
-      expect { run_enqueued_job(enqueued_user_job) }.to change { Delayed::Job.count }.by(-1)
     end
   end
 

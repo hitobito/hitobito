@@ -81,10 +81,11 @@ class InvoiceRun < ActiveRecord::Base
   end
 
   def update_total
-    update_columns(
+    attrs = {
       amount_total: invoices.visible.sum(&:total),
       recipients_total: invoices.visible.count(:recipient_id)
-    )
+    }
+    new_record? ? update(attrs) : update_columns(attrs)
   end
 
   def recipient_source_label

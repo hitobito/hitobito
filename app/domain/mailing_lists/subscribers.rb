@@ -56,7 +56,7 @@ class MailingLists::Subscribers
       .left_joins(:taggings)
       .left_joins(roles: :group)
       .left_joins(:event_participations)
-      .joins("LEFT OUTER JOIN group_subscriptions ON groups.lft >= group_subscriptions.lft AND groups.rgt <= group_subscriptions.rgt")
+      .joins("LEFT OUTER JOIN group_subscriptions ON #{Group.below_or_at_condition("group_subscriptions.lft", "group_subscriptions.rgt")}")
       .joins("LEFT OUTER JOIN event_subscriptions ON event_subscriptions.subscriber_id = event_participations.event_id ")
       .joins("LEFT OUTER JOIN person_including_subscriptions ON people.id = person_including_subscriptions.subscriber_id")
       .joins("LEFT OUTER JOIN person_excluding_subscriptions ON people.id = person_excluding_subscriptions.subscriber_id")

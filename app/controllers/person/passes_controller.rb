@@ -5,40 +5,40 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-class Person::PassesController < ApplicationController
-  before_action :group, :person, :authorize_action
-  before_action :pass, only: [:show, :google_wallet]
+class Person::PassesController < CrudController
+  self.nesting = [Group, Person]
 
-  # GET /groups/:group_id/people/:person_id/passes
-  def index
-    @passes = person.passes
-      .includes(:pass_definition, :pass_installations)
-  end
+  alias_method :pass, :entry
+  delegate :pass_definition, :person, to: :pass
+  skip_authorize_resource only: :google_wallet
 
-  # GET /groups/:group_id/people/:person_id/passes/:id(.pdf|.pkpass)
   def show
     respond_to do |format|
-      format.html { render :show }
+      @pass = entry.decorated # template partials require decorated pass @ivar
+      @pass_definition = entry.pass_definition
+      format.html
       format.pdf { render_pdf }
       format.pkpass { render_apple_wallet }
     end
   end
 
-  # GET /groups/:group_id/people/:person_id/passes/:id/google_wallet
   def google_wallet
+    authorize!(:show, pass)
     redirect_to_google_wallet
   end
 
   private
+
+  def list_entries
+    super.includes(:pass_definition, :pass_installations, :person)
+  end
 
   def redirect_to_google_wallet
     pass_installation = find_or_create_pass_installation(:google)
     service = Wallets::GoogleWallet::PassService.new(pass_installation)
     redirect_to service.save_url, allow_other_host: true
   rescue => e
-    Rails.logger.error("Google Wallet save failed: #{e.message}")
-    redirect_back fallback_location: group_person_path(group, person),
-      alert: I18n.t("wallets.google.save_failed")
+    log_and_redirect(:google, e)
   end
 
   def render_apple_wallet
@@ -47,15 +47,15 @@ class Person::PassesController < ApplicationController
     send_data service.generate_pass,
       type: Mime[:pkpass],
       disposition: "attachment",
-      filename: apple_wallet_filename
+      filename: "#{pass_definition.name.parameterize}-#{person.full_name.parameterize}.pkpass"
   rescue => e
-    Rails.logger.error("Apple Wallet generation failed: #{e.message}")
-    redirect_back fallback_location: group_person_path(group, person),
-      alert: I18n.t("wallets.apple.generation_failed")
+    log_and_redirect(:apple, e)
   end
 
-  def apple_wallet_filename
-    "#{pass_definition.name.parameterize}-#{person.full_name.parameterize}.pkpass"
+  def log_and_redirect(key, e)
+    Rails.logger.error("#{key.upcase} Wallet generation failed: #{e.message}")
+    redirect_back fallback_location: group_person_path(group, person),
+      alert: I18n.t("wallets.#{key}.generation_failed")
   end
 
   def render_pdf
@@ -74,23 +74,7 @@ class Person::PassesController < ApplicationController
     pass_installation
   end
 
-  def pass
-    @pass ||= person.passes.find_by!(pass_definition: pass_definition)
-  end
-
-  def person
-    @person ||= Person.find(params[:person_id])
-  end
-
-  def pass_definition
-    @pass_definition ||= PassDefinition.find(params[:id])
-  end
-
-  def group
-    @group ||= Group.find(params[:group_id])
-  end
-
-  def authorize_action
-    authorize!(:show, @pass || Pass.new(person: person))
+  def authorize_class
+    authorize!(:show, Pass.new(person: person))
   end
 end

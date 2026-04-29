@@ -38,6 +38,7 @@ class PeopleController < CrudController # rubocop:todo Metrics/ClassLength
 
   after_save :show_email_change_info
 
+  before_render_show :load_passes, if: -> { html_request? }
   before_render_show :load_person_add_requests, if: -> { html_request? }
   before_render_index :load_people_add_requests, if: -> { html_request? }
 
@@ -144,6 +145,10 @@ class PeopleController < CrudController # rubocop:todo Metrics/ClassLength
         .includes(person: :primary_group)
         .select("person_add_requests.*")
     end
+  end
+
+  def load_passes
+    @passes = entry.passes.eligible.includes(:pass_definition)
   end
 
   def load_person_add_requests

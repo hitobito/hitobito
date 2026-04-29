@@ -54,7 +54,20 @@
 #  index_groups_on_lft_and_rgt     (lft,rgt)
 #  index_groups_on_parent_id       (parent_id)
 #  index_groups_on_type            (type)
+
+
+# Fixture hierarchy (nested-set lft/rgt):
 #
+# top_layer (1..18)
+# ├── bottom_layer_one (2..9)
+# │   ├── bottom_group_one_one (3..6)
+# │   │   └── bottom_group_one_one_one (4..5)
+# │   └── bottom_group_one_two (7..8)
+# ├── bottom_layer_two (10..13)
+# │   └── bottom_group_two_one (11..12)
+# ├── top_group (14..15)
+# └── toppers (16..17)
+
 
 top_layer:
   name: Top

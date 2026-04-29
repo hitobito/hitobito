@@ -59,7 +59,7 @@ class Invoice::BatchUpdate
     invoice.payment_reminders.create!(attributes)
   end
 
-  def compute_next_state(invoice)
+  def compute_next_state(invoice) # rubocop:disable Metrics/CyclomaticComplexity
     if invoice.draft?
       send_email? ? "sent" : "issued"
     elsif invoice.remindable? && invoice.overdue?

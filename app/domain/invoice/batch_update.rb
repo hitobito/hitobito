@@ -62,7 +62,7 @@ class Invoice::BatchUpdate
   def compute_next_state(invoice)
     if invoice.draft?
       send_email? ? "sent" : "issued"
-    elsif invoice.overdue?
+    elsif invoice.remindable? && invoice.overdue?
       "reminded"
     elsif invoice.issued? && send_email?
       "sent"

@@ -12,6 +12,7 @@ module Passes
   class PassUpdater
     def initialize(role)
       @role = role
+      @person = role.person
     end
 
     # Recomputes and persists state + validity dates for a single pass.
@@ -28,16 +29,14 @@ module Passes
     end
 
     def run
-      return unless person.passes.exists?
+      return unless @person.passes.exists?
 
-      affected = Passes::Subscribers.affected_passes(person, role:)
+      affected = Passes::Subscribers.affected_passes(@person, role:)
       affected.find_each do |pass|
         recompute_state!(pass)
         mark_installations_for_sync!(pass)
       end
     end
-
-    def person = role.person
 
     attr_reader :role
 

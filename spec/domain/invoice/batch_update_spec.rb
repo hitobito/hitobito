@@ -36,6 +36,20 @@ describe Invoice::BatchUpdate do
     expect(results.notice).to have(1).items
   end
 
+  it "does not change overdue invoice to state reminded if payed" do
+    sent.update_columns(due_at: 31.days.ago, state: :payed)
+    expect do
+      expect { update([sent]) }.not_to change { sent.state }
+    end
+  end
+
+  it "does not change overdue invoice to state reminded if payed in excess" do
+    sent.update_columns(due_at: 31.days.ago, state: :excess)
+    expect do
+      expect { update([sent]) }.not_to change { sent.state }
+    end
+  end
+
   it "changes overdue invoice to state reminded, creates first reminder" do
     sent.update_columns(due_at: 31.days.ago)
     expect do

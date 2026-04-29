@@ -182,6 +182,12 @@ Hitobito::Application.routes.draw do
           get "tags/query" => "tags#query"
           post "impersonate" => "impersonation#create"
           delete "impersonate" => "impersonation#destroy"
+
+          resources :passes, only: [:index, :show] do
+            member do
+              get :google_wallet
+            end
+          end
         end
       end
 

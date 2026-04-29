@@ -1,0 +1,22 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- if @passes.present?
+  %section.passes
+    %h2
+      = t('.title')
+
+    %table.table.table-basic
+      %tbody
+        - @passes.each do |pass|
+          %tr
+            %td
+              %strong
+                = icon('id-card')
+                = link_to pass.pass_definition.name, group_person_pass_path(@group, entry, pass)
+            %td
+              - if pass.valid_until.present?
+                = Pass.human_attribute_name(:valid_until)
+                = l(pass.valid_until)

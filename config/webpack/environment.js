@@ -1,8 +1,13 @@
 const { environment } = require('@rails/webpacker')
-const wagonFile = require('./loaders/wagon-file')
-const coffee =  require('./loaders/coffee')
-const erb = require('./loaders/erb')
+const { sync: globSync } = require('glob')
+const { basename, join: pathJoin, resolve: pathResolve } = require('path')
+const { extensions } = require('@rails/webpacker/package/config')
+
+const pathCompleteExtname = require('path-complete-extname')
 const webpack = require('webpack')
+const wagonFile = require('./loaders/wagon-file')
+const coffee = require('./loaders/coffee')
+const erb = require('./loaders/erb')
 
 // Replace default file loader with custom wagon-aware file loader
 const fileLoaderIndex = environment.loaders.findIndex(l => l.key === 'file');
@@ -21,7 +26,7 @@ sass.use.splice(-1, 0, { loader: 'resolve-url-loader' })
 // Remove postcss-loader to avoid a parsing bug with PostCSS
 // 7.0.39. This would be fixed with 8.4.31, but @rails/webpacker is
 // not maintained anymore, so can't update.
-sass.use = sass.use.filter(({loader}) => loader !== 'postcss-loader')
+sass.use = sass.use.filter(({ loader }) => loader !== 'postcss-loader')
 
 // Old-school libraries must be made globally accessible by exposing
 // them to the window object.
@@ -50,5 +55,17 @@ environment.plugins.append('exclude unused moment locales',
     /^\.\/(en|de|fr|it)$/
   )
 )
+
+// Register webpack entry points from wagon directories (../hitobito_*/app/javascript/packs/*)
+// This allows wagons to define their own layouts/pack files that get compiled into the manifest.
+const wagonExtGlob = extensions.length === 1
+  ? `**/*${extensions[0]}`
+  : `**/*{${extensions.join(',')}}`
+
+const wagonPacksPattern = pathJoin('..', 'hitobito_*', 'app', 'javascript', 'packs', wagonExtGlob)
+globSync(wagonPacksPattern).forEach((packPath) => {
+  const name = basename(packPath, pathCompleteExtname(packPath))
+  environment.entry.set(name, pathResolve(packPath))
+})
 
 module.exports = environment

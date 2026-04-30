@@ -14,7 +14,7 @@ class Person::PassesController < CrudController
 
   def show
     respond_to do |format|
-      @pass = entry.decorated # template partials require decorated pass @ivar
+      @pass = entry.decorate # template partials require decorated pass @ivar
       @pass_definition = entry.pass_definition
       format.html
       format.pdf { render_pdf }

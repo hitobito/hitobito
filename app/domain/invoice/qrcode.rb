@@ -18,8 +18,7 @@ class Invoice::Qrcode
     @deprecations = Deprecations.new(invoice)
   end
 
-  # https://www.six-group.com/dam/download/banking-services/standardization/qr-bill/ig-qr-bill-v2.3-de.pdf
-  # see "4.2.2 Datenelemente in der QR-Rechnung"
+  # see comment on Export::Pdf::Invoice::PaymentSlipQr#render
   def payload
     striped_values(
       metadata,

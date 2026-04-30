@@ -17,7 +17,7 @@ module Events::Filter
     self.permitted_args = [:q]
 
     def apply(scope)
-      scope.where(search_condition)
+      scope.joins(:translations).where(search_condition)
     end
 
     def blank?

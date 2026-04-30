@@ -42,7 +42,7 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     account = Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar")
     account.update!(name: "Boo")
 
-    is_expected.to eq("<div>Social Media Adresse <i>Bar (Foo)</i> wurde aktualisiert: " \
+    is_expected.to eq("<div>Social Media Adresse <i>Boo (Foo)</i> wurde aktualisiert: " \
                       "Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.</div>")
   end
 
@@ -92,12 +92,12 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
       )
     end
 
-    it "destroyed mailing list" do
+    it "destroyed mailing list still shows label" do
       Person::AddRequest::MailingList.create!(
         person: person, body: list, requester: people(:top_leader)
       )
       list.destroy
-      expect(subject).to eq "<div>Zugriffsanfrage für <i>unbekannt</i> wurde beantwortet.</div>"
+      expect(subject).to eq "<div>Zugriffsanfrage für <i>Abo Leaders in Top Layer Top</i> wurde beantwortet.</div>"
     end
   end
 
@@ -179,6 +179,20 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
 
         is_expected.to eq("<div><i>(Gelöschte Person)</i> wurde als Verwalter*in entfernt.</div>")
       end
+    end
+  end
+
+  context "without item_label" do
+    before do
+      allow_any_instance_of(PaperTrail::Version).to receive(:item_label).and_return(nil)
+    end
+
+    it "displays unbekannt for version with label from untracked association" do
+      Person::AddRequest::MailingList.create!(
+        person: person, body: mailing_lists(:leaders), requester: people(:top_leader)
+      )
+      mailing_lists(:leaders).destroy
+      expect(subject).to eq "<div>Zugriffsanfrage für <i>unbekannt</i> wurde beantwortet.</div>"
     end
   end
 

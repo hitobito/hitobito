@@ -18,3 +18,32 @@ PaperTrail.config.has_paper_trail_defaults = {
   on: %i[create update destroy],
   skip: %i[updated_at]
 }
+
+# We want to save the current to_s value of the item directly to the version
+# This is used for displaying association texts in the logs
+# e.g. Anhang foo wurde hinzugefügt
+#
+# If we don't save this label directly to the version and use paper trails reify to
+# determine the label inside the logs, we run into an issue as soon as the label
+# of an item is from a association and not directly on the item itself.
+#
+# This happens for attachments for example. The attachment label is the file name
+# The file itself is a has_one_attached association that is not tracked by paper_trail
+# So that association can't be reifyed. This results in log texts without labels as soon
+# as the attachment get's deleted (Also older version of that attachment)
+#
+# This also improves performance when showing the log, since we don't have to reify all
+# the items (well at least for versions from now on...)
+ActiveSupport.on_load(:active_record) do
+  def self.has_paper_trail(options = {})
+    options[:meta] ||= {}
+
+    options[:meta][:item_label] = lambda do |item|
+      item.present? ? item.to_s(:long) : nil
+    rescue ArgumentError
+      nil
+    end
+
+    super(options)
+  end
+end

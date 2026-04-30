@@ -12,7 +12,7 @@ class HitobitoLogMailer < ApplicationMailer
     @error_log_entry_ids = error_log_entry_ids
     @time_period = time_period
 
-    custom_content_mail(recipients, ERROR, values_for_placeholders(ERROR))
+    compose(recipients, ERROR)
   end
 
   private

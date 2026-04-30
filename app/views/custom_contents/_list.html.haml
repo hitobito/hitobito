@@ -5,6 +5,5 @@
 
 = crud_table do |t|
   - t.sortable_attrs :label, :subject
-  - t.col(CustomContent.human_attribute_name(:body)) do |c|
-    = c
+  - t.attr :body
   - action_col_edit(t)

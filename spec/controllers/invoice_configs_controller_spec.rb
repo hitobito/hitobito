@@ -144,7 +144,10 @@ describe InvoiceConfigsController do
           }
         }}
       end.to change { CustomContent.in_context(group.invoice_config).count }.by(1)
-      expect(group.invoice_config.reload.custom_content.subject).to eq "Custom Content Subject"
+
+      content = group.invoice_config.reload.custom_content
+      expect(content.subject).to eq "Custom Content Subject"
+      expect(content.placeholders_list.size).to eq(7)
     end
 
     it "creates empty custom content in invoice config context" do
@@ -158,8 +161,11 @@ describe InvoiceConfigsController do
           }
         }}
       end.to change { CustomContent.in_context(group.invoice_config).count }.by(1)
-      expect(group.invoice_config.reload.custom_content.subject).to be_nil
-      expect(group.invoice_config.reload.custom_content.body).to be_nil
+
+      content = group.invoice_config.reload.custom_content
+      expect(content.subject).to be_nil
+      expect(content.body).to be_nil
+      expect(content.placeholders_list.size).to eq(7)
     end
 
     it "edits custom content in invoice config context" do

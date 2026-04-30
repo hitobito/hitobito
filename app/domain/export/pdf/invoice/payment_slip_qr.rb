@@ -48,7 +48,7 @@ module Export::Pdf::Invoice
       start_new_page if cursor < HEIGHT_WITHOUT_MARGIN
 
       stamped :separators
-0
+
       font FONT_FAMILY do
         font_size(8) do
           receipt do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -41,12 +43,14 @@ class Invoice::PaymentSlip
     end
 
     if invoice.group_id <= 999999
-      "#{invoice.invoice_config.reference_prefix.to_s.ljust(7,
-        "0")}#{zero_padded(invoice.group_id.to_s, 6)}"
+      [
+        invoice.invoice_config.reference_prefix.to_s.ljust(7, "0"),
+        zero_padded(invoice.group_id.to_s, 6)
+      ].join("")
     else
-      # rubocop:todo Layout/LineLength
-      raise "HighlyUnlikelyError: Prefixing the reference number is not possible for this invoice, sequence number (group_id, invoice count) is too long. This error will only occur for invoices created in groups with an id higher than 999'999"
-      # rubocop:enable Layout/LineLength
+      raise "HighlyUnlikelyError: Prefixing the reference number is not possible for this " \
+        "invoice, sequence number (group_id, invoice count) is too long. This error will only " \
+        "occur for invoices created in groups with an id higher than 999'999"
     end
   end
 
@@ -57,14 +61,14 @@ class Invoice::PaymentSlip
   end
 
   def code_line_prefix
-    block = ""
+    block = +"" # create an unfrozen string here to collect the needed parts
     block << BCS[calculate_bc.to_sym]
     block << format("%011.2f", invoice.total).delete(".") if calculate_bc == "esr" && show_total?
     block << check_digit(block).to_s
   end
 
   def code_line_suffix
-    participant_number_parts.each_with_index.inject("") do |block, (nr, i)|
+    participant_number_parts.each_with_index.inject(+"") do |block, (nr, i)|
       block << ((i != 1) ? nr : zero_padded(nr, 6))
     end
   end

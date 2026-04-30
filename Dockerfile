@@ -1,18 +1,24 @@
+# check=skip=SecretsUsedInArgOrEnv
+
 #################################
 #          Variables            #
 #################################
-# check=skip=SecretsUsedInArgOrEnv
 
 # Versioning
-ARG RUBY_VERSION="3.2"
-ARG BUNDLER_VERSION="2.7.1"
+ARG RUBY_VERSION="4.0"
+ARG BUNDLER_VERSION="4.0.6"
 ARG NODEJS_VERSION="16"
 ARG YARN_VERSION="1.22.19"
 ARG DEBIAN_VERSION="trixie"
 
 # Packages
+# BUILD_PACKAGES are used in the targets build and dev
 ARG BUILD_PACKAGES="nodejs git build-essential libpq-dev libvips42"
+# DEV_PACKAGES are used in the target dev
+ARG DEV_PACKAGES="direnv xvfb chromium chromium-driver pv vim curl less sudo"
+# RUN_PACKAGES are used in the target app
 ARG RUN_PACKAGES="shared-mime-info pkg-config libpq-dev libjemalloc-dev libjemalloc2 libvips42 libicu76"
+# EXTRA_PACKAGES are used in the targets build, app and dev
 ARG EXTRA_PACKAGES=""
 
 # Scripts
@@ -61,12 +67,11 @@ ARG PS1="[\$SENTRY_CURRENT_ENV] `uname -n`:\$PWD\$ "
 ARG TZ="Europe/Zurich"
 
 
-
 #################################
-#          Build Stage          #
+#   Prepping the dependencies   #
 #################################
 
-FROM ruby:${RUBY_VERSION}-${DEBIAN_VERSION} AS build
+FROM ruby:${RUBY_VERSION}-${DEBIAN_VERSION} AS runtime
 
 # arguments for steps
 ARG HOME
@@ -75,10 +80,6 @@ ARG BUILD_PACKAGES
 ARG EXTRA_PACKAGES
 ARG INSTALL_SCRIPT
 ARG BUNDLER_VERSION
-ARG PRE_BUILD_SCRIPT
-ARG BUNDLE_WITHOUT_GROUPS
-ARG BUILD_SCRIPT
-ARG POST_BUILD_SCRIPT
 
 # arguments potentially used by steps
 ARG NODE_ENV
@@ -108,7 +109,89 @@ RUN bash -vxc "${INSTALL_SCRIPT:-"echo 'no INSTALL_SCRIPT provided'"}"
 # (not required with newer bundler versions?)
 RUN gem install bundler:${BUNDLER_VERSION} --no-document
 
-# TODO: Load artifacts
+
+#################################
+#  Build for Development Stage  #
+#################################
+
+FROM runtime AS dev
+
+ARG DEV_PACKAGES
+ARG USERNAME=hitobito
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+ENV RAILS_ENV="development"
+ENV RACK_ENV="development"
+ENV NODE_ENV="development"
+
+ENV HOME=/home/developer
+ENV RAILS_DB_ADAPTER=postgresql
+ENV BUNDLE_PATH=/opt/bundle
+ENV NODE_PATH=/usr/lib/nodejs
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get install -y --no-install-recommends ${DEV_PACKAGES}
+
+WORKDIR /usr/src/app/hitobito
+
+# Create the user
+RUN groupadd --gid $USER_GID $USERNAME \
+  && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME -s /bin/bash -d $HOME \
+  && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+  && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# Prepare Docker cli install to be able to use it in the devcontainer
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && mkdir -p /etc/apt/keyrings \
+ && install -m 0755 -d /etc/apt/keyrings \
+ && curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc \
+ && chmod a+r /etc/apt/keyrings/docker.asc \
+ && echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" > /etc/apt/sources.list.d/docker.list
+
+# Preinstall github.com ssh host keys
+# You can find the keys at https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints
+RUN mkdir -p $HOME/.ssh \
+    && echo "github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl" >> $HOME/.ssh/known_hosts \
+    && echo "github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=" >> $HOME/.ssh/known_hosts \
+    && echo "github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=" >> $HOME/.ssh/known_hosts \
+    && chmod 600 $HOME/.ssh/known_hosts \
+    && /usr/bin/ssh-keygen -H -f $HOME/.ssh/known_hosts \
+    && chown -R $USERNAME:$USERNAME $HOME/.ssh
+
+# This depends on the dev-setup.
+COPY ./rails-entrypoint.sh /usr/local/bin
+COPY ./webpack-entrypoint.sh /usr/local/bin
+
+RUN mkdir -p /opt/bundle && chmod 777 /opt/bundle
+RUN mkdir /seed && chmod 777 /seed
+
+USER $USERNAME
+
+ENTRYPOINT ["rails-entrypoint.sh"]
+CMD [ "rails", "server", "-b", "0.0.0.0" ]
+
+#################################
+#   Build for Deployment Stage  #
+#################################
+
+FROM runtime AS build
+
+# arguments for steps
+ARG PRE_BUILD_SCRIPT
+ARG BUNDLE_WITHOUT_GROUPS
+ARG BUILD_SCRIPT
+ARG POST_BUILD_SCRIPT
+
+# arguments potentially used by steps
+ARG NODE_ENV
+ARG RACK_ENV
+ARG RAILS_ENV
+ARG RAILS_HOST_NAME
+ARG SECRET_KEY_BASE
+ARG TZ
 
 # set up app-src directory
 WORKDIR $HOME
@@ -142,15 +225,12 @@ RUN bash -vxc "${BUILD_SCRIPT:-"echo 'no BUILD_SCRIPT provided'"}"
 
 RUN bash -vxc "${POST_BUILD_SCRIPT:-"echo 'no POST_BUILD_SCRIPT provided'"}"
 
-# TODO: Save artifacts
-
 RUN rm -rf vendor/cache/ .git spec/ node_modules/ .npm/
 
 #################################
 #         Run/App Stage         #
 #################################
 
-# This image will be replaced by Openshift
 FROM ruby:${RUBY_VERSION}-slim-${DEBIAN_VERSION} AS app
 
 # Set runtime shell
@@ -162,15 +242,13 @@ ARG EXTRA_PACKAGES
 ARG BUNDLER_VERSION
 ARG BUNDLE_WITHOUT_GROUPS
 
-# arguments potentially used by steps
+# data persisted in the image
+ARG PS1
+ARG TZ
+ARG HOME
 ARG NODE_ENV
 ARG RACK_ENV
 ARG RAILS_ENV
-
-# data persisted in the image
-ARG HOME
-ARG PS1
-ARG TZ
 
 # Set environment variables available in the image
 ENV PS1="${PS1}" \
@@ -213,7 +291,6 @@ RUN mkdir -p tmp/pids log \
     && chmod a+w $HOME/vendor/wagons/*/db/seeds/
 
 # Install specific versions of dependencies
-# (not required with newer bundler versions)
 RUN gem install bundler:${BUNDLER_VERSION} --no-document
 
 # Use cached gems

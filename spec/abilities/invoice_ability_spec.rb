@@ -148,7 +148,7 @@ describe InvoiceAbility do
 
     Group.layers.each do |layer|
       before do
-        layer.send(:create_invoice_config)
+        layer.send(:create_invoice_config) if layer.invoice_config.blank?
         layer.invoice_config.update(sequence_number: "1")
 
         allow_any_instance_of(Group::TopGroup::Leader).to receive(:permissions)

@@ -42,8 +42,10 @@ describe InvoiceRuns::RecipientSourceBuilder do
 
     it "builds filter_chain based on passed parameters" do
       params[:filter][:filters] = {attributes: {"0": {key: "first_name", constraint: "equal", value: "Lias"}}}
-      expect(recipient_source_builder.recipient_source.filter_chain.to_params.to_s).to eq "{\"attributes\"=>" \
-      "{\"0\"=>{\"key\"=>\"first_name\", \"constraint\"=>\"equal\", \"value\"=>\"Lias\"}}}"
+
+      expect(recipient_source_builder.recipient_source.filter_chain.to_params).to eq(
+        {"attributes" => {"0" => {"constraint" => "equal", "key" => "first_name", "value" => "Lias"}}}
+      )
     end
 
     it "uses group passed in filter_params instead of group itself" do
@@ -58,16 +60,14 @@ describe InvoiceRuns::RecipientSourceBuilder do
     }
 
     it "builds filter without specific participant_type specification" do
-      expect(recipient_source_builder.recipient_source
-                                     .to_params
-                                     .to_s).to eq "{:filters=>{:participant_type=>nil}}"
+      expect(recipient_source_builder.recipient_source.to_params)
+        .to eq({filters: {participant_type: nil}})
     end
 
     it "builds filter with specific participant_type specification" do
       params[:filter][:filters] = {participant_type: "teamers"}
-      expect(recipient_source_builder.recipient_source
-                                     .to_params
-                                     .to_s).to eq "{:filters=>{:participant_type=>\"teamers\"}}"
+      expect(recipient_source_builder.recipient_source.to_params)
+        .to eq({filters: {participant_type: "teamers"}})
     end
   end
 
@@ -78,8 +78,9 @@ describe InvoiceRuns::RecipientSourceBuilder do
     let(:params) { ActionController::Parameters.new(ids: [top_leader.id, bottom_member.id].join(",")) }
 
     it "builds people_filter with attribute filter_chain" do
-      expect(recipient_source_builder.recipient_source.filter_chain.to_params.to_s).to eq "{\"attributes\"=>" \
-        "{\"0\"=>{\"constraint\"=>\"include\", \"key\"=>\"id\", \"value\"=>[572407901, 382461928]}}}"
+      expect(recipient_source_builder.recipient_source.filter_chain.to_params).to eq(
+        {"attributes" => {"0" => {"constraint" => "include", "key" => "id", "value" => [572407901, 382461928]}}}
+      )
     end
   end
 end

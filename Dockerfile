@@ -1,7 +1,8 @@
+# check=skip=SecretsUsedInArgOrEnv
+
 #################################
 #          Variables            #
 #################################
-# check=skip=SecretsUsedInArgOrEnv
 
 # Versioning
 ARG RUBY_VERSION="4.0"

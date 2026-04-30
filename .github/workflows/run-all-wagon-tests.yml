@@ -28,7 +28,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} # auto-cancel previous runs of this same workflow on the same PR, if any are still running
-  cancel-in-progress: ${{ github.ref != 'heads/refs/master' && github.ref != 'heads/refs/sac-master' }} # never cancel runs triggered by the main branch, to allow finding the exact merge that broke a wagon
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }} # never cancel runs triggered by the main branch, to allow finding the exact merge that broke a wagon
 
 jobs:
   find-wagons:

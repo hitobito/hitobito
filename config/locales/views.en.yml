@@ -2431,7 +2431,7 @@ en:
 
   wallets:
     google:
-      save_failed: The pass could not be added to Google Wallet.
+      generation_failed: The pass could not be added to Google Wallet.
     apple:
       generation_failed: The pass could not be generated for Apple Wallet.
     pass:

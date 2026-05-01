@@ -7,7 +7,15 @@
 
 module SearchStrategies
   class Base
-    MIN_TERM_LENGTH = 3
+    class_attribute :model_class, :readables_ability
+
+    # Hash of identifier attributes and regular expressions to match them,
+    # e.g. { number: /\A\d+\z/ }
+    # If the search term matches one of the regular expressions,
+    # the record with the given attribute value will be prepended to the search results.
+    # Identifier attribute columns should have a database index.
+    class_attribute :searchable_identifiers
+    self.searchable_identifiers = {}
 
     attr_accessor :term
 
@@ -18,18 +26,43 @@ module SearchStrategies
       @limit = limit
     end
 
+    def search
+      identifier_results = search_identifiers.to_a
+      if identifier_results.present?
+        identifier_results + search_fulltext.excluding(identifier_results)
+      else
+        search_fulltext
+      end
+    end
+
     def search_fulltext
-      # override
+      accessible_scope.search(@term).limit(@limit)
+    end
+
+    def search_identifiers
+      identifiers = matching_identifiers
+      return model_class.none if identifiers.blank?
+
+      condition = identifiers.map do |attribute|
+        "#{model_class.table_name}.#{attribute} = :term"
+      end.join(" OR ")
+      accessible_scope.where(condition, term: @term)
     end
 
     protected
 
-    def term_present?
-      @term.present? && @term.length >= MIN_TERM_LENGTH
+    def accessible_scope
+      if readables_ability
+        model_class.accessible_by(readables_ability.new(@user))
+      else
+        model_class.all
+      end
     end
 
-    def accessible_layers
-      @user.groups.flat_map(&:layer_hierarchy)
+    def matching_identifiers
+      searchable_identifiers.filter_map do |attribute, regex|
+        attribute if @term.match?(regex)
+      end
     end
   end
 end

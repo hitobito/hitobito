@@ -10,6 +10,7 @@
 - Qualifkationen wurden in das JSON:API integriert (hitobito_bdp#12)
 - Rechnungen können neu auch als Excel (XLSX) exportiert werden (hitobito_sww#288)
 - Vor- und Nachname des Rechnungsempfängers werden neu strukturiert in separaten Feldern gespeichert (#4164)
+- Konfigurierbare Identifier für eine schnellere globale Suche (hitobito_sac_cas#2331)
 
 ## Version 2.9
 

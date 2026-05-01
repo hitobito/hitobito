@@ -6,7 +6,7 @@
 - title t('.title')
 
 #main
-  - if params[:q].to_s.size < 2
+  - if !query?
     %p= t('.incomplete_search_request')
 
   - else

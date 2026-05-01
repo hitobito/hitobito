@@ -6,9 +6,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class FullTextController < ApplicationController
+  MIN_TERM_LENGTH = 3
+
   skip_authorization_check
 
-  helper_method :entries, :active_tab_class
+  helper_method :active_tab_class, :query?
 
   respond_to :html
 
@@ -22,21 +24,17 @@ class FullTextController < ApplicationController
   def index
     respond_to do |format|
       format.html { query_results }
-      format.json do
-        render json: query_json_results || []
-      end
+      format.json { render json: query_json_results }
     end
   end
 
   private
 
-  def query_results # rubocop:todo Metrics/AbcSize
+  def query_results
     each_search_result do |key, result|
-      if key == :invoices || key == :events
-        instance_variable_set(:"@#{key}", with_query { send(:"decorate_#{key}", result) })
-      else
-        instance_variable_set(:"@#{key}", with_query { result })
-      end
+      decorator = "decorate_#{key}"
+      list = respond_to?(decorator, true) ? send(decorator, result) : result
+      instance_variable_set(:"@#{key}", list)
     end
 
     if only_result.present?
@@ -48,43 +46,46 @@ class FullTextController < ApplicationController
 
   def query_json_results
     each_search_result do |key, result|
-      instance_variable_set(
-        :"@#{key}", result.collect { |i|
-          "#{key.to_s.singularize.titleize}Decorator"
-            .constantize.new(i)
-            .as_quicksearch
-        }
-      )
+      instance_variable_set(:"@#{key}", quicksearch_result(key, result))
     end
 
-    results_with_separator(@people, @groups, @events, @invoices)
+    results_with_separator || []
+  end
+
+  def quicksearch_result(key, result)
+    result.collect do |i|
+      "#{key.to_s.singularize.titleize}Decorator".constantize.new(i).as_quicksearch
+    end
   end
 
   def each_search_result(limit: nil)
+    return unless query?
+
     SEARCHABLE_MODELS.each do |key, search_class, condition|
-      next if condition && !instance_exec(&condition)
-      yield key, search_class.new(current_user, query_param, params[:page], limit:).search_fulltext
+      if !condition || instance_exec(&condition)
+        yield key, search_result(search_class)
+      end
     end
   end
 
-  def results_with_separator(*sets)
-    sets.select(&:present?).inject do |memo, set|
+  def search_result(search_class)
+    search_class.new(current_user, query_param, params[:page]).search
+  end
+
+  def results_with_separator
+    all_results.inject do |memo, set|
       memo + [{label: "—" * 20}] + set
     end
   end
 
   # return the only result if the search term only matches a single result for all searchable models
   def only_result
-    all_results = [@people, @invoices, @events, @groups].compact.flatten
-    all_results.first if all_results.size == 1
+    all = all_results.flatten
+    all.first if all.size == 1
   end
 
-  def entries
-    @people
-  end
-
-  def with_query
-    (query_param.to_s.size >= 2) ? yield : []
+  def all_results
+    [@people, @groups, @events, @invoices].compact_blank
   end
 
   def active_tab
@@ -112,7 +113,11 @@ class FullTextController < ApplicationController
     end
   end
 
+  def query?
+    query_param.size >= MIN_TERM_LENGTH
+  end
+
   def query_param
-    params[:q]
+    params[:q].to_s.strip
   end
 end

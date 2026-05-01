@@ -6,8 +6,10 @@
 require "spec_helper"
 
 describe SearchStrategies::GroupSearch do
+  let(:group) { groups(:bottom_layer_one) }
+
   before do
-    @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
+    @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: group).person
   end
 
   describe "#search_fulltext" do
@@ -15,9 +17,9 @@ describe SearchStrategies::GroupSearch do
       let(:user) { @bl_leader }
 
       it "finds groups" do
-        result = search_class(groups(:bottom_layer_one).to_s[0..5]).search_fulltext
+        result = search_class(group.to_s[0..5]).search_fulltext
 
-        expect(result).to include(groups(:bottom_layer_one))
+        expect(result).to include(group)
       end
 
       context "without any params" do
@@ -32,10 +34,10 @@ describe SearchStrategies::GroupSearch do
     context "as unprivileged person" do
       let(:user) { Fabricate(:person) }
 
-      it "finds groups" do
-        result = search_class(groups(:bottom_layer_one).to_s[0..5]).search_fulltext
+      it "finds no groups" do
+        result = search_class(group.to_s[0..5]).search_fulltext
 
-        expect(result).to include(groups(:bottom_layer_one))
+        expect(result).to be_blank
       end
     end
   end

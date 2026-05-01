@@ -115,15 +115,21 @@ module PaperTrail
     def translation_change? = item_type.include?("Translation") && main_type
 
     def label_with_fallback(item)
-      return "" unless item
+      return I18n.t("global.unknown") unless item
 
       if item.respond_to?(:translation_class)
-        item_class.find_by(id: item_id).to_s(:long)
+        label_method(item_class.find_by(id: item_id))
       else
-        item.to_s(:long)
+        label_method(item)
       end
-    rescue
-      I18n.t("global.unknown")
+    end
+
+    def label_method(object)
+      if object.method(:to_s).arity != 0
+        object.to_s(:long)
+      else
+        object.to_s
+      end
     end
   end
 end

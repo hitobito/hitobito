@@ -128,7 +128,7 @@ class Event::Question < ActiveRecord::Base
     question&.truncate(30)
   end
 
-  def to_s(format = :default)
+  def to_s
     label
   end
 

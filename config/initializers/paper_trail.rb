@@ -39,9 +39,13 @@ ActiveSupport.on_load(:active_record) do
     options[:meta] ||= {}
 
     options[:meta][:item_label] = lambda do |item|
-      item.present? ? item.to_s(:long) : nil
-    rescue ArgumentError
-      nil
+      return nil if item.blank?
+
+      if item.method(:to_s).arity != 0
+        item.to_s(:long)
+      else
+        item.to_s
+      end
     end
 
     super(options)

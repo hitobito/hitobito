@@ -123,7 +123,6 @@ describe :user_job_results, js: true do
     job.user_id = top_leader.id
 
     enqueue_and_run_job(job)
-    Delayed::Worker.new.work_off
 
     within "#user_job_results" do
       expect(page).to have_content("Parent Job", count: 1)

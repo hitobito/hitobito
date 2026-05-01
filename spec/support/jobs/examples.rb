@@ -31,16 +31,6 @@ module Examples
     end
   end
 
-  class LongRunningUserManagedJob < BaseJob
-    prepend UserManageableJob
-
-    def perform
-      loop do
-        Rails.logger.debug "Working..."
-      end
-    end
-  end
-
   class UserManagedParentJob < BaseJob
     prepend UserManageableJob
 

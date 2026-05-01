@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe UserJobResult do
-  let(:person_id) { 42 }
   let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
   let(:job_name) { "A test job" }
@@ -199,37 +198,52 @@ describe UserJobResult do
   end
 
   describe "broadcasting" do
+    let(:update_channel_name) { "person_#{person.id}_user_job_result_updates" }
+    let(:notification_channel_name) { "person_#{person.id}_user_job_result_notifications" }
+
     it "should broadcast on create" do
-      expect { subject }
-        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
+      expect { subject }.to have_broadcasted_overview_update_and_badge_update
     end
 
     it "should broadcast on update" do
       user_job_result = subject
 
       expect { user_job_result.update!(status: "in_progress") }
-        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
+        .to have_broadcasted_overview_update_and_badge_update
     end
 
     it "should broadcast on destroy" do
       user_job_result = subject
 
       expect { user_job_result.destroy! }
-        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
+        .to have_broadcasted_overview_update_and_badge_update
     end
 
     it "should broadcast notification when reporting success" do
       user_job_result = subject
 
       expect { user_job_result.report_success!(1) }
-        .to have_broadcasted_to("person_#{person_id}_user_job_result_notifications")
+        .to have_broadcasted_notification_and_badge_update
     end
 
     it "should broadcast notification when reporting failure" do
       user_job_result = subject
 
       expect { user_job_result.report_failure! }
-        .to have_broadcasted_to("person_#{person_id}_user_job_result_notifications")
+        .to have_broadcasted_notification_and_badge_update
+    end
+
+    def have_broadcasted_overview_update_and_badge_update
+      have_broadcasted_to(update_channel_name)
+        .and have_broadcasted_to(notification_channel_name)
+        .with(a_string_matching(/target="user-job-results-link-with-badge"/))
+    end
+
+    def have_broadcasted_notification_and_badge_update
+      have_broadcasted_to(notification_channel_name)
+        .with(a_string_matching(/target="user-job-result-notifications-container"/))
+        .and have_broadcasted_to(notification_channel_name)
+        .with(a_string_matching(/target="user-job-results-link-with-badge"/))
     end
   end
 

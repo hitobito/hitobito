@@ -33,14 +33,8 @@ class UserJobResult < ApplicationRecord
   validates_by_schema
 
   after_initialize :set_default_values, if: :new_record?
-  after_update_commit lambda do
-    broadcast_replace_to(update_channel_name)
-    broadcast_badge_update
-  end
-  after_commit lambda do
-    broadcast_refresh_to(update_channel_name)
-    broadcast_badge_update
-  end, on: %i[create destroy]
+  after_update_commit :broadcast_replace_and_badge_update
+  after_commit :broadcast_refresh_and_badge_update, on: %i[create destroy]
 
   before_destroy do
     generated_file.purge if generated_file.attached?
@@ -162,6 +156,16 @@ class UserJobResult < ApplicationRecord
 
   def notification_channel_name
     "person_#{person_id}_user_job_result_notifications"
+  end
+
+  def broadcast_replace_and_badge_update
+    broadcast_replace_to(update_channel_name)
+    broadcast_badge_update
+  end
+
+  def broadcast_refresh_and_badge_update
+    broadcast_refresh_to(update_channel_name)
+    broadcast_badge_update
   end
 
   def broadcast_notification

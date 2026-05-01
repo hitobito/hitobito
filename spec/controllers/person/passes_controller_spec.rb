@@ -59,7 +59,7 @@ describe Person::PassesController do
 
     context "format.html" do
       it "renders the show view" do
-        get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}
+        get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}
 
         expect(response).to be_successful
         expect(assigns(:group)).to eq(group)
@@ -71,7 +71,7 @@ describe Person::PassesController do
         pass.delete
 
         expect {
-          get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}
+          get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
@@ -79,7 +79,7 @@ describe Person::PassesController do
         sign_in(people(:bottom_member))
 
         expect {
-          get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}
+          get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}
         }.to raise_error(CanCan::AccessDenied)
       end
     end
@@ -99,7 +99,7 @@ describe Person::PassesController do
         expect(synchronizer).to receive(:assign_validity)
 
         expect {
-          get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
+          get :google_wallet, params: {group_id: group.id, person_id: person.id, id: pass.id}
         }.to change(Wallets::PassInstallation, :count).by(1)
 
         expect(response).to redirect_to(save_url)
@@ -111,7 +111,7 @@ describe Person::PassesController do
         pass.delete
 
         expect {
-          get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
+          get :google_wallet, params: {group_id: group.id, person_id: person.id, id: pass.id}
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
@@ -120,7 +120,7 @@ describe Person::PassesController do
           .with(kind_of(Wallets::PassInstallation))
           .and_return(google_service)
 
-        get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
+        get :google_wallet, params: {group_id: group.id, person_id: person.id, id: pass.id}
       end
 
       it "reuses existing passes and installation" do
@@ -130,7 +130,7 @@ describe Person::PassesController do
         )
 
         expect {
-          get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
+          get :google_wallet, params: {group_id: group.id, person_id: person.id, id: pass.id}
         }.not_to change(Wallets::PassInstallation, :count)
 
         expect(response).to redirect_to(save_url)
@@ -139,10 +139,10 @@ describe Person::PassesController do
       it "redirects back with alert on error" do
         allow(google_service).to receive(:save_url).and_raise(StandardError.new("API error"))
 
-        get :google_wallet, params: {group_id: group.id, person_id: person.id, id: definition.id}
+        get :google_wallet, params: {group_id: group.id, person_id: person.id, id: pass.id}
 
         expect(response).to redirect_to(group_person_path(group, person))
-        expect(flash[:alert]).to eq(I18n.t("wallets.google.save_failed"))
+        expect(flash[:alert]).to eq("Der Pass konnte nicht zu Google Wallet hinzugefügt werden.")
       end
     end
 
@@ -162,7 +162,7 @@ describe Person::PassesController do
         expect(synchronizer).to receive(:assign_validity)
 
         expect {
-          get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}, format: :pkpass
+          get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}, format: :pkpass
         }.to change(Wallets::PassInstallation, :count).by(1)
 
         expect(response).to be_successful
@@ -176,7 +176,7 @@ describe Person::PassesController do
       it "redirects back with alert on error" do
         allow(apple_service).to receive(:generate_pass).and_raise(StandardError.new("signing error"))
 
-        get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}, format: :pkpass
+        get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}, format: :pkpass
 
         expect(response).to redirect_to(group_person_path(group, person))
         expect(flash[:alert]).to eq(I18n.t("wallets.apple.generation_failed"))
@@ -198,7 +198,7 @@ describe Person::PassesController do
       end
 
       it "renders PDF" do
-        get :show, params: {group_id: group.id, person_id: person.id, id: definition.id}, format: :pdf
+        get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}, format: :pdf
 
         expect(response).to be_successful
         expect(response.media_type).to eq("application/pdf")

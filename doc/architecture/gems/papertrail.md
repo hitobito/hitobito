@@ -42,7 +42,7 @@ To maintain a clean version history, we prevent PaperTrail from creating version
     # This is used to display in log what language record actually changed. Currently those
     # values are just the strings from settings.yml, so the log does not display translated
     # language names
-    def to_s(format = :default)
+    def to_s
       locale.to_s
     end
   end

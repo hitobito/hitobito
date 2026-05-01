@@ -1433,6 +1433,11 @@ de:
     subscribe: "Anmelden"
     unsubscribe: "Abmelden"
 
+  pass_definitions:
+    global:
+      link:
+        add: Pass erstellen
+
   messages:
     attrs:
       dispatch_infos: Verabeitung

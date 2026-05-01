@@ -1453,6 +1453,11 @@ fr:
     subscribe: "Inscription"
     unsubscribe: "Désinscription"
 
+  pass_definitions:
+    global:
+      link:
+        add: Créer un pass
+
   messages:
     attrs:
       dispatch_infos: En cours de traitement

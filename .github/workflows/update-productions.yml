@@ -5,7 +5,7 @@ on:
     inputs:
       instances:
         type: string
-        description: demo, cevi, die_mitte, digisus_lab, dsj, ejv, glp, insieme, jemk, jubla, multitenancy, pbs, pro_natura, sbv, sjas, skv, svse, swb, sww
+        description: demo, cevi, bdp, die_mitte, digisus_lab, dsj, ejv, glp, insieme, jemk, jubla, multitenancy, pbs, pro_natura, sbv, sjas, skv, svse, swb, sww
         required: true
       release:
         type: choice

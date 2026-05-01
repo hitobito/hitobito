@@ -54,7 +54,7 @@ class Person::PassesController < CrudController
 
   def log_and_redirect(key, e)
     Rails.logger.error("#{key.upcase} Wallet generation failed: #{e.message}")
-    redirect_back fallback_location: group_person_path(group, person),
+    redirect_back fallback_location: group_person_path(@group, @person),
       alert: I18n.t("wallets.#{key}.generation_failed")
   end
 

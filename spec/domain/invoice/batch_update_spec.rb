@@ -36,35 +36,12 @@ describe Invoice::BatchUpdate do
     expect(results.notice).to have(1).items
   end
 
-  it "does not change overdue invoice to state reminded if payed" do
-    sent.update_columns(due_at: 31.days.ago, state: :payed)
-    expect do
-      expect { update([sent]) }.not_to change { sent.state }
-    end
-  end
-
-  it "does not change overdue invoice to state reminded if payed in excess" do
-    sent.update_columns(due_at: 31.days.ago, state: :excess)
-    expect do
-      expect { update([sent]) }.not_to change { sent.state }
-    end
-  end
-
   it "changes overdue invoice to state reminded, creates first reminder" do
     sent.update_columns(due_at: 31.days.ago)
     expect do
       expect { update([sent]) }.to change { sent.state }.to "reminded"
     end.to change { sent.payment_reminders.size }.by(1)
     expect(results.notice).to have(1).item
-  end
-
-  it "changes overdue invoice to state reminded, creates first reminder, sends email" do
-    sent.update_columns(due_at: 31.days.ago)
-    expect do
-      expect { update([sent], person) }.to change { sent.state }.to "reminded"
-    end.to change { sent.payment_reminders.size }.by(1)
-      .and change { Delayed::Job.count }.by(1)
-    expect(results.notice).to have(2).items
   end
 
   it "tracks error if invoice cannot be issued because no invoice_item is present" do

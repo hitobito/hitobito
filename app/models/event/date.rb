@@ -19,7 +19,6 @@
 #  index_event_dates_on_event_id               (event_id)
 #  index_event_dates_on_event_id_and_start_at  (event_id,start_at)
 #
-
 class Event::Date < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(d) { d.event_id },
                          main_type: Event.sti_name}

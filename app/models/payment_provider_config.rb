@@ -25,7 +25,6 @@
 #
 #  index_payment_provider_configs_on_invoice_config_id  (invoice_config_id)
 #
-
 class PaymentProviderConfig < ActiveRecord::Base
   include Encryptable
   include I18nEnums

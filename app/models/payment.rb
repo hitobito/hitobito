@@ -23,7 +23,6 @@
 #  index_payments_on_invoice_id              (invoice_id)
 #  index_payments_on_transaction_identifier  (transaction_identifier) UNIQUE
 #
-
 class Payment < ActiveRecord::Base
   include I18nEnums
 

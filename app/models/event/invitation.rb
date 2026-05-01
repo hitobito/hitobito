@@ -23,7 +23,6 @@
 #  index_event_invitations_on_event_id_and_person_id  (event_id,person_id) UNIQUE
 #  index_event_invitations_on_person_id               (person_id)
 #
-
 class Event::Invitation < ActiveRecord::Base
   self.demodulized_route_keys = true
 

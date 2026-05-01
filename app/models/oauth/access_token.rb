@@ -28,7 +28,6 @@
 #
 #  fk_rails_...  (application_id => oauth_applications.id)
 #
-
 module Oauth
   class AccessToken < Doorkeeper::AccessToken
     belongs_to :person, foreign_key: :resource_owner_id, inverse_of: :access_tokens

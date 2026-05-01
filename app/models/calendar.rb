@@ -19,7 +19,6 @@
 #
 #  index_calendars_on_group_id  (group_id)
 #
-
 class Calendar < ActiveRecord::Base
   belongs_to :group
 

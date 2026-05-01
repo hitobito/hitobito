@@ -22,7 +22,6 @@
 #  index_payees_on_payment_id  (payment_id)
 #  index_payees_on_person_id   (person_id)
 #
-
 class Payee < ActiveRecord::Base
   belongs_to :payment
   belongs_to :person, optional: true

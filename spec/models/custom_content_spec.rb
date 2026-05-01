@@ -2,22 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-# == Schema Information
-#
-# Table name: custom_contents
-#
-#  id                    :integer          not null, primary key
-#  key                   :string           not null
-#  placeholders_required :string
-#  placeholders_optional :string
-#  context_type          :string
-#  context_id            :integer
-#
-# Indexes
-#
-#  index_custom_contents_on_context  (context_type,context_id)
-#
-
 require "spec_helper"
 
 describe CustomContent do

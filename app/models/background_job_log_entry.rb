@@ -26,7 +26,6 @@
 #  index_background_job_log_entries_on_job_id_and_attempt  (job_id,attempt) UNIQUE
 #  index_background_job_log_entries_on_job_name            (job_name)
 #
-
 class BackgroundJobLogEntry < ApplicationRecord
   validates_by_schema
 

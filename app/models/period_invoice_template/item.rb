@@ -17,6 +17,27 @@
 # In order to actually calculate counts and prices, the
 # #to_invoice_item_for_groups or #to_invoice_item_for_people method
 # is used to get an invoice item that can perform the calculation.
+
+# == Schema Information
+#
+# Table name: period_invoice_template_items
+#
+#  id                              :bigint           not null, primary key
+#  account                         :string
+#  cost_center                     :string
+#  dynamic_cost_parameters         :text
+#  name                            :string
+#  type                            :string           not null
+#  vat_rate                        :decimal(5, 2)
+#  created_at                      :datetime         not null
+#  updated_at                      :datetime         not null
+#  period_invoice_template_id      :bigint           not null
+#  period_invoice_template_item_id :bigint           not null
+#
+# Indexes
+#
+#  idx_on_period_invoice_template_id_ffb9250706  (period_invoice_template_id)
+#
 class PeriodInvoiceTemplate::Item < ActiveRecord::Base
   include Globalized
 

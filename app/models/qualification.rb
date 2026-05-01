@@ -20,7 +20,6 @@
 #  index_qualifications_on_person_id              (person_id)
 #  index_qualifications_on_qualification_kind_id  (qualification_kind_id)
 #
-
 class Qualification < ActiveRecord::Base
   include DateYearValidatable
 

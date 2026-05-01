@@ -2,18 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-# == Schema Information
-#
-# Table name: event_kinds
-#
-#  id               :integer          not null, primary key
-#  created_at       :datetime
-#  updated_at       :datetime
-#  deleted_at       :datetime
-#  minimum_age      :integer
-#  kind_category_id :integer
-#
-
 Fabricator(:event_kind, class_name: "Event::Kind") do
   label { Faker::Company.bs }
   general_information { Faker::Lorem.sentence }

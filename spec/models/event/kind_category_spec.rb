@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: event_kind_categories
-#
-#  id         :integer          not null, primary key
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  deleted_at :datetime
-#  order      :integer
-#
-
 require "spec_helper"
 
 describe Event::KindCategory do

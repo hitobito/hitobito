@@ -1,3 +1,4 @@
+
 # == Schema Information
 #
 # Table name: group_type_orders

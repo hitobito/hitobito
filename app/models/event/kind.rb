@@ -18,9 +18,9 @@
 #  short_name             :string
 #  created_at             :datetime
 #  updated_at             :datetime
+#  event_kind_id          :integer          not null
 #  kind_category_id       :integer
 #
-
 class Event::Kind < ActiveRecord::Base
   include Paranoia::Globalized
 

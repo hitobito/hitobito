@@ -22,7 +22,6 @@
 #  width            :float            not null
 #  person_id        :integer
 #
-
 class LabelFormat < ActiveRecord::Base
   class << self
     def available_page_sizes

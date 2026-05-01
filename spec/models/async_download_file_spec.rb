@@ -1,18 +1,9 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: async_download_files
-#
-#  id         :integer          not null, primary key
-#  name       :string           not null
-#  filetype   :string
-#  progress   :integer
-#  person_id  :integer          not null
-#  timestamp  :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#
+#  Copyright (c) 2021, Hitobito AG. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
 

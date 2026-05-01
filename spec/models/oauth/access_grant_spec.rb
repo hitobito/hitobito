@@ -1,25 +1,9 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: oauth_access_grants
-#
-#  id                    :integer          not null, primary key
-#  resource_owner_id     :integer          not null
-#  application_id        :integer          not null
-#  token                 :string           not null
-#  expires_in            :integer          not null
-#  redirect_uri          :text             not null
-#  created_at            :datetime         not null
-#  revoked_at            :datetime
-#  scopes                :string
-#  code_challenge        :string
-#  code_challenge_method :string
-#
-# Indexes
-#
-#  index_oauth_access_grants_on_token  (token) UNIQUE
-#
+#  Copyright (c) 2021, Hitobito AG. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
 

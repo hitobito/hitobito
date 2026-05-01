@@ -22,6 +22,12 @@
 #  logo_position                    :string           default("disabled"), not null
 #  participant_number               :string
 #  payee                            :text
+#  payee_country                    :string           default("CH")
+#  payee_housenumber                :string
+#  payee_name                       :string
+#  payee_street                     :string
+#  payee_town                       :string
+#  payee_zip_code                   :string
 #  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
 #  reference_prefix                 :integer
@@ -32,9 +38,8 @@
 #
 # Indexes
 #
-#  index_invoice_configs_on_group_id  (group_id)
+#  index_invoice_configs_on_group_id  (group_id) UNIQUE
 #
-
 class InvoiceConfig < ActiveRecord::Base
   include I18nEnums
   include ValidatedEmail

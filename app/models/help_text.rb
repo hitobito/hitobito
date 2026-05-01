@@ -19,7 +19,6 @@
 #
 #  index_help_texts_fields  (controller,model,kind,name) UNIQUE
 #
-
 class HelpText < ActiveRecord::Base
   COLUMN_BLACKLIST = %w[id created_at updated_at deleted_at].freeze
 

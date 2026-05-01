@@ -17,7 +17,6 @@
 #
 #  index_event_attachments_on_event_id  (event_id)
 #
-
 class Event::Attachment < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(a) { a.event_id },
                          main_type: Event.sti_name}

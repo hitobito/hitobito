@@ -4,21 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-# == Schema Information
-#
-# Table name: calendars
-#
-#  id          :integer          not null, primary key
-#  name        :string           not null
-#  group_id    :integer          not null
-#  description :text
-#  token       :string           not null
-#
-# Indexes
-#
-#  index_calendars_on_group_id  (group_id)
-#
-
 Fabricator(:calendar) do
   name { Faker::Lorem.words(number: 1).first.capitalize }
   description { Faker::Lorem.sentences }

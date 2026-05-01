@@ -21,7 +21,6 @@
 #
 #  index_notes_on_subject_id  (subject_id)
 #
-
 class Note < ActiveRecord::Base
   ### ASSOCIATIONS
 

@@ -3,6 +3,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: groups_filters
+#
+#  id         :bigint           not null, primary key
+#  active_at  :date             not null
+#  group_type :string           not null
+#  parent_id  :bigint           not null
+#
+# Indexes
+#
+#  index_groups_filters_on_parent_id  (parent_id)
+#
 class GroupsFilter < ActiveRecord::Base
   belongs_to :parent, class_name: "Group"
 

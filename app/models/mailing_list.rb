@@ -34,7 +34,6 @@
 #
 #  index_mailing_lists_on_group_id  (group_id)
 #
-
 class MailingList < ActiveRecord::Base
   include I18nEnums
 

@@ -4,29 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-# == Schema Information
-#
-# Table name: roles
-#
-#  id          :integer          not null, primary key
-#  archived_at :datetime
-#  end_on      :date
-#  label       :string
-#  start_on    :date
-#  terminated  :boolean          default(FALSE), not null
-#  type        :string           not null
-#  created_at  :datetime
-#  updated_at  :datetime
-#  group_id    :integer          not null
-#  person_id   :integer          not null
-#
-# Indexes
-#
-#  index_roles_on_person_id_and_group_id  (person_id,group_id)
-#  index_roles_on_type                    (type)
-#
-
 require "spec_helper"
 
 describe Role do

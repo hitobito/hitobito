@@ -20,7 +20,6 @@
 #
 #  index_person_duplicates_on_person_1_id_and_person_2_id  (person_1_id,person_2_id) UNIQUE
 #
-
 class PersonDuplicate < ActiveRecord::Base
   belongs_to :person_1, class_name: "Person"
   belongs_to :person_2, class_name: "Person"

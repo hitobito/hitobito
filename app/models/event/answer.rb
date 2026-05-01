@@ -18,7 +18,6 @@
 #
 #  index_event_answers_on_participation_id_and_question_id  (participation_id,question_id) UNIQUE
 #
-
 class Event::Answer < ActiveRecord::Base
   # create events also create a version but we do it in after_create to
   # make the event update

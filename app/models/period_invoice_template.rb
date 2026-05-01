@@ -3,6 +3,25 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# == Schema Information
+#
+# Table name: period_invoice_templates
+#
+#  id                    :bigint           not null, primary key
+#  end_on                :date
+#  name                  :string           not null
+#  recipient_source_type :string
+#  start_on              :date             not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  group_id              :bigint           not null
+#  recipient_source_id   :integer
+#
+# Indexes
+#
+#  index_period_invoice_templates_on_group_id          (group_id)
+#  index_period_invoice_templates_on_recipient_source  (recipient_source_type,recipient_source_id)
+#
 class PeriodInvoiceTemplate < ActiveRecord::Base
   belongs_to :group
 

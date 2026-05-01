@@ -11,6 +11,7 @@
 #
 #  id             :integer          not null, primary key
 #  event          :string           not null
+#  item_subtype   :string
 #  item_type      :string           not null
 #  main_type      :string
 #  object         :text
@@ -28,7 +29,6 @@
 #  index_versions_on_main_id_and_main_type  (main_id,main_type)
 #  index_versions_on_mutation_id            (mutation_id)
 #
-
 module PaperTrail
   class Version < ActiveRecord::Base
     include PaperTrail::VersionConcern

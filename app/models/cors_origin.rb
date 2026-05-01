@@ -19,7 +19,6 @@
 #  index_cors_origins_on_auth_method_type_and_auth_method_id  (auth_method_type,auth_method_id)
 #  index_cors_origins_on_origin                               (origin)
 #
-
 class CorsOrigin < ActiveRecord::Base
   belongs_to :auth_method, polymorphic: true
 

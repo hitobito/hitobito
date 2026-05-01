@@ -13,12 +13,12 @@
 #  account                 :string
 #  cost                    :decimal(12, 2)
 #  cost_center             :string
-#  count                   :integer          default(1), not null
+#  count                   :integer          default(1)
 #  description             :text
 #  dynamic_cost_parameters :text
-#  name                    :string           not null
+#  name                    :string
 #  type                    :string           default("InvoiceItem"), not null
-#  unit_cost               :decimal(12, 2)   not null
+#  unit_cost               :decimal(12, 2)
 #  vat_rate                :decimal(5, 2)
 #  invoice_id              :integer          not null
 #
@@ -26,7 +26,6 @@
 #
 #  index_invoice_items_on_invoice_id  (invoice_id)
 #
-
 class InvoiceItem < ActiveRecord::Base
   include Globalized
 

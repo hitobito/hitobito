@@ -22,7 +22,6 @@
 #  fk_rails_...  (subscription_id => subscriptions.id)
 #  fk_rails_...  (tag_id => tags.id)
 #
-
 class SubscriptionTag < ActiveRecord::Base
   belongs_to :subscription
   belongs_to :tag, class_name: "ActsAsTaggableOn::Tag"

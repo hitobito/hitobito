@@ -17,7 +17,6 @@
 #  created_at             :datetime
 #  updated_at             :datetime
 #
-
 class QualificationKind < ActiveRecord::Base
   include Paranoia::Globalized
 

@@ -4,7 +4,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 class Invoice::RoleCountItem < Invoice::PeriodItem
   validates :role_types, presence: true
 

@@ -22,7 +22,6 @@
 #
 #  fk_rails_...  (tag_id => tags.id) ON DELETE => cascade
 #
-
 class CalendarTag < ActiveRecord::Base
   belongs_to :calendar
   belongs_to :tag, class_name: "ActsAsTaggableOn::Tag"

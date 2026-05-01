@@ -2,7 +2,7 @@
 #
 # Table name: role_type_orders
 #
-#  id           :integer          not null, primary key
+#  id           :bigint           not null, primary key
 #  name         :string
 #  order_weight :integer
 #  created_at   :datetime         not null

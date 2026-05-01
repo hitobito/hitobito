@@ -17,7 +17,6 @@
 #  index_event_roles_on_participation_id  (participation_id)
 #  index_event_roles_on_type              (type)
 #
-
 class Event::Role < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(r) { r.participation_id },
                          main_type: Event::Participation.sti_name}

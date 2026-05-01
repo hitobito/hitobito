@@ -8,9 +8,6 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
     rename_table :async_download_files, :user_job_results
 
     change_table :user_job_results do |t|
-      t.change :person_id, :bigint
-      t.index :person_id
-
       t.rename :name, :job_name
       t.rename :timestamp, :start_timestamp
 
@@ -27,6 +24,7 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
         execute("UPDATE user_job_results SET filetype = 'txt' WHERE filetype IS NULL")
         execute("UPDATE user_job_results SET progress = 0 WHERE progress IS NULL")
 
+        change_column(:user_job_results, :person_id, :bigint)
         change_column(
           :user_job_results, :start_timestamp, :datetime,
           using: "to_timestamp(start_timestamp::numeric)"
@@ -34,12 +32,27 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
       end
 
       dir.down do
+        max_person_id = execute(
+          "SELECT COALESCE(MAX(person_id), 0) as max_person_id FROM user_job_results"
+        ).to_a.first["max_person_id"]
+
+        # Min and max signed integers with 4 bytes
+        if (max_person_id > (-2**31)) && (max_person_id < (2**31 - 1))
+          change_column(:user_job_results, :person_id, :bigint)
+        else
+          raise "Could not rollback migration:" \
+            " Changing type of column person_id on table user_job_results from bigint" \
+            " back to integer not possible because max person_id is outside of integer limit."
+        end
+
         change_column(
           :user_job_results, :start_timestamp, :string,
           using: "EXTRACT(EPOCH FROM start_timestamp)::bigint::text"
         )
       end
     end
+
+    add_index(:user_job_results, :person_id)
 
     change_column_null(:user_job_results, :filetype, false)
     change_column_null(:user_job_results, :progress, false)

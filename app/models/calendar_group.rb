@@ -21,7 +21,6 @@
 #  index_calendar_groups_on_calendar_id  (calendar_id)
 #  index_calendar_groups_on_group_id     (group_id)
 #
-
 class CalendarGroup < ActiveRecord::Base
   belongs_to :calendar
   belongs_to :group

@@ -17,7 +17,6 @@
 #  index_related_role_types_on_relation_id_and_relation_type  (relation_id,relation_type)
 #  index_related_role_types_on_role_type                      (role_type)
 #
-
 class RelatedRoleType < ActiveRecord::Base
   belongs_to :relation, polymorphic: true
 

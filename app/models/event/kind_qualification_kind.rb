@@ -22,7 +22,6 @@
 #  index_event_kind_qualification_kinds_on_category  (category)
 #  index_event_kind_qualification_kinds_on_role      (role)
 #
-
 class Event::KindQualificationKind < ActiveRecord::Base
   include I18nEnums
 

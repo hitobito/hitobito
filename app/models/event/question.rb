@@ -16,16 +16,17 @@
 #  event_type               :string
 #  multiple_choices         :boolean          default(FALSE), not null
 #  question                 :text
+#  sensitive                :boolean          default(TRUE), not null
 #  type                     :string           not null
 #  derived_from_question_id :integer
 #  event_id                 :integer
+#  event_question_id        :integer          not null
 #
 # Indexes
 #
 #  index_event_questions_on_derived_from_question_id  (derived_from_question_id)
 #  index_event_questions_on_event_id                  (event_id)
 #
-
 class Event::Question < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(q) { q.event_id },
                          main_type: Event.sti_name}

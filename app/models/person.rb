@@ -78,13 +78,11 @@
 #  index_people_on_reset_password_token         (reset_password_token) UNIQUE
 #  index_people_on_self_registration_reason_id  (self_registration_reason_id)
 #  index_people_on_unlock_token                 (unlock_token) UNIQUE
-#  people_search_column_gin_idx                 (search_column) USING gin
 #
 # Foreign Keys
 #
 #  fk_rails_...  (self_registration_reason_id => self_registration_reasons.id)
 #
-
 class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,

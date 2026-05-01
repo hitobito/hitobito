@@ -31,6 +31,8 @@ Layout/LineLength:
   Max: 100
   Severity: warning
   IgnoreCopDirectives: true
+  AllowedPatterns:
+    - !ruby/regexp /\A#/
 
 Metrics/MethodLength:
   Enabled: true

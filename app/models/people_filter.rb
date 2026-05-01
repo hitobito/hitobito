@@ -10,8 +10,9 @@
 #  id           :integer          not null, primary key
 #  filter_chain :text
 #  group_type   :string
-#  name         :string           not null
+#  name         :string
 #  range        :string           default("deep")
+#  visible      :boolean          default(FALSE)
 #  created_at   :datetime
 #  updated_at   :datetime
 #  group_id     :integer
@@ -20,7 +21,6 @@
 #
 #  index_people_filters_on_group_id_and_group_type  (group_id,group_type)
 #
-
 class PeopleFilter < ActiveRecord::Base
   RANGES = %w[deep layer group].freeze
 

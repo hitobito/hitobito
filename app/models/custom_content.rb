@@ -12,7 +12,7 @@
 #  id                    :integer          not null, primary key
 #  context_type          :string
 #  key                   :string           not null
-#  label                 :string           not null
+#  label                 :string
 #  placeholders_optional :string
 #  placeholders_required :string
 #  subject               :string
@@ -22,7 +22,6 @@
 #
 #  index_custom_contents_on_context  (context_type,context_id)
 #
-
 class CustomContent < ActiveRecord::Base
   include Globalized
   translates :label, :subject

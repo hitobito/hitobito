@@ -22,7 +22,6 @@
 #  index_person_add_requests_on_person_id         (person_id)
 #  index_person_add_requests_on_type_and_body_id  (type,body_id)
 #
-
 class Person::AddRequest < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(r) { r.person_id },
                          main_type: Person.sti_name}

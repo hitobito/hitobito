@@ -18,7 +18,6 @@
 #  index_subscriptions_on_mailing_list_id                    (mailing_list_id)
 #  index_subscriptions_on_subscriber_id_and_subscriber_type  (subscriber_id,subscriber_type)
 #
-
 class Subscription < ActiveRecord::Base
   include RelatedRoleType::Assigners
 

@@ -17,7 +17,6 @@
 #  updated_at :datetime         not null
 #  entry_id   :integer          not null
 #
-
 class MountedAttribute < ActiveRecord::Base
   belongs_to :entry, polymorphic: true
 

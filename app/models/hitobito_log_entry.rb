@@ -25,7 +25,6 @@
 #  index_hitobito_log_entries_on_multiple_columns  (category,level,subject_id,subject_type,message)
 #  index_hitobito_log_entries_on_subject           (subject_type,subject_id)
 #
-
 class HitobitoLogEntry < ApplicationRecord
   class_attribute :categories, default: %w[webhook ebics mail cleanup]
 

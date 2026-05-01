@@ -18,7 +18,6 @@
 #  updated_at :datetime         not null
 #  person_id  :integer          not null
 #
-
 class AsyncDownloadFile < ApplicationRecord
   class << self
     FILENAME_REGEX = /\A(.*)_(\d+)-(\d+)\z/

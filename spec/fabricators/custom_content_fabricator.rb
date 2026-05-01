@@ -1,20 +1,9 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: custom_contents
-#
-#  id                    :integer          not null, primary key
-#  key                   :string           not null
-#  placeholders_required :string
-#  placeholders_optional :string
-#  context_type          :string
-#  context_id            :integer
-#
-# Indexes
-#
-#  index_custom_contents_on_context  (context_type,context_id)
-#
+#  Copyright (c) 2022-2025,  Eidgenössischer Jodlerverband. This file is part of
+#  hitobito_cvp and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
 
 Fabricator(:custom_content) do
   key { sequence(:key) { |i| "key#{i}" } }

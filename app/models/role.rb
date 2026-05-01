@@ -26,7 +26,6 @@
 #  index_roles_on_person_id_and_group_id  (person_id,group_id)
 #  index_roles_on_type                    (type)
 #
-
 class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   has_paper_trail meta: {main_id: ->(r) { r.person_id },
                          main_type: Person.sti_name},

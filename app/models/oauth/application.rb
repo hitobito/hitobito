@@ -12,6 +12,7 @@
 #  id                   :integer          not null, primary key
 #  additional_audiences :string
 #  confidential         :boolean          default(TRUE), not null
+#  description          :text
 #  name                 :string           not null
 #  redirect_uri         :text             not null
 #  scopes               :string           default(""), not null
@@ -25,7 +26,6 @@
 #
 #  index_oauth_applications_on_uid  (uid) UNIQUE
 #
-
 module Oauth
   class Application < Doorkeeper::Application
     has_many :access_grants, dependent: :delete_all, class_name: "Oauth::AccessGrant"

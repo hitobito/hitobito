@@ -2,25 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
-# == Schema Information
-#
-# Table name: person_add_requests
-#
-#  id           :integer          not null, primary key
-#  role_type    :string
-#  type         :string           not null
-#  created_at   :datetime         not null
-#  body_id      :integer          not null
-#  person_id    :integer          not null
-#  requester_id :integer          not null
-#
-# Indexes
-#
-#  index_person_add_requests_on_person_id         (person_id)
-#  index_person_add_requests_on_type_and_body_id  (type,body_id)
-#
-
 class Person::AddRequest::Group < Person::AddRequest
   belongs_to :body, class_name: "::Group"
 

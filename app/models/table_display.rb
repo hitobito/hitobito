@@ -18,7 +18,6 @@
 #
 #  index_table_displays_on_person_id_and_table_model_class  (person_id,table_model_class) UNIQUE
 #
-
 class TableDisplay < ActiveRecord::Base
   validates_by_schema
 

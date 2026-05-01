@@ -25,7 +25,6 @@
 #  index_assignments_on_creator_id  (creator_id)
 #  index_assignments_on_person_id   (person_id)
 #
-
 class Assignment < ActiveRecord::Base
   ATTACHMENT_TYPES = [Message::Letter, Message::LetterWithInvoice].freeze
   include I18nEnums

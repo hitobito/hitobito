@@ -115,9 +115,9 @@ GEM
     airbrake-ruby (6.2.2)
       rbtree3 (~> 0.6)
     amazing_print (2.0.0)
-    annotate (2.6.5)
-      activerecord (>= 2.3.0)
-      rake (>= 0.8.7)
+    annotaterb (4.20.0)
+      activerecord (>= 6.0.0)
+      activesupport (>= 6.0.0)
     ast (2.4.3)
     awesome_nested_set (3.8.0)
       activerecord (>= 4.0.0, < 8.1)
@@ -839,7 +839,7 @@ DEPENDENCIES
   acts-as-taggable-on
   airbrake
   amazing_print
-  annotate
+  annotaterb
   awesome_nested_set
   aws-sdk-s3
   bcrypt

@@ -20,6 +20,7 @@
 #  encrypted_text_message_password         :string
 #  encrypted_text_message_username         :string
 #  housenumber                             :string(20)
+#  language                                :string           default("de"), not null
 #  letter_address_position                 :string           default("left"), not null
 #  lft                                     :integer
 #  main_self_registration_group            :boolean          default(FALSE), not null
@@ -51,13 +52,11 @@
 #
 # Indexes
 #
-#  groups_search_column_gin_idx    (search_column) USING gin
 #  index_groups_on_layer_group_id  (layer_group_id)
 #  index_groups_on_lft_and_rgt     (lft,rgt)
 #  index_groups_on_parent_id       (parent_id)
 #  index_groups_on_type            (type)
 #
-
 class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   SEARCHABLE_ATTRS = [:name, :short_name, :email, :street, :housenumber, :zip_code, :town,
     :country, {phone_numbers: [:number], social_accounts: [:name], additional_emails: [:email]}]

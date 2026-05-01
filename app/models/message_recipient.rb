@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 # rubocop:disable Layout/LineLength
+# rubocop:enable Layout/LineLength
 
 # == Schema Information
 #
@@ -33,8 +34,6 @@
 #  index_message_recipients_on_person_message_email         (person_id,message_id,email) UNIQUE
 #  index_message_recipients_on_person_message_phone_number  (person_id,message_id,phone_number) UNIQUE
 #
-
-# rubocop:enable Layout/LineLength
 class MessageRecipient < ActiveRecord::Base
   STATES = %w[pending sending sent failed blocked].freeze
 

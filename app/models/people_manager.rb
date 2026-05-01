@@ -7,6 +7,20 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_youth.
 
+# == Schema Information
+#
+# Table name: people_managers
+#
+#  id         :bigint           not null, primary key
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  managed_id :integer          not null
+#  manager_id :integer          not null
+#
+# Indexes
+#
+#  index_people_managers_on_manager_id_and_managed_id  (manager_id,managed_id) UNIQUE
+#
 class PeopleManager < ApplicationRecord
   belongs_to :manager, class_name: "Person", validate: true
   belongs_to :managed, class_name: "Person", validate: true

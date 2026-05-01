@@ -9,29 +9,31 @@
 #
 # Table name: invoice_runs
 #
-#  id                    :bigint           not null, primary key
-#  amount_paid           :decimal(15, 2)   default(0.0), not null
-#  amount_total          :decimal(15, 2)   default(0.0), not null
-#  invalid_recipient_ids :text
-#  receiver_type         :string
-#  receivers             :text
-#  recipients_paid       :integer          default(0), not null
-#  recipients_processed  :integer          default(0), not null
-#  recipients_total      :integer          default(0), not null
-#  title                 :string           not null
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  creator_id            :bigint
-#  group_id              :bigint
-#  receiver_id           :bigint
+#  id                         :bigint           not null, primary key
+#  amount_paid                :decimal(15, 2)   default(0.0), not null
+#  amount_total               :decimal(15, 2)   default(0.0), not null
+#  invalid_recipient_ids      :text
+#  pp_post                    :string
+#  recipient_source_type      :string
+#  recipients_paid            :integer          default(0), not null
+#  recipients_processed       :integer          default(0), not null
+#  recipients_total           :integer          default(0), not null
+#  shipping_method            :string           default("own")
+#  title                      :string
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
+#  creator_id                 :bigint
+#  group_id                   :bigint
+#  period_invoice_template_id :integer
+#  recipient_source_id        :bigint
 #
 # Indexes
 #
-#  index_invoice_runs_on_creator_id                     (creator_id)
-#  index_invoice_runs_on_group_id                       (group_id)
-#  index_invoice_runs_on_receiver_type_and_receiver_id  (receiver_type,receiver_id)
+#  idx_on_recipient_source_type_recipient_source_id_17d425237e  (recipient_source_type,recipient_source_id)
+#  index_invoice_runs_on_creator_id                             (creator_id)
+#  index_invoice_runs_on_group_id                               (group_id)
+#  index_invoice_runs_on_period_invoice_template_id             (period_invoice_template_id)
 #
-
 class InvoiceRun < ActiveRecord::Base
   include I18nEnums
   include Shippable

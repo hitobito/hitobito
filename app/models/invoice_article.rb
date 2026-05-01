@@ -24,7 +24,6 @@
 #
 #  index_invoice_articles_on_number_and_group_id  (number,group_id) UNIQUE
 #
-
 class InvoiceArticle < ActiveRecord::Base
   belongs_to :group
 

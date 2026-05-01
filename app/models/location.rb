@@ -16,7 +16,6 @@
 #
 #  index_locations_on_zip_code_and_canton_and_name  (zip_code,canton,name) UNIQUE
 #
-
 class Location < ActiveRecord::Base
   validates_by_schema
   validates :name, uniqueness: {scope: [:zip_code, :canton], case_sensitive: true}

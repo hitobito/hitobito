@@ -18,7 +18,6 @@
 #  priority_2_id        :integer
 #  priority_3_id        :integer
 #
-
 class Event::Application < ActiveRecord::Base
   self.demodulized_route_keys = true
 

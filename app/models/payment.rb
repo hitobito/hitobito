@@ -29,7 +29,7 @@ class Payment < ActiveRecord::Base
 
   belongs_to :invoice, optional: true
 
-  validates :transaction_identifier, uniqueness: {allow_nil: true, case_sensitive: false}
+  validate :no_duplicate_transaction_identifier
 
   has_one :payee, inverse_of: :payment, dependent: :destroy
   accepts_nested_attributes_for :payee
@@ -45,6 +45,7 @@ class Payment < ActiveRecord::Base
   validates :status, inclusion: {in: STATES, allow_nil: true}
 
   attr_writer :esr_number
+  attr_accessor :legacy_transaction_identifier
 
   validates_by_schema
 
@@ -96,5 +97,23 @@ class Payment < ActiveRecord::Base
 
   def set_received_at
     self.received_at ||= Time.zone.today
+  end
+
+  # Checks for duplicate payments using both the current and the legacy transaction identifier.
+  # Before PR #3998, transaction_identifier was computed from fields (amount, reference, etc.).
+  # PR #3998 switched to using the UETR (Unique End-to-End Transaction Reference) when available.
+  # Payments already stored with a legacy identifier must still be recognised as duplicates when
+  # the same transaction is re-imported from a newer CAMT file that includes a UETR.
+  # See also #3998, #4199
+  def no_duplicate_transaction_identifier
+    identifiers_to_check = [transaction_identifier, legacy_transaction_identifier]
+      .compact.map(&:downcase)
+
+    return if identifiers_to_check.empty?
+
+    if Payment.where("LOWER(transaction_identifier) IN (?)", identifiers_to_check)
+        .where.not(id: id).exists?
+      errors.add(:transaction_identifier, :taken)
+    end
   end
 end

@@ -98,6 +98,11 @@ class Invoice::PaymentProcessor
       received_at: received_at(net_entry, statement),
       invoice: invoice(statement),
       transaction_identifier: transaction_identifier(net_entry, statement),
+      # `legacy_transaction_identifier` is passed for backwards compatibility of duplicate
+      # detection: payments already stored with a legacy identifier must still be recognised
+      # as duplicates when the same transaction is re-imported from a newer CAMT file that
+      # includes a UETR. See also #3998, #4199
+      legacy_transaction_identifier: legacy_transaction_identifier(net_entry, statement),
       reference: esr_reference(statement),
       transaction_xml: statement.to_xml(root: :TxDtls, skip_instruct: true).squish,
       status: :xml_imported,

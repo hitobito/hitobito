@@ -45,13 +45,14 @@ runs:
 
     - name: "Determine common branch and set branch name for dependency repo"
       if: inputs.wagon_dependency_repository != ''
+      working-directory: .hitobito_core_repo
       env:
         GH_TOKEN: ${{ inputs.github_token }}
         INPUT_CORE_REF: ${{ inputs.core_ref }}
         WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
         INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
         INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
-        GITHUB_REF: ${{github.head_ref || github.ref_name}}
+        WAGON_HEAD_REF: ${{github.head_ref || github.ref_name}}
       run: |
         REPO_URL="https://github.com/hitobito/$WAGON_DEPENDENCY_REPO"
         REMOTE_BRANCHES=$(git ls-remote --heads "$REPO_URL" | awk -F'refs/heads/' '{print $2}')
@@ -60,17 +61,24 @@ runs:
           RESOLVED_REF="$INPUT_WDEP_REF"
         else
           PR_BRANCH=""
-          if [[ "$INPUT_CORE_REF" =~ ^refs/pull/([0-9]+)/ ]]; then
-            PR_NUMBER="${BASH_REMATCH[1]}"
-            PR_BRANCH=$(gh pr view "$PR_NUMBER" --repo hitobito/hitobito --json headRefName -q '.headRefName')
+          if [[ "$INPUT_CORE_REF" =~ refs/pull/([0-9]+)/ ]]; then
+            PR_BRANCH=$(gh pr view "${BASH_REMATCH[1]}" --repo hitobito/hitobito --json headRefName -q '.headRefName' 2>/dev/null || echo "")
           fi
 
-          for candidate in "$INPUT_CORE_REF" "$PR_BRANCH" "$INPUT_WAGON_REF" "$GITHUB_REF"; do
-            [ -z "$candidate" ] && continue
+          for candidate_name in "INPUT_CORE_REF" "PR_BRANCH" "INPUT_WAGON_REF" "WAGON_HEAD_REF"; do
+            candidate="${!candidate_name}"
+
+            if [ -z "$candidate" ]; then
+              echo "INFO: Skipping $candidate_name, candidate value is empty"
+              continue
+            fi
 
             if echo "$REMOTE_BRANCHES" | grep -xq "$candidate"; then
               RESOLVED_REF="$candidate"
+              echo "INFO: MATCH FOUND in $candidate_name: $RESOLVED_REF"
               break
+            else
+              echo "INFO: No match for $candidate_name ('$candidate')"
             fi
           done
         fi

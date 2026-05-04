@@ -6,38 +6,22 @@
 #  https://github.com/hitobito/hitobito.
 
 class People::Membership::VerifyController < ActionController::Base # rubocop:disable Rails/ApplicationController
-  helper_method :person, :root, :member?
-
   skip_authorization_check
 
   def show
-    return head :not_found unless feature_enabled?
+    person = Person.find_by(membership_verify_token: params[:verify_token])
+    pass_definition = legacy_pass_definition
 
-    render layout: false
+    pass = Pass.find_by(person:, pass_definition:) if person && pass_definition
+    verify_token = pass&.verify_token || "not-found"
+
+    redirect_to pass_verify_path(verify_token), status: :found
   end
 
   private
 
-  def person
-    @person ||= fetch_person
-  end
-
-  def fetch_person
-    token = params[:verify_token]
-    return nil if token.blank?
-
-    Person.find_by(membership_verify_token: params[:verify_token])
-  end
-
-  def root
-    Group.root.decorate
-  end
-
-  def member?
-    @member ||= People::Membership::Verifier.new(person).member?
-  end
-
-  def feature_enabled?
-    People::Membership::Verifier.enabled?
+  def legacy_pass_definition
+    key = Settings.passes&.legacy_verify_pass_definition_key
+    PassDefinition.find_by(template_key: key) if key.present?
   end
 end

@@ -11,6 +11,8 @@ class Pass < ActiveRecord::Base
   STATES = %w[eligible ended revoked].freeze
   i18n_enum :state, STATES, scopes: true, queries: true
 
+  has_secure_token :verify_token
+
   ### ASSOCIATIONS
 
   belongs_to :person

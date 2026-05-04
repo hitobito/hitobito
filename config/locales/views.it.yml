@@ -2459,6 +2459,15 @@ it:
     status_valid: Iscrizione valida
     status_invalid: Nessuna iscrizione valida
 
+  passes:
+    verifications:
+      title: Verifica del pass
+      status:
+        valid: Il pass è valido
+        expired: Il pass è scaduto
+        invalid: Il pass non è valido
+        invalid_message: Questo pass non può essere verificato.
+
   wizards:
     steps:
       new_user_form:

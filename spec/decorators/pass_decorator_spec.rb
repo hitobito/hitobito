@@ -188,10 +188,10 @@ describe PassDecorator do
   end
 
   describe "#qrcode_value" do
-    it "returns a verification URL string" do
-      definition.save!
+    it "returns a verification URL containing the pass verify_token" do
+      pass_record.save!
       expect(decorator.qrcode_value).to be_a(String)
-      expect(decorator.qrcode_value).to include(definition.id.to_s)
+      expect(decorator.qrcode_value).to include(pass_record.verify_token)
     end
   end
 

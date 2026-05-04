@@ -15,12 +15,12 @@ describe Export::EventParticipationsExportJob do
   let(:user) { participation.person }
   let(:other_user) { Fabricate(:person, first_name: "Other", last_name: "Member", household_key: 1) }
   let(:event) { participation.event }
-  let(:filename) { AsyncDownloadFile.create_name("event_participation_export", user.id) }
+  let(:filename) { UserJobResult.create_name("event_participation_export", user.id) }
 
   let(:params) { {filter: "all"} }
 
   let(:file) do
-    AsyncDownloadFile
+    UserJobResult
       .from_filename(filename, format)
   end
 

@@ -22,13 +22,13 @@ describe DownloadCleanerJob do
 
     expect do
       subject.perform_internal
-    end.to change(AsyncDownloadFile, :count).from(4).to(2)
+    end.to change(UserJobResult, :count).from(4).to(2)
   end
 
   private
 
   def download_file(filename, time)
-    file = AsyncDownloadFile.from_filename("#{filename}_#{time}-1234")
+    file = UserJobResult.from_filename("#{filename}_#{time}-1234")
     file.write("testfilecontent")
     file
   end

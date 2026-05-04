@@ -18,8 +18,8 @@ describe Export::PeopleExportJob do
   let(:group) { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
-  let(:filename) { AsyncDownloadFile.create_name("people_export", user.id) }
+  let(:file) { UserJobResult.from_filename(filename, format) }
+  let(:filename) { UserJobResult.create_name("people_export", user.id) }
 
   before do
     SeedFu.quiet = true

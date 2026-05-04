@@ -8,7 +8,7 @@ require "spec_helper"
 describe Export::EventsExportJob do
   subject { Export::EventsExportJob.new(format, user.id, group.id, filter, filename: filename) }
 
-  let(:filename) { AsyncDownloadFile.create_name("event_export", user.id) }
+  let(:filename) { UserJobResult.create_name("event_export", user.id) }
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
@@ -16,7 +16,7 @@ describe Export::EventsExportJob do
   let(:filter) do
     {range: "all", year: year}
   end
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
+  let(:file) { UserJobResult.from_filename(filename, format) }
 
   before do
     SeedFu.quiet = true

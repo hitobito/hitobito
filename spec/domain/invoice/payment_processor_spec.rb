@@ -172,6 +172,17 @@ describe Invoice::PaymentProcessor do
       .to eq(Time.zone.parse("2022-01-26T18:43:27+01:00").to_date)
   end
 
+  it "does not create duplicate payments when re-importing with UETR after legacy import" do
+    # First: process the payments from a file without the UETR attributes
+    Invoice::PaymentProcessor.new(read("camt.054_version_001.04")).process
+    expect(Payment.count).to eq(5)
+
+    expect do
+      # Then: re-import the same payments from a file including the UETR attributes
+      parser("camt.054_version_001.08").process
+    end.not_to change(Payment, :count)
+  end
+
   private
 
   def parser(file = "camt.054_version_001.08")

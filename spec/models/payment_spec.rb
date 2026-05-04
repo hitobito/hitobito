@@ -53,4 +53,35 @@ describe Payment do
     invoice.payments.create!(amount: invoice.total - 1, reference: 1)
     expect(invoice.payments.build(amount: 1, reference: 1)).to be_valid
   end
+
+  it "is invalid when transaction_identifier already exists" do
+    Payment.create!(amount: 10, transaction_identifier: "unique-uetr-123")
+    payment = Payment.new(amount: 10, transaction_identifier: "unique-uetr-123")
+    expect(payment).not_to be_valid
+    expect(payment.errors[:transaction_identifier]).to be_present
+  end
+
+  it "is invalid when legacy_transaction_identifier matches an existing transaction_identifier" do
+    Payment.create!(amount: 10, transaction_identifier: "legacy-txn-abc")
+    payment = Payment.new(amount: 10,
+      transaction_identifier: "new-uetr-xyz",
+      legacy_transaction_identifier: "legacy-txn-abc")
+    expect(payment).not_to be_valid
+    expect(payment.errors[:transaction_identifier]).to be_present
+  end
+
+  it "is valid when neither transaction_identifier nor legacy_transaction_identifier exist yet" do
+    Payment.create!(amount: 10, transaction_identifier: "some-other-txn")
+    payment = Payment.new(amount: 10,
+      transaction_identifier: "new-uetr-xyz",
+      legacy_transaction_identifier: "legacy-txn-abc")
+    expect(payment).to be_valid
+  end
+
+  it "is invalid when transaction_identifier matches case-insensitively" do
+    Payment.create!(amount: 10, transaction_identifier: "UNIQUE-UETR-123")
+    payment = Payment.new(amount: 10, transaction_identifier: "unique-uetr-123")
+    expect(payment).not_to be_valid
+    expect(payment.errors[:transaction_identifier]).to be_present
+  end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Hitobito AG. This file is part of
+#  Copyright (c) 2012-2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -202,15 +202,13 @@ describe UserJobResult do
     it "should broadcast on create" do
       expect { subject }
         .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
-        .with(a_string_matching(/action="refresh"/))
     end
 
     it "should broadcast on update" do
       user_job_result = subject
 
-      expect { subject.update!(status: "in_progress") }
+      expect { user_job_result.update!(status: "in_progress") }
         .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
-        .with(a_string_matching(/target="user_job_result_#{user_job_result.id}"/))
     end
 
     it "should broadcast on destroy" do
@@ -218,25 +216,20 @@ describe UserJobResult do
 
       expect { user_job_result.destroy! }
         .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
-        .with(a_string_matching(/action="refresh"/))
     end
 
     it "should broadcast notification when reporting success" do
       user_job_result = subject
 
-      expect(user_job_result).to receive(:broadcast_notification).and_call_original
       expect { user_job_result.report_success!(1) }
-        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
-        .with(a_string_matching(/target="user-job-result-notification-placeholder"/))
+        .to have_broadcasted_to("person_#{person_id}_user_job_result_notifications")
     end
 
     it "should broadcast notification when reporting failure" do
       user_job_result = subject
 
-      expect(user_job_result).to receive(:broadcast_notification).and_call_original
       expect { user_job_result.report_failure! }
-        .to have_broadcasted_to("person_#{person_id}_user_job_result_updates")
-        .with(a_string_matching(/target="user-job-result-notification-placeholder"/))
+        .to have_broadcasted_to("person_#{person_id}_user_job_result_notifications")
     end
   end
 

@@ -30,8 +30,8 @@ class UserJobResult < ApplicationRecord
   validates_by_schema
 
   after_initialize :set_default_values, if: :new_record?
-  after_update_commit -> { broadcast_replace_to(stream_name) }
-  after_commit -> { broadcast_refresh_to(stream_name) }, on: %i[create destroy]
+  after_update_commit -> { broadcast_replace_to(update_channel_name) }
+  after_commit -> { broadcast_refresh_to(update_channel_name) }, on: %i[create destroy]
 
   before_destroy do
     generated_file.purge if generated_file.attached?
@@ -138,22 +138,26 @@ class UserJobResult < ApplicationRecord
       filetype: "txt",
       attempts: 0,
       max_attempts: Delayed::Worker.max_attempts,
+      reports_progress: false,
       progress: 0
     }
 
     default_values.each do |k, v|
-      send(:"#{k}=", v) unless send(k)
+      send(:"#{k}=", v) if send(k).nil?
     end
-    self.reports_progress = false if reports_progress.nil?
   end
 
-  def stream_name
+  def update_channel_name
     "person_#{person_id}_user_job_result_updates"
+  end
+
+  def notification_channel_name
+    "person_#{person_id}_user_job_result_notifications"
   end
 
   def broadcast_notification
     broadcast_append_to(
-      stream_name,
+      notification_channel_name,
       partial: "user_job_results/user_job_result_notification",
       locals: {user_job_result: self},
       target: "user-job-result-notification-placeholder"

@@ -12,8 +12,7 @@ describe Invoice::Qrcode do
       payment_slip: :qr,
       total: 1500,
       iban: "CH93 0076 2011 6238 5295 7",
-      recipient_first_name: "Max",
-      recipient_last_name: "Mustermann",
+      recipient_name: "Max Mustermann",
       recipient_street: "Musterweg",
       recipient_housenumber: "2",
       recipient_zip_code: "8000",
@@ -143,8 +142,7 @@ describe Invoice::Qrcode do
           iban: "CH93 0076 2011 6238 5295 7",
           reference: "RF561A1",
           deprecated_recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
-          recipient_first_name: nil,
-          recipient_last_name: nil,
+          recipient_name: nil,
           recipient_street: nil,
           recipient_housenumber: nil,
           recipient_zip_code: nil,
@@ -244,7 +242,7 @@ describe Invoice::Qrcode do
       let(:invoice) do
         Invoice.new(
           deprecated_recipient_address: "Max Mustermann\nMusterweg 2\n8000 Alt Tylerland",
-          recipient_first_name: nil, recipient_last_name: nil
+          recipient_name: nil
         )
       end
 

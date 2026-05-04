@@ -406,8 +406,7 @@ describe InvoicesController do
                      title: "current_user",
                      recipient_type: "Person",
                      recipient_id: person.id,
-                     recipient_first_name: "Tim",
-                     recipient_last_name: "Testermann",
+                     recipient_name: "Tim Testermann",
                      recipient_street: "Alphastrasse", recipient_housenumber: "1", recipient_zip_code: "8000",
                      recipient_town: "Zürich"
                    }}

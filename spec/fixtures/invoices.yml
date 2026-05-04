@@ -54,8 +54,7 @@ invoice:
   group: bottom_layer_one
   recipient: top_leader (Person)
   recipient_email: top_leader@example.com
-  recipient_first_name: Top
-  recipient_last_name: Leader
+  recipient_name: "Top Leader"
   recipient_street: Greatstreet
   recipient_housenumber: 345
   recipient_zip_code: 3456
@@ -80,8 +79,7 @@ sent:
   group: bottom_layer_one
   recipient: top_leader (Person)
   recipient_email: top_leader@example.com
-  recipient_first_name: Top
-  recipient_last_name: Leader
+  recipient_name: "Top Leader"
   recipient_street: Greatstreet
   recipient_housenumber: 345
   recipient_zip_code: 3456
@@ -111,7 +109,7 @@ group_invoice:
   group: top_layer
   recipient: top_group (Group)
   recipient_email: top_group@example.com
-  recipient_last_name: Top Group Collective
+  recipient_name: Top Group Collective
   recipient_street: Topstreet
   recipient_housenumber: 42
   recipient_zip_code: 3456

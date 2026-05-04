@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
+(??)ActiveRecord::Schema[8.0].define(version: 2026_04_30_065720) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -991,7 +991,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.date "valid_until"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "verify_token", null: false
     t.index ["person_id", "pass_definition_id"], name: "idx_passes_unique", unique: true
+    t.index ["verify_token"], name: "index_passes_on_verify_token", unique: true
   end
 
   create_table "payees", force: :cascade do |t|

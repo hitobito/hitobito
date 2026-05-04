@@ -29,6 +29,25 @@ describe Pass do
     end
   end
 
+  context "verify_token" do
+    it "generates verify_token automatically on create" do
+      pass.save!
+      expect(pass.verify_token).to be_present
+    end
+
+    it "generates a unique verify_token for each pass" do
+      pass.save!
+      other = Pass.new(
+        person: Fabricate(:person),
+        pass_definition: definition,
+        state: :eligible,
+        valid_from: Time.zone.today
+      )
+      other.save!
+      expect(pass.verify_token).not_to eq(other.verify_token)
+    end
+  end
+
   context "validations" do
     it "validates person uniqueness per pass_definition" do
       pass.save!

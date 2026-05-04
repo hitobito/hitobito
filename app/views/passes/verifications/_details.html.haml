@@ -1,0 +1,30 @@
+-# Copyright (c) 2026, Puzzle ITC. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito
+
+.container.mt-4
+  .row.justify-content-center
+    .col-md-8.col-lg-6
+      -# State Banner
+      - case @state
+      - when :valid
+        .alert.alert-success.d-flex.align-items-center{role: 'alert'}
+          %span.fas.fa-check-circle.me-2{style: 'font-size: 1.5rem;'}
+          %div
+            %strong= t('passes.verifications.status.valid')
+      - when :expired
+        .alert.alert-warning.d-flex.align-items-center{role: 'alert'}
+          %span.fas.fa-exclamation-triangle.me-2{style: 'font-size: 1.5rem;'}
+          %div
+            %strong= t('passes.verifications.status.expired')
+      - when :invalid
+        .alert.alert-danger.d-flex.align-items-center{role: 'alert'}
+          %span.fas.fa-times-circle.me-2{style: 'font-size: 1.5rem;'}
+          %div
+            %strong= t('passes.verifications.status.invalid')
+            %p.mb-0.mt-1= t('passes.verifications.status.invalid_message')
+
+          -# Pass Card (only if person found)
+      - if @person && @pass
+        = render pass_template_partial(@template.pass_view_partial, 'verify')

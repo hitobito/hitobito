@@ -17,7 +17,7 @@ class People::Membership::VerificationQrCode
   end
 
   def verify_url
-    host = ENV.fetch("RAILS_HOST_NAME", "localhost:3000")
+    host = Settings.application.hostname
     Rails
       .application
       .routes

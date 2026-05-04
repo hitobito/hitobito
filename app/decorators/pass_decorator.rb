@@ -18,10 +18,7 @@ class PassDecorator < SimpleDelegator
   end
 
   def qrcode_value
-    # Passes::VerificationQrCode.new(person, definition).verify_url
-
-    # Placeholder value for QR code, since Passes::VerificationQrCode is not implemented yet.
-    "https://example.com/passes/#{definition.id}/verify/token"
+    Passes::VerificationQrCode.new(self).verify_url
   end
 
   # Resolve the closest group in the owner's ancestor chain that has a logo attached.

@@ -2444,6 +2444,15 @@ de:
     status_valid: Mitgliedschaft gültig
     status_invalid: Keine gültige Mitgliedschaft
 
+  passes:
+    verifications:
+      title: Pass-Verifizierung
+      status:
+        valid: Pass ist gültig
+        expired: Pass ist abgelaufen
+        invalid: Pass ist ungültig
+        invalid_message: Dieser Pass konnte nicht verifiziert werden.
+
   wizards:
     steps:
       new_user_form:

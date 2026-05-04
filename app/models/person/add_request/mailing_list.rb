@@ -6,6 +6,8 @@ class Person::AddRequest::MailingList < Person::AddRequest
   belongs_to :body, class_name: "::MailingList"
 
   def to_s(_format = :default)
+    return I18n.t("global.unknown") unless body
+
     group = body.group
     list_label = body_label
     group_label = "#{group.model_name.human} #{group}"

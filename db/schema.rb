@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_24_135223) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_30_065720) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1345,6 +1345,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_24_135223) do
     t.string "whodunnit_type", default: "Person", null: false
     t.string "mutation_id"
     t.string "item_subtype"
+    t.string "item_label"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
     t.index ["main_id", "main_type"], name: "index_versions_on_main_id_and_main_type"
     t.index ["mutation_id"], name: "index_versions_on_mutation_id"

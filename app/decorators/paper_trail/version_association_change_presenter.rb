@@ -7,7 +7,8 @@ module PaperTrail
   class VersionAssociationChangePresenter
     attr_reader :version, :h
 
-    delegate :event, :changeset, :item, :item_type, :item_id, :main_type, :main_id, to: :version
+    delegate :event, :changeset, :item_type, :item_id, :item_label, :main_type, :main_id,
+      to: :version
 
     def initialize(version, view_context)
       @version = version
@@ -17,9 +18,8 @@ module PaperTrail
     def render
       h.content_tag(:div) do
         changeset = (event == "update") ? changeset_list : nil
-        item = reifyed_item
 
-        text = association_change_text(changeset, item)
+        text = association_change_text(changeset)
 
         h.sanitize(text, tags: %w[i])
       end
@@ -37,19 +37,24 @@ module PaperTrail
       h.safe_join(rendered_changes, ", ")
     end
 
-    def association_change_text(changeset, item)
-      return changeset if item_type.include?("Translation") && main_type
+    def association_change_text(changeset)
+      return changeset if translation_change?
 
       if item_type == PeopleManager.sti_name
-        return association_change_text_with_people_manager(changeset,
-          item)
+        association_change_text_with_people_manager(changeset, reifyed_item)
+      else
+        translate_association_change(item_label || label_with_fallback(reifyed_item), changeset)
       end
+    end
 
-      I18n.t("version.association_change.#{item_class.name.underscore}.#{event}",
+    def translate_association_change(label, changeset)
+      I18n.t(
+        "version.association_change.#{item_class.name.underscore}.#{event}",
         default: :"version.association_change.#{event}",
         model: item_class.model_name.human,
-        label: item ? label_with_fallback(item) : "",
-        changeset: changeset)
+        label: label,
+        changeset: changeset
+      )
     end
 
     def association_change_text_with_people_manager(changeset, _item) # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
@@ -93,7 +98,7 @@ module PaperTrail
     end
 
     def reify_exisiting
-      item || build_new_instance
+      version.item || build_new_instance
     end
 
     def build_new_instance
@@ -107,14 +112,24 @@ module PaperTrail
 
     def item_class = @item_class ||= version.item_type.constantize
 
+    def translation_change? = item_type.include?("Translation") && main_type
+
     def label_with_fallback(item)
+      return I18n.t("global.unknown") unless item
+
       if item.respond_to?(:translation_class)
-        item_class.find_by(id: item_id).to_s(:long)
+        label_method(item_class.find_by(id: item_id))
       else
-        item.to_s(:long)
+        label_method(item)
       end
-    rescue
-      I18n.t("global.unknown")
+    end
+
+    def label_method(object)
+      if object.method(:to_s).arity != 0
+        object.to_s(:long)
+      else
+        object.to_s
+      end
     end
   end
 end

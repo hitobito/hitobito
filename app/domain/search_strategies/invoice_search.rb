@@ -5,16 +5,6 @@
 
 module SearchStrategies
   class InvoiceSearch < Base
-    def search_fulltext
-      return no_invoices unless term_present?
-
-      Invoice.search(@term).limit(@limit)
-    end
-
-    private
-
-    def no_invoices
-      Invoice.none.page(1)
-    end
+    self.model_class = Invoice
   end
 end

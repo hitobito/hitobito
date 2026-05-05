@@ -5,16 +5,7 @@
 
 module SearchStrategies
   class GroupSearch < Base
-    def search_fulltext
-      return no_groups unless term_present?
-
-      Group.search(@term).limit(@limit)
-    end
-
-    private
-
-    def no_groups
-      Group.none.page(1)
-    end
+    self.model_class = Group
+    self.readables_ability = GroupReadables
   end
 end

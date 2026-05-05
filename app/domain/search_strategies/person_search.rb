@@ -5,52 +5,66 @@
 
 module SearchStrategies
   class PersonSearch < Base
-    # rubocop:disable Metrics/MethodLength
-    def search_fulltext # rubocop:todo Metrics/AbcSize
-      return no_people unless term_present?
+    POSSIBLE_DATE_FORMATS = ["%d.%m.%Y", "%d.%m", "%d-%m-%Y", "%d-%m"].freeze
+    REGULAR_DATE_FORMAT = "%Y-%m-%d"
 
-      pg_rank_alias = extract_pg_ranking(Person.search(@term).to_sql)
+    self.model_class = Person
+    self.readables_ability = PersonReadables
 
-      search_results = if date_query?(@term)
-        Person.search(reformat_date(@term)).limit(@limit)
-      else
-        Person.search(@term).limit(@limit)
-      end
+    def initialize(user, term, page, limit: nil)
+      super
 
-      entries = search_results
-        .accessible_by(PersonReadables.new(@user))
-        .select(pg_rank_alias) # add fulltext search rank to select list of base query again
-
-      people_without_role = index_people_without_role?(search_results)
-      entries += people_without_role if people_without_role
-
-      entries += Group::DeletedPeople.deleted_for_multiple(
-        deleted_people_indexable_layers
-      ) & search_results
-
-      entries.uniq
+      @term = normalize_date_term(term)
     end
-    # rubocop:enable Metrics/MethodLength
 
     private
 
-    def index_people_without_role?(search_results)
-      if Ability.new(@user).can?(:index_people_without_role, Person)
-        search_results.where("NOT EXISTS (SELECT * FROM roles " \
-          "WHERE (roles.end_on IS NULL OR
-          roles.end_on >= :today) AND
-          roles.person_id = people.id)", today: Date.current.to_fs(:db))
+    def accessible_scope
+      scopes = [super, people_without_role, deleted_people].compact
+      if scopes.size == 1
+        scopes.first
+      else
+        arel_union = scopes
+          .map { |scope| scope.reselect("people.id").arel }
+          .reduce { |memo, node| Arel::Nodes::Union.new(memo, node) }
+        Person.where(Person.arel_table[:id].in(Arel::Nodes::Grouping.new(arel_union)))
       end
     end
 
-    def no_people
-      Person.none.page(1)
+    def people_without_role
+      return unless ability.can?(:index_people_without_role, Person)
+
+      Person.where(
+        <<-SQL,
+          NOT EXISTS (
+            SELECT * FROM roles
+            WHERE (roles.end_on IS NULL OR roles.end_on >= :today) AND
+                  roles.person_id = people.id
+          )
+        SQL
+        today: Date.current.to_fs(:db)
+      )
+    end
+
+    def deleted_people
+      layers = deleted_people_indexable_layers
+      return if layers.blank?
+
+      Group::DeletedPeople.deleted_for_multiple(layers)
     end
 
     def deleted_people_indexable_layers
       accessible_layers.select do |layer|
-        Ability.new(@user).can?(:index_deleted_people, layer)
+        ability.can?(:index_deleted_people, layer)
       end
+    end
+
+    def accessible_layers
+      @user.groups.flat_map(&:layer_hierarchy)
+    end
+
+    def ability
+      @ability ||= Ability.new(@user)
     end
 
     # extract first order by value to reselect in permission checked query
@@ -60,37 +74,37 @@ module SearchStrategies
       nil
     end
 
-    # rubocop:disable Metrics/MethodLength
-    def reformat_date(date_str)
-      possible_formats = ["%d.%m.%Y", "%d.%m", "%d-%m-%Y", "%d-%m"]
-      formatted_date = nil
+    def normalize_date_term(term = @term)
+      return term unless date_term?(term)
 
-      possible_formats.each do |format|
-        date = Date.strptime(date_str, format)
-        formatted_date = date.strftime("%Y-%m-%d")
-        break
-      rescue ArgumentError
-        next
-      end
-      # rubocop:enable Metrics/MethodLength
+      formatted_date = formatted_date_term(term)
 
       # when the date could not be formatted it is likely that the user entered an impossible date
       # like 43.15.3912
-      return "" if formatted_date.nil?
+      return term if formatted_date.nil?
 
-      if has_year?(date_str)
+      if term_has_year?(term)
         formatted_date
       else
         formatted_date.slice(4..-1)
       end
     end
 
-    def has_year?(date_string)
-      /\b\d{4}\b/.match?(date_string)
+    def formatted_date_term(term = @term)
+      POSSIBLE_DATE_FORMATS.each do |format|
+        date = Date.strptime(term, format)
+        return date.strftime(REGULAR_DATE_FORMAT)
+      rescue ArgumentError
+      end
+      nil
     end
 
-    def date_query?(date_query)
-      /\A\d{2}[.-]\d{2}([.-]\d{4})?\z/.match?(date_query)
+    def term_has_year?(term = @term)
+      /\b\d{4}\b/.match?(term)
+    end
+
+    def date_term?(term = @term)
+      /\A\d{2}[.-]\d{2}([.-]\d{4})?\z/.match?(term)
     end
   end
 end

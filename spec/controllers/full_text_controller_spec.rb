@@ -80,7 +80,7 @@ describe FullTextController, type: :controller do
         get :index
 
         expect(@response).to be_ok
-        expect(assigns(:people)).to eq([])
+        expect(assigns(:people)).to be_nil
       end
     end
 
@@ -108,6 +108,12 @@ describe FullTextController, type: :controller do
 
         expect(@response.body).to include(invoices(:invoice).title)
       end
+
+      it "returns empty json if no results" do
+        get :index, params: {q: "query with no results"}, format: :json
+
+        expect(@response.body).to eq([].to_json)
+      end
     end
   end
 
@@ -119,7 +125,7 @@ describe FullTextController, type: :controller do
     it "displays people tab" do
       person_search_instance = instance_double(SearchStrategies::PersonSearch)
       allow(SearchStrategies::PersonSearch).to receive(:new).and_return(person_search_instance)
-      allow(person_search_instance).to receive(:search_fulltext).and_return(Person.where(id: people(:bottom_member).id))
+      allow(person_search_instance).to receive(:search).and_return(Person.where(id: people(:bottom_member).id))
 
       get :index, params: {q: "query with people results"}
       expect(assigns(:active_tab)).to eq(:people)
@@ -128,7 +134,7 @@ describe FullTextController, type: :controller do
     it "displays groups tab" do
       group_search_instance = instance_double(SearchStrategies::GroupSearch)
       allow(SearchStrategies::GroupSearch).to receive(:new).and_return(group_search_instance)
-      allow(group_search_instance).to receive(:search_fulltext)
+      allow(group_search_instance).to receive(:search)
         .and_return(Group.where(id: groups(:bottom_layer_one).id))
 
       get :index, params: {q: "query with group results"}
@@ -138,7 +144,7 @@ describe FullTextController, type: :controller do
     it "displays events tab" do
       event_search_instance = instance_double(SearchStrategies::EventSearch)
       allow(SearchStrategies::EventSearch).to receive(:new).and_return(event_search_instance)
-      allow(event_search_instance).to receive(:search_fulltext).and_return(Event.where(id: events(:top_course).id))
+      allow(event_search_instance).to receive(:search).and_return(Event.where(id: events(:top_course).id))
 
       get :index, params: {q: "query with event results"}
       expect(assigns(:active_tab)).to eq(:events)
@@ -147,7 +153,7 @@ describe FullTextController, type: :controller do
     it "displays invoices tab" do
       invoice_search_instance = instance_double(SearchStrategies::InvoiceSearch)
       allow(SearchStrategies::InvoiceSearch).to receive(:new).and_return(invoice_search_instance)
-      allow(invoice_search_instance).to receive(:search_fulltext).and_return(Invoice.where(id: invoices(:invoice).id))
+      allow(invoice_search_instance).to receive(:search).and_return(Invoice.where(id: invoices(:invoice).id))
 
       get :index, params: {q: "query with invoice results"}
       expect(assigns(:active_tab)).to eq(:invoices)

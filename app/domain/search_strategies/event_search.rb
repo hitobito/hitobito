@@ -5,16 +5,15 @@
 
 module SearchStrategies
   class EventSearch < Base
-    def search_fulltext
-      return no_events unless term_present?
+    self.model_class = Event
+    self.readables_ability = EventReadables
 
-      Event.search(@term).includes(:groups, :dates).limit(@limit)
+    def search_fulltext
+      super.includes(:groups, :dates)
     end
 
-    private
-
-    def no_events
-      Event.none.page(1)
+    def search_identifiers
+      super.includes(:groups, :dates)
     end
   end
 end

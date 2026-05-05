@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe SearchStrategies::EventSearch do
+  let(:event) { events(:top_course) }
+
   before do
     @bl_leader = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one)).person
   end
@@ -15,9 +17,9 @@ describe SearchStrategies::EventSearch do
       let(:user) { @bl_leader }
 
       it "finds events" do
-        result = search_class(events(:top_course).to_s[0..5]).search_fulltext
+        result = search_class(event.to_s[0..5]).search_fulltext
 
-        expect(result).to include(events(:top_course))
+        expect(result).to include(event)
       end
 
       context "without any params" do
@@ -32,10 +34,10 @@ describe SearchStrategies::EventSearch do
     context "as unprivileged person" do
       let(:user) { Fabricate(:person) }
 
-      it "finds invoices" do
-        result = search_class(events(:top_course).to_s[0..5]).search_fulltext
+      it "find no events" do
+        result = search_class(event.to_s[0..5]).search_fulltext
 
-        expect(result).to include(events(:top_course))
+        expect(result).to be_blank
       end
     end
   end

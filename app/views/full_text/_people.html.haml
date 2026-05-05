@@ -1,4 +1,4 @@
-= crud_table do |t|
+= table(@people, class: 'table table-striped table-hover') do |t|
   - t.col('') do |p|
     .profil= image_tag(upload_url(p, :picture, variant: :thumb), size: '32x32')
   - t.col(Person.human_attribute_name(:name))    do |p|

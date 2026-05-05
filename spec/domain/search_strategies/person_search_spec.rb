@@ -51,43 +51,37 @@ describe SearchStrategies::PersonSearch do
       let(:user) { people(:top_leader) }
 
       it "finds accessible person" do
-        result = search_class(@bg_leader.last_name[0..5]).search_fulltext
+        result = search_class(@bg_leader.last_name[0..5]).search
 
         expect(result).to include(@bg_leader)
       end
 
       it "finds accessible person with two terms" do
-        result = search_class("#{@bg_leader.last_name[0..5]} #{@bg_leader.first_name[0..3]}").search_fulltext
+        result = search_class("#{@bg_leader.last_name[0..5]} #{@bg_leader.first_name[0..3]}").search
 
         expect(result).to include(@bg_leader)
       end
 
       it "does not find not accessible person" do
-        result = search_class(@bg_member.last_name[0..5]).search_fulltext
+        result = search_class(@bg_member.last_name[0..5]).search
 
         expect(result).not_to include(@bg_member)
       end
 
-      it "does not search for too short queries" do
-        result = search_class("e").search_fulltext
-
-        expect(result).to eq([])
-      end
-
       it "finds people without any roles" do
-        result = search_class(@no_role.last_name[0..5]).search_fulltext
+        result = search_class(@no_role.last_name[0..5]).search
 
         expect(result).to include(@no_role)
       end
 
       it "does not find people not accessible person with deleted role" do
-        result = search_class(@bg_member_with_deleted.last_name[0..5]).search_fulltext
+        result = search_class(@bg_member_with_deleted.last_name[0..5]).search
 
         expect(result).not_to include(@bg_member_with_deleted)
       end
 
       it "does not throw error when user enters invalid date" do
-        expect { search_class("43.45.2000").search_fulltext }.not_to raise_error
+        expect { search_class("43.45.2000").search }.not_to raise_error
       end
     end
 
@@ -95,25 +89,25 @@ describe SearchStrategies::PersonSearch do
       let(:user) { @bl_leader }
 
       it "finds accessible person" do
-        result = search_class(@bg_leader.last_name[0..5]).search_fulltext
+        result = search_class(@bg_leader.last_name[0..5]).search
 
         expect(result).to include(@bg_leader)
       end
 
       it "finds local accessible person" do
-        result = search_class(@bg_member.last_name[0..5]).search_fulltext
+        result = search_class(@bg_member.last_name[0..5]).search
 
         expect(result).to include(@bg_member)
       end
 
       it "does not find people without any roles" do
-        result = search_class(@no_role.last_name[0..5]).search_fulltext
+        result = search_class(@no_role.last_name[0..5]).search
 
         expect(result).not_to include(@no_role)
       end
 
       it "finds deleted people" do
-        result = search_class(@deleted_leader.last_name[0..5]).search_fulltext
+        result = search_class(@deleted_leader.last_name[0..5]).search
 
         expect(result).to include(@deleted_leader)
       end
@@ -123,7 +117,7 @@ describe SearchStrategies::PersonSearch do
       let(:user) { @bg_member }
 
       it "does not find deleted people" do
-        result = search_class(@deleted_leader.last_name[0..5]).search_fulltext
+        result = search_class(@deleted_leader.last_name[0..5]).search
 
         expect(result).to_not include(@deleted_leader)
       end
@@ -133,9 +127,41 @@ describe SearchStrategies::PersonSearch do
       let(:user) { people(:root) }
 
       it "finds every person" do
-        result = search_class(@bg_member.last_name[0..5]).search_fulltext
+        result = search_class(@bg_member.last_name[0..5]).search
 
         expect(result).to include(@bg_member)
+      end
+    end
+  end
+
+  describe "#search_identifiers" do
+    before do
+      expect(described_class).to receive(:searchable_identifiers).and_return({id: /\A\d+\z/})
+    end
+
+    context "as leader" do
+      let(:user) { people(:top_leader) }
+
+      it "finds person by identifier" do
+        result = search_class(@bg_leader.id.to_s).search
+
+        expect(result).to eq([@bg_leader])
+      end
+
+      it "finds local accessible person" do
+        result = search_class(@tg_member.last_name[0..5]).search
+
+        expect(result).to include(@tg_member)
+      end
+    end
+
+    context "as member" do
+      let(:user) { @bg_member }
+
+      it "does not find inaccessible person by identifier" do
+        result = search_class(@tg_member.id.to_s).search
+
+        expect(result).to eq([])
       end
     end
   end

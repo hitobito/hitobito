@@ -19,17 +19,12 @@ describe Wallets::AppleWallet::PassService do
     Fabricate(:pass, person: person, pass_definition: definition,
       state: :eligible, valid_from: Date.current)
   end
-  let(:installation) do
-    Fabricate(:wallets_pass_installation,
-      pass: pass,
-      wallet_type: :apple,
-      wallet_identifier: "#{person.id}-#{definition.id}")
-  end
+  let(:installation) { Fabricate(:wallets_pass_installation, pass: pass, wallet_type: :apple) }
 
   let(:client) { instance_double(Wallets::AppleWallet::PkpassGenerator) }
 
   subject(:service) do
-    described_class.new(pass, pass_installation: installation, client: client)
+    described_class.new(installation, client: client)
   end
 
   before do
@@ -48,13 +43,7 @@ describe Wallets::AppleWallet::PassService do
 
     it "passes pass_data hash and images to client" do
       payload = nil
-      images = nil
-      allow(client).to receive(:create_pass) { |p, i|
-        payload = p
-        images = i
-        "data"
-      }
-
+      allow(client).to receive(:create_pass) { |p| payload = p }
       service.generate_pass
 
       expect(payload).to be_a(Hash)
@@ -65,6 +54,8 @@ describe Wallets::AppleWallet::PassService do
   describe "#pass_data" do
     subject(:data) { service.pass_data }
 
+    after { described_class.id_prefix_addition = nil }
+
     it "contains formatVersion" do
       expect(data[:formatVersion]).to eq(1)
     end
@@ -74,7 +65,12 @@ describe Wallets::AppleWallet::PassService do
     end
 
     it "contains serialNumber from pass_installation.wallet_identifier" do
-      expect(data[:serialNumber]).to eq(installation.wallet_identifier)
+      expect(data[:serialNumber]).to eq("hitobito.#{installation.id}")
+    end
+
+    it "contains serialNumber contains custom prefix if set" do
+      described_class.id_prefix_addition = -> { :test }
+      expect(data[:serialNumber]).to eq("hitobito.test.#{installation.id}")
     end
 
     it "contains teamIdentifier from Config" do
@@ -98,7 +94,7 @@ describe Wallets::AppleWallet::PassService do
     end
 
     it "contains labelColor as white rgb" do
-      expect(data[:labelColor]).to eq("rgb(255, 255, 255)")
+      expect(data[:labelColor]).to eq("rgb(170, 170, 170)")
     end
 
     it "contains webServiceURL from Config" do
@@ -214,7 +210,7 @@ describe Wallets::AppleWallet::PassService do
 
     context "when voided is true" do
       subject(:service) do
-        described_class.new(pass, pass_installation: installation, client: client, voided: true)
+        described_class.new(installation, client: client, voided: true)
       end
 
       it "sets voided to true" do

@@ -707,7 +707,7 @@ fr:
     new:
       title_event: Créer un événement
       title_event/course: Créer un cours
-    preconditions: "qualifications requises"
+    preconditions: "Qualifications requises"
     tabs:
       participants: "Participants"
     export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"

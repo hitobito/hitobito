@@ -11,6 +11,12 @@ module SearchStrategies
     self.model_class = Person
     self.readables_ability = PersonReadables
 
+    def initialize(user, term, page, limit: nil)
+      super
+
+      @term = normalize_date_term(term)
+    end
+
     private
 
     def accessible_scope
@@ -68,41 +74,37 @@ module SearchStrategies
       nil
     end
 
-    def normalized_term
-      @normalized_term ||= normalized_date_term
-    end
+    def normalize_date_term(term = @term)
+      return term unless date_term?(term)
 
-    def normalized_date_term
-      return @term unless date_term?
-
-      formatted_date = formatted_date_term
+      formatted_date = formatted_date_term(term)
 
       # when the date could not be formatted it is likely that the user entered an impossible date
       # like 43.15.3912
-      return @term if formatted_date.nil?
+      return term if formatted_date.nil?
 
-      if term_has_year?
+      if term_has_year?(term)
         formatted_date
       else
         formatted_date.slice(4..-1)
       end
     end
 
-    def formatted_date_term
+    def formatted_date_term(term = @term)
       POSSIBLE_DATE_FORMATS.each do |format|
-        date = Date.strptime(@term, format)
+        date = Date.strptime(term, format)
         return date.strftime(REGULAR_DATE_FORMAT)
       rescue ArgumentError
       end
       nil
     end
 
-    def term_has_year?
-      /\b\d{4}\b/.match?(@term)
+    def term_has_year?(term = @term)
+      /\b\d{4}\b/.match?(term)
     end
 
-    def date_term?
-      /\A\d{2}[.-]\d{2}([.-]\d{4})?\z/.match?(@term)
+    def date_term?(term = @term)
+      /\A\d{2}[.-]\d{2}([.-]\d{4})?\z/.match?(term)
     end
   end
 end

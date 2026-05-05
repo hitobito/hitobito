@@ -14,6 +14,7 @@ class Imap::Mail
   attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
+  delegate :bounced?, :final_recipient, :diagnostic_code, to: :mail
 
   def self.build(net_imap_mail)
     entry = new
@@ -78,7 +79,7 @@ class Imap::Mail
   end
 
   def list_bounce?
-    bounce_return_path? &&
+    bounced? &&
       bounce_hitobito_message_uid.present?
   end
 
@@ -98,15 +99,6 @@ class Imap::Mail
 
   def envelope
     @net_imap_mail.attr["ENVELOPE"]
-  end
-
-  def bounce_return_path?
-    return_path.eql?("") ||
-      return_path.include?("MAILER-DAEMON")
-  end
-
-  def return_path
-    mail.header["Return-Path"].value
   end
 
   # https://www.iana.org/assignments/auto-submitted-keywords/auto-submitted-keywords.xhtml

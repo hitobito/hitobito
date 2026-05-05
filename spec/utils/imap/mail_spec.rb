@@ -17,27 +17,27 @@ describe Imap::Mail do
       allow(bounce_imap_mail).to receive(:mail).and_return(bounce_mail)
     end
 
-    it "is bounce mail if hitobito message uid and mailer deamon in return-path" do
-      expect(bounce_imap_mail.list_bounce?).to eq(true)
+    it "has assumptions" do
+      expect(bounce_imap_mail).to be_bounced
     end
 
-    it "is bounce mail if hitobito message uid and return-path blank" do
-      bounce_mail.header["Return-Path"] = "<>"
+    it "is a list-bounce if it is bounced and a hitobito message uid is present" do
+      expect(bounce_imap_mail).to be_bounced
+      expect(bounce_imap_mail.bounce_hitobito_message_uid).to be_present
 
-      expect(bounce_imap_mail.list_bounce?).to eq(true)
+      expect(bounce_imap_mail).to be_list_bounce
     end
 
-    it "is not bounce mail if return path not mailer daemon" do
-      bounce_mail.header["Return-Path"] = "<sender@example.com>"
-
-      expect(bounce_imap_mail.list_bounce?).to eq(false)
-    end
-
-    it "is not bounce mail if no hitobito message uid" do
+    it "is a list-bounce without hitobito message uid" do
       body = bounce_mail.body.raw_source.gsub("X-Hitobito-Message-UID: a15816bbd204ba20", "")
       expect(bounce_mail.body).to receive(:raw_source).and_return(body)
 
-      expect(bounce_imap_mail.list_bounce?).to eq(false)
+      expect(bounce_imap_mail).to be_bounced
+      expect(bounce_imap_mail).not_to be_list_bounce
+    end
+
+    it "knows the diagnostic code of the bounce" do
+      expect(bounce_imap_mail.diagnostic_code).to match(/unknown user/)
     end
   end
 

@@ -15,7 +15,8 @@ class Events::Filter::Chain < Filter::Chain
     Events::Filter::CourseKindCategory,
     Events::Filter::FullText,
     Events::Filter::Leader,
-    Events::Filter::Attributes
+    Events::Filter::Attributes,
+    Events::Filter::Type
   ]
 
   attr_reader :event_type

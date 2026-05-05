@@ -8,6 +8,8 @@
 module Wallets
   module GoogleWallet
     class PassService
+      class_attribute :id_prefix_addition
+
       def initialize(pass_installation, client: Client.new)
         @pass_installation = pass_installation
         @client = client
@@ -47,7 +49,7 @@ module Wallets
       # Currently always :generic. Event ticket support planned for future phase.
       def pass_type = :generic
 
-      def id_prefix = [Config.issuer_id, "hitobito"].join(".")
+      def id_prefix = [Config.issuer_id, "hitobito", id_prefix_addition&.call].compact.join(".")
 
       # Identifies the pass template shared by all holders of the same PassDefinition.
       def class_id

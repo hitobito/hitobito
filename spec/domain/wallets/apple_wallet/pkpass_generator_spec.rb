@@ -97,12 +97,7 @@ describe Wallets::AppleWallet::PkpassGenerator do
     end
 
     it "returns a valid ZIP file" do
-      entries = []
-      Zip::InputStream.open(StringIO.new(pkpass_data)) do |zip|
-        while (entry = zip.get_next_entry)
-          entries << entry.name
-        end
-      end
+      entries = zip_entries(pkpass_data)
       expect(entries).to include("pass.json", "manifest.json", "signature")
     end
 

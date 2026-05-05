@@ -1,9 +1,13 @@
 # Hitobito Changelog
 
-## Version 2.8
+## Version 2.9
 
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
 - Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
+- API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito/hitobito_sac_cas#2314)
+- Qualifkationen wurden in das JSON:API integriert (hitobito_bdp#12)
+- Rechnungen können neu auch als Excel (XLSX) exportiert werden (hitobito_sww#288)
+- Vor- und Nachname des Rechnungsempfängers werden neu strukturiert in separaten Feldern gespeichert (#4164)
 - Event-Teilnahmen wurden in das JSON:API integriert (#3789)
 - Labels von Kontaktinformationen (Telefonnummern etc.) können auf die vordefinierten Werde eingeschränkt werden. In den Personenexporten werden pro vordefiniertem Label eine Spalte ausgegeben (#1800)
 - Es können jetzt, falls aktiviert, Sammelrechnungen erfasst werden. Diese können verwendet werden, um wiederholbare Rechnungsläufe an Gruppen zu versenden, mit berechneten Beträgen basierend auf der Anzahl Rollen, die während einer spezifischen Rechnungseriode in der jeweiligen Empfängergruppe aktiv waren. (#3610)
@@ -35,7 +39,7 @@
 - In der Suche können Suchbegriffe neu "mit Anführungszeichen gruppiert" werden, einzelne Suchbegriffe können mit einem vorangestellten Minus -ausgeschlossen werden und mit OR können verschiedene Optionen gleichzeitig gesucht werden. (#3879)
 - Auf allen Gruppen kann neu eine Korrespondenzsprache gewählt werden. Diese wird verwendet, wenn Rechnungen an die Gruppe gestellt werden. (#3879)
 
-## Version 2.7
+## Version 2.8
 
 - Die Banken Urner Kantonalbank und Banque Cantonale Neuchâteloise wurden als Ebics Zahlungsschnittstellen hinzugefügt (#3782)
 - Die Option "Automatische Zuteilung" war auf einfachen Anlässen wirkungslos und wurde dort entfernt (#2706)
@@ -53,6 +57,9 @@
 - Mehrsprachige Felder sind nun in den Formularen als solche erkennbar und können in allen verfügbaren Sprachen einer Umgebung erfasst werden (#3560)
 - Es können jetzt Hilfetexte für Radio Buttons, Dropdowns, Personenfelder und weitere Arten von Feldern angezeigt werden (#967)
 - Neue Berechtigung `layer_and_below_finance` für die Rechnungsverwaltung auf mehreren Ebenen (hitobito_sww#311)
+
+## Version 2.7
+
 - Die Optionen für den E-Mail Adressen Export erscheinen nun wie die übrigen Formate in einem Untermenu (#3693)
 - CSV Import unterstützt Rollen Start und Enddatum (#3730)
 - Man kann bei Anlässen neu Begleitpersonen ("Gäste") anmelden, auch wenn sie kein Hitobito-Konto haben (hitobito_sww#208)

@@ -6,6 +6,8 @@
 # Lograge configuration
 # Lograge is enabled in the respective environment configs
 
+require 'lograge/sql/extension'
+
 module LogrageHelper
   def self.stringify_structure(object)
     object
@@ -81,8 +83,6 @@ end
 config.after_initialize do
   # remove other loggers
   if Rails.application.config.lograge.enabled
-    require 'lograge/sql/extension'
-
     # flush stdout after each log statement for immediate downstream processing
     if ENV['RAILS_LOG_TO_STDOUT'].present?
       logger = Rails.logger

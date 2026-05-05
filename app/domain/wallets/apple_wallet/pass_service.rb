@@ -10,6 +10,12 @@ module Wallets
     class PassService
       attr_reader :pass
 
+      # In a multi-tenant environment (multiple instances sharing the same
+      # issuer_id), the wagon sets id_prefix_addition to a code block returning
+      # a tenant-specific identifier so at runtime we ensure global uniqueness of
+      # class and object IDs.
+      class_attribute :id_prefix_addition
+
       def initialize(pass_installation, client: PkpassGenerator.new, voided: false)
         @pass = pass_installation.pass.decorate
         @pass_installation = pass_installation
@@ -39,9 +45,9 @@ module Wallets
           teamIdentifier: Config.team_identifier,
           organizationName: pass.definition.name,
           description: pass.definition.name,
-          foregroundColor: "rgb(255, 255, 255)",
+          foregroundColor: hex_to_rgb(pass.text_colors[:text]),
           backgroundColor: hex_to_rgb(pass.definition.background_color),
-          labelColor: "rgb(255, 255, 255)",
+          labelColor: hex_to_rgb(pass.text_colors[:label]),
           webServiceURL: Config.web_service_url,
           authenticationToken: @pass_installation&.authentication_token,
           barcode: barcode,
@@ -102,7 +108,7 @@ module Wallets
       # In a multi-tenant environment (multiple instances sharing the same
       # pass_type_identifier), the wagon must override this method to include a
       # tenant-specific identifier to ensure global uniqueness of serial numbers.
-      def id_prefix = "hitobito"
+      def id_prefix = ["hitobito", id_prefix_addition&.call].compact.join(".")
 
       def serial_number
         [id_prefix, @pass_installation.id].join(".")

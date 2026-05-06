@@ -22,14 +22,18 @@
 #  status           :string           not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  delayed_job_id   :bigint
 #  person_id        :bigint           not null
 #
 # Indexes
 #
-#  index_user_job_results_on_person_id  (person_id)
+#  index_user_job_results_on_delayed_job_id  (delayed_job_id)
+#  index_user_job_results_on_person_id       (person_id)
 #
 class UserJobResult < ApplicationRecord
   include I18nEnums
+
+  belongs_to :delayed_job, class_name: "Delayed::Backend::ActiveRecord::Job", optional: true
 
   scope :unfinished, -> { where(status: UNFINISHED_STATUSES) }
 

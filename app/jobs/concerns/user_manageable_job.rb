@@ -34,7 +34,10 @@ module UserManageableJob
       )
       @user_job_result_id = user_job_result.id
 
-      super
+      delayed_job = super
+      user_job_result.update!(delayed_job: delayed_job)
+
+      delayed_job
     end
   end
 

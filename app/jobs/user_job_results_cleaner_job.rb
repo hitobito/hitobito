@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class DownloadCleanerJob < RecurringJob
+class UserJobResultsCleanerJob < RecurringJob
   run_every 1.day
 
   def perform_internal
@@ -19,6 +19,6 @@ class DownloadCleanerJob < RecurringJob
   end
 
   def older_than_a_day
-    UserJobResult.arel_table[:start_timestamp].lt(1.day.ago)
+    UserJobResult.arel_table[:end_timestamp].lt(1.day.ago)
   end
 end

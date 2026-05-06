@@ -7,10 +7,16 @@ module Wallets
   # Synchronizes a PassInstallation's validity state with the current Pass data.
   # Called after finding/creating a PassInstallation before dispatching to a wallet provider.
   class PassSynchronizer
-    attr_reader :pass_installation
+    attr_reader :installation
+
+    PASS_INSTALLATION_STATE_MAP = {
+      eligible: :active,
+      ended: :expired,
+      revoked: :revoked
+    }.freeze
 
     def initialize(pass_installation)
-      @pass_installation = pass_installation
+      @installation = pass_installation
     end
 
     # Sync all outdated pass installations with proper association preloading
@@ -26,45 +32,32 @@ module Wallets
 
     # Full sync: recompute validity, push to provider, update state.
     def sync!
-      assign_validity.save!
+      installation.update!(state: installation_state)
+      send(:"sync_#{installation.wallet_type}!")
 
-      case pass_installation.wallet_type
-      when "google" then sync_google!
-      when "apple" then sync_apple!
-      else raise "Unexpected wallet_type: #{pass_installation.wallet_type.inspect}"
-      end
-
-      pass_installation.update!(last_synced_at: Time.current, sync_error: nil, needs_sync: false)
+      installation.update!(last_synced_at: Time.current, sync_error: nil, needs_sync: false)
     rescue => e
-      pass_installation.update!(sync_error: e.message)
+      installation.update!(sync_error: e.message)
       raise
     end
 
     # Mark for asynchronous processing by WalletSyncJob.
     def mark_for_sync!
-      pass_installation.update!(needs_sync: true)
+      installation.update!(needs_sync: true)
     end
 
-    # Updates the installation's state based on the associated Pass.
-    def assign_validity
-      pass_state = pass_installation.pass.state
-
-      new_state = case pass_state
-      when "eligible" then :active
-      when "ended" then :expired
-      when "revoked" then :revoked
-      else raise "Unexpected pass state: #{pass_state.inspect}"
+    def installation_state
+      pass_state = installation.pass.state.to_sym
+      installation.state = PASS_INSTALLATION_STATE_MAP.fetch(pass_state) do |key|
+        raise "Unexpected pass state #{pass_state}"
       end
-
-      pass_installation.state = new_state
-      pass_installation
     end
 
     private
 
     def sync_google!
-      service = Wallets::GoogleWallet::PassService.new(pass_installation)
-      if pass_installation.revoked?
+      service = Wallets::GoogleWallet::PassService.new(installation)
+      if installation.revoked?
         service.revoke
       else
         service.create_or_update
@@ -72,7 +65,7 @@ module Wallets
     end
 
     def sync_apple!
-      AppleWallet::PushService.new(pass_installation).send_update_notification
+      AppleWallet::PushService.new(installation).send_update_notification
     end
   end
 end

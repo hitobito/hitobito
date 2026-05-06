@@ -16,10 +16,14 @@ describe People::Membership::VerifyController do
   end
 
   describe "GET #show" do
-    context "with a configured legacy_verify_pass_definition_key" do
+    before do
+      allow(People::Membership::Verifier).to receive(:enabled?).and_return(true)
+    end
+
+    context "with a configured legacy_verify_pass_definition_name" do
       before do
-        allow(Settings.passes).to receive(:legacy_verify_pass_definition_key)
-          .and_return(definition.template_key)
+        allow(Settings.passes).to receive(:legacy_verify_pass_definition_name)
+          .and_return(definition.name)
       end
 
       it "redirects with 302 to the new pass verify path" do
@@ -44,9 +48,9 @@ describe People::Membership::VerifyController do
       end
     end
 
-    context "without a configured legacy_verify_pass_definition_key" do
+    context "without a configured legacy_verify_pass_definition_name" do
       before do
-        allow(Settings.passes).to receive(:legacy_verify_pass_definition_key).and_return(nil)
+        allow(Settings.passes).to receive(:legacy_verify_pass_definition_name).and_return(nil)
       end
 
       it "redirects to not-found" do
@@ -56,9 +60,9 @@ describe People::Membership::VerifyController do
       end
     end
 
-    context "with a legacy_verify_pass_definition_key that matches no PassDefinition" do
+    context "with a legacy_verify_pass_definition_name that matches no PassDefinition" do
       before do
-        allow(Settings.passes).to receive(:legacy_verify_pass_definition_key)
+        allow(Settings.passes).to receive(:legacy_verify_pass_definition_name)
           .and_return("nonexistent_key")
       end
 
@@ -66,6 +70,15 @@ describe People::Membership::VerifyController do
         get :show, params: {verify_token: person.membership_verify_token}
 
         expect(response).to redirect_to(pass_verify_path("not-found"))
+      end
+    end
+
+    context "not enabled" do
+      it "returns 404 if feature not enabled" do
+        allow(People::Membership::Verifier).to receive(:enabled?).and_return(false)
+        get :show, params: {verify_token: person.membership_verify_token}
+
+        expect(response.status).to eq 404
       end
     end
   end

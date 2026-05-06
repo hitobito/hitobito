@@ -2455,7 +2455,7 @@ de:
         valid: Pass ist gültig
         expired: Pass ist abgelaufen
         invalid: Pass ist ungültig
-        invalid_message: Dieser Pass konnte nicht verifiziert werden.
+      failed: Dieser Pass konnte nicht verifiziert werden.
 
   wizards:
     steps:

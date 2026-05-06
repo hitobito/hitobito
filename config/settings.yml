@@ -28,7 +28,6 @@ application:
   languages:
     # first entry is considered the default language
     de: Deutsch
-  hostname: <%= ENV['RAILS_HOST_NAME'].presence || 'localhost:3000' %>
 
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
                  ENV['RAILS_HOST_NAME'].presence ||
@@ -36,6 +35,7 @@ application:
    hostname    = ENV['RAILS_HOST_NAME'].presence || 'localhost:3000'
    protocol    = %w(true yes 1).include?(ENV['RAILS_HOST_SSL']) ? 'https' : 'http'
 %>
+  hostname: hostname
 currency:
   unit: CHF
 
@@ -306,4 +306,4 @@ wallets:
   sync_interval: <%= ENV['HITOBITO_WALLETS_SYNC_SECONDS'].presence || 3.minutes %>
 
 passes:
-  legacy_verify_pass_definition_key:  # set by wagon, e.g. "membership_card"
+  legacy_verify_pass_definition_name:  # set by wagon, e.g. "membership_card"

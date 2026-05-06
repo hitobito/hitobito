@@ -9,6 +9,8 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
   skip_authorization_check
 
   def show
+    return head :not_found unless feature_enabled?
+
     person = Person.find_by(membership_verify_token: params[:verify_token])
     pass_definition = legacy_pass_definition
 
@@ -21,7 +23,11 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
   private
 
   def legacy_pass_definition
-    key = Settings.passes&.legacy_verify_pass_definition_key
-    PassDefinition.find_by(template_key: key) if key.present?
+    name = Settings.passes&.legacy_verify_pass_definition_name
+    PassDefinition.find_by(name:) if name.present?
+  end
+
+  def feature_enabled?
+    People::Membership::Verifier.enabled?
   end
 end

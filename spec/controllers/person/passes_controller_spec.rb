@@ -92,12 +92,9 @@ describe Person::PassesController do
       before do
         allow(Wallets::GoogleWallet::PassService).to receive(:new).and_return(google_service)
         allow(Wallets::PassSynchronizer).to receive(:new).and_return(synchronizer)
-        allow(synchronizer).to receive(:assign_validity)
       end
 
       it "creates pass installation and redirects to Google Wallet" do
-        expect(synchronizer).to receive(:assign_validity)
-
         expect {
           get :google_wallet, params: {group_id: group.id, person_id: person.id, id: pass.id}
         }.to change(Wallets::PassInstallation, :count).by(1)
@@ -155,12 +152,10 @@ describe Person::PassesController do
         stub_const("Wallets::AppleWallet::PassService", Class.new)
         allow(Wallets::AppleWallet::PassService).to receive(:new).and_return(apple_service)
         allow(Wallets::PassSynchronizer).to receive(:new).and_return(synchronizer)
-        allow(synchronizer).to receive(:assign_validity)
+        allow(synchronizer).to receive(:sync!)
       end
 
       it "creates pass installation and sends pkpass file" do
-        expect(synchronizer).to receive(:assign_validity)
-
         expect {
           get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}, format: :pkpass
         }.to change(Wallets::PassInstallation, :count).by(1)

@@ -47,8 +47,9 @@ describe WalletSynchronizationJob do
       wallet_type: :apple,
       needs_sync: true)
 
+    allow(Rails.logger).to receive(:error).and_call_original
+
     # Make the first installation fail by making its pass invalid
-    allow_any_instance_of(Wallets::PassSynchronizer).to receive(:sync!).and_call_original
     call_count = 0
     allow_any_instance_of(Wallets::PassSynchronizer).to receive(:sync!).and_wrap_original do |method, *args|
       call_count += 1
@@ -63,6 +64,7 @@ describe WalletSynchronizationJob do
 
     # Second installation should still have been processed
     expect(call_count).to eq(2)
+    expect(Rails.logger).to have_received(:error).with(/PassSynchronizer: Failed to sync PassInstallation/)
   end
 
   it "is a RecurringJob" do

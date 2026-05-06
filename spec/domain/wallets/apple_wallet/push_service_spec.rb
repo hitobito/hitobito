@@ -18,10 +18,7 @@ describe Wallets::AppleWallet::PushService do
       state: :eligible, valid_from: Date.current)
   end
   let(:installation) do
-    Fabricate(:wallets_pass_installation,
-      pass: pass,
-      wallet_type: :apple,
-      wallet_identifier: "test-serial")
+    Fabricate(:wallets_pass_installation, pass: pass, wallet_type: :apple)
   end
 
   subject(:push_service) { described_class.new(installation) }

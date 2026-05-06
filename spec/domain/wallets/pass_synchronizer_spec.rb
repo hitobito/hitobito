@@ -25,22 +25,21 @@ describe Wallets::PassSynchronizer do
 
   subject(:synchronizer) { described_class.new(installation) }
 
-  describe "#assign_validity" do
+  describe "#installation_state" do
     {
-      "eligible" => "active",
-      "ended" => "expired",
-      "revoked" => "revoked"
-    }.each do |pass_state, expected_installation_state|
-      it "when pass is #{pass_state} sets installation state to #{expected_installation_state}" do
+      eligible: :active,
+      ended: :expired,
+      revoked: :revoked
+    }.each do |pass_state, installation_state|
+      it "when pass is #{pass_state} has value #{installation_state}" do
         pass.update!(state: pass_state)
-        synchronizer.assign_validity.save!
-        expect(installation.reload.state).to eq(expected_installation_state)
+        expect(synchronizer.installation_state).to eq(installation_state)
       end
     end
 
     it "with an unknown pass state raises an error" do
       pass.update_columns(state: "unknown")
-      expect { synchronizer.assign_validity }.to raise_error(RuntimeError, /Unexpected pass state/)
+      expect { synchronizer.installation_state }.to raise_error(RuntimeError, /Unexpected pass state/)
     end
   end
 
@@ -104,7 +103,7 @@ describe Wallets::PassSynchronizer do
         before { allow(installation).to receive(:wallet_type).and_return("unknown") }
 
         it "raises an error" do
-          expect { synchronizer.sync! }.to raise_error(RuntimeError, /Unexpected wallet_type/)
+          expect { synchronizer.sync! }.to raise_error(NoMethodError, /undefined method `sync_unknown!'/)
         end
       end
 

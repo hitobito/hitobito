@@ -19,14 +19,17 @@ describe Wallets::AppleWallet::WebServiceController do
       state: :eligible, valid_from: Date.current)
   end
   let(:installation) do
-    Fabricate(:wallets_pass_installation,
-      pass: pass,
-      wallet_type: :apple,
-      wallet_identifier: "test-serial-123")
+    Fabricate(:wallets_pass_installation, pass: pass, wallet_type: :apple)
   end
   let(:auth_token) { installation.authentication_token }
   let(:pass_type_id) { "pass.com.example.test" }
   let(:device_id) { "device-abc-123" }
+  let(:serial) { Wallets::AppleWallet::PassService.new(installation).serial_number }
+
+  before do
+    # NOTE: mock as wallet_identifier is calculated from pass installation via PassService
+    allow(Wallets::AppleWallet::PkpassGenerator).to receive(:new)
+  end
 
   describe "POST #register_device" do
     let(:push_token) { SecureRandom.hex(32) }
@@ -36,7 +39,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
       expect {
         post :register_device,
-          params: {device_id: device_id, pass_type_id: pass_type_id, serial: installation.wallet_identifier},
+          params: {device_id: device_id, pass_type_id: pass_type_id, serial: serial},
           body: {pushToken: push_token}.to_json,
           as: :json
       }.to change(Wallets::AppleWallet::DeviceRegistration, :count).by(1)
@@ -52,7 +55,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
       request.headers["Authorization"] = "ApplePass #{auth_token}"
       post :register_device,
-        params: {device_id: device_id, pass_type_id: pass_type_id, serial: installation.wallet_identifier},
+        params: {device_id: device_id, pass_type_id: pass_type_id, serial: serial},
         body: {pushToken: push_token}.to_json,
         as: :json
 
@@ -67,7 +70,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
       request.headers["Authorization"] = "ApplePass #{auth_token}"
       post :register_device,
-        params: {device_id: device_id, pass_type_id: pass_type_id, serial: installation.wallet_identifier},
+        params: {device_id: device_id, pass_type_id: pass_type_id, serial: serial},
         body: {pushToken: push_token}.to_json,
         as: :json
 
@@ -76,7 +79,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
     it "returns 401 without authorization header" do
       post :register_device,
-        params: {device_id: device_id, pass_type_id: pass_type_id, serial: installation.wallet_identifier},
+        params: {device_id: device_id, pass_type_id: pass_type_id, serial: serial},
         body: {pushToken: push_token}.to_json,
         as: :json
 
@@ -86,7 +89,7 @@ describe Wallets::AppleWallet::WebServiceController do
     it "returns 401 with invalid token" do
       request.headers["Authorization"] = "ApplePass invalid-token"
       post :register_device,
-        params: {device_id: device_id, pass_type_id: pass_type_id, serial: installation.wallet_identifier},
+        params: {device_id: device_id, pass_type_id: pass_type_id, serial: serial},
         body: {pushToken: push_token}.to_json,
         as: :json
 
@@ -104,7 +107,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
       expect {
         delete :unregister_device,
-          params: {device_id: device_id, pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+          params: {device_id: device_id, pass_type_id: pass_type_id, serial: serial}
       }.to change(Wallets::AppleWallet::DeviceRegistration, :count).by(-1)
 
       expect(response).to have_http_status(:ok)
@@ -113,14 +116,14 @@ describe Wallets::AppleWallet::WebServiceController do
     it "returns 200 even when registration does not exist" do
       request.headers["Authorization"] = "ApplePass #{auth_token}"
       delete :unregister_device,
-        params: {device_id: device_id, pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {device_id: device_id, pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:ok)
     end
 
     it "returns 401 without authorization" do
       delete :unregister_device,
-        params: {device_id: device_id, pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {device_id: device_id, pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:unauthorized)
     end
@@ -198,7 +201,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
       request.headers["Authorization"] = "ApplePass #{auth_token}"
       get :send_updated_pass,
-        params: {pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to eq("application/vnd.apple.pkpass")
@@ -219,7 +222,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
       request.headers["Authorization"] = "ApplePass #{auth_token}"
       get :send_updated_pass,
-        params: {pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:ok)
       expect(received_pass_data[:voided]).to eq(true)
@@ -237,7 +240,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
       request.headers["Authorization"] = "ApplePass #{auth_token}"
       get :send_updated_pass,
-        params: {pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:ok)
       expect(received_pass_data[:voided]).to eq(false)
@@ -245,7 +248,7 @@ describe Wallets::AppleWallet::WebServiceController do
 
     it "returns 401 without authorization" do
       get :send_updated_pass,
-        params: {pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:unauthorized)
     end
@@ -290,7 +293,7 @@ describe Wallets::AppleWallet::WebServiceController do
   describe "authentication" do
     it "rejects requests without Authorization header" do
       get :send_updated_pass,
-        params: {pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:unauthorized)
     end
@@ -298,7 +301,7 @@ describe Wallets::AppleWallet::WebServiceController do
     it "rejects requests with wrong Authorization scheme" do
       request.headers["Authorization"] = "Bearer #{auth_token}"
       get :send_updated_pass,
-        params: {pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:unauthorized)
     end
@@ -314,7 +317,7 @@ describe Wallets::AppleWallet::WebServiceController do
     it "rejects requests with mismatched token" do
       request.headers["Authorization"] = "ApplePass wrong-token"
       get :send_updated_pass,
-        params: {pass_type_id: pass_type_id, serial: installation.wallet_identifier}
+        params: {pass_type_id: pass_type_id, serial: serial}
 
       expect(response).to have_http_status(:unauthorized)
     end

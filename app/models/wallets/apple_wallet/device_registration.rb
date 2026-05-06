@@ -8,7 +8,7 @@
 class Wallets::AppleWallet::DeviceRegistration < ActiveRecord::Base
   # push_token: APNs token for sending push notifications to this device when the pass updates.
   # device_library_identifier: Unique identifier for the Apple device (provided by Apple PassKit).
-  attr_readonly :device_library_identifier, :push_token
+  attr_readonly :device_library_identifier
 
   ### ASSOCIATIONS
 

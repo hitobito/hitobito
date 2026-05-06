@@ -42,6 +42,10 @@ class Wallets::PassInstallation < ActiveRecord::Base
   # It is cleared by the sync job after a successful push.
   scope :needs_sync, -> { where(needs_sync: true) }
 
+  def wallet_identifier
+    Wallets::AppleWallet::PassService.new(self).serial_number if apple?
+  end
+
   private
 
   def set_needs_sync_on_state_transition

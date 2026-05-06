@@ -27,8 +27,8 @@ module Wallets
         registration = @pass_installation.device_registrations.find_or_initialize_by(
           device_library_identifier: params[:device_id]
         )
-        registration.push_token = parsed_push_token
 
+        registration.push_token = parsed_push_token
         registration.save!
         registration.previously_new_record? ? head(:created) : head(:ok)
       end
@@ -50,15 +50,14 @@ module Wallets
         return head(:no_content) if passes.empty?
 
         render json: {
-          serialNumbers: passes.pluck(:wallet_identifier),
+          serialNumbers: passes.map { |p| PassService.new(p).serial_number },
           lastUpdated: passes.maximum(:updated_at).to_i.to_s
         }
       end
 
       # GET /v1/passes/:pass_type_id/:serial
       def send_updated_pass
-        service = PassService.new(@pass_installation.pass, pass_installation: @pass_installation,
-          voided: @pass_installation.revoked?)
+        service = PassService.new(@pass_installation, voided: @pass_installation.revoked?)
 
         send_data service.generate_pass,
           type: "application/vnd.apple.pkpass",
@@ -98,7 +97,7 @@ module Wallets
 
         token = auth_header.delete_prefix("ApplePass ")
         @pass_installation = Wallets::PassInstallation.apple.find_by(
-          wallet_identifier: params[:serial],
+          id: params[:serial].split(".").last,
           authentication_token: token
         )
 

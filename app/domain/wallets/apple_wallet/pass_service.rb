@@ -34,6 +34,10 @@ module Wallets
         base_pass_data.merge(pass_style_fields).compact
       end
 
+      def serial_number
+        [id_prefix, @pass_installation.id].join(".")
+      end
+
       private
 
       # Common fields shared by all pass styles
@@ -109,10 +113,6 @@ module Wallets
       # pass_type_identifier), the wagon must override this method to include a
       # tenant-specific identifier to ensure global uniqueness of serial numbers.
       def id_prefix = ["hitobito", id_prefix_addition&.call].compact.join(".")
-
-      def serial_number
-        [id_prefix, @pass_installation.id].join(".")
-      end
 
       def barcode
         {

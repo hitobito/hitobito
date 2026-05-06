@@ -17,19 +17,13 @@ module Wallets
       APNS_SANDBOX_URL = "https://api.sandbox.push.apple.com"
 
       def initialize(pass_installation)
-        @pass_installation = pass_installation
+        @registrations = pass_installation.device_registrations
       end
 
       # Send update notification to all registered devices
       def send_update_notification
-        registrations = @pass_installation.device_registrations
-        return if registrations.empty?
-
-        registrations.find_each do |registration|
-          send_push(registration.push_token)
-        rescue => e
-          registration.destroy if gone_response?(e)
-          Rails.logger.warn("APNs push failed for token #{registration.push_token}: #{e.message}")
+        @registrations.find_each do |registration|
+          send_push(registration)
         end
       end
 
@@ -41,39 +35,37 @@ module Wallets
       # - The P12 certificate (same as pass signing) for TLS client auth
       # - An empty JSON payload: {}
       # - Topic = pass type identifier
-      def send_push(push_token)
-        p12 = load_p12
+      def send_push(registration)
         RestClient::Request.execute(
           method: :post,
-          url: "#{apns_url}/3/device/#{push_token}",
+          url: "#{apns_url}/3/device/#{registration.push_token}",
           payload: "{}",
           headers: apns_headers,
           ssl_client_cert: p12.certificate,
           ssl_client_key: p12.key
         )
+      rescue => e
+        registration.destroy if e.is_a?(RestClient::Gone)
+        Rails.logger.warn("APNs push failed for token #{registration.push_token}: #{e.message}")
       end
 
       def apns_headers
-        {
+        @apns_headers ||= {
           "apns-topic" => Config.pass_type_identifier,
           "apns-push-type" => "background",
           "apns-priority" => "5"
         }
       end
 
-      def load_p12
-        OpenSSL::PKCS12.new(
+      def p12
+        @p12 ||= OpenSSL::PKCS12.new(
           File.binread(Config.p12_certificate_path),
           Config.p12_password
         )
       end
 
       def apns_url
-        Rails.env.production? ? APNS_PRODUCTION_URL : APNS_SANDBOX_URL
-      end
-
-      def gone_response?(error)
-        error.is_a?(RestClient::Gone)
+        @apns_url ||= Rails.env.production? ? APNS_PRODUCTION_URL : APNS_SANDBOX_URL
       end
     end
   end

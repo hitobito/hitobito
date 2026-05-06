@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe WalletSyncJob do
+describe WalletSynchronizationJob do
   let(:person) { people(:top_leader) }
   let(:definition) { Fabricate(:pass_definition, owner: groups(:top_layer)) }
   let(:pass) do

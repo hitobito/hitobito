@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class WalletSyncJob < RecurringJob
+class WalletSynchronizationJob < RecurringJob
   run_every Settings.wallets.sync_interval.seconds
 
   def perform_internal

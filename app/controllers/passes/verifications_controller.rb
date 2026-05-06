@@ -5,8 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-class Passes::VerificationsController < ApplicationController
-  skip_authorization_check
+class Passes::VerificationsController < ActionController::Base # rubocop:disable Rails/ApplicationController
   layout false
 
   # Public endpoint for verifying a pass via QR code scan.
@@ -16,15 +15,12 @@ class Passes::VerificationsController < ApplicationController
     @pass = Pass.find_by(verify_token: params[:verify_token])&.decorate
     @person = @pass&.person
     @definition = @pass&.pass_definition
-    @group = @definition&.owner&.decorate
+    @group = (@definition&.owner || Group.root)&.decorate
     @template = @definition&.template
     @state = pass_state
   end
 
   private
-
-  # This controller will always be public
-  def authenticate? = false
 
   def pass_state
     return :invalid unless @pass

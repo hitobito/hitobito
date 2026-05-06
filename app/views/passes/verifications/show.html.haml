@@ -3,17 +3,17 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito
 
-- title = t('passes.verifications.title')
+- title = t("passes.verifications.title")
 
 %html{lang: I18n.locale}
   %head
-    %meta{charset: 'utf-8'}
+    %meta{charset: "utf-8"}
     %title= "#{Settings.application.name} - #{title}"
-    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
-    = stylesheet_pack_tag 'application'
-    = javascript_pack_tag 'membership_verify'
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
+    = stylesheet_pack_tag "application"
+    = javascript_pack_tag "pass_verify"
   %body
-    #membership-verify
-      = render partial: 'header'
-      = render partial: 'details'
-      = render partial: 'footer'
+    #pass-verify
+      = render "header"
+      = render "details"
+      = render "footer"

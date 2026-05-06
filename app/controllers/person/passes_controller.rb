@@ -65,12 +65,11 @@ class Person::PassesController < CrudController
   end
 
   def find_or_create_pass_installation(wallet_type)
-    pass_installation = pass.pass_installations
-      .find_or_initialize_by(wallet_type: wallet_type) do |pi|
+    state = Wallets::PassSynchronizer::PASS_INSTALLATION_STATE_MAP.fetch(pass.state.to_sym)
+    pass.pass_installations.find_or_create_by(wallet_type: wallet_type) do |pi|
       pi.locale = person.language
+      pi.state = state
     end
-    Wallets::PassSynchronizer.new(pass_installation).assign_validity.save!
-    pass_installation
   end
 
   def authorize_class

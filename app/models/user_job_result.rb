@@ -44,9 +44,9 @@ class UserJobResult < ApplicationRecord
   validates_by_schema
 
   after_initialize :set_default_values, if: :new_record?
-  after_update_commit :broadcast_replace_and_badge_update
-  after_commit :broadcast_refresh_and_badge_update, on: %i[create destroy]
   after_save :set_web_socket_connection_state
+  after_commit :broadcast_refresh_and_badge_update, on: %i[create destroy]
+  after_update_commit :broadcast_replace_and_badge_update
 
   before_destroy do
     generated_file.purge if generated_file.attached?

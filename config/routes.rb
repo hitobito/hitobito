@@ -28,7 +28,7 @@ Hitobito::Application.routes.draw do
 
   get "/verify_membership/:verify_token" => "people/membership/verify#show", as: "verify_membership"
 
-  get "passes/verify/:verify_token", to: "passes/verifications#show", as: :pass_verify
+  get "/passes/verify/:verify_token", to: "passes/verifications#show", as: :pass_verify
 
   scope "/wallets/apple", module: "wallets/apple_wallet", as: "apple_wallet" do
     post "v1/devices/:device_id/registrations/:pass_type_id/:serial", action: :register_device,

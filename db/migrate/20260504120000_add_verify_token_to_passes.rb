@@ -7,8 +7,7 @@
 
 class AddVerifyTokenToPasses < ActiveRecord::Migration[8.0]
   def change
-    add_column :passes, :verify_token, :string,
-      null: false
+    add_column :passes, :verify_token, :string, null: false
     add_index :passes, :verify_token, unique: true
   end
 end

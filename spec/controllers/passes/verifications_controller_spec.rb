@@ -11,6 +11,8 @@ describe Passes::VerificationsController do
   let(:person) { people(:top_leader) }
   let(:definition) { Fabricate(:pass_definition, owner: groups(:top_layer)) }
 
+  subject(:dom) { Capybara::Node::Simple.new(response.body) }
+
   describe "GET #show" do
     context "with a valid (active) pass" do
       let!(:pass) do
@@ -64,6 +66,73 @@ describe Passes::VerificationsController do
       it "assigns :invalid state" do
         get :show, params: {verify_token: "unknown_token"}
         expect(assigns(:state)).to eq(:invalid)
+      end
+    end
+  end
+
+  describe "views" do
+    render_views
+    let!(:pass) do
+      Fabricate(:pass, person: person, pass_definition: definition,
+        state: :eligible, valid_from: 1.month.ago.to_date)
+    end
+
+    it "confirms active membership" do
+      definition.owner.update!(street: "Muhrgasse", housenumber: "42a", zip_code: "4242", town: "Romyland")
+
+      get :show, params: {verify_token: pass.verify_token}
+
+      expect(dom).to have_selector("#pass-verify header #group-address strong", text: "Top")
+      expect(dom).to have_selector("#pass-verify header #group-address p", text: "Muhrgasse 42a4242 Romyland")
+
+      expect(dom).to have_selector("#pass-verify #details #member-name", text: "Top Leader")
+      expect(dom).to have_selector("#pass-verify #details .alert-success", text: "Pass ist gültig")
+      expect(dom).to have_selector("#pass-verify #details .alert-success span.fa-check")
+    end
+
+    it "confirms expired membership" do
+      pass.update(state: :ended)
+      get :show, params: {verify_token: pass.verify_token}
+
+      expect(dom).to have_selector("#pass-verify #details #member-name", text: "Top Leader")
+      expect(dom).to have_selector("#pass-verify #details .alert-danger", text: "Pass ist abgelaufen")
+      expect(dom).not_to have_selector("#pass-verify #details .alert-success", text: "Pass ist gültig")
+    end
+
+    it "confirms revoked membership" do
+      pass.update(state: :revoked)
+      get :show, params: {verify_token: pass.verify_token}
+
+      expect(dom).to have_selector("#pass-verify #details #member-name", text: "Top Leader")
+      expect(dom).to have_selector("#pass-verify #details .alert-danger", text: "Pass ist ungültig")
+      expect(dom).not_to have_selector("#pass-verify #details .alert-success", text: "Pass ist gültig")
+    end
+
+    it "confirms unknown pass" do
+      get :show, params: {verify_token: "invalid"}
+      expect(dom).to have_selector("#pass-verify #details .alert-danger",
+        text: "Dieser Pass konnte nicht verifiziert werden.")
+      expect(dom).not_to have_selector("#pass-verify #details #member-name", text: "Top Leader")
+      expect(dom).not_to have_selector("#pass-verify #details .alert-success", text: "Pass ist gültig")
+    end
+
+    describe "logo" do
+      def logo_path(image)
+        controller.view_context.image_pack_tag(image)[/src="(.*?)"/, 1]
+      end
+
+      it "has application logo" do
+        src = logo_path(Settings.application.logo.image)
+        get :show, params: {verify_token: pass.verify_token}
+        expect(dom).to have_css("#logo img[src=\"#{src}\"]")
+      end
+
+      it "may be overriden by membership_verify_logo" do
+        allow(Settings.application).to receive(:membership_verify_logo).and_return(
+          double("logo", {image: "oauth_app.png"})
+        )
+        get :show, params: {verify_token: pass.verify_token}
+        expect(dom).to have_css("#logo img[src=\"#{logo_path("oauth_app.png")}\"]")
       end
     end
   end

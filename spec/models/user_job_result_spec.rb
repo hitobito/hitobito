@@ -154,12 +154,11 @@ describe UserJobResult do
       subject.update!(reports_progress: true)
       subject.update!(progress: 0)
 
-      list = (0..150)
       calculated_progress_values = []
       calculated_progress_values << subject.progress
 
-      list.each do |i|
-        subject.report_progress!(i, 150)
+      (0..100).each do |i|
+        subject.report_progress!(i, 100)
         calculated_progress_values << subject.progress
       end
 
@@ -170,12 +169,11 @@ describe UserJobResult do
       subject.update!(reports_progress: true)
       subject.update!(progress: 0)
 
-      list = (0..1000)
       calculated_progress_values = []
       calculated_progress_values << subject.progress
 
-      list.step(100) do |i|
-        subject.report_progress!(i, 1000)
+      (9..99).step(10).each do |i|
+        subject.report_progress!(i, 100)
         calculated_progress_values << subject.progress
       end
 

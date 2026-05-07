@@ -8,11 +8,14 @@ class Event::ParticipationContactDatasController < ApplicationController
 
   helper_method :group, :event, :entry
 
-  authorize_resource :entry, class: Event::ParticipationContactData
-
   decorates :group, :event
 
-  before_action :set_entry, :group, :policy_finder
+  before_action :set_entry,
+    :authorize_action,
+    :group,
+    :policy_finder,
+    :assert_not_participating,
+    :assert_application_possible
 
   def edit
   end
@@ -104,5 +107,22 @@ class Event::ParticipationContactDatasController < ApplicationController
     else
       :event_participation_contact_data
     end
+  end
+
+  def assert_not_participating
+    if event.participations.where(participant: person).exists?
+      redirect_to group_event_path(group, event)
+    end
+  end
+
+  def assert_application_possible
+    unless event.application_possible?
+      flash[:alert] = I18n.t("event.participation_contact_datas.flash.application_not_possible")
+      redirect_to group_event_path(group, event)
+    end
+  end
+
+  def authorize_action
+    authorize!(:update, entry)
   end
 end

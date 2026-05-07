@@ -478,7 +478,8 @@ de:
       update:
         flash:
           privacy_policy_not_accepted: "Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
-
+      flash:
+        application_not_possible: "Zur Zeit sind für diesen Anlass keine Anmeldungen möglich."
     participation_contact_data:
       managed:
         update:

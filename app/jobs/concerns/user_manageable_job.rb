@@ -25,17 +25,14 @@ module UserManageableJob
 
     ActiveRecord::Base.transaction do
       user_job_result = UserJobResult.create!(
-        person: enqueueing_person,
-        job_name:,
-        filename: @options&.dig(:filename),
-        filetype: @format,
-        reports_progress:,
+        person: enqueueing_person, job_name:, reports_progress:,
+        filename: @options&.dig(:filename), filetype: @format,
         max_attempts: try(:max_attempts)
       )
       @user_job_result_id = user_job_result.id
 
       delayed_job = super
-      user_job_result.update!(delayed_job: delayed_job)
+      user_job_result.update!(delayed_job:)
 
       delayed_job
     end

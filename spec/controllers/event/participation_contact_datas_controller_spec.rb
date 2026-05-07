@@ -13,6 +13,27 @@ describe Event::ParticipationContactDatasController do
   let(:course) { Fabricate(:course, groups: [group]) }
   let(:entry) { assigns(:participation_contact_data) }
 
+  context "GET#edit" do
+    it "renders form" do
+      get :edit, params: {group_id: group.id, event_id: course.id}
+      expect(response).to be_ok
+      expect(response).to render_template :edit
+    end
+
+    it "redirects to event if participation already exists" do
+      course.participations.create!(person: top_leader)
+      get :edit, params: {group_id: group.id, event_id: course.id}
+      expect(response).to redirect_to(group_event_path(group, course))
+    end
+
+    it "redirects to event if application is not possible" do
+      course.update!(application_closing_at: 1.week.ago)
+      get :edit, params: {group_id: group.id, event_id: course.id}
+      expect(response).to redirect_to(group_event_path(group, course))
+      expect(flash[:alert]).to eq("Zur Zeit sind für diesen Anlass keine Anmeldungen möglich.")
+    end
+  end
+
   context "PATCH#update" do
     context "with privacy policies in hierarchy" do
       before do
@@ -62,15 +83,14 @@ describe Event::ParticipationContactDatasController do
         }
 
         expect(entry).to have(1).errors
-        # rubocop:todo Layout/LineLength
-        expect(entry.errors.full_messages).to eq(["Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."])
-        # rubocop:enable Layout/LineLength
+        expect(entry.errors.full_messages).to eq(
+          ["Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."]
+        )
         expect(top_leader.reload.privacy_policy_accepted).to_not be_present
       end
     end
 
     it "validates default attrs" do
-      # course.update(required_contact_attrs: %w(phone_numbers))
       patch :update, params: {
         group_id: group.id,
         event_id: course.id,

@@ -9,9 +9,11 @@ class Event::ParticipationContactData::ManagedController <
   Event::ParticipationContactDatasController
   before_action :assert_feature_enabled
 
+  skip_authorization_check
+
   def update
     if any_duplicates?
-      entry.errors.add(:base, :duplicates_present) if any_duplicates?
+      entry.errors.add(:base, :duplicates_present)
       render :edit, status: :unprocessable_content
     else
       super
@@ -49,5 +51,12 @@ class Event::ParticipationContactData::ManagedController <
   def assert_feature_enabled
     FeatureGate.assert!("people.people_managers") &&
       FeatureGate.assert!("people.people_managers.self_service_managed_creation")
+  end
+
+  def authorize_action
+    # because we are about to create a new managed person,
+    # which is not in the current_user.manageds association yet,
+    # no ability check is possible here.
+    # If this feature is enabled, everybody may create new managed people.
   end
 end

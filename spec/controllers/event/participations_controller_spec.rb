@@ -1177,7 +1177,7 @@ describe Event::ParticipationsController do
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to eq(61)
+        end.to eq(60)
       end
 
       it "GET#index still preloads when sorting" do
@@ -1186,7 +1186,7 @@ describe Event::ParticipationsController do
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to eq(58)
+        end.to eq(57)
       end
 
       it "GET#index preloads questions but increase query count when " do
@@ -1199,7 +1199,7 @@ describe Event::ParticipationsController do
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to eq(88)
+        end.to eq(87)
       end
     end
 

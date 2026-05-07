@@ -65,25 +65,25 @@ describe Group::DeletedPeople do
         end
 
         it "finds those people" do
-          expect(Group::DeletedPeople.deleted_for_multiple(all_groups).first).to eq(person)
+          expect(Group::DeletedPeople.deleted_for(all_groups).first).to eq(person)
         end
 
         it "doesn't find people with new role" do
           Group::TopLayer::TopAdmin.create(person: person, group: group)
 
           expect(person.roles.count).to eq 1
-          expect(Group::DeletedPeople.deleted_for_multiple(all_groups).count).to eq 0
+          expect(Group::DeletedPeople.deleted_for(all_groups).count).to eq 0
         end
 
         it "finds people from other group in same layer" do
           child_role.update_column(:end_on, 1.day.ago)
-          expect(Group::DeletedPeople.deleted_for_multiple([child_group, sibling_group])).to include child_person
+          expect(Group::DeletedPeople.deleted_for([child_group, sibling_group])).to include child_person
         end
       end
 
       context "when group has no people without role" do
         it "returns empty" do
-          expect(Group::DeletedPeople.deleted_for_multiple(all_groups).count).to eq 0
+          expect(Group::DeletedPeople.deleted_for(all_groups).count).to eq 0
         end
       end
     end

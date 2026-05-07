@@ -50,7 +50,7 @@ module SearchStrategies
       layers = deleted_people_indexable_layers
       return if layers.blank?
 
-      Group::DeletedPeople.deleted_for_multiple(layers)
+      Group::DeletedPeople.deleted_for(layers)
     end
 
     def deleted_people_indexable_layers

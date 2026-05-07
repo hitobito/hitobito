@@ -8,52 +8,54 @@
 
 class Group::DeletedPeople
   class << self
-    def deleted_for_multiple(layer_groups)
-      Person
-        .joins("INNER JOIN roles ON roles.person_id = people.id")
-        .joins("INNER JOIN #{Group.quoted_table_name} " \
-              "ON #{Group.quoted_table_name}.id = roles.group_id")
-        .where(no_active_roles_exist)
-        .where("roles.end_on = (?)", lastest_role_ended_on)
-        .where("#{Group.quoted_table_name}.layer_group_id IN (?)", layer_groups.map(&:id))
+    def deleted_for(layer_group, person_joins = nil)
+      subquery = new(person_joins)
+        .roles_of_deleted_people
+        .joins(:group)
+        .where(groups: {layer_group_id: Array(layer_group).map(&:id)})
         .distinct
-    end
-
-    def deleted_for(layer_group)
-      Person
-        .joins("INNER JOIN roles ON roles.person_id = people.id")
-        .joins("INNER JOIN #{Group.quoted_table_name} " \
-              "ON #{Group.quoted_table_name}.id = roles.group_id")
-        .where(no_active_roles_exist)
-        .where("roles.end_on = (?)", lastest_role_ended_on)
-        .where("#{Group.quoted_table_name}.layer_group_id = ?", layer_group.id)
-        .distinct
+      Person.where(id: subquery.select(:person_id))
     end
 
     def group_for_deleted(person)
-      Group.joins("INNER JOIN roles ON roles.group_id = groups.id")
-        .joins("INNER JOIN #{Person.quoted_table_name} " \
-                  "ON #{Person.quoted_table_name}.id = roles.person_id")
-        .where(no_active_roles_exist)
-        .where("roles.end_on = (?)", lastest_role_ended_on)
-        .find_by("#{Person.quoted_table_name}.id = ?", person.id)
+      Group.where(id: new.roles_of_deleted_people.select(:group_id)).first
     end
+  end
 
-    private
+  def initialize(person_joins = nil)
+    @person_joins = person_joins
+  end
 
-    def no_active_roles_exist
-      active_roles.arel.exists.not
-    end
+  def roles_of_deleted_people
+    Role
+      .with_inactive
+      .with(last_roles:, active_roles:)
+      .joins("INNER JOIN last_roles ON last_roles.person_id = roles.person_id " \
+        "AND last_roles.max_end_on = roles.end_on")
+      .joins("LEFT JOIN active_roles ON active_roles.person_id = roles.person_id")
+      .where(active_roles: {person_id: nil})
+  end
 
-    def active_roles
-      Role.active
-        .where("roles.person_id = people.id")
-    end
+  def last_roles
+    Role
+      .with_inactive
+      .where(end_on: ...Date.current)
+      .group("roles.person_id")
+      .select("roles.person_id, MAX(end_on) AS max_end_on")
+      .then { with_person_joins(_1) }
+  end
 
-    def lastest_role_ended_on
-      Role.ended
-        .where("roles.person_id = people.id")
-        .select("MAX(roles.end_on)")
+  def active_roles
+    Role.active.select(:person_id).distinct.then { with_person_joins(_1) }
+  end
+
+  # limiting the scope to only people that have entries on a given join table
+  # drastically improves performance
+  def with_person_joins(scope)
+    if @person_joins
+      scope.joins(person: @person_joins)
+    else
+      scope
     end
   end
 end

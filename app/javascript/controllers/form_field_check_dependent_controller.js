@@ -8,24 +8,37 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["main", "dependent"];
   static values = {
-    selectDependentCheckboxes: { type: Boolean, default: false },
+    interactionMode: { type: String, default: "default" },
+    selectDependentCheckboxes: { type: Boolean, default: false }
   }
 
-  // unselects all dependent checkboxes when unchecking master checkbox
-  toggleMain() {
-    if (!event.target.checked) {
-      this.dependentTargets.forEach((checkbox) => {
-        checkbox.checked = false;
-      });
-    } else if (this.selectDependentCheckboxesValue) {
-      this.dependentTargets.forEach((checkbox) => {
-        checkbox.checked = true;
-      });
+  toggleMain(event) {
+    const isChecked = event.target.checked;
+
+    if (this.interactionModeValue === "exclusive") {
+      if (isChecked) {
+        this.dependentTargets.forEach(cb => cb.checked = false);
+      }
+    } else {
+      if (!isChecked) {
+        this.dependentTargets.forEach(cb => cb.checked = false);
+      } else if (this.selectDependentCheckboxesValue) {
+        this.dependentTargets.forEach(cb => cb.checked = true);
+      }
     }
   }
 
-  // selects master checkbox if any dependent checkbox is checked
-  toggleDependent() {
-    this.mainTarget.checked = true;
+  toggleDependent(event) {
+    const isChecked = event.target.checked;
+
+    if (this.interactionModeValue === "exclusive") {
+      if (isChecked && this.hasMainTarget) {
+        this.mainTarget.checked = false;
+      }
+    } else {
+      if (this.hasMainTarget) {
+        this.mainTarget.checked = true;
+      }
+    }
   }
 }

@@ -103,6 +103,7 @@ describe :user_job_results, js: true do
 
     it "should show notification when job of current user has successfully completed" do
       visit root_path
+      expect(page).to have_content("Top Leader")
 
       expect(page).not_to have_content("Job erfolgreich abgeschlossen")
       expect(page).not_to have_content("Job enqueued by current user")
@@ -118,6 +119,7 @@ describe :user_job_results, js: true do
 
     it "should show notification when job of current user has failed" do
       visit root_path
+      expect(page).to have_content("Top Leader")
 
       expect(page).not_to have_content("Fehler der Jobausführung aufgetreten")
       expect(page).not_to have_content("Job enqueued by current user")
@@ -174,6 +176,7 @@ describe :user_job_results, js: true do
 
     it "should update user job results link badge" do
       visit root_path
+      expect(page).to have_content("Top Leader")
 
       expect(page).to have_css("#user-job-results-link-with-badge")
       expect(page).not_to have_css("#user-job-results-link-with-badge .badge")
@@ -200,6 +203,7 @@ describe :user_job_results, js: true do
 
     it "should establish web socket connection when needs_web_socket_connection on person is truthy" do
       visit root_path
+      expect(page).to have_content("Top Leader")
 
       expect(page).to have_css("turbo-cable-stream-source", visible: false, count: 1)
 

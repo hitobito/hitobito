@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe UserJobResultsCleanerJob do
+  include DelayedJobSpecHelper
+
   subject { UserJobResultsCleanerJob.new }
 
   let(:person) { people(:top_leader) }
@@ -48,20 +50,57 @@ describe UserJobResultsCleanerJob do
 
     expect do
       subject.perform_internal
-    end.to change(UserJobResult, :count).by(-1)
+    end.to change(UserJobResult, :count).from(2).to(1)
+  end
+
+  it "removes user job results that dont have a delayed job id" do
+    download_file(Time.current)
+
+    orphaned_user_job_result = download_file(Time.current)
+    orphaned_user_job_result.update!(delayed_job_id: nil)
+
+    expect do
+      subject.perform_internal
+    end.to change(UserJobResult, :count).from(2).to(1)
+  end
+
+  it "removes user job results where end timestamp is nil and associated delayed job doesnt exist" do
+    download_file(Time.current)
+
+    orphaned_user_job_result = download_file(Time.current)
+    orphaned_user_job_result.update!(end_timestamp: nil)
+    orphaned_user_job_result.delayed_job.destroy!
+
+    expect(orphaned_user_job_result.delayed_job_id).not_to be_nil
+    expect(orphaned_user_job_result.reload.delayed_job).to be_nil
+    expect do
+      subject.perform_internal
+    end.to change(UserJobResult, :count).from(2).to(1)
+  end
+
+  it "removes user job results where end timestamp is nil and associated delayed job has finished with failure" do
+    download_file(Time.current)
+
+    orphaned_user_job_result = download_file(Time.current)
+    orphaned_user_job_result.update!(end_timestamp: nil)
+    orphaned_user_job_result.delayed_job.update!(failed_at: Time.current)
+
+    expect do
+      subject.perform_internal
+    end.to change(UserJobResult, :count).from(2).to(1)
   end
 
   private
 
   def download_file(time)
-    job = Export::EventsExportJob.new(:csv, person.id, group.id, filter, filename: "event_export")
+    export_job = Export::EventsExportJob.new(:csv, person.id, group.id, filter, filename: "event_export")
 
     travel_to(time) do
-      job.enqueue!
-      job.user_job_result.report_success!(1)
+      export_job.enqueue!
+      export_job.user_job_result.report_success!(1)
     end
 
-    user_job_result = job.user_job_result
+    user_job_result = export_job.user_job_result
     user_job_result.write("testfilecontent")
     user_job_result
   end

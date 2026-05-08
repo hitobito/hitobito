@@ -32,7 +32,7 @@ module Messages
       end
     end
 
-    def error(job, exception)
+    def error(job, exception, payload = parameters)
       message.update!(state: :failed)
       super
     end

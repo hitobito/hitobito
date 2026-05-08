@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailchimpSynchronizationJob < BaseJob
+  prepend UserManageableJob
+
   self.parameters = [:mailing_list_id]
 
   def initialize(mailing_list_id)
@@ -29,7 +31,7 @@ class MailchimpSynchronizationJob < BaseJob
       mailchimp_last_synced_at: Time.zone.now)
   end
 
-  def error(_job, exception)
+  def error(_job, exception, payload = parameters)
     sync.result.exception = exception
     mailing_list.update(mailchimp_syncing: false, mailchimp_result: sync.result)
     create_log_entry

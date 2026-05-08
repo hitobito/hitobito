@@ -17,7 +17,7 @@ class MailRelayJob < RecurringJob
     super if configured?
   end
 
-  def error(job, exception)
+  def error(job, exception, payload = parameters)
     if exception.is_a?(MailRelay::Error)
       super(job, exception.original, mail: extract_mail_for_errbit(exception))
     else

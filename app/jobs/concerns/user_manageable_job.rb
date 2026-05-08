@@ -38,22 +38,22 @@ module UserManageableJob
     end
   end
 
-  def before(job)
+  def before(delayed_job)
     user_job_result.report_in_progress! if @user_job_result_id
-    super
-  end
-
-  def success(job)
-    user_job_result.report_success!(job.attempts + 1) if @user_job_result_id
     super if defined?(super)
   end
 
-  def error(job, exception, payload = parameters)
-    user_job_result.report_error!(job.attempts + 1) if @user_job_result_id
-    super
+  def success(delayed_job)
+    user_job_result.report_success!(delayed_job.attempts + 1) if @user_job_result_id
+    super if defined?(super)
   end
 
-  def failure(job)
+  def error(delayed_job, exception, payload = parameters)
+    user_job_result.report_error!(delayed_job.attempts + 1) if @user_job_result_id
+    super if defined?(super)
+  end
+
+  def failure(delayed_job)
     user_job_result.report_failure! if @user_job_result_id
     super if defined?(super)
   end

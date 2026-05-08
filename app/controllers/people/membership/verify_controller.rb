@@ -9,8 +9,6 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
   LEGACY_PASS_DEFINITION_ID = 1
 
   def show
-    return head :not_found unless feature_enabled?
-
     verify_token = find_legacy_pass&.verify_token || "not-found"
     redirect_to pass_verify_path(verify_token), status: :found
   end
@@ -24,9 +22,5 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
         pass_definition_id: LEGACY_PASS_DEFINITION_ID,
         people: {membership_verify_token: params[:verify_token]}
       )
-  end
-
-  def feature_enabled?
-    People::Membership::Verifier.enabled?
   end
 end

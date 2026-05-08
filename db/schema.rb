@@ -1236,7 +1236,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_08_090204) do
     t.boolean "terminated", default: false, null: false
     t.date "start_on"
     t.date "end_on"
+    t.index ["group_id", "person_id", "start_on", "end_on"], name: "index_roles_on_group_id_and_person_id_and_start_on_and_end_on"
     t.index ["person_id", "group_id"], name: "index_roles_on_person_id_and_group_id"
+    t.index ["person_id", "start_on", "end_on"], name: "index_roles_on_person_id_and_start_on_and_end_on"
     t.index ["type"], name: "index_roles_on_type"
   end
 

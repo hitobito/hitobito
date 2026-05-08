@@ -36,10 +36,9 @@ describe "OauthWorkflow", js: true do
     end
 
     it "creates access_grant with consent screen" do
-      authorization_code = nil
       authorization_page = window_opened_by { click_link "Autorisieren" }
 
-      within_window authorization_page do
+      authorization_code = within_window authorization_page do
         expect(page).to have_text "Autorisierung erforderlich"
         expect(page).to have_content "Soll MyApp zur Nutzung dieses Kontos autorisiert werden?"
         expect(page).to have_content "Diese Anwendung erhält folgende Berechtigungen:"
@@ -50,13 +49,14 @@ describe "OauthWorkflow", js: true do
           expect(page).to have_content "Autorisierungscode"
         end.to change { app.access_grants.count }.by(1)
 
-        authorization_code = find("#authorization_code").text
+        find("#authorization_code").text
       end
 
       visit oauth_application_path(app)
       click_link "Autorisierungen"
+      expect(page).to have_content("Aktive OAuth Autorisierungen")
 
-      raise "Did not find authorization code after consenting to access" if authorization_code.blank?
+      raise "OAuth authorization code not found on consent screen" if authorization_code.blank?
       expect(page).not_to have_content authorization_code
     end
 

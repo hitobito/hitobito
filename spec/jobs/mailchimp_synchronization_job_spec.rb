@@ -129,22 +129,30 @@ describe MailchimpSynchronizationJob do
   private
 
   def check_mailing_list_status_on_success
-    expect(mailing_list.mailchimp_syncing).to be false
-    expect(mailing_list.mailchimp_last_synced_at).to eq(Time.current)
-    expect(mailing_list.mailchimp_result.state).to eq :unchanged
+    expect(mailing_list).to have_attributes({
+      mailchimp_syncing: false,
+      mailchimp_last_synced_at: Time.current,
+      mailchimp_result: have_attributes(state: :unchanged)
+    })
   end
 
   def check_mailing_list_status_and_error_logging_on_failure
     log = HitobitoLogEntry.last
-    expect(log.subject).to eq mailing_list
-    expect(log.category).to eq "mail"
-    expect(log.message).to eq "Mailchimp Abgleich war nicht erfolgreich"
+
+    expect(log).to have_attributes({
+      subject: mailing_list,
+      category: "mail",
+      message: "Mailchimp Abgleich war nicht erfolgreich"
+    })
+
     expect(JSON.parse(log.payload).deep_symbolize_keys).to eq({
       data: {exception: "UncaughtThrowError - uncaught throw Exception"}
     })
 
-    expect(mailing_list.mailchimp_syncing).to be false
-    expect(mailing_list.mailchimp_last_synced_at).to be_nil
-    expect(mailing_list.mailchimp_result.state).to eq :failed
+    expect(mailing_list).to have_attributes({
+      mailchimp_syncing: false,
+      mailchimp_last_synced_at: nil,
+      mailchimp_result: have_attributes(state: :failed)
+    })
   end
 end

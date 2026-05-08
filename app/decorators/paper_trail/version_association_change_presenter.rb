@@ -94,7 +94,9 @@ module PaperTrail
         permitted_classes: [Date, Time, Symbol]
       )["type"]
 
-      Object.const_defined?(model_type) ? version.reify : Wrapped.new(model_type)
+      Object.const_defined?(model_type) ?
+        version.reify :
+        PaperTrail::VersionDecorator::Wrapped.new(model_type)
     end
 
     def reify_exisiting

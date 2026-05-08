@@ -71,6 +71,20 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     is_expected.to eq("<div>Gruppe <i>Top</i> wurde entfernt.</div>")
   end
 
+  context "for role type that does not exist anymore" do
+    it "builds update text" do
+      PaperTrail::Version.create!(
+        item_type: "Role", item_id: Role.maximum(:id).succ, # id to role that does not exist
+        object: {"type" => "Group::SektionsMitglieder::NonExistentRoleType"}.to_yaml,
+        object_changes: {"end_on" => [Date.new(2026, 3, 1), Date.new(2026, 5, 1)]}.to_yaml,
+        main: person, event: :update
+      )
+
+      is_expected.to eq("<div>Rolle <i>Group::SektionsMitglieder::NonExistentRoleType</i> wurde aktualisiert: " \
+                        "Bis wurde von <i>01.03.2026</i> auf <i>01.05.2026</i> geändert.</div>")
+    end
+  end
+
   context "mailing list" do
     let(:list) { mailing_lists(:leaders) }
 

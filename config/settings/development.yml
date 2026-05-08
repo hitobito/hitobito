@@ -14,9 +14,6 @@ auth:
 address_sync:
   enabled: true
 
-passes:
-  legacy_verify_pass_definition_name: legacy-pass
-
 payment_providers:
   - name: postfinance-test
     url: https://isotest.postfinance.ch/ebicsweb/ebicsweb

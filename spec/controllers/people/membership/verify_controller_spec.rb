@@ -20,16 +20,17 @@ describe People::Membership::VerifyController do
       allow(People::Membership::Verifier).to receive(:enabled?).and_return(true)
     end
 
-    context "with a configured legacy_verify_pass_definition_name" do
-      before do
-        allow(Settings.passes).to receive(:legacy_verify_pass_definition_name)
-          .and_return(definition.name)
+    context "with pass definition with id=1" do
+      let!(:legacy_definition) { Fabricate(:pass_definition, id: 1) }
+      let!(:legacy_pass) do
+        Fabricate(:pass, person: person, pass_definition: legacy_definition,
+          state: :eligible, valid_from: Date.current)
       end
 
       it "redirects with 302 to the new pass verify path" do
         get :show, params: {verify_token: person.membership_verify_token}
 
-        expect(response).to redirect_to(pass_verify_path(pass.verify_token))
+        expect(response).to redirect_to(pass_verify_path(legacy_pass.verify_token))
         expect(response.status).to eq(302)
       end
 
@@ -40,7 +41,7 @@ describe People::Membership::VerifyController do
       end
 
       it "redirects to not-found when pass does not exist for the person" do
-        pass.delete
+        legacy_pass.delete
 
         get :show, params: {verify_token: person.membership_verify_token}
 
@@ -48,24 +49,7 @@ describe People::Membership::VerifyController do
       end
     end
 
-    context "without a configured legacy_verify_pass_definition_name" do
-      before do
-        allow(Settings.passes).to receive(:legacy_verify_pass_definition_name).and_return(nil)
-      end
-
-      it "redirects to not-found" do
-        get :show, params: {verify_token: person.membership_verify_token}
-
-        expect(response).to redirect_to(pass_verify_path("not-found"))
-      end
-    end
-
-    context "with a legacy_verify_pass_definition_name that matches no PassDefinition" do
-      before do
-        allow(Settings.passes).to receive(:legacy_verify_pass_definition_name)
-          .and_return("nonexistent_key")
-      end
-
+    context "without a legacy pass definition" do
       it "redirects to not-found" do
         get :show, params: {verify_token: person.membership_verify_token}
 

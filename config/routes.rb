@@ -457,8 +457,6 @@ Hitobito::Application.routes.draw do
 
     get "changelog" => "changelog#index"
 
-    get "synchronizations/:id" => "async_synchronizations#show"
-
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
 

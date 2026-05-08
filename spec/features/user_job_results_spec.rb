@@ -76,7 +76,7 @@ describe :user_job_results, js: true do
     before do
       top_leader.update!(needs_web_socket_connection: true)
       bottom_member.update!(needs_web_socket_connection: true)
-      Delayed::Worker.max_attempts = 1
+      allow(Delayed::Worker).to receive(:max_attempts).and_return(1)
     end
 
     it "should receive live updates for user job results of current user" do

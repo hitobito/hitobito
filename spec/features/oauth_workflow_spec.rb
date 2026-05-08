@@ -6,7 +6,7 @@
 
 require "spec_helper"
 
-describe "OauthWorkflow" do
+describe "OauthWorkflow", js: true do
   let(:user) { people(:top_leader) }
   let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
   let(:app) { Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri) }
@@ -36,29 +36,39 @@ describe "OauthWorkflow" do
     end
 
     it "creates access_grant with consent screen" do
-      click_link "Autorisieren"
-      expect(page).to have_text "Autorisierung erforderlich"
-      expect(page).to have_content "Soll MyApp zur Nutzung dieses Kontos autorisiert werden?"
-      expect(page).to have_content "Diese Anwendung erhält folgende Berechtigungen:"
-      expect(page).to have_content "Lesen deiner E-Mail Adresse"
+      authorization_code = nil
+      authorization_page = window_opened_by { click_link "Autorisieren" }
 
-      expect do
-        click_button "Autorisieren"
-        expect(page).to have_content "Autorisierungscode"
-      end.to change { app.access_grants.count }.by(1)
+      within_window authorization_page do
+        expect(page).to have_text "Autorisierung erforderlich"
+        expect(page).to have_content "Soll MyApp zur Nutzung dieses Kontos autorisiert werden?"
+        expect(page).to have_content "Diese Anwendung erhält folgende Berechtigungen:"
+        expect(page).to have_content "Lesen deiner E-Mail Adresse"
 
-      code = find("#authorization_code").text
+        expect do
+          click_button "Autorisieren"
+          expect(page).to have_content "Autorisierungscode"
+        end.to change { app.access_grants.count }.by(1)
+
+        authorization_code = find("#authorization_code").text
+      end
+
       visit oauth_application_path(app)
       click_link "Autorisierungen"
-      expect(page).not_to have_content code
+
+      raise "Did not find authorization code after consenting to access" if authorization_code.blank?
+      expect(page).not_to have_content authorization_code
     end
 
     it "creates access_grant and skips consent screen" do
       app.update!(skip_consent_screen: true)
       expect do
-        click_link "Autorisieren"
-        expect(page).to have_text "Autorisierungscode"
-        expect(page).not_to have_text "Autorisierung erforderlich"
+        authorization_page = window_opened_by { click_link "Autorisieren" }
+
+        within_window authorization_page do
+          expect(page).to have_text "Autorisierungscode"
+          expect(page).not_to have_text "Autorisierung erforderlich"
+        end
       end.to change { app.access_grants.count }.by(1)
     end
   end

@@ -11,6 +11,7 @@
 #
 #  id             :integer          not null, primary key
 #  event          :string           not null
+#  item_label     :string
 #  item_subtype   :string
 #  item_type      :string           not null
 #  main_type      :string

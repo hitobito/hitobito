@@ -250,7 +250,6 @@ Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
-Capybara.current_driver = :chrome
 Capybara.javascript_driver = :chrome
 
 Devise::Test::ControllerHelpers.prepend(Module.new do

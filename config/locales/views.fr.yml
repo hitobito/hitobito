@@ -12,7 +12,7 @@ fr:
     unknown: Inconnu
     nobody: personne
     all: Tous
-    empty: Leer
+    empty: Vide
 
     from: de
     until: à
@@ -75,7 +75,7 @@ fr:
     tabs:
       info: Informations
       settings: Paramètres
-      log: Log
+      log: Journal
 
     search:
       placeholder: "Recherche..."
@@ -169,7 +169,7 @@ fr:
       caption_used_for_invoices: Utilisé pour les factures
 
     address_fields:
-      housenumber: Nr.
+      housenumber: N°
       updates_household_address: l'adresse est actualisée pour l'ensemble du foyer
 
   custom_content_decorator:
@@ -212,9 +212,9 @@ fr:
     move: "Déplacer"
     merge: "Fusionner"
     archive: "Archiver"
-    delete: Löschen
-    edit_service_token: API-Keys
-    edit_calendar_feeds: Kalender-Feeds
+    delete: Effacer
+    edit_service_token: Clefs API
+    edit_calendar_feeds: Feed du calendrier
 
   dropdown/people_email_export:
     button: "Exporter les adresses e-mail"
@@ -637,7 +637,7 @@ fr:
           all: Tous
           only_with_places_available: Seulement avec des places disponibles
         select_states: Filtrer d'après le statut
-        time_period: Im Zeitraum von
+        time_period: Durant la période de
         until: au
       group_filter:
         all_layers: Tous les groupes
@@ -779,31 +779,31 @@ fr:
 
   events/filters:
     new:
-      title: "%{type} filtern"
+      title: "%{type} filtrer"
     form:
       range:
-        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
-        layer: In der aktuellen Ebene und allen ihren Gruppen
-        group: Nur in der aktuellen Gruppe
-        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+        deep: Dans le niveau actuel et tous les niveaux et groupes en dessous
+        layer: Dans le niveau actuel et tous les groupes
+        group: Uniquement dans le groupe actuel
+        group_deep: Dans le groupe actuel et tous les groupes en dessous
     general:
-      title: Allgemein
+      title: Général
     date_range:
-      date_range_since: Zeitraum von
-      until: bis
+      date_range_since: Période de
+      until: à
     full_text:
-      q: Suchbegriff
+      q: Mot-clé
     state:
-      states: Status
+      states: Statut
     leader:
-      leader: Geleitet von
-      current_user: aktuelle/-r Benutzer/-in
+      leader: Sous la direction de
+      current_user: utilisateur/utilisatrice actuel(le)
     kind:
-      kind: Kursart
+      kind: Type de cours
     kind_category:
-      kind_category: Kurskategorie
+      kind_category: Catégorie de cours
     attributes:
-      title: Felder
+      title: Champs
 
   event_decorator:
     apply: "Inscription"
@@ -853,9 +853,9 @@ fr:
     duplicates: "Duplicatas"
 
   filter_navigation/events:
-    deep: "Alle"
+    deep: "Tous"
     layer: "uniquement %{layer}"
-    filter: "Filter..."
+    filter: "Filtre..."
 
   filter_navigation/event/participations:
     predefined_filters:
@@ -865,14 +865,14 @@ fr:
 
   filters:
     attributes:
-      match: enthält
-      not_match: enthält nicht
-      equal: ist genau
-      greater: grösser als
-      smaller: kleiner als
-      before: vor dem
-      after: nach dem
-      blank: ist leer
+      match: contient
+      not_match: ne contient pas
+      equal: est précis
+      greater: plus grand que
+      smaller: plus petit que
+      before: avant le
+      after: après le
+      blank: est vide
 
   full_text:
     index:
@@ -998,7 +998,7 @@ fr:
         description: Ici, tu peux t'inscrire au groupe.
 
   groups_filter:
-    description: "Alle %{group_type_plural} in %{parent}"
+    description: "Tous les %{group_type_plural} dans %{parent}"
 
   group/deleted_people:
     list:
@@ -1207,29 +1207,29 @@ fr:
         many: "%{count} factures ont été établies."
         other: "%{count} factures ont été établies."
       reminded:
-        one: "Rechnung %{number} wurde gemahnt."
-        many: "%{count} Rechnungen wurden gemahnt."
-        other: "%{count} Rechnungen wurden gemahnt."
+        one: "Une rappel a été envoyé pour la facture %{number}."
+        many: "Des rappels ont été établis pour %{count} factures."
+        other: "Des rappels ont été établis pour %{count} factures."
       send_notification:
         one: "Facture %{number} est envoyée en arrière-plan par e-mail."
         many: "%{count} factures sont envoyées en arrière-plan par e-mail."
         other: "%{count} factures sont envoyées en arrière-plan par e-mail."
       invalid_state:
-        one: "Rechnung %{number} wurde bereits gestellt."
-        many: "%{count} Rechnungen wurde bereits gestellt."
-        other: "%{count} Rechnungen wurde bereits gestellt."
+        one: "Facture %{number} a déjà été établie."
+        many: "%{count}  factures ont déjà été établies."
+        other: "%{count}  factures ont déjà été établies."
       issued_invalid:
-        one: "Rechnung %{number} wurde bereits gestellt."
-        many: "%{count} Rechnungen wurde bereits gestellt."
-        other: "%{count} Rechnungen wurde bereits gestellt."
+        one: "Facture %{number} a déjà été établie."
+        many: "%{count}  factures ont déjà été établies."
+        other: "%{count}  factures ont déjà été établies."
       sent_invalid:
-        one: "Rechnung %{number} wurde bereits verschickt."
-        many: "%{count} Rechnungen wurde bereits verschickt."
-        other: "%{count} Rechnungen wurde bereits verschickt."
+        one: "Facture %{number} a déjà été envoyée."
+        many: "%{count} factures ont déjà été envoyées"
+        other: "%{count} factures ont déjà été envoyées."
       payed_invalid:
-        one: "Rechnung %{number} wurde bereits bezahlt."
-        many: "%{count} Rechnungen wurde bereits bezahlt."
-        other: "%{count} Rechnungen wurde bereits bezahlt."
+        one: "Facture %{number} a déjà été payée."
+        many: "%{count} factures ont déjà été payées."
+        other: "%{count} factures ont déjà été payées."
       reminded_invalid:
         one: "Mahnung %{number} wurde bereits erstellt."
         many: "%{count} Mahnungen wurden bereits erstellt."

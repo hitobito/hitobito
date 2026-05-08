@@ -16,10 +16,6 @@ describe People::Membership::VerifyController do
   end
 
   describe "GET #show" do
-    before do
-      allow(People::Membership::Verifier).to receive(:enabled?).and_return(true)
-    end
-
     context "with pass definition with id=1" do
       let!(:legacy_definition) { Fabricate(:pass_definition, id: 1) }
       let!(:legacy_pass) do
@@ -54,15 +50,6 @@ describe People::Membership::VerifyController do
         get :show, params: {verify_token: person.membership_verify_token}
 
         expect(response).to redirect_to(pass_verify_path("not-found"))
-      end
-    end
-
-    context "not enabled" do
-      it "returns 404 if feature not enabled" do
-        allow(People::Membership::Verifier).to receive(:enabled?).and_return(false)
-        get :show, params: {verify_token: person.membership_verify_token}
-
-        expect(response.status).to eq 404
       end
     end
   end

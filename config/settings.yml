@@ -304,6 +304,3 @@ hitobito_log:
 
 wallets:
   sync_interval: <%= ENV['HITOBITO_WALLETS_SYNC_SECONDS'].presence || 3.minutes %>
-
-passes:
-  legacy_verify_pass_definition_name:  # set by wagon, e.g. "membership_card"

@@ -42,6 +42,8 @@ class Export::ExportBaseJob < BaseJob
     @user ||= Person.find(@user_id)
   end
 
+  # If this fails with "Couldn't find UserJobResult without an ID" you may have tried to enqueue
+  # an export job from a context without an authenticated user
   def export_file
     user_job_result.write(data, force_encoding: @options.fetch(:encoding, nil))
   end

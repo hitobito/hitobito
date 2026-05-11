@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "Person::CsvImport" do
+describe "Person::CsvImport", js: true do
   include CsvImportMacros
   let(:role) { roles(:top_leader) }
   let(:person) { people(:top_leader) }

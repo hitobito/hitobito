@@ -140,10 +140,10 @@ describe MailingLists::BulkMail::Retriever do
         expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
         expect(imap_mail_validator).to receive(:sender_allowed?).and_return(false)
 
-        expect(Rails.logger).to receive(:info)
-          # rubocop:todo Layout/LineLength
-          .with("BulkMail Retriever: Rejecting email from dude@hitobito.example.com for list leaders@#{Settings.email.list_domain}")
-        # rubocop:enable Layout/LineLength
+        expect(Rails.logger).to receive(:info).with(
+          "BulkMail Retriever: Rejecting email from dude@hitobito.example.com " \
+          "for list leaders@#{Settings.email.list_domain}"
+        )
 
         expect do
           retriever.perform
@@ -240,6 +240,7 @@ describe MailingLists::BulkMail::Retriever do
         allow(imap_mail).to receive(:mail).and_return(bounce_mail)
         allow(imap_mail).to receive(:sender_email).and_return("MAILER-DAEMON@example.com")
         allow(imap_mail).to receive(:subject).and_return("Undelivered Mail Returned to Sender")
+        allow(imap_mail).to receive(:uid).and_return(42)
       end
 
       it "forwards bounce message to sender" do
@@ -270,6 +271,7 @@ describe MailingLists::BulkMail::Retriever do
         allow(imap_mail).to receive(:mail).and_return(auto_response)
         allow(imap_mail).to receive(:sender_email).and_return("David Hasselhof <david.hasselhof@example.com>")
         allow(imap_mail).to receive(:subject).and_return("Automatische Antwort: Foundation for Law and Government")
+        allow(imap_mail).to receive(:uid).and_return(42)
       end
 
       it "ignores auto response messages" do
@@ -426,6 +428,7 @@ describe MailingLists::BulkMail::Retriever do
       build_imap_mail(42, nil)
       allow(imap_connector).to receive(:fetch_mail_by_uid).with(42, :inbox).and_return(nil)
       expect(retriever).not_to receive(:process_mail)
+
       retriever.perform
     end
   end

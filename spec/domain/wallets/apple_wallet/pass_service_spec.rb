@@ -35,7 +35,8 @@ describe Wallets::AppleWallet::PassService do
 
   describe "#generate_pass" do
     it "delegates to client and returns binary data" do
-      expect(client).to receive(:create_pass).with(kind_of(Hash), kind_of(Hash)).and_return("binary-pkpass-data")
+      expect(client).to receive(:create_pass).with(kind_of(Hash), kind_of(Hash),
+        kind_of(Hash)).and_return("binary-pkpass-data")
 
       result = service.generate_pass
       expect(result).to eq("binary-pkpass-data")
@@ -134,13 +135,13 @@ describe Wallets::AppleWallet::PassService do
     it "includes member_name as primary field" do
       primary = generic[:primaryFields].find { |f| f[:key] == "member_name" }
       expect(primary[:value]).to eq(person.full_name)
-      expect(primary[:label]).to eq(I18n.t("wallets.apple.member_name"))
+      expect(primary[:label]).to eq("member_name_label")
     end
 
     it "includes member_number as secondary field" do
       secondary = generic[:secondaryFields].find { |f| f[:key] == "member_number" }
       expect(secondary[:value]).to eq(service.pass.member_number)
-      expect(secondary[:label]).to eq(I18n.t("wallets.pass.member_number"))
+      expect(secondary[:label]).to eq("member_number_label")
     end
 
     context "with valid_until set" do
@@ -157,7 +158,7 @@ describe Wallets::AppleWallet::PassService do
           aux = generic[:auxiliaryFields].find { |f| f[:key] == "valid_until" }
           expect(aux[:value]).to eq(service.pass.valid_until.iso8601)
           expect(aux[:dateStyle]).to eq("PKDateStyleShort")
-          expect(aux[:label]).to eq(I18n.t("wallets.pass.valid_until"))
+          expect(aux[:label]).to eq(Pass.human_attribute_name(:valid_until))
         end
       end
     end
@@ -176,7 +177,7 @@ describe Wallets::AppleWallet::PassService do
     it "includes description in backFields when definition has description" do
       back = generic[:backFields].find { |f| f[:key] == "description" }
       expect(back[:value]).to eq("Mitgliedschaftsausweis")
-      expect(back[:label]).to eq(I18n.t("wallets.pass.description"))
+      expect(back[:label]).to eq("description_label")
     end
 
     context "without description" do
@@ -198,6 +199,24 @@ describe Wallets::AppleWallet::PassService do
 
       section_field = generic[:secondaryFields].find { |f| f[:key] == "section" }
       expect(section_field[:value]).to eq("Bern")
+    end
+  end
+
+  describe "#pass_strings" do
+    subject(:strings) { service.pass_strings }
+
+    it "generates strings for all languages" do
+      Globalized.languages.each do |lang|
+        expect(strings).to have_key("#{lang}.lproj/pass.strings")
+      end
+    end
+
+    it "includes root-level fallback" do
+      expect(strings).to have_key("pass.strings")
+    end
+
+    it "generates strings in correct format" do
+      expect(strings["de.lproj/pass.strings"]).to match(/"member_name_label" = ".*";/)
     end
   end
 

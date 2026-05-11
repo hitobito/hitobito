@@ -8,6 +8,10 @@
 module Wallets
   module GoogleWallet
     class PassService
+      # Google Wallet image sizes (in pixels)
+      LOGO_ICON_SIZE = [800, 800]
+      LOGO_BANNER_SIZE = [1032, 336]
+
       # In a multi-tenant environment (multiple instances sharing the same
       # issuer_id), the wagon sets id_prefix_addition to a code block returning
       # a tenant-specific identifier so at runtime we ensure global uniqueness of
@@ -82,7 +86,7 @@ module Wallets
       # The Class must exist before any GenericObject can reference it via classId.
       # API reference: https://developers.google.com/wallet/reference/rest/v1/genericclass
       def generic_class
-        logo = image_uri(pass.logo_url)
+        logo = logo_icon_uri
         {
           id: class_id,
           issuerName: pass.definition.name,
@@ -107,8 +111,8 @@ module Wallets
           barcode: qr_barcode,
           textModulesData: generic_text_modules,
           hexBackgroundColor: pass.definition.background_color,
-          heroImage: image_uri(pass.logo_url),
-          logo: image_uri(pass.logo_url),
+          heroImage: logo_banner_uri,
+          logo: logo_icon_uri,
           validTimeInterval: valid_time_interval
         }.compact
       end
@@ -120,10 +124,12 @@ module Wallets
       def base_modules # rubocop:disable Metrics/AbcSize
         modules = [
           {id: "member_name",
-           localizedHeader: localized_string { I18n.t("wallets.pass.member_name") },
+           localizedHeader: localized_string { Pass.human_attribute_name(:member_name) },
            body: pass.member_name},
           {id: "member_number",
-           localizedHeader: localized_string { I18n.t("wallets.pass.member_number") },
+           localizedHeader: localized_string {
+             Pass.human_attribute_name(:member_number)
+           },
            body: pass.member_number}
         ]
         modules << valid_until_module if pass.valid_until.present?
@@ -133,13 +139,13 @@ module Wallets
 
       def description_module
         {id: "description",
-         localizedHeader: localized_string { I18n.t("wallets.pass.description") },
+         localizedHeader: localized_string { Pass.human_attribute_name(:description) },
          localizedBody: localized_string { pass.definition.description }}
       end
 
       def valid_until_module
         {id: "valid_until",
-         localizedHeader: localized_string { I18n.t("wallets.pass.valid_until") },
+         localizedHeader: localized_string { Pass.human_attribute_name(:valid_until) },
          localizedBody: localized_string { I18n.l(pass.valid_until) }}
       end
 
@@ -160,13 +166,13 @@ module Wallets
 
       # Builds a Google Wallet LocalizedString covering all configured locales.
       # Uses I18n.with_locale so translatable values are resolved per locale.
-      # default_locale becomes defaultValue (the person's preferred language);
+      # default_locale becomes defaultValue (pass_installation.locale for consistency);
       # remaining Settings.application.languages keys become translatedValues.
-      def localized_string(default_locale: pass.person.language)
-        default_locale = default_locale.to_sym
-        other_locales = Settings.application.languages.keys.map(&:to_sym) - [default_locale]
+      def localized_string
+        default_lang = @pass_installation.locale.to_sym
+        other_locales = Settings.application.languages.keys.map(&:to_sym) - [default_lang]
         {
-          defaultValue: {language: default_locale.to_s, value: I18n.with_locale(default_locale) {
+          defaultValue: {language: default_lang.to_s, value: I18n.with_locale(default_lang) {
             yield
           }},
           translatedValues: other_locales.map { |locale|
@@ -189,6 +195,30 @@ module Wallets
         return nil if url.blank? || !url.start_with?("http") || url.include?("localhost")
 
         {sourceUri: {uri: url}}
+      end
+
+      def logo_icon_uri
+        variant_url(pass.logo_icon(@pass_installation.locale.to_sym), LOGO_ICON_SIZE)
+      end
+
+      def logo_banner_uri
+        variant_url(pass.logo_banner(@pass_installation.locale.to_sym), LOGO_BANNER_SIZE)
+      end
+
+      private
+
+      def variant_url(attachment, size)
+        return nil unless attachment&.attached?
+
+        url = Rails.application.routes.url_helpers.rails_representation_url(
+          attachment.variant(resize_to_fit: size, format: :png),
+          protocol: Settings.application.protocol,
+          host: Settings.application.hostname,
+          only_path: false
+        )
+
+        return nil unless url
+        image_uri(url)
       end
     end
   end

@@ -29,6 +29,13 @@ class PassDefinition < ActiveRecord::Base
 
   ### ASSOCIATIONS
 
+  # Logo-Attachments — per configured language, similar to Globalize translations.
+  # Dynamically registered based on Settings.application.languages
+  Globalized.languages.each do |lang|
+    has_one_attached :"logo_icon_#{lang}"
+    has_one_attached :"logo_banner_#{lang}"
+  end
+
   belongs_to :owner, polymorphic: true # Group (Event in future phase)
   has_many :pass_grants, dependent: :destroy
   has_many :passes, dependent: :destroy
@@ -48,6 +55,19 @@ class PassDefinition < ActiveRecord::Base
   validates :background_color, presence: true,
     format: {with: /\A#[0-9a-fA-F]{6}\z/, message: :invalid_hex_color}
 
+  validates :logo_icon, presence: true
+  validates :logo_banner, presence: true
+
+  # Logo-Attachments validation
+  Globalized.languages.each do |lang|
+    validates :"logo_icon_#{lang}",
+      content_type: %w[image/png image/jpeg],
+      aspect_ratio: :square
+    validates :"logo_banner_#{lang}",
+      content_type: %w[image/png image/jpeg],
+      aspect_ratio: :landscape
+  end
+
   after_create :populate_passes
   after_update :handle_definition_change
 
@@ -58,6 +78,19 @@ class PassDefinition < ActiveRecord::Base
     Passes::TemplateRegistry.fetch(template_key)
   end
 
+  # Locale-aware accessor for the square icon — similar to Globalize attributes.
+  # Returns the attachment for the requested language (with fallback chain).
+  # Example: definition.logo_icon        → Attachment for I18n.locale
+  #           definition.logo_icon(:fr)   → Attachment for :fr (or fallback)
+  def logo_icon(locale = I18n.locale)
+    find_localized_attachment(:logo_icon, locale)
+  end
+
+  # Locale-aware accessor for the landscape banner — similar to Globalize attributes.
+  def logo_banner(locale = I18n.locale)
+    find_localized_attachment(:logo_banner, locale)
+  end
+
   private
 
   def populate_passes
@@ -66,5 +99,19 @@ class PassDefinition < ActiveRecord::Base
 
   def handle_definition_change
     Passes::DefinitionChangeHandler.new(self).handle_update
+  end
+
+  # Traverses the Globalize fallback chain and returns the first attachment
+  # that exists and is attached for an app language — identical to Globalize's
+  # Adapter#fetch: traverse chain, return nil when exhausted.
+  #
+  # Example: locale = :en, App-Sprachen = [:de, :fr, :it]
+  #   → :en → logo_banner_en? respond_to? no → skip
+  #   → :de → logo_banner_de? respond_to? yes, attached? → yes → return logo_banner_de
+  #   → if nothing found: nil
+  def find_localized_attachment(base_name, locale)
+    Globalize.fallbacks(locale.to_sym)
+      .lazy.map { |lang| try(:"#{base_name}_#{lang}") }
+      .find(&:attached?)
   end
 end

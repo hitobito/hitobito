@@ -48,9 +48,9 @@ module Messages
         succeeded, failed, blocked = recipient_ids(recipients,
           [delivery.succeeded, delivery.failed, delivery.blocked])
 
-        # rubocop:todo Layout/LineLength
-        log "Sent mails, #{succeeded.length} OK, #{failed.length} failed, #{blocked.length} blocked."
-        # rubocop:enable Layout/LineLength
+        log(
+          "Sent mails: #{succeeded.length} OK, #{failed.length} failed, #{blocked.length} blocked."
+        )
 
         message_recipients.where(id: succeeded).update_all(state: :sent)
         message_recipients.where(id: failed).update_all(state: :failed)

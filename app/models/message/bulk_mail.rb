@@ -4,6 +4,7 @@
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
+
 class Message::BulkMail < Message
   delegate :mail_from, to: :mail_log
 

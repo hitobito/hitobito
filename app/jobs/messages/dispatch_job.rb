@@ -19,6 +19,7 @@ module Messages
 
     def perform
       message.update!(sent_at: Time.current, state: :processing)
+      # Domain-Class: Messages::#{message.type}Dispatch
       result = message.dispatcher_class.new(message).run
       message.update!(recipient_count: message.success_count)
 

@@ -1231,22 +1231,22 @@ fr:
         many: "%{count} factures ont déjà été payées."
         other: "%{count} factures ont déjà été payées."
       reminded_invalid:
-        one: "Mahnung %{number} wurde bereits erstellt."
-        many: "%{count} Mahnungen wurden bereits erstellt."
-        other: "%{count} Mahnungen wurden bereits erstellt."
+        one: "Rappel %{number} a déjà été établi."
+        many: "%{count} rappels ont déjà été établis."
+        other: "%{count} rappels ont déjà été établis."
       recipient_email_invalid:
-        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
-        many: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
-        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+        one: "Facture %{number} n'a pas pu être envoyée, car il n'y a pas d'e-mail du destinatair."
+        many: "%{count} factures n'ont pas pu être envoyées car il n'y a pas d'e-mail de destinataire."
+        other: "%{count} factures n'ont pas pu être envoyées car il n'y a pas d'e-mail de destinataire."
       payment_reminders_missing:
-        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
-        many: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
-        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        one: "Rappel de facture %{number} n'a pas pu être établi, car les réglages de rappel ne sont pas valides."
+        many: "%{count} rappels de factures n'ont pas pu être établis car les réglages de rappel ne sont pas valables."
+        other: "%{count} rappels de factures n'ont pas pu être établis car les réglages de rappel ne sont pas valables."
     invoices:
       invalid_recipients:
-        one: "Für einen Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
-        many: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
-        other: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        one: "Aucune facture valide n'a pu être générée pour un destinataire. <br/>%{recipients}"
+        many: "Aucune facture valide n'a pu être générée pour %{count} destinataires. <br/>%{recipients}"
+        other: "Aucune facture valide n'a pu être générée pour %{count} destinataires. <br/>%{recipients}"
     destroy:
       zero: "Choisir d'abord une facture"
       one: "La facture a été annulée."
@@ -1272,18 +1272,18 @@ fr:
       form:
         recipient_count_disclaimer: "Remarque : si les critères de filtrage s'appliquent à un nombre plus ou moins important de destinataires à l'avenir, la liste finale des factures générées est susceptible de changer."
         recipient_info:
-          one: "%{count} Empfänger gefunden."
-          many: "%{count} Empfänger gefunden."
-          other: "%{count} Empfänger gefunden."
+          one: "%{count} destinataire trouvé."
+          many: "%{count} destinataires trouvés."
+          other: "%{count} destinataires trouvés."
     form:
-      recipient_source_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
-      recipient_source_people_filter_parent_group_help: Alle Personen, die während der Rechnungsperiode eine aktive Rolle in %{group} hatten, bekommen eine Rechnung.
+      recipient_source_group_type_help: Tous les groupes de ce type situés dans ou sous %{group} recevront une facture. Sont exclus les groupes qui avaient déjà été supprimés ou archivés à la date de début de la période de facturation.
+      recipient_source_people_filter_parent_group_help: Toutes les personas qui ont eu un rôle actif au cours de la période de facturation au groupe %{group} recevront une facture.
     new:
       title: Définir une facture collective
     actions_index:
       link:
-        add_for_groups: Neue Sammelrechnung an Gruppen
-        add_for_people: Neue Sammelrechnung an Personen
+        add_for_groups: Nouvelle facture collective aux groupes
+        add_for_people: Nouvelle facture collective aux personnes
     tabs:
       info: Informations
       invoice_runs: Série de factures
@@ -1638,7 +1638,7 @@ fr:
         reload: Vérifier à nouveau
       action: Merge
       success: Les données des personnes ont été fusionnées avec succès.
-      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültiger Daten zusammengeführt.
+      success_with_validation_errors: Les entrées des personnes ont été fusionnées malgré la validité partielle des données.
     ignore:
       new:
         title: Voulez-vous vraiment ignorer le doublon?
@@ -2003,7 +2003,7 @@ fr:
       not_blocked: Non bloqué
 
   people_filter:
-    description: "Personen in %{group}"
+    description: "Personnes dans %{group}"
 
   participations:
     destroy:
@@ -2364,7 +2364,7 @@ fr:
       create: "%{model} <i>%{label}</i> a été ajouté."
       update: "%{model} <i>%{label}</i> a été mis à jour : %{changeset}"
       destroy: "%{model} <i>%{label}</i> a été effacé."
-      removed: "%{model} <i>%{label}</i> wurde entfernt."
+      removed: "%{model} <i>%{label}</i>  a été effacé."
 
       person/add_request:
         create: "La demande d'accès pour <i>%{label}</i> a été établie."

@@ -14,7 +14,7 @@
 #  end_timestamp    :datetime
 #  filename         :string
 #  filetype         :string           not null
-#  job_name         :string           not null
+#  job_class        :string           not null
 #  max_attempts     :integer          not null
 #  progress         :integer          not null
 #  reports_progress :boolean          not null
@@ -100,6 +100,11 @@ class UserJobResult < ApplicationRecord
     return if filename.blank?
 
     "#{filename}.#{filetype}"
+  end
+
+  def job_name
+    human_job_class_name = job_class.demodulize.underscore.humanize
+    I18n.t("delayed_job.#{self.job_class.underscore}", default: human_job_class_name)
   end
 
   def report_in_progress!

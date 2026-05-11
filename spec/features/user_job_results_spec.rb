@@ -22,7 +22,7 @@ describe :user_job_results, js: true do
     visit user_job_results_path
 
     expect(page).to have_css(".fas.fa-circle-check")
-    expect(page).to have_content("Custom job name")
+    expect(page).to have_content("Successful user managed job")
     expect(page).to have_content("Versuche: 1/2")
     expect(page).to have_content("Dieser Job hat keinen nachverfolgbaren Fortschritt")
     expect(page).not_to have_css(".progress")
@@ -65,8 +65,8 @@ describe :user_job_results, js: true do
     expect(page).to have_content("Jobübersicht")
 
     within "#user_job_results" do
-      expect(page).to have_content("Parent Job", count: 1)
-      expect(page).to have_content("Child Job", count: 3)
+      expect(page).to have_content("User managed parent job", count: 1)
+      expect(page).to have_content("User managed child job", count: 3)
     end
   end
 
@@ -84,19 +84,19 @@ describe :user_job_results, js: true do
       expect(page).to have_content("Jobübersicht")
 
       within "#user_job_results" do
-        expect(page).not_to have_content("Job enqueued by current user")
-        expect(page).not_to have_content("Job enqueued by other user")
+        expect(page).not_to have_content("Current user job")
+        expect(page).not_to have_content("Other user job")
 
         enqueue_job_by_current_and_other_user(Examples::SuccessfulUserManagedJob)
 
-        expect(page).to have_content("Job enqueued by current user")
-        expect(page).not_to have_content("Job enqueued by other user")
+        expect(page).to have_content("Current user job", count: 1)
+        expect(page).not_to have_content("Other user job")
         expect(page).to have_css(".fas.fa-circle-notch")
 
         expect(Delayed::Worker.new.work_off).to eql([2, 0])
 
-        expect(page).to have_content("Job enqueued by current user")
-        expect(page).not_to have_content("Job enqueued by other user")
+        expect(page).to have_content("Current user job", count: 1)
+        expect(page).not_to have_content("Other user job")
         expect(page).to have_css(".fas.fa-circle-check")
       end
     end
@@ -106,15 +106,15 @@ describe :user_job_results, js: true do
       expect(page).to have_content("Top Leader")
 
       expect(page).not_to have_content("Job erfolgreich abgeschlossen")
-      expect(page).not_to have_content("Job enqueued by current user")
-      expect(page).not_to have_content("Job enqueued by other user")
+      expect(page).not_to have_content("Current user job")
+      expect(page).not_to have_content("Other user job")
 
       enqueue_job_by_current_and_other_user(Examples::SuccessfulUserManagedJob)
       expect(Delayed::Worker.new.work_off).to eql([2, 0])
 
       expect(page).to have_content("Job erfolgreich abgeschlossen", count: 1)
-      expect(page).to have_content("Job enqueued by current user")
-      expect(page).not_to have_content("Job enqueued by other user")
+      expect(page).to have_content("Current user job", count: 1)
+      expect(page).not_to have_content("Other user job")
     end
 
     it "should show notification when job of current user has failed" do
@@ -122,15 +122,15 @@ describe :user_job_results, js: true do
       expect(page).to have_content("Top Leader")
 
       expect(page).not_to have_content("Fehler der Jobausführung aufgetreten")
-      expect(page).not_to have_content("Job enqueued by current user")
-      expect(page).not_to have_content("Job enqueued by other user")
+      expect(page).not_to have_content("Current user job")
+      expect(page).not_to have_content("Other user job")
 
       enqueue_job_by_current_and_other_user(Examples::UnsuccessfulUserManagedJob)
       expect(Delayed::Worker.new.work_off).to eql([0, 2])
 
       expect(page).to have_content("Fehler bei Jobausführung aufgetreten", count: 1)
-      expect(page).to have_content("Job enqueued by current user")
-      expect(page).not_to have_content("Job enqueued by other user")
+      expect(page).to have_content("Current user job", count: 1)
+      expect(page).not_to have_content("Other user job")
     end
 
     it "should update pagination when jobs are enqueued" do
@@ -141,14 +141,16 @@ describe :user_job_results, js: true do
       job = Examples::SuccessfulUserManagedJob.new
 
       within "#content" do
-        job.job_name = "First job"
-        2.times { job.enqueue! }
+        2.times do
+          delayed_job = job.enqueue!
+          UserJobResult.where(delayed_job:).update!(job_class: "FirstJob")
+        end
 
         expect(page).to have_content("First job", count: 2)
         expect(page).not_to have_content("Letzte")
 
-        job.job_name = "Second job"
-        job.enqueue!
+        delayed_job = job.enqueue!
+        UserJobResult.where(delayed_job:).update!(job_class: "SecondJob")
 
         expect(page).to have_content("First job", count: 1)
         expect(page).to have_content("Second job", count: 1)
@@ -160,7 +162,8 @@ describe :user_job_results, js: true do
         expect(page).not_to have_content("Second job")
         expect(page).to have_content("Erste")
 
-        job.enqueue!
+        delayed_job = job.enqueue!
+        UserJobResult.where(delayed_job:).update!(job_class: "SecondJob")
 
         expect(page).to have_content("First job", count: 2)
         expect(page).not_to have_content("Second job")
@@ -246,14 +249,14 @@ describe :user_job_results, js: true do
 
     def enqueue_job_by_current_and_other_user(job_class)
       user_job = job_class.new
-      user_job.job_name = "Job enqueued by current user"
-      user_job.enqueue!
+      user_delayed_job = user_job.enqueue!
+      UserJobResult.where(delayed_job: user_delayed_job).update!(job_class: "CurrentUserJob")
 
       allow(Auth).to receive(:current_person).and_return(bottom_member)
 
       other_user_job = job_class.new
-      user_job.job_name = "Job enqueued by other user"
-      other_user_job.enqueue!
+      other_user_delayed_job = other_user_job.enqueue!
+      UserJobResult.where(delayed_job: other_user_delayed_job).update!(job_class: "OtherUserJob")
 
       allow(Auth).to receive(:current_person).and_return(top_leader)
     end

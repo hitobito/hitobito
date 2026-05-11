@@ -8,7 +8,7 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
     rename_table :async_download_files, :user_job_results
 
     change_table :user_job_results do |t|
-      t.rename :name, :job_name
+      t.rename :name, :job_class
       t.rename :timestamp, :start_timestamp
 
       t.string :filename

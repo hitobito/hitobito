@@ -10,14 +10,14 @@ require "spec_helper"
 describe UserJobResult do
   let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
-  let(:job_name) { "A test job" }
+  let(:job_class) { "Export::ExampleExportJob" }
   let(:filename) { "subscriptions_to-blorbaels-rants" }
   let(:filetype) { "csv" }
   let(:reports_progress) { false }
   let(:data) { SecureRandom.base64(128) }
 
   subject do
-    UserJobResult.create!(person:, job_name:, filename:, filetype:, reports_progress:)
+    UserJobResult.create!(person:, job_class:, filename:, filetype:, reports_progress:)
   end
 
   describe "default values" do
@@ -26,7 +26,7 @@ describe UserJobResult do
     end
 
     it "should set correct default values when values are not passed" do
-      user_job_result = UserJobResult.create!(person:, job_name:)
+      user_job_result = UserJobResult.create!(person:, job_class:)
 
       check_default_values(user_job_result)
     end
@@ -34,7 +34,7 @@ describe UserJobResult do
     it "should set correct default values when values are passed as nil" do
       user_job_result = UserJobResult.create!(
         person:,
-        job_name:,
+        job_class:,
         filetype: nil,
         start_timestamp: nil,
         status: nil,
@@ -50,7 +50,7 @@ describe UserJobResult do
     it "should not override values with default values when they are passed" do
       user_job_result_attributes = {
         person:,
-        job_name:,
+        job_class:,
         filetype: "csv",
         start_timestamp: 10.days.ago,
         status: "in_progress",
@@ -68,7 +68,7 @@ describe UserJobResult do
     def check_default_values(user_job_result)
       expect(user_job_result).to have_attributes(
         person:,
-        job_name:,
+        job_class:,
         filename: nil,
         filetype: "txt",
         reports_progress: false,
@@ -103,6 +103,18 @@ describe UserJobResult do
       subject.filename = "A filename with  many   spaces"
 
       expect(subject.filename).to eql "A-filename-with-many-spaces.csv"
+    end
+  end
+
+  describe "job name handling" do
+    it "returns human readable job name when translation not found" do
+      expect(subject.job_name).to eql("Example export job")
+    end
+
+    it "returns i18n translation if translation is available" do
+      with_translations(de: { delayed_job: { "export/example_export_job": "Custom Job Name for Example Export"} } ) do
+        expect(subject.job_name).to eql("Custom Job Name for Example Export")
+      end
     end
   end
 
@@ -214,7 +226,7 @@ describe UserJobResult do
     it "should be disabled when all jobs have finished" do
       user_job_result = subject
       expect(person.needs_web_socket_connection).to be_truthy
-      other_user_job_result = UserJobResult.create!(person:, job_name:)
+      other_user_job_result = UserJobResult.create!(person:, job_class:)
       expect(person.needs_web_socket_connection).to be_truthy
 
       user_job_result.update!(status: "success")

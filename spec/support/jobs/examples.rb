@@ -24,8 +24,6 @@ module Examples
   class SuccessfulUserManagedJob < BaseJob
     prepend UserManageableJob
 
-    self.job_name = "Custom job name"
-
     def perform
       Rails.logger.debug "Working..."
     end
@@ -33,8 +31,6 @@ module Examples
 
   class UserManagedParentJob < BaseJob
     prepend UserManageableJob
-
-    self.job_name = "Parent Job"
 
     def perform
       3.times do
@@ -47,8 +43,6 @@ module Examples
 
   class UserManagedChildJob < BaseJob
     prepend UserManageableJob
-
-    self.job_name = "Child Job"
 
     def perform
       Rails.logger.debug "Working..."

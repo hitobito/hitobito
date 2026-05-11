@@ -26,7 +26,7 @@ describe UserManageableJob do
 
       expect(UserJobResult).to receive(:create!).with({
         person:,
-        job_name: "Custom job name",
+        job_class: "Examples::SuccessfulUserManagedJob",
         filename: nil,
         filetype: nil,
         reports_progress: false,
@@ -120,20 +120,6 @@ describe UserManageableJob do
 
       expect(user_job_result).to receive(:report_progress!).exactly(5).times
       run_enqueued_job(enqueued_job)
-    end
-
-    it "should use custom job name if set" do
-      job = Examples::SuccessfulUserManagedJob.new
-      job.enqueue!
-      user_job_result = job.user_job_result
-      expect(user_job_result.job_name).to eql("Custom job name")
-    end
-
-    it "should use class name as job name if custom name is not set" do
-      job = Examples::UnsuccessfulUserManagedJob.new
-      job.enqueue!
-      user_job_result = job.user_job_result
-      expect(user_job_result.job_name).to eql("Examples::UnsuccessfulUserManagedJob")
     end
   end
 

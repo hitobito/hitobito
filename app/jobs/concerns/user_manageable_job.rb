@@ -8,7 +8,6 @@ module UserManageableJob
 
   prepended do
     attr_writer :user_id
-    class_attribute :job_name, default: name
     class_attribute :reports_progress, default: false
     self.parameters = parameters.to_a + [:user_job_result_id]
   end
@@ -25,9 +24,9 @@ module UserManageableJob
 
     ActiveRecord::Base.transaction do
       user_job_result = UserJobResult.create!(
-        person: enqueueing_person, job_name:, reports_progress:,
-        filename: @options&.dig(:filename), filetype: @format,
-        max_attempts: try(:max_attempts)
+        person: enqueueing_person, job_class: self.class.name,
+        reports_progress:, filename: @options&.dig(:filename),
+        filetype: @format, max_attempts: try(:max_attempts)
       )
       @user_job_result_id = user_job_result.id
 

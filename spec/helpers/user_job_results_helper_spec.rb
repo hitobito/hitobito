@@ -9,7 +9,7 @@ describe UserJobResultsHelper do
   let(:user_job_result) do
     UserJobResult.create!(
       person: people(:top_leader),
-      job_name: "Testjob"
+      job_class: "TestJob"
     )
   end
 

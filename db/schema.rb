@@ -1383,7 +1383,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
   end
 
   create_table "user_job_results", force: :cascade do |t|
-    t.string "job_name", null: false
+    t.string "job_class", null: false
     t.string "filetype", null: false
     t.integer "progress", null: false
     t.bigint "person_id", null: false

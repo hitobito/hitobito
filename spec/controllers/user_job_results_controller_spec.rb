@@ -60,7 +60,7 @@ describe UserJobResultsController do
   def create_test_user_job_result(person)
     UserJobResult.create!(
       person:,
-      job_name: "A test job",
+      job_class: "TestJob",
       filename: "subscriptions_to-blorbaels-rants",
       filetype: "txt",
       reports_progress: false

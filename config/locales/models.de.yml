@@ -4,6 +4,15 @@
 #  https://github.com/hitobito/hitobito.
 
 de:
+  wallets:
+    apple:
+      member_name: "Mitgliedsname"
+    pass:
+      member_name: "Mitgliedsname"
+      member_number: "Mitgliedsnummer"
+      valid_until: "Gültig bis"
+      description: "Beschreibung"
+
   time:
     formats:
       time: "%H:%M"

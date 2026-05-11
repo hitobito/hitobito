@@ -26,10 +26,11 @@ module Wallets
       #
       # @param pass_json [Hash] The pass.json content
       # @param images [Hash<String, String>] Filename => binary data (e.g. "logo.png" => data)
+      # @param strings [Hash<String, String>] Filename => string data (e.g. "pass.strings" => data)
       # @return [String] Binary .pkpass data
-      def create_pass(pass_json, images = {})
+      def create_pass(pass_json, images = {}, strings = {})
         Dir.mktmpdir do |dir|
-          write_pass_files(dir, pass_json, images)
+          write_pass_files(dir, pass_json, images, strings)
           write_manifest(dir)
           write_signature(dir)
           package_zip(dir)
@@ -38,11 +39,15 @@ module Wallets
 
       private
 
-      def write_pass_files(dir, pass_json, images)
+      def write_pass_files(dir, pass_json, images, strings)
         File.write(File.join(dir, "pass.json"), pass_json.to_json)
         images.each do |name, data|
           safe_name = File.basename(name)
           File.binwrite(File.join(dir, safe_name), data)
+        end
+        strings.each do |name, data|
+          safe_name = File.basename(name)
+          File.write(File.join(dir, safe_name), data)
         end
       end
 

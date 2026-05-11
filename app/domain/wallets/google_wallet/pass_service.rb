@@ -82,7 +82,7 @@ module Wallets
       # The Class must exist before any GenericObject can reference it via classId.
       # API reference: https://developers.google.com/wallet/reference/rest/v1/genericclass
       def generic_class
-        logo = image_uri(pass.logo_url)
+        logo = logo_icon_uri
         {
           id: class_id,
           issuerName: pass.definition.name,
@@ -107,8 +107,8 @@ module Wallets
           barcode: qr_barcode,
           textModulesData: generic_text_modules,
           hexBackgroundColor: pass.definition.background_color,
-          heroImage: image_uri(pass.logo_url),
-          logo: image_uri(pass.logo_url),
+          heroImage: logo_banner_uri,
+          logo: logo_icon_uri,
           validTimeInterval: valid_time_interval
         }.compact
       end
@@ -156,13 +156,13 @@ module Wallets
 
       # Builds a Google Wallet LocalizedString covering all configured locales.
       # Uses I18n.with_locale so translatable values are resolved per locale.
-      # default_locale becomes defaultValue (the person's preferred language);
+      # default_locale becomes defaultValue (pass_installation.locale for consistency);
       # remaining Settings.application.languages keys become translatedValues.
-      def localized_string(default_locale: pass.person.language)
-        default_locale = default_locale.to_sym
-        other_locales = Settings.application.languages.keys.map(&:to_sym) - [default_locale]
+      def localized_string
+        default_lang = @pass_installation.locale.to_sym
+        other_locales = Settings.application.languages.keys.map(&:to_sym) - [default_lang]
         {
-          defaultValue: {language: default_locale.to_s, value: I18n.with_locale(default_locale) {
+          defaultValue: {language: default_lang.to_s, value: I18n.with_locale(default_lang) {
             yield
           }},
           translatedValues: other_locales.map { |locale|
@@ -185,6 +185,24 @@ module Wallets
         return nil if url.blank? || !url.start_with?("http") || url.include?("localhost")
 
         {sourceUri: {uri: url}}
+      end
+
+      def logo_icon_uri
+        attachment = pass.definition.logo_icon(@pass_installation.locale.to_sym)
+        url = Rails.application.routes.url_helpers.rails_representation_url(
+          attachment.variant(resize_to_fill: [800, 800], format: :png),
+          only_path: false
+        )
+        image_uri(url)
+      end
+
+      def logo_banner_uri
+        attachment = pass.definition.logo_banner(@pass_installation.locale.to_sym)
+        url = Rails.application.routes.url_helpers.rails_representation_url(
+          attachment.variant(resize_to_fit: [1032, 336], format: :png),
+          only_path: false
+        )
+        image_uri(url)
       end
     end
   end

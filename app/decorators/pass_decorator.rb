@@ -21,46 +21,53 @@ class PassDecorator < SimpleDelegator
     Passes::VerificationQrCode.new(self).verify_url
   end
 
-  # Resolve the closest group in the owner's ancestor chain that has a logo attached.
-  # Walks from root to self, returns the first group with a logo.
-  # Returns nil if no group has a logo.
-  def logo_group
-    return @logo_group if defined?(@logo_group)
-
-    @logo_group = definition.owner.self_and_ancestors
-      .includes(:logo_attachment)
-      .reverse
-      .find { |g| g.logo.attached? }
+  def logo_icon
+    definition.logo_icon
   end
 
-  # Returns binary logo data.
-  # Priority: group logo blob > Settings.application.logo file from webpack build.
+  def logo_icon_url
+    attachment = definition.logo_icon
+    return nil unless attachment&.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_url(attachment, host: Settings.oidc.issuer)
+  end
+
+  def logo_banner
+    definition.logo_banner
+  end
+
+  def logo_banner_url
+    attachment = definition.logo_banner
+    return nil unless attachment&.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_url(attachment, host: Settings.oidc.issuer)
+  end
+
+  # Returns binary logo data for the current locale.
+  # Uses the locale-aware logo_icon method from PassDefinition.
   def logo_blob
-    if logo_group
-      logo_group.logo.blob.download
-    else
-      settings_logo_blob
-    end
+    attachment = definition.logo_icon
+    return nil unless attachment&.attached?
+
+    attachment.blob.download
   end
 
   # Returns an absolute URL for the logo (for use in wallet providers and PDF).
-  # Priority: group logo blob URL > Settings.application.logo webpack path.
+  # Uses the locale-aware logo_icon method from PassDefinition.
   def logo_url
-    if logo_group
-      Rails.application.routes.url_helpers.rails_blob_url(logo_group.logo, only_path: false)
-    else
-      settings_logo_url
-    end
+    attachment = definition.logo_icon
+    return nil unless attachment&.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_url(attachment, only_path: false)
   end
 
   # Returns a root-relative path suitable for use in HTML (image_tag).
-  # Uses the webpack asset path directly, avoiding the need for a full URL.
+  # Uses the locale-aware logo_icon method from PassDefinition.
   def logo_path
-    if logo_group
-      Rails.application.routes.url_helpers.rails_blob_path(logo_group.logo)
-    else
-      settings_logo_pack_path
-    end
+    attachment = definition.logo_icon
+    return nil unless attachment&.attached?
+
+    Rails.application.routes.url_helpers.rails_blob_path(attachment, only_path: true)
   end
 
   def to_s
@@ -102,39 +109,6 @@ class PassDecorator < SimpleDelegator
   end
 
   private
-
-  # Resolve Settings.application.logo as a webpack asset path.
-  def settings_logo_pack_path
-    logo_image = Settings.application.logo&.image
-    return nil if logo_image.blank?
-
-    manifest = Webpacker.instance.manifest
-    manifest.lookup("wagon-media/images/#{logo_image}") ||
-      manifest.lookup("media/images/#{logo_image}")
-  rescue Webpacker::Manifest::MissingEntryError
-    nil
-  end
-
-  def settings_logo_url
-    path = settings_logo_pack_path
-    return nil unless path
-
-    opts = Rails.application.routes.default_url_options.with_indifferent_access
-    scheme = opts[:protocol] || "http"
-
-    URI::Generic.build(scheme:, host: opts[:host], port: opts[:port], path:).to_s
-  end
-
-  # Read the Settings.application.logo file from the webpack build output.
-  def settings_logo_blob
-    path = settings_logo_pack_path
-    return nil unless path
-
-    # pack_path is relative (e.g. "/packs/media/images/logo-abc123.png").
-    # Resolve to the file on disk via the public directory.
-    file_path = Rails.public_path.join(path.delete_prefix("/"))
-    File.binread(file_path) if File.exist?(file_path)
-  end
 
   # Determines if the background color is light or dark based on luminance
   # @return [Boolean] true if background is light, false if dark

@@ -7,6 +7,15 @@
 require "spec_helper"
 
 describe Role do
+  def track_callbacks(role)
+    callback_types = []
+    allow(role).to receive(:run_callbacks).and_wrap_original do |original, callback_name, &block|
+      callback_types << callback_name
+      original.call(callback_name, &block)
+    end
+    yield(callback_types)
+  end
+
   context "validates" do
     let(:group) { groups(:bottom_layer_one) }
     let(:today) { Time.zone.today }
@@ -583,6 +592,19 @@ describe Role do
     end
   end
 
+  context "#update" do
+    let(:role) do
+      Fabricate(Group::BottomLayer::Leader.name.to_s, group: groups(:bottom_layer_one))
+    end
+
+    it "does not trigger destroy callback when updating end_on to past date" do
+      track_callbacks(role) do |callback_types|
+        role.update!(end_on: Date.current.yesterday)
+        expect(callback_types).not_to include(:destroy)
+      end
+    end
+  end
+
   context "#destroy" do
     context "on young role" do
       let(:role) do
@@ -594,14 +616,24 @@ describe Role do
         expect(described_class.unscoped.where(id: role.id)).not_to be_exists
       end
 
+      it "triggers destroy but not update callback" do
+        track_callbacks(role) do |callback_types|
+          role.destroy
+          expect(callback_types).to include(:destroy)
+          expect(callback_types).not_to include(:update)
+        end
+      end
+
       it "with always_soft_destroy: true ends role per yesterday" do
         expect { role.destroy(always_soft_destroy: true) }
           .to change { role.reload.end_on }.to(Date.current.yesterday)
       end
 
-      it "triggers destroy callback" do
-        expect(role).to receive(:set_contact_data_visible)
-        role.destroy
+      it "with always_soft_destroy: true triggers destroy and update callback" do
+        track_callbacks(role) do |callback_types|
+          role.destroy(always_soft_destroy: true)
+          expect(callback_types).to include(:destroy, :update)
+        end
       end
     end
 
@@ -631,9 +663,14 @@ describe Role do
         expect { role.destroy }.to change { role.reload.end_on }.to(Date.current.yesterday)
       end
 
-      it "does triggers destroy callback" do
-        expect(role).to receive(:set_contact_data_visible).at_least(:once)
-        role.destroy
+      it "triggers destroy and update callbacks" do
+        # Soft destroy calls run_callbacks :destroy, which triggers after_destroy
+        # Inside the block, it calls update!, which triggers after_update
+        track_callbacks(role) do |callback_types|
+          role.destroy
+          expect(callback_types).to include(:destroy, :save)
+          expect(callback_types.index(:destroy)).to be < callback_types.index(:save)
+        end
       end
 
       it "can delete if role starts tomorrow" do

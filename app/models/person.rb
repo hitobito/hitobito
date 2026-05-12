@@ -165,6 +165,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include I18nEnums
   include ValidatedEmail
   include TwoFactorAuthenticatable
+  include AgeCalculatable
   include PersonTags::ValidationTagged
   include People::SelfRegistrationReasons
   include People::MembershipVerification
@@ -452,16 +453,6 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def default_group_id
     primary_group_id || groups.first.try(:id) || Group.root.id
-  end
-
-  def years(comparison = Time.zone.now.to_date)
-    return unless birthday?
-
-    birthday_has_passed =
-      (comparison.month > birthday.month) ||
-      (comparison.month == birthday.month && comparison.day >= birthday.day)
-
-    comparison.year - birthday.year - (birthday_has_passed ? 0 : 1)
   end
 
   def login_status

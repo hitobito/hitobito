@@ -53,6 +53,11 @@ describe Events::Filter::CourseList do
       events(:top_course)].map(&:id))
   end
 
+  it "contains courses only once if kind translations exist" do
+    I18n.with_locale(:fr) { event_kinds(:slk).update!(label: "Course de moniteur") }
+    expect(list_entries.count).to eq(4)
+  end
+
   it "contains all events with list_all_courses" do
     entries = list_entries(list_all_courses: true)
     expect(entries.size).to eq(6)

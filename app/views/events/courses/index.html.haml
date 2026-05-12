@@ -10,12 +10,12 @@
 
 = render "filter"
 
-%p
-  - if can?(:export_list, Event::Course)
-    = Dropdown::Event::EventsExport.new(self, params).to_s
-    = render_extensions :buttons
-
 = turbo_frame_tag(:event_courses_list, target: :_top) do
+  %p
+    - if can?(:export_list, Event::Course)
+      = Dropdown::Event::EventsExport.new(self, params).to_s
+      = render_extensions :buttons
+
   %section
     = grouped_table(@grouped_events, manager || display_any_booking_info? ? 4 : 3) do |event|
       %td

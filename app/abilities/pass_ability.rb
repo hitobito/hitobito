@@ -5,7 +5,7 @@
 
 class PassAbility < AbilityDsl::Base
   on(Pass) do
-    permission(:any).may(:show).herself
+    permission(:any).may(:add_to_wallet).herself
   end
 
   def person

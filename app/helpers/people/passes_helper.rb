@@ -19,7 +19,7 @@ module People::PassesHelper
   end
 
   def can_add_pass_to?(p, wallet_type)
-    "Wallets::#{wallet_type.capitalize}Wallet::Config".constantize.exist? && p.person = current_person
+    send(:"#{wallet_type}_wallet_configured?") && can?(:add_to_wallet, p)
   end
 
   def google_wallet_configured?

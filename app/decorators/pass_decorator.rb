@@ -3,11 +3,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class PassDecorator < SimpleDelegator
+class PassDecorator < ApplicationDecorator
   delegate :member_number, :member_name, to: :wallet_data_provider
   delegate :name, :description, :background_color, to: :pass_definition
-
-  def decorate = self
+  decorates :pass
 
   def definition = pass_definition
 

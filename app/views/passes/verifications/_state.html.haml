@@ -8,7 +8,7 @@
     %span.fas.fa-check
     = t('passes.verifications.status.valid')
 - elsif @state == :expired
-  .alert.alert-danger
+  .alert.alert-warning
     %span.fas.fa-times-circle
     = t('passes.verifications.status.expired')
 - else

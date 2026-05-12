@@ -58,12 +58,18 @@ environment.plugins.append('exclude unused moment locales',
 
 // Register webpack entry points from wagon directories (../hitobito_*/app/javascript/packs/*)
 // This allows wagons to define their own layouts/pack files that get compiled into the manifest.
+
+// For this to work in PRE_BUILD_SCRIPT, we need a pathJoin from
+// vendor wagons aswell, instead of the local setup
 const wagonExtGlob = extensions.length === 1
   ? `**/*${extensions[0]}`
   : `**/*{${extensions.join(',')}}`
 
-const wagonPacksPattern = pathJoin('..', 'hitobito_*', 'app', 'javascript', 'packs', wagonExtGlob)
-globSync(wagonPacksPattern).forEach((packPath) => {
+const wagonPacksPatterns = [
+  pathJoin('..', 'hitobito_*', 'app', 'javascript', 'packs', wagonExtGlob),
+  pathJoin('vendor', 'wagons', 'hitobito_*', 'app', 'javascript', 'packs', wagonExtGlob),
+]
+wagonPacksPatterns.flatMap((pattern) => globSync(pattern)).forEach((packPath) => {
   const name = basename(packPath, pathCompleteExtname(packPath))
   environment.entry.set(name, pathResolve(packPath))
 })

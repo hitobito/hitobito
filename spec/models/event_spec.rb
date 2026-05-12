@@ -452,7 +452,7 @@ describe Event do
     let(:global_questions) { Event::Question.global }
 
     it "adds 3 default questions" do
-      e = Event.new
+      e = Event.new(groups: [groups(:top_layer)])
       e.init_questions
       expect(global_questions.size).to eq(3)
       expect(e.application_questions.size).to eq(global_questions.size)
@@ -463,7 +463,7 @@ describe Event do
       e.init_questions
       e.save!
 
-      q = e.questions.find_by(derived_from_question_id: event_questions(:ga).id)
+      q = e.questions.first
 
       expect(q.question_translations).to eq({
         "de" => "Ich habe folgendes ÖV Abo",
@@ -479,19 +479,63 @@ describe Event do
         "it" => nil
       })
     end
+
+    it "adds default questions to lower layers if inherit true" do
+      Event::QuestionTemplate.update_all(inherit: true)
+
+      e = Event.new(groups: [groups(:bottom_group_one_one)])
+      e.init_questions
+
+      expect(global_questions.size).to eq(3)
+      expect(e.application_questions.size).to eq(global_questions.size)
+    end
+
+    it "does not add default questions to lower layers if inherit false" do
+      Event::QuestionTemplate.update_all(inherit: false)
+
+      e = Event.new(groups: [groups(:bottom_group_one_one)])
+      e.init_questions
+
+      expect(e.application_questions.size).to eq(0)
+    end
+
+    it "does not add default question of another layer hierarchy tree" do
+      # Set inherit to true to actually check to not add in a different hierarchy
+      # and not only deeper inside the current hierarchy
+      Event::QuestionTemplate.update_all(inherit: true)
+
+      Event::QuestionTemplate.update_all(group_id: groups(:bottom_layer_two).id)
+      e = Event.new(groups: [groups(:top_layer)])
+      e.init_questions
+      expect(e.application_questions.size).to eq(0)
+    end
+
+    it "does not add default question for different event type" do
+      Event::QuestionTemplate.update_all(event_type: "Event::Course")
+      e = Event.new(groups: [groups(:top_layer)])
+      e.init_questions
+      expect(e.application_questions.size).to eq(0)
+    end
+
+    it "does not add question if template is default false" do
+      Event::QuestionTemplate.update_all(default: false)
+      e = Event.new(groups: [groups(:top_layer)])
+      e.init_questions
+      expect(e.application_questions.size).to eq(0)
+    end
   end
 
   describe "admin_questions" do
     it "sorts by id asc" do
-      Event::Question.create!(question: "B", disclosure: :optional, event: event, admin: true)
-      Event::Question.create!(question: "A", disclosure: :optional, event: event, admin: true)
+      Event::Question.create!(question: "B", required: false, event: event, admin: true)
+      Event::Question.create!(question: "A", required: false, event: event, admin: true)
       expect(event.reload.admin_questions.map(&:question)).to eq ["B", "A"]
     end
   end
 
   describe "application_questions" do
     it "sorts by id asc" do
-      Event::Question.create!(question: "A", disclosure: :optional, event: event)
+      Event::Question.create!(question: "A", required: false, event: event)
       expect(event.reload.application_questions.map(&:question)).to eq ["Ich bin Vegetarier", "Sonst noch was?",
         "GA oder Halbtax?", "A"]
     end
@@ -831,7 +875,9 @@ describe Event do
       expect(d.applicant_count).to eq(0)
     end
 
-    it "keeps empty questions" do
+    it "keeps empty questions if event did not have any" do
+      event.questions.destroy_all
+
       d = event.duplicate
       expect(d.application_questions.size).to eq(0)
     end

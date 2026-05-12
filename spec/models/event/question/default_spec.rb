@@ -4,6 +4,7 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 describe Event::Question::Default do
@@ -48,13 +49,13 @@ describe Event::Question::Default do
     end
 
     it "may be required" do
-      subject.disclosure = :required
+      subject.required = true
 
       is_expected.to be_valid
     end
 
     it "may be optional" do
-      subject.disclosure = :optional
+      subject.required = false
 
       is_expected.to be_valid
     end
@@ -124,7 +125,7 @@ describe Event::Question::Default do
 
     context "validates answers to single-answer questions correctly: " do
       describe "a non-required question" do
-        let(:question) { Fabricate(:event_question, disclosure: :optional, choices: "Ja") }
+        let(:question) { Fabricate(:event_question, required: false, choices: "Ja") }
 
         subject(:no_answer_given) { build_answer("0") } # no choice
 

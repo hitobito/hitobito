@@ -27,15 +27,15 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
         :_destroy
       ],
       application_questions_attributes: [
-        :id, :question, :choices, :multiple_choices, :disclosure, :type,
-        :derived_from_question_id, :_destroy,
+        :id, :question, :choices, :multiple_choices, :type,
+        :required, :derived, :_destroy,
         {
           choices_attributes: [:choice, :_destroy]
         }
       ],
       admin_questions_attributes: [
-        :id, :question, :choices, :multiple_choices, :disclosure, :type,
-        :derived_from_question_id, :_destroy,
+        :id, :question, :choices, :multiple_choices, :type,
+        :required, :derived, :_destroy,
         {
           choices_attributes: [:choice, :_destroy]
         }
@@ -99,10 +99,6 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     respond_with(entry)
   end
 
-  def edit
-    entry.init_questions(disclosure: :hidden)
-  end
-
   def update
     # This ensures that question choices stay deleted when the form is invalid after
     # deleting all choices
@@ -137,6 +133,20 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     p.delete(:type)
     p.delete(:contact)
     p.permit(globalized_permitted_attrs)
+  end
+
+  # add template_id to permitted question_attributes during create
+  def globalized_permitted_attrs
+    attrs = super
+    return attrs unless action_name == "create"
+
+    question_keys = %i[application_questions_attributes admin_questions_attributes]
+
+    attrs.map do |attr|
+      next attr unless attr.is_a?(Hash)
+
+      attr.merge(attr.slice(*question_keys).transform_values { _1 + [:template_id] })
+    end
   end
 
   def return_path
@@ -208,10 +218,6 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     participation.person = person
 
     entry.application_possible? && can?(:new, participation)
-  end
-
-  def init_questions
-    entry.init_questions
   end
 
   def render_tabular_in_background(format, name = :events_export)

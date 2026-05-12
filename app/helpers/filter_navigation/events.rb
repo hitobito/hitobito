@@ -12,7 +12,7 @@ module FilterNavigation
 
     attr_reader :group, :filter
 
-    def initialize(template, group, filter = {})
+    def initialize(template, group, filter)
       super(template)
       @group = group
       @filter = filter

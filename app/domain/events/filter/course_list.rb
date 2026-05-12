@@ -17,17 +17,6 @@ class Events::Filter::CourseList < Events::Filter::List
 
   private
 
-  def default_order(scope)
-    scope
-      .list
-      .joins(additional_course_includes)
-      .reorder(order_clause)
-  end
-
-  def order_clause
-    kind_used? ? "event_kind_translations.label, start_at" : "start_at"
-  end
-
   def base_scope
     if params[:list_all_courses] == true
       Event::Course.all

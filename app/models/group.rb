@@ -226,11 +226,11 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
 
     # order groups based on order in Group.all_types
-    # group.name as second order attribute, to get same output for all
+    # group.lft as second order attribute, to get same output for all
     # queries where multiple groups have the same type
     def order_by_type
       joins("INNER JOIN group_type_orders ON group_type_orders.name = groups.type")
-        .reorder("group_type_orders.order_weight ASC, groups.name ASC")
+        .reorder("group_type_orders.order_weight ASC, groups.lft ASC")
     end
 
     private

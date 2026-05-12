@@ -95,7 +95,7 @@ describe Passes::VerificationsController do
       get :show, params: {verify_token: pass.verify_token}
 
       expect(dom).to have_selector("#pass-verify #details #member-name", text: "Top Leader")
-      expect(dom).to have_selector("#pass-verify #details .alert-danger", text: "Pass ist abgelaufen")
+      expect(dom).to have_selector("#pass-verify #details .alert-warning", text: "Pass ist abgelaufen")
       expect(dom).not_to have_selector("#pass-verify #details .alert-success", text: "Pass ist gültig")
     end
 

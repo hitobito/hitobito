@@ -19,11 +19,11 @@ module People::PassesHelper
   end
 
   def google_wallet_configured?
-    Wallets::GoogleWallet::Config.present?
+    Wallets::GoogleWallet::Config.exist?
   end
 
   def apple_wallet_configured?
-    Wallets::AppleWallet::Config.present?
+    Wallets::AppleWallet::Config.exist?
   end
 
   # Renders an inline SVG QR code for the pass verification URL.

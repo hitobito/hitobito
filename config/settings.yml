@@ -35,7 +35,7 @@ application:
    hostname    = ENV['RAILS_HOST_NAME'].presence || 'localhost:3000'
    protocol    = %w(true yes 1).include?(ENV['RAILS_HOST_SSL']) ? 'https' : 'http'
 %>
-  hostname: hostname
+  hostname: <%= hostname %>
 currency:
   unit: CHF
 

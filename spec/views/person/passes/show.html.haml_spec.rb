@@ -23,9 +23,9 @@ describe "person/passes/show.html.haml" do
       entry: pass,
       parents: [group, person],
       sortable?: true,
-      google_wallet_configured?: false,
-      apple_wallet_configured?: false
+      current_user:
     )
+    allow(controller).to receive_messages(current_ability: Ability.new(current_user))
     # Stub the template partial to avoid rendering the full card template
     allow(view).to receive(:pass_template_partial).and_return("people/passes/_show_stub")
     allow(view).to receive(:render).and_call_original
@@ -60,23 +60,35 @@ describe "person/passes/show.html.haml" do
 
     context "when google wallet is configured" do
       before do
-        allow(view).to receive(:google_wallet_configured?).and_return(true)
-        render
+        allow(Wallets::GoogleWallet::Config).to receive(:exist?).and_return(true)
       end
 
       it "shows the Google Wallet button" do
+        render
         is_expected.to have_link(I18n.t("person.passes.index.add_to_google_wallet"))
+      end
+
+      it "hides the button if viewing other persons pass" do
+        pass.update(person: people(:bottom_member))
+        render
+        is_expected.not_to have_link(I18n.t("person.passes.index.add_to_google_wallet"))
       end
     end
 
     context "when apple wallet is configured" do
       before do
-        allow(view).to receive(:apple_wallet_configured?).and_return(true)
-        render
+        allow(Wallets::AppleWallet::Config).to receive(:exist?).and_return(true)
       end
 
       it "shows the Apple Wallet button" do
+        render
         is_expected.to have_link(I18n.t("person.passes.index.add_to_apple_wallet"))
+      end
+
+      it "hides the button if viewing other persons pass" do
+        pass.update(person: people(:bottom_member))
+        render
+        is_expected.not_to have_link(I18n.t("person.passes.index.add_to_apple_wallet"))
       end
     end
   end

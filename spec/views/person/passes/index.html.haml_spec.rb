@@ -18,7 +18,7 @@ describe "person/passes/index.html.haml" do
     let(:entries) { [] }
 
     before do
-      allow(view).to receive_messages(entries: [])
+      allow(view).to receive_messages(entries: [], current_user: person)
     end
 
     it "shows the empty state message" do
@@ -38,10 +38,10 @@ describe "person/passes/index.html.haml" do
       allow(view).to receive_messages(
         entries: [pass],
         parents: [group, person],
-        sortable?: true,
-        google_wallet_configured?: false,
-        apple_wallet_configured?: false
+        current_user: person,
+        sortable?: true
       )
+      allow(controller).to receive(:current_user).and_return(person)
     end
 
     it "renders a table with info link to pass and action to print" do
@@ -57,11 +57,23 @@ describe "person/passes/index.html.haml" do
       expect(dom).not_to have_link("Apple Wallet")
     end
 
-    it "does show wallet buttons when wallets are configured" do
-      allow(view).to receive(:google_wallet_configured?).and_return(true)
-      allow(view).to receive(:apple_wallet_configured?).and_return(true)
-      expect(dom).to have_link("Google Wallet")
-      expect(dom).to have_link("Apple Wallet")
+    context "when wallets are configured" do
+      before do
+        allow(Wallets::GoogleWallet::Config).to receive(:exist?).and_return(true)
+        allow(Wallets::AppleWallet::Config).to receive(:exist?).and_return(true)
+        allow(controller).to receive(:current_user).and_return(person)
+      end
+
+      it "does show wallet buttons when wallets are configured" do
+        expect(dom).to have_link("Google Wallet")
+        expect(dom).to have_link("Apple Wallet")
+      end
+
+      it "hides buttons when viewing other person passes" do
+        pass.update!(person: people(:bottom_member))
+        expect(dom).not_to have_link("Google Wallet")
+        expect(dom).not_to have_link("Apple Wallet")
+      end
     end
   end
 end

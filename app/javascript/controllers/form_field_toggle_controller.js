@@ -10,6 +10,7 @@ export default class extends Controller {
 
   static values = {
     hideOn: { type: Array, default: [""] },
+    hideOnBlank: { type: Boolean, default: false },
   }
 
   toggle(event) {
@@ -24,6 +25,12 @@ export default class extends Controller {
     } else if (event.target.tagName === "INPUT") {
       if(this.#hideOnConfigured()) {
         if (!this.hideOnValue.includes(event.target.value)) {
+          this.revealToggleTarget();
+        } else {
+          this.hideToggleTarget();
+        }
+      } else if (this.hideOnBlankValue) {
+        if (!!event.target.value) {
           this.revealToggleTarget();
         } else {
           this.hideToggleTarget();

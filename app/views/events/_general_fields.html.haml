@@ -28,7 +28,7 @@
   = f.labeled_input_fields(*entry.used_attributes(:motto, :cost))
 
   - entry.used?(:contact_id) do
-    %div{data: { controller: 'form-field-toggle' }}
+    %div{data: { controller: 'form-field-toggle', "form-field-toggle-hide-on-blank-value": "true" }}
       = f.labeled_person_field :contact, data: { action: 'change->form-field-toggle#toggle' }
       %div{data: { 'form-field-toggle-target': 'toggle' }, class: entry.contact_id ? "" : "hidden"}
         = f.labeled_boolean_field :notify_contact_on_participations,

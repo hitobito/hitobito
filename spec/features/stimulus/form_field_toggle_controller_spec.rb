@@ -93,4 +93,27 @@ describe "FormFieldToggle Stimulus Controller", js: true do
     choose "Radio 2"
     expect(page).not_to have_css "h1", text: "hi there"
   end
+
+  it "hides based on blank value" do
+    stub_form_with do
+      <<~HTML
+        <form data-controller="#{ctrl}" data-#{ctrl}-hide-on-blank-value='true'>
+          <div>
+            <label for="#{ctrl}-text">Text Field</label>
+            <input type="text" id="#{ctrl}-text" name="#{ctrl}-text" value="" data-action="#{ctrl}#toggle"/>
+          </div>
+
+          <h1 data-#{ctrl}-target="toggle" class="hidden">hi there</div>
+        </form>
+      HTML
+    end
+
+    expect(page).not_to have_css "h1", text: "hi there"
+    fill_in "Text Field", with: "Stuff"
+    expect(page).to have_css "h1", text: "hi there"
+    fill_in "Text Field", with: "Other stuff"
+    expect(page).to have_css "h1", text: "hi there"
+    fill_in "Text Field", with: ""
+    expect(page).not_to have_css "h1", text: "hi there"
+  end
 end

@@ -10,41 +10,35 @@ class Person::PassesController < CrudController
 
   alias_method :pass, :entry
   delegate :pass_definition, :person, to: :pass
-  skip_authorize_resource only: :google_wallet
+  skip_authorize_resource
+
+  ACCEPTED_EXCEPTIONS = [
+    CanCan::AccessDenied,
+    ActiveRecord::RecordNotFound
+  ]
 
   def show
+    authorize!(:show_full, person)
     respond_to do |format|
       @pass = entry.decorate # template partials require decorated pass @ivar
       @pass_definition = entry.pass_definition
       format.html
       format.pdf { render_pdf }
-      format.pkpass { render_apple_wallet }
     end
   end
 
-  def google_wallet
-    authorize!(:show, pass)
-    redirect_to_google_wallet
-  end
+  def google_add_to_wallet
+    authorize!(:add_to_wallet, pass)
 
-  private
-
-  def list_entries
-    super.includes(:pass_definition, :pass_installations, :person)
-  end
-
-  def redirect_to_google_wallet
-    pass_installation = find_or_create_pass_installation(:google)
-    service = Wallets::GoogleWallet::PassService.new(pass_installation)
-    redirect_to service.save_url, allow_other_host: true
+    redirect_to service_for(:google).save_url, allow_other_host: true
   rescue => e
     log_and_redirect(:google, e)
   end
 
-  def render_apple_wallet
-    pass_installation = find_or_create_pass_installation(:apple)
-    service = Wallets::AppleWallet::PassService.new(pass, pass_installation: pass_installation)
-    send_data service.generate_pass,
+  def apple_download_pkpass
+    authorize!(:add_to_wallet, pass)
+
+    send_data service_for(:apple).generate_pass,
       type: Mime[:pkpass],
       disposition: "attachment",
       filename: "#{pass_definition.name.parameterize}-#{person.full_name.parameterize}.pkpass"
@@ -52,7 +46,21 @@ class Person::PassesController < CrudController
     log_and_redirect(:apple, e)
   end
 
+  private
+
+  def service_for(kind)
+    "Wallets::#{kind.capitalize}Wallet::PassService".constantize.new(
+      find_or_create_pass_installation(kind)
+    )
+  end
+
+  def list_entries
+    super.includes(:pass_definition, :pass_installations, :person)
+  end
+
   def log_and_redirect(key, e)
+    raise e if ACCEPTED_EXCEPTIONS.any? { |type| e.is_a?(type) }
+
     Rails.logger.error("#{key.upcase} Wallet generation failed: #{e.message}")
     redirect_back fallback_location: group_person_path(@group, @person),
       alert: I18n.t("wallets.#{key}.generation_failed")
@@ -73,6 +81,6 @@ class Person::PassesController < CrudController
   end
 
   def authorize_class
-    authorize!(:show, Pass.new(person: person))
+    authorize!(:show_full, person)
   end
 end

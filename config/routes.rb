@@ -200,7 +200,8 @@ Hitobito::Application.routes.draw do
 
           resources :passes, only: [:index, :show] do
             member do
-              get :google_wallet
+              get :google_add_to_wallet
+              get :apple_download_pkpass
             end
           end
         end

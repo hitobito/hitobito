@@ -17,6 +17,7 @@ describe Person::PassesController do
     end
   end
   let(:other) { Fabricate(Group::TopGroup::Leader.sti_name, group: group).person }
+  let(:dom) { Capybara::Node::Simple.new(response.body) }
 
   before { sign_in(person) }
 
@@ -51,6 +52,20 @@ describe Person::PassesController do
         get :index, params: {group_id: group.id, person_id: person.id}
       }.to raise_error(CanCan::AccessDenied)
     end
+
+    context "with views" do
+      render_views
+
+      it "renders links to add to wallet" do
+        pass # create pass
+
+        allow(Wallets::GoogleWallet::Config).to receive(:exist?).and_return(true)
+        allow(Wallets::AppleWallet::Config).to receive(:exist?).and_return(true)
+        get :index, params: {group_id: group.id, person_id: person.id}
+        expect(dom).to have_link("Google Wallet")
+        expect(dom).to have_link("Apple Wallet")
+      end
+    end
   end
 
   describe "GET #show" do
@@ -78,6 +93,18 @@ describe Person::PassesController do
         expect {
           get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}
         }.to raise_error(CanCan::AccessDenied)
+      end
+
+      context "with views" do
+        render_views
+
+        it "renders links to add to wallet" do
+          allow(Wallets::GoogleWallet::Config).to receive(:exist?).and_return(true)
+          allow(Wallets::AppleWallet::Config).to receive(:exist?).and_return(true)
+          get :show, params: {group_id: group.id, person_id: person.id, id: pass.id}
+          expect(dom).to have_link("Google Wallet")
+          expect(dom).to have_link("Apple Wallet")
+        end
       end
     end
 

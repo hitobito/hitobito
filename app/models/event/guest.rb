@@ -10,6 +10,8 @@ class Event::Guest < ActiveRecord::Base
 
   GUEST_SPECIFIC_ATTRIBUTES = [:id, :phone_number, :main_applicant_id]
 
+  include AgeCalculatable
+
   def additional_emails
     AdditionalEmail.none
   end

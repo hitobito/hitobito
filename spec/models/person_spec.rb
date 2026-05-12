@@ -456,15 +456,15 @@ describe Person do
   end
 
   context "#years" do
-    before { allow(Time.zone).to receive_messages(now: Time.zone.parse("2014-03-01 11:19:50")) }
+    before { travel_to Time.zone.local(2014, 3, 1) }
 
     it "is nil if person has no birthday" do
       expect(Person.new.years).to be_nil
     end
 
-    [["2006-02-12", 8],
-      ["2005-03-15", 8],
-      ["2004-02-29", 10]].each do |birthday, years|
+    [[Date.new(2006, 2, 12), 8],
+      [Date.new(2005, 3, 15), 8],
+      [Date.new(2004, 2, 29), 10]].each do |birthday, years|
       it "is #{years} years old if born on #{birthday}" do
         expect(Person.new(birthday: birthday).years).to eq years
       end

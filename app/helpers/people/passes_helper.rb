@@ -18,6 +18,10 @@ module People::PassesHelper
     end
   end
 
+  def can_add_pass_to?(p, wallet_type)
+    "Wallets::#{wallet_type.capitalize}Wallet::Config".constantize.exist? && p.person = current_person
+  end
+
   def google_wallet_configured?
     Wallets::GoogleWallet::Config.exist?
   end

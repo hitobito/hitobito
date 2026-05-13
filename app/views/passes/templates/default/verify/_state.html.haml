@@ -3,15 +3,17 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito
 
+-# locals: (i18n_scope:)
+
 - if @state == :valid
   .alert.alert-success
     %span.fas.fa-check
-    = t('passes.verifications.status.valid')
+    = t(:valid, scope: i18n_scope)
 - elsif @state == :expired
   .alert.alert-warning
     %span.fas.fa-times-circle
-    = t('passes.verifications.status.expired')
+    = t(:expired, scope: i18n_scope)
 - else
   .alert.alert-danger
     %span.fas.fa-times-circle
-    = t('passes.verifications.status.invalid')
+    = t(:invalid, scope: i18n_scope)

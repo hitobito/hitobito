@@ -6,8 +6,6 @@
 class People::Membership::VerifyController < ActionController::Base # rubocop:disable Rails/ApplicationController
   skip_authorization_check
 
-  LEGACY_PASS_DEFINITION_ID = 1
-
   def show
     verify_token = find_legacy_pass&.verify_token || "not-found"
     redirect_to pass_verify_path(verify_token), status: :found
@@ -18,9 +16,6 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
   def find_legacy_pass
     Pass
       .joins(:person, :pass_definition)
-      .find_by(
-        pass_definition_id: LEGACY_PASS_DEFINITION_ID,
-        people: {membership_verify_token: params[:verify_token]}
-      )
+      .find_by(people: {membership_verify_token: params[:verify_token]})
   end
 end

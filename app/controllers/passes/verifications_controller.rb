@@ -17,6 +17,7 @@ class Passes::VerificationsController < ActionController::Base # rubocop:disable
     @definition = @pass&.pass_definition
     @group = (@definition&.owner || Group.root)&.decorate
     @template = @definition&.template
+    @pass_view_partial = @definition&.template&.pass_view_partial
     @state = pass_state
   end
 

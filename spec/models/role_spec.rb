@@ -590,6 +590,33 @@ describe Role do
 
       expect(person.minimized_at).to be_nil
     end
+
+    describe "create passes callback" do
+      let(:person) { Fabricate(:person) }
+      let(:group) { groups(:top_group) }
+
+      it "noops if no grant applies" do
+        expect do
+          Fabricate(Group::TopGroup::Member.sti_name, group:, person:)
+        end.not_to change { person.reload.passes.count }
+      end
+
+      it "creates single pass" do
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:)
+        end.to change { person.reload.passes.count }.by(1)
+      end
+
+      it "creates multiple pass if multiple grants apply" do
+        pass_definition = Fabricate(:pass_definition)
+        PassGrant.new(pass_definition:, grantor: group).tap do |g|
+          g.role_types = [Group::TopGroup::Leader.sti_name]
+        end.save!
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:)
+        end.to change { person.reload.passes.count }.by(2)
+      end
+    end
   end
 
   context "#update" do

@@ -17,6 +17,11 @@ describe People::Membership::VerifyController do
 
   describe "GET #show" do
     context "with pass definition" do
+      before do
+        allow(Settings).to receive(:passes)
+          .and_return(OpenStruct.new(membership_pass_definition_id: definition.id))
+      end
+
       it "redirects with 302 to the new pass verify path" do
         get :show, params: {verify_token: person.membership_verify_token}
 
@@ -31,7 +36,7 @@ describe People::Membership::VerifyController do
       end
 
       it "redirects to not-found when pass does not exist for the person" do
-        legacy_pass.delete
+        pass.delete
 
         get :show, params: {verify_token: person.membership_verify_token}
 

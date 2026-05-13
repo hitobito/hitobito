@@ -14,8 +14,12 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
   private
 
   def find_legacy_pass
+    pass_definition_id = Settings.passes&.membership_pass_definition_id
     Pass
       .joins(:person, :pass_definition)
-      .find_by(people: {membership_verify_token: params[:verify_token]})
+      .find_by(
+        people: {membership_verify_token: params[:verify_token]},
+        pass_definition_id:
+      )
   end
 end

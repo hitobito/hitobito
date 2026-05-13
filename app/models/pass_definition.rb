@@ -5,6 +5,24 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
+# == Schema Information
+#
+# Table name: pass_definitions
+#
+#  id               :bigint           not null, primary key
+#  background_color :string           default("#ffffff"), not null
+#  description      :text
+#  name             :string
+#  owner_type       :string           not null
+#  template_key     :string           default("default"), not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  owner_id         :bigint           not null
+#
+# Indexes
+#
+#  index_pass_definitions_on_owner  (owner_type,owner_id)
+#
 class PassDefinition < ActiveRecord::Base
   include Globalized
   translates :name, :description

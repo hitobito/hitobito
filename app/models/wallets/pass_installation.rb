@@ -5,6 +5,27 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
+# == Schema Information
+#
+# Table name: wallets_pass_installations
+#
+#  id                   :bigint           not null, primary key
+#  authentication_token :string
+#  last_synced_at       :datetime
+#  locale               :string           not null
+#  needs_sync           :boolean          default(FALSE), not null
+#  state                :integer          default("active"), not null
+#  sync_error           :text
+#  wallet_type          :integer          not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  pass_id              :bigint           not null
+#
+# Indexes
+#
+#  idx_wallets_pass_installations_needs_sync  (needs_sync)
+#  idx_wallets_pass_installations_unique      (pass_id,wallet_type) UNIQUE
+#
 class Wallets::PassInstallation < ActiveRecord::Base
   # authentication_token: Secret token for authenticating Apple Wallet web service requests.
   # Generated once on creation and used by Apple to authenticate update requests.

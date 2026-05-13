@@ -5,6 +5,25 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
+# == Schema Information
+#
+# Table name: passes
+#
+#  id                 :bigint           not null, primary key
+#  state              :string           default("eligible"), not null
+#  valid_from         :date             not null
+#  valid_until        :date
+#  verify_token       :string           not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  pass_definition_id :bigint           not null
+#  person_id          :bigint           not null
+#
+# Indexes
+#
+#  idx_passes_unique             (person_id,pass_definition_id) UNIQUE
+#  index_passes_on_verify_token  (verify_token) UNIQUE
+#
 class Pass < ActiveRecord::Base
   include I18nEnums
 

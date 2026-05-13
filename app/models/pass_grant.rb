@@ -5,6 +5,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
+# == Schema Information
+#
+# Table name: pass_grants
+#
+#  id                 :bigint           not null, primary key
+#  grantor_type       :string           not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  grantor_id         :bigint           not null
+#  pass_definition_id :bigint           not null
+#
+# Indexes
+#
+#  idx_pass_grants_unique  (pass_definition_id,grantor_type,grantor_id) UNIQUE
+#
 class PassGrant < ActiveRecord::Base
   include RelatedRoleType::Assigners
 

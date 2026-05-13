@@ -16,17 +16,11 @@ describe People::Membership::VerifyController do
   end
 
   describe "GET #show" do
-    context "with pass definition with id=1" do
-      let!(:legacy_definition) { Fabricate(:pass_definition, id: 1) }
-      let!(:legacy_pass) do
-        Fabricate(:pass, person: person, pass_definition: legacy_definition,
-          state: :eligible, valid_from: Date.current)
-      end
-
+    context "with pass definition" do
       it "redirects with 302 to the new pass verify path" do
         get :show, params: {verify_token: person.membership_verify_token}
 
-        expect(response).to redirect_to(pass_verify_path(legacy_pass.verify_token))
+        expect(response).to redirect_to(pass_verify_path(pass.verify_token))
         expect(response.status).to eq(302)
       end
 

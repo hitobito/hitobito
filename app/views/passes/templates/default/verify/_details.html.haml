@@ -4,13 +4,10 @@
 -# https://github.com/hitobito/hitobito
 
 #details
-  = render_extensions(:details_header)
   - if @person
     #member-img= image_tag(upload_url(@person, :picture))
     #member-name= @person.full_name
-    = render_extensions(:below_name)
-    = render "state"
-    = render_extensions(:member_details)
+    = render pass_template_partial('verify/state'), i18n_scope: 'passes.verifications.status'
   - else
     .alert.alert-danger
       %span.fas.fa-times-circle

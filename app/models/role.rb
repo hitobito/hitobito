@@ -122,7 +122,8 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   after_initialize :set_start_on_to_today, if: :new_record?
   before_save :prevent_changes, if: :archived?
-  after_create :reset_person_minimized_at
+
+  after_create :create_passes
   after_destroy :set_contact_data_visible
   after_destroy :set_first_primary_group
   after_destroy :update_passes
@@ -362,5 +363,15 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   def update_passes
     Passes::PassUpdater.new(self).run
+  end
+
+  def create_passes
+    PassDefinition
+      .joins(pass_grants: :related_role_types)
+      .merge(PassGrant.group_grants)
+      .where(related_role_types: {role_type: type})
+      .find_each do |pass_definition|
+        Pass.create!(pass_definition:, person:, valid_from: start_on, valid_until: end_on)
+      end
   end
 end

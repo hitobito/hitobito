@@ -24,7 +24,7 @@ describe "Person::CsvImport", js: true do
     expect(page).to have_css "legend", text: "Aktualisierungsverhalten"
     click_button "Vorschau"
     expect(page).to have_text "Folgende Personen werden mit der Rolle Leader in die Gruppe Bottom One importiert."
-    expect(page).to have_css "tr", text: "Ésaïe Gärber"
+    expect(page).to have_css "tr", text: "Ésaïe Gärber", normalize_ws: true
     click_button "Zurück"
     expect(page).to have_css "legend", text: "Aktualisierungsverhalten"
     click_button "Vorschau"

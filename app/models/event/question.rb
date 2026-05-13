@@ -9,29 +9,31 @@
 #
 # Table name: event_questions
 #
-#  id                       :integer          not null, primary key
-#  admin                    :boolean          default(FALSE), not null
-#  choices                  :string
-#  disclosure               :string
-#  event_type               :string
-#  multiple_choices         :boolean          default(FALSE), not null
-#  question                 :text
-#  sensitive                :boolean          default(TRUE), not null
-#  type                     :string           not null
-#  derived_from_question_id :integer
-#  event_id                 :integer
-#  event_question_id        :integer          not null
+#  id                :integer          not null, primary key
+#  admin             :boolean          default(FALSE), not null
+#  choices           :string
+#  derived           :boolean          default(FALSE)
+#  multiple_choices  :boolean          default(FALSE), not null
+#  question          :text
+#  required          :boolean          default(FALSE), not null
+#  sensitive         :boolean          default(TRUE), not null
+#  type              :string           not null
+#  created_at        :datetime
+#  updated_at        :datetime
+#  event_id          :integer
+#  event_question_id :integer          not null
 #
 # Indexes
 #
-#  index_event_questions_on_derived_from_question_id  (derived_from_question_id)
-#  index_event_questions_on_event_id                  (event_id)
+#  index_event_questions_on_event_id  (event_id)
 #
 class Event::Question < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(q) { q.event_id },
                          main_type: Event.sti_name}
 
   include Globalized
+
+  attr_accessor :template_id
 
   # To prevent issues of having paper trail versions when we don't want/need them, we add all
   # translated attributes to the skip list and create own paper trail versions on the
@@ -66,16 +68,8 @@ class Event::Question < ActiveRecord::Base
   self.list_alphabetically = Settings.event.questions.list_alphabetically
 
   belongs_to :event
-  belongs_to :derived_from_question, class_name: "Event::Question", inverse_of: :derived_questions
 
   has_many :answers, dependent: :destroy
-  # rubocop:todo Layout/LineLength
-  has_many :derived_questions, class_name: "Event::Question", foreign_key: :derived_from_question_id,
-    # rubocop:enable Layout/LineLength
-    dependent: :nullify, inverse_of: :derived_from_question
-
-  DISCLOSURE_VALUES = %w[optional required hidden].freeze
-  i18n_enum :disclosure, DISCLOSURE_VALUES, queries: true
 
   attribute :type, default: -> { Event::Question::Default.sti_name }
   attr_accessor :skip_add_answer_to_participations
@@ -86,11 +80,8 @@ class Event::Question < ActiveRecord::Base
   # so we can have different error messages
   validates :question, presence: {message: :admin_blank}, if: :admin?
   validates :question, presence: {message: :application_blank}, unless: :admin?
-  validates :disclosure, presence: true, unless: :global?
-  validates :derived_from_question_id, uniqueness: {scope: :event_id}, allow_blank: true,
-    if: :event_id
 
-  before_validation :assign_derived_attributes, on: :create, if: :derived?
+  before_create :copy_translations_for_derived_question, if: :derived?
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
@@ -101,25 +92,8 @@ class Event::Question < ActiveRecord::Base
     [
       # needed for the required attribute mark in forms
       # as the relevant validation is conditional
-      :question, :disclosure
+      :question
     ]
-  end
-
-  def derive(disclosure: nil)
-    return unless global? # prevent deriving questions that are attached to an event
-
-    Event::Question.build(attributes.excluding("id")).tap do |derived_question|
-      derived_question.derived_from_question = self
-      derived_question.disclosure = disclosure if disclosure.present?
-    end
-  end
-
-  # most attributes of global questions must not be overriden by derived questions
-  def assign_derived_attributes
-    return if derived_from_question.blank?
-
-    keep_attributes = %w[id event_id disclosure derived_from_question_id]
-    assign_attributes(derived_from_question.attributes.except(*keep_attributes))
   end
 
   def label
@@ -136,44 +110,10 @@ class Event::Question < ActiveRecord::Base
     event.blank?
   end
 
-  def derived?
-    derived_from_question_id.present?
-  end
-
   def validate_answer(_answer)
   end
 
   def before_validate_answer(_answer)
-  end
-
-  # Seed global questions and make sure the same question does not get seeded twice.
-  # In case a global question needs to be changed, make sure to create a migration
-  # accordingly and change the seed at the same time.
-  # Useful options for global questions are:
-  # rubocop:todo Layout/LineLength
-  # - `translation_attributes`: seed all translations at creation. `[{ locale: :de, question: "...", choices: "..." }]`
-  # rubocop:enable Layout/LineLength
-  # - `type`: STI-name of question type
-  # rubocop:todo Layout/LineLength
-  # - `event_type`: STI-name of Event, on which the global question should be applied. `nil` will apply to all events.
-  # rubocop:enable Layout/LineLength
-  # rubocop:todo Layout/LineLength
-  # - `disclosure`: specifies if question is required, optional or hidden. `nil` will force choice at event creation.
-  # rubocop:enable Layout/LineLength
-  def self.seed_global(attributes)
-    questions = [attributes[:question],
-      attributes[:translation_attributes]&.pluck(:question)].flatten.compact_blank
-    return if includes(:translations).where(event_id: nil, question: questions).exists?
-
-    Event::Question.transaction do
-      new(attributes.except(:translation_attributes)).tap do |question|
-        attributes[:translation_attributes]&.each do |translation_attributes|
-          question.attributes = translation_attributes.slice(:locale,
-            *Event::Question.translated_attribute_names)
-        end
-        question.save!
-      end
-    end
   end
 
   def deserialized_choices
@@ -228,13 +168,24 @@ class Event::Question < ActiveRecord::Base
     return if event.blank? || skip_add_answer_to_participations
 
     event.participations.find_each do |participation|
-      existing_answer = participation.answers.find { _1.question_id == derived_from_question_id }
+      existing_answer = participation.answers.find { _1.question.id == id }
 
       if existing_answer
         existing_answer.update(question: self)
       else
         participation.answers << answers.new
       end
+    end
+  end
+
+  def copy_translations_for_derived_question
+    template_question = Event::QuestionTemplate.find(template_id).question
+    [:question, :choices].each do |attribute|
+      template_translations = template_question.globalize_locales
+        .map { [_1.to_s, nil] }
+        .to_h
+        .merge(template_question.send(:"#{attribute}_translations"))
+      send(:"#{attribute}_translations=", template_translations)
     end
   end
 

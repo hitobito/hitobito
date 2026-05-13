@@ -1,0 +1,19 @@
+#  Copyright (c) 2026, Hitobito AG. This file is part of
+#  hitobito_youth and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_youth.
+
+ga_template:
+  group: top_layer
+  question: ga
+  default: true
+
+vegi_template:
+  group: top_layer
+  question: vegi
+  default: true
+
+schub_template:
+  group: top_layer
+  question: schub
+  default: true

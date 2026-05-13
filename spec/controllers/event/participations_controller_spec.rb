@@ -643,7 +643,7 @@ describe Event::ParticipationsController do
 
       it "fails if required answers are missing" do
         expect_any_instance_of(described_class).not_to receive(:set_success_notice)
-        course.questions.first.update!(disclosure: :required)
+        course.questions.first.update!(required: true)
 
         post :create,
           params: {
@@ -662,7 +662,7 @@ describe Event::ParticipationsController do
       end
 
       it "preserves given answers on create when required answer is missing" do
-        course.questions.first.update!(disclosure: :required)
+        course.questions.first.update!(required: true)
         second_question = course.questions.second
 
         post :create,
@@ -835,8 +835,8 @@ describe Event::ParticipationsController do
   context "PUT update" do
     let(:event) { events(:top_event) }
     let(:user) { people(:top_leader) }
-    let(:q1) { Fabricate(:event_question, event: event, disclosure: :required) }
-    let(:q2) { Fabricate(:event_question, event: event, disclosure: :optional) }
+    let(:q1) { Fabricate(:event_question, event: event, required: true) }
+    let(:q2) { Fabricate(:event_question, event: event, required: false) }
     let!(:existing) do
       p = Fabricate(:event_participation, event: event, participant: user)
       p.answers.find_by(question_id: q1.id).update!(answer: "Ja")
@@ -988,7 +988,7 @@ describe Event::ParticipationsController do
     end
 
     def make_request(person, answer, other_person_id = nil)
-      question = course.questions.create!(question: "dummy", disclosure: :required)
+      question = course.questions.create!(question: "dummy", required: true)
       sign_in(person)
 
       attrs = {answers_attributes: {
@@ -1042,7 +1042,7 @@ describe Event::ParticipationsController do
       event.questions.create!(
         question: "Terms and Conditions? Do you speak it?",
         choices: "yep",
-        disclosure: :required
+        required: true
       )
     end
 

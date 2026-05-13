@@ -45,8 +45,8 @@ class EventSeeder
     event.save(validate: false)
 
     seed_dates(event, date + 90.days)
-    seed_questions(event)
     seed_leaders(event)
+    seed_questions(event)
     3.times do
       event.participant_types.each do |type|
         seed_event_role(event, type)
@@ -101,9 +101,6 @@ class EventSeeder
 
   def seed_questions(event)
     event.init_questions
-    event.application_questions.map do |question|
-      question.update(disclosure: :optional)
-    end
   end
 
   def seed_leaders(event)

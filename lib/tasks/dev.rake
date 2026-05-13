@@ -270,10 +270,30 @@ namespace :dev do
       abort("This is for development purposes only.") unless Rails.env.development?
 
       root = Group.roots.first || abort("No root group found. Run db:seed first.")
-      existing = PassDefinition.find_by(owner: root, template_key: "default")
-      if existing
-        abort("A PassDefinition with template_key 'default' already exists for the root group.")
-      end
+      abort("A PassDefinition for the root group exists.") if PassDefinition.exists?(owner: root)
+
+      definition = PassDefinition.new(
+        owner: root,
+        template_key: "default",
+        name: "#{root.name} Mitgliedschaft",
+        background_color: "#0066cc"
+      )
+
+      definition.public_send(:"logo_icon_#{I18n.locale}").attach(
+        io: Rails.root.join("spec", "fixtures", "files", "logo-icon.png").open,
+        filename: "icon.png",
+        content_type: "image/png"
+      )
+
+      definition.public_send(:"logo_banner_#{I18n.locale}").attach(
+        io: Rails.root.join("spec", "fixtures", "files", "logo-banner.png").open,
+        filename: "banner.png",
+        content_type: "image/png"
+      )
+
+      definition.save!
+
+      puts "Created PassDefinition ##{definition.id}: #{definition.name}"
 
       Rails.application.eager_load!
 
@@ -282,15 +302,6 @@ namespace :dev do
         .sort
 
       puts "Found #{all_role_types.size} role types"
-
-      definition = PassDefinition.create!(
-        owner: root,
-        template_key: "default",
-        name: "#{root.name} Mitgliedschaft",
-        background_color: "#0066cc"
-      )
-
-      puts "Created PassDefinition ##{definition.id}: #{definition.name}"
 
       grant = PassGrant.find_or_initialize_by(pass_definition: definition, grantor: root)
       grant.role_types = all_role_types

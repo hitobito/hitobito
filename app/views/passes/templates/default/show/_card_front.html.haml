@@ -19,7 +19,7 @@
       .pass-card-person-info
         %p.pass-card-member-name= pass.member_name
         .pass-card-member-number
-          %span.pass-card-field-label= t('wallets.pass.member_number')
+          %span.pass-card-field-label= Pass.human_attribute_name(:member_number)
           %span.pass-card-field-value= pass.member_number
 
     = render_extensions :pass_details, locals: { pass: pass }
@@ -28,9 +28,9 @@
     .pass-card-validity
       - if pass.valid_from.present?
         %span
-          = t('wallets.pass.valid_from')
+          = Pass.human_attribute_name(:valid_from)
           = l(pass.valid_from)
       - if pass.valid_until.present?
         %span
-          = t('wallets.pass.valid_until')
+          = Pass.human_attribute_name(:valid_until)
           = l(pass.valid_until)

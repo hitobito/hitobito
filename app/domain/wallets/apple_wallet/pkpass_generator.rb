@@ -22,14 +22,15 @@ module Wallets
         raise "#{Config::FILE_PATH} not found" unless Config.exist?
       end
 
-      # Create a signed .pkpass file
-      #
-      # @param pass_json [Hash] The pass.json content
-      # @param images [Hash<String, String>] Filename => binary data (e.g. "logo.png" => data)
-      # @return [String] Binary .pkpass data
-      def create_pass(pass_json, images = {})
+      # Create a signed .pkpass bundle with pass.json, images, and localized strings
+      # pass_json: Hash with the pass structure (formatVersion, passTypeIdentifier, etc.)
+      # images: Hash mapping filenames to binary data (e.g. "icon.png" => data, "logo.png" => data)
+      # strings: Hash mapping filenames to string data
+      #   (e.g. "pass.strings" => data, "de.lproj/pass.strings" => data)
+      # See: https://developer.apple.com/documentation/walletpasses/building_a_pass
+      def create_pass(pass_json, images = {}, strings = {})
         Dir.mktmpdir do |dir|
-          write_pass_files(dir, pass_json, images)
+          write_pass_files(dir, pass_json, images, strings)
           write_manifest(dir)
           write_signature(dir)
           package_zip(dir)
@@ -38,11 +39,15 @@ module Wallets
 
       private
 
-      def write_pass_files(dir, pass_json, images)
+      def write_pass_files(dir, pass_json, images, strings)
         File.write(File.join(dir, "pass.json"), pass_json.to_json)
         images.each do |name, data|
           safe_name = File.basename(name)
           File.binwrite(File.join(dir, safe_name), data)
+        end
+        strings.each do |name, data|
+          safe_name = File.basename(name)
+          File.write(File.join(dir, safe_name), data)
         end
       end
 

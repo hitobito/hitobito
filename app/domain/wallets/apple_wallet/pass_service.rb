@@ -10,6 +10,22 @@ module Wallets
     class PassService
       attr_reader :pass
 
+      # Apple Wallet standard image variants (filename => [width, height])
+      ICON_VARIANTS = {
+        "icon.png" => [29, 29],
+        "icon@2x.png" => [58, 58]
+      }.freeze
+
+      THUMBNAIL_VARIANTS = {
+        "thumbnail.png" => [90, 90],
+        "thumbnail@2x.png" => [180, 180]
+      }.freeze
+
+      LOGO_VARIANTS = {
+        "logo.png" => [160, 50],
+        "logo@2x.png" => [320, 100]
+      }.freeze
+
       # In a multi-tenant environment (multiple instances sharing the same
       # issuer_id), the wagon sets id_prefix_addition to a code block returning
       # a tenant-specific identifier so at runtime we ensure global uniqueness of
@@ -24,18 +40,42 @@ module Wallets
       end
 
       # Generate a signed .pkpass file
-      # @return [String] Binary .pkpass data
       def generate_pass
-        @client.create_pass(pass_data, pass_images)
+        @client.create_pass(pass_data, pass_images, pass_strings)
       end
 
-      # Pass data as hash (also used by WebServiceController to serve updates)
+      # Pass data as hash for pass.json in the .pkpass bundle
+      # Returns hash with formatVersion, passTypeIdentifier, serialNumber, teamIdentifier,
+      # organizationName, description, colors, barcode, expirationDate, and style-specific fields
+      # See: https://developer.apple.com/documentation/walletpasses/building_a_pass
       def pass_data
         base_pass_data.merge(pass_style_fields).compact
       end
 
       def serial_number
         [id_prefix, @pass_installation.id].join(".")
+      end
+
+      # Generate localized pass.strings files for all languages
+      # Returns hash mapping filenames to string data (e.g. "pass.strings" => data,
+      # "de.lproj/pass.strings" => data) with localization keys for field labels
+      # See: https://developer.apple.com/documentation/walletpasses/building_a_pass
+      def pass_strings
+        strings = {}
+
+        # Lokalisierte pass.strings für alle App-Sprachen
+        Globalized.languages.each do |lang|
+          I18n.with_locale(lang) do
+            strings["#{lang}.lproj/pass.strings"] = build_pass_strings
+          end
+        end
+
+        # Root-Level-Fallback: pass_installation.locale
+        I18n.with_locale(@pass_installation.locale.to_sym) do
+          strings["pass.strings"] = build_pass_strings
+        end
+
+        strings
       end
 
       private
@@ -73,18 +113,18 @@ module Wallets
           generic: {
             primaryFields: [
               {key: "member_name",
-               label: I18n.t("wallets.apple.member_name"),
+               label: "member_name_label",
                value: pass.member_name}
             ],
             secondaryFields: [
               {key: "member_number",
-               label: I18n.t("wallets.pass.member_number"),
+               label: "member_number_label",
                value: pass.member_number}
             ],
             auxiliaryFields: [
               (if pass.valid_until
                  {key: "valid_until",
-                  label: I18n.t("wallets.pass.valid_until"),
+                  label: "valid_until_label",
                   value: pass.valid_until&.iso8601,
                   dateStyle: "PKDateStyleShort"}
                end)
@@ -128,7 +168,7 @@ module Wallets
         return [] if pass.definition.description.blank?
 
         [{key: "description",
-          label: I18n.t("wallets.pass.description"),
+          label: "description_label",
           value: pass.definition.description}]
       end
 
@@ -138,16 +178,63 @@ module Wallets
         "rgb(#{r}, #{g}, #{b})"
       end
 
-      # Build the images hash for the .pkpass bundle.
-      # Apple requires icon.png; logo.png is recommended.
+      def build_pass_strings
+        <<~STRINGS
+          "member_name_label" = "#{Pass.human_attribute_name(:member_name)}";
+          "member_number_label" = "#{Pass.human_attribute_name(:member_number)}";
+          "valid_until_label" = "#{Pass.human_attribute_name(:valid_until)}";
+          "description_label" = "#{Pass.human_attribute_name(:description)}";
+        STRINGS
+      end
+
+      # Build the images hash for the .pkpass bundle
+      # Returns hash mapping filenames to binary image data (e.g. "icon.png" => data,
+      # "logo.png" => data, "de.lproj/icon.png" => data). Apple requires icon.png, adding logo.png
+      # is recommended.
+      # See: https://developer.apple.com/documentation/walletpasses/building_a_pass
       def pass_images
         images = {}
-        data = pass.logo_blob
-        if data
-          images["icon.png"] = data
-          images["logo.png"] = data
+        languages = Globalized.languages
+
+        if languages.size > 1
+          images.merge!(generate_localized_variants(languages))
         end
+
+        images.merge!(generate_root_level_variants)
         images.merge(pass.wallet_data_provider.extra_apple_images)
+      end
+
+      # Generate localized variants for all languages
+      def generate_localized_variants(languages)
+        languages.each_with_object({}) do |lang, result|
+          icon = pass.logo_icon(lang)
+          result.merge!(generate_variants(icon, ICON_VARIANTS, "#{lang}.lproj/"))
+          result.merge!(generate_variants(icon, THUMBNAIL_VARIANTS, "#{lang}.lproj/"))
+
+          banner = pass.logo_banner(lang)
+          result.merge!(generate_variants(banner, LOGO_VARIANTS, "#{lang}.lproj/"))
+        end
+      end
+
+      # Generate root-level variants for fallback or single-language
+      def generate_root_level_variants
+        fallback_locale = @pass_installation.locale.to_sym
+        icon = pass.logo_icon(fallback_locale)
+        banner = pass.logo_banner(fallback_locale)
+
+        generate_variants(icon, ICON_VARIANTS)
+          .merge(generate_variants(icon, THUMBNAIL_VARIANTS))
+          .merge(generate_variants(banner, LOGO_VARIANTS))
+      end
+
+      # Generate image variants for an attachment
+      def generate_variants(attachment, variants, prefix = "")
+        return {} unless attachment&.attached?
+
+        variants.each_with_object({}) do |(filename, size), result|
+          result["#{prefix}#{filename}"] =
+            attachment.variant(resize_to_fit: size, format: :png).download
+        end
       end
     end
   end

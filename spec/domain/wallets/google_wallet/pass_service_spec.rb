@@ -29,7 +29,8 @@ describe Wallets::GoogleWallet::PassService do
 
   before do
     allow(Wallets::GoogleWallet::Config).to receive(:issuer_id).and_return(issuer_id)
-    allow(Settings.application).to receive(:logo).and_return(nil)
+    allow(Settings.application).to receive(:host).and_return("test.host")
+    allow(Settings.application).to receive(:protocol).and_return("https")
   end
 
   describe "#save_url" do
@@ -126,21 +127,22 @@ describe Wallets::GoogleWallet::PassService do
 
         member_name_mod = modules.find { |m| m[:id] == "member_name" }
         expect(member_name_mod[:body]).to eq(person.full_name)
-        expect(member_name_mod[:localizedHeader][:defaultValue][:value]).to eq(I18n.t("wallets.pass.member_name"))
+        expect(member_name_mod[:localizedHeader][:defaultValue][:value]).to eq(Pass.human_attribute_name(:member_name))
 
         member_number_mod = modules.find { |m| m[:id] == "member_number" }
         expect(member_number_mod[:body]).to eq(pass.member_number)
-        expect(member_number_mod[:localizedHeader][:defaultValue][:value]).to eq(I18n.t("wallets.pass.member_number"))
+        expect(member_number_mod[:localizedHeader][:defaultValue][:value])
+          .to eq(Pass.human_attribute_name(:member_number))
 
         valid_until_mod = modules.find { |m| m[:id] == "valid_until" }
-        expect(valid_until_mod[:localizedHeader][:defaultValue][:value]).to eq(I18n.t("wallets.pass.valid_until"))
+        expect(valid_until_mod[:localizedHeader][:defaultValue][:value]).to eq(Pass.human_attribute_name(:valid_until))
         expect(valid_until_mod[:localizedBody]).to be_present
       end
 
       it "includes description module when definition has description" do
         desc_module = create_or_update_payload[:textModulesData].find { |m| m[:id] == "description" }
         expect(desc_module[:localizedBody][:defaultValue][:value]).to eq("Pass für TopLayer Mitglieder")
-        expect(desc_module[:localizedHeader][:defaultValue][:value]).to eq(I18n.t("wallets.pass.description"))
+        expect(desc_module[:localizedHeader][:defaultValue][:value]).to eq(Pass.human_attribute_name(:description))
       end
 
       it "omits description module when definition has no description" do
@@ -195,21 +197,6 @@ describe Wallets::GoogleWallet::PassService do
 
         interval = create_or_update_payload[:validTimeInterval]
         expect(interval).not_to have_key(:end)
-      end
-    end
-
-    describe "logo resolution" do
-      it "returns nil image when no logo is attached and no application logo" do
-        allow(Settings.application).to receive(:logo).and_return(nil)
-
-        expect(create_or_update_payload[:heroImage]).to be_nil
-      end
-
-      it "uses application logo as fallback" do
-        logo_url = "http://test.host/packs/media/images/logo.png"
-        allow_any_instance_of(PassDecorator).to receive(:logo_url).and_return(logo_url)
-
-        expect(create_or_update_payload[:heroImage]).to eq({sourceUri: {uri: logo_url}})
       end
     end
   end

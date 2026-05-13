@@ -8,6 +8,44 @@
 require "spec_helper"
 
 describe Event::Guest do
+  let(:guest) { Event::Guest.new }
+
+  describe "#gender" do
+    it "is valid with a known gender" do
+      guest.gender = "m"
+      expect(guest.gender).to eq "m"
+      guest.gender = "w"
+      expect(guest.gender).to eq "w"
+    end
+
+    it "is valid with nil" do
+      guest.gender = nil
+      expect(guest).to be_valid
+    end
+
+    it "is invalid with a gender that is not defined" do
+      guest.gender = "something"
+      expect(guest).not_to be_valid
+    end
+  end
+
+  describe "#language" do
+    it "is valid with a defined language" do
+      guest.language = "de"
+      expect(guest).to be_valid
+    end
+
+    it "is valid with nil" do
+      guest.language = nil
+      expect(guest).to be_valid
+    end
+
+    it "is invalid with a language outside defined languages" do
+      guest.language = "rm"
+      expect(guest).not_to be_valid
+    end
+  end
+
   context "#years" do
     before { travel_to Time.zone.local(2021, 5, 24) }
 

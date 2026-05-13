@@ -41,6 +41,12 @@ class Event::Guest < ActiveRecord::Base
   GUEST_SPECIFIC_ATTRIBUTES = [:id, :phone_number, :main_applicant_id]
 
   include AgeCalculatable
+  include I18nEnums
+  include I18nSettable
+
+  i18n_enum :gender, Person::GENDERS
+  i18n_setter :gender, (Person::GENDERS + [nil])
+  i18n_enum :language, Person::LANGUAGES.keys.map(&:to_s)
 
   def additional_emails
     AdditionalEmail.none

@@ -135,7 +135,7 @@ describe Person::PassesController do
   context "GET #google_add_to_wallet" do
     let(:save_url) { "https://pay.google.com/gp/v/save/jwt-token" }
     let(:google_service) { instance_double(Wallets::GoogleWallet::PassService, save_url: save_url) }
-    let(:synchronizer) { instance_double(Wallets::PassSynchronizer) }
+    let(:synchronizer) { instance_double(Wallets::PassSynchronizer, sync!: nil) }
 
     before do
       allow(Wallets::GoogleWallet::PassService).to receive(:new).and_return(google_service)
@@ -171,6 +171,13 @@ describe Person::PassesController do
       expect(Wallets::GoogleWallet::PassService).to receive(:new)
         .with(kind_of(Wallets::PassInstallation))
         .and_return(google_service)
+
+      get :google_add_to_wallet, params: {group_id: group.id, person_id: person.id, id: pass.id}
+    end
+
+    it "calls synchronizer with the installation to sync before generating save URL" do
+      expect(synchronizer).to receive(:sync!).ordered
+      expect(google_service).to receive(:save_url).ordered
 
       get :google_add_to_wallet, params: {group_id: group.id, person_id: person.id, id: pass.id}
     end

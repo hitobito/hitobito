@@ -124,11 +124,9 @@ module Wallets
            body: pass.member_name},
           {id: "member_number",
            localizedHeader: localized_string { I18n.t("wallets.pass.member_number") },
-           body: pass.member_number},
-          {id: "valid_until",
-           localizedHeader: localized_string { I18n.t("wallets.pass.valid_until") },
-           localizedBody: localized_string { pass.valid_until ? I18n.l(pass.valid_until) : "" }}
+           body: pass.member_number}
         ]
+        modules << valid_until_module if pass.valid_until.present?
         modules << description_module if pass.definition.description.present?
         modules
       end
@@ -137,6 +135,12 @@ module Wallets
         {id: "description",
          localizedHeader: localized_string { I18n.t("wallets.pass.description") },
          localizedBody: localized_string { pass.definition.description }}
+      end
+
+      def valid_until_module
+        {id: "valid_until",
+         localizedHeader: localized_string { I18n.t("wallets.pass.valid_until") },
+         localizedBody: localized_string { I18n.l(pass.valid_until) }}
       end
 
       # Additional text modules from the template's WalletDataProvider.

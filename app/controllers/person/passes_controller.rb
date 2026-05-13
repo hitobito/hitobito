@@ -30,6 +30,8 @@ class Person::PassesController < CrudController
   def google_add_to_wallet
     authorize!(:add_to_wallet, pass)
 
+    installation = find_or_create_pass_installation(:google)
+    Wallets::PassSynchronizer.new(installation).sync!
     redirect_to service_for(:google).save_url, allow_other_host: true
   rescue => e
     log_and_redirect(:google, e)

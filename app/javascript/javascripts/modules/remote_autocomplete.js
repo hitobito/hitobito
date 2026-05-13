@@ -126,6 +126,12 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
         return labelWithIcon(record.icon, record.label.replace(escapeHtml(query), mark(query)))
       }
     });
+
+    input.addEventListener('input', () => {
+      if (input.value === '' && input.dataset.idField) {
+        document.getElementById(adjustSelector(input.dataset.idField)).value = '';
+      }
+    });
   }
 
   /**

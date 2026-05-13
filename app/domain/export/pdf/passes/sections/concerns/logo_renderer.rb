@@ -13,11 +13,10 @@ module Export::Pdf::Passes::Sections::Concerns
     private
 
     def render_logo(x, y, align: :right)
-      logo_data = @pass_decorator.logo_blob
+      logo_data = fetch_logo_data
       return 0 unless logo_data
 
-      logo_x = (align == :right) ? x + @inner_width - LOGO_MAX_WIDTH : x
-
+      logo_x = calculate_logo_x(x, align)
       @pdf.image(StringIO.new(logo_data),
         at: [logo_x, y],
         fit: [LOGO_MAX_WIDTH, LOGO_MAX_HEIGHT])
@@ -27,8 +26,14 @@ module Export::Pdf::Passes::Sections::Concerns
       0
     end
 
-    def logo_available?
-      @pass_decorator.logo_blob.present?
+    def fetch_logo_data
+      attachment = @pass_decorator.logo_banner(@pass_decorator.person.language)
+      attachment&.variant(resize_to_fit: [1032, 336], format: :png)&.processed&.download
+    end
+
+    def calculate_logo_x(x, align)
+      return x + @inner_width - LOGO_MAX_WIDTH if align == :right
+      x
     end
   end
 end

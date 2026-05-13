@@ -19,60 +19,19 @@ describe PassDecorator do
 
   subject(:decorator) { described_class.new(pass_record) }
 
-  describe "#logo_group" do
-    before { definition.save! }
-
-    it "returns nil when no group in the ancestor chain has a logo" do
-      expect(decorator.logo_group).to be_nil
+  describe "#logo_icon" do
+    it "returns the logo icon attachment" do
+      attachment = decorator.logo_icon(:de)
+      expect(attachment).to be_attached
     end
 
-    it "returns the closest ancestor group with a logo attached" do
-      groups(:top_layer).logo.attach(
-        io: Rails.root.join("spec", "fixtures", "files", "images", "logo.png").open,
-        filename: "logo.png",
-        content_type: "image/png"
-      )
-      expect(decorator.logo_group).to eq(groups(:top_layer))
-    end
-  end
-
-  describe "#logo_blob" do
-    before { definition.save! }
-
-    it "returns nil when no logo is configured" do
-      allow(Settings.application).to receive(:logo).and_return(nil)
-      expect(decorator.logo_blob).to be_nil
-    end
-
-    it "returns binary data from the group logo when available" do
-      groups(:top_layer).logo.attach(
-        io: Rails.root.join("spec", "fixtures", "files", "images", "logo.png").open,
-        filename: "logo.png",
-        content_type: "image/png"
-      )
-      blob = decorator.logo_blob
-      expect(blob).to be_a(String)
-      expect(blob).not_to be_empty
-    end
-  end
-
-  describe "#logo_url" do
-    before { definition.save! }
-
-    it "returns nil when no logo is configured" do
-      allow(Settings.application).to receive(:logo).and_return(nil)
-      expect(decorator.logo_url).to be_nil
-    end
-
-    it "returns a URL for the group logo when available" do
-      groups(:top_layer).logo.attach(
-        io: Rails.root.join("spec", "fixtures", "files", "images", "logo.png").open,
-        filename: "logo.png",
-        content_type: "image/png"
-      )
-      url = decorator.logo_url
-      expect(url).to be_a(String)
-      expect(url).to include("logo")
+    it "returns fallback locale attachment when requested locale not attached" do
+      expect(definition.logo_icon_en).not_to be_attached
+      I18n.with_locale(:en) do
+        attachment = decorator.logo_icon(:en)
+        expect(attachment).to be_attached
+        expect(attachment).to eq(definition.logo_icon_de)
+      end
     end
   end
 
@@ -160,12 +119,6 @@ describe PassDecorator do
       pass_record.valid_from = 2.months.ago.to_date
       pass_record.valid_until = 1.day.ago.to_date
       expect(decorator).not_to be_active
-    end
-  end
-
-  describe "#definition" do
-    it "returns the pass_definition from the pass record" do
-      expect(decorator.definition).to eq(definition)
     end
   end
 

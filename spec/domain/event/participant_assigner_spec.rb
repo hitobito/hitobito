@@ -83,7 +83,7 @@ describe Event::ParticipantAssigner do
           quest = course.questions.first
           other = Fabricate(:course, groups: [groups(:top_layer)])
           other.questions << Event::Question::NonDefaultQuestion.create!(event: other,
-            disclosure: :optional,
+            required: false,
             question: participation.answers.first.question.question)
           other.questions << Fabricate(:event_question, event: other, question: quest.question, choices: quest.choices,
             multiple_choices: quest.multiple_choices)

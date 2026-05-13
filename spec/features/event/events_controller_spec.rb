@@ -8,14 +8,19 @@
 require "spec_helper"
 
 describe EventsController, js: true do
-  let(:event) do
+  let!(:event) do
     event = Fabricate(:course, kind: event_kinds(:slk), groups: [groups(:top_group)])
     event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
+    event.init_questions
     event
   end
 
   def click_save
     all("form .btn-group").first.click_button "Speichern"
+  end
+
+  before do
+    sign_in
   end
 
   context "contacts" do
@@ -40,7 +45,6 @@ describe EventsController, js: true do
     end
 
     it "may set and remove contact from event" do
-      sign_in
       visit edit_path
 
       hidden_contact_fields_visible(false)
@@ -70,7 +74,6 @@ describe EventsController, js: true do
     end
 
     it "shows no results message for contact and does not interact with message click" do
-      sign_in
       visit edit_path
 
       hidden_contact_fields_visible(false)
@@ -86,7 +89,6 @@ describe EventsController, js: true do
     it "toggles participation notifications" do
       event.update(contact: people(:top_leader))
 
-      sign_in
       visit edit_path
 
       expect(notification_checkbox).not_to be_checked
@@ -109,7 +111,6 @@ describe EventsController, js: true do
     let(:edit_path) { edit_group_event_path(event.group_ids.first, event.id) }
 
     it "may change master organizer groups of course" do
-      sign_in
       visit edit_path
 
       # change organizer group
@@ -130,7 +131,6 @@ describe EventsController, js: true do
     let(:prefill_description) { "Test description" }
 
     before do
-      sign_in
       visit form_path
     end
 
@@ -147,14 +147,26 @@ describe EventsController, js: true do
   end
 
   context "event_questions" do
-    it "orders event questions by id on edit page" do
-      Event::Question.where(event_id: nil).second.update!(question: "A question?")
+    it "orders event questions by id on new page" do
+      event_questions(:vegi).update!(question: "A question?")
 
-      sign_in
+      visit new_group_event_path(group_id: event.groups.first.id)
+      click_on "Anmeldeangaben"
+      expect(find("#event_application_questions_attributes_0_question+p").text).to eq "Ich habe folgendes ÖV Abo"
+      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "Ich habe bereits den Schub " \
+        "(das Werkbuch für Leiterinnen und Leiter der Jubla)"
+      expect(find("#event_application_questions_attributes_2_question+p").text).to eq "A question?"
+    end
+
+    it "orders event questions by id on edit page" do
+      event.questions.third.update!(question: "A question?")
+
       visit edit_group_event_path(event.groups.first, event)
       click_on "Anmeldeangaben"
       expect(find("#event_application_questions_attributes_0_question+p").text).to eq "Ich habe folgendes ÖV Abo"
-      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "A question?"
+      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "Ich habe bereits den Schub " \
+        "(das Werkbuch für Leiterinnen und Leiter der Jubla)"
+      expect(find("#event_application_questions_attributes_2_question+p").text).to eq "A question?"
     end
   end
 end

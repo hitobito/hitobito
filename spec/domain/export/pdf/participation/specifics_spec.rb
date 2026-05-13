@@ -31,8 +31,8 @@ describe Export::Pdf::Participation::Specifics do
     )
   end
   let(:participation) { Event::Participation.create(event: event, person: person) }
-  let!(:question1) { Event::Question.create!(question: "B", disclosure: :optional, event: event) }
-  let!(:question2) { Event::Question.create!(question: "A", disclosure: :optional, event: event) }
+  let!(:question1) { Event::Question.create!(question: "B", required: false, event: event) }
+  let!(:question2) { Event::Question.create!(question: "A", required: false, event: event) }
   let!(:answer1) {
     Event::Answer.find_or_create_by(question: question1, participation: participation).update(answer: "answer b")
   }

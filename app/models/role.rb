@@ -122,7 +122,7 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
   after_initialize :set_start_on_to_today, if: :new_record?
   before_save :prevent_changes, if: :archived?
-
+  after_create :reset_person_minimized_at
   after_create :create_passes
   after_destroy :set_contact_data_visible
   after_destroy :set_first_primary_group

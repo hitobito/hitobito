@@ -16,7 +16,8 @@ describe Wallets::GoogleWallet::PassService do
       person: person,
       pass_definition: definition,
       state: :eligible,
-      valid_from: Date.current)
+      valid_from: Date.current,
+      valid_until: Date.current.end_of_year)
   end
   let(:pass_installation) do
     Fabricate(:wallets_pass_installation,
@@ -147,6 +148,13 @@ describe Wallets::GoogleWallet::PassService do
 
         desc_module = create_or_update_payload[:textModulesData].find { |m| m[:id] == "description" }
         expect(desc_module).to be_nil
+      end
+
+      it "omits valid_until module when pass.valid_until is nil" do
+        allow(pass).to receive(:valid_until).and_return(nil)
+
+        valid_until_mod = create_or_update_payload[:textModulesData].find { |m| m[:id] == "valid_until" }
+        expect(valid_until_mod).to be_nil
       end
 
       it "includes extra text modules from wallet_data_provider" do

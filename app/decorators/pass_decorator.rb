@@ -118,10 +118,10 @@ class PassDecorator < ApplicationDecorator
     path = settings_logo_pack_path
     return nil unless path
 
-    opts = Rails.application.routes.default_url_options.with_indifferent_access
-    scheme = opts[:protocol] || "http"
+    scheme = Settings.application.protocol
+    host = Settings.application.hostname
 
-    URI::Generic.build(scheme:, host: opts[:host], port: opts[:port], path:).to_s
+    URI::Generic.build(scheme:, host:, path:).to_s
   end
 
   # Read the Settings.application.logo file from the webpack build output.

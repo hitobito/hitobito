@@ -6,10 +6,6 @@
 - title entry.pass_definition.name
 
 - content_for(:toolbar) do
-  = action_button t('person.passes.index.download_pdf'), group_person_pass_path(*parents, entry, format: :pdf), "print"
-  - if can_add_pass_to?(entry, :google)
-    = action_button t('person.passes.index.add_to_google_wallet'), google_add_to_wallet_group_person_pass_path(*parents, entry), "add"
-  - if can_add_pass_to?(entry, :apple)
-    = action_button t('person.passes.index.add_to_apple_wallet'), apple_download_pkpass_group_person_pass_path(*parents, entry, format: :pkpass), "add"
+  = render "actions_show"
 
 = render pass_template_partial('show')

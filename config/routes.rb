@@ -270,6 +270,8 @@ Hitobito::Application.routes.draw do
             end
           end
 
+          resources :messages, only: [:index]
+
           resources :applications, only: [] do
             member do
               put    :approve
@@ -291,6 +293,7 @@ Hitobito::Application.routes.draw do
               end
             end
             resource :mail_dispatch, only: [:create], module: :participations
+            resources :messages, only: [:index], module: :participations
             member do
               get "print"
               resources :guests, only: [:new, :create]
@@ -313,7 +316,9 @@ Hitobito::Application.routes.draw do
 
       resources :mailing_lists do
         resource :subscriber_list, only: [:create], module: :subscriber
-        resources :messages
+        resources :messages, module: :mailing_lists do
+          resource :dispatch, only: [:create, :show], module: :messages
+        end
 
         resources :subscriptions, only: [:index, :destroy] do
           collection do
@@ -436,10 +441,6 @@ Hitobito::Application.routes.draw do
 
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
-    resources :messages, only: [:show] do
-      resource :preview, only: [:show], module: :messages
-      resource :dispatch, only: [:create, :show], module: :messages
-    end
   end # scope locale
 
   get "/api", to: "json_api/documentation#index"

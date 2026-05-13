@@ -22,18 +22,12 @@ module MessagesHelper
       "plus")
   end
 
-  def available_message_placeholders(editor_id)
-    safe_join([t("messages.form.available_placeholders"),
-      " ",
-      safe_join(placeholder_links(editor_id), ", ")])
-  end
-
   def format_message_type(message)
     icon(message.class.icon, title: message.type.constantize.model_name.human)
   end
 
   def format_send_to_households(message)
-    base_key = "messages.letter.fields.send_to_households_options."
+    base_key = "mailing_lists.messages.letter.fields.send_to_households_options."
     t(base_key + message.send_to_households.to_s)
   end
 
@@ -54,11 +48,11 @@ module MessagesHelper
   def format_message_infos(message)
     infos = []
     if message.respond_to?(:mail_from) && message.mail_from
-      infos << t("messages.table.infos.sender", mail: message.mail_from)
+      infos << t("mailing_lists.messages.table.infos.sender", mail: message.mail_from)
     end
     if message.failed? && message.mail_log.present?
       mail_log_error_key = message.mail_log.status.to_s
-      infos << t("messages.table.infos.#{mail_log_error_key}")
+      infos << t("mailing_lists.messages.table.infos.#{mail_log_error_key}")
     end
     infos.join(", ")
   end

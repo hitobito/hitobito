@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class MessagesController < CrudController
+class MailingLists::MessagesController < CrudController
   include RenderMessagesExports
   include YearBasedPaging
   include AsyncDownload

@@ -10,8 +10,7 @@ require "spec_helper"
 describe Export::Pdf::Messages::LetterWithInvoice::DonationConfirmation do
   let(:top_leader) { people(:top_leader) }
   let(:recipient) do
-    MessageRecipient
-      .new(message: letter_with_invoice, person: bottom_member)
+    MessageRecipient.new(message: letter_with_invoice, person: bottom_member)
   end
   let(:top_layer) { groups(:top_layer) }
   let(:bottom_member) { people(:bottom_member) }

@@ -11,7 +11,7 @@ module Sheet
 
     tab "global.tabs.info",
       :group_mailing_list_path,
-      alt: [:edit_group_mailing_list_path],
+      no_alt: true,
       if: :show
 
     tab "activerecord.models.message.other",

@@ -8,7 +8,7 @@
 
 = crud_table do |t|
   - t.sortable_attrs(:type)
-  - t.col(Message.human_attribute_name(:subject)) do |message|
+  - t.col(Message.human_attribute_name(:subject), class: 'nowrap mw-20ch') do |message|
     %strong
       = link_to(message, message.path_args)
   - t.sortable_attrs(:state, :sent_at)

@@ -12,6 +12,8 @@ class ApplicationMailer < ActionMailer::Base
 
   helper :webpack, :utility
 
+  after_deliver :record_system_mail_message
+
   def mail(headers = {}, &block)
     HEADERS_TO_SANITIZE.each do |h|
       if headers.key?(h) && headers[h].present?
@@ -35,8 +37,9 @@ class ApplicationMailer < ActionMailer::Base
     headers[:to] = emails
     content = custom_content(content_key, context:)
     headers[:subject] ||= unescape_html(content.subject_with_values(values))
+    @body = content.body_with_values(values)
     mail(headers) do |format|
-      format.html { render html: content.body_with_values(values), layout: true }
+      format.html { render html: @body, layout: true }
     end
   end
 
@@ -83,6 +86,40 @@ class ApplicationMailer < ActionMailer::Base
   # as reply-to address
   def return_path(sender)
     MailRelay::Lists.personal_return_path(MailRelay::Lists.app_sender_name, sender.email)
+  end
+
+  def record_system_mail_for(recipient)
+    @system_mail_recipients ||= []
+    # skip event guests (who as person have no id)
+    @system_mail_recipients.push(*Array(recipient).select(&:id))
+  end
+
+  def record_system_mail_message
+    return if @system_mail_recipients.blank?
+
+    record = Message::SystemMail.create!(system_mail_attributes)
+    @system_mail_recipients.each do |r|
+      record.message_recipients.create!(system_mail_recipient_attributes(r))
+    end
+  end
+
+  def system_mail_attributes
+    {
+      raw_source: @body,
+      subject: message.subject,
+      sent_at: Time.zone.now,
+      state: :finished,
+      recipient_count: @system_mail_recipients.size,
+      event_id: @event&.id || @course&.id
+    }
+  end
+
+  def system_mail_recipient_attributes(person)
+    {
+      person:,
+      state: :sent,
+      email: use_mailing_emails(person).first
+    }
   end
 
   def link_to(label, url = nil)

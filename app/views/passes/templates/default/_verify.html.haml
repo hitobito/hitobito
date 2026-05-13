@@ -3,9 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito
 
-- template_name = @template.pass_view_partial
-
-.pass-card-wrapper
-  .pass-card-sides
-    = render pass_template_partial(template_name, 'card_front'), pass: @pass, person: @person
-    = render pass_template_partial(template_name, 'card_back'), pass: @pass
+#pass-verify.row.justify-content-md-center
+  = render pass_template_partial('verify/header')
+  = render pass_template_partial('verify/details')
+  = render pass_template_partial('verify/footer')

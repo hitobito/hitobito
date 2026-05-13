@@ -12,4 +12,4 @@
   - if can_add_pass_to?(entry, :apple)
     = action_button t('person.passes.index.add_to_apple_wallet'), apple_download_pkpass_group_person_pass_path(*parents, entry, format: :pkpass), "add"
 
-= render pass_template_partial(entry.pass_definition.template.pass_view_partial, 'show')
+= render pass_template_partial('show')

@@ -13,7 +13,4 @@
     = stylesheet_pack_tag "application"
     = javascript_pack_tag "pass_verify"
   %body.container
-    #pass-verify.row.justify-content-md-center
-      = render "header"
-      = render "details"
-      = render "footer"
+    = render pass_template_partial(:verify)

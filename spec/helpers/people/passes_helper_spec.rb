@@ -12,8 +12,9 @@ describe People::PassesHelper do
     before { allow(helper).to receive(:lookup_context).and_return(lookup) }
 
     it "returns the default path without consulting lookup_context" do
+      assign(:pass_view_partial, "default")
       expect(lookup).not_to receive(:find_all)
-      result = helper.pass_template_partial("default", "card_front")
+      result = helper.pass_template_partial("card_front")
       expect(result).to eq("passes/templates/default/card_front")
     end
 
@@ -22,7 +23,8 @@ describe People::PassesHelper do
         .with("passes/templates/members/_card_front")
         .and_return([double("template")])
 
-      result = helper.pass_template_partial("members", "card_front")
+      assign(:pass_view_partial, "members")
+      result = helper.pass_template_partial("card_front")
       expect(result).to eq("passes/templates/members/card_front")
     end
 
@@ -31,7 +33,8 @@ describe People::PassesHelper do
         .with("passes/templates/members/_card_back")
         .and_return([])
 
-      result = helper.pass_template_partial("members", "card_back")
+      assign(:pass_view_partial, "members")
+      result = helper.pass_template_partial("card_back")
       expect(result).to eq("passes/templates/default/card_back")
     end
   end

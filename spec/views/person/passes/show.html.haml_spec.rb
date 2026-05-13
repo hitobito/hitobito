@@ -43,7 +43,7 @@ describe "person/passes/show.html.haml" do
 
   it "delegates to the template partial" do
     expect(view).to have_received(:pass_template_partial)
-      .with(definition.template_key, "show")
+      .with("show")
   end
 
   describe "toolbar action buttons" do

@@ -9,12 +9,15 @@ module People::PassesHelper
   # Resolves a pass template partial with fallback to the "default" template.
   # If the template provides e.g. only _card_front, the missing _card_back and
   # _verify partials are loaded from passes/templates/default/ instead.
-  def pass_template_partial(template_name, partial_name)
-    path = "passes/templates/#{template_name}/_#{partial_name}"
-    if template_name != "default" && lookup_context.find_all(path).empty?
-      "passes/templates/default/#{partial_name}"
+  def pass_template_partial(relative_partial_path, prefix = "passes/templates")
+    partial, *folders = relative_partial_path.to_s.split("/").reverse
+    path = [prefix, "%s", folders.reverse.join("/").presence, "%s"].compact.join("/")
+    template_partial_path = format(path, @pass_view_partial, "_#{partial}")
+
+    if @pass_view_partial == "default" || lookup_context.find_all(template_partial_path).blank?
+      format(path, "default", partial)
     else
-      "passes/templates/#{template_name}/#{partial_name}"
+      format(path, @pass_view_partial, partial)
     end
   end
 

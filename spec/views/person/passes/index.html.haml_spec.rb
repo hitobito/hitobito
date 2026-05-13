@@ -53,6 +53,8 @@ describe "person/passes/index.html.haml" do
     end
 
     it "does not show wallet buttons when wallets are not configured" do
+      expect(Wallets::GoogleWallet::Config).not_to exist
+      expect(Wallets::AppleWallet::Config).not_to exist
       expect(dom).not_to have_link("Google Wallet")
       expect(dom).not_to have_link("Apple Wallet")
     end

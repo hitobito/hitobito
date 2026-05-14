@@ -161,6 +161,7 @@ describe Person::PassesController do
     end
 
     it "raises when pass does not belong to current user" do
+      other.passes.where(pass_definition: definition).delete_all
       pass.update!(person: other)
       expect {
         get :google_add_to_wallet, params: {group_id: group.id, person_id: other.id, id: pass.id}
@@ -240,6 +241,7 @@ describe Person::PassesController do
     end
 
     it "raises when pass does not belong to current user" do
+      other.passes.where(pass_definition: definition).delete_all
       pass.update!(person: other)
       expect {
         get :apple_download_pkpass, params: {group_id: group.id, person_id: other.id, id: pass.id}, format: :pkpass

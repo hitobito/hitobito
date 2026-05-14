@@ -625,6 +625,31 @@ describe Role do
         end.to not_change { person.reload.passes.count }
           .and not_change { person.passes.first.valid_from }
       end
+
+      it "sets pass valid_from to role start_on when present" do
+        start_date = 1.week.from_now.to_date
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:, start_on: start_date)
+        end.to change(Pass, :count).by(1)
+        pass = person.passes.find_by(pass_definition:)
+        expect(pass.valid_from).to eq(start_date)
+      end
+
+      it "sets pass valid_from to Date.current when role start_on is blank" do
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:, start_on: nil)
+        end.to change(Pass, :count).by(1)
+        pass = person.passes.find_by(pass_definition:)
+        expect(pass.valid_from).to eq(Date.current)
+      end
+
+      it "does not modify existing pass start_on when role start_on is blank" do
+        existing_pass = Fabricate(:pass, person:, pass_definition:, valid_from: 1.year.ago)
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:, start_on: nil)
+        end.not_to change(Pass, :count)
+        expect(existing_pass.reload.valid_from).to eq(1.year.ago.to_date)
+      end
     end
   end
 

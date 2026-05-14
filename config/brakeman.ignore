@@ -3,6 +3,29 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "131c9860a37072923fde4105ba31af1362ca3052638870526adcf3359ff111d2",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/mailing_lists/subscribers.rb",
+      "line": 59,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "people_scope.with(:person_tag_ids => person_tag_ids).with(:group_subscriptions => group_subscriptions).with(:event_subscriptions => event_subscriptions).with(:person_including_subscriptions => person_including_subscriptions).with(:person_excluding_subscriptions => person_excluding_subscriptions).left_joins(:taggings).left_joins(:roles => :group).left_joins(:event_participations).joins(\"LEFT OUTER JOIN group_subscriptions ON #{Group.below_or_at_condition(\"group_subscriptions.lft\", \"group_subscriptions.rgt\")}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "MailingLists::Subscribers",
+        "method": "unfiltered_people_as_configured"
+      },
+      "user_input": "Group.below_or_at_condition(\"group_subscriptions.lft\", \"group_subscriptions.rgt\")",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "Safe: Group.below_or_at_condition uses sanitize_nested_set_bound which validates inputs against SQL injection (only accepts integers, bind-parameter placeholders, or column references matching /\\A[\\w.]+\\z/)"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "3a4aa5477a1a1e079bb24001f19c237f1075d2c547f3f814dcef0fa113de2d23",
       "check_name": "SQL",
       "message": "Possible SQL injection",

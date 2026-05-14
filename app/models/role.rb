@@ -374,7 +374,7 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
       .where(related_role_types: {role_type: type})
       .find_each do |pass_definition|
         Pass.find_or_create_by!(pass_definition:, person:) do |pass|
-          pass.valid_from = start_on
+          pass.valid_from = start_on || Date.current
           pass.valid_until = end_on
         end
       end

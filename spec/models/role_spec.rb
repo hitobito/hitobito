@@ -594,6 +594,7 @@ describe Role do
     describe "create passes callback" do
       let(:person) { Fabricate(:person) }
       let(:group) { groups(:top_group) }
+      let(:pass_definition) { pass_definitions(:top_layer_pass) }
 
       it "noops if no grant applies" do
         expect do
@@ -615,6 +616,14 @@ describe Role do
         expect do
           Fabricate(Group::TopGroup::Leader.sti_name, group:, person:)
         end.to change { person.reload.passes.count }.by(2)
+      end
+
+      it "noops if pass matching grant already exists" do
+        Fabricate(:pass, person:, pass_definition:, valid_from: 1.year.ago)
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:)
+        end.to not_change { person.reload.passes.count }
+          .and not_change { person.passes.first.valid_from }
       end
     end
   end

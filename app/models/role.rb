@@ -371,7 +371,10 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
       .merge(PassGrant.group_grants)
       .where(related_role_types: {role_type: type})
       .find_each do |pass_definition|
-        Pass.create!(pass_definition:, person:, valid_from: start_on, valid_until: end_on)
+        Pass.find_or_create_by!(pass_definition:, person:) do |pass|
+          pass.valid_from = start_on
+          pass.valid_until = end_on
+        end
       end
   end
 end

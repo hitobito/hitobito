@@ -934,12 +934,8 @@ fr:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
-        disclosure: Paramétrage
+        required: Obligatorisch
         sensitive: Sensible
-        disclosures:
-          required: Obligatoire
-          optional: Optionnel
-          hidden: Non affiché
 
       admin_questions:
         question: Question

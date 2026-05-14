@@ -606,6 +606,7 @@ fr:
     questions:
       add_choice: "Ajouter une réponse possible"
       sensitive_caption: Les réponses seront supprimées %{cutoff} mois après la fin de l'événement.
+      required_caption: Diese Frage muss beim Anmelden beantworten werden.
 
   assignments:
     attachment: "afficher les pièces jointes"

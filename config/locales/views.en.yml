@@ -600,6 +600,7 @@ en:
     questions:
       add_choice: "Add an answer option"
       sensitive_caption: Replies will be deleted %{cutoff} months after the event ends.
+      required_caption: Diese Frage muss beim Anmelden beantworten werden.
 
   assignments:
     attachment: "Show attachment"

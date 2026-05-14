@@ -933,12 +933,8 @@ it:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
-        disclosure: Impostazione
+        required: Obligatorisch
         sensitive: Delicato
-        disclosures:
-          required: Obbligatorio
-          optional: Opzionale
-          hidden: Non visualizzato
 
       admin_questions:
         question: Domanda

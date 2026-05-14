@@ -861,12 +861,8 @@ en:
         question: Question
         choices: Possible answers
         multiple_choices: Multiple choice
-        disclosure: Antwortangabe
+        required: Obligatorisch
         sensitive: Sensitive
-        disclosures:
-          required: Required
-          optional: Optional
-          hidden: Hidden
 
       admin_questions:
         question: Question

@@ -604,6 +604,7 @@ it:
     questions:
       add_choice: "Possibile risposta risposta"
       sensitive_caption: Le risposte vengono cancellate %{cutoff} mesi dopo la conclusione dell'evento.
+      required_caption: Diese Frage muss beim Anmelden beantworten werden.
 
   assignments:
     attachment: "Mostrare l'allegato."

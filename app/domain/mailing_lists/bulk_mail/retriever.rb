@@ -64,6 +64,7 @@ class MailingLists::BulkMail::Retriever
     return handle_too_big_mail!(imap_mail) if validator.mail_too_big?
     return handle_mail_without_path_header!(imap_mail.uid) if validator.return_path_header_nil?
     return handle_invalid_mail(imap_mail) unless validator.valid_mail?
+    return handle_generic_bounce(imap_mail) if imap_mail.generic_bounce?
 
     imap_mail
   end
@@ -114,9 +115,26 @@ class MailingLists::BulkMail::Retriever
     mail_log.update!(status: :bounce_rejected)
 
     bounce_mail = Imap::BounceMail.new(imap_mail)
-    bounce_handler(bounce_mail, mail_log.message, mailing_list).process
+    action_taken = bounce_handler(bounce_mail, mail_log.message, mailing_list).process
 
-    delete_mail(imap_mail.uid)
+    if action_taken == :unknown
+      move_mail_to_failed(imap_mail.uid)
+    else
+      delete_mail(imap_mail.uid)
+    end
+
+    nil
+  end
+
+  def handle_generic_bounce(imap_mail)
+    bounce = Imap::BounceMail.new(imap_mail)
+    action_taken = bounce_handler(bounce, nil, nil).analyze!
+
+    if action_taken == :unknown
+      move_mail_to_failed(imap_mail.uid)
+    else
+      delete_mail(imap_mail.uid)
+    end
 
     nil
   end

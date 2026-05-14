@@ -1,0 +1,102 @@
+#  Copyright (c) 2026, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+# Notes and Remarks:
+#
+# This file contains commonly encountered Diagnostic Codes from email bounces
+# collected from our own mailservers.
+#
+# All lists list a single diagnostic code per entry. Note that there might be
+# more text preceding and following in the real bounce messages.
+#
+# These are the meanings and intended actions:
+#
+# block
+#   BLOCK the email address after the first occurrence.
+#
+# continue
+#   Keep active / NOOP / No reason to block those users.
+#
+# register
+#   RECORD the email address or increase the bounce-score.
+#
+# internal_error
+#   indicate an error with the way we formatted/sent the email. These should be
+#   considered errors on our side. Do not block or increment bounce scores for
+#   those users. This should be sent to Glitchtip and be analyzed with the
+#   platform helpdesk/the mailserver-admins
+#
+# The order of the keys is relevant. we check in the order that is mentioned
+# here and the first match determines the action.
+#
+email:
+  bounces:
+    diagnostic_codes:
+      block:
+        - "550 No such user"
+        - "550 5.1.1 MXIN501 mailbox"
+        - "550 5.5.1 Recipient rejected - OXSEU001_403"
+        - "550 No Such User Here"
+        - "550 Recipient does not exist"
+        - "550 5.1.1 User Unknown"
+        - "550 no such address here"
+        - "552 1 Requested mail action aborted, mailbox not found"
+        - "550 No Such User Here"
+        - "550-5.1.1 The email account that you tried to reach does not exist. Please try 550-5.1.1 double-checking the recipient's email address for typos or 550-5.1.1 unnecessary spaces"
+        - "550 5.1.1 Requested action not taken: user unknown (Benutzer unbekannt)."
+        - "550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/EXOSmtpErrors"
+        - "550 5.1.1 sc147: <.+@.+> recipient rejected - address unknown"
+        - "550 5.1.1 sc146: <.+@.+> recipient rejected - address unknown"
+        - "550 5.1.1 <.+@.+>... User unknown"
+        - "550 5.1.1 <.+@.+>: Recipient address rejected: User unknown in virtual mailbox table"
+        - "550-5.1.1 <.+@.+>: Recipient address rejected: 550 User unknown in virtual mailbox table"
+        - "550 5.1.1 <.+@.+>: Recipient address rejected: User unknown in relay recipient table"
+        - "550 5.1.1 <.+@.+> User unknown; rejecting"
+        - "550 5.1.1 <.+@.+> sorry, no mailbox here by that name. #5.5.1"
+        - "550 5.7.1 Recipient address rejected: User unknown in local recipient table"
+        - "550 5.1.1 <.+@.+>: Recipient address rejected: Address does not exist"
+        - "550 5.1.1 <.+@.+>: user does not exist"
+        - "550 Unknown User"
+        - "550 No such recipient"
+        - "550 5.7.1 User unknown"
+        - "550 5.1.1 <.+@.+>: Recipient address rejected: User unknown in virtual alias table"
+        - "550 5.1.1 <.+@.+>: Recipient address rejected: User unknown"
+        - "550 5.1.0 <.+@.+> Recipient not found."
+        - "550 5.1.1 RCP-P1 Recipient address does not exist"
+        - "550 5.1.1 <.+@.+>: Recipient address rejected: undeliverable address:"
+      continue:
+        - "552-Requested mail action aborted: exceeded storage allocation 552-Quota exceeded. 552 For explanation visit https://postmaster.gmx.net/en/case?c=r1503"
+        - "554 5.7.1 Spam message rejected"
+        - '550 5.1.1 MXIN505 mailbox\s+.+@.+\s+is full'
+        - "552 5.2.2 <.+@.+>: user is over quota"
+        - "550-Callout verification failed: 550 552 5.2.2 <.+@.+> Quota exceeded"
+        - "552 5.2.2 Mailbox is full"
+        - "550 5.7.1 message content rejected"
+        - "554 5.7.1 Message cannot be accepted, spam rejection"
+        - "552-5.2.2 The recipient's inbox is out of storage space and inactive."
+        - "550 High probability of spam"
+        - "550-Callout verification failed: 550 550 user quota exceeded: mailbox is full"
+        - "554 Your email is considered spam"
+      register:
+        - "550 Unrouteable address"
+        - "550-Requested action not taken: mailbox unavailable"
+        - "550 5.5.0 Requested action not taken: mailbox unavailable"
+        - "550 #5.1.0 Address rejected."
+        - "550 5.1.1 User Unknown Rule"
+        - "550-5.2.1 The email account that you tried to reach is inactive."
+        - "554 5.7.1 <.+@.+>: Relay access denied"
+        - "550 Requested action not taken: mailbox unavailable or not local."
+        - "550 5.7.1 Relaying denied"
+        - "550 5.1.1 <.+@.+>: Recipient address rejected: Account recently deleted"
+        - '554 30 Sorry, your message to\s+.+@.+\s+cannot be delivered. This mailbox is disabled'
+      internal_error:
+        - "554-Transaction failed 554-Reject due to policy restrictions. 554 For explanation visit https://postmaster.gmx.net/en/case?c=r0735"
+        - "554-Transaction failed 554-Reject due to policy restrictions. 554 For explanation visit https://postmaster.gmx.net/en/case?c=r0710"
+        - "550-5.7.1 This message is not RFC 5322 compliant. There are multiple From 550-5.7.1 headers. To reduce the amount of spam sent to Gmail, this message has 550-5.7.1 been blocked."
+        - "554-Transaction failed 554-Reject due to policy restrictions."
+        - '550-5.7.1 \[.+\] Messages with multiple addresses in From: header are 550-5.7.1 not accepted. For more information, go to 550-5.7.1'
+        - "554 Message not accepted. From header is invalid or contains unacceptable characters."
+        - "550 5.1.20 SMTP; Multiple From addresses are not allowed without a Sender address"
+        - "550 From contains invalid characters."

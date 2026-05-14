@@ -39,8 +39,10 @@ describe MailingLists::BulkMail::BounceHandler do
     let(:bounce_parent) { messages(:bulk_mail) }
 
     it "does not process bounce if source message cannot be found" do
-      body = bounce_mail.body.raw_source.gsub("X-Hitobito-Message-UID: a15816bbd204ba20",
-        "X-Hitobito-Message-UID: unknown42")
+      body = bounce_mail.body.raw_source.gsub(
+        "X-Hitobito-Message-UID: a15816bbd204ba20",
+        "X-Hitobito-Message-UID: unknown42"
+      )
       expect(bounce_mail.body).to receive(:raw_source).at_least(:once).and_return(body)
 
       expect(Rails.logger).to receive(:info)
@@ -127,6 +129,109 @@ describe MailingLists::BulkMail::BounceHandler do
         bounce_handler.process
       end.to raise_error(MailingLists::BulkMail::NoBounceRecipientDetected)
         .with_message(/Mail seems to be a bounce, but the original recipient could not be detected./)
+    end
+  end
+
+  describe "#analyze!" do
+    it "blocks an email for hard bounces" do
+      expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:block)
+      expect(bounce_handler).to receive(:block_bounce).once
+
+      expect(bounce_handler).to_not receive(:notify_sentry)
+
+      bounce_handler.analyze!
+    end
+
+    it "does nothing for minor issues on the recipient end" do
+      expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:continue)
+      expect(bounce_handler).to_not receive(:block_bounce)
+      expect(bounce_handler).to_not receive(:record_bounce)
+      expect(bounce_handler).to_not receive(:notify_sentry)
+
+      bounce_handler.analyze!
+    end
+
+    it "records a bounce for normal bounces" do
+      expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:register)
+      expect(bounce_handler).to receive(:record_bounce).once
+
+      expect(bounce_handler).to_not receive(:block_bounce)
+      expect(bounce_handler).to_not receive(:notify_sentry)
+
+      bounce_handler.analyze!
+    end
+
+    it "reports internal errors" do
+      expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:internal_error)
+      expect(bounce_handler).to receive(:notify_sentry).once
+
+      expect(bounce_handler).to_not receive(:block_bounce)
+      expect(bounce_handler).to_not receive(:record_bounce)
+
+      bounce_handler.analyze!
+    end
+
+    it "records a bounces a reports an error for unknown codes" do
+      expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:unknown)
+      expect(bounce_handler).to receive(:record_bounce).once
+      expect(bounce_handler).to receive(:notify_sentry).once
+
+      expect(bounce_handler).to_not receive(:block_bounce)
+
+      bounce_handler.analyze!
+    end
+
+    it "records a bounces a reports an error for other codes" do
+      expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:dunno_dont_care)
+      expect(bounce_handler).to receive(:record_bounce).once
+      expect(bounce_handler).to receive(:notify_sentry).once
+
+      expect(bounce_handler).to_not receive(:block_bounce)
+
+      bounce_handler.analyze!
+    end
+  end
+
+  describe "#analyze_diagnostic_code can return" do
+    it "block" do
+      expect(bounce_handler.analyze_diagnostic_code("550 No such user")).to eq :block
+      expect(bounce_handler.analyze_diagnostic_code("550 5.1.1 <testing@example.com>... User unknown")).to eq :block
+    end
+
+    it "continue" do
+      expect(bounce_handler.analyze_diagnostic_code(
+        "550 5.1.1 MXIN505 mailbox   testing@example.com    is full"
+      )).to eq :continue
+      expect(bounce_handler.analyze_diagnostic_code(
+        "550 5.1.1 MXIN505 mailbox testing@example.com is full"
+      )).to eq :continue
+      expect(bounce_handler.analyze_diagnostic_code("550 5.7.1 message content rejected")).to eq :continue
+    end
+
+    it "register" do
+      expect(bounce_handler.analyze_diagnostic_code("550 Unrouteable address")).to eq :register
+      expect(bounce_handler.analyze_diagnostic_code(
+        "554 30 Sorry, your message to   testing@example.com   cannot be delivered. This mailbox is disabled"
+      )).to eq :register
+      expect(bounce_handler.analyze_diagnostic_code(
+        "554 30 Sorry, your message to testing@example.com cannot be delivered. This mailbox is disabled"
+      )).to eq :register
+    end
+
+    it "internal_error" do
+      expect(bounce_handler.analyze_diagnostic_code(
+        "550-5.7.1 [42] Messages with multiple addresses in From: header are 550-5.7.1 not accepted. " \
+        "For more information, go to 550-5.7.1"
+      )).to eq :internal_error
+
+      expect(bounce_handler.analyze_diagnostic_code("550 From contains invalid characters.")).to eq :internal_error
+    end
+
+    it "unknown" do
+      expect(bounce_handler.analyze_diagnostic_code(
+        "Dit is jetzt peinlich... Ick will die Mail für <matze@example.com> nich, jeh ma wech mit dem"
+      )).to eq :unknown
+      expect(bounce_handler.analyze_diagnostic_code("Iiih, Mehl!")).to eq :unknown
     end
   end
 end

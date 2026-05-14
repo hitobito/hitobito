@@ -78,9 +78,12 @@ class Imap::Mail
     first_header("X-Original-To")
   end
 
+  def generic_bounce?
+    bounced? && bounce_hitobito_message_uid.blank?
+  end
+
   def list_bounce?
-    bounced? &&
-      bounce_hitobito_message_uid.present?
+    bounced? && bounce_hitobito_message_uid.present?
   end
 
   def auto_response?

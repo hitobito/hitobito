@@ -5,16 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require_relative '../../config/settings_contract'
+require_relative "../../config/settings_contract"
 
 # Setup for https://github.com/rubyconfig/config
 Config.setup do |config|
   # Name of the constant exposing loaded settings
-  config.const_name = 'Settings'
+  config.const_name = "Settings"
 
   # Ability to remove elements of the array set in earlier loaded settings file. For example value: '--'.
   #
-  config.knockout_prefix = '--'
+  config.knockout_prefix = "--"
 
   # Overwrite an existing value when merging a `nil` value.
   # When set to `false`, the existing value is retained after merge.
@@ -69,6 +69,8 @@ end
 # use add_source for extend-only files
 # and prepend_source for files with overwritable settings
 Rails.application.config.to_prepare do
-  Settings.add_source!(Rails.root.join('config/settings/payment_providers.yml').to_s)
+  settings_dir = Rails.root.join("config", "settings")
+  Settings.add_source!(settings_dir.join("payment_providers.yml").to_s)
+  Settings.add_source!(settings_dir.join("bounce_heuristics.yml").to_s)
   Settings.reload!
 end

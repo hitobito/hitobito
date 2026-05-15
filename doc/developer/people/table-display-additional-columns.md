@@ -93,6 +93,12 @@ can produce multiple actual columns.
   - Event::Participations::QuestionColumn
     - uses `:update` Permission on the Event or `:show_full` Permission on the Person
 
+
+## Custom Columns
+
+Always override `value_for(object, attr, &block)` to produce data. This method is used in
+web and export context, whereas `render` is only used for web.
+
 ## Implementation Advice / TODO
 
 Table display columns are also exportable but without template context. We should refrain

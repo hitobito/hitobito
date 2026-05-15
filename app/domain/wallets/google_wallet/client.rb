@@ -35,8 +35,8 @@ module Wallets
         # Token is cached at the class level so all instances (threads) reuse
         # the same credential, reducing token fetches to at most once per hour.
         # Access is serialized via a class-level mutex.
-        def token
-          @token_semaphore.synchronize { renew_expired_token }
+        def token(config = Config)
+          @token_semaphore.synchronize { renew_expired_token(config) }
           @token
         end
 
@@ -45,11 +45,11 @@ module Wallets
         # Fetches a fresh access token from Google using the service account
         # credentials in Config. Skips the fetch if the current token is still
         # valid. Stores the new token and its expiry in class-level variables.
-        def renew_expired_token
+        def renew_expired_token(config)
           return if @token_expires_at&.> Time.zone.now
 
           authorizer = Google::Auth::ServiceAccountCredentials.make_creds(
-            json_key_io: StringIO.new(Config.service_account_json),
+            json_key_io: StringIO.new(config.service_account_json),
             scope: SCOPES
           )
           authorizer.fetch_access_token!
@@ -59,8 +59,11 @@ module Wallets
         end
       end
 
-      def initialize
-        raise "#{Config::FILE_PATH} not found" unless Config.exist?
+      attr_reader :config
+
+      def initialize(config = Config)
+        @config = config
+        raise "#{config::FILE_PATH} not found" unless config.exist?
       end
 
       # Create a pass class (template).
@@ -133,7 +136,7 @@ module Wallets
       end
 
       def token
-        self.class.token
+        self.class.token(config)
       end
 
       # Builds a signed RS256 JWT for the "Save to Google Wallet" deep-link URL.
@@ -144,13 +147,13 @@ module Wallets
       def build_save_jwt(object_id, type)
         jwt_key = (type == :event_ticket) ? :eventTicketObjects : :genericObjects
         payload = {
-          iss: Config.issuer_email || Config.client_email,
+          iss: config.issuer_email || config.client_email,
           aud: "google",
           typ: "savetowallet",
           iat: Time.now.to_i,
           payload: {jwt_key => [{id: object_id}]}
         }
-        private_key = OpenSSL::PKey::RSA.new(Config.private_key)
+        private_key = OpenSSL::PKey::RSA.new(config.private_key)
         JWT.encode(payload, private_key, "RS256")
       end
 

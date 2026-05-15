@@ -21,33 +21,27 @@ describe Wallets::AppleWallet::PushService do
     Fabricate(:wallets_pass_installation, pass: pass, wallet_type: :apple)
   end
 
-  subject(:push_service) { described_class.new(installation) }
-
-  let(:p12_path) { Rails.root.join("tmp", "test_cert.p12") }
-  let(:p12_password) { "test" }
-
-  before do
-    # Create a self-signed test P12 certificate
-    key = OpenSSL::PKey::RSA.new(2048)
+  let(:test_key) { OpenSSL::PKey::RSA.new(2048) }
+  let(:test_cert) do
     cert = OpenSSL::X509::Certificate.new
     cert.subject = OpenSSL::X509::Name.new([["CN", "Test"]])
     cert.issuer = cert.subject
     cert.not_before = Time.current
     cert.not_after = Time.current + 3600
-    cert.public_key = key.public_key
+    cert.public_key = test_key.public_key
     cert.serial = 1
-    cert.sign(key, OpenSSL::Digest.new("SHA256"))
-    p12 = OpenSSL::PKCS12.create(p12_password, "Test", key, cert)
-    File.binwrite(p12_path, p12.to_der)
-
-    allow(Wallets::AppleWallet::Config).to receive(:p12_certificate_path).and_return(p12_path.to_s)
-    allow(Wallets::AppleWallet::Config).to receive(:p12_password).and_return(p12_password)
-    allow(Wallets::AppleWallet::Config).to receive(:pass_type_identifier).and_return("pass.com.example.test")
+    cert.sign(test_key, OpenSSL::Digest.new("SHA256"))
+    cert
   end
 
-  after do
-    FileUtils.rm_f(p12_path)
+  let(:mock_config) do
+    class_double(Wallets::AppleWallet::Config,
+      pass_type_identifier: "pass.com.example.test",
+      certificate: test_cert,
+      key: test_key)
   end
+
+  subject(:push_service) { described_class.new(installation, mock_config) }
 
   describe "#send_update_notification" do
     context "with no device registrations" do

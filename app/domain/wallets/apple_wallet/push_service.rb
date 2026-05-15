@@ -16,8 +16,11 @@ module Wallets
       APNS_PRODUCTION_URL = "https://api.push.apple.com"
       APNS_SANDBOX_URL = "https://api.sandbox.push.apple.com"
 
-      def initialize(pass_installation)
+      attr_reader :config
+
+      def initialize(pass_installation, config = Config)
         @registrations = pass_installation.device_registrations
+        @config = config
       end
 
       # Send update notification to all registered devices
@@ -32,7 +35,7 @@ module Wallets
       # Send an empty push notification via APNs HTTP/2
       #
       # Apple Wallet push notifications use:
-      # - The P12 certificate (same as pass signing) for TLS client auth
+      # - The PassKit certificate (same as pass signing) for TLS client auth
       # - An empty JSON payload: {}
       # - Topic = pass type identifier
       def send_push(registration)
@@ -41,8 +44,8 @@ module Wallets
           url: "#{apns_url}/3/device/#{registration.push_token}",
           payload: "{}",
           headers: apns_headers,
-          ssl_client_cert: p12.certificate,
-          ssl_client_key: p12.key
+          ssl_client_cert: config.certificate,
+          ssl_client_key: config.key
         )
       rescue => e
         registration.destroy if e.is_a?(RestClient::Gone)
@@ -51,17 +54,10 @@ module Wallets
 
       def apns_headers
         @apns_headers ||= {
-          "apns-topic" => Config.pass_type_identifier,
+          "apns-topic" => config.pass_type_identifier,
           "apns-push-type" => "background",
           "apns-priority" => "5"
         }
-      end
-
-      def p12
-        @p12 ||= OpenSSL::PKCS12.new(
-          File.binread(Config.p12_certificate_path),
-          Config.p12_password
-        )
       end
 
       def apns_url

@@ -18,8 +18,11 @@ module Wallets
     #
     # See: https://developer.apple.com/documentation/walletpasses/building_a_pass
     class PkpassGenerator
-      def initialize
-        raise "#{Config::FILE_PATH} not found" unless Config.exist?
+      attr_reader :config
+
+      def initialize(config = Config)
+        @config = config
+        raise "#{config::FILE_PATH} not found" unless config.exist?
       end
 
       # Create a signed .pkpass bundle with pass.json, images, and localized strings
@@ -27,7 +30,6 @@ module Wallets
       # images: Hash mapping filenames to binary data (e.g. "icon.png" => data, "logo.png" => data)
       # strings: Hash mapping filenames to string data
       #   (e.g. "pass.strings" => data, "de.lproj/pass.strings" => data)
-      # See: https://developer.apple.com/documentation/walletpasses/building_a_pass
       def create_pass(pass_json, images = {}, strings = {})
         Dir.mktmpdir do |dir|
           write_pass_files(dir, pass_json, images, strings)
@@ -39,6 +41,7 @@ module Wallets
 
       private
 
+      # Write pass.json, images, and localized strings to the temporary directory
       def write_pass_files(dir, pass_json, images, strings)
         File.write(File.join(dir, "pass.json"), pass_json.to_json)
         images.each do |name, data|
@@ -51,32 +54,44 @@ module Wallets
         end
       end
 
+      # Write manifest.json containing SHA-1 hashes of all files in the pass package
       def write_manifest(dir)
-        manifest = {}
-        Dir[File.join(dir, "*")].each do |file|
-          manifest[File.basename(file)] = Digest::SHA1.hexdigest(File.binread(file))
-        end
+        manifest = build_manifest(dir)
         File.write(File.join(dir, "manifest.json"), manifest.to_json)
+      end
+
+      # Build manifest hash mapping filenames to their SHA-1 hashes
+      def build_manifest(dir)
+        Dir[File.join(dir, "*")].each_with_object({}) do |file, hash|
+          hash[File.basename(file)] = calculate_file_hash(file)
+        end
+      end
+
+      # Calculate SHA-1 hash of a file
+      def calculate_file_hash(file)
+        Digest::SHA1.hexdigest(File.binread(file))
       end
 
       # Sign manifest.json with PKCS#7 detached signature
       def write_signature(dir)
-        p12 = OpenSSL::PKCS12.new(
-          File.binread(Config.p12_certificate_path),
-          Config.p12_password
-        )
-        wwdr = OpenSSL::X509::Certificate.new(
-          File.binread(Config.wwdr_certificate_path)
-        )
-        signature = OpenSSL::PKCS7.sign(
-          p12.certificate, p12.key,
-          File.read(File.join(dir, "manifest.json")),
-          [wwdr],
-          OpenSSL::PKCS7::BINARY | OpenSSL::PKCS7::DETACHED
-        )
+        signature = create_signature(dir)
         File.binwrite(File.join(dir, "signature"), signature.to_der)
       end
 
+      # Create PKCS#7 detached signature of the manifest.json file
+      # Uses the pass certificate and WWDR certificate chain
+      # See: https://ruby-doc.org/stdlib/libdoc/openssl/rdoc/OpenSSL/PKCS7.html
+      def create_signature(dir)
+        OpenSSL::PKCS7.sign(
+          config.certificate,
+          config.key,
+          File.read(File.join(dir, "manifest.json")),
+          [config.wwdr_certificate],
+          OpenSSL::PKCS7::BINARY | OpenSSL::PKCS7::DETACHED
+        )
+      end
+
+      # Package all pass files into a ZIP archive (.pkpass format)
       def package_zip(dir)
         buffer = Zip::OutputStream.write_buffer do |zip|
           Dir[File.join(dir, "*")].each do |file|

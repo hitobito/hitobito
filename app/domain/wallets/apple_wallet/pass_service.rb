@@ -32,11 +32,14 @@ module Wallets
       # class and object IDs.
       class_attribute :id_prefix_addition
 
-      def initialize(pass_installation, client: PkpassGenerator.new, voided: false)
+      attr_reader :config
+
+      def initialize(pass_installation, client: PkpassGenerator.new, voided: false, config: Config)
         @pass = pass_installation.pass.decorate
         @pass_installation = pass_installation
         @client = client
         @voided = voided
+        @config = config
       end
 
       # Generate a signed .pkpass file
@@ -84,15 +87,15 @@ module Wallets
       def base_pass_data # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
         {
           formatVersion: 1,
-          passTypeIdentifier: Config.pass_type_identifier,
+          passTypeIdentifier: config.pass_type_identifier,
           serialNumber: serial_number,
-          teamIdentifier: Config.team_identifier,
+          teamIdentifier: config.team_identifier,
           organizationName: pass.definition.name,
           description: pass.definition.name,
           foregroundColor: hex_to_rgb(pass.text_colors[:text]),
           backgroundColor: hex_to_rgb(pass.definition.background_color),
           labelColor: hex_to_rgb(pass.text_colors[:label]),
-          webServiceURL: Config.web_service_url,
+          webServiceURL: config.web_service_url,
           authenticationToken: @pass_installation&.authentication_token,
           barcode: barcode,
           barcodes: [barcode],

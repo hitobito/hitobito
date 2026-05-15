@@ -112,6 +112,6 @@ class PassDefinition < ActiveRecord::Base
   def find_localized_attachment(base_name, locale)
     Globalize.fallbacks(locale.to_sym)
       .lazy.map { |lang| try(:"#{base_name}_#{lang}") }
-      .find(&:attached?)
+      .find { |attachment| attachment&.attached? }
   end
 end

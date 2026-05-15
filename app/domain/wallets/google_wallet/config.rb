@@ -35,15 +35,21 @@ module Wallets
 
         def private_key
           @private_key ||= parsed_credentials["private_key"]
+        rescue => e
+          raise "Failed to load private key from service account: #{e.message}"
         end
 
         def client_email
           @client_email ||= parsed_credentials["client_email"]
+        rescue => e
+          raise "Failed to load client email from service account: #{e.message}"
         end
 
         def service_account_json
           return @service_account_json if defined?(@service_account_json)
           @service_account_json = load_service_account
+        rescue => e
+          raise "Failed to load service account JSON from #{SERVICE_ACCOUNT_PATH}: #{e.message}"
         end
 
         private

@@ -8,9 +8,9 @@ require "zip"
 
 describe Wallets::AppleWallet::PkpassGenerator do
   let(:tmp_dir) { Rails.root.join("tmp", "apple_wallet_test") }
-  let(:p12_path) { tmp_dir.join("test.p12").to_s }
+  let(:cert_path) { tmp_dir.join("test_cert.pem").to_s }
+  let(:key_path) { tmp_dir.join("test_key.pem").to_s }
   let(:wwdr_path) { tmp_dir.join("wwdr.cer").to_s }
-  let(:config_path) { tmp_dir.join("apple_wallet.yml") }
 
   # Generate self-signed test certificates
   let(:ca_key) { OpenSSL::PKey::RSA.new(2048) }
@@ -41,8 +41,21 @@ describe Wallets::AppleWallet::PkpassGenerator do
     cert
   end
 
-  let(:p12_password) { "test_password" }
-  let(:p12) { OpenSSL::PKCS12.create(p12_password, "pass", pass_key, pass_cert) }
+  # Mock config with test certificate paths
+  let(:mock_config) do
+    class_double(Wallets::AppleWallet::Config,
+      exist?: true,
+      pass_type_identifier: "pass.com.example.membership",
+      team_identifier: "ABC123DEF4",
+      certificate_path: cert_path,
+      key_path: key_path,
+      key_password: "",
+      wwdr_certificate_path: wwdr_path,
+      web_service_url: "https://app.example.com/wallets/apple",
+      certificate: pass_cert,
+      key: pass_key,
+      wwdr_certificate: ca_cert)
+  end
 
   let(:pass_json) do
     {
@@ -60,26 +73,10 @@ describe Wallets::AppleWallet::PkpassGenerator do
   before do
     FileUtils.mkdir_p(tmp_dir)
 
-    File.binwrite(p12_path, p12.to_der)
+    # Write certificate and key files
+    File.write(cert_path, pass_cert.to_pem)
+    File.write(key_path, pass_key.to_pem)
     File.binwrite(wwdr_path, ca_cert.to_der)
-    File.write(config_path, YAML.dump(
-      "apple_wallet" => {
-        "pass_type_identifier" => "pass.com.example.membership",
-        "team_identifier" => "ABC123DEF4",
-        "p12_certificate_path" => p12_path,
-        "p12_password" => p12_password,
-        "wwdr_certificate_path" => wwdr_path,
-        "web_service_url" => "https://app.example.com/wallets/apple",
-        "contact_info" => "info@example.com"
-      }
-    ))
-
-    # Reset config memoization
-    Wallets::AppleWallet::Config.instance_variable_set(:@config, nil)
-    Wallets::AppleWallet::Config.remove_instance_variable(:@config) if
-      Wallets::AppleWallet::Config.instance_variable_defined?(:@config)
-
-    stub_const("Wallets::AppleWallet::Config::FILE_PATH", config_path)
   end
 
   after do
@@ -87,7 +84,7 @@ describe Wallets::AppleWallet::PkpassGenerator do
   end
 
   describe "#create_pass" do
-    subject(:pkpass_data) { described_class.new.create_pass(pass_json, images) }
+    subject(:pkpass_data) { described_class.new(mock_config).create_pass(pass_json, images) }
 
     let(:images) { {"logo.png" => logo_data} }
 
@@ -133,7 +130,7 @@ describe Wallets::AppleWallet::PkpassGenerator do
     end
 
     it "creates pass without images" do
-      pkpass = described_class.new.create_pass(pass_json)
+      pkpass = described_class.new(mock_config).create_pass(pass_json)
       entries = zip_entries(pkpass)
       expect(entries).to include("pass.json", "manifest.json", "signature")
       expect(entries).not_to include("logo.png")
@@ -142,7 +139,7 @@ describe Wallets::AppleWallet::PkpassGenerator do
     it "includes multiple images" do
       icon_data = "\x00ICON"
       images = {"logo.png" => logo_data, "icon.png" => icon_data}
-      pkpass = described_class.new.create_pass(pass_json, images)
+      pkpass = described_class.new(mock_config).create_pass(pass_json, images)
       entries = zip_entries(pkpass)
       expect(entries).to include("logo.png", "icon.png")
     end
@@ -150,10 +147,8 @@ describe Wallets::AppleWallet::PkpassGenerator do
 
   describe "#initialize" do
     it "raises when config is missing" do
-      Wallets::AppleWallet::Config.instance_variable_set(:@config, nil)
-      Wallets::AppleWallet::Config.remove_instance_variable(:@config)
-      stub_const("Wallets::AppleWallet::Config::FILE_PATH",
-        Rails.root.join("tmp", "nonexistent.yml"))
+      class_double("Wallets::AppleWallet::Config", exist?: false).as_stubbed_const
+      stub_const("Wallets::AppleWallet::Config::FILE_PATH", Pathname.new("/fake/path.yml"))
 
       expect { described_class.new }.to raise_error(RuntimeError, /not found/)
     end

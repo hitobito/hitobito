@@ -23,14 +23,15 @@ describe Wallets::AppleWallet::PassService do
 
   let(:client) { instance_double(Wallets::AppleWallet::PkpassGenerator) }
 
-  subject(:service) do
-    described_class.new(installation, client: client)
+  let(:mock_config) do
+    class_double(Wallets::AppleWallet::Config,
+      pass_type_identifier: "pass.com.example.test",
+      team_identifier: "ABCDE12345",
+      web_service_url: "https://example.com/api/apple")
   end
 
-  before do
-    allow(Wallets::AppleWallet::Config).to receive(:pass_type_identifier).and_return("pass.com.example.test")
-    allow(Wallets::AppleWallet::Config).to receive(:team_identifier).and_return("ABCDE12345")
-    allow(Wallets::AppleWallet::Config).to receive(:web_service_url).and_return("https://example.com/api/apple")
+  subject(:service) do
+    described_class.new(installation, client: client, config: mock_config)
   end
 
   describe "#generate_pass" do
@@ -229,7 +230,7 @@ describe Wallets::AppleWallet::PassService do
 
     context "when voided is true" do
       subject(:service) do
-        described_class.new(installation, client: client, voided: true)
+        described_class.new(installation, client: client, voided: true, config: mock_config)
       end
 
       it "sets voided to true" do

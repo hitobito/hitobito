@@ -37,7 +37,7 @@ class Export::EventParticipationsExportJob < Export::ExportBaseJob
     return super unless table_display?
 
     table_display = TableDisplay.for(@user_id, Event::Participation)
-    exporter.export(@format, entries, table_display, group)
+    exporter.export(@format, entries, ability, table_display, group)
   end
 
   def full_export?

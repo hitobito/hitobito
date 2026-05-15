@@ -12,8 +12,8 @@ module Export::Tabular::People
 
     attr_reader :table_display, :selected_group
 
-    def initialize(list, table_display, selected_group)
-      super(add_table_display_to_query(list, table_display.person, selected_group))
+    def initialize(list, ability, table_display, selected_group)
+      super(add_table_display_to_query(list, table_display.person, selected_group), ability)
       @table_display = table_display
       @selected_group = selected_group
       @table_display.selected_group = selected_group
@@ -33,7 +33,9 @@ module Export::Tabular::People
     end
 
     def row_for(entry, format = nil)
-      row_class.new(entry, table_display, format)
+      row = row_class.new(entry, table_display, format)
+      row.ability = ability
+      row
     end
 
     def attribute_label(attr)

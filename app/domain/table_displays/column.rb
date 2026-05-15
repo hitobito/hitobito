@@ -43,6 +43,7 @@ module TableDisplays
       model_class.column_names.include?(column) && (table.nil? || table == model_class.table_name)
     end
 
+    # Main extension point to load custom data (used in UI and Export)
     def value_for(object, attr, &block)
       target, target_attr = resolve(object, attr)
       if target.present? && target_attr.present?
@@ -73,6 +74,7 @@ module TableDisplays
       false
     end
 
+    # Only called in UI, for data itself use #value_for
     def render(attr)
       raise "implement in subclass, using `super do ... end`" unless block_given?
       return if exclude_attr?(template&.parent)

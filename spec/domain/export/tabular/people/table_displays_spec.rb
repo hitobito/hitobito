@@ -10,6 +10,7 @@ describe Export::Tabular::People::TableDisplays do
   let(:group) { groups(:top_group) }
   let!(:registered_columns) { TableDisplay.table_display_columns.clone }
   let!(:registered_multi_columns) { TableDisplay.multi_columns.clone }
+  let(:ability) { Ability.new(person) }
 
   before do
     TableDisplay.table_display_columns = {}
@@ -22,7 +23,7 @@ describe Export::Tabular::People::TableDisplays do
   end
 
   context "people" do
-    let(:people_list) { Export::Tabular::People::TableDisplays.new(list, table_display, group) }
+    let(:people_list) { Export::Tabular::People::TableDisplays.new(list, ability, table_display, group) }
     let(:table_display) { TableDisplay.new(person: person, table_model_class: "Person") }
     let(:list) do
       Person.where(id: person.id)
@@ -118,7 +119,7 @@ describe Export::Tabular::People::TableDisplays do
 
   context "participations" do
     let(:people_list) do
-      Export::Tabular::Event::Participations::TableDisplays.new(list, table_display, group)
+      Export::Tabular::Event::Participations::TableDisplays.new(list, ability, table_display, group)
     end
     let(:table_display) do
       TableDisplay.new(person: person, table_model_class: "Event::Participation")

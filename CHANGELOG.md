@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Gruppen Sammelrechnungen können kopiert werden (#3754)
 - Spezifische E-Mails je nach Zustand der Teilnahme (Nicht zugeteilt, Zugeteilt, Warteliste) (hitobito/hitobito_sww#289)
 - Optionale PP-Zeile auf Rechnungen (hitobito/hitobito_swb#246)
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)

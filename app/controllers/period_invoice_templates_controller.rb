@@ -42,6 +42,11 @@ class PeriodInvoiceTemplatesController < CrudController
 
   private
 
+  def build_entry
+    return super unless params[:source_id]
+    group.period_invoice_templates.find(params[:source_id]).duplicate
+  end
+
   def placeholder(attr, suffix: nil)
     PeriodInvoiceTemplate::Item.human_attribute_name(attr) + suffix.to_s
   end

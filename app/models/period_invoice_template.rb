@@ -39,6 +39,7 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
     on_or_after: :start_on,
     on_or_after_message: :must_be_later_than_start_on,
     if: -> { start_on.present? }
+
   validate :assert_valid_recipient_source
   validate :assert_changes_to_recipient_source_allowed
 
@@ -68,7 +69,27 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
     group.class
   end
 
+  def duplicate
+    self.class.build(attributes_for_duplicate).tap do |period|
+      items.each do |item|
+        period.items.build(item.attributes.except("id", "created_at", "updated_at"))
+      end
+    end
+  end
+
   private
+
+  def attributes_for_duplicate # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    duration = start_on...end_on
+    new_start_on = duration.end ? end_on + 1.day : Time.zone.today
+    count = duration.count
+    count -= 1 if duration.begin.leap? && !new_start_on.leap?
+    count += 1 if !duration.begin.leap? && new_start_on.leap?
+    new_end_on = new_start_on + count.days if duration.end
+    attributes.except("id", "start_on", "end_on")
+      .merge(start_on: new_start_on, end_on: new_end_on)
+      .symbolize_keys
+  end
 
   def assert_valid_recipient_source
     if recipient_source.instance_of?(::GroupsFilter)

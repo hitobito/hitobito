@@ -70,7 +70,7 @@ module MailingLists::BulkMail
     def source_message
       parent_uid = bounce_hitobito_message_uid
 
-      return nil unless parent_uid.present?
+      return nil if parent_uid.blank?
 
       Message::BulkMail.find_by(uid: parent_uid)
     end

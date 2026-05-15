@@ -149,11 +149,11 @@ fr:
         pass_definition:
           attributes:
             background_color:
-              invalid_hex_color: "doit être une couleur hexadécimale valide de 6 chiffres commençant par #"
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
         pass_grant:
           attributes:
             related_role_types:
-              blank: Au moins un type de rôle doit être sélectionné
+              blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Veuillez saisir votre nom'
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
@@ -424,20 +424,25 @@ fr:
         many: Notes
         other: Notes
       pass_definition:
-        one: Définition de pass
-        other: Définitions de pass
+        one: Pass-Definition
+        many: Pass-Definitionen
+        other: Pass-Definitionen
       pass_grant:
-        one: Autorisation de pass
-        other: Autorisations de pass
+        one: Pass-Berechtigung
+        many: Pass-Berechtigungen
+        other: Pass-Berechtigungen
       pass:
-        one: Carte de membre
-        other: Cartes de membre
+        one: Ausweis
+        many: Ausweise
+        other: Ausweise
       wallets/pass_installation:
-        one: Installation wallet
-        other: Installations wallet
+        one: Wallet-Installation
+        many: Wallet-Installationen
+        other: Wallet-Installationen
       wallets/apple_wallet/device_registration:
-        one: Enregistrement d'appareil Apple
-        other: Enregistrements d'appareils Apple
+        one: Apple-Geräteregistrierung
+        many: Apple-Geräteregistrierungen
+        other: Apple-Geräteregistrierungen
       payment:
         one: paiements
         many: Paiements
@@ -989,42 +994,42 @@ fr:
         text: Texte
 
       pass_definition:
-        name: Nom
-        description: Description
-        owner: Propriétaire
-        template_key: Modèle
-        background_color: Couleur de fond
+        name: Name
+        description: Beschreibung
+        owner: Besitzer
+        template_key: Vorlage
+        background_color: Hintergrundfarbe
 
       pass_grant:
-        pass_definition: Définition de pass
-        grantor: Groupe autorisateur
-        related_role_types: Types de rôle
+        pass_definition: Pass-Definition
+        grantor: Berechtigende Gruppe
+        related_role_types: Rollentypen
 
       pass:
-        member_number: Numéro de membre
-        person: Personne
-        pass_definition: Définition de pass
-        state: État
-        valid_from: Valide dès
-        valid_until: Valide jusqu'à
+        member_number: Mitgliedsnummer
+        person: Person
+        pass_definition: Pass-Definition
+        state: Status
+        valid_from: Gültig von
+        valid_until: Gültig bis
         states:
-          eligible: éligible
-          ended: expiré
-          revoked: révoqué
+          eligible: Gültig
+          ended: Abgelaufen
+          revoked: Widerrufen
 
       wallets/pass_installation:
-        pass: Carte de membre
-        wallet_type: Type de wallet
-        state: État
-        wallet_identifier: ID wallet
-        authentication_token: Jeton d'authentification
-        last_synced_at: Dernière synchronisation
-        sync_error: Erreur de synchronisation
+        pass: Ausweis
+        wallet_type: Wallet-Typ
+        state: Status
+        wallet_identifier: Wallet-ID
+        authentication_token: Authentifizierungs-Token
+        last_synced_at: Letzte Synchronisation
+        sync_error: Synchronisationsfehler
 
       wallets/apple_wallet/device_registration:
-        pass_installation: Installation de pass
-        device_library_identifier: ID de l'appareil
-        push_token: Jeton push
+        pass_installation: Pass-Installation
+        device_library_identifier: Geräte-ID
+        push_token: Push-Token
 
       oauth/application:
         cors_origins: Serveur avec accès via API

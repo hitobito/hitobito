@@ -147,11 +147,11 @@ en:
         pass_definition:
           attributes:
             background_color:
-              invalid_hex_color: "must be a valid 6-digit hex color starting with #"
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
         pass_grant:
           attributes:
             related_role_types:
-              blank: At least one role type must be selected
+              blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Please enter a name'
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
@@ -373,20 +373,20 @@ en:
         one: Note
         other: Notes
       pass_definition:
-        one: Pass Definition
-        other: Pass Definitions
+        one: Pass-Definition
+        other: Pass-Definitionen
       pass_grant:
-        one: Pass Grant
-        other: Pass Grants
+        one: Pass-Berechtigung
+        other: Pass-Berechtigungen
       pass:
-        one: Member Pass
-        other: Member Passes
+        one: Ausweis
+        other: Ausweise
       wallets/pass_installation:
-        one: Wallet Installation
-        other: Wallet Installations
+        one: Wallet-Installation
+        other: Wallet-Installationen
       wallets/apple_wallet/device_registration:
-        one: Apple Device Registration
-        other: Apple Device Registrations
+        one: Apple-Geräteregistrierung
+        other: Apple-Geräteregistrierungen
       payment:
         one: Payment
         other: Payments
@@ -917,41 +917,41 @@ en:
 
       pass_definition:
         name: Name
-        description: Description
-        owner: Owner
-        template_key: Template
-        background_color: Background Color
+        description: Beschreibung
+        owner: Besitzer
+        template_key: Vorlage
+        background_color: Hintergrundfarbe
 
       pass_grant:
-        pass_definition: Pass Definition
-        grantor: Granting Group
-        related_role_types: Role Types
+        pass_definition: Pass-Definition
+        grantor: Berechtigende Gruppe
+        related_role_types: Rollentypen
 
       pass:
-        member_number: Member number
+        member_number: Mitgliedsnummer
         person: Person
-        pass_definition: Pass Definition
-        state: State
-        valid_from: Valid from
-        valid_until: Valid until
+        pass_definition: Pass-Definition
+        state: Status
+        valid_from: Gültig von
+        valid_until: Gültig bis
         states:
-          eligible: Eligible
-          ended: Ended
-          revoked: Revoked
+          eligible: Gültig
+          ended: Abgelaufen
+          revoked: Widerrufen
 
       wallets/pass_installation:
-        pass: Member pass
-        wallet_type: Wallet Type
-        state: State
-        wallet_identifier: Wallet ID
-        authentication_token: Authentication Token
-        last_synced_at: Last Synced
-        sync_error: Sync Error
+        pass: Ausweis
+        wallet_type: Wallet-Typ
+        state: Status
+        wallet_identifier: Wallet-ID
+        authentication_token: Authentifizierungs-Token
+        last_synced_at: Letzte Synchronisation
+        sync_error: Synchronisationsfehler
 
       wallets/apple_wallet/device_registration:
-        pass_installation: Pass Installation
-        device_library_identifier: Device ID
-        push_token: Push Token
+        pass_installation: Pass-Installation
+        device_library_identifier: Geräte-ID
+        push_token: Push-Token
 
       oauth/application:
         cors_origins: Hosts with API access

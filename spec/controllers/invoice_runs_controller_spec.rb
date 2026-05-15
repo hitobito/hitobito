@@ -321,6 +321,31 @@ describe InvoiceRunsController do
       expect(response).to redirect_to group_invoice_run_invoice_path(group, invoice_run, invoice)
     end
 
+    # NOTE: that dance seems odd, should we not just globally activate that feature for tests?
+    context "with period invoice template" do
+      around do |example|
+        original = Settings.groups.period_invoice_templates.enabled
+        Settings.groups.period_invoice_templates.enabled = true
+        Rails.application.reload_routes!
+        example.run
+        Settings.groups.period_invoice_templates.enabled = original
+        Rails.application.reload_routes!
+      end
+
+      it "PUT#update redirects to period template nested path if invoice_run is set and singular is true" do
+        period_invoice_template = Fabricate(:period_invoice_template)
+        invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new,
+          period_invoice_template:)
+        invoice = Invoice.create!(group: group, title: "test", recipient: person,
+          invoice_run: invoice_run,
+          invoice_items_attributes:
+          {"1" => {name: "item1", unit_cost: 1, count: 1}})
+        post :update, params: {group_id: group.id, invoice_run_id: invoice_run.id, ids: invoice.id, singular: true}
+        expect(response).to redirect_to group_period_invoice_template_invoice_run_invoice_path(group,
+          period_invoice_template, invoice_run, invoice)
+      end
+    end
+
     it "PUT#update can move multiple invoices at once" do
       invoice = Invoice.create!(group: group, title: "test", recipient: person,
         invoice_items_attributes:

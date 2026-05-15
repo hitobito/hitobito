@@ -108,9 +108,7 @@ class InvoiceRunsController < CrudController
     invoice_run_id = params[:invoice_run_id].presence
     if params[:singular]
       if invoice_run_id
-        group_invoice_run_invoice_path(
-          group, invoice_run_id: invoice_run_id, id: invoices.first.id
-        )
+        invoice_run_invoice_path(invoice_run_id, invoices.first.id)
       else
         group_invoice_path(group, invoices.first)
       end
@@ -120,6 +118,22 @@ class InvoiceRunsController < CrudController
       group_invoice_run_invoices_path(group, invoice_run_id: invoice_run_id, returning: true)
     else
       group_invoices_path(group, returning: true)
+    end
+  end
+
+  def invoice_run_invoice_path(invoice_run_id, invoice_id)
+    invoice_run = InvoiceRun.find(invoice_run_id)
+    if invoice_run.period_invoice_template
+      group_period_invoice_template_invoice_run_invoice_path(
+        group,
+        invoice_run.period_invoice_template,
+        invoice_run,
+        id: invoice_id
+      )
+    else
+      group_invoice_run_invoice_path(
+        group, invoice_run_id: invoice_run_id, id: invoices.first.id
+      )
     end
   end
 

@@ -14,8 +14,7 @@ describe Wallets::AppleWallet::Config do
         "certificate_path" => "config/apple-wallet-pass.cer",
         "key_path" => "config/apple-wallet-pass.key",
         "key_password" => "",
-        "wwdr_certificate_path" => "config/AppleWWDRCAG4.cer",
-        "web_service_url" => "https://app.example.com/wallets/apple"
+        "wwdr_certificate_path" => "config/AppleWWDRCAG4.cer"
       }
     }
   end
@@ -75,10 +74,6 @@ describe Wallets::AppleWallet::Config do
     it "returns wwdr_certificate_path" do
       expect(described_class.wwdr_certificate_path).to eq("config/AppleWWDRCAG4.cer")
     end
-
-    it "returns web_service_url" do
-      expect(described_class.web_service_url).to eq("https://app.example.com/wallets/apple")
-    end
   end
 
   describe "certificate helper methods" do
@@ -108,8 +103,7 @@ describe Wallets::AppleWallet::Config do
           "certificate_path" => cert_path,
           "key_path" => key_path,
           "key_password" => "",
-          "wwdr_certificate_path" => wwdr_path,
-          "web_service_url" => "https://example.com"
+          "wwdr_certificate_path" => wwdr_path
         }
       }
     end

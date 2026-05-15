@@ -4,6 +4,9 @@
 #  https://github.com/hitobito/hitobito.
 
 application:
+  hostname: hitobito.example.com
+  protocol: https
+
   languages:
     de: Deutsch
     en: English

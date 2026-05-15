@@ -28,8 +28,7 @@ describe Passes::VerificationQrCode do
     end
 
     it "uses Settings.application.hostname for the host" do
-      allow(Settings.application).to receive(:hostname).and_return("example.com")
-      expect(qr.verify_url).to include("example.com")
+      expect(qr.verify_url).to include("hitobito.example.com")
     end
   end
 

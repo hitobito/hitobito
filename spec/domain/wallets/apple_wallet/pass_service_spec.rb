@@ -26,8 +26,7 @@ describe Wallets::AppleWallet::PassService do
   let(:mock_config) do
     class_double(Wallets::AppleWallet::Config,
       pass_type_identifier: "pass.com.example.test",
-      team_identifier: "ABCDE12345",
-      web_service_url: "https://example.com/api/apple")
+      team_identifier: "ABCDE12345")
   end
 
   subject(:service) do
@@ -99,8 +98,8 @@ describe Wallets::AppleWallet::PassService do
       expect(data[:labelColor]).to eq("rgb(170, 170, 170)")
     end
 
-    it "contains webServiceURL from Config" do
-      expect(data[:webServiceURL]).to eq("https://example.com/api/apple")
+    it "contains webServiceURL generated from Rails URL config" do
+      expect(data[:webServiceURL]).to eq("https://hitobito.example.com/wallets/apple/v1")
     end
 
     it "contains authenticationToken from pass_installation" do
@@ -278,6 +277,19 @@ describe Wallets::AppleWallet::PassService do
       definition.update!(background_color: "#ffffff")
       data = service.pass_data
       expect(data[:backgroundColor]).to eq("rgb(255, 255, 255)")
+    end
+  end
+
+  describe "#web_service_url" do
+    it "generates URL from Settings.application (same as GoogleWallet)" do
+      expect(service.send(:web_service_url)).to eq("https://hitobito.example.com/wallets/apple/v1")
+    end
+
+    it "uses Settings.application.protocol and .hostname" do
+      allow(Settings.application).to receive(:protocol).and_return("http")
+      allow(Settings.application).to receive(:hostname).and_return("test.example.com")
+
+      expect(service.send(:web_service_url)).to eq("http://test.example.com/wallets/apple/v1")
     end
   end
 end

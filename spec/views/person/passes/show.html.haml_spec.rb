@@ -26,6 +26,9 @@ describe "person/passes/show.html.haml" do
       current_user:
     )
     allow(controller).to receive_messages(current_ability: Ability.new(current_user))
+    # Stub wallet configs to not exist by default (overridden in specific contexts)
+    allow(Wallets::AppleWallet::Config).to receive(:exist?).and_return(false)
+    allow(Wallets::GoogleWallet::Config).to receive(:exist?).and_return(false)
     # Stub the template partial to avoid rendering the full card template
     allow(view).to receive(:pass_template_partial).and_return("people/passes/_show_stub")
     allow(view).to receive(:render).and_call_original

@@ -51,7 +51,6 @@ describe Wallets::AppleWallet::PkpassGenerator do
       key_path: key_path,
       key_password: "",
       wwdr_certificate_path: wwdr_path,
-      web_service_url: "https://app.example.com/wallets/apple",
       certificate: pass_cert,
       key: pass_key,
       wwdr_certificate: ca_cert)

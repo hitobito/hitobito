@@ -45,12 +45,21 @@ module Wallets
       def write_pass_files(dir, pass_json, images, strings)
         File.write(File.join(dir, "pass.json"), pass_json.to_json)
         images.each do |name, data|
-          safe_name = File.basename(name)
-          File.binwrite(File.join(dir, safe_name), data)
+          write_file_with_directories(dir, name, data, binary: true)
         end
         strings.each do |name, data|
-          safe_name = File.basename(name)
-          File.write(File.join(dir, safe_name), data)
+          write_file_with_directories(dir, name, data, binary: false)
+        end
+      end
+
+      # Write file to directory, creating subdirectories if needed (e.g., de.lproj/)
+      def write_file_with_directories(base_dir, name, data, binary:)
+        full_path = File.join(base_dir, name)
+        FileUtils.mkdir_p(File.dirname(full_path))
+        if binary
+          File.binwrite(full_path, data)
+        else
+          File.write(full_path, data)
         end
       end
 
@@ -61,9 +70,11 @@ module Wallets
       end
 
       # Build manifest hash mapping filenames to their SHA-1 hashes
+      # Recursively includes files in subdirectories (e.g., de.lproj/pass.strings)
       def build_manifest(dir)
-        Dir[File.join(dir, "*")].each_with_object({}) do |file, hash|
-          hash[File.basename(file)] = calculate_file_hash(file)
+        Dir.glob(File.join(dir, "**", "*")).select { |f| File.file?(f) }.each_with_object({}) do |file, hash|
+          relative_path = file.sub("#{dir}/", "")
+          hash[relative_path] = calculate_file_hash(file)
         end
       end
 
@@ -92,10 +103,12 @@ module Wallets
       end
 
       # Package all pass files into a ZIP archive (.pkpass format)
+      # Preserves directory structure for localized files (e.g., de.lproj/pass.strings)
       def package_zip(dir)
         buffer = Zip::OutputStream.write_buffer do |zip|
-          Dir[File.join(dir, "*")].each do |file|
-            zip.put_next_entry(File.basename(file))
+          Dir.glob(File.join(dir, "**", "*")).select { |f| File.file?(f) }.each do |file|
+            relative_path = file.sub("#{dir}/", "")
+            zip.put_next_entry(relative_path)
             zip.write(File.binread(file))
           end
         end

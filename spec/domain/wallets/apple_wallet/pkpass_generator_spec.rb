@@ -143,6 +143,30 @@ describe Wallets::AppleWallet::PkpassGenerator do
       entries = zip_entries(pkpass)
       expect(entries).to include("logo.png", "icon.png")
     end
+
+    it "includes localized strings in subdirectories" do
+      strings = {
+        "pass.strings" => '"key" = "value";',
+        "de.lproj/pass.strings" => '"key" = "Wert";',
+        "fr.lproj/pass.strings" => '"key" = "valeur";'
+      }
+      pkpass = described_class.new(mock_config).create_pass(pass_json, {}, strings)
+      entries = zip_entries(pkpass)
+
+      expect(entries).to include("pass.strings")
+      expect(entries).to include("de.lproj/pass.strings")
+      expect(entries).to include("fr.lproj/pass.strings")
+    end
+
+    it "includes localized strings in manifest with correct paths" do
+      strings = {"de.lproj/pass.strings" => '"key" = "Wert";'}
+      pkpass = described_class.new(mock_config).create_pass(pass_json, {}, strings)
+
+      manifest_content = extract_entry(pkpass, "manifest.json")
+      manifest = JSON.parse(manifest_content)
+
+      expect(manifest).to have_key("de.lproj/pass.strings")
+    end
   end
 
   describe "#initialize" do

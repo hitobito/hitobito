@@ -149,11 +149,11 @@ it:
         pass_definition:
           attributes:
             background_color:
-              invalid_hex_color: "deve essere un colore esadecimale valido di 6 cifre che inizia con #"
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
         pass_grant:
           attributes:
             related_role_types:
-              blank: Deve essere selezionato almeno un tipo di ruolo
+              blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Inserire un nome'
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
@@ -427,20 +427,25 @@ it:
         many: Note
         other: Note
       pass_definition:
-        one: Definizione pass
-        other: Definizioni pass
+        one: Pass-Definition
+        many: Pass-Definitionen
+        other: Pass-Definitionen
       pass_grant:
-        one: Autorizzazione pass
-        other: Autorizzazioni pass
+        one: Pass-Berechtigung
+        many: Pass-Berechtigungen
+        other: Pass-Berechtigungen
       pass:
-        one: Tessera associativa
-        other: Tessere associativa
+        one: Ausweis
+        many: Ausweise
+        other: Ausweise
       wallets/pass_installation:
-        one: Installazione wallet
-        other: Installazioni wallet
+        one: Wallet-Installation
+        many: Wallet-Installationen
+        other: Wallet-Installationen
       wallets/apple_wallet/device_registration:
-        one: Registrazione dispositivo Apple
-        other: Registrazioni dispositivi Apple
+        one: Apple-Geräteregistrierung
+        many: Apple-Geräteregistrierungen
+        other: Apple-Geräteregistrierungen
       payment:
         one: Pagamento
         many: Pagamenti
@@ -992,42 +997,42 @@ it:
         text: Testo
 
       pass_definition:
-        name: Nome
-        description: Descrizione
-        owner: Proprietario
-        template_key: Modello
-        background_color: Colore di sfondo
+        name: Name
+        description: Beschreibung
+        owner: Besitzer
+        template_key: Vorlage
+        background_color: Hintergrundfarbe
 
       pass_grant:
-        pass_definition: Definizione pass
-        grantor: Gruppo autorizzatore
-        related_role_types: Tipi di ruolo
+        pass_definition: Pass-Definition
+        grantor: Berechtigende Gruppe
+        related_role_types: Rollentypen
 
       pass:
-        member_number: Numero di membro
-        person: Persona
-        pass_definition: Definizione pass
-        state: Stato
-        valid_from: Valido da
-        valid_until: Valido fino a
+        member_number: Mitgliedsnummer
+        person: Person
+        pass_definition: Pass-Definition
+        state: Status
+        valid_from: Gültig von
+        valid_until: Gültig bis
         states:
-          eligible: idoneo
-          ended: scaduto
-          revoked: revocato
+          eligible: Gültig
+          ended: Abgelaufen
+          revoked: Widerrufen
 
       wallets/pass_installation:
-        pass: Tessera associativa
-        wallet_type: Tipo di wallet
-        state: Stato
-        wallet_identifier: ID wallet
-        authentication_token: Token di autenticazione
-        last_synced_at: Ultima sincronizzazione
-        sync_error: Errore di sincronizzazione
+        pass: Ausweis
+        wallet_type: Wallet-Typ
+        state: Status
+        wallet_identifier: Wallet-ID
+        authentication_token: Authentifizierungs-Token
+        last_synced_at: Letzte Synchronisation
+        sync_error: Synchronisationsfehler
 
       wallets/apple_wallet/device_registration:
-        pass_installation: Installazione pass
-        device_library_identifier: ID dispositivo
-        push_token: Token push
+        pass_installation: Pass-Installation
+        device_library_identifier: Geräte-ID
+        push_token: Push-Token
 
       oauth/application:
         cors_origins: host con accesso API

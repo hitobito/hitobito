@@ -1822,12 +1822,11 @@ it:
 
     passes:
       index:
-        title: Pass
-        show_pass: Mostrare
+        title: Pässe
+        show_pass: Anzeigen
         add_to_google_wallet: Google Wallet
         add_to_apple_wallet: Apple Wallet
-        download_pdf: Stampa
-
+        download_pdf: Drucken
 
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
@@ -1872,7 +1871,7 @@ it:
         other: "%{count} %{role} hanno ricevuto una richiesta d'accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta."
   people:
     passes_aside:
-      title: Pass
+      title: Pässe
 
     addresses_sync:
       create:
@@ -2465,12 +2464,12 @@ it:
 
   passes:
     verifications:
-      title: Verifica del pass
+      title: Pass-Verifizierung
       status:
-        valid: Il pass è valido
-        expired: Il pass è scaduto
-        invalid: Il pass non è valido
-        invalid_message: Questo pass non può essere verificato.
+        valid: Pass ist gültig
+        expired: Pass ist abgelaufen
+        invalid: Pass ist ungültig
+      failed: Dieser Pass konnte nicht verifiziert werden.
 
   wizards:
     steps:
@@ -2499,13 +2498,13 @@ it:
 
   wallets:
     google:
-      generation_failed: Il pass non ha potuto essere aggiunto a Google Wallet.
+      generation_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
     apple:
-      member_name: Membro
-      generation_failed: Il pass non ha potuto essere generato per Apple Wallet.
+      member_name: Mitglied
+      generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
     pass:
-      member_name: Nome
-      member_number: Numero di membro
-      valid_from: Valido da
-      valid_until: Valido fino al
-      description: Descrizione
+      member_name: Name
+      member_number: Mitgliedernummer
+      valid_from: Gültig von
+      valid_until: Gültig bis
+      description: Beschreibung

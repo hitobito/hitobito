@@ -1780,11 +1780,11 @@ en:
 
     passes:
       index:
-        title: Passes
-        show_pass: Show
+        title: Pässe
+        show_pass: Anzeigen
         add_to_google_wallet: Google Wallet
         add_to_apple_wallet: Apple Wallet
-        download_pdf: Print
+        download_pdf: Drucken
 
   person/csv_imports:
     invalid_file: Please select a valid CSV file.
@@ -1818,10 +1818,9 @@ en:
       requests:
         one: "%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access."
         other: "%{count} %{role} will receive a request for their data. Any changes from this import have to be repeated after having been granted access."
-
   people:
     passes_aside:
-      title: Passes
+      title: Pässe
 
     addresses_sync:
       create:
@@ -2402,6 +2401,21 @@ en:
       truncate: "..."
   json_api: JSON:API
 
+  verify_membership:
+    title: Verifizierung Mitgliedschaft
+    not_found: Ungültiger Verifikationscode
+    status_valid: Mitgliedschaft gültig
+    status_invalid: Keine gültige Mitgliedschaft
+
+  passes:
+    verifications:
+      title: Pass-Verifizierung
+      status:
+        valid: Pass ist gültig
+        expired: Pass ist abgelaufen
+        invalid: Pass ist ungültig
+      failed: Dieser Pass konnte nicht verifiziert werden.
+
   wizards:
     steps:
       new_user_form:
@@ -2427,26 +2441,15 @@ en:
     role_count_item_fields:
       choose_role_types: Select roller types
 
-  passes:
-    verifications:
-      title: Pass Verification
-      valid_from: "Valid from"
-      valid_until: "Valid until"
-      expired_on: "Expired on"
-      status:
-        valid: Pass is valid
-        expired: Pass has expired
-        invalid: Pass is invalid
-        invalid_message: This pass could not be verified.
-
   wallets:
     google:
-      generation_failed: The pass could not be added to Google Wallet.
+      generation_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
     apple:
-      generation_failed: The pass could not be generated for Apple Wallet.
+      member_name: Mitglied
+      generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
     pass:
       member_name: Name
-      member_number: Member number
-      valid_from: Valid from
-      valid_until: Valid until
-      description: Description
+      member_number: Mitgliedernummer
+      valid_from: Gültig von
+      valid_until: Gültig bis
+      description: Beschreibung

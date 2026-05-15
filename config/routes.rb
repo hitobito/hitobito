@@ -30,17 +30,17 @@ Hitobito::Application.routes.draw do
 
   get "/passes/verify/:verify_token", to: "passes/verifications#show", as: :pass_verify
 
-  scope "/wallets/apple", module: "wallets/apple_wallet", as: "apple_wallet" do
-    post "v1/devices/:device_id/registrations/:pass_type_id/:serial", action: :register_device,
-      controller: "web_service"
-    delete "v1/devices/:device_id/registrations/:pass_type_id/:serial", action: :unregister_device,
-      controller: "web_service"
-    get "v1/devices/:device_id/registrations/:pass_type_id", action: :updatable_passes,
-      controller: "web_service"
-    get "v1/passes/:pass_type_id/:serial", action: :send_updated_pass,
-      controller: "web_service"
-    post "v1/log", action: :log_message,
-      controller: "web_service"
+  scope Wallets::AppleWallet::PassService::WEB_SERVICE_PATH, module: "wallets/apple_wallet", as: "apple_wallet" do
+    post "devices/:device_id/registrations/:pass_type_id/:serial",
+      action: :register_device, controller: "web_service", as: :register_device
+    delete "devices/:device_id/registrations/:pass_type_id/:serial",
+      action: :unregister_device, controller: "web_service", as: :unregister_device
+    get "devices/:device_id/registrations/:pass_type_id",
+      action: :updatable_passes, controller: "web_service", as: :updatable_passes
+    get "passes/:pass_type_id/:serial",
+      action: :send_updated_pass, controller: "web_service", as: :pass
+    post "log",
+      action: :log_message, controller: "web_service", as: :log
   end
 
   language_scope do

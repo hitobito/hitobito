@@ -13,7 +13,6 @@ module Wallets
         pass_type_identifier team_identifier
         certificate_path key_path key_password
         wwdr_certificate_path
-        web_service_url
       ].freeze
 
       class << self

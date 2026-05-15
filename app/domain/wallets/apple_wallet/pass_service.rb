@@ -10,6 +10,9 @@ module Wallets
     class PassService
       attr_reader :pass
 
+      # Apple Wallet web service base path (appended to hostname in webServiceURL)
+      WEB_SERVICE_PATH = "/wallets/apple/v1"
+
       # Apple Wallet standard image variants (filename => [width, height])
       ICON_VARIANTS = {
         "icon.png" => [29, 29],
@@ -95,7 +98,7 @@ module Wallets
           foregroundColor: hex_to_rgb(pass.text_colors[:text]),
           backgroundColor: hex_to_rgb(pass.definition.background_color),
           labelColor: hex_to_rgb(pass.text_colors[:label]),
-          webServiceURL: config.web_service_url,
+          webServiceURL: web_service_url,
           authenticationToken: @pass_installation&.authentication_token,
           barcode: barcode,
           barcodes: [barcode],
@@ -151,6 +154,13 @@ module Wallets
       end
 
       # --- Shared helpers ---
+
+      # Generate the Apple Wallet web service URL for device registration and updates
+      # Returns the base URL (e.g., https://example.com/wallets/apple/v1)
+      # Uses Settings.application.protocol and .hostname (same logic as GoogleWallet)
+      def web_service_url
+        "#{Settings.application.protocol}://#{Settings.application.hostname}#{WEB_SERVICE_PATH}"
+      end
 
       # In a multi-tenant environment (multiple instances sharing the same
       # pass_type_identifier), the wagon must override this method to include a

@@ -29,8 +29,6 @@ describe Wallets::GoogleWallet::PassService do
 
   before do
     allow(Wallets::GoogleWallet::Config).to receive(:issuer_id).and_return(issuer_id)
-    allow(Settings.application).to receive(:host).and_return("test.host")
-    allow(Settings.application).to receive(:protocol).and_return("https")
   end
 
   describe "#save_url" do

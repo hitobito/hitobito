@@ -19,7 +19,7 @@
                       url: group_event_attachments_path(@group, entry),
                       html: { multipart: true,
                               class: 'mb-0',
-                              data: { remote: true, spin: true } }) do |f|
+                              data: { remote: true, controller: 'spinner' } }) do |f|
             %span.custom-file
               = link_to(icon(:plus) + ' ' + t('.add'), '#')
               = f.file_field(:files,

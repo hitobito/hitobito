@@ -112,7 +112,7 @@ describe UserJobResult do
     end
 
     it "returns i18n translation if translation is available" do
-      with_translations(de: { delayed_job: { "export/example_export_job": "Custom Job Name for Example Export"} } ) do
+      with_translations(de: {delayed_job: {"export/example_export_job": "Custom Job Name for Example Export"}}) do
         expect(subject.job_name).to eql("Custom Job Name for Example Export")
       end
     end

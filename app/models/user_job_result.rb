@@ -104,7 +104,7 @@ class UserJobResult < ApplicationRecord
 
   def job_name
     human_job_class_name = job_class.demodulize.underscore.humanize
-    I18n.t("delayed_job.#{self.job_class.underscore}", default: human_job_class_name)
+    I18n.t("delayed_job.#{job_class.underscore}", default: human_job_class_name)
   end
 
   def report_in_progress!

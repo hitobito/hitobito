@@ -102,7 +102,7 @@ module Wallets
           authenticationToken: @pass_installation&.authentication_token,
           barcode: barcode,
           barcodes: [barcode],
-          expirationDate: pass.valid_until&.iso8601,
+          expirationDate: pass.valid_until&.end_of_day&.iso8601,
           voided: @voided
         }
       end
@@ -131,8 +131,10 @@ module Wallets
               (if pass.valid_until
                  {key: "valid_until",
                   label: "valid_until_label",
-                  value: pass.valid_until&.iso8601,
-                  dateStyle: "PKDateStyleShort"}
+                  value: pass.valid_until.end_of_day.iso8601,
+                  dateStyle: "PKDateStyleShort",
+                  timeStyle: "PKDateStyleNone"
+                 }
                end)
             ].compact,
             backFields: description_back_fields
@@ -172,7 +174,7 @@ module Wallets
           message: pass.qrcode_value,
           format: "PKBarcodeFormatQR",
           messageEncoding: "iso-8859-1",
-          altText: pass.member_number
+          altText: pass.member_number.to_s
         }
       end
 
@@ -246,7 +248,7 @@ module Wallets
 
         variants.each_with_object({}) do |(filename, size), result|
           result["#{prefix}#{filename}"] =
-            attachment.variant(resize_to_fit: size, format: :png).download
+            attachment.variant(resize_to_fit: size, format: :png).processed.download
         end
       end
     end

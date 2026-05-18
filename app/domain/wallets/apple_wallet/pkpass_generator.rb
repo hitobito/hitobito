@@ -72,7 +72,9 @@ module Wallets
       # Build manifest hash mapping filenames to their SHA-1 hashes
       # Recursively includes files in subdirectories (e.g., de.lproj/pass.strings)
       def build_manifest(dir)
-        Dir.glob(File.join(dir, "**", "*")).select { |f| File.file?(f) }.each_with_object({}) do |file, hash|
+        Dir.glob(File.join(dir, "**", "*")).select { |f|
+          File.file?(f)
+        }.each_with_object({}) do |file, hash|
           relative_path = file.sub("#{dir}/", "")
           hash[relative_path] = calculate_file_hash(file)
         end

@@ -111,7 +111,7 @@ describe Wallets::AppleWallet::PassService do
       expect(data[:barcode][:format]).to eq("PKBarcodeFormatQR")
       expect(data[:barcode][:message]).to eq(service.pass.qrcode_value)
       expect(data[:barcode][:messageEncoding]).to eq("iso-8859-1")
-      expect(data[:barcode][:altText]).to eq(service.pass.member_number)
+      expect(data[:barcode][:altText]).to eq(service.pass.member_number.to_s)
     end
 
     it "contains barcodes array with single barcode" do
@@ -146,20 +146,14 @@ describe Wallets::AppleWallet::PassService do
 
     context "with valid_until set" do
       before do
-        role = person.roles.first
-        role.update_columns(end_on: 1.year.from_now.to_date)
-
-        grant = Fabricate(:pass_grant, pass_definition: definition, grantor: groups(:top_group))
-        grant.role_types = [role.type] if role
+        allow(service.pass).to receive(:valid_until).and_return(Date.new(2026, 12, 31))
       end
 
       it "includes valid_until as auxiliary field with dateStyle" do
-        if service.pass.valid_until
-          aux = generic[:auxiliaryFields].find { |f| f[:key] == "valid_until" }
-          expect(aux[:value]).to eq(service.pass.valid_until.iso8601)
-          expect(aux[:dateStyle]).to eq("PKDateStyleShort")
-          expect(aux[:label]).to eq(Pass.human_attribute_name(:valid_until))
-        end
+        aux = generic[:auxiliaryFields].find { |f| f[:key] == "valid_until" }
+        expect(aux[:value]).to eq(service.pass.valid_until.iso8601)
+        expect(aux[:dateStyle]).to eq("PKDateStyleShort")
+        expect(aux[:label]).to eq("valid_until_label")
       end
     end
 
@@ -218,6 +212,19 @@ describe Wallets::AppleWallet::PassService do
     it "generates strings in correct format" do
       expect(strings["de.lproj/pass.strings"]).to match(/"member_name_label" = ".*";/)
     end
+
+    it "contains all required label keys" do
+      expected_keys = [
+        "member_name_label",
+        "member_number_label",
+        "valid_until_label",
+        "description_label"
+      ]
+
+      expected_keys.each do |key|
+        expect(strings["pass.strings"]).to match(/"#{key}" = ".*";/)
+      end
+    end
   end
 
   describe "voided flag" do
@@ -245,7 +252,7 @@ describe Wallets::AppleWallet::PassService do
       end
 
       it "sets expirationDate to iso8601" do
-        expect(service.pass_data[:expirationDate]).to eq("2026-12-31")
+        expect(service.pass_data[:expirationDate]).to eq("2026-12-31T23:59:59+01:00")
       end
     end
 
@@ -290,6 +297,154 @@ describe Wallets::AppleWallet::PassService do
       allow(Settings.application).to receive(:hostname).and_return("test.example.com")
 
       expect(service.send(:web_service_url)).to eq("http://test.example.com/wallets/apple/v1")
+    end
+  end
+
+  describe "Integration: end-to-end pass generation" do
+    it "generates valid pkpass with all expected contents" do
+      # Setup temporary directory for certificates
+      tmp_dir = Rails.root.join("tmp", "apple_wallet_integration_test")
+      FileUtils.mkdir_p(tmp_dir)
+
+      # Generate self-signed test certificates
+      ca_key = OpenSSL::PKey::RSA.new(2048)
+      ca_cert = OpenSSL::X509::Certificate.new
+      ca_cert.version = 2
+      ca_cert.serial = 1
+      ca_cert.subject = OpenSSL::X509::Name.parse("/CN=Test WWDR CA")
+      ca_cert.issuer = ca_cert.subject
+      ca_cert.public_key = ca_key.public_key
+      ca_cert.not_before = Time.current - 3600
+      ca_cert.not_after = Time.current + 3600
+      ca_cert.sign(ca_key, OpenSSL::Digest.new("SHA256"))
+
+      pass_key = OpenSSL::PKey::RSA.new(2048)
+      pass_cert = OpenSSL::X509::Certificate.new
+      pass_cert.version = 2
+      pass_cert.serial = 2
+      pass_cert.subject = OpenSSL::X509::Name.parse("/CN=Test Pass Certificate")
+      pass_cert.issuer = ca_cert.subject
+      pass_cert.public_key = pass_key.public_key
+      pass_cert.not_before = Time.current - 3600
+      pass_cert.not_after = Time.current + 3600
+      pass_cert.sign(ca_key, OpenSSL::Digest.new("SHA256"))
+
+      # Write certificates to disk
+      cert_path = tmp_dir.join("test_cert.pem").to_s
+      key_path = tmp_dir.join("test_key.pem").to_s
+      wwdr_path = tmp_dir.join("wwdr.cer").to_s
+      File.write(cert_path, pass_cert.to_pem)
+      File.write(key_path, pass_key.to_pem)
+      File.binwrite(wwdr_path, ca_cert.to_der)
+
+      # Create config and client
+      config = class_double(Wallets::AppleWallet::Config,
+        exist?: true,
+        pass_type_identifier: "pass.com.example.test",
+        team_identifier: "ABCDE12345",
+        certificate_path: cert_path,
+        key_path: key_path,
+        key_password: "",
+        wwdr_certificate_path: wwdr_path,
+        certificate: pass_cert,
+        key: pass_key,
+        wwdr_certificate: ca_cert)
+      client = Wallets::AppleWallet::PkpassGenerator.new(config)
+
+      # Create pass with expiry date
+      pass = Fabricate(:pass, person: person, pass_definition: definition,
+        state: :eligible, valid_from: Date.new(2026, 1, 1))
+
+      # Set up role with end date and grant to calculate valid_until
+      role = person.roles.first
+      role.update_columns(end_on: Date.new(2026, 12, 31))
+      grant = Fabricate(:pass_grant, pass_definition: definition, grantor: groups(:top_group))
+      grant.role_types = [role.type] if role
+      Passes::PassUpdater.recompute_state!(pass)
+
+      # Create installation
+      installation = Fabricate(:wallets_pass_installation, pass: pass, wallet_type: :apple)
+
+      # Verify images are attached (by fabricator)
+      expect(definition.logo_icon_de).to be_attached
+      expect(definition.logo_banner_de).to be_attached
+
+      # Generate the pkpass
+      service = described_class.new(installation, client: client, config: config)
+      pkpass_data = service.generate_pass
+
+      # Verify it's a binary ZIP file
+      expect(pkpass_data).to be_a(String)
+      expect(pkpass_data.encoding).to eq(Encoding::ASCII_8BIT)
+
+      # Extract and verify pass.json
+      pass_json_content = extract_zip_entry(pkpass_data, "pass.json")
+      pass_json = JSON.parse(pass_json_content)
+
+      # Verify expirationDate is in W3C datetime format
+      expect(pass_json["expirationDate"]).to match(/^2026-12-31T23:59:59[+-]\d{2}:\d{2}$/)
+
+      # Verify altText is a string
+      expect(pass_json["barcode"]["altText"]).to be_a(String)
+      expect(pass_json["barcode"]["format"]).to eq("PKBarcodeFormatQR")
+
+      # Verify generic style fields
+      expect(pass_json["generic"]["primaryFields"].first["key"]).to eq("member_name")
+      expect(pass_json["generic"]["secondaryFields"].first["key"]).to eq("member_number")
+
+      # Verify images are present and not empty
+      logo_content = extract_zip_entry(pkpass_data, "logo.png")
+      expect(logo_content).not_to be_empty
+      expect(logo_content.size).to be > 0
+
+      icon_content = extract_zip_entry(pkpass_data, "icon.png")
+      expect(icon_content).not_to be_empty
+
+      # Verify localized strings files exist
+      expect(zip_entry_exists?(pkpass_data, "pass.strings")).to be true
+      expect(zip_entry_exists?(pkpass_data, "de.lproj/pass.strings")).to be true
+
+      # Verify strings contain all required keys
+      strings_content = extract_zip_entry(pkpass_data, "pass.strings")
+      expect(strings_content).to include("member_name_label")
+      expect(strings_content).to include("member_number_label")
+      expect(strings_content).to include("valid_until_label")
+      expect(strings_content).to include("description_label")
+
+      # Verify manifest and signature exist
+      expect(zip_entry_exists?(pkpass_data, "manifest.json")).to be true
+      expect(zip_entry_exists?(pkpass_data, "signature")).to be true
+
+      # Verify manifest contains all files with SHA-1 hashes
+      manifest = JSON.parse(extract_zip_entry(pkpass_data, "manifest.json"))
+      expect(manifest).to have_key("pass.json")
+      expect(manifest).to have_key("logo.png")
+      expect(manifest["pass.json"]).to match(/^[0-9a-f]{40}$/)
+    ensure
+      # Cleanup
+      FileUtils.rm_rf(tmp_dir)
+    end
+
+    private
+
+    def extract_zip_entry(pkpass_data, name)
+      require "zip"
+      Zip::InputStream.open(StringIO.new(pkpass_data)) do |zip|
+        while (entry = zip.get_next_entry)
+          return entry.get_input_stream.read if entry.name == name
+        end
+      end
+      raise "Entry #{name} not found in pkpass"
+    end
+
+    def zip_entry_exists?(pkpass_data, name)
+      require "zip"
+      Zip::InputStream.open(StringIO.new(pkpass_data)) do |zip|
+        while (entry = zip.get_next_entry)
+          return true if entry.name == name
+        end
+      end
+      false
     end
   end
 end

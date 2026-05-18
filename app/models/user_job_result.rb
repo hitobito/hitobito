@@ -209,9 +209,9 @@ class UserJobResult < ApplicationRecord
 
   def set_web_socket_connection_state
     if person.user_job_results.unfinished.count > 0
-      person.update!(needs_web_socket_connection: true)
+      person.update_column(needs_web_socket_connection: true)
     else
-      person.update!(needs_web_socket_connection: false)
+      person.update_column(needs_web_socket_connection: false)
     end
   end
 end

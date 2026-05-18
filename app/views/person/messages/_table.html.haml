@@ -10,7 +10,7 @@
   - t.attrs(:sent_at, :type)
   - t.col(Message.human_attribute_name(:subject), class: 'nowrap mw-20ch') do |message|
     %strong
-      - if can?(:update, message.mailing_list)
+      - if message.mailing_list && can?(:update, message.mailing_list)
         = link_to(message, [message.group, message.mailing_list, message])
       - else
         = message

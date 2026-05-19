@@ -35,18 +35,18 @@ class MailingListReadables < GroupBasedReadables
   end
 
   def subscribable_condition(condition)
-    if user.persisted?
+    if user.service_token?
+      # When logged in with a service token
+      condition.or("#{MailingList.quoted_table_name}.subscribable_for = ?", "anyone")
+    else
       # When logged in with a real person account
       subscriptions_sql = Person::Subscriptions.new(user).subscribable.select(:id).to_sql
       condition.or("#{MailingList.quoted_table_name}.id IN (#{subscriptions_sql})")
-    else
-      # When logged in with a service token
-      condition.or("#{MailingList.quoted_table_name}.subscribable_for = ?", "anyone")
     end
   end
 
   def service_token_condition(condition)
-    unless user.persisted?
+    if user.service_token?
       groups_in_same_layer = user.roles.first.group.layer_group.groups_in_same_layer.select(:id)
       condition.or("#{MailingList.quoted_table_name}.group_id IN (?)", groups_in_same_layer)
     end

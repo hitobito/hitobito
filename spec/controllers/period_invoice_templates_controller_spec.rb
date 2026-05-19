@@ -22,6 +22,14 @@ describe PeriodInvoiceTemplatesController do
       Rails.application.reload_routes!
     end
 
+    it "GET#new populates from source if source_id is passed" do
+      get :new, params: {group_id: Group.root.id, source_id: period_invoice_template.id}
+      template = assigns(:period_invoice_template)
+      expect(template.name).to eq period_invoice_template.name
+      expect(template.start_on).to eq period_invoice_template.end_on + 1.day
+      expect(template.items.first.name).to eq period_invoice_template.items.first.name
+    end
+
     it "GET#index does list period invoice templates" do
       get :index, params: {group_id: Group.root.id}
       expect(assigns(:period_invoice_templates)).to include(period_invoice_template)

@@ -4,3 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 = button_action_edit if can?(:edit, entry)
+- if can?(:new, entry)
+  = action_button(t('events.global.link.duplicate'),
+    new_group_period_invoice_template_path(@group, source_id: entry.id), :book)

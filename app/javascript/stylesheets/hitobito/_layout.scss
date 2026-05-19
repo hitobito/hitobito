@@ -22,9 +22,10 @@ body {
   position: absolute;
   margin: 1rem 0 0 1rem;
   padding: 0.5rem;
-  z-index: 80;
+  z-index: 90; // higher than main header so link remains clickable
+
   // for a box around the logo, if the Logo cannot be directly on the page background:
-  @if ($logo-background-color != none) {
+  @if ($logo-background-color !=none) {
     padding: 10px;
     background-color: $logo-background-color;
     border-radius: 6px;
@@ -51,8 +52,11 @@ body {
   a {
     text-decoration: none;
   }
+
   .active {
-    a, a:hover {
+
+    a,
+    a:hover {
       color: $white;
     }
   }
@@ -66,9 +70,11 @@ body {
 /* Content */
 #page {
   padding: 3px 0 60px;
-  @include responsive(mediaTablet){
+
+  @include responsive(mediaTablet) {
     padding: 5px 1rem 90px;
   }
+
   margin: 0;
   width: 100%;
   background: $page-background;
@@ -83,9 +89,12 @@ body {
   .nav-left {
     @if $logo-width < 200px {
       min-width: 280px;
-    } @else {
+    }
+
+    @else {
       min-width: ($logo-width+40px);
     }
+
     width: 30%;
     max-width: 25rem;
     height: 100%;
@@ -99,9 +108,10 @@ body {
     overflow-x: visible;
     overflow-y: visible;
     padding: 0 5px;
-    @include responsive(mediaTablet){
+
+    @include responsive(mediaTablet) {
       padding-bottom: 60px; // needs these paddings to accomodate further sheets
-      padding-right: 20px;  // needs these paddings to accomodate further sheets
+      padding-right: 20px; // needs these paddings to accomodate further sheets
       padding-left: 15px;
     }
   }
@@ -128,7 +138,8 @@ body {
   flex-direction: row;
   align-items: center;
   margin-bottom: 5px;
-  @include responsive(mediaTablet){
+
+  @include responsive(mediaTablet) {
     margin-bottom: 0.5rem;
     margin-top: 0.25rem;
   }
@@ -137,20 +148,23 @@ body {
     margin: -0.5rem 1rem -0.5rem 0rem;
     padding: 0.5rem;
     text-transform: uppercase;
+
     i {
       margin-top: 0.2rem;
       margin-right: 0.5rem;
     }
+
     a:hover i {
       text-decoration: none;
     }
   }
+
   .form-inline {
     flex: 1 0 auto;
     margin: 0;
   }
 
-  & > a {
+  &>a {
     flex: 0 0 auto;
     color: $white;
     margin-left: 1rem;
@@ -158,6 +172,7 @@ body {
 
   .is-logged-out & {
     justify-content: flex-end;
+
     a {
       color: $white;
     }
@@ -188,26 +203,34 @@ body {
   display: flow-root;
   background: lighten($content-background, 3%);
   box-shadow: 0 2px 8px $shadow-color;
+
   .sheet {
     margin: 0 3px 3px;
-    @include responsive(mediaTablet){
+
+    @include responsive(mediaTablet) {
       margin: 0 -10px -30px 10px;
     }
+
     &.parent {
       background: lighten($content-background, 6%);
     }
   }
-  .level { color: $gray; }
+
+  .level {
+    color: $gray;
+  }
 }
 
 #content {
   box-shadow: 0 2px 8px $shadow-color;
   background: $white;
   padding: 12px 10px 12px;
-  @include responsive(mediaTablet){
+
+  @include responsive(mediaTablet) {
     padding: 8px 10px 16px;
   }
-  @include responsive(mediaDesktop){
+
+  @include responsive(mediaDesktop) {
     padding: 12px 14px 20px;
   }
 
@@ -215,6 +238,7 @@ body {
     @include responsive(phone, $media-desktop) {
       margin-top: $v-space;
     }
+
     margin-bottom: $v-space;
   }
 
@@ -222,7 +246,10 @@ body {
     @include clearfix;
     clear: both;
     margin-top: $v-space;
-    &:first-child { margin-top:0; }
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   .breadcrumb {
@@ -233,6 +260,7 @@ body {
 
 .contactable {
   @include clearfix;
+
   .profil-big {
     margin: 0 0 0 10px;
   }
@@ -272,6 +300,7 @@ body {
   .footer-content {
     padding-top: 20px;
     padding-bottom: 20px;
+
     a {
       color: $footer-color;
 
@@ -287,6 +316,7 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+
   .quicksearch-input {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -307,6 +337,7 @@ body {
 @include responsive(phone, $media-tablet) {
   .logo {
     display: none;
+
     .is-logged-out & {
       display: block;
     }
@@ -324,6 +355,7 @@ body {
       overflow-x: visible;
       overflow-y: scroll;
       transition: all 300ms ease-in-out;
+
       &.is-visible {
         left: 0;
         width: 90%;
@@ -343,7 +375,7 @@ body {
       cursor: pointer;
     }
 
-    .nav-left > nav {
+    .nav-left>nav {
       z-index: 1;
       background-color: $gray-lighter;
       width: 100%;
@@ -354,7 +386,7 @@ body {
       opacity: 1;
       width: 1000rem;
       z-index: -1;
-      background-color: rgba(0,0,0,0.3);
+      background-color: rgba(0, 0, 0, 0.3);
     }
 
 
@@ -366,7 +398,8 @@ body {
       a.level {
         margin-bottom: 0.5rem;
       }
-      & > ul.nav.nav-sub {
+
+      &>ul.nav.nav-sub {
         display: none;
       }
     }
@@ -397,19 +430,25 @@ body {
 }
 
 .contactable.well .contact {
-  address { margin-left: 1em; }
-  .social { margin-left: 1em; }
+  address {
+    margin-left: 1em;
+  }
+
+  .social {
+    margin-left: 1em;
+  }
 }
 
 .profiler-results {
   opacity: 0.2;
+
   &:hover {
     opacity: 1;
   }
 }
 
 td.column-with-min-width {
-  min-width:28px;
+  min-width: 28px;
 }
 
 strong.bigger-title div.trix-content {

@@ -1826,7 +1826,7 @@ fr:
         show_pass: Anzeigen
         add_to_google_wallet: Google Wallet
         add_to_apple_wallet: Apple Wallet
-        download_pdf: Imprimer
+        download_pdf: Drucken
 
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.

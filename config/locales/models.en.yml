@@ -382,8 +382,8 @@ en:
         one: Pass-Berechtigung
         other: Pass-Berechtigungen
       pass:
-        one: Pass
-        other: Passes
+        one: Ausweis
+        other: Ausweise
       wallets/pass_installation:
         one: Wallet-Installation
         other: Wallet-Installationen
@@ -920,7 +920,7 @@ en:
 
       pass_definition:
         name: Name
-        description: Description
+        description: Beschreibung
         owner: Besitzer
         template_key: Vorlage
         background_color: Hintergrundfarbe
@@ -931,12 +931,13 @@ en:
         related_role_types: Rollentypen
 
       pass:
-        member_number: Membership number
+        member_name: Mitgliedsname
+        member_number: Mitgliedsnummer
         person: Person
         pass_definition: Pass-Definition
         state: Status
-        valid_from: Valid from
-        valid_until: Valid until
+        valid_from: Gültig von
+        valid_until: Gültig bis
         states:
           eligible: Gültig
           ended: Abgelaufen

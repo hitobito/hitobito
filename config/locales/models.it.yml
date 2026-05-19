@@ -435,9 +435,9 @@ it:
         many: Pass-Berechtigungen
         other: Pass-Berechtigungen
       pass:
-        one: Passaporto
-        many: Passaporti
-        other: Passaporti
+        one: Ausweis
+        many: Ausweise
+        other: Ausweise
       wallets/pass_installation:
         one: Wallet-Installation
         many: Wallet-Installationen
@@ -997,8 +997,8 @@ it:
         text: Testo
 
       pass_definition:
-        name: Nome
-        description: Descrizione
+        name: Name
+        description: Beschreibung
         owner: Besitzer
         template_key: Vorlage
         background_color: Hintergrundfarbe
@@ -1009,12 +1009,13 @@ it:
         related_role_types: Rollentypen
 
       pass:
-        member_number: Numero di iscrizione
+        member_name: Mitgliedsname
+        member_number: Mitgliedsnummer
         person: Person
         pass_definition: Pass-Definition
         state: Status
-        valid_from: Valido da
-        valid_until: Valido fino a
+        valid_from: Gültig von
+        valid_until: Gültig bis
         states:
           eligible: Gültig
           ended: Abgelaufen

@@ -43,19 +43,18 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def donation_confirmation_content
-      text I18n.t("messages.export.section.donation_confirmation.acknowledgement") + break_line
+      text t("acknowledgement") + break_line
     end
 
     def donation_confirmation_header
       layer_name = @letter.group.layer_group.name
-      text I18n.t("messages.export.section.donation_confirmation.header", organisation: layer_name),
+      text t("header", organisation: layer_name),
         style: :bold,
         size: 14
     end
 
     def donation_confirmation_title
-      text I18n.t("messages.export.section.donation_confirmation.title", year: 1.year.ago.year),
-        style: :bold
+      text t("title", year: 1.year.ago.year), style: :bold
     end
 
     def donation_confirmation_text
@@ -68,17 +67,15 @@ class Export::Pdf::Messages::LetterWithInvoice
     end
 
     def donation_confirmation_year_info
-      text(I18n.t("messages.export.section.donation_confirmation.received_from",
-        year: 1.year.ago.year))
+      text(t("received_from", year: 1.year.ago.year))
     end
 
     def donation_confirmation_received_amount_info
-      text(I18n.t("messages.export.section.donation_confirmation.received_amount"))
+      text(t("received_amount"))
     end
 
     def last_year_donation_amount
       currency = letter.invoice.currency
-
       "#{currency} #{sprintf("%.2f", donation_amount)}"
     end
 
@@ -99,6 +96,10 @@ class Export::Pdf::Messages::LetterWithInvoice
           .in_layer(letter.group.layer_group)
           .of_person(@recipient)
           .payments_amount
+    end
+
+    def t(key, **options)
+      I18n.t("mailing_lists.messages.export.section.donation_confirmation.#{key}", **options)
     end
   end
 end

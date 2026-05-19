@@ -206,6 +206,14 @@ class Event::Participation < ActiveRecord::Base
     participant_type == Event::Guest.sti_name
   end
 
+  def messages
+    return Message.none unless participant_type == Person.sti_name
+
+    event.messages
+      .joins(:message_recipients)
+      .where(message_recipients: {person_id: participant_id})
+  end
+
   private
 
   def set_self_in_nested

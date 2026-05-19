@@ -12,6 +12,7 @@
 - Rechnungen können neu auch als Excel (XLSX) exportiert werden (hitobito_sww#288)
 - Vor- und Nachname des Rechnungsempfängers werden neu strukturiert in separaten Feldern gespeichert (#4164)
 - Konfigurierbare Identifier für eine schnellere globale Suche (hitobito_sac_cas#2331)
+- System E-Mails von Anlässen werden in den Nachrichten Tabs auf dem Anlass, der Teilnahme und der Person angezeigt (hitobito_sac_cas#2419)
 
 ## Version 2.9
 

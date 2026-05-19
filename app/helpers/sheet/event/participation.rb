@@ -17,6 +17,12 @@ module Sheet
         if: (lambda do |view, _group, event, participation|
           view.can?(:update, participation)
         end)
+
+      tab "activerecord.models.message.other",
+        :group_event_participation_messages_path,
+        if: (lambda do |view, _group, event, participation|
+          view.can?(:update, participation)
+        end)
     end
   end
 end

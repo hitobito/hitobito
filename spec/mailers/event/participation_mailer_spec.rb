@@ -33,6 +33,19 @@ describe Event::ParticipationMailer do
     expect(mail.parts.second.content_type).to eq "application/pdf; filename=now_with_quotes-top_leader.pdf"
   end
 
+  it "creates message system mail record" do
+    expect { mail.deliver_now }.to change { Message::SystemMail.count }.by(1)
+    system_mail = Message::SystemMail.last
+    expect(system_mail.subject).to eq "Voranmeldung eingegangen"
+    expect(system_mail.recipient_count).to eq(1)
+    expect(system_mail.event_id).to eq(event.id)
+    expect(system_mail.raw_source).to include("Hallo Top", "Wir haben deine Voranmeldung", "Eventus")
+
+    recipient = system_mail.message_recipients.first
+    expect(recipient.person).to eq(person)
+    expect(recipient.email).to eq(person.email)
+  end
+
   describe "event data" do
     it "renders set attributes only" do
       is_expected.to match(/Eventus/)

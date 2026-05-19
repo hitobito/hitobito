@@ -57,6 +57,12 @@ module Sheet
         view.can?(:update, event)
       end)
 
+    tab "activerecord.models.message.other",
+      :group_event_messages_path,
+      if: (lambda do |view, _group, event|
+        view.can?(:update, event)
+      end)
+
     def link_url
       view.group_event_path(parent_sheet.entry.id, entry.id)
     end

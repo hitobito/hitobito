@@ -14,11 +14,11 @@
   = f.hidden_field :type
 
   - if entry.text_message?
-    = render 'messages/text_message/fields', f: f
+    = render 'mailing_lists/messages/text_message/fields', f: f
   - elsif entry.invoice?
-    = render 'messages/letter_with_invoice/fields', f: f
+    = render 'mailing_lists/messages/letter_with_invoice/fields', f: f
   - elsif entry.letter?
-    = render 'messages/letter/fields', f: f
+    = render 'mailing_lists/messages/letter/fields', f: f
 
   %br
   = form_buttons(f, cancel_url: [parent.group, parent, :messages])

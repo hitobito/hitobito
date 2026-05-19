@@ -198,6 +198,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy
 
+  has_many :messages, dependent: :nullify
+
   has_many :person_add_requests,
     foreign_key: :body_id,
     inverse_of: :body,

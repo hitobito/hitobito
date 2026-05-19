@@ -27,12 +27,14 @@ class Event::ParticipationMailer < ApplicationMailer
 
     content = participation.pending? ? CONTENT_PENDING : CONTENT_CONFIRMATION
 
+    record_system_mail_for(person)
     compose(person, content)
   end
 
   def approval(participation, recipients)
     @participation = participation
     @recipients = recipients
+    record_system_mail_for(recipients)
 
     compose(@recipients, CONTENT_APPROVAL)
   end
@@ -40,6 +42,7 @@ class Event::ParticipationMailer < ApplicationMailer
   def cancel(event, person)
     @event = event
     @person = person
+    record_system_mail_for(person)
 
     compose(@person, CONTENT_CANCEL)
   end

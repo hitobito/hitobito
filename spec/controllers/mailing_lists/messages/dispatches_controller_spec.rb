@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Messages::DispatchesController do
+describe MailingLists::Messages::DispatchesController do
   let(:top_leader) { people(:top_leader) }
 
   before { sign_in(top_leader) }
@@ -16,9 +16,14 @@ describe Messages::DispatchesController do
     let(:message) { messages(:letter) }
 
     it "POST#create redirects to assignments#new" do
-      post :create, params: {message_id: message.id}
+      post :create, params: {
+        group_id: message.mailing_list.group.id,
+        mailing_list_id: message.mailing_list.id,
+        message_id: message.id
+      }
       expect(response).to redirect_to new_assignment_redirect_path(message)
-      expect(flash[:alert]).to eq "Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden."
+      expect(flash[:alert]).to eq "Sobald der Druckauftrag erstellt wurde, " \
+      "kann der Brief nicht mehr bearbeitet werden."
     end
   end
 
@@ -26,12 +31,15 @@ describe Messages::DispatchesController do
     let(:message) { messages(:with_invoice) }
 
     it "POST#create redirects to assignments#new" do
-      post :create, params: {message_id: message.id}
+      post :create, params: {
+        group_id: message.mailing_list.group.id,
+        mailing_list_id: message.mailing_list.id,
+        message_id: message.id
+      }
       expect(message.reload.invoice_run).to be_persisted
       expect(response).to redirect_to new_assignment_redirect_path(message)
-      # rubocop:todo Layout/LineLength
-      expect(flash[:alert]).to eq "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
-      # rubocop:enable Layout/LineLength
+      expect(flash[:alert]).to eq "Sobald der Druckauftrag erstellt wurde, " \
+      "kann der Rechnungsbrief nicht mehr bearbeitet werden."
     end
   end
 
@@ -41,11 +49,16 @@ describe Messages::DispatchesController do
 
     it "POST#create creates dispatch and enqueues job and redirects to message#show" do
       expect do
-        post :create, params: {message_id: message.id}
+        post :create, params: {
+          group_id: message.mailing_list.group.id,
+          mailing_list_id: message.mailing_list.id,
+          message_id: message.id
+        }
       end.to change { Messages::DispatchJob.new(message).delayed_jobs.count }.by(1)
       expect(message.reload.state).to eq "pending"
-      expect(response).to redirect_to group_mailing_list_message_path(group_id: list.group.id,
-        mailing_list_id: list.id, id: message.id)
+      expect(response).to redirect_to(
+        group_mailing_list_message_path(group_id: list.group.id, mailing_list_id: list.id, id: message.id)
+      )
       expect(flash[:notice]).to eq "SMS wird versendet."
     end
   end
@@ -54,8 +67,6 @@ describe Messages::DispatchesController do
 
   def new_assignment_redirect_path(message)
     new_assignment_path(assignment: {attachment_id: message.id, attachment_type: "Message"},
-      return_url: group_mailing_list_message_path(message.group,
-        message.mailing_list,
-        message))
+      return_url: group_mailing_list_message_path(message.group, message.mailing_list, message))
   end
 end

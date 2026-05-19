@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_30_065720) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_08_090204) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -878,6 +878,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_30_065720) do
     t.string "uid"
     t.integer "bounce_parent_id"
     t.integer "blocked_count", default: 0
+    t.bigint "event_id"
+    t.index ["event_id"], name: "index_messages_on_event_id"
     t.index ["invoice_run_id"], name: "index_messages_on_invoice_run_id"
     t.index ["mailing_list_id"], name: "index_messages_on_mailing_list_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"

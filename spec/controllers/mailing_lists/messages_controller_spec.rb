@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe MessagesController do
+describe MailingLists::MessagesController do
   let(:list) { mailing_lists(:leaders) }
   let(:nesting) { {group_id: list.group_id, mailing_list_id: list.id} }
   let(:top_leader) { people(:top_leader) }

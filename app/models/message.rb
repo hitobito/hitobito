@@ -70,14 +70,15 @@ class Message < ActiveRecord::Base
   validates_by_schema except: :text
   validates :state, inclusion: {in: STATES}
 
-  scope :list, -> { order(:created_at) }
+  scope :list, -> { order(created_at: :desc) }
 
   class << self
     def all_types
       [Message::TextMessage,
         Message::Letter,
         Message::LetterWithInvoice,
-        Message::BulkMail]
+        Message::BulkMail,
+        Message::SystemMail]
     end
 
     def find_message_type!(sti_name)
@@ -89,7 +90,7 @@ class Message < ActiveRecord::Base
   end
 
   def to_s
-    subject ? "#{type.constantize.model_name.human}: #{subject.truncate(20)}" : super
+    subject ? "#{type.constantize.model_name.human}: #{subject}" : super
   end
 
   def dispatch!

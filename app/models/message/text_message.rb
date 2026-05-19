@@ -10,7 +10,7 @@ class Message::TextMessage < Message
   validates :text, length: {minimum: 1, maximum: 603}
 
   def subject
-    text && text[0..20]
+    text&.truncate(50)
   end
 
   def update_message_status!

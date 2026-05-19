@@ -7,25 +7,21 @@
 
 module Messages
   class LetterWithInvoiceDispatch < LetterDispatch
-    def initialize(*args)
-      super
-      @invoice_run = @message.invoice_run
-      @invoice_run.invoice = @message.invoice
-    end
+    delegate :invoice_run, to: :message
 
     def run
       super
 
-      @message.update!(invoice_run_id: @invoice_run.id)
-      batch_create # create invoices for all people on the invoice run
-      # rubocop:todo Layout/LineLength
-      batch_update # update invoices by advancing their state, sending mail and create reminders if needed
-      # rubocop:enable Layout/LineLength
+      create_invoice_run!
+      batch_create
+      batch_update
+
       DispatchResult.finished
     end
 
+    # create invoices for all people on the invoice run
     def batch_create
-      batch_create = Invoice::BatchCreate.new(@invoice_run, @people)
+      batch_create = Invoice::BatchCreate.new(invoice_run, @people)
       batch_create.call
 
       @message.update!(
@@ -34,8 +30,9 @@ module Messages
       )
     end
 
+    # update invoices by advancing their state, sending mail and create reminders if needed
     def batch_update
-      Invoice::BatchUpdate.new(@invoice_run.reload.invoices).call
+      Invoice::BatchUpdate.new(invoice_run.reload.invoices).call
     end
 
     # disable household addresses for letter with invoice
@@ -44,6 +41,14 @@ module Messages
     end
 
     private
+
+    attr_accessor :message
+
+    def create_invoice_run!
+      fail "Message #{message.id} already processed" if invoice_run
+
+      message.create_invoice_run!(message.invoice_run_attributes)
+    end
 
     def address_for_letter(person, _housemates)
       Person::Address.new(person).for_letter_with_invoice

@@ -36,7 +36,7 @@ describe MailingLists::Messages::DispatchesController do
         mailing_list_id: message.mailing_list.id,
         message_id: message.id
       }
-      expect(message.reload.invoice_run).to be_persisted
+      expect(message.reload.invoice_run).to be_nil
       expect(response).to redirect_to new_assignment_redirect_path(message)
       expect(flash[:alert]).to eq "Sobald der Druckauftrag erstellt wurde, " \
       "kann der Rechnungsbrief nicht mehr bearbeitet werden."

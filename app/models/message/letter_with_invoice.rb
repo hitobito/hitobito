@@ -11,13 +11,13 @@ class Message::LetterWithInvoice < Message::Letter
 
   self.icon = :"file-invoice"
 
-  def invoice_run
-    @invoice_run ||= InvoiceRun.create!(
+  def invoice_run_attributes
+    {
       title: subject,
       group: group.layer_group,
       recipient_source: mailing_list,
       invoice: invoice
-    )
+    }
   end
 
   def invoice

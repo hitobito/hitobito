@@ -128,7 +128,7 @@ class MailingLists::BulkMail::Retriever
 
   def handle_generic_bounce(imap_mail)
     bounce = Imap::BounceMail.new(imap_mail)
-    action_taken = bounce_handler(bounce, nil, nil).analyze!
+    action_taken = bounce_handler(bounce, nil, nil).perform_analyzed_action!
 
     if action_taken == :unknown
       move_mail_to_failed(imap_mail.uid)

@@ -139,7 +139,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect(bounce_handler).to_not receive(:notify_sentry)
 
-      bounce_handler.analyze!
+      bounce_handler.perform_analyzed_action!
     end
 
     it "does nothing for minor issues on the recipient end" do
@@ -148,7 +148,7 @@ describe MailingLists::BulkMail::BounceHandler do
       expect(bounce_handler).to_not receive(:record_bounce)
       expect(bounce_handler).to_not receive(:notify_sentry)
 
-      bounce_handler.analyze!
+      bounce_handler.perform_analyzed_action!
     end
 
     it "records a bounce for normal bounces" do
@@ -158,7 +158,7 @@ describe MailingLists::BulkMail::BounceHandler do
       expect(bounce_handler).to_not receive(:block_bounce)
       expect(bounce_handler).to_not receive(:notify_sentry)
 
-      bounce_handler.analyze!
+      bounce_handler.perform_analyzed_action!
     end
 
     it "reports internal errors" do
@@ -168,7 +168,7 @@ describe MailingLists::BulkMail::BounceHandler do
       expect(bounce_handler).to_not receive(:block_bounce)
       expect(bounce_handler).to_not receive(:record_bounce)
 
-      bounce_handler.analyze!
+      bounce_handler.perform_analyzed_action!
     end
 
     it "records a bounces a reports an error for unknown codes" do
@@ -178,7 +178,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect(bounce_handler).to_not receive(:block_bounce)
 
-      bounce_handler.analyze!
+      bounce_handler.perform_analyzed_action!
     end
 
     it "records a bounces a reports an error for other codes" do
@@ -188,7 +188,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
       expect(bounce_handler).to_not receive(:block_bounce)
 
-      bounce_handler.analyze!
+      bounce_handler.perform_analyzed_action!
     end
   end
 

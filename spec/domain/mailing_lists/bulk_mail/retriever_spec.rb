@@ -271,13 +271,6 @@ describe MailingLists::BulkMail::Retriever do
         allow(imap_mail).to receive(:uid).and_return(42)
       end
 
-      it "has assumptions" do
-        bouncer = MailingLists::BulkMail::BounceHandler.new(bounce_mail, nil, nil)
-        expect(bouncer.analyze).to be :block
-
-        expect(imap_mail).to be_generic_bounce
-      end
-
       it "invokes the bounce-handler" do
         allow(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 

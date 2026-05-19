@@ -16,7 +16,7 @@ module MailingLists::BulkMail
     end
 
     def process
-      action = analyze!
+      action = perform_analyzed_action!
 
       if source_message.blank? || source_message_outdated?
         reject_bounce
@@ -33,7 +33,7 @@ module MailingLists::BulkMail
       action
     end
 
-    def analyze!
+    def perform_analyzed_action!
       action = analyze_diagnostic_code(@imap_mail.diagnostic_code)
 
       case action
@@ -49,18 +49,15 @@ module MailingLists::BulkMail
       action
     end
 
-    def analyze
-      analyze_diagnostic_code(@imap_mail.diagnostic_code)
-    end
-
     def analyze_diagnostic_code(code)
       return :unknown if code.blank?
 
+      cleaned_code = code.squish
       grouped_codes = Settings.email.bounces.diagnostic_codes
 
       grouped_codes.keys.detect do |action|
-        grouped_codes[action].detect do |pattern|
-          Regexp.new(pattern).match? code.squish
+        grouped_codes[action].any? do |pattern|
+          Regexp.new(pattern).match? cleaned_code
         end
       end || :unknown
     end
@@ -115,7 +112,7 @@ module MailingLists::BulkMail
 
     def notify_sentry(message_code)
       message = case message_code
-      when :internal_error then "A Bounce had a internal error in its Diagnostic Code"
+      when :internal_error then "A Bounce had an internal error in its Diagnostic Code"
       when :unknown_code then "A Bounce had a previously unknown Diagnostic Code"
       end
 

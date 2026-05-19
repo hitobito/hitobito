@@ -20,6 +20,8 @@
 
 see [Household Class](https://github.com/hitobito/hitobito/blob/master/app/models/household.rb)
 
-## PeopleManager (youth wagon)
+## PeopleManagers (Elternzugang)
 
-this is the Parent Access Feature (Elternzugang) which comes with the [youth wagon](https://github.com/hitobito/hitobito_youth/blob/master/app/models/people_manager.rb)
+- controlled via `Settings.people.people_managers` feature gate
+- allows creating PeopleManager and PeopleManaged relations from person/show page
+- see [PeopleManager](https://github.com/hitobito/hitobito/blob/master/app/models/people_manager.rb)

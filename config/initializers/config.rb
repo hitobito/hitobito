@@ -71,6 +71,6 @@ end
 Rails.application.config.to_prepare do
   settings_dir = Rails.root.join("config", "settings")
   Settings.add_source!(settings_dir.join("payment_providers.yml").to_s)
-  Settings.add_source!(settings_dir.join("bounce_heuristics.yml").to_s)
+  Settings.prepend_source!(settings_dir.join("bounce_heuristics.yml").to_s)
   Settings.reload!
 end

@@ -17,11 +17,17 @@ class MailConfig
       @retriever_imap ||= retriever_imap_config
     end
 
+    def retrieval_active?
+      retriever_imap? &&
+        retriever_imap.fetch(:interval, 0) != 0
+    end
+
     private
 
     def retriever_imap_config
-      config = config_file[:imap]
-      decode_password(config)
+      config_file[:imap]
+        .then { |config| decode_password(config) }
+        .tap { |config| config[:interval] ||= config[:retriever_interval] }
     end
 
     def decode_password(config)

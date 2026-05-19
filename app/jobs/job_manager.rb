@@ -46,7 +46,7 @@ class JobManager
   def mail_jobs
     if MailConfig.legacy?
       MailRelayJob
-    else
+    elsif MailConfig.retrieval_active?
       MailingLists::MailRetrieverJob
     end
   end

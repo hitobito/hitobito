@@ -38,10 +38,13 @@ module Imap
     end
 
     def bounced_mail_addresses
+      status_tos = mails_mentioned_in_status_headers
       mentioned_tos = mails_mentioned_in_notification
       original_tos = recipients_of_original_message
 
-      if mentioned_tos.one?
+      if status_tos.one?
+        status_tos
+      elsif mentioned_tos.one?
         mentioned_tos
       elsif original_tos.any? && mentioned_tos.any?
         original_tos & mentioned_tos
@@ -66,6 +69,15 @@ module Imap
       mail
         .parts
         .find { |part| part.content_description == "Notification" }
+        .then { |part| find_mails(part) }
+    end
+
+    def mails_mentioned_in_status_headers
+      find_mails(mail.final_recipient)
+    end
+
+    def find_mails(maybe_string)
+      maybe_string
         .to_s.scan(/\w+@\w+.\w+/).uniq
         .select { |email| Truemail.valid?(email, with: :regex) }
         .to_a

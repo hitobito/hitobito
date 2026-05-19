@@ -16,11 +16,11 @@ module MailingLists::BulkMail
     end
 
     def process
-      record_bounce
+      action = perform_analyzed_action!
 
       if source_message.blank? || source_message_outdated?
         reject_bounce
-        return
+        return action
       end
 
       @bulk_mail_bounce.update!(bounce_parent: source_message,
@@ -29,18 +29,51 @@ module MailingLists::BulkMail
                "to #{source_message.mail_from}")
 
       MailingLists::BulkMail::BounceMessageForwardJob.new(@bulk_mail_bounce).enqueue!
+
+      action
+    end
+
+    def perform_analyzed_action!
+      action = analyze_diagnostic_code(@imap_mail.diagnostic_code)
+
+      case action
+      when :block then block_bounce
+      when :continue then true
+      when :register then record_bounce
+      when :internal_error then notify_sentry(:internal_error)
+      else
+        record_bounce
+        notify_sentry(:unknown_code)
+      end
+
+      action
+    end
+
+    def analyze_diagnostic_code(code)
+      return :unknown if code.blank?
+
+      cleaned_code = code.squish
+      grouped_codes = Settings.email.bounces.diagnostic_codes
+
+      grouped_codes.keys.detect do |action|
+        grouped_codes[action].any? do |pattern|
+          Regexp.new(pattern).match? cleaned_code
+        end
+      end || :unknown
     end
 
     private
 
     def source_message
       parent_uid = bounce_hitobito_message_uid
+
+      return nil if parent_uid.blank?
+
       Message::BulkMail.find_by(uid: parent_uid)
     end
 
     def bounce_hitobito_message_uid
-      @imap_mail.bounce_hitobito_message_uid ||
-        @imap_mail.auto_response_hitobito_message_uid
+      @imap_mail.bounce_hitobito_message_uid
     end
 
     def source_message_outdated?
@@ -61,9 +94,13 @@ module MailingLists::BulkMail
 
       raise MailingLists::BulkMail::NoBounceRecipientDetected, @imap_mail if bounced_mails.empty?
 
-      bounced_mails.each do |email|
+      bounced_mails.map do |email|
         ::Bounce.record(email, mailing_list_id: source_message&.mailing_list_id)
       end
+    end
+
+    def block_bounce
+      record_bounce.each(&:block!)
     end
 
     def reject_bounce
@@ -71,6 +108,17 @@ module MailingLists::BulkMail
 
       @bulk_mail_bounce.mail_log.update!(status: :bounce_rejected)
       @bulk_mail_bounce.destroy!
+    end
+
+    def notify_sentry(message_code)
+      message = case message_code
+      when :internal_error then "A Bounce had an internal error in its Diagnostic Code"
+      when :unknown_code then "A Bounce had a previously unknown Diagnostic Code"
+      end
+
+      Sentry.capture_message(message, logger: "bounce_handler", extra: {
+        diagnostic_code: @imap_mail.diagnostic_code
+      })
     end
   end
 end

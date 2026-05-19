@@ -19,8 +19,8 @@ module MailingLists
     run_every retrieve_interval
 
     def perform_internal
-      # only run if a retriever address is defined
-      if MailConfig.retriever_imap?
+      # only run if a retriever address is defined and retriever interval > 0
+      if MailConfig.retrieval_active?
         retriever.perform
       end
     end

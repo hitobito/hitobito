@@ -79,16 +79,23 @@ class PeriodInvoiceTemplate < ActiveRecord::Base
 
   private
 
-  def attributes_for_duplicate # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
-    duration = start_on...end_on
-    new_start_on = duration.end ? end_on + 1.day : Time.zone.today
-    count = duration.count
-    count -= 1 if duration.begin.leap? && !new_start_on.leap?
-    count += 1 if !duration.begin.leap? && new_start_on.leap?
-    new_end_on = new_start_on + count.days if duration.end
+  def attributes_for_duplicate
+    new_start_on = end_on ? end_on + 1.day : Time.zone.today
+    new_end_on = compute_new_end_on(new_start_on) if end_on
+
     attributes.except("id", "start_on", "end_on")
       .merge(start_on: new_start_on, end_on: new_end_on)
       .symbolize_keys
+  end
+
+  def compute_new_end_on(new_start_on) # rubocop:disable Metrics/AbcSize
+    months = (new_start_on.year - start_on.year) * 12 + new_start_on.month - start_on.month
+
+    if months > 0 && start_on.months_since(months) == new_start_on
+      new_start_on.months_since(months) - 1.day
+    else
+      new_start_on + (end_on - start_on).to_i.days
+    end
   end
 
   def assert_valid_recipient_source

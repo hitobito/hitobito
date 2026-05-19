@@ -107,18 +107,39 @@ describe PeriodInvoiceTemplate do
       expect(duplicated.end_on).to eq Date.new(2026, 5, 21)
     end
 
-    it "caters for source leap year" do
-      template.update!(start_on: Date.new(2026, 1, 1), end_on: Date.new(2026, 12, 31))
+    it "caters for source leap year (full year)" do
+      template.update!(start_on: Date.new(2024, 1, 1), end_on: Date.new(2024, 12, 31))
       duplicated = template.duplicate
-      expect(duplicated.start_on).to eq Date.new(2027, 1, 1)
-      expect(duplicated.end_on).to eq Date.new(2027, 12, 31)
+      expect(duplicated.start_on).to eq Date.new(2025, 1, 1)
+      expect(duplicated.end_on).to eq Date.new(2025, 12, 31)
     end
 
-    it "caters for duplicate leap year" do
-      template.update!(start_on: Date.new(2025, 1, 1), end_on: Date.new(2025, 12, 31))
+    it "caters for duplicate leap year (full year)" do
+      template.update!(start_on: Date.new(2023, 1, 1), end_on: Date.new(2023, 12, 31))
       duplicated = template.duplicate
-      expect(duplicated.start_on).to eq Date.new(2026, 1, 1)
+      expect(duplicated.start_on).to eq Date.new(2024, 1, 1)
+      expect(duplicated.end_on).to eq Date.new(2024, 12, 31)
+    end
+
+    it "handles monthly borders for half year (1.1. to 30.6.)" do
+      template.update!(start_on: Date.new(2026, 1, 1), end_on: Date.new(2026, 6, 30))
+      duplicated = template.duplicate
+      expect(duplicated.start_on).to eq Date.new(2026, 7, 1)
       expect(duplicated.end_on).to eq Date.new(2026, 12, 31)
+    end
+
+    it "handles leap years naturally (start of year to end of Feb)" do
+      template.update!(start_on: Date.new(2024, 1, 1), end_on: Date.new(2024, 2, 29))
+      duplicated = template.duplicate
+      expect(duplicated.start_on).to eq Date.new(2024, 3, 1)
+      expect(duplicated.end_on).to eq Date.new(2024, 4, 30)
+    end
+
+    it "handles mid-month starts and ends (15th to 14th)" do
+      template.update!(start_on: Date.new(2026, 1, 15), end_on: Date.new(2026, 2, 14))
+      duplicated = template.duplicate
+      expect(duplicated.start_on).to eq Date.new(2026, 2, 15)
+      expect(duplicated.end_on).to eq Date.new(2026, 3, 14)
     end
   end
 end

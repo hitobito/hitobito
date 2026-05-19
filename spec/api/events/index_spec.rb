@@ -9,6 +9,17 @@ require "rails_helper"
 
 RSpec.describe "events#index", type: :request do
   it_behaves_like "jsonapi authorized requests", required_scopes: [:events] do
+    before do
+      # only keep event specific scopes
+      service_token.update!(
+        people: false,
+        groups: false,
+        invoices: false,
+        mailing_lists: false,
+        qualifications: false
+      )
+    end
+
     let(:params) { {} }
 
     subject(:make_request) do
@@ -62,35 +73,52 @@ RSpec.describe "events#index", type: :request do
 
     context "including contact" do
       let(:event) { Event.first }
-      let(:params) { {include: "leaders,contact"} }
+      let(:params) { {include: "contact"} }
 
-      it "returns the event contact" do
+      it "returns nothing without people scope" do
         event.update_attribute(:contact_id, people(:bottom_member).id)
 
         make_request
 
         expect(response.status).to eq(200)
         data = json["data"]
-        contact_id = data[0]["relationships"]["contact"]["data"]["id"]
-        contact = json["included"].first { |inc| inc["type"] == "person" && inc.id == contact_id }
-        expect(contact["attributes"]["first_name"]).to eq("Bottom")
-        expect(contact["attributes"]["last_name"]).to eq("Member")
-        expect(contact["attributes"]["email"]).to eq(people(:bottom_member).email)
+        expect(data[0]["relationships"]["contact"]["data"]).to be_nil
+        expect(json["included"]).to be_nil
       end
 
-      describe "without people scope" do
-        before { service_token.update!(people: false) }
-
+      describe "with people scope" do
         it "does not return the event contact" do
+          service_token.update!(people: true)
           event.update_attribute(:contact_id, people(:bottom_member).id)
 
           make_request
 
           expect(response.status).to eq(200)
           data = json["data"]
-          expect(data[0]["relationships"]["contact"]["data"]).to be_nil
-          expect(json["included"]).to be_nil
+          contact_id = data[0]["relationships"]["contact"]["data"]["id"]
+          contact = json["included"].first { |inc| inc["type"] == "person" && inc.id == contact_id }
+          expect(contact["attributes"]["first_name"]).to eq("Bottom")
+          expect(contact["attributes"]["last_name"]).to eq("Member")
+          expect(contact["attributes"]["email"]).to eq(people(:bottom_member).email)
         end
+      end
+    end
+
+    context "including leaders" do
+      let(:event) { Event.first }
+      let(:params) { {include: "leaders"} }
+
+      it "returns leaders" do
+        make_request
+
+        expect(response.status).to eq(200)
+        data = json["data"]
+        expect(data[0]["relationships"]["leaders"]["data"].size).to eq(1)
+        leader_id = data[0]["relationships"]["leaders"]["data"].first["id"]
+        leader = json["included"].first { |inc| inc["type"] == "person-name" && inc.id == leader_id }
+        expect(leader["attributes"]["first_name"]).to eq("Bottom")
+        expect(leader["attributes"]["last_name"]).to eq("Member")
+        expect(leader["attributes"]).not_to have_key("email")
       end
     end
 
@@ -115,6 +143,9 @@ RSpec.describe "events#index", type: :request do
       end
 
       context "including participant" do
+        # participants require people scope
+        before { service_token.update!(people: true) }
+
         let(:bottom_member) { people(:bottom_member) }
         let(:params) { {include: "participations.participant", filter: {id: event.id}} }
 

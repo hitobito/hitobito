@@ -12,11 +12,11 @@ class QualificationAbility < AbilityDsl::Base
   end
 
   def in_course_layer
-    in_course_layer_with(:layer_full, subject.person.layer_group_ids)
+    in_course_layer_with(:layer_full, subject.person&.layer_group_ids)
   end
 
   def in_course_layer_or_below
-    in_course_layer_with(:layer_and_below_full, subject.person.groups_hierarchy_ids)
+    in_course_layer_with(:layer_and_below_full, subject.person&.groups_hierarchy_ids)
   end
 
   private

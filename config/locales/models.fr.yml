@@ -395,6 +395,10 @@ fr:
         one: Factures
         many: Factures
         other: Factures
+      message/system_mail:
+        one: System-E-Mail
+        many: System-E-Mails
+        other: System-E-Mails
       message/text_message:
         one: SMS
         many: SMS
@@ -1171,8 +1175,9 @@ fr:
         recipient_count: Nombre de destinataires
         success_count: Réception réussie
         failed_count: Échec de l'envoi
-        sent_at: Traité le
+        sent_at: Verarbeitet am
         recipient_progress: Progression du traitement
+        recipients: Empfänger/in(nen)
 
       message/letter:
         body: Contenu

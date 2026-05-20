@@ -349,6 +349,9 @@ en:
       message/letter_with_invoice:
         one: Invoice letter
         other: Invoice letters
+      message/system_mail:
+        one: System-E-Mail
+        other: System-E-Mails
       message/text_message:
         one: SMS
         other: SMS
@@ -1094,8 +1097,9 @@ en:
         recipient_count: Number of recipients
         success_count: Recipient successful
         failed_count: Recipient failed
-        sent_at: Sent at
+        sent_at: Verarbeitet am
         recipient_progress: Processing progress
+        recipients: Empfänger/in(nen)
 
       message/letter:
         body: Content

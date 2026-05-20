@@ -394,6 +394,10 @@ it:
         one: Lettera di fatturazione
         many: Lettere di fatturazione
         other: Lettere di fatturazione
+      message/system_mail:
+        one: System-E-Mail
+        many: System-E-Mails
+        other: System-E-Mails
       message/text_message:
         one: SMS
         many: SMS
@@ -1170,8 +1174,9 @@ it:
         recipient_count: Numero di destinatari
         success_count: Destinatario con successo
         failed_count: Destinatario errato
-        sent_at: Elaborato il
+        sent_at: Verarbeitet am
         recipient_progress: avanzamento dell'elaborazione
+        recipients: Empfänger/in(nen)
 
       message/letter:
         body: Contenuto

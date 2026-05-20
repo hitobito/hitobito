@@ -52,6 +52,7 @@ it:
       add_another: Salvare ed inserirne altri
       cancel: Interrompere
       close: Chiudere
+      confirm: Bestätigen
       search: Cercare
       back: Indietro
       refresh: Aggiornare
@@ -476,7 +477,8 @@ it:
       update:
         flash:
           privacy_policy_not_accepted: "Per completare l'iscrizione deve venir accettata la dichiarazione di protezione dei dati."
-
+      flash:
+        application_not_possible: "Zur Zeit sind für diesen Anlass keine Anmeldungen möglich."
     participation_contact_data:
       managed:
         update:
@@ -1387,6 +1389,67 @@ it:
         server_error: Non è possibile collegarsi al server per le mails, per favore riprova più tardi.
     bounces:
       manage: Rimbalzi
+
+    messages:
+      attrs:
+        dispatch_infos: Verarbeitung
+      dispatches:
+        create:
+          success:
+            message/letter: "Brief wurde als Druckauftrag vorbereitet."
+            message/letter_with_invoice: "Rechnungsbrief wurde als Druckauftrag vorbereitet."
+            message/text_message: "SMS wird versendet."
+          alert:
+            message/letter: "Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden."
+            message/letter_with_invoice: "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
+      actions_show:
+        button_dispatch_letter: Druckauftrag erstellen
+        button_show_assignment: Druckauftrag anzeigen
+        button_duplicate: Duplizieren
+        button_preview: Vorschau
+        button_dispatch_text_message: Senden
+        button_show_pdf: PDF anzeigen
+        recipient_info:
+          valid:
+            message/letter:
+              zero: "Keine Personen mit Adresse vorhanden."
+              one: "%{model_class} wird für eine Person mit Adresse erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+            message/letter_with_invoice:
+              zero: "Keine Personen mit Adresse vorhanden."
+              one: "%{model_class} wird für eine Person mit Adresse erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+            message/text_message:
+              zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
+              one: "%{model_class} wird für eine Person mit Mobiltelefonnummer erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Mobiltelefonnummer erstellt."
+      text_message:
+        fields:
+          remaining_chars: Verbleibende Zeichen
+      letter:
+        fields:
+          send_to_households_options:
+            true: Ein Brief pro Haushalt
+            false: Ein Brief pro Person
+      table:
+        infos:
+          sender: "Absender: %{mail}"
+          sender_rejected: Absender wurde abgelehnt
+          unknown_recipient: Empfänger unbekannt
+          retrieved: Empfangen
+          bounce_rejected: Bounce abgelehnt
+      export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+      show:
+        recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
+      export:
+        section:
+          donation_confirmation:
+            header: "Spenden an %{organisation}"
+            title: "Spendenbestätigung %{year}"
+            received_amount: "Spenden erhalten in der Höhe von"
+            received_from: "%{year} haben wir von"
+            acknowledgement: "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"
+
     recipient_counts:
       index:
         recipient_info:
@@ -1451,66 +1514,6 @@ it:
 
     subscribe: "Iscriversi"
     unsubscribe: "scollegarsi"
-
-  messages:
-    attrs:
-      dispatch_infos: Elaborazione
-    dispatches:
-      create:
-        success:
-          message/letter: "La lettera è stata preparata per la stampa."
-          message/letter_with_invoice: "La lettera con la fattura è stata preparata per la stampa."
-          message/text_message: "L'SMS viene inviato."
-        alert:
-          message/letter: "Appena sarà creato l'ordine di stampa la lettera non potrà più venir rielaborata."
-          message/letter_with_invoice: "Appena sarà creato l'ordine di stampa la lettera con la fattura non potrà più venir rielaborata."
-    actions_show:
-      button_dispatch_letter: Creare l'ordine di stampa
-      button_show_assignment: Mostrare l'ordine di stampa
-      button_duplicate: Duplicare
-      button_preview: Anteprima
-      button_dispatch_text_message: Inviare
-      button_show_pdf: Mostrare il PDF
-      recipient_info:
-        valid:
-          message/letter:
-            zero: "Non ci sono persone con indirizzo."
-            one: "%{model_class} viene creato per una persona con indirizzo."
-            other: "%{model_class} viene creato per %{count} persone con indirizzo."
-          message/letter_with_invoice:
-            zero: "Non ci sono persone con indirizzo."
-            one: "%{model_class} viene creato per una persona con indirizzo."
-            other: "%{model_class} viene creato per %{count} persone con indirizzo."
-          message/text_message:
-            zero: "Non ci sono persone con un numero di telefonino."
-            one: "%{model_class} viene creato per una persona con numero di telefonino."
-            other: "%{model_class} viene creato per %{count} persone con numero di telefonino."
-    text_message:
-      fields:
-        remaining_chars: Caratteri rimanenti
-    letter:
-      fields:
-        send_to_households_options:
-          true: Una lettera per economia domestica.
-          false: Una lettera per persona.
-    table:
-      infos:
-        sender: "Mittente: %{mail}"
-        sender_rejected: Il mittente è stato respinto
-        unknown_recipient: Destinatario sconosciuto
-        retrieved: Ricevere
-        bounce_rejected: Rimbalzo rifiutato
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
-    show:
-      recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
-    export:
-      section:
-        donation_confirmation:
-          header: "Donare a %{organisation}"
-          title: "Conferma della donazione %{year}"
-          received_amount: "Ricevuta una donazione per il totale di "
-          received_from: "%{year} abbiamo da"
-          acknowledgement: "La ringraziamo per la sua fiducia e per il suo impegno apprezzato!"
 
   navigation:
     menu: "Menu"

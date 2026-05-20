@@ -100,7 +100,7 @@ class InvoiceRun < ActiveRecord::Base
 
   # rubocop:disable Metrics/AbcSize
   def recipients(current_user)
-    return [] if recipient_source_type.nil?
+    return Person.none if recipient_source.nil?
 
     case recipient_source_type
     when MailingList.sti_name

@@ -30,6 +30,21 @@ describe InvoiceRun do
       subject.recipient_source = Event::ParticipationsFilter.new(event: events(:top_course))
       expect(subject.recipients(leader)).to eq [member]
     end
+
+    it "returns none if recipient_source is nil" do
+      subject.recipient_source = nil
+
+      expect(subject.recipients(leader)).to eq []
+    end
+
+    it "returns none if recipient_source has been destroyed" do
+      subject.recipient_source = list
+      list.destroy!
+
+      expect(subject.recipient_source_type).to eq "MailingList"
+      expect(subject.recipient_source_id).to eq list.id
+      expect(subject.recipients(leader)).to eq []
+    end
   end
 
   describe "recipient_source" do

@@ -57,6 +57,15 @@ module Messages
         # OptionalField does not implement the method #<() which is used by #insert_field.
         @mail.to = "" # ← makes sure the To header exists, so we can replace it later
         undisclosed = Mail::OptionalField.new("To", "Undisclosed recipients:;")
+
+        # Mail::OptionalField does not have field_order_id because it does not
+        # inherit from Mail::Field.
+        # Mail::Field#<=> calls "other.field_order_id" when sorting headers
+        # during delivery.
+        # We define field_order_id here to prevent this from happening
+        undisclosed.define_singleton_method(:field_order_id) do
+          Mail::Field::FIELD_ORDER_LOOKUP.fetch(name.to_s.downcase, 100)
+        end
         @mail.header.fields.replace_field(undisclosed)
       end
 

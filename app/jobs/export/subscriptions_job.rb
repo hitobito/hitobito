@@ -17,7 +17,10 @@ class Export::SubscriptionsJob < Export::ExportBaseJob
     return super unless @options[:selection]
 
     table_display = TableDisplay.for(@user_id, Person)
-    Export::Tabular::People::TableDisplays.export(@format, entries, table_display,
+    Export::Tabular::People::TableDisplays.export(@format,
+      entries,
+      ability,
+      table_display,
       mailing_list.group)
   end
 

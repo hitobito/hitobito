@@ -8,9 +8,10 @@
 require "spec_helper"
 
 describe Export::SubscriptionsJob do
+  let(:options) { {household: true, filename: filename} }
+
   subject do
-    Export::SubscriptionsJob.new(format, user.id, mailing_list.id,
-      household: true, filename: filename)
+    Export::SubscriptionsJob.new(format, user.id, mailing_list.id, options)
   end
 
   let(:mailing_list) { mailing_lists(:info) }
@@ -39,6 +40,17 @@ describe Export::SubscriptionsJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Name;zusätzliche Adresszeile;Strasse;.*/)
     end
+
+    context "with selection" do
+      let(:options) { {selection: true, filename: filename} }
+
+      it "and saves it" do
+        subject.perform
+
+        lines = file.read.lines
+        expect(lines.size).to eq(3)
+      end
+    end
   end
 
   context "creates an Excel-Export" do
@@ -48,6 +60,16 @@ describe Export::SubscriptionsJob do
       subject.perform
 
       expect(file.generated_file).to be_attached
+    end
+
+    context "with selection" do
+      let(:options) { {selection: true, filename: filename} }
+
+      it "and saves it" do
+        subject.perform
+
+        expect(file.generated_file).to be_attached
+      end
     end
   end
 end

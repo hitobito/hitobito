@@ -22,4 +22,11 @@ class QualificationResource < ApplicationResource
 
   belongs_to :person, writable: false
   belongs_to :qualification_kind, writable: false
+
+  private
+
+  def authorize_create(model)
+    invalid_request!(:person_id, :blank) if model.person_id.blank?
+    super
+  end
 end

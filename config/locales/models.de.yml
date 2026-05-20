@@ -1438,6 +1438,9 @@ de:
             unwritable_attribute: kann nicht geändert werden
           type:
             unwritable_attribute: kann nicht geändert werden
+        qualification_resource:
+          person_id:
+            blank: muss ausgefüllt werden
         self_registration_resource:
           adult_consent:
             must_be_accepted: muss akzeptiert werden

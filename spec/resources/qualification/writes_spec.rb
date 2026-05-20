@@ -43,6 +43,14 @@ describe QualificationResource, type: :resource do
       expect(qualification.origin).to eq "test"
     end
 
+    context "without person_id" do
+      before { payload[:data][:attributes].delete(:person_id) }
+
+      it "raises an invalid request error" do
+        expect { instance.save }.to raise_error(Graphiti::Errors::InvalidRequest)
+      end
+    end
+
     context "not authorized" do
       let(:ability) { Ability.new(people(:bottom_member)) }
 

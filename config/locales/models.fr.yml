@@ -959,7 +959,7 @@ fr:
         type: Rôle
         participation: Personne
         remove_participant_role: Supprimer le rôle éventuel de participant.
-        string_long: "%{role} de %{group}"
+        string_long: "%{role} de %{participation}"
 
       family_member:
         kind: Lien de parenté

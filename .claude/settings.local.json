@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bundle install *)",
+      "Bash(bundle exec *)",
+      "Bash(BUNDLE_GEMFILE=Gemfile.next bundle install)"
+    ]
+  },
+  "enabledPlugins": {
+    "rails-upgrade@ombulabs-ai": true,
+    "rails-load-defaults@ombulabs-ai": true,
+    "dual-boot@ombulabs-ai": true
+  }
+}

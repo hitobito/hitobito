@@ -31,7 +31,7 @@ class Event::ParticipationDecorator < ApplicationDecorator
   end
 
   def incomplete_label
-    if answers.any? { |answer| answer.question.required? && answer.answer.blank? }
+    if answers.any? { |answer| answer.question&.required? && answer.answer.blank? }
       content_tag(:div, h.t(".incomplete"), class: "text-warning")
     end
   end

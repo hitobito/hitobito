@@ -1,12 +1,21 @@
+def next?
+  File.basename(__FILE__) == "Gemfile.next"
+end
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
 
 git_source(:github) { |name| "https://github.com/#{name}.git" }
 
-gem 'rails', '~> 7.0.x'
+gem 'next_rails'
 
-gem 'activerecord-nulldb-adapter', github: 'puzzle/nulldb'
+if next?
+  gem 'rails', '~> 7.2.0'
+else
+  gem 'rails', '~> 7.1.0'
+end
+
+gem 'activerecord-nulldb-adapter', github: 'puzzle/nulldb' unless next?
 gem 'pg'
 
 gem 'nochmal', github: 'puzzle/nochmal'

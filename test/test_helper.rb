@@ -24,6 +24,12 @@ ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../config/environment', __dir__)
 Rails.env = 'test'
 require 'rails/test_help'
+
+DeprecationTracker.track_minitest(
+  shitlist_path: 'test/support/deprecation_warning.shitlist.json',
+  mode: ENV.fetch('DEPRECATION_TRACKER', 'save'),
+  transform_message: ->(message) { message.gsub("#{Rails.root}/", '') }
+)
 require 'mocha/minitest'
 require 'capybara/rails'
 Settings.reload!

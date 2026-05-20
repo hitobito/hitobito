@@ -288,7 +288,7 @@ describe MailingLists::BulkMail::Retriever do
           bounce_handler = instance_double("MailingLists::BulkMail::BounceHandler")
           allow(retriever).to receive(:bounce_handler).and_return(bounce_handler)
 
-          expect(bounce_handler).to receive(:analyze!).and_return(action)
+          expect(bounce_handler).to receive(:perform_analyzed_action!).and_return(action)
           expect(imap_connector).to receive(:delete_by_uid).with(42, :inbox)
 
           retriever.perform
@@ -299,7 +299,7 @@ describe MailingLists::BulkMail::Retriever do
         bounce_handler = instance_double("MailingLists::BulkMail::BounceHandler")
         allow(retriever).to receive(:bounce_handler).and_return(bounce_handler)
 
-        expect(bounce_handler).to receive(:analyze!).and_return(:unknown)
+        expect(bounce_handler).to receive(:perform_analyzed_action!).and_return(:unknown)
         expect(imap_connector).to receive(:move_by_uid).with(42, :inbox, :failed)
 
         retriever.perform

@@ -24,4 +24,27 @@ describe Event::ParticipationDecorator, :draper_with_helpers do
         id: participation.id))
     end
   end
+
+  describe "#incomplete_label" do
+    let!(:answer) { participation.answers.create!(question: event_questions(:top_ov), answer: "") }
+
+    before do
+      event_questions(:top_ov).update!(required: true)
+    end
+
+    it "returns a warning label" do
+      expect(subject.incomplete_label).to include("text-warning")
+    end
+
+    context "when answer has no question" do
+      before do
+        event_questions(:top_ov).destroy!
+        participation.reload
+      end
+
+      it "returns nil without raising" do
+        expect(subject.incomplete_label).to be_nil
+      end
+    end
+  end
 end

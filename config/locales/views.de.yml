@@ -492,6 +492,8 @@ de:
           save: Weiter
 
     participations:
+      answers:
+        incomplete: Pflichtangaben fehlen
       edit:
         title: Anmeldung
       approvals:
@@ -534,8 +536,6 @@ de:
         page_of_pages: "Seite <page> von <total>"
       priorities:
         on_waiting_list: Auf Warteliste
-      list:
-        incomplete: Pflichtangaben fehlen
       guest_of_info:
         with_main_applicant: "(Gast von %{main_applicant_name})"
         without_main_applicant: "(Gast von abgemeldeter Person)"

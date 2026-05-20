@@ -42,6 +42,14 @@ describe RoleResource, type: :resource do
       expect(new_role.label).to eq "test"
     end
 
+    context "without group_id" do
+      before { payload[:data][:attributes].delete(:group_id) }
+
+      it "raises an invalid request error" do
+        expect { instance.save }.to raise_error(Graphiti::Errors::InvalidRequest)
+      end
+    end
+
     context "other user" do
       let(:ability) { Ability.new(people(:bottom_member)) }
 

@@ -50,6 +50,11 @@ class RoleResource < ApplicationResource
 
   private
 
+  def authorize_create(model)
+    invalid_request!(:group_id, :blank) unless model.group_id.present?
+    super
+  end
+
   def raise_when_changing_readonly_attr(model)
     changed = [:group_id, :person_id, :type].filter { |attr| model.changes.key?(attr.to_s) }
     invalid_request!(*changed, :unwritable_attribute) if changed.any?

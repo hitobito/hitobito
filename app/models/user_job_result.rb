@@ -52,10 +52,6 @@ class UserJobResult < ApplicationRecord
   after_commit :broadcast_refresh_and_badge_update, on: %i[create destroy]
   after_update_commit :broadcast_replace_and_badge_update
 
-  before_destroy do
-    generated_file.purge if generated_file.attached?
-  end
-
   def to_s
     partial = " (#{progress}%)" if progress.present?
 

@@ -121,6 +121,15 @@ describe UserManageableJob do
       expect(user_job_result).to receive(:report_progress!).exactly(5).times
       run_enqueued_job(enqueued_job)
     end
+
+    it "should not create user job result when user_id is explicitly set to nil" do
+      job = Examples::SuccessfulUserManagedJob.new
+      job.user_id = nil
+
+      expect(UserJobResult).not_to receive(:create!)
+      job.enqueue!
+      expect(job.instance_variable_get(:@user_job_result_id)).to be_nil
+    end
   end
 
   context "without logged in person" do

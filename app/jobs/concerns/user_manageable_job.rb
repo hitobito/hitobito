@@ -15,10 +15,11 @@ module UserManageableJob
   def enqueue!
     # @user_id is set in #initialize of ExportBaseJob
     # Additionally an attr writer is provided so it can be set e.g. when enqueueing a job
-    # from another job
+    # from another job. We check if the instance variable is defined so it can be explicitly
+    # set to nil without falling back to the currently authenticated person
     # For jobs that are not export jobs, we fall back to Auth.current_person,
     # which is the currently logged in or imitated user
-    enqueueing_person = Person.find_by(id: @user_id) || Auth.current_person
+    enqueueing_person = defined?(@user_id) ? Person.find_by(id: @user_id) : Auth.current_person
 
     return super unless enqueueing_person
 

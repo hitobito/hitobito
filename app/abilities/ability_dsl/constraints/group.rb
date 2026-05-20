@@ -27,7 +27,7 @@ module AbilityDsl::Constraints
     end
 
     def group_not_deleted
-      !group.deleted?
+      group && !group.deleted?
     end
 
     def group_not_deleted_or_archived
@@ -35,7 +35,7 @@ module AbilityDsl::Constraints
     end
 
     def if_layer_group
-      group.layer?
+      group&.layer?
     end
 
     def if_layer_group_if_active
@@ -43,11 +43,11 @@ module AbilityDsl::Constraints
     end
 
     def in_active_group
-      !group.archived?
+      group && !group.archived?
     end
 
     def in_archived_group
-      group.archived?
+      group&.archived?
     end
 
     def in_same_group_if_active
@@ -67,7 +67,7 @@ module AbilityDsl::Constraints
     end
 
     def on_root_group
-      group.root?
+      group&.root?
     end
 
     private

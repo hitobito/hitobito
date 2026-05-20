@@ -51,7 +51,7 @@ class RoleResource < ApplicationResource
   private
 
   def authorize_create(model)
-    invalid_request!(:group_id, :blank) unless model.group_id.present?
+    invalid_request!(:group_id, :blank) if model.group_id.blank?
     super
   end
 

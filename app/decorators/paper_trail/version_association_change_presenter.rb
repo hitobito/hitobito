@@ -105,7 +105,7 @@ module PaperTrail
 
     def build_new_instance
       clazz = type_class_from_changeset || item_class
-      clazz.new(attrs_from_changeset)
+      clazz.new(attrs_from_changeset.slice(*clazz.attribute_names))
     end
 
     def attrs_from_changeset = changeset.transform_values(&:last)

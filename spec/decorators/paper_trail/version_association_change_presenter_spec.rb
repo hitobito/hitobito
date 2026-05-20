@@ -210,6 +210,46 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     end
   end
 
+  context "with ancient attributes that got removed in the meantime" do
+    let(:event) { events(:top_course) }
+    let(:version) { PaperTrail::Version.where(main: event).order(:created_at, :id).last }
+
+    it "reifies the remaining attributes for create" do
+      PaperTrail::Version.create!(
+        item_type: "Event::Question",
+        item_id: 1001,
+        object: {"type" => "Event::Question::Default"}.to_yaml,
+        object_changes: {
+          "question_de" => [nil, "Ich habe folgendes ÖV Abo"],
+          "disclosure" => [nil, "hidden"],
+          "type" => [nil, "Event::Question::Default"],
+          "derived_from_question_id" => [nil, 3],
+          "event_type" => [nil, "Event::Course"]
+        }.to_yaml,
+        main: event,
+        event: :create
+      )
+      expect(subject).to eq("<div>Anmeldeangabe <i></i> wurde hinzugefügt.</div>")
+    end
+
+    it "reifies the remaining attributes for update" do
+      PaperTrail::Version.create!(
+        item_type: "Event::Question",
+        item_id: 1001,
+        object: {"type" => "Event::Question::Default"}.to_yaml,
+        object_changes: {
+          "question_de" => ["Ich habe folgendes Abo", "Ich habe folgendes ÖV Abo"],
+          "disclosure" => ["required", "optional"]
+        }.to_yaml,
+        main: event,
+        event: :update
+      )
+      expect(subject).to eq("<div>Anmeldeangabe <i></i> wurde aktualisiert: " \
+       "Frage (DE) wurde von <i>Ich habe folgendes Abo</i> auf <i>Ich habe folgendes ÖV Abo</i> geändert., " \
+       "Disclosure wurde von <i>required</i> auf <i>optional</i> geändert.</div>")
+    end
+  end
+
   def update
     person.update!(town: "Bern", zip_code: "3007")
   end

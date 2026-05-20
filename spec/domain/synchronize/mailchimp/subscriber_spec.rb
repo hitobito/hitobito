@@ -104,6 +104,24 @@ describe Synchronize::Mailchimp::Subscriber do
       end
     end
 
+    context "without subscribe_managers setting" do
+      around do |example|
+        Settings.mailchimp.subscribe_managers = false
+        example.run
+      ensure
+        Settings.mailchimp.subscribe_managers = true
+      end
+
+      it "returns only directly subscribed people" do
+        manager = Fabricate(:person)
+        person.managers = [manager]
+
+        expect(subscribers.count).to eq(1)
+
+        expect(subscribers.first.person).to eq(person)
+      end
+    end
+
     context "strategy to include additional emails" do
       let(:bottom_member) { people(:bottom_member) }
 

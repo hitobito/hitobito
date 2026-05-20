@@ -3,16 +3,17 @@
 ## unreleased
 
 - Gruppen Sammelrechnungen können kopiert werden (#3754)
-- Spezifische E-Mails je nach Zustand der Teilnahme (Nicht zugeteilt, Zugeteilt, Warteliste) (hitobito/hitobito_sww#289)
-- Optionale PP-Zeile auf Rechnungen (hitobito/hitobito_swb#246)
-- Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
-- Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
-- API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito/hitobito_sac_cas#2314)
+- Spezifische E-Mails je nach Zustand der Teilnahme (Nicht zugeteilt, Zugeteilt, Warteliste) (hitobito_sww#289)
+- Optionale PP-Zeile auf Rechnungen (hitobito_swb#246)
+- Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito_sac_cas#2366)
+- Filtermöglichkeiten auf Anlässen (hitobito_sac_cas#2367)
+- API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito_sac_cas#2314)
 - Qualifkationen wurden in das JSON:API integriert (hitobito_bdp#12)
 - Rechnungen können neu auch als Excel (XLSX) exportiert werden (hitobito_sww#288)
 - Vor- und Nachname des Rechnungsempfängers werden neu strukturiert in separaten Feldern gespeichert (#4164)
 - Konfigurierbare Identifier für eine schnellere globale Suche (hitobito_sac_cas#2331)
 - System E-Mails von Anlässen werden in den Nachrichten Tabs auf dem Anlass, der Teilnahme und der Person angezeigt (hitobito_sac_cas#2419)
+- Konfigurationsmöglichkeit ob Eltern (`PeopleManager`) von regulären Abonnenten ebenfalls bei Mailchimp eingeschrieben werden oder nicht (hitobito_sac_cas#2446)
 
 ## Version 2.9
 

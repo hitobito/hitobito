@@ -1507,6 +1507,7 @@ fr:
         id_must_not_be_set: ID ne doit pas être défini
         role_resource:
           group_id:
+            blank: muss ausgefüllt werden
             unwritable_attribute: Ne peut pas être modifié
           person_id:
             unwritable_attribute: kann nicht geändert werden

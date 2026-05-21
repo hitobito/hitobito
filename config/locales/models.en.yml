@@ -1427,6 +1427,7 @@ en:
         id_must_not_be_set: ID must not be set
         role_resource:
           group_id:
+            blank: muss ausgefüllt werden
             unwritable_attribute: can't be changed
           person_id:
             unwritable_attribute: can't be changed

@@ -10,8 +10,6 @@ class AsyncDownloadsController < ApplicationController
 
   def show
     if file&.downloadable?(current_person)
-      Cookies::AsyncDownload.new(cookies).remove(name: params[:id], type: params[:file_type])
-
       redirect_to rails_blob_path(
         file.generated_file,
         filename: file.filename,
@@ -33,6 +31,6 @@ class AsyncDownloadsController < ApplicationController
   private
 
   def file
-    @file ||= AsyncDownloadFile.from_filename(params[:id], params[:file_type])
+    @file ||= UserJobResult.find(params[:id])
   end
 end

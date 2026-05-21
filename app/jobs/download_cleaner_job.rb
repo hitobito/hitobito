@@ -15,10 +15,10 @@ class DownloadCleanerJob < RecurringJob
   private
 
   def remove_old_downloads
-    AsyncDownloadFile.where(older_than_a_day).find_each(&:destroy)
+    UserJobResult.where(older_than_a_day).find_each(&:destroy)
   end
 
   def older_than_a_day
-    AsyncDownloadFile.arel_table[:timestamp].lt(1.day.ago.to_i)
+    UserJobResult.arel_table[:start_timestamp].lt(1.day.ago.to_i)
   end
 end

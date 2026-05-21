@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Export::ProgressReporter do
-  let(:file) { AsyncDownloadFile.from_filename("subscriptions_1234-42") }
+  let(:file) { UserJobResult.from_filename("subscriptions_1234-42") }
   let(:values) { [] }
 
   subject! do

@@ -1,0 +1,22 @@
+-# Copyright (c) 2012-2026, Puzzle ITC. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+.container-fluid.text-center.bg-light.m-2.p-3{id: dom_id(user_job_result)}
+  .row
+    .col-1
+      = job_status_icon(user_job_result.status.to_sym)
+    .col-3
+      = user_job_result.name
+    .col-3
+      = job_progress_bar(user_job_result.progress)
+    .col-3
+      = "#{t('.start_timestamp')}: #{job_timestamp(user_job_result.start_timestamp)}"
+      %br
+      = "#{t('.end_timestamp')}: #{job_timestamp(user_job_result.end_timestamp)}"
+    .col-1
+      = "#{t('.attempts')}: #{user_job_result.attempts}/#{Delayed::Worker.max_attempts}"
+    .col-1
+      - if user_job_result.generated_file.attached?
+        = link_to(icon("download", {filled: true}), "/downloads/#{user_job_result.id}")

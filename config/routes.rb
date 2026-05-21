@@ -464,6 +464,8 @@ Hitobito::Application.routes.draw do
 
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
+
+    get "user_job_results" => "user_job_results#index"
   end # scope locale
 
   get "/api", to: "json_api/documentation#index"

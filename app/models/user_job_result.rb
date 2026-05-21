@@ -176,22 +176,17 @@ class UserJobResult < ApplicationRecord
   end
 
   def broadcast_replace_and_badge_update
-    broadcast_replace_to(update_channel_name)
-    broadcast_badge_update
+    capturing_redis_exceptions do
+      broadcast_replace_to(update_channel_name)
+      broadcast_badge_update
+    end
   end
 
   def broadcast_refresh_and_badge_update
-    broadcast_refresh_to(update_channel_name)
-    broadcast_badge_update
-  end
-
-  def broadcast_notification
-    broadcast_append_to(
-      notification_channel_name,
-      partial: "user_job_results/notification",
-      locals: {user_job_result: self},
-      target: "user-job-result-notifications-container"
-    )
+    capturing_redis_exceptions do
+      broadcast_refresh_to(update_channel_name)
+      broadcast_badge_update
+    end
   end
 
   def broadcast_badge_update
@@ -203,11 +198,28 @@ class UserJobResult < ApplicationRecord
     )
   end
 
+  def broadcast_notification
+    capturing_redis_exceptions do
+      broadcast_append_to(
+        notification_channel_name,
+        partial: "user_job_results/notification",
+        locals: {user_job_result: self},
+        target: "user-job-result-notifications-container"
+      )
+    end
+  end
+
   def set_web_socket_connection_state
     if person.user_job_results.unfinished.count > 0
       person.update_column(:needs_web_socket_connection, true)
     else
       person.update_column(:needs_web_socket_connection, false)
     end
+  end
+
+  def capturing_redis_exceptions
+    yield
+  rescue Redis::BaseError => e
+    Sentry.capture_exception(e)
   end
 end

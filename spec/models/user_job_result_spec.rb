@@ -20,11 +20,7 @@ describe UserJobResult do
     UserJobResult.create!(person:, job_class:, filename:, filetype:, reports_progress:)
   end
 
-  describe "default values" do
-    before do
-      freeze_time
-    end
-
+  describe "default values", time_frozen: true do
     it "should set correct default values when values are not passed" do
       user_job_result = UserJobResult.create!(person:, job_class:)
 
@@ -270,6 +266,15 @@ describe UserJobResult do
 
       expect { user_job_result.report_failure! }
         .to have_broadcasted_notification_and_badge_update
+    end
+
+    it "should still successfully complete job if broadcasting fails with redis exceptions" do
+      expect(subject).to receive(:broadcast_replace_to).and_raise(Redis::ConnectionError)
+      expect(Sentry).to receive(:capture_exception).with(Redis::ConnectionError)
+
+      subject.report_success!(1)
+
+      expect(subject.status).to eql("success")
     end
 
     def have_broadcasted_overview_update_and_badge_update

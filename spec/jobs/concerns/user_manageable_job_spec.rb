@@ -130,6 +130,18 @@ describe UserManageableJob do
       job.enqueue!
       expect(job.instance_variable_get(:@user_job_result_id)).to be_nil
     end
+
+    it "should successfully run job even if redis error occurs during broadcast" do
+      job = Examples::SuccessfulUserManagedJob.new
+      enqueued_job = job.enqueue!
+      user_job_result = job.user_job_result
+
+      expect(user_job_result).to receive(:report_success!).with(1).and_call_original
+      allow(user_job_result).to receive(:broadcast_replace_to).and_raise(Redis::ConnectionError).twice
+      expect(Sentry).to receive(:capture_exception).with(Redis::ConnectionError).twice
+
+      expect(run_enqueued_job(enqueued_job)).to be_truthy
+    end
   end
 
   context "without logged in person" do

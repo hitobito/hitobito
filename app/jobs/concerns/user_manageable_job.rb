@@ -12,7 +12,7 @@ module UserManageableJob
     self.parameters = parameters.to_a + [:user_job_result_id]
   end
 
-  def enqueue!
+  def enqueue!(options = {})
     # @user_id is set in #initialize of ExportBaseJob
     # Additionally an attr writer is provided so it can be set e.g. when enqueueing a job
     # from another job. We check if the instance variable is defined so it can be explicitly

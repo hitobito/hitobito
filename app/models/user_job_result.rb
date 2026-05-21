@@ -7,16 +7,26 @@
 
 # == Schema Information
 #
-# Table name: async_download_files
+# Table name: user_job_results
 #
-#  id         :bigint           not null, primary key
-#  filetype   :string
-#  name       :string           not null
-#  progress   :integer
-#  timestamp  :string           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  person_id  :integer          not null
+#  id               :bigint           not null, primary key
+#  attempts         :integer          not null
+#  end_timestamp    :datetime
+#  filename         :string
+#  filetype         :string           not null
+#  job_name         :string           not null
+#  max_attempts     :integer          not null
+#  progress         :integer          not null
+#  reports_progress :boolean          not null
+#  start_timestamp  :datetime         not null
+#  status           :string           not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  person_id        :bigint           not null
+#
+# Indexes
+#
+#  index_user_job_results_on_person_id  (person_id)
 #
 class UserJobResult < ApplicationRecord
   include I18nEnums

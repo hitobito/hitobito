@@ -16,7 +16,7 @@ describe MailchimpSynchronizationsController do
 
     it "sets flash message" do
       post :create, params: {group_id: group.id, mailing_list_id: mailing_list.id}
-      expect(flash[:notice]).to be_present
+      expect(flash[:notice]).to match(/Ihre Daten werden aktuell an MailChimp gesendet/)
     end
   end
 end

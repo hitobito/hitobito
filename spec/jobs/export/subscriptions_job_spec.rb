@@ -8,6 +8,7 @@
 require "spec_helper"
 
 describe Export::SubscriptionsJob do
+  let(:filename) { "subscription_export" }
   let(:options) { {household: true, filename: filename} }
 
   subject do
@@ -16,11 +17,10 @@ describe Export::SubscriptionsJob do
 
   let(:mailing_list) { mailing_lists(:info) }
   let(:user) { people(:top_leader) }
-  let(:filename) { UserJobResult.create_name("subscription_export", user.id) }
 
   let(:group) { groups(:top_layer) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
-  let(:file) { UserJobResult.from_filename(filename, format) }
+  let(:file) { subject.user_job_result }
 
   before do
     SeedFu.quiet = true
@@ -28,14 +28,14 @@ describe Export::SubscriptionsJob do
 
     Fabricate(:subscription, mailing_list: mailing_list)
     Fabricate(:subscription, mailing_list: mailing_list)
+    subject.enqueue!
+    subject.perform
   end
 
   context "creates an CSV-Export" do
     let(:format) { :csv }
 
     it "and saves it" do
-      subject.perform
-
       lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Name;zusätzliche Adresszeile;Strasse;.*/)
@@ -57,8 +57,6 @@ describe Export::SubscriptionsJob do
     let(:format) { :xlsx }
 
     it "and saves it" do
-      subject.perform
-
       expect(file.generated_file).to be_attached
     end
 

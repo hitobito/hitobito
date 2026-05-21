@@ -23,7 +23,7 @@ module Export::Pdf::Messages
     def initialize(letter, options = {})
       @letter = letter
       @options = options
-      @async_download_file = options.delete(:async_download_file)
+      @user_job_result = options.delete(:user_job_result)
       @body_font_size = Settings.messages.body_font_size
     end
 
@@ -81,14 +81,14 @@ module Export::Pdf::Messages
     private
 
     def reporter
-      return unless @async_download_file
+      return unless @user_job_result
 
       @reporter ||= init_reporter
     end
 
     def init_reporter
       Export::ProgressReporter.new(
-        @async_download_file,
+        @user_job_result,
         recipients.size
       )
     end

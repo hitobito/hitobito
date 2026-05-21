@@ -29,7 +29,7 @@ class Export::InvoicesJob < Export::ExportBaseJob
     case @format
     when :pdf
       Export::Pdf::Invoice.render_multiple(entries, @options.merge({
-        async_download_file: async_download_file
+        user_job_result: user_job_result
       }))
     when :csv
       Export::Tabular::Invoices::List.csv(entries)

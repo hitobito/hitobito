@@ -6,9 +6,7 @@
 require "spec_helper"
 
 describe Export::EventsExportJob do
-  subject { Export::EventsExportJob.new(format, user.id, group.id, filter, filename: filename) }
-
-  let(:filename) { UserJobResult.create_name("event_export", user.id) }
+  subject { Export::EventsExportJob.new(format, user.id, group.id, filter, filename: "event_export") }
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
@@ -16,20 +14,20 @@ describe Export::EventsExportJob do
   let(:filter) do
     {range: "all", year: year}
   end
-  let(:file) { UserJobResult.from_filename(filename, format) }
+  let(:file) { subject.user_job_result }
 
   before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
     Fabricate(:event)
+    subject.enqueue!
+    subject.perform
   end
 
   context "creates a CSV-Export" do
     let(:format) { :csv }
 
     it "and saves it" do
-      subject.perform
-
       lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Name;Organisatoren;Beschreibung;.*/)
@@ -41,8 +39,6 @@ describe Export::EventsExportJob do
     let(:format) { :xlsx }
 
     it "and saves it" do
-      subject.perform
-
       expect(file.generated_file).to be_attached
     end
   end

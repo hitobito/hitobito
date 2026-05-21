@@ -13,7 +13,8 @@ module UserManageableJob
   end
 
   def enqueue!
-    raise "User manageable jobs must be called from context with auth user" unless @user_id
+    @person_id = @user_id || Auth.current_person&.id
+    raise "User manageable jobs must be called from context with auth user" unless @person_id
 
     user_job_result = create_default_user_job_result
     @user_job_result_id = user_job_result.id
@@ -92,7 +93,7 @@ module UserManageableJob
       name: job_name,
       filetype: filetype,
       progress: default_progress,
-      person_id: @user_id,
+      person_id: @person_id,
       status: "planned",
       start_timestamp: Time.now.to_i,
       attempts: 0,
@@ -101,7 +102,7 @@ module UserManageableJob
   end
 
   def filename_with_timestamp
-    filename = @options[:filename]
+    filename = @options&.dig(:filename)
     return unless filename
 
     "#{filename.to_s.parameterize(preserve_case: true)}_#{Time.now.to_i}.#{filetype}"

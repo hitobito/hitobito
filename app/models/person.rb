@@ -190,7 +190,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   strip_attributes except: [:zip_code]
 
-  attr_accessor :household_people_ids, :shared_access_token, :skip_household
+  attr_accessor :household_people_ids, :shared_access_token, :skip_household, :service_token
 
   ### ASSOCIATIONS
 
@@ -480,6 +480,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # Is this person blocked?
   def blocked?
     has_attribute?(:blocked_at) && blocked_at?
+  end
+
+  # Is this person a dynamic user for a service token?
+  def service_token?
+    service_token.present?
   end
 
   ### OTHER INSTANCE METHODS

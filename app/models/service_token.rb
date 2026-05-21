@@ -65,7 +65,7 @@ class ServiceToken < ActiveRecord::Base
       role.permissions = [permission.to_sym]
       role.permissions << :finance if invoices?
       p.roles = [role]
-      p.instance_variable_set(:@service_token, self)
+      p.service_token = self
     end
   end
 

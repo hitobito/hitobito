@@ -6,7 +6,7 @@
 module UserManageableExportJob
   def respond_to_export_job(redirection_target: {returning: true}, render_command: nil)
     flash[:notice] = translate(
-      :export_enqueued, default: :"global.export.enqueued",
+      :export_enqueued, default: :"global.export_enqueued",
       overview_link: helpers.link_to(t("user_job_results.index.title"), user_job_results_path)
     )
 

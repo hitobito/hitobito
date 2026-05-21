@@ -17,6 +17,7 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
       t.integer :attempts, null: false
       t.integer :max_attempts, null: false
       t.boolean :reports_progress, null: false
+      t.datetime :last_progress_update_broadcasted_at
 
       t.references :delayed_job
     end

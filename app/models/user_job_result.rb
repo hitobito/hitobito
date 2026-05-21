@@ -142,10 +142,21 @@ class UserJobResult < ApplicationRecord
   # <tt>current_iteration</tt>: The current iteration
   # <tt>iteration_count</tt>: The total iterations after which the job will be done
   def report_progress!(current_iteration, iteration_count)
+    return if iteration_count.zero?
+
     if reports_progress
+      should_broadcast_update = last_progress_update_broadcasted_at&.before?(5.seconds.ago)
+
       progress = ((100.to_f / iteration_count) * (current_iteration + 1)).round
-      progress = (0 if progress < 0) || (100 if progress > 100) || progress
-      update!(progress:)
+      progress = progress.clamp(0, 100)
+
+      attributes_to_update = {progress:}
+      if should_broadcast_update
+        attributes_to_update[:last_progress_update_broadcasted_at] = Time.current
+      end
+      update_columns(attributes_to_update)
+
+      broadcast_replace_to(update_channel_name) if should_broadcast_update
     end
   end
 

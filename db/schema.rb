@@ -1396,6 +1396,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.integer "attempts", null: false
     t.integer "max_attempts", null: false
     t.boolean "reports_progress", null: false
+    t.datetime "last_progress_update_broadcasted_at"
     t.bigint "delayed_job_id"
     t.index ["delayed_job_id"], name: "index_user_job_results_on_delayed_job_id"
     t.index ["person_id"], name: "index_user_job_results_on_person_id"

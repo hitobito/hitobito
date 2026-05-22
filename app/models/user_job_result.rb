@@ -54,9 +54,9 @@ class UserJobResult < ApplicationRecord
   after_update_commit :broadcast_replace_and_badge_update
 
   def to_s
-    partial = " (#{progress}%)" if progress.present?
+    progress_string = " (#{progress}%)" if reports_progress
 
-    "<UserJobResult##{id}: #{filename}#{partial}>"
+    "<UserJobResult##{id}: #{filename}#{progress_string}>"
   end
 
   def downloadable?(downloading_person)
@@ -64,19 +64,20 @@ class UserJobResult < ApplicationRecord
   end
 
   def write(data, force_encoding: nil)
-    io = StringIO.new
+    Tempfile.create do |file|
+      case filetype.to_sym
+      when :csv then file.set_encoding(Settings.csv.encoding)
+      when :pdf then file.binmode
+      end
 
-    case filetype.to_sym
-    when :csv then io.set_encoding(Settings.csv.encoding)
-    when :pdf then io.binmode
+      file.set_encoding(force_encoding) if force_encoding.present?
+
+      file.write(data)
+
+      file.rewind # make ActiveStorage's checksum-calculation deterministic
+
+      generated_file.attach(io: file, filename:)
     end
-
-    io.set_encoding(force_encoding) if force_encoding.present?
-
-    io.write(data)
-    io.rewind # make ActiveStorage's checksum-calculation deterministic
-
-    generated_file.attach(io: io, filename:)
   end
 
   def read

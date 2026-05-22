@@ -52,7 +52,6 @@ jobs:
 
   run-wagon-tests:
     name: 'Run ${{ matrix.wagon.name }} wagon tests'
-    runs-on: 'ubuntu-latest'
     needs:
       - find-wagons
     strategy:
@@ -60,27 +59,12 @@ jobs:
       matrix:
         wagon: ${{ fromJSON(needs.find-wagons.outputs.wagons) }}
       max-parallel: 5 # needed so we don't occupy all the runners with core waiting jobs and the wagon tests can never start
-    # steps:
-    #   - name: "Determine common branch and set branch name for wagon"
-    #     env:
-    #       INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
-    #     run: |
-    #       COMMON_BRANCH_NAME="${{github.head_ref || github.ref_name}}"
-    #       if [ -z "$INPUT_WAGON_REF" ]; then
-    #         WAGON_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "$COMMON_BRANCH_NAME" || echo 'master')
-    #       fi
-    #
-    #       echo "WAGON_REF=$WAGON_REF" >> $GITHUB_ENV
-    #     shell: bash
-    #
-    #  core_ref: env.WAGON_REF
-    #  wagon_dependency_ref: env.WAGON_REF
 
     uses: hitobito/hitobito/.github/workflows/wagon-tests.yml@master
     with:
       wagon_repository: ${{ github.event.repository.name }}
-      core_ref: ${{ github.ref || inputs.core_ref || 'sac-master' }}
-      wagon_dependency_ref: ${{ inputs.wagon_dependency_ref || 'sac-master' }}
+      core_ref: ${{ github.ref || inputs.core_ref || '' }}
+      wagon_dependency_ref: ${{ inputs.wagon_dependency_ref || '' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

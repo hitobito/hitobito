@@ -9,21 +9,22 @@
 #
 # Table name: user_job_results
 #
-#  id               :bigint           not null, primary key
-#  attempts         :integer          not null
-#  end_timestamp    :datetime
-#  filename         :string
-#  filetype         :string           not null
-#  job_class        :string           not null
-#  max_attempts     :integer          not null
-#  progress         :integer          not null
-#  reports_progress :boolean          not null
-#  start_timestamp  :datetime         not null
-#  status           :string           not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  delayed_job_id   :bigint
-#  person_id        :bigint           not null
+#  id                                  :bigint           not null, primary key
+#  attempts                            :integer          not null
+#  end_timestamp                       :datetime
+#  filename                            :string
+#  filetype                            :string           not null
+#  job_class                           :string           not null
+#  last_progress_update_broadcasted_at :datetime
+#  max_attempts                        :integer          not null
+#  progress                            :integer          not null
+#  reports_progress                    :boolean          not null
+#  start_timestamp                     :datetime         not null
+#  status                              :string           not null
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
+#  delayed_job_id                      :bigint
+#  person_id                           :bigint           not null
 #
 # Indexes
 #

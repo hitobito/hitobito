@@ -7,6 +7,7 @@
   %article.col-12.col-md-6
     %h2= t('.contact_details')
     = render 'contact_data', group: entry, only_public: cannot?(:show_details, @group)
+    = render_extensions :contact_data
 
     %h2= t('.additional_information')
     - if entry.self_registration_active?

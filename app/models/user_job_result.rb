@@ -145,22 +145,30 @@ class UserJobResult < ApplicationRecord
   def report_progress!(current_iteration, iteration_count)
     return if !reports_progress || iteration_count.zero?
 
-    # Converted to integer to also handle the nil case
-    should_broadcast_update = last_progress_update_broadcasted_at.to_i < 5.seconds.ago.to_i
+    new_progress = calculate_progress_percentage(current_iteration, iteration_count)
+    return if new_progress == self.progress
 
-    attributes_to_update = {
-      progress: calculate_progress_percentage(current_iteration, iteration_count),
-      last_progress_update_broadcasted_at: (Time.current if should_broadcast_update)
-    }.compact
+    should_broadcast = progress_broadcast_due?
+
+    attributes_to_update = { progress: new_progress }
+    attributes_to_update[:last_progress_update_broadcasted_at] = Time.current if should_broadcast
 
     update_columns(attributes_to_update)
-    broadcast_replace_to(update_channel_name) if should_broadcast_update
+
+    broadcast_replace_to(update_channel_name) if should_broadcast
   end
 
   private
 
+  def progress_broadcast_due?
+    return true if last_progress_update_broadcasted_at.nil?
+
+    last_progress_update_broadcasted_at.before?(5.seconds.ago)
+  end
+
   def calculate_progress_percentage(current_iteration, iteration_count)
-    ((100.to_f / iteration_count) * (current_iteration + 1)).round.clamp(0, 100)
+    percentage = ((current_iteration + 1) * 100) / iteration_count
+    percentage.clamp(0, 100)
   end
 
   def set_default_values

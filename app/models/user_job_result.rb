@@ -146,11 +146,11 @@ class UserJobResult < ApplicationRecord
     return if !reports_progress || iteration_count.zero?
 
     new_progress = calculate_progress_percentage(current_iteration, iteration_count)
-    return if new_progress == self.progress
+    return if new_progress == progress
 
     should_broadcast = progress_broadcast_due?
 
-    attributes_to_update = { progress: new_progress }
+    attributes_to_update = {progress: new_progress}
     attributes_to_update[:last_progress_update_broadcasted_at] = Time.current if should_broadcast
 
     update_columns(attributes_to_update)

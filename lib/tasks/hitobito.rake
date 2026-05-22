@@ -5,31 +5,28 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+LAYER_MARKER = "▲"
+STATIC_MARKER = "¹"
+
 namespace :hitobito do
+  desc "Print group tree structure"
+  task :groups, [:print_types] => [:environment] do |_t, args| # rubocop:disable Rails/RakeEnvironment
+    args.with_defaults({print_types: false})
+    print_types = args[:print_types].to_s == "true"
+
+    require_relative "../../app/utils/group_structure"
+    structure = GroupStructure.from_classes
+    puts structure.to_markdown(include_roles: false, print_types:)
+  end
+
   desc "Print all groups, roles and permissions"
-  task :roles, [:with_classes] => [:environment] do |_t, args| # rubocop:disable Rails/RakeEnvironment
-    args.with_defaults({with_classes: false})
-    with_classes = args[:with_classes].to_s == "true"
+  task :roles, [:print_types] => [:environment] do |_t, args| # rubocop:disable Rails/RakeEnvironment
+    args.with_defaults({print_types: false})
+    print_types = args[:print_types].to_s == "true"
 
-    group_tree = Group.subclasses.index_by(&:label).map { |label, klass|
-      [label, klass.children.map(&:label)]
-    }.to_h
-
-    Role::TypeList.new(Group.root_types.first, include_empty: true).each do |layer, groups|
-      super_layers = group_tree.select { |_key, list| list.include?(layer) }.keys
-      super_layer_tag = " < #{super_layers.join(", ")}" if super_layers.any?
-
-      puts "    * #{layer}#{super_layer_tag}"
-      groups.each do |group, roles|
-        puts "      * #{group}"
-        roles.each do |r|
-          twofa_tag = "2FA " if r.two_factor_authentication_enforced
-          role_class_info = "  --  (#{r})" if with_classes
-
-          puts "        * #{r.label}: #{twofa_tag}#{r.permissions.inspect}#{role_class_info}"
-        end
-      end
-    end
+    require_relative "../../app/utils/group_structure"
+    structure = GroupStructure.from_classes
+    puts structure.to_markdown(include_roles: true, print_types:)
   end
 
   namespace :roles do
@@ -37,7 +34,12 @@ namespace :hitobito do
       stdout, _stderr, status = Open3.capture3("rake app:hitobito:roles")
       raise "failed to generate role docs with `rake app:hitobito:roles`" unless status.success?
 
-      roles = "#{stdout}\n(Output of rake app:hitobito:roles)"
+      roles = [
+        stdout,
+        "---",
+        "Output of rake app:hitobito:roles",
+        "🛈 use rake app:hitobito:roles:update_readme to update it."
+      ].join("  \n")
       start_tag = "<!-- roles:start -->"
       end_tag = "<!-- roles:end -->"
       pattern = /#{start_tag}(.*)#{end_tag}/m
@@ -144,7 +146,7 @@ namespace :hitobito do
 
   desc "Parse Structure and output classes and translations"
   task :parse_structure, [:filename] => [:environment] do |_t, args|
-    require_relative "../../app/domain/structure_parser"
+    require_relative "../../app/utils/group_structure"
     args.with_defaults({
       filename: "./structure.txt"
     })
@@ -153,48 +155,36 @@ namespace :hitobito do
     dry_run = ENV["DRY_RUN"] == "true"
 
     puts "-------- Parsing #{file}"
-    parser = StructureParser.new(
-      file.read,
-      common_indent: 4,
-      shiftwidth: 2,
-      list_marker: "*",
-      allowed_permissions: Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
-    )
-    puts parser.inspect if dry_run
-    parser.parse
-    if parser.valid?
-      puts "Structure and Permissions seem valid."
-    else
-      puts(*parser.errors)
-      puts
-      raise "Inputfile seems invalid."
+    structure = GroupStructure.parse(file.read)
+    puts structure.inspect if dry_run
+
+    puts "-------- Generating classes"
+    classes = structure.to_ruby_classes
+    classes.each do |filename, content|
+      puts "  #{filename}"
+      puts content if dry_run
     end
 
-    puts "-------- Groups and Roles as classes ------"
-    group_path = file.dirname.join("app", "models", "group")
-    puts "writing classes to #{group_path}"
-    parser.output_groups.each do |fn, content|
-      if dry_run
-        puts fn, content
-      else
+    puts "-------- Generating translations"
+    translations = structure.to_translations
+    puts translations if dry_run
+
+    unless dry_run
+      puts "-------- Writing classes to disk"
+      group_path = file.dirname.join("app", "models", "group")
+      puts "writing classes to #{group_path}"
+      classes.each do |fn, content|
         group_path.join(fn).write(content)
         print "."
       end
-    end
-    puts ""
+      puts ""
 
-    puts "-------- Translations for those -----------"
-    locale_path = file.dirname.join("config", "locales").children.first
-    if dry_run
-      puts locale_path
-      puts parser.output_translations
-    else
-      locale_path.write(parser.output_translations)
+      puts "-------- Writing translations to disk"
+      locale_path = file.dirname.join("config", "locales").children.first
+      locale_path.write(translations)
       puts "written to #{locale_path}"
-    end
 
-    puts "-------- Done."
-    unless dry_run
+      puts "-------- Done."
       puts <<~MSG
 
         Next steps:
@@ -204,7 +194,7 @@ namespace :hitobito do
 
           rake app:hitobito:roles:update_readme
 
-        works as intended. Take a lookt at
+        works as intended. Take a look at
 
           #{file.dirname.glob("app/models/*/group.rb").first}
 

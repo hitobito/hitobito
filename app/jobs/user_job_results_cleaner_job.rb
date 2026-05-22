@@ -15,21 +15,25 @@ class UserJobResultsCleanerJob < RecurringJob
   private
 
   def clean_up_user_job_results
-    UserJobResult.left_joins(:delayed_job).where(orphaned).or(older_than_a_day).find_each(&:destroy)
-  end
+    base = UserJobResult.left_joins(:delayed_job)
 
-  def orphaned
-    <<~SQL.squish
-      (user_job_results.delayed_job_id IS NULL)
-      OR
-      (
-        user_job_results.end_timestamp IS NULL
-        AND (delayed_jobs.id IS NULL OR delayed_jobs.failed_at IS NOT NULL)
-      )
-    SQL
-  end
+    # Remove records where job has completed more than one day ago
+    old_records = base.where(end_timestamp: ..1.day.ago)
 
-  def older_than_a_day
-    UserJobResult.where("end_timestamp < :yesterday", yesterday: 1.day.ago)
+    # Remove records without an associated delayed job
+    no_job_id = base.where(delayed_job_id: nil)
+
+    # Remove records where job is uncompleted and delayed job id doesnt point to a record
+    incomplete_missing_job = base.where(end_timestamp: nil, delayed_jobs: { id: nil })
+
+    # Remove records where job is uncompleted but associated delayed job has failed
+    incomplete_failed_job =
+      base.where(end_timestamp: nil).where.not(delayed_jobs: { failed_at: nil })
+
+    old_records
+      .or(no_job_id)
+      .or(incomplete_missing_job)
+      .or(incomplete_failed_job)
+      .find_each(&:destroy!)
   end
 end

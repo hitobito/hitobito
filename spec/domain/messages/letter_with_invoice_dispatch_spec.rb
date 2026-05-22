@@ -40,6 +40,11 @@ describe Messages::LetterWithInvoiceDispatch do
     expect(message.invoice_run.invalid_recipient_ids).to eq []
   end
 
+  it "running twice raises error" do
+    dispatch.run
+    expect { dispatch.run }.to raise_error("Message #{message.id} already processed")
+  end
+
   it "creates and issues invoice" do
     expect { dispatch.run }.to change { Invoice.count }.by(1)
 

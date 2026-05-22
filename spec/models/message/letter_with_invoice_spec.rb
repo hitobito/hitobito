@@ -30,7 +30,7 @@ describe Message::LetterWithInvoice do
 
   it "builds valid invoice_run" do
     message = messages(:with_invoice)
-    expect(message.invoice_run).to be_valid
+    expect(message.build_invoice_run(message.invoice_run_attributes)).to be_valid
     message.save
     expect(message.invoice_run).to be_persisted
   end

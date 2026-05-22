@@ -160,7 +160,6 @@ describe UserJobResult do
 
     it "should correctly set progress with 1 percent steps" do
       subject.update!(reports_progress: true)
-      subject.update!(progress: 0)
 
       calculated_progress_values = []
       calculated_progress_values << subject.progress
@@ -175,7 +174,6 @@ describe UserJobResult do
 
     it "should correctly set progress with 10 percent steps" do
       subject.update!(reports_progress: true)
-      subject.update!(progress: 0)
 
       calculated_progress_values = []
       calculated_progress_values << subject.progress
@@ -266,6 +264,30 @@ describe UserJobResult do
 
       expect { user_job_result.report_failure! }
         .to have_broadcasted_notification_and_badge_update
+    end
+
+    it "should broadcast after set timeout only when updating progress" do
+      freeze_time
+
+      user_job_result = subject
+      user_job_result.update!(reports_progress: true)
+
+      broadcast_time = Time.current
+
+      expect { user_job_result.report_progress!(10, 100) }.to have_broadcasted_to(update_channel_name)
+      expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
+
+      expect { user_job_result.report_progress!(15, 100) }.not_to have_broadcasted_to(update_channel_name)
+      expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
+
+      travel(6.seconds)
+      broadcast_time = Time.current
+
+      expect { user_job_result.report_progress!(20, 100) }.to have_broadcasted_to(update_channel_name)
+      expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
+
+      expect { user_job_result.report_progress!(25, 100) }.not_to have_broadcasted_to(update_channel_name)
+      expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
     end
 
     it "should still successfully complete job if broadcasting fails with redis exceptions" do

@@ -10,6 +10,8 @@
 # The main job is to retrieve all mails from the inbox and (mostly) enqueue
 # them for later dispatch to the intended recipients. Sending is handled in
 # a separate job and class.
+#
+# This whole class is the definition of a complexicated side-effect
 class MailingLists::BulkMail::Retriever
   LOG_PREFIX = "BulkMail Retriever: "
 
@@ -24,11 +26,19 @@ class MailingLists::BulkMail::Retriever
     return abort_imap_unavailable unless imap_server_available?
 
     mail_uids
-      .map { |uid| fetch_mail(uid) }.compact
-      .map { |imap_mail| reject_invalid_mails(imap_mail) }.compact
-      .map { |imap_mail| handle_edge_cases(imap_mail) }.compact
-      .map { |uid, bulk_mail| enqueue_for_multiplexing(uid, bulk_mail) }.compact
+      .filter_map { |uid| fetch_mail(uid) }
+      .filter_map { |imap_mail| process_mail(imap_mail) }
       .empty? # nothing left to handle
+  end
+
+  def process_mail(imap_mail)
+    valid_mail = reject_invalid_mail(imap_mail)
+    return nil if valid_mail.blank?
+
+    bulk_mail = prepare_bulk_mail(valid_mail)
+    return nil if bulk_mail.blank?
+
+    enqueue_for_multiplexing(valid_mail.uid, bulk_mail)
   end
 
   private
@@ -39,7 +49,7 @@ class MailingLists::BulkMail::Retriever
     nil
   end
 
-  def handle_edge_cases(imap_mail)
+  def prepare_bulk_mail(imap_mail)
     mail_log = create_mail_log(imap_mail)
     mailing_list = assign_mailing_list(imap_mail)
 
@@ -54,10 +64,10 @@ class MailingLists::BulkMail::Retriever
       return reject_forbidden_sender(mail_log, imap_mail, bulk_mail)
     end
 
-    [imap_mail.uid, bulk_mail]
+    bulk_mail
   end
 
-  def reject_invalid_mails(imap_mail)
+  def reject_invalid_mail(imap_mail)
     validator = validator(imap_mail)
 
     return mail_processed_before!(imap_mail) if validator.processed_before?
@@ -101,6 +111,8 @@ class MailingLists::BulkMail::Retriever
   def abort_imap_unavailable
     imap_address = imap.config(:address)
     log_info("cannot connect to IMAP server #{imap_address}, terminating.")
+
+    false
   end
 
   def validator(mail)

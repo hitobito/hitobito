@@ -16,6 +16,7 @@ RSpec.describe MigrateInvoiceRunsReceiverIds, type: :migration do
   end
 
   before do
+    ActiveRecord::Migration.verbose = false
     migration_context.down(previous_version)
     InvoiceRun.reset_column_information
   end
@@ -23,6 +24,7 @@ RSpec.describe MigrateInvoiceRunsReceiverIds, type: :migration do
   after do
     migration_context.up
     InvoiceRun.reset_column_information
+    ActiveRecord::Migration.verbose = true
   end
 
   context "invoice_runs with group as receiver" do

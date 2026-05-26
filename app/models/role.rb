@@ -23,8 +23,10 @@
 #
 # Indexes
 #
-#  index_roles_on_person_id_and_group_id  (person_id,group_id)
-#  index_roles_on_type                    (type)
+#  index_roles_on_group_id_and_person_id_and_start_on_and_end_on  (group_id,person_id,start_on,end_on)
+#  index_roles_on_person_id_and_group_id                          (person_id,group_id)
+#  index_roles_on_person_id_and_start_on_and_end_on               (person_id,start_on,end_on)
+#  index_roles_on_type                                            (type)
 #
 class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   has_paper_trail meta: {main_id: ->(r) { r.person_id },

@@ -249,6 +249,10 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def attr_used?(attr)
+    used_attributes.include?(attr)
+  end
+
   ### INSTANCE METHODS
 
   def to_s(_format = :default)

@@ -35,11 +35,9 @@ module PostalAddress
 
   private
 
-  # rubocop:todo Layout/LineLength
-  # to validate zip codes to swiss zip code format when country is nil, we return :ch format as the default
-  # rubocop:enable Layout/LineLength
-  # option when country is nil
+  # to validate zip codes when country is nil, we return the
+  # highest priority country as the fallback when country is nil
   def zip_country
-    self[:country] || :ch
+    self[:country] || Settings.countries.prioritized.first.downcase
   end
 end

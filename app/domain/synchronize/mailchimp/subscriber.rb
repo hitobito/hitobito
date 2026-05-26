@@ -20,25 +20,34 @@ module Synchronize
       end
 
       def self.recipients(mailing_list)
-        people = mailing_list.people.pluck(:id)
-        Person.left_joins(:people_manageds).distinct
-          .where(people_manageds: {managed_id: people})
-          .or(Person.distinct.where(id: people))
+        if Settings.mailchimp.subscribe_managers
+          people_ids = mailing_list.people.pluck(:id)
+          Person.left_joins(:people_manageds).distinct
+            .where(people_manageds: {managed_id: people_ids})
+            .or(Person.distinct.where(id: people_ids))
+        else
+          mailing_list.people
+        end
       end
 
       def self.default_and_additional_addresses(mailing_list)
         people = recipients(mailing_list)
-        additional_emails = AdditionalEmail.where(contactable_type: Person.sti_name,
-          contactable_id: people.collect(&:id),
-          mailings: true).to_a
+        additional_emails = fetch_additional_emails(people)
         people.flat_map do |person|
-          additional_email_subscribers = additional_emails.select do |additional_email|
-            additional_email.contactable_id == person.id
-          end.map do |additional_email|
-            new(person, additional_email.email)
-          end
-          [new(person, person.email)] + additional_email_subscribers
+          [new(person, person.email)] +
+            additional_emails[person.id].map { |email| new(person, email) }
         end
+      end
+
+      def self.fetch_additional_emails(people)
+        result = Hash.new { |h, k| h[k] = [] }
+        AdditionalEmail.where(
+          contactable_type: Person.sti_name,
+          contactable_id: people.map(&:id),
+          mailings: true
+        ).pluck(:contactable_id, :email)
+          .each { |(id, email)| result[id] << email }
+        result
       end
 
       def self.default_addresses(mailing_list)

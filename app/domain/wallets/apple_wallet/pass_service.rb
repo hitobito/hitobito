@@ -129,11 +129,12 @@ module Wallets
             ],
             auxiliaryFields: [
               (if pass.valid_until
-                 {key: "valid_until",
-                  label: "valid_until_label",
-                  value: pass.valid_until.end_of_day.iso8601,
-                  dateStyle: "PKDateStyleShort",
-                  timeStyle: "PKDateStyleNone"
+                 {
+                   key: "valid_until",
+                   label: "valid_until_label",
+                   value: pass.valid_until.end_of_day.iso8601,
+                   dateStyle: "PKDateStyleShort",
+                   timeStyle: "PKDateStyleNone"
                  }
                end)
             ].compact,

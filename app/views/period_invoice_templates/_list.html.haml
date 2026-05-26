@@ -7,5 +7,10 @@
   - t.col(t.sort_header(:name)) do |template|
     = link_to template.name, group_period_invoice_template_path(template.group, template)
   - t.sortable_attrs :start_on, :end_on
+  - action_col(t) do |e|
+    - link_to(icon(:copy),
+      new_group_period_invoice_template_path(@group, source_id: e.id),
+      title: t('events.global.link.duplicate'),
+      alt: t('events.global.link.duplicate'))
   - action_col_edit(t)
 

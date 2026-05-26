@@ -10,7 +10,7 @@
 - if can?(:new, entry)
   = action_button(t('events.global.link.duplicate'),
                   new_group_event_path(@group, source_id: entry.id),
-                  :book)
+                  :copy)
 = export_events_ical_button
 - if can?(:update, entry)
   = action_button(t('.copy_share_link'),

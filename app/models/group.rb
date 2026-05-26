@@ -70,6 +70,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include Encryptable
   include I18nEnums
   include FullTextSearchable
+  include UsedAttributes
 
   PROVIDER_VALUES = %w[aspsms].freeze
   ADDRESS_POSITION_VALUES = %w[left right].freeze
@@ -96,7 +97,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   # This must contain the superior attributes as well.
-  class_attribute :used_attributes
   self.used_attributes = [
     :name, :short_name, :email, :contact_id, :text_message_username,
     :text_message_password, :text_message_provider, :text_message_originator,
@@ -225,11 +225,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### CLASS METHODS
 
   class << self
-    # Is the given attribute used in the current STI class
-    def attr_used?(attr)
-      used_attributes.include?(attr)
-    end
-
     # order groups based on order in Group.all_types
     # group.lft as second order attribute, to get same output for all
     # queries where multiple groups have the same type
@@ -247,10 +242,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
         all_types
       end
     end
-  end
-
-  def attr_used?(attr)
-    used_attributes.include?(attr)
   end
 
   ### INSTANCE METHODS

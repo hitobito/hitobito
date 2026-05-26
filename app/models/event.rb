@@ -93,6 +93,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   include Event::ContactAttrs
   include FullTextSearchable
   include Globalized
+  include UsedAttributes
 
   # To prevent issues of having paper trail versions when we don't want/need them, we add all
   # translated attributes to the skip list and create own paper trail versions on the
@@ -335,11 +336,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
             "(participant_count < events.maximum_participants)")
     end
 
-    # Is the given attribute used in the current STI class
-    def attr_used?(attr)
-      used_attributes.include?(attr)
-    end
-
     def label
       model_name.human
     end
@@ -473,10 +469,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
         event.admin_questions.build(q.attributes.excluding("id"))
       end
     end
-  end
-
-  def attr_used?(attr)
-    self.class.used_attributes.include?(attr)
   end
 
   def places_available?

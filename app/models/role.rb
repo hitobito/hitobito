@@ -37,13 +37,13 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   include NormalizedLabels
   include TypeId
   include DateYearValidatable
+  include UsedAttributes
 
   validates_date_year :start_on, :end_on
 
   ### ATTRIBUTES
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
-  class_attribute :used_attributes
   self.used_attributes = [:label, :start_on, :end_on]
 
   # Attributes that may only be modified by people from superior layers.
@@ -174,11 +174,6 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
 
       with_inactive.where(end_on: [nil,
         [Settings.people.ended_roles_readable_for.seconds.ago.to_date..]])
-    end
-
-    # Is the given attribute used in the current STI class
-    def attr_used?(attr)
-      used_attributes.include?(attr)
     end
   end
 

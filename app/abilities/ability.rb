@@ -32,6 +32,7 @@ class Ability
     PersonAbility,
     Person::AddRequestAbility,
     QualificationAbility,
+    QuestionTemplateAbility,
     RoleAbility,
     SelfRegistrationReasonAbility,
     ServiceTokenAbility,

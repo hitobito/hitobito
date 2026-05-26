@@ -25,6 +25,8 @@ class Event::QuestionTemplate < ActiveRecord::Base
   belongs_to :question, dependent: :destroy
   belongs_to :group
 
+  accepts_nested_attributes_for :question
+
   scope :in_hierarchy, ->(groups) {
     layer_ids = groups.map(&:layer_group_id).uniq
     hierarchy_ids = groups.flat_map { |g| g.hierarchy.pluck(:layer_group_id) }.uniq
@@ -57,5 +59,9 @@ class Event::QuestionTemplate < ActiveRecord::Base
                                                                      .merge(template_translations))
       end
     end
+  end
+
+  def to_s
+    question.to_s
   end
 end

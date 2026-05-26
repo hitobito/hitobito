@@ -217,6 +217,7 @@ de:
     archive: "Archivieren"
     delete: Löschen
     edit_service_token: API-Keys
+    edit_event_question_template: Vorlagen Anmeldeangabe Anlässe
     edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
@@ -2129,6 +2130,11 @@ de:
   self_registration_reasons:
     destroy:
       foreign_key_error: Es gibt Personen, die diesen Eintrittsgrund verwenden, löschen ist daher nicht möglich.
+
+  question_templates:
+    form:
+      default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
+      inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
 
   role_decorator:
     terminates_on: Austritt per %{date}

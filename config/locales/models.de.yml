@@ -311,6 +311,9 @@ de:
       event/question:
         one: Anmeldeangabe
         other: Anmeldeangaben
+      event/question_template:
+        one: Vorlage Anmeldeangabe Anlässe
+        other: Vorlagen Anmeldeangabe Anlässe
       event/answer:
         one: Antwort auf Anmeldeangabe
         other: Antworten auf Anmeldeangaben
@@ -891,6 +894,13 @@ de:
         multiple_choices: Mehrfachauswahl
         required: Obligatorisch
         sensitive: Sensibel
+
+      event/question_template:
+        question: Frage
+        default: Default
+        event_type: Anlasstyp
+        inherit: Vererbung
+
 
       admin_questions:
         question: Frage

@@ -53,7 +53,7 @@ class Event::Answer < ActiveRecord::Base
   def to_s(format = :default)
     # Used for log, in the log we want to show to what question the answer
     # belongs to. The actual change (answer) is inside the version changelog
-    return question.label if format == :long
+    return question.to_s if format == :long
 
     answer
   end

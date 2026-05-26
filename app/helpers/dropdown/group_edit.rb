@@ -28,6 +28,7 @@ module Dropdown
 
     def setting_items
       edit_service_token_item if template.can?(:index_service_tokens, group)
+      edit_event_question_template_item if template.can?(:index_question_templates, group)
       edit_calendar_feeds_item
     end
 
@@ -44,6 +45,12 @@ module Dropdown
       add_item(translate(:edit_service_token), template.group_service_tokens_path(group))
     end
 
+    def edit_event_question_template_item
+      add_item(
+        translate(:edit_event_question_template), template.group_question_templates_path(group)
+      )
+    end
+
     def edit_calendar_feeds_item
       add_item(translate(:edit_calendar_feeds), template.group_calendars_path(group))
     end
@@ -57,14 +64,20 @@ module Dropdown
     end
 
     def archive_group_item
-      add_item(translate(:archive), template.archive_group_path(group),
-        data: {confirm: template.ti(:confirm_archive), method: :post})
+      add_item(
+        translate(:archive),
+        template.archive_group_path(group),
+        data: {confirm: template.ti(:confirm_archive), method: :post}
+      )
     end
 
     def delete_group_item
       add_divider unless group.archived?
-      add_item(translate(:delete), template.group_path(group),
-        data: {confirm: template.ti(:confirm_delete), method: :delete})
+      add_item(
+        translate(:delete),
+        template.group_path(group),
+        data: {confirm: template.ti(:confirm_delete), method: :delete}
+      )
     end
   end
 end

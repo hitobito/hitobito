@@ -67,6 +67,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
 
+      it "may show question_templates" do
+        is_expected.to be_able_to(:index_question_templates, group)
+      end
+
       it "may manage person tags" do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -121,6 +125,10 @@ describe GroupAbility do
         is_expected.not_to be_able_to(:index_service_tokens, group)
       end
 
+      it "may not index question_templates" do
+        is_expected.not_to be_able_to(:index_question_templates, group)
+      end
+
       it "may manage person tags" do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -169,6 +177,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
 
+      it "may show question_templates" do
+        is_expected.to be_able_to(:index_question_templates, group)
+      end
+
       it "may manage person tags" do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -199,6 +211,10 @@ describe GroupAbility do
 
       it "may not show service tokens" do
         is_expected.not_to be_able_to(:index_service_tokens, group)
+      end
+
+      it "may not show question_templates" do
+        is_expected.not_to be_able_to(:index_question_templates, group)
       end
 
       it "may not manage person tags" do
@@ -263,6 +279,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
 
+      it "may show question_templates" do
+        is_expected.to be_able_to(:index_question_templates, group)
+      end
+
       it "may manage person tags" do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -307,6 +327,10 @@ describe GroupAbility do
         is_expected.to be_able_to(:index_service_tokens, group)
       end
 
+      it "may show question_templates" do
+        is_expected.to be_able_to(:index_question_templates, group)
+      end
+
       it "may manage person tags" do
         is_expected.to be_able_to(:manage_person_tags, group)
       end
@@ -349,6 +373,10 @@ describe GroupAbility do
 
       it "may not show service tokens" do
         is_expected.not_to be_able_to(:index_service_tokens, group)
+      end
+
+      it "may not show question_templates" do
+        is_expected.not_to be_able_to(:index_question_templates, group)
       end
 
       it "may not manage person tags" do
@@ -421,6 +449,10 @@ describe GroupAbility do
 
       it "mayi not show service tokens" do
         is_expected.not_to be_able_to(:index_service_tokens, group)
+      end
+
+      it "may not show question_templates" do
+        is_expected.not_to be_able_to(:index_question_templates, group)
       end
 
       it "may not manage person tags" do
@@ -507,6 +539,10 @@ describe GroupAbility do
 
       it "may not show service tokens" do
         is_expected.not_to be_able_to(:index_service_tokens, group)
+      end
+
+      it "may not show question_templates" do
+        is_expected.not_to be_able_to(:index_question_templates, group)
       end
 
       it "may not manage person tags" do

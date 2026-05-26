@@ -11,6 +11,7 @@ describe PassPopulateJob do
   let(:definition) { pass_definitions(:top_layer_pass) }
   let(:grant) { pass_grants(:top_layer_grant) }
   let(:person) { people(:top_leader) }
+  let(:bottom_member) { people(:bottom_member) }
 
   before do
     allow_any_instance_of(PassPopulateJob).to receive(:enqueue!)
@@ -54,11 +55,27 @@ describe PassPopulateJob do
     end
 
     it "does not create passes for ineligible people" do
-      bottom_member = people(:bottom_member)
-
       described_class.new(definition.id).perform
 
       expect(Pass.find_by(person: bottom_member, pass_definition: definition)).to be_nil
+    end
+
+    it "ignores and continous on PG::UniqueViolation" do
+      pass = Fabricate(:pass, person: person, pass_definition: definition, state: :eligible)
+      pass.update_column(:state, "ended")
+
+      Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: bottom_member)
+      recompute_state = Passes::PassUpdater.method(:recompute_state!)
+
+      expect(Passes::PassUpdater).to receive(:recompute_state!).twice do |pass|
+        fail PG::UniqueViolation if pass.person == bottom_member
+        recompute_state.call(pass)
+      end
+
+      expect {
+        described_class.new(definition.id).perform
+      }.to not_change(Pass, :count)
+        .and change { pass.reload.state }.to eq("eligible")
     end
   end
 end

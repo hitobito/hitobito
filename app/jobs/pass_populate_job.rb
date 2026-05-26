@@ -20,9 +20,15 @@ class PassPopulateJob < BaseJob
     pass_definition = PassDefinition.find(@pass_definition_id)
     subscribers = Passes::Subscribers.new(pass_definition)
 
-    subscribers.people.find_each do |person|
+    subscribers.people.order(:id).find_each do |person|
       pass = Pass.find_or_initialize_by(person: person, pass_definition: pass_definition)
-      Passes::PassUpdater.recompute_state!(pass)
+      recompute_state!(pass)
     end
+  end
+
+  def recompute_state!(pass)
+    Passes::PassUpdater.recompute_state!(pass)
+  rescue PG::UniqueViolation # pass has already been created by role callack, noop
+    Rails.logger.info("Pass(#{pass.id}) already exists, ignoring")
   end
 end

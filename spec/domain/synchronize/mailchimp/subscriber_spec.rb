@@ -104,7 +104,7 @@ describe Synchronize::Mailchimp::Subscriber do
       end
     end
 
-    context "without subscribe_managers setting" do
+    context "with subscribe_managers setting disabled" do
       around do |example|
         Settings.mailchimp.subscribe_managers = false
         example.run

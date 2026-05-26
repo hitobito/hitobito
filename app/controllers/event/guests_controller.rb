@@ -10,9 +10,7 @@ class Event::GuestsController < Wizards::BaseController
 
   self.wizard_action = :new
 
-  authorize_resource :guest, class: Event::Guest
-
-  prepend_before_action :guest_of
+  prepend_before_action :authorize_update_main_person
   before_action :enforce_guest_limit
   before_action :init_answers
 
@@ -52,10 +50,11 @@ class Event::GuestsController < Wizards::BaseController
   end
 
   def guest_of
-    @guest_of ||= event.participations.find_by!(
-      participant: current_person,
-      id: params[:id]
-    )
+    @guest_of ||= event.participations.find(params[:id])
+  end
+
+  def authorize_update_main_person
+    authorize! :update, guest_of
   end
 
   def enforce_guest_limit

@@ -3,6 +3,34 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
 
+/**
+ * Handles form field inheritance from predefined value sets.
+ *
+ * This controller allows users to inherit multiple form field values from a selected
+ * option in a datalist. Each option in the datalist contains data attributes that
+ * specify which target fields to populate and what values to use.
+ *
+ * When a user selects an option to inherit from, the controller populates all
+ * associated form fields with the predefined values. Users can then override
+ * individual fields while preserving their custom values (as long as they differ
+ * from the defaults).
+ *
+ * The controller expects:
+ * - A datalist with options containing data-source-id, data-target-field, data-value,
+ *   and data-default attributes
+ * - Form fields with IDs matching the data-target-field values
+ *
+ * Usage:
+ *   <div data-controller="form-field-inheritance">
+ *     <select data-action="change->form-field-inheritance#inherit">
+ *       <option value="template1">Template 1</option>
+ *     </select>
+ *     <datalist>
+ *       <option data-source-id="template1" data-target-field="field1" data-value="foo" data-default="bar">
+ *     </datalist>
+ *     <input id="field1">
+ *   </div>
+ */
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {

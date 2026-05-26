@@ -3,6 +3,36 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
 
+/**
+ * Toggles visibility of form fields based on user input.
+ *
+ * This controller dynamically shows or hides form elements (toggle target and
+ * optionally toggleOpposite target) based on the state of another form field.
+ * It supports multiple toggle strategies:
+ *
+ * - Select elements: Toggles based on the selected option's data-visibility attribute
+ *   ("true" to show, anything else to hide)
+ *
+ * - Input elements with hideOn value: Hides the target when the input value matches
+ *   any value in the hideOn array
+ *
+ * - Input elements with hideOnBlank: Hides the target when the input is empty,
+ *   shows it when it has a value
+ *
+ * - Default toggle: Simple show/hide toggle for other input types
+ *
+ * The toggleOpposite target provides inverse visibility (when toggle is shown,
+ * toggleOpposite is hidden, and vice versa).
+ *
+ * Usage:
+ *   <div data-controller="form-field-toggle"
+ *        data-form-field-toggle-hide-on-value="["hidden_value"]"
+ *        data-form-field-toggle-hide-on-blank-value="true">
+ *     <input data-action="input->form-field-toggle#toggle">
+ *     <div data-form-field-toggle-target="toggle">Conditional content</div>
+ *     <div data-form-field-toggle-target="toggleOpposite">Inverse content</div>
+ *   </div>
+ */
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {

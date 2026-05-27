@@ -125,4 +125,4 @@ The Hitobito logo is a registered trademark of Hitobito LTD, Switzerland.
 
 ---
 
-btw: Hitobito 人人 [means](https://www.wordsense.eu/%E4%BA%BA%E4%BA%BA/) "everyone"
+btw: Hitobito 人人 [means](https://en.wiktionary.org/wiki/%E4%BA%BA%E4%BA%BA) "everyone"

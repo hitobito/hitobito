@@ -1,0 +1,7 @@
+apple_wallet:
+  pass_type_identifier: "pass.com.example.membership"
+  team_identifier: "ABC123DEF4"
+  certificate_path: "config/apple-wallet-pass.cer"
+  key_path: "config/apple-wallet-pass.key"
+  key_password: ""
+  wwdr_certificate_path: "config/AppleWWDRCAG4.cer"

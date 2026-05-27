@@ -1,0 +1,18 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+- title t('.title')
+
+= crud_table do |t|
+  - t.attr(PassDefinition.human_attribute_name(:name)) do |p|
+    = content_tag(:strong, link_to(p.pass_definition.name, polymorphic_path(parents + [p])))
+  - t.sortable_attrs(:state, :valid_from, :valid_until)
+  - action_col(t) do |p|
+    - if can_add_pass_to?(p, :google)
+      = action_button t('.add_to_google_wallet'), google_add_to_wallet_group_person_pass_path(*parents, p)
+    - if can_add_pass_to?(p, :apple)
+      = action_button t('.add_to_apple_wallet'), apple_download_pkpass_group_person_pass_path(*parents, p, format: :pkpass)
+  - action_col(t) do |p|
+    = action_button t('.download_pdf'), polymorphic_path(parents + [p], format: :pdf)

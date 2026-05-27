@@ -260,6 +260,72 @@ namespace :dev do
     end
   end
 
+  namespace :passes do
+    # This cannot be a regular seed script in db/seeds/development/ because core seeds run
+    # before wagon seeds, and the root group is only created during wagon seeding. A seed script
+    # placed in the core would find no root group and return early. Instead, this task is invoked
+    # automatically after wagon:seed via an enhance block in lib/tasks/wagon.rake.
+    desc "Seed a PassDefinition on the root group with a grant covering all available role types"
+    task seed_definition: :environment do
+      abort("This is for development purposes only.") unless Rails.env.development?
+
+      root = Group.roots.first || abort("No root group found. Run db:seed first.")
+      abort("A PassDefinition for the root group exists.") if PassDefinition.exists?(owner: root)
+
+      definition = PassDefinition.new(
+        owner: root,
+        template_key: "default",
+        name: "#{root.name} Mitgliedschaft",
+        background_color: "#0066cc"
+      )
+
+      definition.public_send(:"logo_icon_#{I18n.locale}").attach(
+        io: Rails.root.join("spec", "fixtures", "files", "logo-icon.png").open,
+        filename: "icon.png",
+        content_type: "image/png"
+      )
+
+      definition.public_send(:"logo_banner_#{I18n.locale}").attach(
+        io: Rails.root.join("spec", "fixtures", "files", "logo-banner.png").open,
+        filename: "banner.png",
+        content_type: "image/png"
+      )
+
+      definition.save!
+
+      puts "Created PassDefinition ##{definition.id}: #{definition.name}"
+
+      Rails.application.eager_load!
+
+      all_role_types = Role.all_types
+        .map(&:sti_name)
+        .sort
+
+      puts "Found #{all_role_types.size} role types"
+
+      grant = PassGrant.find_or_initialize_by(pass_definition: definition, grantor: root)
+      grant.role_types = all_role_types
+      grant.save!
+
+      puts "PassGrant ##{grant.id} saved for root group with #{all_role_types.size} role types:"
+      all_role_types.each { |t| puts "  - #{t}" }
+    end
+
+    desc "Generate a PDF for a given pass ID and write it to tmp/"
+    task :generate_pdf, [:pass_id] => [:environment] do |_, args|
+      pass_id = args.fetch(:pass_id) { abort("Usage: rake dev:passes:generate_pdf[PASS_ID]") }
+      pass = Pass.find(pass_id)
+
+      template = Passes::TemplateRegistry.fetch(pass.pass_definition.template_key)
+      generator = template.pdf_class.new(pass)
+
+      output_path = Rails.root.join("tmp", generator.filename)
+      File.binwrite(output_path, generator.render)
+
+      puts "PDF written to #{output_path}"
+    end
+  end
+
   namespace :help_texts do
     desc "Create all helptexts"
     task create: [:environment] do

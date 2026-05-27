@@ -1,0 +1,225 @@
+#  Copyright (c) 2026, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+require "spec_helper"
+
+describe PassDecorator do
+  let(:person) { people(:top_leader) }
+  let(:definition) { Fabricate(:pass_definition, owner: groups(:top_layer)) }
+  let(:pass_record) do
+    Fabricate.build(:pass,
+      person: person,
+      pass_definition: definition,
+      state: :eligible,
+      valid_from: 1.month.ago.to_date,
+      valid_until: nil)
+  end
+
+  subject(:decorator) { described_class.new(pass_record) }
+
+  describe "#logo_icon" do
+    it "returns the logo icon attachment" do
+      attachment = decorator.logo_icon(:de)
+      expect(attachment).to be_attached
+    end
+
+    it "returns fallback locale attachment when requested locale not attached" do
+      expect(definition.logo_icon_en).not_to be_attached
+      I18n.with_locale(:en) do
+        attachment = decorator.logo_icon(:en)
+        expect(attachment).to be_attached
+        expect(attachment).to eq(definition.logo_icon_de)
+      end
+    end
+  end
+
+  describe "#eligible?" do
+    it "returns true when pass state is eligible" do
+      pass_record.state = :eligible
+      expect(decorator).to be_eligible
+    end
+
+    it "returns false when pass state is ended" do
+      pass_record.state = :ended
+      expect(decorator).not_to be_eligible
+    end
+
+    it "returns false when pass state is revoked" do
+      pass_record.state = :revoked
+      expect(decorator).not_to be_eligible
+    end
+  end
+
+  describe "#ended?" do
+    it "returns true when pass state is ended" do
+      pass_record.state = :ended
+      expect(decorator).to be_ended
+    end
+
+    it "returns false when pass state is eligible" do
+      pass_record.state = :eligible
+      expect(decorator).not_to be_ended
+    end
+
+    it "returns false when pass state is revoked" do
+      pass_record.state = :revoked
+      expect(decorator).not_to be_ended
+    end
+  end
+
+  describe "#valid_from" do
+    it "reads valid_from from the pass record" do
+      pass_record.valid_from = Date.new(2025, 1, 15)
+      expect(decorator.valid_from).to eq(Date.new(2025, 1, 15))
+    end
+  end
+
+  describe "#valid_until" do
+    it "reads valid_until from the pass record" do
+      pass_record.valid_until = Date.new(2026, 12, 31)
+      expect(decorator.valid_until).to eq(Date.new(2026, 12, 31))
+    end
+
+    it "returns nil when open-ended" do
+      pass_record.valid_until = nil
+      expect(decorator.valid_until).to be_nil
+    end
+  end
+
+  describe "#active?" do
+    it "returns true when eligible and within validity period" do
+      pass_record.state = :eligible
+      pass_record.valid_from = 1.month.ago.to_date
+      pass_record.valid_until = 1.month.from_now.to_date
+      expect(decorator).to be_active
+    end
+
+    it "returns true when eligible with open-ended validity" do
+      pass_record.state = :eligible
+      pass_record.valid_from = 1.month.ago.to_date
+      pass_record.valid_until = nil
+      expect(decorator).to be_active
+    end
+
+    it "returns false when not eligible" do
+      pass_record.state = :ended
+      expect(decorator).not_to be_active
+    end
+
+    it "returns false when valid_from is in the future" do
+      pass_record.state = :eligible
+      pass_record.valid_from = 1.month.from_now.to_date
+      expect(decorator).not_to be_active
+    end
+
+    it "returns false when valid_until is in the past" do
+      pass_record.state = :eligible
+      pass_record.valid_from = 2.months.ago.to_date
+      pass_record.valid_until = 1.day.ago.to_date
+      expect(decorator).not_to be_active
+    end
+  end
+
+  describe "#person" do
+    it "delegates to the pass record" do
+      expect(decorator.person).to eq(person)
+    end
+  end
+
+  describe "#member_number" do
+    it "returns zero-padded person id via WalletDataProvider" do
+      expect(decorator.member_number).to eq(person.id.to_s.rjust(8, "0"))
+    end
+  end
+
+  describe "#member_name" do
+    it "returns person full_name via WalletDataProvider" do
+      expect(decorator.member_name).to eq(person.full_name)
+    end
+  end
+
+  describe "#qrcode_value" do
+    it "returns a verification URL containing the pass verify_token" do
+      pass_record.save!
+      expect(decorator.qrcode_value).to be_a(String)
+      expect(decorator.qrcode_value).to include(pass_record.verify_token)
+    end
+  end
+
+  describe "#to_h" do
+    before { definition.save! }
+
+    it "returns a hash with all pass data" do
+      pass_record.valid_from = Date.new(2025, 6, 1)
+      pass_record.valid_until = Date.new(2026, 5, 31)
+
+      result = decorator.to_h
+
+      expect(result[:definition_id]).to eq(definition.id)
+      expect(result[:definition_name]).to eq(definition.name)
+      expect(result[:person_id]).to eq(person.id)
+      expect(result[:member_number]).to eq(person.id.to_s.rjust(8, "0"))
+      expect(result[:member_name]).to eq(person.full_name)
+      expect(result[:valid_from]).to eq(Date.new(2025, 6, 1))
+      expect(result[:valid_until]).to eq(Date.new(2026, 5, 31))
+      expect(result[:qrcode_value]).to be_a(String)
+    end
+  end
+
+  describe "#wallet_data_provider" do
+    it "returns a WalletDataProvider instance" do
+      expect(decorator.wallet_data_provider).to be_a(Passes::WalletDataProvider)
+    end
+
+    it "passes self (the decorator) to the provider" do
+      expect(decorator.wallet_data_provider.pass).to eq(decorator)
+    end
+
+    it "memoizes the provider" do
+      expect(decorator.wallet_data_provider).to be(decorator.wallet_data_provider)
+    end
+  end
+
+  describe "#pdf_background_color" do
+    it "strips hash prefix from color" do
+      definition.background_color = "#0066CC"
+      expect(decorator.pdf_background_color).to eq("0066CC")
+    end
+
+    it "defaults to white when color is blank" do
+      definition.background_color = nil
+      expect(decorator.pdf_background_color).to eq("FFFFFF")
+    end
+
+    it "defaults to white when color is empty string" do
+      definition.background_color = ""
+      expect(decorator.pdf_background_color).to eq("FFFFFF")
+    end
+  end
+
+  describe "#text_colors" do
+    context "with light background" do
+      before { definition.background_color = "#FFFFFF" }
+
+      it "returns dark text colors" do
+        colors = decorator.text_colors
+        expect(colors[:text]).to eq("333333")
+        expect(colors[:muted]).to eq("666666")
+        expect(colors[:label]).to eq("888888")
+      end
+    end
+
+    context "with dark background" do
+      before { definition.background_color = "#000000" }
+
+      it "returns light text colors" do
+        colors = decorator.text_colors
+        expect(colors[:text]).to eq("FFFFFF")
+        expect(colors[:muted]).to eq("CCCCCC")
+        expect(colors[:label]).to eq("AAAAAA")
+      end
+    end
+  end
+end

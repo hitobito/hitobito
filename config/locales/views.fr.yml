@@ -1820,6 +1820,14 @@ fr:
           success: Le login a été débloqué avec succès.
           error: Tu ne peux pas débloquer ton propre login.
 
+    passes:
+      index:
+        title: Pässe
+        show_pass: Anzeigen
+        add_to_google_wallet: Google Wallet
+        add_to_apple_wallet: Apple Wallet
+        download_pdf: Drucken
+
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
 
@@ -1862,6 +1870,9 @@ fr:
         many: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
         other: "%{count} %{role} ont reçu une demande d'accès pour leurs données personnelles. Des changements éventuels dus à cette importation doivent être ré-effectués après cette confirmation."
   people:
+    passes_aside:
+      title: Pässe
+
     addresses_sync:
       create:
         scheduled: La comparaison d'adresses a été lancée avec succès.
@@ -2452,6 +2463,15 @@ fr:
     status_valid: Adhésion valide
     status_invalid: Pas d'adhésion valide
 
+  passes:
+    verifications:
+      title: Pass-Verifizierung
+      status:
+        valid: Pass ist gültig
+        expired: Pass ist abgelaufen
+        invalid: Pass ist ungültig
+      failed: Dieser Pass konnte nicht verifiziert werden.
+
   wizards:
     steps:
       new_user_form:
@@ -2476,3 +2496,16 @@ fr:
   period_invoice_template:
     role_count_item_fields:
       choose_role_types: Sélectionner les types de rouleaux
+
+  wallets:
+    google:
+      generation_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
+    apple:
+      member_name: Mitglied
+      generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
+    pass:
+      member_name: Name
+      member_number: Mitgliedernummer
+      valid_from: Gültig von
+      valid_until: Gültig bis
+      description: Beschreibung

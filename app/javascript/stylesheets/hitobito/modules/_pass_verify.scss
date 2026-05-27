@@ -1,0 +1,62 @@
+// Copyright (c) 2012-2024, Schweizerischer Kanu-Verband. This file is part of
+// hitobito and licensed under the Affero General Public License version 3
+// or later. See the COPYING file at the top-level directory or at
+// https://github.com/hitobito/hitobito.
+
+#pass-verify {
+  header {
+    display: flex;
+    justify-content: space-between;
+
+    #logo {
+      width: 50%;
+
+      img {
+        max-width: 300px;
+      }
+    }
+
+    #group-address {
+      width: 50%;
+      padding-top: 2em;
+      padding-right: 1em;
+      text-align: right;
+    }
+
+    margin-bottom: 15px;
+  }
+
+  #details {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    padding: 15px;
+    font-size: 18px;
+
+    #member-img {
+      img {
+        width: 80%;
+        margin-top: 2em;
+        border-radius: 1em;
+      }
+    }
+
+    #member-name {
+      font-weight: bold;
+      line-height: 4rem;
+    }
+
+    .alert-success {
+      background-color: #00b050;
+      color: white;
+    }
+
+    .alert-danger {
+      background-color: #e41924;
+      color: white;
+    }
+  }
+}

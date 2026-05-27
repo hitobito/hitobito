@@ -123,8 +123,7 @@ class GroupDecorator < ApplicationDecorator
   end
 
   def subgroup_ids
-    @subgroup_ids ||= Group.where("lft >= :lft AND rgt <= :rgt",
-      lft: group.lft, rgt: group.rgt)
+    @subgroup_ids ||= Group.where(Group.below_or_at_condition(group.lft, group.rgt))
       .pluck(:id)
   end
 

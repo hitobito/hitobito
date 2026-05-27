@@ -191,6 +191,11 @@ RSpec.configure do |config|
     printer.print(File.open(filename, "w"))
   end
 
+  config.after(:suite) do
+    # Clean up ActiveStorage fixture files after all tests complete
+    FileUtils.rm_rf(ActiveStorage::Blob.services.fetch(:test_fixtures).root)
+  end
+
   unless RSpec.configuration.exclusion_filter[:type] == "feature"
     config.include Warden::Test::Helpers
     Warden.test_mode!

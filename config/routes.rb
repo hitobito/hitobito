@@ -28,6 +28,21 @@ Hitobito::Application.routes.draw do
 
   get "/verify_membership/:verify_token" => "people/membership/verify#show", as: "verify_membership"
 
+  get "/passes/verify/:verify_token", to: "passes/verifications#show", as: :pass_verify
+
+  scope Wallets::AppleWallet::PassService::WEB_SERVICE_PATH, module: "wallets/apple_wallet", as: "apple_wallet" do
+    post "devices/:device_id/registrations/:pass_type_id/:serial",
+      action: :register_device, controller: "web_service", as: :register_device
+    delete "devices/:device_id/registrations/:pass_type_id/:serial",
+      action: :unregister_device, controller: "web_service", as: :unregister_device
+    get "devices/:device_id/registrations/:pass_type_id",
+      action: :updatable_passes, controller: "web_service", as: :updatable_passes
+    get "passes/:pass_type_id/:serial",
+      action: :send_updated_pass, controller: "web_service", as: :pass
+    post "log",
+      action: :log_message, controller: "web_service", as: :log
+  end
+
   language_scope do
     namespace :oauth do
       resource :profile, only: :show
@@ -182,6 +197,13 @@ Hitobito::Application.routes.draw do
           get "tags/query" => "tags#query"
           post "impersonate" => "impersonation#create"
           delete "impersonate" => "impersonation#destroy"
+
+          resources :passes, only: [:index, :show] do
+            member do
+              get :google_add_to_wallet
+              get :apple_download_pkpass
+            end
+          end
         end
       end
 

@@ -2,7 +2,6 @@
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
-
 mailchimp:
   enabled: false
 
@@ -21,3 +20,4 @@ payment_providers:
     host_id: PFEBICS
     encryption_hash: F6 D1 D2 3E B7 1A 49 19 69 CF 13 09 76 00 C2 4C D8 95 E1 BC 26 33 77 FA E4 5A 04 E1 E5 B3 FA 16
     authentication_hash: F6 D1 D2 3E B7 1A 49 19 69 CF 13 09 76 00 C2 4C D8 95 E1 BC 26 33 77 FA E4 5A 04 E1 E5 B3 FA 16
+

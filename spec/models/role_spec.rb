@@ -590,6 +590,67 @@ describe Role do
 
       expect(person.minimized_at).to be_nil
     end
+
+    describe "create passes callback" do
+      let(:person) { Fabricate(:person) }
+      let(:group) { groups(:top_group) }
+      let(:pass_definition) { pass_definitions(:top_layer_pass) }
+
+      it "noops if no grant applies" do
+        expect do
+          Fabricate(Group::TopGroup::Member.sti_name, group:, person:)
+        end.not_to change { person.reload.passes.count }
+      end
+
+      it "creates single pass" do
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:)
+        end.to change { person.reload.passes.count }.by(1)
+      end
+
+      it "creates multiple pass if multiple grants apply" do
+        pass_definition = Fabricate(:pass_definition)
+        PassGrant.new(pass_definition:, grantor: group).tap do |g|
+          g.role_types = [Group::TopGroup::Leader.sti_name]
+        end.save!
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:)
+        end.to change { person.reload.passes.count }.by(2)
+      end
+
+      it "noops if pass matching grant already exists" do
+        Fabricate(:pass, person:, pass_definition:, valid_from: 1.year.ago)
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:)
+        end.to not_change { person.reload.passes.count }
+          .and not_change { person.passes.first.valid_from }
+      end
+
+      it "sets pass valid_from to role start_on when present" do
+        start_date = 1.week.from_now.to_date
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:, start_on: start_date)
+        end.to change(Pass, :count).by(1)
+        pass = person.passes.find_by(pass_definition:)
+        expect(pass.valid_from).to eq(start_date)
+      end
+
+      it "sets pass valid_from to Date.current when role start_on is blank" do
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:, start_on: nil)
+        end.to change(Pass, :count).by(1)
+        pass = person.passes.find_by(pass_definition:)
+        expect(pass.valid_from).to eq(Date.current)
+      end
+
+      it "does not modify existing pass start_on when role start_on is blank" do
+        existing_pass = Fabricate(:pass, person:, pass_definition:, valid_from: 1.year.ago)
+        expect do
+          Fabricate(Group::TopGroup::Leader.sti_name, group:, person:, start_on: nil)
+        end.not_to change(Pass, :count)
+        expect(existing_pass.reload.valid_from).to eq(1.year.ago.to_date)
+      end
+    end
   end
 
   context "#update" do

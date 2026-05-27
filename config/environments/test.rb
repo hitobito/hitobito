@@ -36,6 +36,8 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
+  # Ensure test_fixtures service is available for ActiveStorage fixtures
+  config.active_storage.service_names = [:test, :test_fixtures]
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 

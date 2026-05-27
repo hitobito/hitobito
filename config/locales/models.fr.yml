@@ -146,6 +146,14 @@ fr:
           attributes:
             scopes:
               not_match_configured: "ne correspondent pas aux données sur le serveur."
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Veuillez saisir votre nom'
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
@@ -419,6 +427,26 @@ fr:
         one: Note
         many: Notes
         other: Notes
+      pass_definition:
+        one: Pass-Definition
+        many: Pass-Definitionen
+        other: Pass-Definitionen
+      pass_grant:
+        one: Pass-Berechtigung
+        many: Pass-Berechtigungen
+        other: Pass-Berechtigungen
+      pass:
+        one: Ausweis
+        many: Ausweise
+        other: Ausweise
+      wallets/pass_installation:
+        one: Wallet-Installation
+        many: Wallet-Installationen
+        other: Wallet-Installationen
+      wallets/apple_wallet/device_registration:
+        one: Apple-Geräteregistrierung
+        many: Apple-Geräteregistrierungen
+        other: Apple-Geräteregistrierungen
       payment:
         one: paiements
         many: Paiements
@@ -968,6 +996,45 @@ fr:
 
       note:
         text: Texte
+
+      pass_definition:
+        name: Name
+        description: Beschreibung
+        owner: Besitzer
+        template_key: Vorlage
+        background_color: Hintergrundfarbe
+
+      pass_grant:
+        pass_definition: Pass-Definition
+        grantor: Berechtigende Gruppe
+        related_role_types: Rollentypen
+
+      pass:
+        member_name: Mitgliedsname
+        member_number: Mitgliedsnummer
+        person: Person
+        pass_definition: Pass-Definition
+        state: Status
+        valid_from: Gültig von
+        valid_until: Gültig bis
+        states:
+          eligible: Gültig
+          ended: Abgelaufen
+          revoked: Widerrufen
+
+      wallets/pass_installation:
+        pass: Ausweis
+        wallet_type: Wallet-Typ
+        state: Status
+        wallet_identifier: Wallet-ID
+        authentication_token: Authentifizierungs-Token
+        last_synced_at: Letzte Synchronisation
+        sync_error: Synchronisationsfehler
+
+      wallets/apple_wallet/device_registration:
+        pass_installation: Pass-Installation
+        device_library_identifier: Geräte-ID
+        push_token: Push-Token
 
       oauth/application:
         cors_origins: Serveur avec accès via API

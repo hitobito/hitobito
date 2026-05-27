@@ -1808,6 +1808,14 @@ de:
           success: Login wurde erfolgreich entsperrt.
           error: Du kannst dein eigenes Login nicht entsperren.
 
+    passes:
+      index:
+        title: Pässe
+        show_pass: Anzeigen
+        add_to_google_wallet: Google Wallet
+        add_to_apple_wallet: Apple Wallet
+        download_pdf: Drucken
+
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
 
@@ -1844,6 +1852,9 @@ de:
         other: "%{count} %{role} haben eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfragen erneut vorgenommen werden."
 
   people:
+    passes_aside:
+      title: Pässe
+
     addresses_sync:
       create:
         scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
@@ -2437,6 +2448,15 @@ de:
     status_valid: Mitgliedschaft gültig
     status_invalid: Keine gültige Mitgliedschaft
 
+  passes:
+    verifications:
+      title: Pass-Verifizierung
+      status:
+        valid: Pass ist gültig
+        expired: Pass ist abgelaufen
+        invalid: Pass ist ungültig
+      failed: Dieser Pass konnte nicht verifiziert werden.
+
   wizards:
     steps:
       new_user_form:
@@ -2461,3 +2481,16 @@ de:
   period_invoice_template:
     role_count_item_fields:
       choose_role_types: Rollentypen auswählen
+
+  wallets:
+    google:
+      generation_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
+    apple:
+      member_name: Mitglied
+      generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
+    pass:
+      member_name: Name
+      member_number: Mitgliedernummer
+      valid_from: Gültig von
+      valid_until: Gültig bis
+      description: Beschreibung

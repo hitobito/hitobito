@@ -1820,6 +1820,14 @@ it:
           success: L'accesso è stato sbloccato con successo.
           error: Non puoi sbloccare il tuo login.
 
+    passes:
+      index:
+        title: Pässe
+        show_pass: Anzeigen
+        add_to_google_wallet: Google Wallet
+        add_to_apple_wallet: Apple Wallet
+        download_pdf: Drucken
+
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
 
@@ -1862,6 +1870,9 @@ it:
         many: "%{count} %{role} hanno ricevuto una richiesta d'accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta."
         other: "%{count} %{role} hanno ricevuto una richiesta d'accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta."
   people:
+    passes_aside:
+      title: Pässe
+
     addresses_sync:
       create:
         scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
@@ -2451,6 +2462,15 @@ it:
     status_valid: Iscrizione valida
     status_invalid: Nessuna iscrizione valida
 
+  passes:
+    verifications:
+      title: Pass-Verifizierung
+      status:
+        valid: Pass ist gültig
+        expired: Pass ist abgelaufen
+        invalid: Pass ist ungültig
+      failed: Dieser Pass konnte nicht verifiziert werden.
+
   wizards:
     steps:
       new_user_form:
@@ -2475,3 +2495,16 @@ it:
   period_invoice_template:
     role_count_item_fields:
       choose_role_types: Selezionare i tipi di rullo
+
+  wallets:
+    google:
+      generation_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
+    apple:
+      member_name: Mitglied
+      generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
+    pass:
+      member_name: Name
+      member_number: Mitgliedernummer
+      valid_from: Gültig von
+      valid_until: Gültig bis
+      description: Beschreibung

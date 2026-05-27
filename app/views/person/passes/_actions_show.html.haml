@@ -1,0 +1,10 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+= action_button t('person.passes.index.download_pdf'), group_person_pass_path(*parents, entry, format: :pdf), "print"
+- if can_add_pass_to?(entry, :google)
+  = action_button t('person.passes.index.add_to_google_wallet'), google_add_to_wallet_group_person_pass_path(*parents, entry), "add"
+- if can_add_pass_to?(entry, :apple)
+  = action_button t('person.passes.index.add_to_apple_wallet'), apple_download_pkpass_group_person_pass_path(*parents, entry), "add"

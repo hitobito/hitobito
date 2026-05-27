@@ -31,6 +31,9 @@ class Event::Question < ActiveRecord::Base
   has_paper_trail meta: {main_id: ->(q) { q.event_id },
                          main_type: Event.sti_name}
 
+  class_attribute :template_editable
+  self.template_editable = true
+
   include Globalized
 
   attr_accessor :template_id
@@ -103,7 +106,7 @@ class Event::Question < ActiveRecord::Base
   end
 
   def to_s
-    label
+    question
   end
 
   def global?

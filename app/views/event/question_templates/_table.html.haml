@@ -1,0 +1,14 @@
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= table(entries, class: 'table table-striped table-hover') do |t|
+  - t.sortable_attr :question
+  - t.attr :event_type do
+    = _1.event_type_label
+  - t.attr :default
+  - action_col(t) do
+    = link_action_edit(edit_group_question_template_path(_1.group, _1)) if _1.editable?
+  - action_col(t) do
+    = link_action_destroy(group_question_template_path(_1.group, _1)) if _1.editable?

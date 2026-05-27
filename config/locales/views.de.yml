@@ -217,6 +217,7 @@ de:
     archive: "Archivieren"
     delete: Löschen
     edit_service_token: API-Keys
+    edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
     edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
@@ -556,6 +557,11 @@ de:
       update:
         flash:
           success: Die Qualifikationen wurden erfolgreich aktualisiert.
+
+    question_templates:
+      form:
+        default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
+        inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
 
     register:
       register:

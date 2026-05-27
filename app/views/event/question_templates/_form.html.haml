@@ -1,0 +1,26 @@
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- url = entry.new_record? ? group_question_templates_path(group) : group_question_template_path(group, entry)
+= standard_form(entry, url: url) do |f|
+  = f.fields_for :question do |ff|
+    = ff.hidden_field(:admin)
+
+    - partial_path = "event/questions/#{ff.object.model_name.singular}"
+    - if lookup_context.find_all(File.join(partial_path, '_fields')).any?
+      = render partial: File.join(partial_path, 'fields'), locals: { f: ff }
+
+    - unless ff.object.admin?
+      = ff.labeled_input_field(:required, caption: t('event.questions.required_caption'))
+
+    - if Settings.event.participations.manual_sensitive_option
+      - delete_answers_after_months = Settings.event.participations.delete_answers_after_months
+      = ff.labeled_input_field(:sensitive, caption: t('event.questions.sensitive_caption', cutoff: delete_answers_after_months))
+
+  = f.labeled_collection_select :event_type, Event.all_types.map { [_1.label, _1.sti_name] }, :last, :first, { include_blank: I18n.t('global.all') }, { class: 'form-select form-select-sm' }
+  = f.labeled_input_field(:default, caption: t(".default_caption"))
+  = f.labeled_input_field(:inherit, caption: t(".inherit_caption"))
+
+  = form_buttons(f, submit_label: t("global.button.save"), cancel_url: group_question_templates_path(group))

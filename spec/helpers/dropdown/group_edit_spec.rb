@@ -39,6 +39,18 @@ describe "Dropdown::GroupEdit" do
     is_expected.to have_no_selector "a", text: "API-Keys"
   end
 
+  it "renders question template item with index_question_templates" do
+    allow(self).to receive(:can?).with(:index_question_templates, anything).and_return(true)
+
+    is_expected.to have_selector "a", text: "Vorlagen Anmeldeangaben Anlässe"
+  end
+
+  it "does not render question template item without index_question_templates" do
+    allow(self).to receive(:can?).with(:index_question_templates, anything).and_return(false)
+
+    is_expected.to have_no_selector "a", text: "Vorlagen Anmeldeangabe Anlässe"
+  end
+
   it "renders calendar item" do
     allow(self).to receive(:can?).with(:index_service_tokens, anything).and_return(true)
 

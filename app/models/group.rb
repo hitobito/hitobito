@@ -167,6 +167,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :invoice_items, through: :issued_invoices
   has_many :period_invoice_templates
 
+  has_many :question_templates,
+    dependent: :destroy,
+    class_name: "Event::QuestionTemplate"
   has_many :service_tokens,
     foreign_key: :layer_group_id,
     dependent: :destroy

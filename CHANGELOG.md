@@ -15,6 +15,7 @@
 - Konfigurierbare Identifier für eine schnellere globale Suche (hitobito_sac_cas#2331)
 - System E-Mails von Anlässen werden in den Nachrichten Tabs auf dem Anlass, der Teilnahme und der Person angezeigt (hitobito_sac_cas#2419)
 - Konfigurationsmöglichkeit ob Eltern (`PeopleManager`) von regulären Abonnenten ebenfalls bei Mailchimp eingeschrieben werden oder nicht (hitobito_sac_cas#2446)
+- Vorlagen für Anmeldeangaben können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (hitobito_sac_cas#2345)
 
 ## Version 2.9
 

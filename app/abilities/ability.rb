@@ -20,6 +20,7 @@ class Ability
     Event::ParticipationAbility,
     Event::ParticipationContactDataAbility,
     Event::RoleAbility,
+    Event::QuestionTemplateAbility,
     GroupAbility,
     InvoiceAbility,
     MailingListAbility,

@@ -36,7 +36,7 @@ describe UserJobResultsCleanerJob do
     end.to change(UserJobResult, :count).from(4).to(2)
   end
 
-  # User Job Results are removed by end_timestamp to not remove user job results
+  # User Job Results are removed by finished_at to not remove user job results
   # of jobs with a total retry time longer than 1 day
   it "doesnt remove user job results for jobs that have not finished yet" do
     unfinished_job = Examples::SuccessfulUserManagedJob.new
@@ -68,7 +68,7 @@ describe UserJobResultsCleanerJob do
     download_file(Time.current)
 
     orphaned_user_job_result = download_file(Time.current)
-    orphaned_user_job_result.update!(end_timestamp: nil)
+    orphaned_user_job_result.update!(finished_at: nil)
     orphaned_user_job_result.delayed_job.destroy!
 
     expect(orphaned_user_job_result.delayed_job_id).not_to be_nil
@@ -82,7 +82,7 @@ describe UserJobResultsCleanerJob do
     download_file(Time.current)
 
     orphaned_user_job_result = download_file(Time.current)
-    orphaned_user_job_result.update!(end_timestamp: nil)
+    orphaned_user_job_result.update!(finished_at: nil)
     orphaned_user_job_result.delayed_job.update!(failed_at: Time.current)
 
     expect do

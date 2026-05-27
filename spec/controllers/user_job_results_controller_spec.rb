@@ -27,7 +27,7 @@ describe UserJobResultsController do
       get :index
       user_job_results = assigns(:user_job_results)
 
-      expect(user_job_results).to eq(expected_user_job_results.sort_by(&:start_timestamp).reverse)
+      expect(user_job_results).to eq(expected_user_job_results.sort_by(&:started_at).reverse)
       expect(user_job_results).not_to include(*unexpected_user_job_results)
     end
   end

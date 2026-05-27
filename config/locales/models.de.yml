@@ -1499,8 +1499,8 @@ de:
         excluded_calendar_tags: Ausgeschlossene Tags
 
       user_job_result:
-        start_timestamp: Startzeitpunkt
-        end_timestamp: Endzeitpunkt
+        started_at: Startzeitpunkt
+        finished_at: Endzeitpunkt
         attempts: Versuche
         statuses:
           planned: In der Warteschlange

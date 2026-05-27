@@ -18,17 +18,17 @@ class UserJobResultsCleanerJob < RecurringJob
     base = UserJobResult.left_joins(:delayed_job)
 
     # Remove records where job has completed more than one day ago
-    old_records = base.where(end_timestamp: ..1.day.ago)
+    old_records = base.where(finished_at: ..1.day.ago)
 
     # Remove records without an associated delayed job
     no_job_id = base.where(delayed_job_id: nil)
 
     # Remove records where job is uncompleted and delayed job id doesnt point to a record
-    incomplete_missing_job = base.where(end_timestamp: nil, delayed_jobs: {id: nil})
+    incomplete_missing_job = base.where(finished_at: nil, delayed_jobs: {id: nil})
 
     # Remove records where job is uncompleted but associated delayed job has failed
     incomplete_failed_job =
-      base.where(end_timestamp: nil).where.not(delayed_jobs: {failed_at: nil})
+      base.where(finished_at: nil).where.not(delayed_jobs: {failed_at: nil})
 
     old_records
       .or(no_job_id)

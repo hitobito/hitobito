@@ -9,10 +9,9 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
 
     change_table :user_job_results do |t|
       t.rename :name, :job_class
-      t.rename :timestamp, :start_timestamp
+      t.rename :timestamp, :started_at
 
-      t.string :filename
-      t.datetime :end_timestamp
+      t.datetime :finished_at
       t.string :status, null: false
       t.integer :attempts, null: false
       t.integer :max_attempts, null: false
@@ -29,8 +28,8 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
 
         change_column(:user_job_results, :person_id, :bigint)
         change_column(
-          :user_job_results, :start_timestamp, :datetime,
-          using: "to_timestamp(start_timestamp::numeric)"
+          :user_job_results, :started_at, :datetime,
+          using: "to_timestamp(started_at::numeric)"
         )
       end
 
@@ -49,8 +48,8 @@ class MigrateAsyncDownloadFileToUserJobResult < ActiveRecord::Migration[8.0]
         end
 
         change_column(
-          :user_job_results, :start_timestamp, :string,
-          using: "EXTRACT(EPOCH FROM start_timestamp)::bigint::text"
+          :user_job_results, :started_at, :string,
+          using: "EXTRACT(EPOCH FROM started_at)::bigint::text"
         )
       end
     end

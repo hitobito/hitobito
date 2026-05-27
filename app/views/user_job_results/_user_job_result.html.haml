@@ -15,11 +15,11 @@
       - else
         = t(".no_progress_provided")
     .col-3
-      = "#{UserJobResult.human_attribute_name('start_timestamp')}: #{job_timestamp(user_job_result.start_timestamp)}"
+      = "#{UserJobResult.human_attribute_name("started_at")}: #{job_timestamp(user_job_result.started_at)}"
       %br
-      = "#{UserJobResult.human_attribute_name('end_timestamp')}: #{job_timestamp(user_job_result.end_timestamp)}"
+      = "#{UserJobResult.human_attribute_name("finished_at")}: #{job_timestamp(user_job_result.finished_at)}"
     .col-1
-      = "#{UserJobResult.human_attribute_name('attempts')}: #{user_job_result.attempts}/#{user_job_result.max_attempts}"
+      = "#{UserJobResult.human_attribute_name("attempts")}: #{user_job_result.attempts}/#{user_job_result.max_attempts}"
     .col-1
       - if user_job_result.generated_file.attached?
         = link_to(icon("download", {filled: true}), download_user_job_result_path(user_job_result))

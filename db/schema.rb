@@ -1387,11 +1387,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.string "filetype", null: false
     t.integer "progress", null: false
     t.bigint "person_id", null: false
-    t.datetime "start_timestamp", null: false
+    t.datetime "started_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "filename"
-    t.datetime "end_timestamp"
+    t.datetime "finished_at"
     t.string "status", null: false
     t.integer "attempts", null: false
     t.integer "max_attempts", null: false

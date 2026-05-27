@@ -29,7 +29,7 @@ describe UserJobResult do
         person:,
         job_class:,
         filetype: nil,
-        start_timestamp: nil,
+        started_at: nil,
         status: nil,
         attempts: nil,
         max_attempts: nil,
@@ -45,7 +45,7 @@ describe UserJobResult do
         person:,
         job_class:,
         filetype: "csv",
-        start_timestamp: 10.days.ago,
+        started_at: 10.days.ago,
         status: "in_progress",
         attempts: 3,
         max_attempts: 42,
@@ -69,7 +69,7 @@ describe UserJobResult do
         status: "planned",
         attempts: 0,
         max_attempts: Delayed::Worker.max_attempts,
-        start_timestamp: Time.current
+        started_at: Time.current
       )
     end
   end
@@ -115,7 +115,7 @@ describe UserJobResult do
     it "should correctly change model state when reporting in progress" do
       subject.report_in_progress!
 
-      expect(subject.end_timestamp).to be_nil
+      expect(subject.finished_at).to be_nil
       expect(subject.status).to eql("in_progress")
       expect(subject.attempts).to eql(0)
     end
@@ -124,7 +124,7 @@ describe UserJobResult do
       freeze_time
       subject.report_success!(1)
 
-      expect(subject.end_timestamp).to eql(Time.current)
+      expect(subject.finished_at).to eql(Time.current)
       expect(subject.status).to eql("success")
       expect(subject.attempts).to eql(1)
     end
@@ -132,7 +132,7 @@ describe UserJobResult do
     it "should correctly change model state when reporting error" do
       subject.report_error!(3)
 
-      expect(subject.end_timestamp).to be_nil
+      expect(subject.finished_at).to be_nil
       expect(subject.status).to eql("planned")
       expect(subject.attempts).to eql(3)
     end
@@ -142,7 +142,7 @@ describe UserJobResult do
       subject.update!(attempts: 3)
       subject.report_failure!
 
-      expect(subject.end_timestamp).to eql(Time.current)
+      expect(subject.finished_at).to eql(Time.current)
       expect(subject.status).to eql("error")
       expect(subject.attempts).to eql(3)
     end

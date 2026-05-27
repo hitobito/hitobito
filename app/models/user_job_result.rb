@@ -11,15 +11,15 @@
 #
 #  id                                  :bigint           not null, primary key
 #  attempts                            :integer          not null
-#  end_timestamp                       :datetime
 #  filename                            :string
 #  filetype                            :string           not null
+#  finished_at                         :datetime
 #  job_class                           :string           not null
 #  last_progress_update_broadcasted_at :datetime
 #  max_attempts                        :integer          not null
 #  progress                            :integer          not null
 #  reports_progress                    :boolean          not null
-#  start_timestamp                     :datetime         not null
+#  started_at                          :datetime         not null
 #  status                              :string           not null
 #  created_at                          :datetime         not null
 #  updated_at                          :datetime         not null
@@ -112,7 +112,7 @@ class UserJobResult < ApplicationRecord
   def report_success!(total_attempts)
     update!(
       status: "success",
-      end_timestamp: Time.current,
+      finished_at: Time.current,
       attempts: total_attempts
     )
     broadcast_notification
@@ -129,7 +129,7 @@ class UserJobResult < ApplicationRecord
   def report_failure!
     update!(
       status: "error",
-      end_timestamp: Time.current
+      finished_at: Time.current
     )
     broadcast_notification
   end
@@ -174,7 +174,7 @@ class UserJobResult < ApplicationRecord
 
   def set_default_values
     default_values = {
-      start_timestamp: Time.current,
+      started_at: Time.current,
       status: "planned",
       filetype: "txt",
       attempts: 0,

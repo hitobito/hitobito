@@ -321,6 +321,10 @@ siehe [Qualifikationen](../developer/events/qualifications.md).
 
 siehe [Messages](../developer/messages).
 
+### Konfigurierbare Ausweise (Passes)
+
+siehe [Passes](../developer/passes).
+
 ### Single Table Inheritance
 
 Verschiedene Modelle in hitobito verwenden

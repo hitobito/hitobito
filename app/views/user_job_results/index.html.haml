@@ -9,7 +9,6 @@
 
 - title t(".title")
 #user_job_results
-  - @user_job_results.each do |user_job_result|
-    = render "user_job_result", user_job_result:
+  = render @user_job_results
 
 = paginate @user_job_results

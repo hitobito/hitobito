@@ -26,8 +26,7 @@
     = yield(:head)
 
   %body{class: ('is-logged-out' unless person_signed_in?), data: { controller: 'remote-autocomplete' } }
-    - if current_person && current_person.needs_web_socket_connection
-      = turbo_stream_from "person_#{current_person.id}_user_job_result_notifications"
+    = render "user_job_results/notifications_stream"
     %a#jump-to-content.bg-dark.text-light.mt-5.ml-5.p-2{href: "#main-content"}= t("global.jump_to_content")
     = render 'layouts/environment_header'
     #modal-placeholder

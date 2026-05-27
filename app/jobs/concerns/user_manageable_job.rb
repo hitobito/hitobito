@@ -19,13 +19,13 @@ module UserManageableJob
     # from another job
     # For jobs that are not export jobs, we fall back to Auth.current_person,
     # which is the currently logged in or imitated user
-    person_id = @user_id || Auth.current_person&.id
+    enqueueing_person = Person.find_by(id: @user_id) || Auth.current_person
 
-    return super unless person_id
+    return super unless enqueueing_person
 
     ActiveRecord::Base.transaction do
       user_job_result = UserJobResult.create!(
-        person_id:,
+        person: enqueueing_person,
         job_name:,
         filename: @options&.dig(:filename),
         filetype: @format,

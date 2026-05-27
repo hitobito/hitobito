@@ -9,8 +9,9 @@ require "spec_helper"
 
 describe UserJobResultsController do
   let(:person) { people(:bottom_member) }
+  let(:other_person) { people(:top_leader) }
   let(:user_job_result) do
-    create_test_user_job_result(person.id)
+    create_test_user_job_result(person)
   end
 
   before do
@@ -22,8 +23,8 @@ describe UserJobResultsController do
     it "provides user job results only of current person" do
       expected_user_job_results = [user_job_result]
       unexpected_user_job_results = []
-      3.times { expected_user_job_results << create_test_user_job_result(person.id) }
-      3.times { unexpected_user_job_results << create_test_user_job_result(1234) }
+      3.times { expected_user_job_results << create_test_user_job_result(person) }
+      3.times { unexpected_user_job_results << create_test_user_job_result(other_person) }
 
       get :index
       user_job_results = assigns(:user_job_results)
@@ -41,7 +42,7 @@ describe UserJobResultsController do
     end
 
     it "returns 404 if person has no access" do
-      user_job_result.update!(person_id: 1234)
+      user_job_result.update!(person: other_person)
       get :download_attachment, params: {id: user_job_result.id}
 
       is_expected.to render_template("errors/404")
@@ -56,9 +57,9 @@ describe UserJobResultsController do
     end
   end
 
-  def create_test_user_job_result(person_id)
+  def create_test_user_job_result(person)
     UserJobResult.create!(
-      person_id:,
+      person:,
       job_name: "A test job",
       filename: "subscriptions_to-blorbaels-rants",
       filetype: "txt",

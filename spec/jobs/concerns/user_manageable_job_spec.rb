@@ -25,7 +25,7 @@ describe UserManageableJob do
       job = Examples::SuccessfulUserManagedJob.new
 
       expect(UserJobResult).to receive(:create!).with({
-        person_id: person.id,
+        person:,
         job_name: "Custom job name",
         filename: nil,
         filetype: nil,
@@ -65,7 +65,7 @@ describe UserManageableJob do
         .and change { Delayed::Job.count }.by(0)
     end
 
-    it "should not create user job result when enqueing of delayed job fails" do
+    it "should not create user job result when enqueueing of delayed job fails" do
       job = Examples::UnsuccessfulUserManagedJob.new
       job.define_singleton_method(:enqueue!) do
         raise "Test exception: Something went wrong while enqueueing job"

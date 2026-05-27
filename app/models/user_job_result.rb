@@ -21,17 +21,26 @@
 class UserJobResult < ApplicationRecord
   include I18nEnums
 
+  scope :unfinished, -> { where(status: [:planned, :in_progress]) }
+
   STATUSES = %w[planned in_progress success error].freeze
 
   i18n_enum :status, STATUSES, queries: true
 
+  belongs_to :person
   has_one_attached :generated_file
 
   validates_by_schema
 
   after_initialize :set_default_values, if: :new_record?
-  after_update_commit -> { broadcast_replace_to(update_channel_name) }
-  after_commit -> { broadcast_refresh_to(update_channel_name) }, on: %i[create destroy]
+  after_update_commit lambda do
+    broadcast_replace_to(update_channel_name)
+    broadcast_badge_update
+  end
+  after_commit lambda do
+    broadcast_refresh_to(update_channel_name)
+    broadcast_badge_update
+  end, on: %i[create destroy]
 
   before_destroy do
     generated_file.purge if generated_file.attached?
@@ -43,8 +52,8 @@ class UserJobResult < ApplicationRecord
     "<UserJobResult##{id}: #{filename}#{partial}>"
   end
 
-  def downloadable?(person)
-    (person_id == person.id) && generated_file.attached?
+  def downloadable?(downloading_person)
+    (person_id == downloading_person.id) && generated_file.attached?
   end
 
   def write(data, force_encoding: nil)
@@ -158,9 +167,18 @@ class UserJobResult < ApplicationRecord
   def broadcast_notification
     broadcast_append_to(
       notification_channel_name,
-      partial: "user_job_results/user_job_result_notification",
+      partial: "user_job_results/notification",
       locals: {user_job_result: self},
-      target: "user-job-result-notification-placeholder"
+      target: "user-job-result-notifications-container"
+    )
+  end
+
+  def broadcast_badge_update
+    broadcast_replace_to(
+      notification_channel_name,
+      partial: "user_job_results/link_with_badge",
+      locals: {person:},
+      target: "user-job-results-link-with-badge"
     )
   end
 end

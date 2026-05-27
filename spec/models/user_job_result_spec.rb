@@ -9,8 +9,8 @@ require "spec_helper"
 
 describe UserJobResult do
   let(:person_id) { 42 }
-  let(:person) { Person.new(id: person_id) }
-  let(:other_person) { Person.new(id: 23) }
+  let(:person) { people(:top_leader) }
+  let(:other_person) { people(:bottom_member) }
   let(:job_name) { "A test job" }
   let(:filename) { "subscriptions_to-blorbaels-rants" }
   let(:filetype) { "csv" }
@@ -18,7 +18,7 @@ describe UserJobResult do
   let(:data) { SecureRandom.base64(128) }
 
   subject do
-    UserJobResult.create!(person_id:, job_name:, filename:, filetype:, reports_progress:)
+    UserJobResult.create!(person:, job_name:, filename:, filetype:, reports_progress:)
   end
 
   describe "default values" do
@@ -27,14 +27,14 @@ describe UserJobResult do
     end
 
     it "should set correct default values when values are not passed" do
-      user_job_result = UserJobResult.create!(person_id:, job_name:)
+      user_job_result = UserJobResult.create!(person:, job_name:)
 
       check_default_values(user_job_result)
     end
 
     it "should set correct default values when values are passed as nil" do
       user_job_result = UserJobResult.create!(
-        person_id:,
+        person:,
         job_name:,
         filetype: nil,
         start_timestamp: nil,
@@ -50,7 +50,7 @@ describe UserJobResult do
 
     it "should not override values with default values when they are passed" do
       user_job_result_attributes = {
-        person_id:,
+        person:,
         job_name:,
         filetype: "csv",
         start_timestamp: 10.days.ago,
@@ -68,8 +68,8 @@ describe UserJobResult do
 
     def check_default_values(user_job_result)
       expect(user_job_result).to have_attributes(
-        person_id: person_id,
-        job_name: job_name,
+        person:,
+        job_name:,
         filename: nil,
         filetype: "txt",
         reports_progress: false,

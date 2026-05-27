@@ -8,11 +8,8 @@ require "spec_helper"
 describe UserJobResultsHelper do
   let(:user_job_result) do
     UserJobResult.create!(
-      person_id: people(:top_leader).id,
-      job_name: "Testjob",
-      filename: nil,
-      filetype: :txt,
-      reports_progress: false
+      person: people(:top_leader),
+      job_name: "Testjob"
     )
   end
 

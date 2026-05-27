@@ -53,6 +53,8 @@ class UserJobResult < ApplicationRecord
   after_commit :broadcast_refresh_and_badge_update, on: %i[create destroy]
   after_update_commit :broadcast_replace_and_badge_update
 
+  normalizes :filename, with: -> filename { filename.to_s.parameterize(preserve_case: true) }
+
   def to_s
     progress_string = " (#{progress}%)" if reports_progress
 
@@ -86,11 +88,6 @@ class UserJobResult < ApplicationRecord
       data = data.force_encoding(Settings.csv.encoding)
     end
     data
-  end
-
-  def filename=(filename)
-    normalized_filename = filename.to_s.parameterize(preserve_case: true)
-    super(normalized_filename)
   end
 
   def filename

@@ -19,6 +19,10 @@ module UserJobResultsHelper
     icon(icon_name, icon_options)
   end
 
+  def job_status_class_names(user_job_result)
+    class_names("bg-info": user_job_result.success?, "bg-danger": user_job_result.error?)
+  end
+
   def job_progress_bar(progress)
     content_tag(
       :div, nil, class: "progress", role: "progressbar",

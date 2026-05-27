@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe QuestionTemplateAbility do
+describe Event::QuestionTemplateAbility do
   let(:user) { role.person }
   let(:group) { role.group }
   let(:top_group) { groups(:top_group) }

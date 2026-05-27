@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "question_templates/_table.html.haml" do
+describe "event/question_templates/_table.html.haml" do
   let(:person) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
   let(:template) { event_question_templates(:ga_template) }
@@ -21,7 +21,7 @@ describe "question_templates/_table.html.haml" do
   end
 
   context "when template is editable" do
-    before { render partial: "question_templates/table", locals: {entries: entries} }
+    before { render partial: "event/question_templates/table", locals: {entries: entries} }
 
     it "renders edit link" do
       expect(dom).to have_link(href: edit_group_question_template_path(group, template))
@@ -35,7 +35,7 @@ describe "question_templates/_table.html.haml" do
   context "when template is not editable" do
     before do
       allow(Event::Question::Default).to receive(:template_editable).and_return(false)
-      render partial: "question_templates/table", locals: {entries: entries}
+      render partial: "event/question_templates/table", locals: {entries: entries}
     end
 
     it "does not render edit link" do

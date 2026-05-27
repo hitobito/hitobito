@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class QuestionTemplatesController < SimpleCrudController
+class Event::QuestionTemplatesController < SimpleCrudController
   self.nesting = Group
   self.sort_mappings = {question: "event_question_translations.question"}
   self.permitted_attrs = [

@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module Sheet
-  class QuestionTemplate < Base
+  class Event::QuestionTemplate < Base
     def parent_sheet
       create_parent(Sheet::Group)
     end

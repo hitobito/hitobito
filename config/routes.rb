@@ -390,7 +390,7 @@ Hitobito::Application.routes.draw do
       end
 
       resources :service_tokens
-      resources :question_templates, except: [:show]
+      resources :question_templates, except: [:show], module: :event
     end # resources :group
 
     get "list_courses" => "events/courses#index", as: :list_courses

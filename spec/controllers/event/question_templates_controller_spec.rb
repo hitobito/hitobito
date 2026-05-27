@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe QuestionTemplatesController do
+describe Event::QuestionTemplatesController do
   let(:group) { groups(:top_layer) }
   let(:person) { people(:top_leader) }
   let(:ga_template) { event_question_templates(:ga_template) }

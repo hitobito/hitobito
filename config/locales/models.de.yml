@@ -313,7 +313,7 @@ de:
         other: Anmeldeangaben
       event/question_template:
         one: Vorlage Anmeldeangabe Anlässe
-        other: Vorlagen Anmeldeangabe Anlässe
+        other: Vorlagen Anmeldeangaben Anlässe
       event/answer:
         one: Antwort auf Anmeldeangabe
         other: Antworten auf Anmeldeangaben

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class QuestionTemplateAbility < AbilityDsl::Base
+class Event::QuestionTemplateAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Group
 
   on(Event::QuestionTemplate) do

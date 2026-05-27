@@ -42,7 +42,7 @@ describe "Dropdown::GroupEdit" do
   it "renders question template item with index_question_templates" do
     allow(self).to receive(:can?).with(:index_question_templates, anything).and_return(true)
 
-    is_expected.to have_selector "a", text: "Vorlagen Anmeldeangabe Anlässe"
+    is_expected.to have_selector "a", text: "Vorlagen Anmeldeangaben Anlässe"
   end
 
   it "does not render question template item without index_question_templates" do

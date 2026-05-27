@@ -18,12 +18,14 @@ RSpec.describe MigrateInvoiceRunsReceiverIds, type: :migration do
   before do
     ActiveRecord::Migration.verbose = false
     migration_context.down(previous_version)
-    InvoiceRun.reset_column_information
+    ActiveRecord::Base.connection.schema_cache.clear!
+    ActiveRecord::Base.descendants.each(&:reset_column_information)
   end
 
   after do
     migration_context.up
-    InvoiceRun.reset_column_information
+    ActiveRecord::Base.connection.schema_cache.clear!
+    ActiveRecord::Base.descendants.each(&:reset_column_information)
     ActiveRecord::Migration.verbose = true
   end
 

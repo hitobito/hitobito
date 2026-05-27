@@ -15,7 +15,7 @@ class UserJobResultsController < ApplicationController
     render "index"
   end
 
-  def download_attachment
+  def download
     user_job_result = UserJobResult.find_by(id: params[:id])
     if user_job_result&.downloadable?(current_person)
       redirect_to rails_blob_path(

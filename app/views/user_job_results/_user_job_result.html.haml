@@ -22,4 +22,4 @@
       = "#{UserJobResult.human_attribute_name('attempts')}: #{user_job_result.attempts}/#{user_job_result.max_attempts}"
     .col-1
       - if user_job_result.generated_file.attached?
-        = link_to(icon("download", {filled: true}), "/user_job_results/#{user_job_result.id}/download_attachment")
+        = link_to(icon("download", {filled: true}), download_user_job_result_path(user_job_result))

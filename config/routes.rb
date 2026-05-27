@@ -460,8 +460,9 @@ Hitobito::Application.routes.draw do
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
 
-    get "user_job_results" => "user_job_results#index"
-    get "user_job_results/:id/download_attachment" => "user_job_results#download_attachment"
+    resources :user_job_results, only: [:index] do
+      get :download, on: :member
+    end
   end # scope locale
 
   get "/api", to: "json_api/documentation#index"

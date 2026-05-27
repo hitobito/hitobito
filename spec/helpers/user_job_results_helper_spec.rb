@@ -6,12 +6,7 @@
 require "spec_helper"
 
 describe UserJobResultsHelper do
-  let(:user_job_result) do
-    UserJobResult.create!(
-      person: people(:top_leader),
-      job_class: "TestJob"
-    )
-  end
+  let(:user_job_result) { Fabricate(:user_job_result) }
 
   it "icon for status in_progress should have spin animation class" do
     user_job_result.report_in_progress!

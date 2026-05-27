@@ -8,11 +8,9 @@
 require "spec_helper"
 
 describe UserJobResultsController do
-  let(:person) { people(:bottom_member) }
-  let(:other_person) { people(:top_leader) }
-  let(:user_job_result) do
-    create_test_user_job_result(person)
-  end
+  let(:person) { people(:top_leader) }
+  let(:other_person) { people(:bottom_member) }
+  let(:user_job_result) { Fabricate(:user_job_result) }
 
   before do
     sign_in(person)
@@ -23,47 +21,37 @@ describe UserJobResultsController do
     it "provides user job results only of current person" do
       expected_user_job_results = [user_job_result]
       unexpected_user_job_results = []
-      3.times { expected_user_job_results << create_test_user_job_result(person) }
-      3.times { unexpected_user_job_results << create_test_user_job_result(other_person) }
+      3.times { expected_user_job_results << Fabricate(:user_job_result, person:) }
+      3.times { unexpected_user_job_results << Fabricate(:user_job_result, person_id: other_person.id) }
 
       get :index
       user_job_results = assigns(:user_job_results)
 
-      expect(user_job_results).to match_array(expected_user_job_results)
+      expect(user_job_results).to eq(expected_user_job_results.sort_by(&:start_timestamp).reverse)
       expect(user_job_results).not_to include(*unexpected_user_job_results)
     end
   end
 
   context "show" do
     it "allows downloading an attachment that person has access to" do
-      get :download_attachment, params: {id: user_job_result.id}
+      get :download, params: {id: user_job_result.id}
 
       expect(response).to be_redirect
     end
 
     it "returns 404 if person has no access" do
       user_job_result.update!(person: other_person)
-      get :download_attachment, params: {id: user_job_result.id}
+      get :download, params: {id: user_job_result.id}
 
       is_expected.to render_template("errors/404")
       expect(response.status).to match(404)
     end
 
     it "returns 404 if file does not exists" do
-      get :download_attachment, params: {id: "unknown_file"}
+      get :download, params: {id: "unknown_file"}
 
       is_expected.to render_template("errors/404")
       expect(response.status).to match(404)
     end
-  end
-
-  def create_test_user_job_result(person)
-    UserJobResult.create!(
-      person:,
-      job_class: "TestJob",
-      filename: "subscriptions_to-blorbaels-rants",
-      filetype: "txt",
-      reports_progress: false
-    )
   end
 end

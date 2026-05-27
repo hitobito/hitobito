@@ -9,15 +9,12 @@ require "spec_helper"
 
 describe UserJobResult do
   let(:person) { people(:top_leader) }
-  let(:other_person) { people(:bottom_member) }
   let(:job_class) { "Export::ExampleExportJob" }
-  let(:filename) { "subscriptions_to-blorbaels-rants" }
-  let(:filetype) { "csv" }
   let(:reports_progress) { false }
   let(:data) { SecureRandom.base64(128) }
 
   subject do
-    UserJobResult.create!(person:, job_class:, filename:, filetype:, reports_progress:)
+    Fabricate(:user_job_result, job_class:, filetype: "csv", reports_progress:)
   end
 
   describe "default values", time_frozen: true do
@@ -79,7 +76,7 @@ describe UserJobResult do
 
   describe "filename handling" do
     it "should append filetype to filename in getter" do
-      expect(subject.filename).to eql "#{filename}.#{filetype}"
+      expect(subject.filename).to eql "subscriptions_to-blorbaels-rants.csv"
     end
 
     # Tested because we append the filetype to the filename
@@ -158,75 +155,80 @@ describe UserJobResult do
       expect(subject.progress).to be_zero
     end
 
-    it "should correctly set progress with 1 percent steps" do
-      subject.update!(reports_progress: true)
+    context "when reports_progress true" do
+      let(:reports_progress) { true }
 
-      calculated_progress_values = []
-      calculated_progress_values << subject.progress
-
-      (0..100).each do |i|
-        subject.report_progress!(i, 100)
-        calculated_progress_values << subject.progress
+      it "should not make db query when reported progress stays the same" do
+        expect do
+          subject.report_progress!(10, 1000)
+          subject.report_progress!(11, 1000)
+        end.to make.db_queries.with("UserJobResult Update": 1)
       end
 
-      expect(calculated_progress_values.uniq).to match_array((0..100).to_a)
-    end
-
-    it "should correctly set progress with 10 percent steps" do
-      subject.update!(reports_progress: true)
-
-      calculated_progress_values = []
-      calculated_progress_values << subject.progress
-
-      (9..99).step(10).each do |i|
-        subject.report_progress!(i, 100)
+      it "should correctly set progress with 1 percent steps" do
+        calculated_progress_values = []
         calculated_progress_values << subject.progress
+
+        (0..100).each do |i|
+          subject.report_progress!(i, 100)
+          calculated_progress_values << subject.progress
+        end
+
+        expect(calculated_progress_values.uniq).to match_array((0..100).to_a)
       end
 
-      expect(calculated_progress_values.uniq).to match_array((0..100).step(10).to_a)
-    end
+      it "should correctly set progress with 10 percent steps" do
+        calculated_progress_values = []
+        calculated_progress_values << subject.progress
 
-    it "should not allow progress over 100" do
-      subject.update!(reports_progress: true)
-      subject.report_progress!(150, 100)
+        (9..99).step(10).each do |i|
+          subject.report_progress!(i, 100)
+          calculated_progress_values << subject.progress
+        end
 
-      expect(subject.progress).to eql(100)
-    end
+        expect(calculated_progress_values.uniq).to match_array((0..100).step(10).to_a)
+      end
 
-    it "should not allow progress under 0" do
-      subject.update!(reports_progress: true)
-      subject.report_progress!(-100, 100)
+      it "should not allow progress over 100" do
+        subject.report_progress!(150, 100)
 
-      expect(subject.progress).to eql(0)
+        expect(subject.progress).to eql(100)
+      end
+
+      it "should not allow progress under 0" do
+        subject.report_progress!(-100, 100)
+
+        expect(subject.progress).to eql(0)
+      end
     end
   end
 
   describe "websocket connection of person" do
     it "should be enabled when job is enqueued" do
-      expect(person.needs_web_socket_connection).to be_falsy
+      expect(person.reload.needs_web_socket_connection).to be_falsy
 
       subject
-      expect(person.needs_web_socket_connection).to be_truthy
+      expect(person.reload.needs_web_socket_connection).to be_truthy
     end
 
     it "should be enabled when job is in progress" do
       subject
-      expect(person.needs_web_socket_connection).to be_truthy
+      expect(person.reload.needs_web_socket_connection).to be_truthy
 
       subject.update!(status: "in_progress")
-      expect(person.needs_web_socket_connection).to be_truthy
+      expect(person.reload.needs_web_socket_connection).to be_truthy
     end
 
     it "should be disabled when all jobs have finished" do
       user_job_result = subject
-      expect(person.needs_web_socket_connection).to be_truthy
-      other_user_job_result = UserJobResult.create!(person:, job_class:)
-      expect(person.needs_web_socket_connection).to be_truthy
+      expect(person.reload.needs_web_socket_connection).to be_truthy
+      other_user_job_result = Fabricate(:user_job_result, job_class:)
+      expect(person.reload.needs_web_socket_connection).to be_truthy
 
       user_job_result.update!(status: "success")
-      expect(person.needs_web_socket_connection).to be_truthy
+      expect(person.reload.needs_web_socket_connection).to be_truthy
       other_user_job_result.update!(status: "error")
-      expect(person.needs_web_socket_connection).to be_falsy
+      expect(person.reload.needs_web_socket_connection).to be_falsy
     end
   end
 
@@ -277,16 +279,16 @@ describe UserJobResult do
       expect { user_job_result.report_progress!(10, 100) }.to have_broadcasted_to(update_channel_name)
       expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
-      expect { user_job_result.report_progress!(15, 100) }.not_to have_broadcasted_to(update_channel_name)
+      expect { user_job_result.report_progress!(20, 100) }.not_to have_broadcasted_to(update_channel_name)
       expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
       travel(6.seconds)
       broadcast_time = Time.current
 
-      expect { user_job_result.report_progress!(20, 100) }.to have_broadcasted_to(update_channel_name)
+      expect { user_job_result.report_progress!(30, 100) }.to have_broadcasted_to(update_channel_name)
       expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
-      expect { user_job_result.report_progress!(25, 100) }.not_to have_broadcasted_to(update_channel_name)
+      expect { user_job_result.report_progress!(40, 100) }.not_to have_broadcasted_to(update_channel_name)
       expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
     end
 
@@ -323,6 +325,8 @@ describe UserJobResult do
     end
 
     it "is not downloadable for a different person" do
+      other_person = people(:bottom_member)
+
       expect(subject.downloadable?(other_person)).to be false
     end
   end

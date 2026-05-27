@@ -3,7 +3,8 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-= turbo_stream_from "person_#{current_person.id}_user_job_result_updates"
+- if current_person.needs_web_socket_connection
+  = turbo_stream_from "person_#{current_person.id}_user_job_result_updates"
 = paginate @user_job_results
 
 - title t(".title")

@@ -71,7 +71,11 @@ describe :user_job_results, js: true do
   end
 
   describe "live update and notifications" do
+    let(:bottom_member) { people(:bottom_member) }
+
     before do
+      top_leader.update!(needs_web_socket_connection: true)
+      bottom_member.update!(needs_web_socket_connection: true)
       Delayed::Worker.max_attempts = 1
     end
 
@@ -194,12 +198,54 @@ describe :user_job_results, js: true do
       expect(page).not_to have_css("#user-job-results-link-with-badge .badge")
     end
 
+    it "should establish web socket connection when needs_web_socket_connection on person is truthy" do
+      visit root_path
+
+      expect(page).to have_css("turbo-cable-stream-source", visible: false, count: 1)
+
+      visit user_job_results_path
+
+      expect(page).to have_css("turbo-cable-stream-source", visible: false, count: 2)
+    end
+
+    it "should not establish web socket connection when needs_web_socket_connection on person is falsy" do
+      top_leader.update!(needs_web_socket_connection: false)
+
+      visit root_path
+      expect(page).to have_content("Top Leader")
+
+      expect(page).not_to have_css("turbo-cable-stream-source", visible: false)
+
+      visit user_job_results_path
+      expect(page).to have_content("Jobübersicht")
+
+      expect(page).not_to have_css("turbo-cable-stream-source", visible: false)
+    end
+
+    it "should automatically establish websocket connection when job is enqueued from ui" do
+      top_leader.update!(needs_web_socket_connection: false)
+
+      visit group_path(groups(:top_group))
+      expect(page).to have_content("TopGroup")
+
+      expect(page).not_to have_css("turbo-cable-stream-source", visible: false)
+
+      click_link("CSV Untergruppen")
+
+      expect(page).to have_css("turbo-cable-stream-source", visible: false, count: 1)
+      expect(page).to have_css("#user-job-results-link-with-badge .badge", text: 1)
+
+      expect(Delayed::Worker.new.work_off).to eql([1, 0])
+
+      expect(page).to have_content("Job erfolgreich abgeschlossen")
+    end
+
     def enqueue_job_by_current_and_other_user(job_class)
       user_job = job_class.new
       user_job.job_name = "Job enqueued by current user"
       user_job.enqueue!
 
-      allow(Auth).to receive(:current_person).and_return(people(:bottom_member))
+      allow(Auth).to receive(:current_person).and_return(bottom_member)
 
       other_user_job = job_class.new
       user_job.job_name = "Job enqueued by other user"

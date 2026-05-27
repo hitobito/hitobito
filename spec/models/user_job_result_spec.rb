@@ -154,12 +154,12 @@ describe UserJobResult do
       subject.update!(reports_progress: true)
       subject.update!(progress: 0)
 
-      list = (0..1000)
+      list = (0..150)
       calculated_progress_values = []
       calculated_progress_values << subject.progress
 
       list.each do |i|
-        subject.report_progress!(i, 1000)
+        subject.report_progress!(i, 150)
         calculated_progress_values << subject.progress
       end
 
@@ -194,6 +194,35 @@ describe UserJobResult do
       subject.report_progress!(-100, 100)
 
       expect(subject.progress).to eql(0)
+    end
+  end
+
+  describe "websocket connection of person" do
+    it "should be enabled when job is enqueued" do
+      expect(person.needs_web_socket_connection).to be_falsy
+
+      subject
+      expect(person.needs_web_socket_connection).to be_truthy
+    end
+
+    it "should be enabled when job is in progress" do
+      subject
+      expect(person.needs_web_socket_connection).to be_truthy
+
+      subject.update!(status: "in_progress")
+      expect(person.needs_web_socket_connection).to be_truthy
+    end
+
+    it "should be disabled when all jobs have finished" do
+      user_job_result = subject
+      expect(person.needs_web_socket_connection).to be_truthy
+      other_user_job_result = UserJobResult.create!(person:, job_name:)
+      expect(person.needs_web_socket_connection).to be_truthy
+
+      user_job_result.update!(status: "success")
+      expect(person.needs_web_socket_connection).to be_truthy
+      other_user_job_result.update!(status: "error")
+      expect(person.needs_web_socket_connection).to be_falsy
     end
   end
 

@@ -42,6 +42,7 @@
 #  locked_at                            :datetime
 #  membership_verify_token              :string
 #  minimized_at                         :datetime
+#  needs_web_socket_connection          :boolean
 #  nickname                             :string
 #  postbox                              :string
 #  privacy_policy_accepted_at           :datetime
@@ -105,7 +106,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :blocked_at,
     :membership_verify_token,
     :inactivity_block_warning_sent_at,
-    :minimized_at
+    :minimized_at,
+    :needs_web_socket_connection
   ]
 
   MERGABLE_ATTRS = PUBLIC_ATTRS - [:id, :primary_group_id, :picture]
@@ -279,7 +281,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :pass_installations, class_name: "Wallets::PassInstallation",
     through: :passes
 
-  has_many :user_job_results
+  has_many :user_job_results, dependent: :destroy
 
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true

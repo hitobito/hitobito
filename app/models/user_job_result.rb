@@ -31,9 +31,10 @@
 class UserJobResult < ApplicationRecord
   include I18nEnums
 
-  scope :unfinished, -> { where(status: [:planned, :in_progress]) }
+  scope :unfinished, -> { where(status: UNFINISHED_STATUSES) }
 
   STATUSES = %w[planned in_progress success error].freeze
+  UNFINISHED_STATUSES = %w[planned in_progress].freeze
 
   i18n_enum :status, STATUSES, queries: true
 
@@ -45,6 +46,7 @@ class UserJobResult < ApplicationRecord
   after_initialize :set_default_values, if: :new_record?
   after_update_commit :broadcast_replace_and_badge_update
   after_commit :broadcast_refresh_and_badge_update, on: %i[create destroy]
+  after_save :set_web_socket_connection_state
 
   before_destroy do
     generated_file.purge if generated_file.attached?
@@ -194,5 +196,13 @@ class UserJobResult < ApplicationRecord
       locals: {person:},
       target: "user-job-results-link-with-badge"
     )
+  end
+
+  def set_web_socket_connection_state
+    if person.user_job_results.unfinished.count > 0
+      person.update!(needs_web_socket_connection: true)
+    else
+      person.update!(needs_web_socket_connection: false)
+    end
   end
 end

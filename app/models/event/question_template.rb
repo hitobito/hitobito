@@ -64,4 +64,8 @@ class Event::QuestionTemplate < ActiveRecord::Base
   def to_s
     question.to_s
   end
+
+  def editable?
+    question&.class&.template_editable
+  end
 end

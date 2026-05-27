@@ -56,6 +56,6 @@ class Event::QuestionTemplatesController < SimpleCrudController
   def group = @group ||= Group.find(params[:group_id])
 
   def assert_template_editable
-    raise CanCan::AccessDenied unless entry.question.class.template_editable
+    raise CanCan::AccessDenied unless entry.editable?
   end
 end

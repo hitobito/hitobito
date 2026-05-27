@@ -9,6 +9,6 @@
     = _1.event_type_label
   - t.attr :default
   - action_col(t) do
-    = link_action_edit(edit_group_question_template_path(_1.group, _1)) if _1.question.class.template_editable
+    = link_action_edit(edit_group_question_template_path(_1.group, _1)) if _1.editable?
   - action_col(t) do
-    = link_action_destroy(group_question_template_path(_1.group, _1)) if _1.question.class.template_editable
+    = link_action_destroy(group_question_template_path(_1.group, _1)) if _1.editable?

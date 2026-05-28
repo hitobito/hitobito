@@ -339,6 +339,10 @@ fr:
         one: Donnée pour l'inscription
         many: Données pour l'inscription
         other: Données pour l'inscription
+      event/question_template:
+        one: Vorlage Anmeldeangabe Anlässe
+        many: Vorlagen Anmeldeangaben Anlässe
+        other: Vorlagen Anmeldeangaben Anlässe
       event/answer:
         one: Réponse aux informations d'inscription
         many: Réponses aux informations d'inscription
@@ -968,6 +972,13 @@ fr:
         multiple_choices: Sélection multiple
         required: Obligatorisch
         sensitive: Sensible
+
+      event/question_template:
+        question: Frage
+        default: Default
+        event_type: Anlasstyp
+        inherit: Vererbung
+
 
       admin_questions:
         question: Question

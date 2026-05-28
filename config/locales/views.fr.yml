@@ -215,6 +215,7 @@ fr:
     archive: "Archiver"
     delete: Effacer
     edit_service_token: Clefs API
+    edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
     edit_calendar_feeds: Feed du calendrier
 
   dropdown/people_email_export:
@@ -556,6 +557,11 @@ fr:
       update:
         flash:
           success: Les qualifications ont été mises à jour.
+
+    question_templates:
+      form:
+        default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
+        inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
 
     register:
       register:

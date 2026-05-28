@@ -338,6 +338,10 @@ it:
         one: Anmeldeangabe
         many: Anmeldeangaben
         other: Anmeldeangaben
+      event/question_template:
+        one: Vorlage Anmeldeangabe Anlässe
+        many: Vorlagen Anmeldeangaben Anlässe
+        other: Vorlagen Anmeldeangaben Anlässe
       event/answer:
         one: Antwort auf Anmeldeangabe
         many: Antworten auf Anmeldeangaben
@@ -967,6 +971,13 @@ it:
         multiple_choices: Scelta multipla
         required: Obligatorisch
         sensitive: Delicato
+
+      event/question_template:
+        question: Frage
+        default: Default
+        event_type: Anlasstyp
+        inherit: Vererbung
+
 
       admin_questions:
         question: Domanda

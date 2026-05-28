@@ -182,6 +182,8 @@ class Event::Question < ActiveRecord::Base
   end
 
   def copy_translations_for_derived_question
+    return unless template_id
+
     template_question = Event::QuestionTemplate.find(template_id).question
     [:question, :choices].each do |attribute|
       template_translations = template_question.globalize_locales

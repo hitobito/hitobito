@@ -13,6 +13,7 @@ describe "people/_actions_show.html.haml" do
   before do
     allow(controller).to receive(:current_user) { current_user }
     allow(view).to receive(:current_user) { current_user }
+    allow(view).to receive(:current_person) { current_user }
     allow(view).to receive(:entry) { person.decorate }
     allow(view).to receive(:parent) { group }
     allow(view).to receive(:path_args) { [group, person] }
@@ -73,6 +74,28 @@ describe "people/_actions_show.html.haml" do
       it "is not shown" do
         expect(current_user_finance_layer_ids).to include(groups(:bottom_layer_one).id)
         is_expected.not_to have_link("Rechnung erstellen")
+      end
+    end
+  end
+
+  describe "export button" do
+    context "when user has basic_permissions_only" do
+      let(:current_user) { person_with_role(Group::BottomLayer::BasicPermissionsOnly, groups(:bottom_layer_one)) }
+      let(:person) { current_user }
+
+      it "is not shown" do
+        allow(view).to receive(:dropdown_people_export).and_return("Export Button")
+        is_expected.not_to have_content("Export Button")
+      end
+    end
+
+    context "when user has more than basic_permissions_only" do
+      let(:current_user) { people(:bottom_member) }
+      let(:person) { people(:bottom_member) }
+
+      it "is shown" do
+        allow(view).to receive(:dropdown_people_export).and_return("Export Button")
+        is_expected.to have_content("Export Button")
       end
     end
   end

@@ -1736,12 +1736,12 @@ describe PersonAbility do
         group: groups(:bottom_layer_one))
     end
 
-    it "may not show_details herself" do
-      is_expected.to_not be_able_to(:show_details, role.person)
+    it "may show_details herself" do
+      is_expected.to be_able_to(:show_details, role.person)
     end
 
-    it "may not show_full herself" do
-      is_expected.to_not be_able_to(:show_full, role.person)
+    it "may show_full herself" do
+      is_expected.to be_able_to(:show_full, role.person)
     end
 
     it "may not show history on herself" do

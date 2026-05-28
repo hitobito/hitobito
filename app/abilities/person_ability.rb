@@ -101,7 +101,11 @@ class PersonAbility < AbilityDsl::Base
       permission(:any).may(:show, :update, :update_email, :primary_group, :totp_reset).herself
 
       permission(:any)
-        .may(:show_details, :show_full, :history, :log)
+        .may(:show_details, :show_full)
+        .herself
+
+      permission(:any)
+        .may(:history, :log)
         .herself_unless_only_basic_permissions_roles
 
       class_side(:create_households).if_any_writing_permission_or_any_manageds

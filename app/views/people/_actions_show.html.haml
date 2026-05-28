@@ -17,7 +17,8 @@
 
 = render_extensions(:actions_show)
 
-= dropdown_people_export(can?(:show_full, entry), false, true, false)
+- unless current_person&.basic_permissions_only?
+  = dropdown_people_export(can?(:show_full, entry), false, true, false)
 
 = dropdown_people_login(entry)
 

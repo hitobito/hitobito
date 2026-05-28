@@ -28,7 +28,7 @@ describe OidcClaimSetup do
 
     it "includes person name attributes" do
       expect(claim_keys).to match_array %w[first_name last_name nickname address address_care_of street housenumber
-        postbox zip_code town country]
+        postbox zip_code town country given_name family_name]
     end
   end
 
@@ -41,6 +41,8 @@ describe OidcClaimSetup do
         roles
         first_name
         last_name
+        given_name
+        family_name
         nickname
         address
         company_name

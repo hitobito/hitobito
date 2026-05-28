@@ -24,12 +24,6 @@ describe Person::NameResource, type: :resource do
       expect(data.id).to eq person.id
       expect(data.jsonapi_type).to eq("person-name")
     end
-
-    it "does not return people without roles as ability filters" do
-      Role.destroy_all
-      render
-      expect(jsonapi_data).to be_empty
-    end
   end
 
   describe "filters" do

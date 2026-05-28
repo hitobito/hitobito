@@ -61,7 +61,7 @@ RSpec.describe "events#show", type: :request do
       describe "without people scope" do
         before { service_token.update!(people: false) }
 
-        it "does not return the event contact" do
+        it "does not return the event contact, only the leader" do
           event.update_attribute(:contact_id, people(:bottom_member).id)
 
           make_request
@@ -69,7 +69,8 @@ RSpec.describe "events#show", type: :request do
           expect(response.status).to eq(200)
           data = json["data"]
           expect(data["relationships"]["contact"]["data"]).to be_nil
-          expect(json["included"]).to be_nil
+          expect(data["relationships"]["leaders"]["data"].size).to eq(1)
+          expect(json["included"].first["type"]).to eq("person-name")
         end
       end
     end

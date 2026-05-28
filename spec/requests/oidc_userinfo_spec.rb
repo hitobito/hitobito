@@ -62,6 +62,8 @@ RSpec.describe "GET oauth/userinfo", type: :request do
       expect(userinfo).to eq({sub: "382461928",
         first_name: "Bottom",
         last_name: "Member",
+        given_name: "Bottom",
+        family_name: "Member",
         nickname: nil,
         company_name: nil,
         company: false,

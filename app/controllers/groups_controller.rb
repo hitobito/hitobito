@@ -77,7 +77,7 @@ class GroupsController < CrudController
     Export::SubgroupsExportJob.new(
       current_person.id, entry.id, filename: :subgroups_export
     ).enqueue!
-    redirect_after_enqueued_export(redirection_target: entry)
+    redirect_after_enqueued_export(entry)
   end
 
   def person_notes

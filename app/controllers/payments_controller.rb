@@ -38,7 +38,7 @@ class PaymentsController < CrudController
   def render_tabular_entries_in_background(format)
     return_path = group_invoices_path(params[:group_id])
     render_tabular_in_background(format, :payment_export)
-    redirect_after_enqueued_export(redirection_target: return_path)
+    redirect_after_enqueued_export(return_path)
   end
 
   def render_tabular_in_background(format, filename)

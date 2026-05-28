@@ -4,16 +4,12 @@
 #  https://github.com/hitobito/hitobito.
 
 module ExportableRedirect
-  def redirect_after_enqueued_export(redirection_target: {returning: true}, render_command: nil)
+  def redirect_after_enqueued_export(redirection_target={returning: true})
     flash[:notice] = translate(
       :export_enqueued, default: :"global.export_enqueued",
       overview_link: helpers.link_to(t("job_observations.index.title"), job_observations_path)
     )
 
-    if render_command
-      render_command.call
-    else
-      redirect_to redirection_target
-    end
+    redirect_to redirection_target
   end
 end

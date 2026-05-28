@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 module ExportableRedirect
+  private
+
   def redirect_after_enqueued_export(redirection_target={returning: true})
     flash[:notice] = translate(
       :export_enqueued, default: :"global.export_enqueued",

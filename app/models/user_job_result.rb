@@ -66,20 +66,21 @@ class UserJobResult < ApplicationRecord
   end
 
   def write(data, force_encoding: nil)
-    Tempfile.create do |file|
-      case filetype.to_sym
-      when :csv then file.set_encoding(Settings.csv.encoding)
-      when :pdf then file.binmode
-      end
+    io = StringIO.new
 
-      file.set_encoding(force_encoding) if force_encoding.present?
-
-      file.write(data)
-
-      file.rewind # make ActiveStorage's checksum-calculation deterministic
-
-      generated_file.attach(io: file, filename:)
+    case filetype.to_sym
+    when :csv then io.set_encoding(Settings.csv.encoding)
+    when :pdf then io.binmode
     end
+
+    io.set_encoding(force_encoding) if force_encoding.present?
+
+    # This creates a copy of data in memory. To make the memory footprint of the workers smaller
+    # we should find a method that doesnt create a copy of data in memory.
+    io.write(data)
+    io.rewind # make ActiveStorage's checksum-calculation deterministic
+
+    generated_file.attach(io: io, filename: filename.to_s)
   end
 
   def read

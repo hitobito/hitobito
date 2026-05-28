@@ -17,7 +17,7 @@ Applications must be registered with allowed callback URLs and allowed scopes (s
 Different external applications need different types of data about their users. Scopes are used to define what information an external application can request and access.
 
 | Scope           | Available user data / functionality       |
-| ---             | ---                                       |
+| --------------- | ----------------------------------------- |
 | `email`         | id, email                                 |
 | `name`          | id, email, firstname, lastname, nickname  |
 | `with_roles`    | All the profile data, roles within groups |
@@ -131,6 +131,7 @@ When using the `with_roles` scope, the /oauth/profile endpoint yields all public
   "birthday": "1999-09-09",
   "primary_group_id": 1,
   "language": "de",
+  "locale": "de",
   "roles": [
     {
       "group_id": 1,
@@ -203,6 +204,7 @@ curl -H "Authorization: Bearer A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ" \
   "birthday": "1999-09-09",
   "primary_group_id": 1,
   "language": "de",
+  "locale": "de",
   "roles": [
     {
       "group_id": 1,

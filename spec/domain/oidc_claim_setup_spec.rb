@@ -59,6 +59,7 @@ describe OidcClaimSetup do
         birthday
         primary_group_id
         language
+        locale
       ]
     end
 

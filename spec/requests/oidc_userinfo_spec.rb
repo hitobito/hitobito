@@ -79,6 +79,7 @@ RSpec.describe "GET oauth/userinfo", type: :request do
         birthday: nil,
         primary_group_id: 376803389,
         language: "de",
+        locale: "de",
         address: "Greatstreet 345",
         roles: [{group_id: 376803389,
                  group_name: "Bottom One",

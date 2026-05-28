@@ -165,6 +165,7 @@ When using the `with_roles` scope, the /oauth/profile endpoint yields all public
   "birthday": "1999-09-09",
   "primary_group_id": 1,
   "language": "de",
+  "locale": "de",
   "roles": [
     {
       "group_id": 1,
@@ -237,6 +238,7 @@ curl -H "Authorization: Bearer A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ" \
   "birthday": "1999-09-09",
   "primary_group_id": 1,
   "language": "de",
+  "locale": "de",
   "roles": [
     {
       "group_id": 1,

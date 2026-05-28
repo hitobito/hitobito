@@ -30,6 +30,7 @@ class OidcClaimSetup
     end
     add_claim(:given_name, scope: :with_roles) { |owner| owner.first_name }
     add_claim(:family_name, scope: :with_roles) { |owner| owner.last_name }
+    add_claim(:locale, scope: :with_roles) { |owner| owner.language }
     add_claim(:roles, scope: :with_roles) { |owner| owner.decorate.roles_for_oauth }
   end
 

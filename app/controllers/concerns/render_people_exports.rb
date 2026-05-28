@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module RenderPeopleExports
-  include UserManageableExportJob
+  include ExportableRedirect
   extend ActiveSupport::Concern
 
   def render_pdf(people, group = nil, title = nil)
@@ -32,7 +32,7 @@ module RenderPeopleExports
       group.id,
       params.slice(:label_format_id, :household, :address_type)
       .merge(filename: filename)).enqueue!
-    respond_to_export_job
+    redirect_after_enqueued_export
   end
 
   private

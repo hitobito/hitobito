@@ -744,6 +744,26 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
 
+  create_table "job_observations", force: :cascade do |t|
+    t.string "job_class", null: false
+    t.string "filetype", null: false
+    t.integer "progress", null: false
+    t.bigint "person_id", null: false
+    t.datetime "started_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "filename"
+    t.datetime "finished_at"
+    t.string "status", null: false
+    t.integer "attempts", null: false
+    t.integer "max_attempts", null: false
+    t.boolean "reports_progress", null: false
+    t.datetime "last_progress_update_broadcasted_at"
+    t.bigint "delayed_job_id"
+    t.index ["delayed_job_id"], name: "index_job_observations_on_delayed_job_id"
+    t.index ["person_id"], name: "index_job_observations_on_person_id"
+  end
+
   create_table "label_format_translations", force: :cascade do |t|
     t.integer "label_format_id", null: false
     t.string "locale", null: false
@@ -1380,26 +1400,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
-  end
-
-  create_table "user_job_results", force: :cascade do |t|
-    t.string "job_class", null: false
-    t.string "filetype", null: false
-    t.integer "progress", null: false
-    t.bigint "person_id", null: false
-    t.datetime "started_at", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "filename"
-    t.datetime "finished_at"
-    t.string "status", null: false
-    t.integer "attempts", null: false
-    t.integer "max_attempts", null: false
-    t.boolean "reports_progress", null: false
-    t.datetime "last_progress_update_broadcasted_at"
-    t.bigint "delayed_job_id"
-    t.index ["delayed_job_id"], name: "index_user_job_results_on_delayed_job_id"
-    t.index ["person_id"], name: "index_user_job_results_on_person_id"
   end
 
   create_table "versions", id: :serial, force: :cascade do |t|

@@ -3,13 +3,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module UserManageableJob
+module ObservableJob
   extend ActiveSupport::Concern
 
   prepended do
     attr_writer :user_id
     class_attribute :reports_progress, default: false
-    self.parameters = parameters.to_a + [:user_job_result_id]
+    self.parameters = parameters.to_a + [:job_observation_id]
   end
 
   def enqueue!(options = {})
@@ -24,47 +24,47 @@ module UserManageableJob
     return super unless enqueueing_person
 
     ActiveRecord::Base.transaction do
-      user_job_result = UserJobResult.create!(
+      job_observation = JobObservation.create!(
         person: enqueueing_person, job_class: self.class.name,
         reports_progress:, filename: @options&.dig(:filename),
         filetype: @format, max_attempts: try(:max_attempts)
       )
-      @user_job_result_id = user_job_result.id
+      @job_observation_id = job_observation.id
 
       delayed_job = super
-      user_job_result.update!(delayed_job:)
+      job_observation.update!(delayed_job:)
 
       delayed_job
     end
   end
 
   def before(delayed_job)
-    user_job_result.report_in_progress! if @user_job_result_id
+    job_observation.report_in_progress! if @job_observation_id
     super if defined?(super)
   end
 
   def success(delayed_job)
-    user_job_result.report_success!(delayed_job.attempts + 1) if @user_job_result_id
+    job_observation.report_success!(delayed_job.attempts + 1) if @job_observation_id
     super if defined?(super)
   end
 
   def error(delayed_job, exception, payload = parameters)
-    user_job_result.report_error!(delayed_job.attempts + 1) if @user_job_result_id
+    job_observation.report_error!(delayed_job.attempts + 1) if @job_observation_id
     super if defined?(super)
   end
 
   def failure(delayed_job)
-    user_job_result.report_failure! if @user_job_result_id
+    job_observation.report_failure! if @job_observation_id
     super if defined?(super)
   end
 
   def report_progress!(current_iteration, iteration_count)
-    return unless @user_job_result_id
+    return unless @job_observation_id
 
-    user_job_result.report_progress!(current_iteration, iteration_count)
+    job_observation.report_progress!(current_iteration, iteration_count)
   end
 
-  def user_job_result
-    @user_job_result ||= UserJobResult.find(@user_job_result_id)
+  def job_observation
+    @job_observation ||= JobObservation.find(@job_observation_id)
   end
 end

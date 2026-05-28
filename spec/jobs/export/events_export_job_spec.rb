@@ -14,7 +14,7 @@ describe Export::EventsExportJob do
   let(:filter) do
     {range: "all", year: year}
   end
-  let(:file) { subject.user_job_result }
+  let(:file) { subject.job_observation }
 
   before do
     SeedFu.quiet = true

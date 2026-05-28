@@ -18,7 +18,7 @@ describe Export::PeopleExportJob do
   let(:group) { groups(:bottom_layer_one) }
   let(:household) { false }
   let(:selection) { false }
-  let(:file) { subject.user_job_result }
+  let(:file) { subject.job_observation }
 
   before do
     SeedFu.quiet = true

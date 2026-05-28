@@ -7,12 +7,12 @@
 
 require "spec_helper"
 
-describe "user_job_results/_user_job_result.html.haml" do
+describe "job_observations/_job_observation.html.haml" do
   let(:person) { people(:top_leader) }
-  let(:user_job_result) { Fabricate(:user_job_result, person_id: person.id, status: "success", attempts: 1) }
+  let(:job_observation) { Fabricate(:job_observation, person_id: person.id, status: "success", attempts: 1) }
 
   let(:dom) do
-    render locals: { user_job_result: }
+    render locals: { job_observation: }
     Capybara::Node::Simple.new(rendered)
   end
 
@@ -32,8 +32,8 @@ describe "user_job_results/_user_job_result.html.haml" do
   end
 
   it "shows progress bar for successful job with progress" do
-    user_job_result.update!(reports_progress: true)
-    user_job_result.update!(progress: 100)
+    job_observation.update!(reports_progress: true)
+    job_observation.update!(progress: 100)
 
     expect(dom).to have_css(".fas.fa-circle-check")
     expect(dom).to have_css(".progress")
@@ -42,7 +42,7 @@ describe "user_job_results/_user_job_result.html.haml" do
   end
 
   it "should show download icon if file is downloadable" do
-    user_job_result.write("Some wonderful file content")
+    job_observation.write("Some wonderful file content")
 
     expect(dom).to have_css(".fas.fa-download")
   end

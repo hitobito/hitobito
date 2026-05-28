@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::InvitationsController < CrudController
-  include UserManageableExportJob
+  include ExportableRedirect
 
   self.permitted_attrs = [:event_id, :person_id, :participation_type]
 
@@ -67,7 +67,7 @@ class Event::InvitationsController < CrudController
       current_person.id,
       event.id,
       filename: name).enqueue!
-    respond_to_export_job
+    redirect_after_enqueued_export
   end
 
   def ability

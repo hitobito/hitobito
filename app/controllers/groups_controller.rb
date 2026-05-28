@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class GroupsController < CrudController
-  include UserManageableExportJob
+  include ExportableRedirect
 
   # Respective group attrs are added in corresponding instance method.
   self.permitted_attrs = Contactable::ACCESSIBLE_ATTRS.dup + [
@@ -77,7 +77,7 @@ class GroupsController < CrudController
     Export::SubgroupsExportJob.new(
       current_person.id, entry.id, filename: :subgroups_export
     ).enqueue!
-    respond_to_export_job(redirection_target: entry)
+    redirect_after_enqueued_export(redirection_target: entry)
   end
 
   def person_notes

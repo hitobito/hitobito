@@ -10,7 +10,7 @@ require "spec_helper"
 describe Export::PaymentsExportJob do
   subject { described_class.new(format, user.id, payment_ids, filename: "payments_export") }
 
-  let(:file) { subject.user_job_result }
+  let(:file) { subject.job_observation }
 
   let(:user) { people(:top_leader) }
   let(:payment_ids) do

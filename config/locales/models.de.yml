@@ -1498,7 +1498,7 @@ de:
         included_calendar_tags: Nur mit Tags
         excluded_calendar_tags: Ausgeschlossene Tags
 
-      user_job_result:
+      job_observation:
         started_at: Startzeitpunkt
         finished_at: Endzeitpunkt
         attempts: Versuche

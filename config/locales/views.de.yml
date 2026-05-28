@@ -2366,10 +2366,10 @@ de:
     cannot_create: Bitte wähle einen bestehenden Tag aus
     no_entry: (keine)
 
-  user_job_results:
+  job_observations:
     index:
       title: Jobübersicht
-    user_job_result:
+    job_observation:
       no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
     notification:
       job_success: Job erfolgreich abgeschlossen

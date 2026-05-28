@@ -6,7 +6,7 @@
 class PaymentsController < CrudController
   include FormatHelper
   include ActionView::Helpers::NumberHelper
-  include UserManageableExportJob
+  include ExportableRedirect
 
   self.nesting = [Group, Invoice]
   self.permitted_attrs = [:amount, :received_at]
@@ -38,7 +38,7 @@ class PaymentsController < CrudController
   def render_tabular_entries_in_background(format)
     return_path = group_invoices_path(params[:group_id])
     render_tabular_in_background(format, :payment_export)
-    respond_to_export_job(redirection_target: return_path)
+    redirect_after_enqueued_export(redirection_target: return_path)
   end
 
   def render_tabular_in_background(format, filename)

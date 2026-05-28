@@ -34,7 +34,7 @@ describe Export::InvitationsExportJob do
       subject.enqueue!
       subject.perform
 
-      lines = subject.user_job_result.read.lines
+      lines = subject.job_observation.read.lines
       expect(lines.size).to eq(3)
     end
   end

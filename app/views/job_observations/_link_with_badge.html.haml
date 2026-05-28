@@ -3,10 +3,10 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-%a#user-job-results-link-with-badge.position-relative{href: user_job_results_path}
+%a#job-observations-link-with-badge.position-relative{href: job_observations_path}
   = icon('bars-progress')
-  = t('user_job_results.index.title')
-  - unfinished_job_count = person.user_job_results.unfinished.count
+  = t('job_observations.index.title')
+  - unfinished_job_count = person.job_observations.unfinished.count
   - if unfinished_job_count > 0
     %span.position-absolute.top-0.start-100.translate-middle.badge.rounded-pill.bg-danger
       = unfinished_job_count

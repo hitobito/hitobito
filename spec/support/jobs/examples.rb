@@ -1,6 +1,6 @@
 module Examples
-  class UserManagedJobWithProgress < BaseJob
-    prepend UserManageableJob
+  class ObservableJobWithProgress < BaseJob
+    prepend ObservableJob
 
     self.reports_progress = true
 
@@ -12,8 +12,8 @@ module Examples
     end
   end
 
-  class UnsuccessfulUserManagedJob < BaseJob
-    prepend UserManageableJob
+  class UnsuccessfulObservableJob < BaseJob
+    prepend ObservableJob
 
     def perform
       Rails.logger.debug "Working..."
@@ -21,28 +21,28 @@ module Examples
     end
   end
 
-  class SuccessfulUserManagedJob < BaseJob
-    prepend UserManageableJob
+  class SuccessfulObservableJob < BaseJob
+    prepend ObservableJob
 
     def perform
       Rails.logger.debug "Working..."
     end
   end
 
-  class UserManagedParentJob < BaseJob
-    prepend UserManageableJob
+  class ObservableParentJob < BaseJob
+    prepend ObservableJob
 
     def perform
       3.times do
-        child_job = UserManagedChildJob.new
+        child_job = ObservableChildJob.new
         child_job.user_id = @user_id
         child_job.enqueue!
       end
     end
   end
 
-  class UserManagedChildJob < BaseJob
-    prepend UserManageableJob
+  class ObservableChildJob < BaseJob
+    prepend ObservableJob
 
     def perform
       Rails.logger.debug "Working..."

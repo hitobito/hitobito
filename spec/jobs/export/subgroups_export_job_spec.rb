@@ -11,7 +11,7 @@ describe Export::SubgroupsExportJob do
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
   let(:year) { 2012 }
-  let(:file) { subject.user_job_result }
+  let(:file) { subject.job_observation }
 
   context "creates a CSV-Export" do
     it "and saves it" do

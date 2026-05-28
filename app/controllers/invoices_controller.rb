@@ -6,7 +6,7 @@
 class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   include Api::JsonPaging
   include RenderMessagesExports
-  include UserManageableExportJob
+  include ExportableRedirect
 
   decorates :invoice
 
@@ -148,7 +148,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       format, current_person.id, invoices.map(&:id),
       {filename: filename(invoices)}
     ).enqueue!
-    respond_to_export_job
+    redirect_after_enqueued_export
   end
 
   def render_invoices_pdf(invoices)
@@ -163,7 +163,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
         invoices.map(&:id),
         pdf_options.merge({filename: filename(invoices)})
       ).enqueue!
-      respond_to_export_job
+      redirect_after_enqueued_export
     end
   end
 

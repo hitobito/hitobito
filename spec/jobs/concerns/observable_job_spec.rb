@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe UserManageableJob do
+describe ObservableJob do
   include DelayedJobSpecHelper
 
   let(:person) { people(:top_leader) }
@@ -16,17 +16,17 @@ describe UserManageableJob do
     end
 
     it "should enqueue job" do
-      job = Examples::SuccessfulUserManagedJob.new
+      job = Examples::SuccessfulObservableJob.new
 
-      expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+      expect { job.enqueue! }.to change { JobObservation.count }.by(1)
     end
 
-    it "should create user job result when enqueued" do
-      job = Examples::SuccessfulUserManagedJob.new
+    it "should create job observation when enqueued" do
+      job = Examples::SuccessfulObservableJob.new
 
-      expect(UserJobResult).to receive(:create!).with({
+      expect(JobObservation).to receive(:create!).with({
         person:,
-        job_class: "Examples::SuccessfulUserManagedJob",
+        job_class: "Examples::SuccessfulObservableJob",
         filename: nil,
         filetype: nil,
         reports_progress: false,
@@ -36,108 +36,108 @@ describe UserManageableJob do
       job.enqueue!
     end
 
-    it "should create user job result with job specific number of max attempts" do
-      job = Examples::SuccessfulUserManagedJob.new
+    it "should create job observation with job specific number of max attempts" do
+      job = Examples::SuccessfulObservableJob.new
       job.define_singleton_method(:max_attempts) { 3 }
 
-      expect(UserJobResult).to receive(:create!)
+      expect(JobObservation).to receive(:create!)
         .with(hash_including(max_attempts: 3))
         .and_call_original
       job.enqueue!
     end
 
-    it "should have reference to user job result when enqueued" do
-      job = Examples::SuccessfulUserManagedJob.new
+    it "should have reference to job observation when enqueued" do
+      job = Examples::SuccessfulObservableJob.new
       job.enqueue!
 
-      expect(job.user_job_result).not_to be_nil
+      expect(job.job_observation).not_to be_nil
     end
 
-    it "should not enqueue job when creating user job result fails" do
-      job = Examples::SuccessfulUserManagedJob.new
-      allow(UserJobResult)
+    it "should not enqueue job when creating job observation fails" do
+      job = Examples::SuccessfulObservableJob.new
+      allow(JobObservation)
         .to receive(:create!)
-        .and_raise("Test exception: Could not create user job result")
+        .and_raise("Test exception: Could not create job observation")
 
       expect { job.enqueue! }
-        .to raise_exception("Test exception: Could not create user job result")
-        .and change { UserJobResult.count }.by(0)
+        .to raise_exception("Test exception: Could not create job observation")
+        .and change { JobObservation.count }.by(0)
         .and change { Delayed::Job.count }.by(0)
     end
 
-    it "should not create user job result when enqueueing of delayed job fails" do
-      job = Examples::UnsuccessfulUserManagedJob.new
+    it "should not create job observation when enqueueing of delayed job fails" do
+      job = Examples::UnsuccessfulObservableJob.new
       job.define_singleton_method(:enqueue!) do
         raise "Test exception: Something went wrong while enqueueing job"
       end
 
       expect { job.enqueue! }
         .to raise_exception("Test exception: Something went wrong while enqueueing job")
-        .and change { UserJobResult.count }.by(0)
+        .and change { JobObservation.count }.by(0)
         .and change { Delayed::Job.count }.by(0)
     end
 
     it "should report status in_progress when job is being worked off" do
-      job = Examples::SuccessfulUserManagedJob.new
+      job = Examples::SuccessfulObservableJob.new
       enqueued_job = job.enqueue!
-      user_job_result = job.user_job_result
+      job_observation = job.job_observation
 
-      expect(user_job_result).to receive(:report_in_progress!)
+      expect(job_observation).to receive(:report_in_progress!)
       run_enqueued_job(enqueued_job)
     end
 
     it "should report status success when job has been worked off without any errors" do
-      job = Examples::SuccessfulUserManagedJob.new
+      job = Examples::SuccessfulObservableJob.new
       enqueued_job = job.enqueue!
-      user_job_result = job.user_job_result
+      job_observation = job.job_observation
 
-      expect(user_job_result).to receive(:report_success!).with(1)
+      expect(job_observation).to receive(:report_success!).with(1)
       expect { run_enqueued_job(enqueued_job) }.to change(Delayed::Job, :count).by(-1)
     end
 
     it "should increase attempt number after failure and reschedule job" do
-      job = Examples::UnsuccessfulUserManagedJob.new
+      job = Examples::UnsuccessfulObservableJob.new
       enqueued_job = job.enqueue!
-      user_job_result = job.user_job_result
+      job_observation = job.job_observation
 
-      expect(user_job_result).to receive(:report_error!).with(1)
+      expect(job_observation).to receive(:report_error!).with(1)
       run_enqueued_job(enqueued_job)
     end
 
     it "should have status error when last job retry failed" do
-      job = Examples::UnsuccessfulUserManagedJob.new
+      job = Examples::UnsuccessfulObservableJob.new
       enqueued_job = job.enqueue!
-      user_job_result = job.user_job_result
+      job_observation = job.job_observation
 
-      expect(user_job_result).to receive(:report_failure!)
+      expect(job_observation).to receive(:report_failure!)
       2.times { run_enqueued_job(enqueued_job) }
     end
 
     it "should report progress" do
-      job = Examples::UserManagedJobWithProgress.new
+      job = Examples::ObservableJobWithProgress.new
       enqueued_job = job.enqueue!
-      user_job_result = job.user_job_result
+      job_observation = job.job_observation
 
-      expect(user_job_result).to receive(:report_progress!).exactly(5).times
+      expect(job_observation).to receive(:report_progress!).exactly(5).times
       run_enqueued_job(enqueued_job)
     end
 
-    it "should not create user job result when user_id is explicitly set to nil" do
-      job = Examples::SuccessfulUserManagedJob.new
+    it "should not create job observation when user_id is explicitly set to nil" do
+      job = Examples::SuccessfulObservableJob.new
       job.user_id = nil
 
-      expect(UserJobResult).not_to receive(:create!)
+      expect(JobObservation).not_to receive(:create!)
       job.enqueue!
-      expect(job.instance_variable_get(:@user_job_result_id)).to be_nil
+      expect(job.instance_variable_get(:@job_observation_id)).to be_nil
     end
 
     it "should successfully run job even if redis error occurs during broadcast" do
-      job = Examples::SuccessfulUserManagedJob.new
+      job = Examples::SuccessfulObservableJob.new
       enqueued_job = job.enqueue!
-      user_job_result = job.user_job_result
+      job_observation = job.job_observation
 
-      expect(user_job_result).to receive(:report_success!).with(1).and_call_original
-      allow(user_job_result).to receive(:broadcast_replace_to).and_raise(Redis::ConnectionError).twice
+      expect(job_observation).to receive(:report_success!).with(1).and_call_original
+      allow(job_observation).to receive(:broadcast_replace_to).and_raise(Redis::ConnectionError).twice
       expect(Sentry).to receive(:capture_exception).with(Redis::ConnectionError).twice
 
       expect(run_enqueued_job(enqueued_job)).to be_truthy
@@ -145,16 +145,16 @@ describe UserManageableJob do
   end
 
   context "without logged in person" do
-    it "should not create user job result when enqueued" do
-      job = Examples::SuccessfulUserManagedJob.new
+    it "should not create job observation when enqueued" do
+      job = Examples::SuccessfulObservableJob.new
 
-      expect(UserJobResult).not_to receive(:create!)
+      expect(JobObservation).not_to receive(:create!)
       job.enqueue!
-      expect(job.instance_variable_get(:@user_job_result_id)).to be_nil
+      expect(job.instance_variable_get(:@job_observation_id)).to be_nil
     end
 
     it "should successfully complete job" do
-      enqueued_job = Examples::UserManagedJobWithProgress.new.enqueue!
+      enqueued_job = Examples::ObservableJobWithProgress.new.enqueue!
 
       expect do
         run_enqueued_job(enqueued_job)
@@ -162,7 +162,7 @@ describe UserManageableJob do
     end
 
     it "should fail with expected exception" do
-      enqueued_job = Examples::UnsuccessfulUserManagedJob.new.enqueue!
+      enqueued_job = Examples::UnsuccessfulObservableJob.new.enqueue!
       run_enqueued_job(enqueued_job)
 
       expect(enqueued_job.last_error).to include("Test exception: Something went wrong during job execution")
@@ -171,12 +171,12 @@ describe UserManageableJob do
 
   context "nested jobs" do
     it "should enqueue jobs from another job and correctly assign them to a user" do
-      job = Examples::UserManagedParentJob.new
+      job = Examples::ObservableParentJob.new
       job.user_id = person.id
 
       expect { enqueue_and_run_job(job) }
         .to change { Delayed::Job.count }.by(3)
-        .and change { UserJobResult.where(person_id: person.id).count }.by(4)
+        .and change { JobObservation.where(person_id: person.id).count }.by(4)
 
       expect(Delayed::Worker.new.work_off).to match_array([3, 0])
     end

@@ -5,18 +5,18 @@
 
 require "spec_helper"
 
-describe UserJobResultsHelper do
-  let(:user_job_result) { Fabricate(:user_job_result) }
+describe JobObservationsHelper do
+  let(:job_observation) { Fabricate(:job_observation) }
 
   it "icon for status in_progress should have spin animation class" do
-    user_job_result.report_in_progress!
-    icon = Capybara::Node::Simple.new(helper.job_status_icon(user_job_result))
+    job_observation.report_in_progress!
+    icon = Capybara::Node::Simple.new(helper.job_status_icon(job_observation))
     expect(icon).to have_css(".fa-spin-pulse")
   end
 
   it "icons that are not for status in_progress should not have spin animation class" do
-    user_job_result.report_success!(1)
-    icon = Capybara::Node::Simple.new(helper.job_status_icon(user_job_result))
+    job_observation.report_success!(1)
+    icon = Capybara::Node::Simple.new(helper.job_status_icon(job_observation))
     expect(icon).not_to have_css(".fa-spin-pulse")
   end
 

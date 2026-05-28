@@ -7,7 +7,7 @@
 
 class PeopleController < CrudController # rubocop:todo Metrics/ClassLength
   include RenderPeopleExports
-  include UserManageableExportJob
+  include ExportableRedirect
   include Tags
   prepend RenderTableDisplays
   include FilteredPeople # provides all_filtered_or_listed_people, person_filter, list_filter_args
@@ -199,7 +199,7 @@ class PeopleController < CrudController # rubocop:todo Metrics/ClassLength
   def render_tabular_entries_in_background(format)
     full = params[:details].present? && index_full_ability?
     render_tabular_in_background(format, full, :people_export)
-    respond_to_export_job
+    redirect_after_enqueued_export
   end
 
   def render_tabular_entry(format)

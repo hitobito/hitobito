@@ -10,7 +10,7 @@ require "spec_helper"
 describe Export::InvoicesJob do
   subject { described_class.new(format, user.id, invoice_ids, filename: "rechnungen") }
 
-  let(:pdf) { subject.user_job_result }
+  let(:pdf) { subject.job_observation }
 
   let(:group) { groups(:top_group) }
   let(:user) { people(:top_leader) }

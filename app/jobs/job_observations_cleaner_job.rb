@@ -5,17 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class UserJobResultsCleanerJob < RecurringJob
+class JobObservationsCleanerJob < RecurringJob
   run_every 1.day
 
   def perform_internal
-    clean_up_user_job_results
+    clean_up_job_observations
   end
 
   private
 
-  def clean_up_user_job_results
-    base = UserJobResult.left_joins(:delayed_job)
+  def clean_up_job_observations
+    base = JobObservation.left_joins(:delayed_job)
 
     # Remove records where job has completed more than one day ago
     old_records = base.where(finished_at: ..1.day.ago)

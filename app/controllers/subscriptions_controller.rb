@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class SubscriptionsController < CrudController
-  include UserManageableExportJob
+  include ExportableRedirect
   include RenderPeopleExports
 
   self.nesting = Group, MailingList
@@ -67,7 +67,7 @@ class SubscriptionsController < CrudController
       current_person.id,
       mailing_list.id,
       tabular_params(filename: "subscriptions_#{mailing_list.id}")).enqueue!
-    respond_to_export_job
+    redirect_after_enqueued_export
   end
 
   def tabular_params(**opts)

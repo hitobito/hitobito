@@ -460,7 +460,7 @@ Hitobito::Application.routes.draw do
     resources :assignments, only: [:new, :create]
     resources :table_displays, only: [:create]
 
-    resources :user_job_results, only: [:index] do
+    resources :job_observations, only: [:index] do
       get :download, on: :member
     end
   end # scope locale

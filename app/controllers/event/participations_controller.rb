@@ -7,7 +7,7 @@
 
 class Event::ParticipationsController < CrudController # rubocop:disable Metrics/ClassLength
   include RenderPeopleExports
-  include UserManageableExportJob
+  include ExportableRedirect
   include Api::JsonPaging
   include ActionView::Helpers::SanitizeHelper
   prepend RenderTableDisplays
@@ -263,7 +263,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       event.id,
       group.id,
       params.merge(filename: :event_participation_export)).enqueue!
-    respond_to_export_job
+    redirect_after_enqueued_export
   end
 
   def check_preconditions

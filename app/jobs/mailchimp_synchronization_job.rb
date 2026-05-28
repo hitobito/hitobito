@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class MailchimpSynchronizationJob < BaseJob
-  prepend UserManageableJob
+  prepend ObservableJob
 
   self.parameters = [:mailing_list_id]
 

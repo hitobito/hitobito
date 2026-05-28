@@ -62,7 +62,7 @@ class JobManager
 
   def standard_jobs # rubocop:disable Metrics/MethodLength
     [
-      UserJobResultsCleanerJob,
+      JobObservationsCleanerJob,
       Event::ParticipationCleanupJob,
       Event::ParticipationCleanupAnswersJob,
       Groups::ContactPersonCleanerJob,

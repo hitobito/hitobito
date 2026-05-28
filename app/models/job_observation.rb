@@ -7,7 +7,7 @@
 
 # == Schema Information
 #
-# Table name: user_job_results
+# Table name: job_observations
 #
 #  id                                  :bigint           not null, primary key
 #  attempts                            :integer          not null
@@ -28,10 +28,10 @@
 #
 # Indexes
 #
-#  index_user_job_results_on_delayed_job_id  (delayed_job_id)
-#  index_user_job_results_on_person_id       (person_id)
+#  index_job_observations_on_delayed_job_id  (delayed_job_id)
+#  index_job_observations_on_person_id       (person_id)
 #
-class UserJobResult < ApplicationRecord
+class JobObservation < ApplicationRecord
   include I18nEnums
 
   belongs_to :delayed_job, class_name: "Delayed::Backend::ActiveRecord::Job", optional: true
@@ -58,7 +58,7 @@ class UserJobResult < ApplicationRecord
   def to_s
     progress_string = " (#{progress}%)" if reports_progress
 
-    "<UserJobResult##{id}: #{filename}#{progress_string}>"
+    "<JobObservation##{id}: #{filename}#{progress_string}>"
   end
 
   def downloadable?(downloading_person)
@@ -133,7 +133,7 @@ class UserJobResult < ApplicationRecord
   end
 
   # Report the progess of the job which is then shown as a progress bar on the
-  # user job results view. This could for example be used in a loop that iterates
+  # job observations view. This could for example be used in a loop that iterates
   # through files or sends out mails.
   #
   # Attention: The <tt>reports_progress</tt> class attribute has to be set to a truthy value
@@ -187,11 +187,11 @@ class UserJobResult < ApplicationRecord
   end
 
   def update_channel_name
-    "person_#{person_id}_user_job_result_updates"
+    "person_#{person_id}_job_observation_updates"
   end
 
   def notification_channel_name
-    "person_#{person_id}_user_job_result_notifications"
+    "person_#{person_id}_job_observation_notifications"
   end
 
   def broadcast_replace_and_badge_update
@@ -211,9 +211,9 @@ class UserJobResult < ApplicationRecord
   def broadcast_badge_update
     broadcast_replace_to(
       notification_channel_name,
-      partial: "user_job_results/link_with_badge",
+      partial: "job_observations/link_with_badge",
       locals: {person:},
-      target: "user-job-results-link-with-badge"
+      target: "job-observations-link-with-badge"
     )
   end
 
@@ -221,15 +221,15 @@ class UserJobResult < ApplicationRecord
     capturing_redis_exceptions do
       broadcast_append_to(
         notification_channel_name,
-        partial: "user_job_results/notification",
-        locals: {user_job_result: self},
-        target: "user-job-result-notifications-container"
+        partial: "job_observations/notification",
+        locals: {job_observation: self},
+        target: "job-observation-notifications-container"
       )
     end
   end
 
   def set_web_socket_connection_state
-    if person.user_job_results.unfinished.count > 0
+    if person.job_observations.unfinished.count > 0
       person.update_column(:needs_web_socket_connection, true)
     else
       person.update_column(:needs_web_socket_connection, false)

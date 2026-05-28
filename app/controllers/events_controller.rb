@@ -7,7 +7,7 @@
 
 class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   include YearBasedPaging
-  include UserManageableExportJob
+  include ExportableRedirect
   include Api::JsonPaging
   include Tags
 
@@ -226,7 +226,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
       group.id,
       event_filter.to_h,
       filename: name).enqueue!
-    respond_to_export_job
+    redirect_after_enqueued_export
   end
 
   def render_ical(entries)

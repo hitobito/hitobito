@@ -7,25 +7,25 @@
 
 require "spec_helper"
 
-describe UserJobResult do
+describe JobObservation do
   let(:person) { people(:top_leader) }
   let(:job_class) { "Export::ExampleExportJob" }
   let(:reports_progress) { false }
   let(:data) { SecureRandom.base64(128) }
 
   subject do
-    Fabricate(:user_job_result, job_class:, filetype: "csv", reports_progress:)
+    Fabricate(:job_observation, job_class:, filetype: "csv", reports_progress:)
   end
 
   describe "default values", time_frozen: true do
     it "should set correct default values when values are not passed" do
-      user_job_result = UserJobResult.create!(person:, job_class:)
+      job_observation = JobObservation.create!(person:, job_class:)
 
-      check_default_values(user_job_result)
+      check_default_values(job_observation)
     end
 
     it "should set correct default values when values are passed as nil" do
-      user_job_result = UserJobResult.create!(
+      job_observation = JobObservation.create!(
         person:,
         job_class:,
         filetype: nil,
@@ -37,11 +37,11 @@ describe UserJobResult do
         progress: nil
       )
 
-      check_default_values(user_job_result)
+      check_default_values(job_observation)
     end
 
     it "should not override values with default values when they are passed" do
-      user_job_result_attributes = {
+      job_observation_attributes = {
         person:,
         job_class:,
         filetype: "csv",
@@ -53,13 +53,13 @@ describe UserJobResult do
         progress: 50
       }
 
-      user_job_result = UserJobResult.create!(user_job_result_attributes)
+      job_observation = JobObservation.create!(job_observation_attributes)
 
-      expect(user_job_result).to have_attributes(user_job_result_attributes)
+      expect(job_observation).to have_attributes(job_observation_attributes)
     end
 
-    def check_default_values(user_job_result)
-      expect(user_job_result).to have_attributes(
+    def check_default_values(job_observation)
+      expect(job_observation).to have_attributes(
         person:,
         job_class:,
         filename: nil,
@@ -162,7 +162,7 @@ describe UserJobResult do
         expect do
           subject.report_progress!(10, 1000)
           subject.report_progress!(11, 1000)
-        end.to make.db_queries.with("UserJobResult Update": 1)
+        end.to make.db_queries.with("JobObservation Update": 1)
       end
 
       it "should correctly set progress with 1 percent steps" do
@@ -220,76 +220,76 @@ describe UserJobResult do
     end
 
     it "should be disabled when all jobs have finished" do
-      user_job_result = subject
+      job_observation = subject
       expect(person.reload.needs_web_socket_connection).to be_truthy
-      other_user_job_result = Fabricate(:user_job_result, job_class:)
+      other_job_observation = Fabricate(:job_observation, job_class:)
       expect(person.reload.needs_web_socket_connection).to be_truthy
 
-      user_job_result.update!(status: "success")
+      job_observation.update!(status: "success")
       expect(person.reload.needs_web_socket_connection).to be_truthy
-      other_user_job_result.update!(status: "error")
+      other_job_observation.update!(status: "error")
       expect(person.reload.needs_web_socket_connection).to be_falsy
     end
   end
 
   describe "broadcasting" do
-    let(:update_channel_name) { "person_#{person.id}_user_job_result_updates" }
-    let(:notification_channel_name) { "person_#{person.id}_user_job_result_notifications" }
+    let(:update_channel_name) { "person_#{person.id}_job_observation_updates" }
+    let(:notification_channel_name) { "person_#{person.id}_job_observation_notifications" }
 
     it "should broadcast on create" do
       expect { subject }.to have_broadcasted_overview_update_and_badge_update
     end
 
     it "should broadcast on update" do
-      user_job_result = subject
+      job_observation = subject
 
-      expect { user_job_result.update!(status: "in_progress") }
+      expect { job_observation.update!(status: "in_progress") }
         .to have_broadcasted_overview_update_and_badge_update
     end
 
     it "should broadcast on destroy" do
-      user_job_result = subject
+      job_observation = subject
 
-      expect { user_job_result.destroy! }
+      expect { job_observation.destroy! }
         .to have_broadcasted_overview_update_and_badge_update
     end
 
     it "should broadcast notification when reporting success" do
-      user_job_result = subject
+      job_observation = subject
 
-      expect { user_job_result.report_success!(1) }
+      expect { job_observation.report_success!(1) }
         .to have_broadcasted_notification_and_badge_update
     end
 
     it "should broadcast notification when reporting failure" do
-      user_job_result = subject
+      job_observation = subject
 
-      expect { user_job_result.report_failure! }
+      expect { job_observation.report_failure! }
         .to have_broadcasted_notification_and_badge_update
     end
 
     it "should broadcast after set timeout only when updating progress" do
       freeze_time
 
-      user_job_result = subject
-      user_job_result.update!(reports_progress: true)
+      job_observation = subject
+      job_observation.update!(reports_progress: true)
 
       broadcast_time = Time.current
 
-      expect { user_job_result.report_progress!(10, 100) }.to have_broadcasted_to(update_channel_name)
-      expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
+      expect { job_observation.report_progress!(10, 100) }.to have_broadcasted_to(update_channel_name)
+      expect(job_observation.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
-      expect { user_job_result.report_progress!(20, 100) }.not_to have_broadcasted_to(update_channel_name)
-      expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
+      expect { job_observation.report_progress!(20, 100) }.not_to have_broadcasted_to(update_channel_name)
+      expect(job_observation.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
       travel(6.seconds)
       broadcast_time = Time.current
 
-      expect { user_job_result.report_progress!(30, 100) }.to have_broadcasted_to(update_channel_name)
-      expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
+      expect { job_observation.report_progress!(30, 100) }.to have_broadcasted_to(update_channel_name)
+      expect(job_observation.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
-      expect { user_job_result.report_progress!(40, 100) }.not_to have_broadcasted_to(update_channel_name)
-      expect(user_job_result.last_progress_update_broadcasted_at).to eql(broadcast_time)
+      expect { job_observation.report_progress!(40, 100) }.not_to have_broadcasted_to(update_channel_name)
+      expect(job_observation.last_progress_update_broadcasted_at).to eql(broadcast_time)
     end
 
     it "should still successfully complete job if broadcasting fails with redis exceptions" do
@@ -304,14 +304,14 @@ describe UserJobResult do
     def have_broadcasted_overview_update_and_badge_update
       have_broadcasted_to(update_channel_name)
         .and have_broadcasted_to(notification_channel_name)
-        .with(a_string_matching(/target="user-job-results-link-with-badge"/))
+        .with(a_string_matching(/target="job-observations-link-with-badge"/))
     end
 
     def have_broadcasted_notification_and_badge_update
       have_broadcasted_to(notification_channel_name)
-        .with(a_string_matching(/target="user-job-result-notifications-container"/))
+        .with(a_string_matching(/target="job-observation-notifications-container"/))
         .and have_broadcasted_to(notification_channel_name)
-        .with(a_string_matching(/target="user-job-results-link-with-badge"/))
+        .with(a_string_matching(/target="job-observations-link-with-badge"/))
     end
   end
 

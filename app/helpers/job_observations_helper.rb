@@ -3,8 +3,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module UserJobResultsHelper
-  def job_status_icon(user_job_result)
+module JobObservationsHelper
+  def job_status_icon(job_observation)
     icon_names_by_status = {
       planned: "circle-notch",
       in_progress: "spinner",
@@ -12,15 +12,15 @@ module UserJobResultsHelper
       error: "circle-xmark"
     }
 
-    icon_name = icon_names_by_status[user_job_result.status.to_sym]
-    icon_options = {filled: true, "data-bs-toggle": "tooltip", title: user_job_result.status_label}
-    icon_options[:class] = "fa-spin-pulse" if user_job_result.in_progress?
+    icon_name = icon_names_by_status[job_observation.status.to_sym]
+    icon_options = {filled: true, "data-bs-toggle": "tooltip", title: job_observation.status_label}
+    icon_options[:class] = "fa-spin-pulse" if job_observation.in_progress?
 
     icon(icon_name, icon_options)
   end
 
-  def job_status_class_names(user_job_result)
-    class_names("bg-info": user_job_result.success?, "bg-danger": user_job_result.error?)
+  def job_status_class_names(job_observation)
+    class_names("bg-info": job_observation.success?, "bg-danger": job_observation.error?)
   end
 
   def job_progress_bar(progress)

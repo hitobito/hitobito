@@ -3,11 +3,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class UserJobResultsController < ApplicationController
+class JobObservationsController < ApplicationController
   skip_authorization_check
 
   def index
-    @user_job_results = current_person.user_job_results
+    @job_observations = current_person.job_observations
       .includes([:generated_file_attachment])
       .order(started_at: :desc)
       .page(params[:page])
@@ -16,11 +16,11 @@ class UserJobResultsController < ApplicationController
   end
 
   def download
-    user_job_result = UserJobResult.find_by(id: params[:id])
-    if user_job_result&.downloadable?(current_person)
+    job_observation = JobObservation.find_by(id: params[:id])
+    if job_observation&.downloadable?(current_person)
       redirect_to rails_blob_path(
-        user_job_result.generated_file,
-        filename: user_job_result.filename,
+        job_observation.generated_file,
+        filename: job_observation.filename,
         disposition: "attachment"
       )
     else

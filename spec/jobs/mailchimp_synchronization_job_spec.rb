@@ -68,14 +68,14 @@ describe MailchimpSynchronizationJob do
       allow(Auth).to receive(:current_person).and_return(people(:top_leader))
     end
 
-    it "should set mailchimp state to syncing and create user job result" do
+    it "should set mailchimp state to syncing and create job observation" do
       expect do
         subject.enqueue!
       end.to change { Delayed::Job.count }.by 1
 
       mailing_list.reload
 
-      expect(subject.user_job_result).not_to be_nil
+      expect(subject.job_observation).not_to be_nil
       expect(mailing_list.mailchimp_syncing).to be true
     end
 
@@ -85,7 +85,7 @@ describe MailchimpSynchronizationJob do
       mailchimp_sync_delayed_job = subject.enqueue!
 
       expect(subject).to receive(:perform)
-      expect(subject.user_job_result).to receive(:report_success!).with(1).and_call_original
+      expect(subject.job_observation).to receive(:report_success!).with(1).and_call_original
 
       run_enqueued_job(mailchimp_sync_delayed_job)
       mailing_list.reload
@@ -99,7 +99,7 @@ describe MailchimpSynchronizationJob do
       mailchimp_sync_delayed_job = subject.enqueue!
 
       expect(subject).to receive(:perform).and_throw(Exception).twice
-      expect(subject.user_job_result).to receive(:report_failure!).and_call_original
+      expect(subject.job_observation).to receive(:report_failure!).and_call_original
 
       expect do
         2.times { run_enqueued_job(mailchimp_sync_delayed_job) }

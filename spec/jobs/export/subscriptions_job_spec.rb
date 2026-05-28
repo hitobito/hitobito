@@ -20,7 +20,7 @@ describe Export::SubscriptionsJob do
 
   let(:group) { groups(:top_layer) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
-  let(:file) { subject.user_job_result }
+  let(:file) { subject.job_observation }
 
   before do
     SeedFu.quiet = true

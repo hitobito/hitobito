@@ -281,7 +281,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   has_many :pass_installations, class_name: "Wallets::PassInstallation",
     through: :passes
 
-  has_many :user_job_results, dependent: :destroy
+  has_many :job_observations, dependent: :destroy
 
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true

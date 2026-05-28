@@ -7,41 +7,41 @@
 
 require "spec_helper"
 
-describe UserJobResultsController do
+describe JobObservationsController do
   let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
-  let(:user_job_result) { Fabricate(:user_job_result) }
+  let(:job_observation) { Fabricate(:job_observation) }
 
   before do
     sign_in(person)
-    user_job_result.write("Some super duper data")
+    job_observation.write("Some super duper data")
   end
 
   context "index" do
-    it "provides user job results only of current person" do
-      expected_user_job_results = [user_job_result]
-      unexpected_user_job_results = []
-      3.times { expected_user_job_results << Fabricate(:user_job_result, person:) }
-      3.times { unexpected_user_job_results << Fabricate(:user_job_result, person_id: other_person.id) }
+    it "provides job observations only of current person" do
+      expected_job_observations = [job_observation]
+      unexpected_job_observations = []
+      3.times { expected_job_observations << Fabricate(:job_observation, person:) }
+      3.times { unexpected_job_observations << Fabricate(:job_observation, person_id: other_person.id) }
 
       get :index
-      user_job_results = assigns(:user_job_results)
+      job_observations = assigns(:job_observations)
 
-      expect(user_job_results).to eq(expected_user_job_results.sort_by(&:started_at).reverse)
-      expect(user_job_results).not_to include(*unexpected_user_job_results)
+      expect(job_observations).to eq(expected_job_observations.sort_by(&:started_at).reverse)
+      expect(job_observations).not_to include(*unexpected_job_observations)
     end
   end
 
   context "show" do
     it "allows downloading an attachment that person has access to" do
-      get :download, params: {id: user_job_result.id}
+      get :download, params: {id: job_observation.id}
 
       expect(response).to be_redirect
     end
 
     it "returns 404 if person has no access" do
-      user_job_result.update!(person: other_person)
-      get :download, params: {id: user_job_result.id}
+      job_observation.update!(person: other_person)
+      get :download, params: {id: job_observation.id}
 
       is_expected.to render_template("errors/404")
       expect(response.status).to match(404)

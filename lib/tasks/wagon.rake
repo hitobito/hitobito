@@ -72,5 +72,7 @@ end
 # We enhance wagon:seed here in core rather than adding a script to db/seeds/development/,
 # because core seed scripts execute before wagon seeds and would find no root group yet.
 Rake::Task["wagon:seed"].enhance do
-  Rake::Task["dev:passes:seed_definition"].invoke if Rails.env.development?
+  if Rails.env.development? && PassDefinition.where(owner: Group.root).none?
+    Rake::Task["dev:passes:seed_definition"].invoke
+  end
 end

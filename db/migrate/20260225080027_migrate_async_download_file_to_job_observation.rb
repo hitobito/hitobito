@@ -5,6 +5,8 @@
 
 class MigrateAsyncDownloadFileToJobObservation < ActiveRecord::Migration[8.0]
   def up
+    ActiveStorage::Attachment.where(record_type: "AsyncDownloadFile").find_each(&:purge)
+
     drop_table :async_download_files
 
     create_table :job_observations do |t|
@@ -17,10 +19,10 @@ class MigrateAsyncDownloadFileToJobObservation < ActiveRecord::Migration[8.0]
       t.integer :progress, null: false
       t.boolean :reports_progress, null: false
       t.datetime :started_at, null: false
-      t.datetime :finished_at, null: false
+      t.datetime :finished_at
       t.datetime :last_progress_update_broadcasted_at
 
-      t.references :person
+      t.references :person, null: false
       t.references :delayed_job
 
       t.timestamps
@@ -28,6 +30,8 @@ class MigrateAsyncDownloadFileToJobObservation < ActiveRecord::Migration[8.0]
   end
 
   def down
+    ActiveStorage::Attachment.where(record_type: "JobObservation").find_each(&:purge)
+
     drop_table :job_observations
 
     create_table :async_download_files do |t|

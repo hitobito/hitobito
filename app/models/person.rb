@@ -283,6 +283,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :job_observations, dependent: :destroy
 
+  has_many :personal_documents, dependent: :destroy
+
   FeatureGate.if("people.family_members") do
     accepts_nested_attributes_for :family_members, allow_destroy: true
   end

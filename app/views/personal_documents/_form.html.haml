@@ -1,0 +1,6 @@
+= entry_form do |f|
+  = f.hidden_field :person_id
+  = f.labeled :personal_document_label_id do
+    = f.collection_select :personal_document_label_id, PersonalDocumentLabel.all, :id, :to_s, {}, class: 'form-select form-select-sm'
+  = f.labeled :file do
+    = f.file_field :file, type: :file, class: 'form-control form-control-sm'

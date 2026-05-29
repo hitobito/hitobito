@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe Export::EventsExportJob do
+  include JobObservationSpecHelper
+
   subject { Export::EventsExportJob.new(format, user.id, group.id, filter, filename: "event_export") }
 
   let(:user) { people(:top_leader) }
@@ -28,7 +30,7 @@ describe Export::EventsExportJob do
     let(:format) { :csv }
 
     it "and saves it" do
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Name;Organisatoren;Beschreibung;.*/)
       expect(lines[0].split(";").count).to match(34)

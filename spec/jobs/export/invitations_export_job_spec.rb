@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe Export::InvitationsExportJob do
+  include JobObservationSpecHelper
+
   subject { Export::InvitationsExportJob.new(format, user.id, course.id, filename: "invitations_export") }
 
   let(:user) { people(:top_leader) }
@@ -34,7 +36,7 @@ describe Export::InvitationsExportJob do
       subject.enqueue!
       subject.perform
 
-      lines = subject.job_observation.read.lines
+      lines = read_data_from_generated_file(subject.job_observation).lines
       expect(lines.size).to eq(3)
     end
   end

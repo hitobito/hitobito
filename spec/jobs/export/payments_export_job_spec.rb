@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Export::PaymentsExportJob do
+  include JobObservationSpecHelper
+
   subject { described_class.new(format, user.id, payment_ids, filename: "payments_export") }
 
   let(:file) { subject.job_observation }
@@ -32,7 +34,7 @@ describe Export::PaymentsExportJob do
     let(:format) { :csv }
 
     it "and saves it" do
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(6)
       # rubocop:todo Layout/LineLength
       expect(lines[0]).to match(/Id;Betrag;Eingangsdatum;Zahlungsreferenz;Transaktionsidentifikator;Status;Schuldner Name;Schuldner Adresse/)

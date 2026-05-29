@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe Export::SubgroupsExportJob do
+  include JobObservationSpecHelper
+
   subject { Export::SubgroupsExportJob.new(user.id, group.id, filename: "subgroups_export") }
 
   let(:user) { people(:top_leader) }
@@ -18,7 +20,7 @@ describe Export::SubgroupsExportJob do
       subject.enqueue!
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(10)
       expect(lines[0]).to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Id;Elterngruppe;Name;.*"))
       expect(lines[1]).to match(/^#{group.id};;Top;.*/)

@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
+  include JobObservationSpecHelper
+
   subject {
     Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id,
       params.merge(filename: "event_participation_export"))
@@ -35,7 +37,7 @@ describe Export::EventParticipationsExportJob do
     it "and saves it" do
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
 
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
@@ -50,7 +52,7 @@ describe Export::EventParticipationsExportJob do
     it "and saves it" do
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
@@ -65,7 +67,7 @@ describe Export::EventParticipationsExportJob do
 
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.first).to include "Anmeldedatum"
 
       created_at_index = lines.first.strip.split(";").index("Anmeldedatum")
@@ -85,7 +87,7 @@ describe Export::EventParticipationsExportJob do
 
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/Hauptebene.*/)
@@ -106,7 +108,7 @@ describe Export::EventParticipationsExportJob do
 
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(2)
       expect(lines[0]).to match(/Anrede;Name;zusätzliche Adresszeile;Strasse;Hausnummer;Postfach;PLZ;.*/)
       expect(lines[1]).to match(/Bottom und Other Member.*/).or match(/Other und Bottom Member.*/)

@@ -4,9 +4,9 @@
 #  https://github.com/hitobito/hitobito.
 
 module JobObservationSpecHelper
-  def read_data_from_generated_file(observable_job)
-    data = observable_job.generated_file.download
-    if observable_job.filetype.to_sym == :csv && data.present?
+  def read_data_from_generated_file(job_observation)
+    data = job_observation.generated_file.download
+    if job_observation.filetype.to_sym == :csv && data.present?
       data = data.force_encoding(Settings.csv.encoding)
     end
     data

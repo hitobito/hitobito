@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Export::PeopleExportJob do
+  include JobObservationSpecHelper
+
   subject do
     Export::PeopleExportJob.new(format, user.id, group.id, {},
       household: household, full: full,
@@ -33,7 +35,7 @@ describe Export::PeopleExportJob do
     it "and saves it" do
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0].split(";").count).to match(28)
@@ -50,14 +52,14 @@ describe Export::PeopleExportJob do
       it "and saves it with single line per household" do
         subject.perform
 
-        lines = file.read.lines
+        lines = read_data_from_generated_file(file).lines
         expect(lines.size).to eq(2)
       end
     end
 
     context "table_display" do
       let(:selection) { true }
-      let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
+      let(:csv) { CSV.parse(read_data_from_generated_file(file), col_sep: Settings.csv.separator.strip, headers: true) }
 
       let!(:registered_columns) { TableDisplay.table_display_columns.clone }
       let!(:registered_multi_columns) { TableDisplay.multi_columns.clone }
@@ -98,7 +100,7 @@ describe Export::PeopleExportJob do
     it "and saves it" do
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
       expect(lines[0]).to match(/Zusätzliche Angaben;.*/)
@@ -114,7 +116,7 @@ describe Export::PeopleExportJob do
       it "falls back to address export" do
         subject.perform
 
-        lines = file.read.lines
+        lines = read_data_from_generated_file(file).lines
         expect(lines.size).to eq(1)
         expect(lines[0]).to match(/Vorname;Nachname;.*/)
         expect(lines[0]).not_to match(/Zusätzliche Angaben;.*/)

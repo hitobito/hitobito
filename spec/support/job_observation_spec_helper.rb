@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module ObservableJobSpecHelper
+module JobObservationSpecHelper
   def read_data_from_generated_file(observable_job)
     data = observable_job.generated_file.download
     if observable_job.filetype.to_sym == :csv && data.present?

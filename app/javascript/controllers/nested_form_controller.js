@@ -20,6 +20,10 @@ export default class extends NestedForm {
   }
 
   add(e) {
+    this.insertTemplate(this.templateTarget)
+  }
+
+  insertTemplate(templateTarget) {
     if (this.#getVisibleFieldsCount() >= this.limitValue) {
       return
     }
@@ -29,7 +33,7 @@ export default class extends NestedForm {
     const uniqueId = new Date().getTime().toString()
 
     const placeholder = `NEW_${this.assocValue.toUpperCase()}_RECORD`
-    const content = this.templateTarget.innerHTML.replace(new RegExp(placeholder, 'g'), uniqueId)
+    const content = templateTarget.innerHTML.replace(new RegExp(placeholder, 'g'), uniqueId)
 
     // Insert the new fields
     this.targetTarget.insertAdjacentHTML("beforebegin", content)

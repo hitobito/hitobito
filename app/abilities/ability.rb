@@ -32,6 +32,7 @@ class Ability
     PeopleManagerAbility,
     PersonAbility,
     Person::AddRequestAbility,
+    PersonalDocumentAbility,
     QualificationAbility,
     RoleAbility,
     SelfRegistrationReasonAbility,

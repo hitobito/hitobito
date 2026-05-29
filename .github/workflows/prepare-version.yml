@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: "Checkout hitobito"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: "hitobito/hitobito"
           ref: ${{ inputs.target_branch }}
@@ -92,7 +92,7 @@ jobs:
 
     steps:
       - name: "Checkout composition repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ needs.settings.outputs.repo_name }}
           ref: ${{ needs.settings.outputs.composition_branch }}

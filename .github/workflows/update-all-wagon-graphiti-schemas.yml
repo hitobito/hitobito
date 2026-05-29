@@ -94,7 +94,7 @@ jobs:
           fi
 
       - name: Check out core with shared setup action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hitobito/hitobito
           ref: ${{ github.ref || inputs.core_ref }}

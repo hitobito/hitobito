@@ -6,6 +6,8 @@
 class JobObservationsController < ApplicationController
   skip_authorization_check
 
+  decorates :job_observations
+
   def index
     @job_observations = current_person.job_observations
       .includes([:generated_file_attachment])

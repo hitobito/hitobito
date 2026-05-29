@@ -3,8 +3,8 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-%div.toast{"data-controller": "job-observation-notification"}
-  .toast-header.d-flex.justify-content-between{class: job_status_class_names(job_observation)}
+.toast{**job_observation.stimulus_attributes}
+  .toast-header.d-flex.justify-content-between{class: job_observation.status_class}
     %strong.text-light= t(".job_#{job_observation.status}")
     %button.btn-close{"data-bs-dismiss" => "toast", :type => "button"}
   .toast-body

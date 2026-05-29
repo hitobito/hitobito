@@ -196,14 +196,14 @@ class JobObservation < ApplicationRecord
 
   def broadcast_replace_and_badge_update
     capturing_redis_exceptions do
-      broadcast_replace_to(update_channel_name)
+      broadcast_replace_to(update_channel_name, locals: {job_observation: self.decorate})
       broadcast_badge_update
     end
   end
 
   def broadcast_refresh_and_badge_update
     capturing_redis_exceptions do
-      broadcast_refresh_to(update_channel_name)
+      broadcast_refresh_to(update_channel_name, locals: {job_observation: self.decorate})
       broadcast_badge_update
     end
   end
@@ -217,12 +217,15 @@ class JobObservation < ApplicationRecord
     )
   end
 
+  # On successful export jobs this also causes the generated file to be
+  # automatically downloaded on the client.
+  # See job_observation_notification_controller.js.
   def broadcast_notification
     capturing_redis_exceptions do
       broadcast_append_to(
         notification_channel_name,
         partial: "job_observations/notification",
-        locals: {job_observation: self},
+        locals: {job_observation: self.decorate},
         target: "job-observation-notifications-container"
       )
     end

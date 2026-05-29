@@ -6,8 +6,31 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static values = {
+    generatedFileDownloadUrl: String
+  }
+
   connect() {
-    const toast = new Toast(this.element)
-    toast.show()
+    if(this.generatedFileDownloadUrlValue) {
+      this.downloadGeneratedFile(this.generatedFileDownloadUrlValue);
+    }
+
+    const toast = new Toast(this.element);
+    toast.show();
+  }
+
+  // If we were to use window.location.href there could only ever be one toast on the page
+  // at a time because the page navigation causes previous toasts to vanish
+  downloadGeneratedFile(url) {
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.setAttribute('download', '');
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
   }
 }

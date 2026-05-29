@@ -6,20 +6,20 @@
 .container-fluid.text-center.bg-light.m-2.p-3{id: dom_id(job_observation)}
   .row
     .col-1
-      = job_status_icon(job_observation)
+      = job_observation.status_icon
     .col-3
       = job_observation.job_name
     .col-3
       - if job_observation.reports_progress
-        = job_progress_bar(job_observation.progress)
+        = job_observation.progress_bar
       - else
         = t(".no_progress_provided")
     .col-3
-      = "#{JobObservation.human_attribute_name("started_at")}: #{job_timestamp(job_observation.started_at)}"
+      = "#{JobObservation.human_attribute_name("started_at")}: #{job_observation.formatted_started_at}"
       %br
-      = "#{JobObservation.human_attribute_name("finished_at")}: #{job_timestamp(job_observation.finished_at)}"
+      = "#{JobObservation.human_attribute_name("finished_at")}: #{job_observation.formatted_finished_at}"
     .col-1
-      = "#{JobObservation.human_attribute_name("attempts")}: #{job_observation.attempts}/#{job_observation.max_attempts}"
+      = "#{JobObservation.human_attribute_name("attempts")}: #{job_observation.attempts_of_max_attempts}"
     .col-1
       - if job_observation.generated_file.attached?
         = link_to(icon("download", {filled: true}), download_job_observation_path(job_observation))

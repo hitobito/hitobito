@@ -69,10 +69,14 @@ Rake::Task["wagon:migrate"].enhance do
 end
 
 # Seed development-only data that depends on wagon seeds (e.g. the root group) having run first.
+#
 # We enhance wagon:seed here in core rather than adding a script to db/seeds/development/,
 # because core seed scripts execute before wagon seeds and would find no root group yet.
+#
+# We also check for the root-group because in a dependency-only wagon there is no structure,
+# but we still want to test the seeds, which happens in the development-env.
 Rake::Task["wagon:seed"].enhance do
-  if Rails.env.development? && PassDefinition.where(owner: Group.root).none?
+  if Rails.env.development? && Group.root.present? && PassDefinition.where(owner: Group.root).none?
     Rake::Task["dev:passes:seed_definition"].invoke
   end
 end

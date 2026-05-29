@@ -83,14 +83,6 @@ class JobObservation < ApplicationRecord
     generated_file.attach(io: io, filename: filename.to_s)
   end
 
-  def read
-    data = generated_file.download
-    if filetype.to_sym == :csv && data.present?
-      data = data.force_encoding(Settings.csv.encoding)
-    end
-    data
-  end
-
   def filename
     filename = super
     return if filename.blank?

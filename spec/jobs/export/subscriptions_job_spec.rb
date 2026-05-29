@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Export::SubscriptionsJob do
+  include JobObservationSpecHelper
+
   let(:filename) { "subscription_export" }
   let(:options) { {household: true, filename: filename} }
 
@@ -36,7 +38,7 @@ describe Export::SubscriptionsJob do
     let(:format) { :csv }
 
     it "and saves it" do
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Name;zusätzliche Adresszeile;Strasse;.*/)
     end
@@ -47,7 +49,7 @@ describe Export::SubscriptionsJob do
       it "and saves it" do
         subject.perform
 
-        lines = file.read.lines
+        lines = read_data_from_generated_file(file).lines
         expect(lines.size).to eq(3)
       end
     end

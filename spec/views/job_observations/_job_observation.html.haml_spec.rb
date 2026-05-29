@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe "job_observations/_job_observation.html.haml" do
   let(:person) { people(:top_leader) }
-  let(:job_observation) { Fabricate(:job_observation, person_id: person.id, status: "success", attempts: 1) }
+  let(:job_observation) { Fabricate(:job_observation, person_id: person.id, status: "success", attempts: 1).decorate }
 
   let(:dom) do
     render locals: {job_observation:}

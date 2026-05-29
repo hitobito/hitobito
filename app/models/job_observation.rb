@@ -146,7 +146,9 @@ class JobObservation < ApplicationRecord
 
     update_columns(attributes_to_update)
 
-    broadcast_replace_to(update_channel_name) if should_broadcast
+    if should_broadcast
+      broadcast_replace_to(update_channel_name, locals: {job_observation: decorate})
+    end
   end
 
   private
@@ -195,7 +197,7 @@ class JobObservation < ApplicationRecord
 
   def broadcast_refresh_and_badge_update
     capturing_redis_exceptions do
-      broadcast_refresh_to(update_channel_name, locals: {job_observation: decorate})
+      broadcast_refresh_to(update_channel_name)
       broadcast_badge_update
     end
   end

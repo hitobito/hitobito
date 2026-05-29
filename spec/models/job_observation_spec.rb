@@ -331,26 +331,11 @@ describe JobObservation do
     end
   end
 
-  describe "attachment reading and writing" do
+  describe "attachment" do
     it "allows writing data" do
       expect do
         subject.write(data)
       end.to change(subject.generated_file, :attached?).from(false).to(true)
-    end
-
-    it "allows reading data" do
-      subject.update!(filetype: :txt)
-      subject.write(data)
-
-      expect(subject.read).to eql(data)
-    end
-
-    it "encodes data as csv when reading from csv file" do
-      subject.write(data)
-      read_data = subject.read
-
-      expect(read_data).to eql(data)
-      expect(read_data.encoding.to_s).to eql(Settings.csv.encoding)
     end
   end
 end

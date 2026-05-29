@@ -53,7 +53,7 @@ class JobObservation < ApplicationRecord
   after_commit :broadcast_refresh_and_badge_update, on: %i[create destroy]
   after_update_commit :broadcast_replace_and_badge_update
 
-  normalizes :filename, with: -> filename { filename.to_s.parameterize(preserve_case: true) }
+  normalizes :filename, with: ->(filename) { filename.to_s.parameterize(preserve_case: true) }
 
   def to_s
     progress_string = " (#{progress}%)" if reports_progress
@@ -196,14 +196,14 @@ class JobObservation < ApplicationRecord
 
   def broadcast_replace_and_badge_update
     capturing_redis_exceptions do
-      broadcast_replace_to(update_channel_name, locals: {job_observation: self.decorate})
+      broadcast_replace_to(update_channel_name, locals: {job_observation: decorate})
       broadcast_badge_update
     end
   end
 
   def broadcast_refresh_and_badge_update
     capturing_redis_exceptions do
-      broadcast_refresh_to(update_channel_name, locals: {job_observation: self.decorate})
+      broadcast_refresh_to(update_channel_name, locals: {job_observation: decorate})
       broadcast_badge_update
     end
   end
@@ -225,7 +225,7 @@ class JobObservation < ApplicationRecord
       broadcast_append_to(
         notification_channel_name,
         partial: "job_observations/notification",
-        locals: {job_observation: self.decorate},
+        locals: {job_observation: decorate},
         target: "job-observation-notifications-container"
       )
     end

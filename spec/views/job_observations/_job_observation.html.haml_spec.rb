@@ -12,7 +12,7 @@ describe "job_observations/_job_observation.html.haml" do
   let(:job_observation) { Fabricate(:job_observation, person_id: person.id, status: "success", attempts: 1) }
 
   let(:dom) do
-    render locals: { job_observation: }
+    render locals: {job_observation:}
     Capybara::Node::Simple.new(rendered)
   end
 

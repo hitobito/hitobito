@@ -6,7 +6,7 @@
 module ExportableRedirect
   private
 
-  def redirect_after_enqueued_export(redirection_target={returning: true})
+  def redirect_after_enqueued_export(redirection_target = {returning: true})
     flash[:notice] = translate(
       :export_enqueued, default: :"global.export_enqueued",
       overview_link: helpers.link_to(t("job_observations.index.title"), job_observations_path)

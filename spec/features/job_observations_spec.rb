@@ -29,7 +29,7 @@ describe :job_observations, js: true do
       expect(page).not_to have_content("Current user job")
       expect(page).not_to have_content("Other user job")
 
-      enqueue_job_by_current_and_other_user(Examples::SuccessfulObservableJob)
+      enqueue_job_by_current_and_other_user(Test::SuccessfulObservableJob)
 
       expect(page).to have_content("Current user job", count: 1)
       expect(page).not_to have_content("Other user job")
@@ -51,7 +51,7 @@ describe :job_observations, js: true do
     expect(page).not_to have_content("Current user job")
     expect(page).not_to have_content("Other user job")
 
-    enqueue_job_by_current_and_other_user(Examples::SuccessfulObservableJob)
+    enqueue_job_by_current_and_other_user(Test::SuccessfulObservableJob)
     expect(Delayed::Worker.new.work_off).to eql([2, 0])
 
     expect(page).to have_content("Job erfolgreich abgeschlossen", count: 1)
@@ -67,7 +67,7 @@ describe :job_observations, js: true do
     expect(page).not_to have_content("Current user job")
     expect(page).not_to have_content("Other user job")
 
-    enqueue_job_by_current_and_other_user(Examples::UnsuccessfulObservableJob)
+    enqueue_job_by_current_and_other_user(Test::UnsuccessfulObservableJob)
     expect(Delayed::Worker.new.work_off).to eql([0, 2])
 
     expect(page).to have_content("Fehler bei Jobausführung aufgetreten", count: 1)
@@ -80,7 +80,7 @@ describe :job_observations, js: true do
     expect(page).to have_content("Jobübersicht")
 
     allow(Kaminari.config).to receive(:default_per_page).and_return(2)
-    job = Examples::SuccessfulObservableJob.new
+    job = Test::SuccessfulObservableJob.new
 
     within "#content" do
       2.times do
@@ -126,11 +126,11 @@ describe :job_observations, js: true do
     expect(page).to have_css("#job-observations-link-with-badge")
     expect(page).not_to have_css("#job-observations-link-with-badge .badge")
 
-    enqueued_job = Examples::SuccessfulObservableJob.new.enqueue!
+    enqueued_job = Test::SuccessfulObservableJob.new.enqueue!
 
     expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
 
-    in_progress_job = Examples::SuccessfulObservableJob.new
+    in_progress_job = Test::SuccessfulObservableJob.new
     enqueued_in_progress_job = in_progress_job.enqueue!
     in_progress_job.job_observation.report_in_progress!
 

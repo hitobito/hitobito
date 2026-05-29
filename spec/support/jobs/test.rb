@@ -1,4 +1,4 @@
-module Examples
+module Test
   class ObservableJobWithProgress < BaseJob
     prepend ObservableJob
 

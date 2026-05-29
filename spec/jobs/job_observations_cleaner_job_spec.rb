@@ -39,8 +39,8 @@ describe JobObservationsCleanerJob do
   # job observations are removed by finished_at to not remove job observations
   # of jobs with a total retry time longer than 1 day
   it "doesnt remove job observations for jobs that have not finished yet" do
-    unfinished_job = Examples::SuccessfulObservableJob.new
-    finished_job = Examples::SuccessfulObservableJob.new
+    unfinished_job = Test::SuccessfulObservableJob.new
+    finished_job = Test::SuccessfulObservableJob.new
 
     travel_to(2.days.ago) do
       unfinished_job.enqueue!

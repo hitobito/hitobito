@@ -214,7 +214,7 @@ describe Export::Pdf::Messages::Letter do
 
   context "when passing job in options" do
     let(:job) do
-      job = Examples::SuccessfulObservableJob.new
+      job = Test::SuccessfulObservableJob.new
       job.enqueue!
       job
     end

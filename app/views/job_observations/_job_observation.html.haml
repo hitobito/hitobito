@@ -4,22 +4,22 @@
 -# https://github.com/hitobito/hitobito.
 
 .container-fluid.text-center.bg-light.my-2.p-3{id: dom_id(job_observation)}
-  .row
-    .col-1
+  .row.align-items-center.justify-content-center
+    .col-12.col-lg-1.mb-2.mb-lg-0
       = job_observation.status_icon
-    .col-3
+    .col-12.col-lg-3.mb-2.mb-lg-0
       = job_observation.job_name
-    .col-3
+    .col-6.col-lg-3.mb-2.mb-lg-0
       - if job_observation.reports_progress
         = job_observation.progress_bar
       - else
         = t(".no_progress_provided")
-    .col-3
+    .col-12.col-lg-3.mb-2.mb-lg-0
       = "#{JobObservation.human_attribute_name("started_at")}: #{job_observation.formatted_started_at}"
       %br
       = "#{JobObservation.human_attribute_name("finished_at")}: #{job_observation.formatted_finished_at}"
-    .col-1
+    .col-12.col-lg-1.mb-2.mb-lg-0
       = "#{JobObservation.human_attribute_name("attempts")}: #{job_observation.attempts_of_max_attempts}"
-    .col-1
+    .col-12.col-lg-1
       - if job_observation.generated_file.attached?
         = link_to(icon("download", {filled: true}), download_job_observation_path(job_observation))

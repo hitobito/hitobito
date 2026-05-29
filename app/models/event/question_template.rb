@@ -34,11 +34,11 @@ class Event::QuestionTemplate < ActiveRecord::Base
     where("group_id IN (?) OR (group_id IN (?) AND inherit IS TRUE)", layer_ids, hierarchy_ids)
   }
 
-  def self.applicable_to(groups, event_type: nil, admin: false)
+  def self.applicable_to(groups, event_type: nil, admin: false, default: true)
     return none if groups.blank?
 
     joins(:question)
-      .where(default: true, event_type: [event_type, nil])
+      .where(default:, event_type: [event_type, "", nil])
       .in_hierarchy(groups)
       .merge(Event::Question.where(admin: admin).list)
       .select(attribute_names)

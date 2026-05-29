@@ -28,14 +28,14 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
       ],
       application_questions_attributes: [
         :id, :question, :choices, :multiple_choices, :type,
-        :required, :derived, :_destroy,
+        :required, :derived, :template_id, :_destroy,
         {
           choices_attributes: [:choice, :_destroy]
         }
       ],
       admin_questions_attributes: [
         :id, :question, :choices, :multiple_choices, :type,
-        :required, :derived, :_destroy,
+        :required, :derived, :template_id, :_destroy,
         {
           choices_attributes: [:choice, :_destroy]
         }

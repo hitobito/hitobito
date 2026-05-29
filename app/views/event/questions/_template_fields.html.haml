@@ -1,4 +1,4 @@
--# Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 -# hitobito and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
@@ -10,15 +10,13 @@
 - # lookup if a partial for the question type and render it if it exists.
 - # `lookup_context.find_all` needs the partial including the leading underscore,
 - # while `render` requires you to pass the partial name without it.
-- partial_path = "event/questions/#{f.object.model_name.singular}"
-- if lookup_context.find_all(File.join(partial_path, '_fields')).any?
-  = render partial: File.join(partial_path, 'fields'), locals: { f: f }
+= render "event/questions/derived_fields", f: f
 
-= f.labeled_input_field(:required, caption: t('event.questions.required_caption'))
+= f.labeled_input_field(:required, caption: t('event.questions.required_caption'), disabled: f.object.admin?)
 
 - if Settings.event.participations.manual_sensitive_option
   - delete_answers_after_months = Settings.event.participations.delete_answers_after_months
-  = f.labeled_input_field(:sensitive, caption: t('event.questions.sensitive_caption', cutoff: delete_answers_after_months))
+  = f.labeled_input_field(:sensitive, caption: t('event.questions.sensitive_caption', cutoff: delete_answers_after_months), disabled: true)
 
 = render_extensions :fields, locals: { f: f }
 

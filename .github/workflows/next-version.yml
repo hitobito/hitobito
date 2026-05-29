@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: "Checkout composition"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ inputs.composition_repo }}
           ref: ${{ inputs.composition_ref }}

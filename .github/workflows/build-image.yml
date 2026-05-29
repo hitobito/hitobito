@@ -49,7 +49,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: 'Checkout composition repo'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ inputs.composition }}
           ref: ${{ inputs.source_ref }}

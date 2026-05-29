@@ -53,7 +53,7 @@ jobs:
         working-directory: .
 
       - name: Check out core with shared setup action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hitobito/hitobito
           ref: ${{ inputs.core_ref }}
@@ -108,7 +108,7 @@ jobs:
         working-directory: .
 
       - name: Check out core with shared setup action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hitobito/hitobito
           ref: ${{ inputs.core_ref }}
@@ -161,7 +161,7 @@ jobs:
           --health-retries 10
     steps:
       - name: Check out the core, which contains the shared setup action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hitobito/hitobito
           ref: ${{ inputs.core_ref }}
@@ -216,7 +216,7 @@ jobs:
 
     steps:
       - name: Check out the core, which contains the shared setup action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hitobito/hitobito
           ref: ${{ inputs.core_ref }}
@@ -271,7 +271,7 @@ jobs:
 
     steps:
       - name: Check out core with shared setup action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hitobito/hitobito
           ref: ${{ inputs.core_ref }}
@@ -301,7 +301,7 @@ jobs:
           bundle exec rake app:ci:setup:rspec app:spec:features:lenient
 
       - name: "Make capybara output downloadable"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: capybara-output-wagon

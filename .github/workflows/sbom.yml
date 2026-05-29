@@ -49,7 +49,7 @@ jobs:
 
     steps:
       - name: 'Checkout composition repository'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 'Checkout hitobito core submodule and wagon submodules'
         run: git submodule update --init --recursive
@@ -60,7 +60,7 @@ jobs:
           working-directory: hitobito
 
       - name: 'Set up Node'
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
 
@@ -80,14 +80,14 @@ jobs:
         working-directory: hitobito
         run: cp Gemfile.lock Gemfile.lock.backup
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: hitobito/vendor/bundle
           key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
           restore-keys: |
             ${{ runner.os }}-ruby-bundle-
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         if: ${{ inputs.wagon_dependency_repository != '' }}
         with:
           path: ${{ inputs.wagon_dependency_repository }}/vendor/bundle
@@ -96,7 +96,7 @@ jobs:
             ${{ runner.os }}-ruby-bundle-
 
       # Commented out for now because we would have to loop over all used wagons doing this
-#      - uses: actions/cache@v4
+#      - uses: actions/cache@v5
 #        with:
 #          path: ${{ env.WAGON_NAME }}/vendor/bundle
 #          key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
@@ -122,7 +122,7 @@ jobs:
 #            bundle install --jobs 4 --retry 3 --path vendor/bundle
 #          done
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: hitobito/node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
@@ -170,7 +170,7 @@ jobs:
           --form "projectVersion=latest" \
           --form "bom=@sbom.json"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: sboms

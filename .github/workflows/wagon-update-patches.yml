@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - name: Check out the core, which contains the shared setup action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hitobito/hitobito
           ref: ${{ inputs.core_ref }}

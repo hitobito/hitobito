@@ -20,7 +20,7 @@ runs:
       id: readToolVersions
 
     - name: Set up Node.js ${{ steps.readToolVersions.outputs.nodejs }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ steps.readToolVersions.outputs.nodejs }}
 
@@ -38,7 +38,7 @@ runs:
       run: cp Gemfile.lock Gemfile.lock.backup
       shell: bash
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
@@ -55,7 +55,7 @@ runs:
       run: git diff Gemfile.lock || true
       shell: bash
 
-    - uses: actions/cache@v4
+    - uses: actions/cache@v5
       if: inputs.assets == 'true'
       with:
         path: node_modules

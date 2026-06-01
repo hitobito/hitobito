@@ -6,8 +6,9 @@
 require "spec_helper"
 
 describe ApplicationCable::Connection, type: :channel do
+  let(:person) { people(:top_leader) }
+
   it "should successfully connect with logged in user" do
-    person = people(:top_leader)
     warden = double("Warden")
     allow(warden).to receive(:user).with(:person).and_return(person)
 

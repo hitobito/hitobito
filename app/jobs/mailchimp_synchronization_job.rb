@@ -8,7 +8,7 @@
 class MailchimpSynchronizationJob < BaseJob
   prepend ObservableJob
 
-  self.parameters = [:mailing_list_id]
+  self.parameters = parameters + [:mailing_list_id]
 
   def initialize(mailing_list_id)
     super()

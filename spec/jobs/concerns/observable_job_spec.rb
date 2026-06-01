@@ -181,4 +181,27 @@ describe ObservableJob do
       expect(Delayed::Worker.new.work_off).to match_array([3, 0])
     end
   end
+
+  context "job observation id" do
+    it "has job_observation_id in the parameters array of all observable jobs", :aggregate_failures do
+      Rails.autoloaders.main.eager_load_dir("app/jobs")
+
+      observable_job_classes = ObjectSpace.each_object(Class).select do |klass|
+        klass.ancestors.include?(ObservableJob)
+      end
+
+      observable_job_classes.each do |observable_job_class|
+        error_message = <<~MSG
+          Expected #{observable_job_class}.parameters to include :job_observation_id but it didn't.
+
+          This can usually be solved by replacing:
+            self.parameters = [:some_param]
+          with:
+            self.parameters = parameters + [:some_param]
+        MSG
+
+        expect(observable_job_class.parameters).to include(:job_observation_id), error_message
+      end
+    end
+  end
 end

@@ -58,7 +58,7 @@ class JobObservation < ApplicationRecord
   def to_s
     progress_string = " (#{progress}%)" if reports_progress
 
-    "<JobObservation##{id}: #{filename}#{progress_string}>"
+    "<JobObservation##{id}: #{filename_with_extension}#{progress_string}>"
   end
 
   def downloadable?(downloading_person)
@@ -80,13 +80,10 @@ class JobObservation < ApplicationRecord
     io.write(data)
     io.rewind # make ActiveStorage's checksum-calculation deterministic
 
-    generated_file.attach(io: io, filename: filename.to_s)
+    generated_file.attach(io: io, filename: filename_with_extension.to_s)
   end
 
-  def filename
-    filename = super
-    return if filename.blank?
-
+  def filename_with_extension
     "#{filename}.#{filetype}"
   end
 

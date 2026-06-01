@@ -22,7 +22,7 @@ class JobObservationsController < ApplicationController
     if job_observation&.downloadable?(current_person)
       redirect_to rails_blob_path(
         job_observation.generated_file,
-        filename: job_observation.filename,
+        filename: job_observation.filename_with_extension,
         disposition: "attachment"
       )
     else

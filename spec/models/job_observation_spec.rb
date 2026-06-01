@@ -75,27 +75,16 @@ describe JobObservation do
   end
 
   describe "filename handling" do
-    it "should append filetype to filename in getter" do
-      expect(subject.filename).to eql "subscriptions_to-blorbaels-rants.csv"
-    end
-
-    # Tested because we append the filetype to the filename
-    it "should have no filename when filename is nil" do
-      subject.update!(filename: nil)
-
-      expect(subject.filename).to be_nil
-    end
-
-    it "should have no filename when filename is blank" do
-      subject.update!(filename: "")
-
-      expect(subject.filename).to be_nil
+    it "#filename_with_extension should append filetype to filename" do
+      expect(subject.filename).to eql "subscriptions_to-blorbaels-rants"
+      expect(subject.filetype).to eql "csv"
+      expect(subject.filename_with_extension).to eql "subscriptions_to-blorbaels-rants.csv"
     end
 
     it "should normalize filename in setter" do
       subject.filename = "A filename with  many   spaces"
 
-      expect(subject.filename).to eql "A-filename-with-many-spaces.csv"
+      expect(subject.filename).to eql "A-filename-with-many-spaces"
     end
   end
 

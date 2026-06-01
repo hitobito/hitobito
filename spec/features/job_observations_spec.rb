@@ -211,7 +211,7 @@ describe :job_observations, js: true do
   end
 
   context "export jobs" do
-    around(:each) do |example|
+    around do |example|
       clear_downloads
       example.run
       clear_downloads

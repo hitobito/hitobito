@@ -257,7 +257,7 @@ Capybara.register_driver :chrome do |app|
   options.args << "--crash-dumps-dir=/tmp"
   options.add_preference("intl.accept_languages", "de-CH,de")
   options.add_preference(:download, prompt_for_download: false, default_directory: DownloadHelpers::PATH.to_s)
-  options.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
+  options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 

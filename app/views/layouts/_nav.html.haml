@@ -16,7 +16,7 @@
       %li.divider
       %li= link_to current_user, person_home_path(current_user)
       %li.divider
-      %li= render 'job_observations/link_with_badge', person: current_user
+      %li= link_to t('job_observations.index.title'), job_observations_path
       %li.divider
       = render 'layouts/languages'
       %li= link_to t('.sign_out'), sign_out_path, 'data-method': :delete

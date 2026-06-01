@@ -7,6 +7,7 @@ require "spec_helper"
 
 describe :job_observations, js: true do
   include DelayedJobSpecHelper
+  include DownloadHelpers
 
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
@@ -207,5 +208,32 @@ describe :job_observations, js: true do
     JobObservation.where(delayed_job: other_user_delayed_job).update!(job_class: "OtherUserJob")
 
     allow(Auth).to receive(:current_person).and_return(top_leader)
+  end
+
+  context "export jobs" do
+    around(:each) do |example|
+      clear_downloads
+      example.run
+      clear_downloads
+    end
+
+    it "should automatically download file when job is enqueued from ui" do
+      visit group_path(groups(:top_group))
+      expect(page).to have_content("TopGroup")
+
+      click_link("CSV Untergruppen")
+
+      expect(page).to have_css("turbo-cable-stream-source", visible: false, count: 1)
+      expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
+
+      expect(Delayed::Worker.new.work_off).to eql([1, 0])
+
+      expect(page).to have_content("Job erfolgreich abgeschlossen")
+
+      wait_for_download
+
+      expect(downloads.length).to eql(1)
+      expect(download).to match(/subgroups_export.csv/)
+    end
   end
 end

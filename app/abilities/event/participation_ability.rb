@@ -47,7 +47,7 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:mail_confirmation).in_same_layer_if_active
 
     for_self_or_manageds do
-      permission(:any).may(:create).her_own_if_application_possible
+      permission(:any).may(:create).her_own_or_for_participations_full_events
       permission(:any).may(:destroy).her_own_if_application_cancelable
       general(:create).at_least_one_group_not_deleted
     end
@@ -59,6 +59,10 @@ class Event::ParticipationAbility < AbilityDsl::Base
 
   def her_own_or_for_leaded_events
     her_own || for_leaded_events
+  end
+
+  def her_own_or_for_participations_full_events
+    her_own_if_application_possible || for_participations_full_events
   end
 
   def her_own_or_for_participations_read_events

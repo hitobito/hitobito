@@ -18,10 +18,13 @@ class EventAbility < AbilityDsl::Base
       .may(:index_participations)
       .for_participations_read_events_or_visible_fellow_participants
     permission(:any)
-      .may(:index_full_participations)
+      .may(:index_full_participations, :application_market)
       .for_participations_full_events
     permission(:any).may(:update, :create_tags, :assign_tags, :manage_attachments).for_leaded_events
     permission(:any).may(:qualify, :qualifications_read).for_qualify_event
+    permission(:any)
+      .may(:index_invitations)
+      .for_participations_full_events_and_invitations_supported
 
     permission(:group_full)
       .may(:index_participations, :index_full_participations, :show)

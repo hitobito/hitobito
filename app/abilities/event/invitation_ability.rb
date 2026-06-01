@@ -26,5 +26,10 @@ class Event::InvitationAbility < AbilityDsl::Base
       # abilities which managers inherit from their managed children
       permission(:any).may(:decline).own_invitation
     end
+
+    # abilities granted by event role permissions
+    permission(:any)
+      .may(:create, :destroy)
+      .for_participations_full_events_and_invitations_supported
   end
 end

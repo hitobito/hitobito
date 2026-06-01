@@ -41,6 +41,21 @@ describe Event::ParticipationAbility do
     end
   end
 
+  context "with event role participations_full creating participation for some one else" do
+    let(:user) { Fabricate(Group::BottomLayer::Member.name, group: groups(:bottom_layer_one)).person }
+    let(:course) { Fabricate(:course, groups: [groups(:bottom_layer_one)]) }
+    let(:participation) { Fabricate(:event_participation, event: course, participant: user) }
+    let!(:leader_role) { Fabricate(Event::Role::ParticipationFull.name, participation: participation) }
+    let(:other_participation) { Fabricate(:event_participation, event: course) }
+    let(:new_participation) { Event::Participation.new(event: course, person: Fabricate(:person)) }
+
+    it { is_expected.to be_able_to :show, other_participation }
+    it { is_expected.to be_able_to :show_details, other_participation }
+    it { is_expected.to be_able_to :show_full, other_participation }
+    it { is_expected.to be_able_to :create, new_participation }
+    it { is_expected.to be_able_to :update, other_participation }
+  end
+
   context "manager inherited permissions" do
     let(:participant) { Fabricate(:person) }
     let(:manager) { Fabricate(:person) }
@@ -78,14 +93,6 @@ describe Event::ParticipationAbility do
 
           it { is_expected.not_to be_able_to :create, participation }
         end
-      end
-
-      context "as event leader" do
-        let!(:leader_role) { Fabricate(Event::Role::Leader.name, participation: participation) }
-        let(:other_participation) { Fabricate(:event_participation, event: course) }
-
-        it { is_expected.to be_able_to :show, other_participation }
-        it { is_expected.to be_able_to :show_details, other_participation }
       end
     end
 

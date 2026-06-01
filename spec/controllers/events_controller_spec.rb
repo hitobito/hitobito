@@ -725,11 +725,11 @@ describe EventsController do
 
         expect(cde["id"]).to eq(course_de.id)
         expect(cde["label"]).to eq("Kurs 42")
-        expect(cde["types"].count).to eq(7)
+        expect(cde["types"].count).to eq(9)
 
         expect(cfr["id"]).to eq(course_fr.id)
         expect(cfr["label"]).to eq("Château 42")
-        expect(cfr["types"].count).to eq(7)
+        expect(cfr["types"].count).to eq(9)
       end
     end
   end

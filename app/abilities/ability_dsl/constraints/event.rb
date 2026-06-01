@@ -25,6 +25,10 @@ module AbilityDsl::Constraints
       permission_in_event?(:participations_full)
     end
 
+    def for_participations_full_events_and_invitations_supported
+      for_participations_full_events && invitations_supported?
+    end
+
     def in_same_group
       permission_in_groups?(event.group_ids)
     end
@@ -70,6 +74,10 @@ module AbilityDsl::Constraints
 
     def permission_in_event?(permission)
       user_context.events_with_permission(permission).include?(event.id)
+    end
+
+    def invitations_supported?
+      event.class.supports_invitations
     end
   end
 end

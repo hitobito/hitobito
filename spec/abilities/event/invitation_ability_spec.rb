@@ -34,4 +34,25 @@ describe Event::InvitationAbility do
       it { is_expected.not_to be_able_to :decline, invitation }
     end
   end
+
+  context "event leader with participations_full" do
+    let(:user) { Fabricate(:person) }
+    let(:participation) { Fabricate(:event_participation, event: course, participant: user) }
+    let!(:leader_role) { Fabricate(Event::Role::ParticipationFull.name, participation: participation) }
+
+    before { participation }
+
+    context "for own event" do
+      it { is_expected.to be_able_to :create, invitation }
+      it { is_expected.to be_able_to :destroy, invitation }
+    end
+
+    context "for other event" do
+      let(:other_course) { Fabricate(:course) }
+      let(:other_invitation) { Fabricate(:event_invitation, event: other_course, person: invitee) }
+
+      it { is_expected.not_to be_able_to :create, other_invitation }
+      it { is_expected.not_to be_able_to :destroy, other_invitation }
+    end
+  end
 end

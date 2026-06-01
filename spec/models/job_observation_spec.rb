@@ -192,32 +192,42 @@ describe JobObservation do
     end
   end
 
-  describe "websocket connection of person" do
-    it "should be enabled when job is enqueued" do
-      expect(person.reload.needs_web_socket_connection).to be_falsy
+  describe "unfinished counter cache" do
+    it "should update counter when job is created" do
+      expect(person.reload.unfinished_job_observations_count).to eql(0)
 
       subject
-      expect(person.reload.needs_web_socket_connection).to be_truthy
+      expect(person.reload.unfinished_job_observations_count).to eql(1)
     end
 
-    it "should be enabled when job is in progress" do
+    it "should update counter when job observation is destroyed" do
       subject
-      expect(person.reload.needs_web_socket_connection).to be_truthy
+      expect(person.reload.unfinished_job_observations_count).to eql(1)
+
+      subject.destroy
+      expect(person.reload.unfinished_job_observations_count).to eql(0)
+    end
+
+    it "should not change count when job changes state to in progress" do
+      subject
+      expect(person.reload.unfinished_job_observations_count).to eql(1)
 
       subject.update!(status: "in_progress")
-      expect(person.reload.needs_web_socket_connection).to be_truthy
+      expect(person.reload.unfinished_job_observations_count).to eql(1)
     end
 
-    it "should be disabled when all jobs have finished" do
+    it "should update counter with multiple jobs" do
       job_observation = subject
-      expect(person.reload.needs_web_socket_connection).to be_truthy
+      expect(person.reload.unfinished_job_observations_count).to eql(1)
+
       other_job_observation = Fabricate(:job_observation, job_class:)
-      expect(person.reload.needs_web_socket_connection).to be_truthy
+      expect(person.reload.unfinished_job_observations_count).to eql(2)
 
       job_observation.update!(status: "success")
-      expect(person.reload.needs_web_socket_connection).to be_truthy
+      expect(person.reload.unfinished_job_observations_count).to eql(1)
+
       other_job_observation.update!(status: "error")
-      expect(person.reload.needs_web_socket_connection).to be_falsy
+      expect(person.reload.unfinished_job_observations_count).to eql(0)
     end
   end
 

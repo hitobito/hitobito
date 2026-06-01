@@ -3,8 +3,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddNeedsWebSocketConnectionToPeople < ActiveRecord::Migration[8.0]
+class AddUnfinishedJobObservationsCountToPeople < ActiveRecord::Migration[8.0]
   def change
-    add_column :people, :needs_web_socket_connection, :boolean
+    add_column :people, :unfinished_job_observations_count, :integer, default: 0, null: false
   end
 end

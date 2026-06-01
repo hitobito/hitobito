@@ -49,7 +49,8 @@ class JobObservation < ApplicationRecord
   validates_by_schema
 
   after_initialize :set_default_values, if: :new_record?
-  after_save :set_web_socket_connection_state
+  after_save :update_unfinished_counter_cache
+  after_destroy :update_unfinished_counter_cache
   after_commit :broadcast_refresh_and_badge_update, on: %i[create destroy]
   after_update_commit :broadcast_replace_and_badge_update
 
@@ -222,12 +223,8 @@ class JobObservation < ApplicationRecord
     end
   end
 
-  def set_web_socket_connection_state
-    if person.job_observations.unfinished.count > 0
-      person.update_column(:needs_web_socket_connection, true)
-    else
-      person.update_column(:needs_web_socket_connection, false)
-    end
+  def update_unfinished_counter_cache
+    person.update_column(:unfinished_job_observations_count, person.job_observations.unfinished.count)
   end
 
   def capturing_redis_exceptions

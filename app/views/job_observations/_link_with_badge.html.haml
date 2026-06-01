@@ -5,7 +5,7 @@
 
 %a#job-observations-link-with-badge.position-relative{href: job_observations_path}
   = icon('bars-progress')
-  - unfinished_job_count = person.job_observations.unfinished.count
+  - unfinished_job_count = person.unfinished_job_observations_count
   - if unfinished_job_count > 0
     %span.position-absolute.top-0.start-100.translate-middle.badge.rounded-pill.bg-danger
       = unfinished_job_count

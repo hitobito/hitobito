@@ -1130,7 +1130,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.string "housenumber", limit: 20
     t.string "address_care_of"
     t.string "postbox"
-    t.boolean "needs_web_socket_connection"
+    t.integer "unfinished_job_observations_count", default: 0, null: false
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

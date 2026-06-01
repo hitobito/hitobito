@@ -42,7 +42,6 @@
 #  locked_at                            :datetime
 #  membership_verify_token              :string
 #  minimized_at                         :datetime
-#  needs_web_socket_connection          :boolean
 #  nickname                             :string
 #  postbox                              :string
 #  privacy_policy_accepted_at           :datetime
@@ -57,6 +56,7 @@
 #  town                                 :string
 #  two_factor_authentication            :integer
 #  unconfirmed_email                    :string
+#  unfinished_job_observations_count    :integer          default(0), not null
 #  unlock_token                         :string
 #  zip_code                             :string
 #  created_at                           :datetime
@@ -107,7 +107,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :membership_verify_token,
     :inactivity_block_warning_sent_at,
     :minimized_at,
-    :needs_web_socket_connection
+    :unfinished_job_observations_count
   ]
 
   MERGABLE_ATTRS = PUBLIC_ATTRS - [:id, :primary_group_id, :picture]
@@ -466,6 +466,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     return :password_email_sent if reset_password_period_valid?
 
     :no_login
+  end
+
+  def needs_web_socket_connection?
+    unfinished_job_observations_count > 0
   end
 
   ### AUTHENTICATION INSTANCE METHODS

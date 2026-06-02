@@ -81,10 +81,10 @@ describe RoleListsController, js: true do
     find(:css, "input[name='role[types][Group::TopGroup::Leader]']").set(false)
     find("button", text: "Rollen verschieben").click
 
-    expect(page).to have_content("3 Rollen wurden verschoben")
+    expect(page).to have_content("2 Rollen wurden verschoben")
     expect(page).to have_css("tr#person_#{role1.person.id} td p", text: "Secretary")
     expect(page).to have_css("tr#person_#{role2.person.id} td p", text: "Secretary")
-    expect(page).to have_css("tr#person_#{leader.person.id} td p", text: "Secretary")
+    expect(page).to have_css("tr#person_#{leader.person.id} td p", text: "Leader")
 
     expect(page).not_to have_css("tr#person_#{role1.person.id} td p", text: "Member")
     expect(page).not_to have_css("tr#person_#{role2.person.id} td p", text: "Member")

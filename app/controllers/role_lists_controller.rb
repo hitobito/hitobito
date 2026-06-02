@@ -10,6 +10,7 @@ class RoleListsController < CrudController
 
   rescue_from CanCan::AccessDenied, with: :handle_access_denied
 
+  before_action :set_group_selection, only: [:new, :move]
   before_action :validate_role_type, only: [:create, :update]
 
   helper_method :group
@@ -17,35 +18,35 @@ class RoleListsController < CrudController
   respond_to :js, only: [:new, :move, :movable, :deletable]
 
   def create
-    new_roles = role_list.build_new_roles_hash
-    count = Role.create(new_roles).count
-    redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
+    role_list.create
+    redirect_to_group_people_path(**role_list.counts)
   end
 
   def destroy
-    count = Role.destroy(role_list.deletable_role_ids).count
-    redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
+    role_list.destroy
+    redirect_to_group_people_path(**role_list.counts)
   end
 
   def update
-    count = Role.transaction do
-      Role.destroy(role_list.deletable_role_ids)
-      Role.create(role_list.build_new_roles_hash).count
-    end
+    role_list.move
+    redirect_to_group_people_path(**role_list.counts)
+  end
 
-    redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
+  def redirect_to_group_people_path(success:, failure:)
+    redirect_to(
+      group_people_path(group),
+      notice: (flash_message(:success, count: success) if success.positive?),
+      alert: (flash_message(:failure, count: failure) if failure.positive?)
+    )
   end
 
   def new
-    @group_selection = group.groups_in_same_layer.to_a
     @people_ids ||= params[:ids]
     @people_count = people.count
   end
 
   def move
     entry # initialize entry so form extensions work without modifications
-
-    @group_selection = group.groups_in_same_layer.to_a
     @people_ids ||= params[:ids]
   end
 
@@ -66,13 +67,17 @@ class RoleListsController < CrudController
 
   private
 
+  def set_group_selection
+    @group_selection = group.groups_in_same_layer.to_a
+  end
+
   def entry
     super.decorate
   end
 
   def validate_role_type
     if role_type.blank? || !Object.const_defined?(role_type.camelize)
-      redirect_to(group_people_path(group), alert: flash_message(:failure))
+      redirect_to(group_people_path(group), alert: flash_message(:failure, count: 0))
     end
   end
 

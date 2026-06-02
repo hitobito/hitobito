@@ -2197,18 +2197,28 @@ de:
         zero: Es wurde keine Rolle entfernt
         one: Eine Rolle wurde entfernt
         other: "%{count} Rollen wurden entfernt"
+      failure:
+        zero: Es wurde keine Rolle entfernt
+        one: Eine Rolle konnte nicht entfernt werden
+        other: "%{count} Rollen konnten nicht entfernt werden"
     create:
       success:
         zero: Es wurde keine Rolle erstellt
         one: Eine Rolle wurde erstellt
         other: "%{count} Rollen wurden erstellt"
-      failure: Bitte geben Sie eine valide Rolle an
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht erstellt werden
+        other: "%{count} Rollen konnten nicht erstellt werden"
     update:
       success:
         zero: Es wurde keine Rolle verschoben
         one: Eine Rolle wurde verschoben
         other: "%{count} Rollen wurden verschoben"
-      failure: Bitte geben Sie eine valide Rolle an
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht verschoben werden
+        other: "%{count} Rollen konnten nicht verschoben werden"
     move:
       title: Wohin sollen die Personen verschoben werden?
       submit: Weiter

@@ -19,7 +19,7 @@ module RoleListsHelper
 
   def type_checkbox(type, count)
     label_tag(nil, class: "checkbox ") do
-      out = check_box_tag("role[types][#{type}]", nil, true)
+      out = check_box_tag("role[types][#{type}]", nil, true, class: "me-2")
       out << type.constantize.label
       out << content_tag(:div, class: "role-count") do
         count.to_s

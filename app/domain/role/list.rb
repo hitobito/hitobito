@@ -5,19 +5,47 @@
 
 class Role
   class List
-    attr_reader :ability, :params
+    attr_reader :ability, :params, :counts
+
     delegate :authorize!, :can?, to: :ability
 
     def initialize(ability, params)
       @ability = ability
       @params = params
+      @counts = {success: 0, failure: 0}
     end
 
-    def build_new_roles_hash
-      people.map do |person|
-        role = build_role(person.id)
-        authorize!(:create, role, message: access_denied_flash(person))
-        role.attributes.except("terminated")
+    def create
+      build_new_roles.each do |role|
+        role_create(role)
+      end
+    end
+
+    def destroy
+      deleteable_roles.each do |role|
+        role_destroy(role)
+      end
+    end
+
+    def move
+      @skip_counts = true
+      new_roles_by_person_id = build_new_roles.index_by(&:person_id)
+      deleteable_roles.each do |old_role|
+        new_role = new_roles_by_person_id[old_role.person_id]
+        move_role(old_role, new_role)
+      end
+    end
+
+    def move_role(old_role, new_role)
+      Role.transaction do
+        destroyed = role_destroy(old_role)
+        created = role_create(new_role)
+        if !(created && destroyed)
+          counts[:failure] += 1
+          raise ActiveRecord::Rollback
+        end
+
+        counts[:success] += 1
       end
     end
 
@@ -33,13 +61,36 @@ class Role
       end
     end
 
-    def deletable_role_ids
-      roles.where(type: role_types.keys).map do |r|
-        authorize!(:destroy, r, message: access_denied_flash(r.person)).id
+    private
+
+    def role_create(role)
+      with_counts(role, :save)
+    end
+
+    def role_destroy(role)
+      with_counts(role, :destroy)
+    end
+
+    def with_counts(role, method)
+      role.send(method).tap do |success|
+        next if @skip_counts
+        success ? counts[:success] += 1 : counts[:failure] += 1
       end
     end
 
-    private
+    def build_new_roles
+      people.map do |person|
+        role = build_role(person.id)
+        authorize!(:create, role, message: access_denied_flash(person))
+        Role.new(role.attributes.except("terminated"))
+      end
+    end
+
+    def deleteable_roles
+      roles.where(type: role_types.keys).map do |r|
+        authorize!(:destroy, r, message: access_denied_flash(r.person))
+      end
+    end
 
     def build_role(person_id)
       role = build_role_type

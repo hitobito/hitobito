@@ -140,6 +140,42 @@ describe RoleListsController do
       expect(person1.roles.count).to eq(2)
       expect(person2.roles.count).to eq(2)
     end
+
+    it "reports about failed creation" do
+      allow_any_instance_of(Role).to receive(:save).and_return(false)
+      expect do
+        post :create, params: {
+          group_id: group,
+          ids: person1.id,
+          role: {type: Group::TopGroup::Member,
+                 group_id: group}
+        }
+      end.not_to change(Role, :count)
+
+      expect(flash[:notice]).to be_blank
+      expect(flash[:alert]).to eq "Eine Rolle konnte nicht erstellt werden"
+    end
+
+    it "handles successful and failed creation" do
+      allow_any_instance_of(Role).to receive(:save) do |role|
+        if @saved
+          false
+        else
+          @saved = true
+          role.save!
+        end
+      end
+      expect do
+        post :create, params: {
+          group_id: group,
+          ids: [person2.id, person1.id].join(","),
+          role: {type: Group::TopGroup::Member,
+                 group_id: group}
+        }
+      end.to change(Role, :count).by(1)
+      expect(flash[:notice]).to include "Eine Rolle wurde erstellt"
+      expect(flash[:alert]).to eq "Eine Rolle konnte nicht erstellt werden"
+    end
   end
 
   context "PUT update" do
@@ -205,6 +241,34 @@ describe RoleListsController do
         expect(role.group).to eq(groups(:top_layer))
         expect(role.type).to eq("Group::TopLayer::TopAdmin")
       end
+    end
+
+    it "handles successul and failed move" do
+      allow_any_instance_of(Role).to receive(:save) do |role|
+        if @saved
+          false
+        else
+          @saved = true
+          role.save!
+        end
+      end
+      expect do
+        put :update, params: {
+          group_id: group,
+          ids: [person1.id, person2.id].join(","),
+          role: {types: {Group::TopGroup::Member => 1,
+                         Group::TopGroup::Leader => 1},
+                 type: Group::TopLayer::TopAdmin,
+                 group_id: groups(:top_layer)}
+        }
+      end.to not_change { role2.reload.attributes }
+
+      role1 = person1.roles.first
+      expect(role1.group).to eq(groups(:top_layer))
+      expect(role1.type).to eq("Group::TopLayer::TopAdmin")
+
+      expect(flash[:notice]).to include "Eine Rolle wurde verschoben"
+      expect(flash[:alert]).to eq "Eine Rolle konnte nicht verschoben werden"
     end
   end
 end

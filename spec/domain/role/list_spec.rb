@@ -13,7 +13,7 @@ describe Role::List do
   let(:group) { groups(:top_group) }
   let!(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, group: group) }
 
-  context "build_new_roles_hash" do
+  context "create" do
     let(:params) {
       ActionController::Parameters.new({ids: person.id,
                                                       role: {type: "Group::TopGroup::Leader",
@@ -24,7 +24,7 @@ describe Role::List do
       allow(ability).to receive(:can?).and_return(false)
 
       expect do
-        role_list.build_new_roles_hash
+        role_list.create
       end.to raise_error(CanCan::AccessDenied, "Zugriff auf Top Leader verweigert")
     end
   end

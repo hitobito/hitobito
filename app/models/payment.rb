@@ -38,6 +38,8 @@ class Payment < ActiveRecord::Base
 
   scope :list, -> { order(Arel.sql("(SELECT MAX(received_at) FROM payments) DESC")) }
   scope :unassigned, -> { where(invoice_id: nil) }
+  # FIXIT: spec this properly
+  scope :of_layer, ->(group) { where(invoice: Invoice.where(group: group.groups_in_same_layer)) }
 
   STATES = %w[ebics_imported xml_imported manually_created without_invoice].freeze
   i18n_enum :status, STATES

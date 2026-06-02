@@ -8,13 +8,24 @@ class PaymentsController < CrudController
   include ActionView::Helpers::NumberHelper
   include ExportableRedirect
 
-  self.nesting = [Group, Invoice]
+  self.nesting = [Group]
+  self.optional_nesting = [Invoice]
   self.permitted_attrs = [:amount, :received_at]
+
+  self.sort_mappings = {
+    invoice_amount: "invoices.total",
+    invoice_due_at: "invoices.due_at",
+    invoice_status: "invoices.state",
+    amount: "payments.amount",
+    received_at: "payments.received_at",
+    status: "payments.status"
+  }
 
   def index
     respond_to do |format|
       format.csv { render_tabular_entries_in_background(:csv) }
       format.xlsx { render_tabular_entries_in_background(:xlsx) }
+      format.html { super }
     end
   end
 
@@ -59,8 +70,14 @@ class PaymentsController < CrudController
 
   def list_entries
     scope = super
+    scope = scope.joins(<<~SQL)
+      LEFT JOIN invoices ON payments.invoice_id = invoices.id
+      LEFT JOIN people ON people.id = invoices.recipient_id AND invoices.recipient_type = 'Person'
+      LEFT JOIN groups ON groups.id = invoices.recipient_id AND invoices.recipient_type = 'Group'
+    SQL
 
     scope = scope.unassigned if params[:state] == "without_invoice"
+    scope = scope.page(params[:page]) if params[:ids].blank?
     scope.where(received_at: from_param..to_param)
   end
 
@@ -80,7 +97,11 @@ class PaymentsController < CrudController
 
   def model_scope
     if action_name == "index"
-      Payment
+      if parents.one? # only a group present
+        Payment.of_layer(parent).includes(:invoice)
+      else # group and invoice, crashes rightfully if neither is present
+        @invoice.payments # ivar is loaded by the parents-call above
+      end
     else
       super
     end

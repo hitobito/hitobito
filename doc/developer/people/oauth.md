@@ -77,6 +77,7 @@ The response will contain the access token (formatted here for readability):
   "access_token": "A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ",
   "token_type": "Bearer",
   "expires_in": 7200,
+  "refresh_token": "MGccQ5fqRIqqW9hcPgQRhwrfIF56DGD6vO_b2LN_d0B",
   "scope": "email name",
   "created_at": 1560862298
 }
@@ -103,6 +104,39 @@ An example response could be (formatted here for readability):
   "zip_code": "",
   "town": null,
   "country": null
+}
+```
+
+#### Using a refresh token to acquire a new access token
+
+The access token response also included a refresh_token.
+While the access token expires after 2 hours, the refresh token is valid for 7 days.
+The refresh token can be used once in order to get a new access token and refresh token, as follows:
+
+
+```bash
+curl -X POST \
+     -H "Accept: application/json" \
+     -d "grant_type=refresh_token" \
+     -d "refresh_token=MGccQ5fqRIqqW9hcPgQRhwrfIF56DGD6vO_b2LN_d0B" \
+     -d "client_id=df57d88580cd81d2f7ca9974ff5a45dece279a36d4f55fe741502dd3ebb60ba8" \
+     -d "client_secret=2e1a8ef6676e3b9a13a75a7e6ae55879a02b8a5194af010dd8af0eb1a2ca0957" \
+     https://demo.hitobito.com/oauth/token
+```
+
+* `grant_type` For this type of request we use the value `refresh_token`
+* `client_id` and `client_secret` Same as above for the access token request
+* `refresh_token` Must be a valid, unused refresh_token
+
+The response will contain the access token and a new refresh token (formatted here for readability):
+```json
+{
+  "access_token": "sqJbQBhu0bRKMvWdwcBSw2DJbUiaQA5t3yMUvKCZLxa",
+  "token_type": "Bearer",
+  "expires_in": 7200,
+  "refresh_token": "QRhwrfIF56DGD6vO_b2LN_d0BMGccQ5fqRIqqW9hcPg",
+  "scope": "email name",
+  "created_at": 1561381985
 }
 ```
 

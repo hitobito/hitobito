@@ -18,13 +18,13 @@ describe Oauth::AccessTokenCleanupJob do
   let!(:token) { Fabricate(:access_token, application:, scopes:, resource_owner_id:) }
 
   describe "refresh token behaviour" do
-    it "keeps token refreshable for 180 days" do
-      travel_to(180.days.from_now.noon) do
+    it "keeps token refreshable for 7 days" do
+      travel_to(7.days.from_now.noon) do
         expect { job.perform }.not_to change { Oauth::AccessToken.count }
       end
     end
 
-    it "removes token after 180 days" do
+    it "removes token after 7 days" do
       travel_to(181.days.from_now.noon) do
         expect { job.perform }.to change { Oauth::AccessToken.count }.by(-1)
       end

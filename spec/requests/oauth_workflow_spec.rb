@@ -61,6 +61,7 @@ describe "OauthWorkflow" do
       end.to change { Oauth::AccessToken.count }.by(1)
       expect(json["created_at"]).to be_present
       expect(json["access_token"]).to be_present
+      expect(json["refresh_token"]).to be_present
       expect(json["token_type"]).to eq "Bearer"
       expect(json["expires_in"]).to eq 2.hours.to_i
     end
@@ -97,14 +98,18 @@ describe "OauthWorkflow" do
 
       it "returns jwt as access_token" do
         make_request_with(create_grant)
-        expect(json.keys).to match_array %w[access_token token_type expires_in created_at]
+        expect(json.keys).to match_array(
+          %w[access_token token_type expires_in created_at refresh_token]
+        )
         expect(jwt_decode(json["access_token"])["exp"]).to be_within(10).of(2.hours.from_now.to_i)
       end
 
       it "can configure scopes" do
         @app.update(scopes: "email openid")
         make_request_with(create_grant(scopes: "email openid"))
-        expect(json.keys).to match_array %w[access_token token_type expires_in created_at scope id_token]
+        expect(json.keys).to match_array(
+          %w[access_token token_type expires_in created_at scope id_token refresh_token]
+        )
         expect(jwt_decode(json["id_token"])["exp"]).to be_within(10).of(2.minutes.from_now.to_i)
       end
 
@@ -114,6 +119,27 @@ describe "OauthWorkflow" do
         make_request_with(create_grant(scopes: "email openid"))
         expect(jwt_decode(json["id_token"])["exp"]).to be_within(10).of(2.hours.from_now.to_i)
       end
+    end
+  end
+
+  describe "refreshing token" do
+    it "refreshes an access_token for the user", :time_frozen do
+      grant = @app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri: redirect_uri)
+      post oauth_token_path,
+        params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri,
+                 code: grant.token, grant_type: "authorization_code"}
+      refresh_token = json["refresh_token"]
+
+      expect do
+        post oauth_token_path,
+          params: {client_id: @app.uid, client_secret: @app.secret, refresh_token: refresh_token,
+                   grant_type: "refresh_token"}
+      end.to change { Oauth::AccessToken.count }.by(1)
+      expect(json["created_at"]).to be_present
+      expect(json["access_token"]).to be_present
+      expect(json["refresh_token"]).to be_present
+      expect(json["token_type"]).to eq "Bearer"
+      expect(json["expires_in"]).to eq 2.hours.to_i
     end
   end
 

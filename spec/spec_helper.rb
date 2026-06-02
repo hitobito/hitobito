@@ -255,6 +255,11 @@ Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
+# We use Rack::Test by default for performance reasons but still want to be able
+# to run feature spec in a browser via setting HEADLESS=false
+if ENV["HEADLESS"] == "false"
+  Capybara.current_driver = :chrome
+end
 Capybara.javascript_driver = :chrome
 
 Devise::Test::ControllerHelpers.prepend(Module.new do

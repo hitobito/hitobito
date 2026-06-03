@@ -1410,9 +1410,9 @@ de:
         payee_person_name: Schuldner Name
         payee_person_address: Schuldner Adresse
         statuses:
-          ebics_imported: "via EBICS"
-          xml_imported: "aus XML"
-          manually_created: "manuell"
+          ebics_imported: "EBICS"
+          xml_imported: "CAMT"
+          manually_created: "Manuell"
           without_invoice: "ohne Rechnung"
 
       payment_reminder:

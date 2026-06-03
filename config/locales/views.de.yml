@@ -1271,6 +1271,8 @@ de:
       number_of_payments_shown:
         one: "%{count} Zahlung angezeigt."
         other: "%{count} Zahlungen angezeigt."
+    history:
+      payed: "%{amount} bezahlt (%{source})"
 
   period_invoice_templates:
     invoice_runs:

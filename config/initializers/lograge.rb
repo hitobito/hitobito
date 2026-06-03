@@ -50,7 +50,7 @@ config.lograge.custom_options = lambda do |event|
     time: Time.zone.now,
     request_uuid: event.payload[:request_uuid],
     params: LogrageHelper.stringify_structure(
-      event.payload[:params].except(*%w(controller action format id))
+      event.payload[:params]&.except(*%w(controller action format id))
     )
   }.tap do |options|
     LogrageHelper.add_exception(options, event.payload[:exception_object])

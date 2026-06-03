@@ -92,6 +92,8 @@ fr:
 
     jump_to_content: "Aller au contenu principal"
 
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+
   list:
     index:
       title: "%{models}"
@@ -719,7 +721,7 @@ fr:
     preconditions: "Qualifications requises"
     tabs:
       participants: "Participants"
-    export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   event/applications:
     approved: "L'inscription a été autorisée."
@@ -737,7 +739,7 @@ fr:
     not_allowed_due_to_guest_limit: "Tu ne peux pas ajouter d'autres invités à cette événement."
 
   event/invitations:
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via la page%{model_name}. Elles ne reçoivent pas de mail automatique."
 
   event/kinds:
@@ -752,7 +754,7 @@ fr:
     success: "%{full_entry_label} a été ajouté avec succès."
     success_for_external_manager: "%{full_entry_label} a été créé avec succès."
     instructions: "Pour l'inscription définitive, tu dois imprimer cette page en utilisant l'option <i>imprimer</i>, puis la signer et l'envoyer par poste à l'adresse indiquée."
-    export_enqueued: "l'exportation débute en arrière-plan et est téléchargée quand elle est terminée"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     waiting_list: "Toutes les places sont actuellement prises, l'inscription est sur la liste d'attente."
     pending: " Une pré-entrée a été créée pour  %{full_entry_label}. La participation n'est pas encore définitive et doit être confirmée par la direction de l'événement."
 
@@ -970,7 +972,7 @@ fr:
     tabs:
       deleted: "Eléments effacés"
       statistics: "Statistiques"
-    export_enqueued: "L'exportation est lancée en arrière-plan et téléchargée une fois terminée."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     statistics:
       title: Statistiques
       description: "%{subject} in %{groups}"
@@ -1121,7 +1123,7 @@ fr:
         esr_number_heading: Numéro de référence
         currency: Devise
         amount: Montant
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     recipients_empty: La liste des destinataires est vide. Impossible de créer un PDF.
     evaluations:
       show:
@@ -1262,7 +1264,7 @@ fr:
       other: "%{count} factures ont été annulées."
 
   payments:
-    export_enqueued: "L'exportation a commencé en tâche de fond et sera téléchargée une fois terminée."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     create:
       flash:
         success: La facture supérieur à %{amount} saisie.
@@ -1328,6 +1330,9 @@ fr:
     user_impersonation:
       info: "Tu es maintenant enregistré en tant que %{user}"
       end: "Terminer l'imitation"
+
+  mailchimp_synchronizations:
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1437,7 +1442,7 @@ fr:
           unknown_recipient: Empfänger unbekannt
           retrieved: Empfangen
           bounce_rejected: Bounce abgelehnt
-      export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+      export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
       show:
         recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
       export:
@@ -1981,7 +1986,7 @@ fr:
       add_role: Ajouter un rôle
       set_main_group: Déterminer le groupe principal
 
-    export_enqueued: "L'exportation commence en arrière-plan et sera téléchargé après avoir été complété."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     export_email_needed: "Adresse e-mail requise pour l'export."
 
     multiselect_actions:
@@ -2369,12 +2374,21 @@ fr:
     subscription:
       only_persons_with: "Seulement personnes avec:"
       persons_excluded_with: "Personnes exclues avec:"
-    export_enqueued: "L'exportation commence en arrière-plan et sera téléchargé après avoir été complété."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   taggable:
     add_tag: Rajouter un tag
     cannot_create: Veuillez sélectionner une tag existante
     no_entry: (aucune)
+
+  job_observations:
+    index:
+      title: Jobübersicht
+    job_observation:
+      no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
+    notification:
+      job_success: Job erfolgreich abgeschlossen
+      job_error: Fehler bei Jobausführung aufgetreten
 
   version:
     attribute_change:

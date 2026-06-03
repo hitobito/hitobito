@@ -116,22 +116,34 @@ class EventDecorator < ApplicationDecorator
        application_conditions.present?)
   end
 
-  def complete_contact_attributes # rubocop:todo Metrics/AbcSize
-    contact_attributes = {}
+  def complete_contact_attributes(icons: true)
+    return if contact.nil?
 
-    contact_attributes[:picture] = event_contact_person_picture
-    contact_attributes[:name] = contact.contact_name
-    contact_attributes[:address] =
-      [contact.complete_address, *contact.all_additional_addresses].compact.join.html_safe
-    contact_attributes[:email] =
-      [
-        contact.email.present? ? h.mail_to(contact.email) : nil,
-        *contact.all_additional_emails
-      ].compact.join.html_safe
-    contact_attributes[:phone_number] = contact.all_phone_numbers
-    contact_attributes[:social_account] = contact.all_social_accounts
+    attrs = {
+      picture: event_contact_person_picture,
+      name: contact.contact_name,
+      address: contact_address,
+      email: contact_emails(icons: icons),
+      phone_number: contact_phone_numbers(icons: icons),
+      social_account: contact.all_social_accounts
+    }
+    safe_join(attrs.values_at(*visible_contact_attributes.map(&:to_sym)))
+  end
 
-    safe_join(contact_attributes.values_at(*visible_contact_attributes.map(&:to_sym)))
+  def contact_address
+    [contact.complete_address, *contact.all_additional_addresses].compact.join.html_safe
+  end
+
+  def contact_emails(icons: true)
+    icon = icons ? h.icon(:envelope, class: "me-1") : nil
+    safe_join([
+      contact.primary_email(prefix: icon),
+      contact.all_additional_emails(prefix: icon)
+    ].compact_blank)
+  end
+
+  def contact_phone_numbers(icons: true)
+    contact.all_phone_numbers(prefix: icons ? h.icon(:phone, class: "me-1") : nil)
   end
 
   def event_contact_person_picture

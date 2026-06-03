@@ -30,9 +30,9 @@ describe ContactableDecorator do
 
   describe "#complete_contact" do
     it "returns all attributes" do
-      # rubocop:todo Layout/LineLength
-      expect(event.contact.complete_contact).to eq "<strong>Top Leader</strong><p>Greatstreet 345<br />3456 Greattown</p><p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
-      # rubocop:enable Layout/LineLength
+      expect(event.contact.complete_contact).to eq "<strong>Top Leader</strong>" \
+        "<p>Greatstreet 345<br />3456 Greattown</p>" \
+        "<p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
     end
   end
 
@@ -40,8 +40,16 @@ describe ContactableDecorator do
     expect(@group.complete_address).to eq "<p>foostreet 3<br />4242 footown</p>"
   end
 
-  it "#primary_email" do
-    expect(@group.primary_email).to eq '<p><a href="mailto:foo@foobar.com">foo@foobar.com</a></p>'
+  describe "#primary_email" do
+    it "renders primary email as mailto link" do
+      expect(@group.primary_email).to eq '<p><a href="mailto:foo@foobar.com">foo@foobar.com</a></p>'
+    end
+
+    it "with prefix renders primary_email with prefix" do
+      expect(
+        @group.primary_email(prefix: "someprefixiwanttodisplay")
+      ).to eq '<p>someprefixiwanttodisplay <a href="mailto:foo@foobar.com">foo@foobar.com</a></p>'
+    end
   end
 
   context "#all_emails" do
@@ -62,9 +70,8 @@ describe ContactableDecorator do
       it "contains muted translated label with invoices suffix for invoices email" do
         person.additional_emails.create!(label: "Private", email: "invoices@example.com", invoices: true)
         expect(person.decorate.all_additional_emails).to end_with(
-          # rubocop:todo Layout/LineLength
-          "<span class=\"muted\">Private <i class=\"muted fas fa-money-bill-alt\" title=\"Wird für Rechnungen verwendet\"></i></span></p>"
-          # rubocop:enable Layout/LineLength
+          "<span class=\"muted\">Private " \
+          "<i class=\"muted fas fa-money-bill-alt\" title=\"Wird für Rechnungen verwendet\"></i></span></p>"
         )
       end
     end
@@ -84,6 +91,12 @@ describe ContactableDecorator do
       it { is_expected.to match(/additional@foobar.com.+Work/) }
       it { is_expected.to match(/private@foobar.com.+Mobile/) }
     end
+
+    context "with prefix" do
+      subject { @group.all_additional_emails(prefix: "someprefixiwanttodisplay") }
+
+      it { is_expected.to match(/someprefixiwanttodisplay.+additional@foobar.com.+Work/) }
+    end
   end
 
   context "#all_phone_numbers" do
@@ -101,6 +114,13 @@ describe ContactableDecorator do
       it { is_expected.to match(/tel:031.*Home/) }
       it { is_expected.to match(/tel:041.*Work/) }
       it { is_expected.to match(/tel:079.*Mobile/) }
+    end
+
+    context "with prefix" do
+      subject { @group.all_phone_numbers(prefix: "someprefixiwanttodisplay") }
+
+      it { is_expected.to match(/someprefixiwanttodisplay.+tel:031.*Home/) }
+      it { is_expected.to match(/someprefixiwanttodisplay.+tel:041.*Work/) }
     end
   end
 
@@ -146,12 +166,10 @@ describe ContactableDecorator do
     it "renders value with muted label" do
       person.additional_addresses.build(attrs.merge(label: "Rechnung"))
       person.additional_addresses.build(attrs.merge(label: "Andere", address_care_of: nil, housenumber: "12a"))
-      # rubocop:todo Layout/LineLength
-      expect(subject).to start_with '<p><span>c/o Backoffice, Langestrasse 37, 8000 Zürich</span> <span class="muted">Rechnung</span><br /><span>'
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      expect(subject).to end_with '</span><br /><span>Langestrasse 12a, 8000 Zürich</span> <span class="muted">Andere</span></p>'
-      # rubocop:enable Layout/LineLength
+      expect(subject).to start_with "<p><span>c/o Backoffice, Langestrasse 37, 8000 Zürich</span> " \
+        '<span class="muted">Rechnung</span><br /><span>'
+      expect(subject).to end_with "</span><br /><span>Langestrasse 12a, 8000 Zürich</span> " \
+        '<span class="muted">Andere</span></p>'
     end
   end
 end

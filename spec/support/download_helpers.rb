@@ -1,6 +1,6 @@
 module DownloadHelpers
   TIMEOUT = 10
-  PATH = Rails.root.join("tmp", "downloads", "downloads")
+  PATH = Rails.root.join("tmp", "downloads")
 
   def downloads
     Dir[PATH.join("*")]

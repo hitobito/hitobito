@@ -22,4 +22,4 @@
       = "#{JobObservation.human_attribute_name("attempts")}: #{job_observation.attempts_of_max_attempts}"
     .col-12.col-lg-1
       - if job_observation.generated_file.attached?
-        = link_to(icon("download", {filled: true}), download_job_observation_path(job_observation))
+        = link_to(icon("download", {filled: true}), download_job_observation_path(job_observation), "data-turbo": false)

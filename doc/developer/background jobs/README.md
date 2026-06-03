@@ -31,6 +31,6 @@ could be associated with, the job runs anyway without creating and updating an i
 - `BaseJob` provides a class attribute called `parameters` which is an array of symbols that contains the names of all
 instance methods that should be serialized with the job class. For observable jobs this must contain `job_observation_id`.
 It is already added to the array in the `ObservableJob` concern so a declaration like this is sufficient:
-`self.parameters = parameters + [:some_other_param]`
+`self.parameters += [:some_other_param]`
 - Export jobs can't be run from outside a user context because they export a file the user should be able to download.
 Therefore there must be an instance of `JobObservation` associated with the Job.

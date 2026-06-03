@@ -197,7 +197,7 @@ describe ObservableJob do
           This can usually be solved by replacing:
             self.parameters = [:some_param]
           with:
-            self.parameters = parameters + [:some_param]
+            self.parameters += [:some_param]
         MSG
 
         expect(observable_job_class.parameters).to include(:job_observation_id), error_message

@@ -22,6 +22,8 @@ class Contactables::InvoicesController < ListController
     scope = super.list
       .includes(:group)
       .where(search_conditions)
+      .joins(group: :layer_group)
+      .where(layer_group: {id: current_ability.user_finance_layer_ids})
       .page(params[:page]).per(50)
     Invoice::Filter.new(params).apply(scope)
   end

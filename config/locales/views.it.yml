@@ -717,7 +717,7 @@ it:
     preconditions: "qualifiche necessarie"
     tabs:
       participants: "partecipanti"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 
   event/applications:
     approved: "L'iscrizione è stata accettata"
@@ -735,7 +735,7 @@ it:
     not_allowed_due_to_guest_limit: "Non è possibile aggiungere altri ospiti a questo evento."
 
   event/invitations:
-    export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
 
   event/kinds:
@@ -750,7 +750,7 @@ it:
     success: "%{full_entry_label} è stato creato con successo."
     success_for_external_manager: "%{full_entry_label} è stato salvato con successo."
     instructions: "per l'iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all'indirizzo corrispondente"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     waiting_list: "Tutti i posti sono attualmente occupati, l'iscrizione è in lista d'attesa."
     pending: "È stata creata una pre-registrazione per %{full_entry_label}. La partecipazione non è ancora definitiva e deve essere confermata dall'amministrazione dell'evento."
 
@@ -968,7 +968,7 @@ it:
     tabs:
       deleted: "Cancellato"
       statistics: "Statistica"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     statistics:
       title: Statistica
       description: "%{subject} in %{groups}"
@@ -1119,7 +1119,7 @@ it:
         esr_number_heading: Riferimento
         currency: Valuta
         amount: Importo
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
     evaluations:
       show:
@@ -1260,7 +1260,7 @@ it:
       other: "%{count} fatture sono state annullate."
 
   payments:
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     create:
       flash:
         success: Pagamento sopra i %{amount} è stato registrato
@@ -1328,13 +1328,13 @@ it:
       end: "Finire l'imitazione"
 
     file_download:
-      wait_for_downloads: "Il download viene preparato, prego attendere"
-      cancel_downloads: "Interrompere il download"
+      wait_for_downloads: "Die Downloads werden vorbereitet, bitte warten."
+      cancel_downloads: "Downloads abbrechen"
 
     synchronization:
-      wait_for_synchronization: "I vostri dati vengono ora inviati a MailChimp. Potrebbe volerci un attimo. Dopo di che l'elenco selezionato con i contatti di hitobito verrà aggiornato. "
-      synchronization_failed: "Durante l'invio dei dati a MailChimp si è verificato un errore"
-      cancel_synchronization: "Interrompere l'esportazione"
+      wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein."
+      synchronization_failed: "Beim Senden der Daten an MailChimp ist ein Fehler aufgetreten (%{error})."
+      cancel_synchronization: "Export abbrechen"
 
   mailing_lists:
     subscriber_lists:
@@ -1989,7 +1989,7 @@ it:
       add_role: Aggiungi ruolo
       set_main_group: Impostare il gruppo principale
 
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     export_email_needed: "Per l'esportazione è necessario un indirizzo e-mail"
 
     multiselect_actions:
@@ -2367,7 +2367,7 @@ it:
     subscription:
       only_persons_with: "Solo persone con"
       persons_excluded_with: "Escludere le persone con:"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 
   taggable:
     add_tag: Aggiungere tag

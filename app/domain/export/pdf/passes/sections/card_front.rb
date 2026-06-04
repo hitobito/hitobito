@@ -20,8 +20,8 @@ module Export::Pdf::Passes::Sections
     LOGO_SPACING = 2.mm
 
     # Photo dimensions
-    PHOTO_WIDTH = 12.mm
-    PHOTO_HEIGHT = 16.mm
+    PHOTO_WIDTH = 26.mm
+    PHOTO_HEIGHT = 20.mm
     PHOTO_SPACING = 2.mm
 
     # Text box dimensions

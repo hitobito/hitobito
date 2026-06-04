@@ -9,8 +9,8 @@ class MailchimpSynchronizationsController < ApplicationController
 
     authorize!(:update, mailing_list)
 
-    Cookies::AsyncSynchronization.new(cookies).set(mailing_list_id: mailing_list.id)
     MailchimpSynchronizationJob.new(mailing_list.id).enqueue!
+    flash[:notice] = t(".wait_for_synchronization")
 
     redirect_to(action: :index, controller: :subscriptions)
   end

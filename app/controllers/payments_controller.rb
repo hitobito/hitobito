@@ -21,6 +21,22 @@ class PaymentsController < CrudController
     status: "payments.status"
   }
 
+  self.remember_params += %w[invoice_status status]
+
+  self.search_columns = [
+    "invoices.reference",
+    "invoices.sequence_number",
+    "invoices.title",
+    "people.first_name",
+    "people.last_name",
+    "people.email",
+    "groups.name",
+    "groups.short_name",
+    "groups.email"
+  ]
+
+  helper_method :filter_params
+
   def index
     respond_to do |format|
       format.csv { render_tabular_entries_in_background(:csv) }
@@ -105,5 +121,10 @@ class PaymentsController < CrudController
     else
       super
     end
+  end
+
+  def filter_params
+    year = Time.zone.today.year
+    {from: params[:from] || "1.1.#{year}", to: params[:to] || "31.12.#{year}"}
   end
 end

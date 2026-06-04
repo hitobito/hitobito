@@ -1256,10 +1256,17 @@ de:
     create:
       flash:
         success: Zahlung über %{amount} wurde erfasst.
-    list:
+    table:
       number_of_payments_shown:
         one: "%{count} Zahlung angezeigt."
         other: "%{count} Zahlungen angezeigt."
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    filter:
+      from: Von
+      to: Bis
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
     history:
       payed: "%{amount} bezahlt (%{source})"
 

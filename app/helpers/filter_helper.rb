@@ -12,8 +12,8 @@ module FilterHelper
     html += content_tag(:div, capture(&block), class: "input-group mt-2")
     content_tag(:div, html, class: "control-group row").html_safe
   end
-
   # rubocop:enable Rails/OutputSafety
+
   def direct_filter_search
     label = t("global.button.search")
     direct_filter(:q, label, class: "has-feedback has-clear") do

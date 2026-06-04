@@ -1,0 +1,25 @@
+-#  Copyright (c) 2026, Schweizer Wanderwege. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= content_for(:filter) do
+  = form_tag(nil, { method: :get, class: 'form-inline-search invoices-filter', role: 'search', remote: true, data: { spin: true } }) do |f|
+    = hidden_field_tag :returning, true
+    = hidden_field_tag :page, 1
+
+    .d-lg-flex.justify-content-between
+      .d-lg-inline-flex.gap-3.me-4
+        .mb-3
+          = direct_filter_search
+        .mb-3
+          = direct_filter_select(:invoice_status, Invoice.state_labels.to_a, t('.invoice_status'))
+        .mb-3
+          = direct_filter_select(:status, Payment.status_labels.to_a, t('.payment_status'))
+      .d-lg-inline-flex.gap-3
+        .mb-3
+          = direct_filter_date(:from, t('.from'), value: filter_params[:from], data: { submit: true })
+        .mb-3
+          = direct_filter_date(:to, t('.to'), value: filter_params[:to], data: {submit: true })
+
+-# - params[:q] = nil # Reset param so quicksearch filter does not get populated

@@ -232,8 +232,10 @@ describe JobObservation do
   end
 
   describe "broadcasting" do
-    let(:update_channel_name) { "person_#{person.id}_job_observation_updates" }
-    let(:notification_channel_name) { "person_#{person.id}_job_observation_notifications" }
+    # Construct the channel name like turbo rails does.
+    # See: https://github.com/hotwired/turbo-rails/blob/435135b26a4b62e49d2f55bb4b1fd419e3bfb228/app/channels/turbo/streams/stream_name.rb#L24
+    let(:update_channel) { "#{person.to_gid_param}:job_observation_updates" }
+    let(:notification_channel) { "#{person.to_gid_param}:job_observation_notifications" }
 
     it "should broadcast on create" do
       expect { subject }.to have_broadcasted_overview_update_and_badge_update
@@ -275,19 +277,19 @@ describe JobObservation do
 
       broadcast_time = Time.current
 
-      expect { job_observation.report_progress!(10, 100) }.to have_broadcasted_to(update_channel_name)
+      expect { job_observation.report_progress!(10, 100) }.to have_broadcasted_to(update_channel)
       expect(job_observation.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
-      expect { job_observation.report_progress!(20, 100) }.not_to have_broadcasted_to(update_channel_name)
+      expect { job_observation.report_progress!(20, 100) }.not_to have_broadcasted_to(update_channel)
       expect(job_observation.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
       travel(6.seconds)
       broadcast_time = Time.current
 
-      expect { job_observation.report_progress!(30, 100) }.to have_broadcasted_to(update_channel_name)
+      expect { job_observation.report_progress!(30, 100) }.to have_broadcasted_to(update_channel)
       expect(job_observation.last_progress_update_broadcasted_at).to eql(broadcast_time)
 
-      expect { job_observation.report_progress!(40, 100) }.not_to have_broadcasted_to(update_channel_name)
+      expect { job_observation.report_progress!(40, 100) }.not_to have_broadcasted_to(update_channel)
       expect(job_observation.last_progress_update_broadcasted_at).to eql(broadcast_time)
     end
 
@@ -301,15 +303,15 @@ describe JobObservation do
     end
 
     def have_broadcasted_overview_update_and_badge_update
-      have_broadcasted_to(update_channel_name)
-        .and have_broadcasted_to(notification_channel_name)
+      have_broadcasted_to(update_channel)
+        .and have_broadcasted_to(notification_channel)
         .with(a_string_matching(/target="job-observations-link-with-badge"/))
     end
 
     def have_broadcasted_notification_and_badge_update
-      have_broadcasted_to(notification_channel_name)
+      have_broadcasted_to(notification_channel)
         .with(a_string_matching(/target="job-observation-notifications-container"/))
-        .and have_broadcasted_to(notification_channel_name)
+        .and have_broadcasted_to(notification_channel)
         .with(a_string_matching(/target="job-observations-link-with-badge"/))
     end
   end

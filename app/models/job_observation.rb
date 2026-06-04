@@ -145,7 +145,7 @@ class JobObservation < ApplicationRecord
     update_columns(attributes_to_update)
 
     if should_broadcast
-      broadcast_replace_to(update_channel_name, locals: {job_observation: decorate})
+      broadcast_replace_to(update_channel, locals: {job_observation: decorate})
     end
   end
 
@@ -178,31 +178,31 @@ class JobObservation < ApplicationRecord
     end
   end
 
-  def update_channel_name
-    "person_#{person_id}_job_observation_updates"
+  def update_channel
+    [person, :job_observation_updates]
   end
 
-  def notification_channel_name
-    "person_#{person_id}_job_observation_notifications"
+  def notification_channel
+    [person, :job_observation_notifications]
   end
 
   def broadcast_replace_and_badge_update
     capturing_redis_exceptions do
-      broadcast_replace_to(update_channel_name, locals: {job_observation: decorate})
+      broadcast_replace_to(update_channel, locals: {job_observation: decorate})
       broadcast_badge_update
     end
   end
 
   def broadcast_refresh_and_badge_update
     capturing_redis_exceptions do
-      broadcast_refresh_to(update_channel_name)
+      broadcast_refresh_to(update_channel)
       broadcast_badge_update
     end
   end
 
   def broadcast_badge_update
     broadcast_replace_to(
-      notification_channel_name,
+      notification_channel,
       partial: "job_observations/link_with_badge",
       locals: {person:},
       target: "job-observations-link-with-badge"
@@ -215,7 +215,7 @@ class JobObservation < ApplicationRecord
   def broadcast_notification
     capturing_redis_exceptions do
       broadcast_append_to(
-        notification_channel_name,
+        notification_channel,
         partial: "job_observations/notification",
         locals: {job_observation: decorate},
         target: "job-observation-notifications-container"

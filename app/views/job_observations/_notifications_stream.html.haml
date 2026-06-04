@@ -1,2 +1,2 @@
 - if current_person && current_person.needs_web_socket_connection?
-  = turbo_stream_from "person_#{current_person.id}_job_observation_notifications"
+  = turbo_stream_from(current_person, :job_observation_notifications)

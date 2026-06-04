@@ -1329,10 +1329,6 @@ fr:
       info: "Tu es maintenant enregistré en tant que %{user}"
       end: "Terminer l'imitation"
 
-    file_download:
-      wait_for_downloads: "Die Downloads werden vorbereitet, bitte warten."
-      cancel_downloads: "Downloads abbrechen"
-
   mailing_lists:
     subscriber_lists:
       create:

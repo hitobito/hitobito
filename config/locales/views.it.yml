@@ -1327,10 +1327,6 @@ it:
       info: "Sei ora registrato come %{user}"
       end: "Finire l'imitazione"
 
-    file_download:
-      wait_for_downloads: "Die Downloads werden vorbereitet, bitte warten."
-      cancel_downloads: "Downloads abbrechen"
-
   mailing_lists:
     subscriber_lists:
       create:

@@ -132,7 +132,7 @@ describe EventsController do
         expect(assigns(:events).first.name).to eq "Eventus"
       end
 
-      it "sets enqueues job on export" do
+      it "enqueues job on export" do
         expect do
           get :index, params: {group_id: group.id}, format: :csv
           expect(flash[:notice])

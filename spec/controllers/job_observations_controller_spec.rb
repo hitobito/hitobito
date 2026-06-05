@@ -36,7 +36,12 @@ describe JobObservationsController do
     it "allows downloading an attachment that person has access to" do
       get :download, params: {id: job_observation.id}
 
-      expect(response).to be_redirect
+      generated_file_url = rails_blob_path(
+        job_observation.generated_file,
+        filename: job_observation.filename_with_extension,
+        disposition: "attachment"
+      )
+      expect(response).to redirect_to(generated_file_url)
     end
 
     it "returns 404 if person has no access" do

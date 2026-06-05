@@ -132,14 +132,12 @@ describe EventsController do
         expect(assigns(:events).first.name).to eq "Eventus"
       end
 
-      it "sets cookie on export" do
-        get :index, params: {group_id: group.id}, format: :csv
-
-        cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-        expect(cookie[0]["name"]).to match(/^(events_export)+\S*(#{top_leader.id})+$/)
-        expect(cookie[0]["type"]).to match(/^csv$/)
-        expect(response).to redirect_to(returning: true)
+      it "enqueues job on export" do
+        expect do
+          get :index, params: {group_id: group.id}, format: :csv
+          expect(flash[:notice])
+            .to match(/Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/)
+        end.to change(Delayed::Job, :count).by(1)
       end
 
       it "renders json with dates" do

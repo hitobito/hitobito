@@ -1,0 +1,11 @@
+-# Copyright (c) 2012-2026, Puzzle ITC. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+.toast{**job_observation.stimulus_attributes}
+  .toast-header.d-flex.justify-content-between{class: job_observation.status_class}
+    %strong.text-light= t(".job_#{job_observation.status}")
+    %button.btn-close{"data-bs-dismiss" => "toast", :type => "button"}
+  .toast-body
+    = job_observation.job_name

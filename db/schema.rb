@@ -110,16 +110,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.index ["person_id"], name: "index_assignments_on_person_id"
   end
 
-  create_table "async_download_files", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "filetype"
-    t.integer "progress"
-    t.integer "person_id", null: false
-    t.string "timestamp", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "background_job_log_entries", force: :cascade do |t|
     t.bigint "job_id", null: false
     t.string "job_name", null: false
@@ -754,6 +744,26 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.index ["sequence_number"], name: "index_invoices_on_sequence_number"
   end
 
+  create_table "job_observations", force: :cascade do |t|
+    t.string "job_class", null: false
+    t.string "filename"
+    t.string "filetype", null: false
+    t.string "status", null: false
+    t.integer "attempts", null: false
+    t.integer "max_attempts", null: false
+    t.integer "progress", null: false
+    t.boolean "reports_progress", null: false
+    t.datetime "started_at", null: false
+    t.datetime "finished_at"
+    t.datetime "last_progress_update_broadcasted_at"
+    t.bigint "person_id", null: false
+    t.bigint "delayed_job_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["delayed_job_id"], name: "index_job_observations_on_delayed_job_id"
+    t.index ["person_id"], name: "index_job_observations_on_person_id"
+  end
+
   create_table "label_format_translations", force: :cascade do |t|
     t.integer "label_format_id", null: false
     t.string "locale", null: false
@@ -1120,6 +1130,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.string "housenumber", limit: 20
     t.string "address_care_of"
     t.string "postbox"
+    t.integer "unfinished_job_observations_count", default: 0, null: false
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

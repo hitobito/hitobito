@@ -98,7 +98,7 @@ describe Event::ParticipationsController do
       expect do
         get :index, params: {group_id: group, event_id: course.id}, format: :csv
         expect(flash[:notice]).to match(
-          /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+          /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
         )
       end.to change(Delayed::Job, :count).by(1)
     end
@@ -107,20 +107,9 @@ describe Event::ParticipationsController do
       expect do
         get :index, params: {group_id: group, event_id: course.id}, format: :xlsx
         expect(flash[:notice]).to match(
-          /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+          /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
         )
       end.to change(Delayed::Job, :count).by(1)
-    end
-
-    it "sets cookie on export" do
-      get :index, params: {group_id: group, event_id: course.id}, format: :csv
-
-      cookie = JSON.parse(cookies[Cookies::AsyncDownload::NAME])
-
-      expect(cookie[0]["name"]).to match(
-        /^(event_participation_export)+\S*(#{people(:top_leader).id})+$/
-      )
-      expect(cookie[0]["type"]).to match(/^csv$/)
     end
 
     it "renders email addresses with additional ones" do
@@ -1172,21 +1161,21 @@ describe Event::ParticipationsController do
 
     describe "preloading" do
       it "GET#index preloads answers and person" do
-        expect_query_count do
+        expect do
           get :index, params: {group_id: group.id, event_id: course.id}
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to eq(60)
+        end.to make(60).db_queries
       end
 
       it "GET#index still preloads when sorting" do
-        expect_query_count do
+        expect do
           get :index, params: {group_id: group.id, event_id: course.id, sort: "last_name"}
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to eq(57)
+        end.to make(57).db_queries
       end
 
       it "GET#index preloads questions but increase query count when " do
@@ -1194,19 +1183,19 @@ describe Event::ParticipationsController do
         table_display = top_leader.table_display_for(Event::Participation)
         table_display.selected = %W[event_question_#{question.id}]
         table_display.save!
-        expect_query_count do
+        expect do
           get :index, params: {group_id: group.id, event_id: course.id}
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to eq(87)
+        end.to make(87).db_queries
       end
     end
 
     it "GET#index exports to csv using TableDisplay" do
       get :index, params: {group_id: group.id, event_id: course.id, selection: true}, format: :csv
       expect(flash[:notice]).to match(
-        /Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen./
+        /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
       )
       expect(Delayed::Job.last.payload_object.send(:exporter))
         .to eq Export::Tabular::Event::Participations::TableDisplays

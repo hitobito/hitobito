@@ -7,7 +7,7 @@
 
 class Event::ParticipationsController < CrudController # rubocop:disable Metrics/ClassLength
   include RenderPeopleExports
-  include AsyncDownload
+  include ExportableRedirect
   include Api::JsonPaging
   include ActionView::Helpers::SanitizeHelper
   prepend RenderTableDisplays
@@ -258,13 +258,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def render_tabular_in_background(format)
-    with_async_download_cookie(format, :event_participation_export) do |filename|
-      Export::EventParticipationsExportJob.new(format,
-        current_person.id,
-        event.id,
-        group.id,
-        params.merge(filename: filename)).enqueue!
-    end
+    Export::EventParticipationsExportJob.new(format,
+      current_person.id,
+      event.id,
+      group.id,
+      params.merge(filename: :event_participation_export)).enqueue!
+    redirect_after_enqueued_export
   end
 
   def check_preconditions

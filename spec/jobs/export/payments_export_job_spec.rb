@@ -8,10 +8,11 @@
 require "spec_helper"
 
 describe Export::PaymentsExportJob do
-  subject { described_class.new(format, user.id, payment_ids, filename: filename) }
+  include JobObservationSpecHelper
 
-  let(:filename) { AsyncDownloadFile.create_name("payments_export", user.id) }
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
+  subject { described_class.new(format, user.id, payment_ids, filename: "payments_export") }
+
+  let(:file) { subject.job_observation }
 
   let(:user) { people(:top_leader) }
   let(:payment_ids) do
@@ -25,15 +26,15 @@ describe Export::PaymentsExportJob do
   before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+    subject.enqueue!
+    subject.perform
   end
 
   context "creates a CSV-Export" do
     let(:format) { :csv }
 
     it "and saves it" do
-      subject.perform
-
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(6)
       # rubocop:todo Layout/LineLength
       expect(lines[0]).to match(/Id;Betrag;Eingangsdatum;Zahlungsreferenz;Transaktionsidentifikator;Status;Schuldner Name;Schuldner Adresse/)

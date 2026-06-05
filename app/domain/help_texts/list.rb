@@ -7,7 +7,7 @@
 
 class HelpTexts::List
   CONTROLLER_BLACKLIST = %w[
-    async_downloads async_synchronizations errors healthz
+    job_observations errors healthz
     devise/passwords devise/registrations devise/sessions devise/tokens
     doorkeeper/authorizations doorkeeper/tokens
   ]

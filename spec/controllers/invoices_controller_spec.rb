@@ -227,7 +227,7 @@ describe InvoicesController do
     describe "tabular exports" do
       let(:expected_ids) { [invoice.id, invoices(:sent).id] }
       let(:now) { Time.zone.now }
-      let(:options) { {filename: "rechnungen_#{now.to_i}-#{person.id}"} }
+      let(:options) { {filename: "rechnungen"} }
 
       before do
         update_issued_at_to_current_year
@@ -252,7 +252,7 @@ describe InvoicesController do
 
     it "handles exporting only one invoice" do
       expected_ids = [invoice.id]
-      expected_options = {filename: /^Rechnung[-_].*/i}
+      expected_options = {filename: /^Rechnung[-].*/i}
 
       expect(Export::InvoicesJob).to receive(:new)
         .with(:csv, anything, expected_ids, expected_options).and_call_original
@@ -263,7 +263,7 @@ describe InvoicesController do
     end
 
     it "handles exporting no invoices" do
-      expected_options = {filename: /^rechnungen[-_].*/i}
+      expected_options = {filename: "rechnungen"}
 
       expect(Export::InvoicesJob).to receive(:new)
         .with(:csv, anything, [], expected_options).and_call_original
@@ -366,7 +366,7 @@ describe InvoicesController do
 
     describe "tabular exports" do
       let(:now) { Time.zone.now }
-      let(:options) { {filename: "#{invoice.filename("")}_#{now.to_i}-#{person.id}"} }
+      let(:options) { {filename: invoice.filename("").to_s} }
 
       before { freeze_time }
 

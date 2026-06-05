@@ -1,0 +1,25 @@
+-# Copyright (c) 2012-2026, Puzzle ITC. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+.container-fluid.text-center.bg-light.my-2.p-3{id: dom_id(job_observation)}
+  .row.align-items-center.justify-content-center
+    .col-12.col-lg-1.mb-2.mb-lg-0
+      = job_observation.status_icon
+    .col-12.col-lg-3.mb-2.mb-lg-0
+      = job_observation.job_name
+    .col-6.col-lg-3.mb-2.mb-lg-0
+      - if job_observation.reports_progress
+        = job_observation.progress_bar
+      - else
+        = t(".no_progress_provided")
+    .col-12.col-lg-3.mb-2.mb-lg-0
+      = "#{JobObservation.human_attribute_name("started_at")}: #{job_observation.formatted_started_at}"
+      %br
+      = "#{JobObservation.human_attribute_name("finished_at")}: #{job_observation.formatted_finished_at}"
+    .col-12.col-lg-1.mb-2.mb-lg-0
+      = "#{JobObservation.human_attribute_name("attempts")}: #{job_observation.attempts_of_max_attempts}"
+    .col-12.col-lg-1
+      - if job_observation.generated_file.attached?
+        = link_to(icon("download", {filled: true}), download_job_observation_path(job_observation), "data-turbo": false)

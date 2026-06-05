@@ -1124,4 +1124,18 @@ describe Person do
       expect(managed).to be_valid_email
     end
   end
+
+  describe "#needs_web_socket_connection?" do
+    let(:person) { people(:top_leader) }
+
+    it "should be true if job observation count is greater than zero" do
+      person.update!(unfinished_job_observations_count: 3)
+      expect(person.needs_web_socket_connection?).to be_truthy
+    end
+
+    it "should be false if job observation count is zero" do
+      expect(person.unfinished_job_observations_count).to be_zero
+      expect(person.needs_web_socket_connection?).to be_falsy
+    end
+  end
 end

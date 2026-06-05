@@ -41,6 +41,10 @@ WebMock.disable_net_connect!(
   ]
 )
 
+# Delayed job worker configuration
+Delayed::Worker.max_attempts = 2
+Delayed::Worker.max_run_time = 10.seconds
+
 # Maintain test schema for core and wagon specs
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -252,6 +256,8 @@ Capybara.register_driver :chrome do |app|
   options.args << "--window-size=1800,1000"
   options.args << "--crash-dumps-dir=/tmp"
   options.add_preference("intl.accept_languages", "de-CH,de")
+  options.add_preference(:download, prompt_for_download: false, default_directory: DownloadHelpers::PATH.to_s)
+  options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 

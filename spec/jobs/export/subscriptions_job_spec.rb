@@ -8,6 +8,9 @@
 require "spec_helper"
 
 describe Export::SubscriptionsJob do
+  include JobObservationSpecHelper
+
+  let(:filename) { "subscription_export" }
   let(:options) { {household: true, filename: filename} }
 
   subject do
@@ -16,11 +19,10 @@ describe Export::SubscriptionsJob do
 
   let(:mailing_list) { mailing_lists(:info) }
   let(:user) { people(:top_leader) }
-  let(:filename) { AsyncDownloadFile.create_name("subscription_export", user.id) }
 
   let(:group) { groups(:top_layer) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
-  let(:file) { AsyncDownloadFile.from_filename(filename, format) }
+  let(:file) { subject.job_observation }
 
   before do
     SeedFu.quiet = true
@@ -28,15 +30,15 @@ describe Export::SubscriptionsJob do
 
     Fabricate(:subscription, mailing_list: mailing_list)
     Fabricate(:subscription, mailing_list: mailing_list)
+    subject.enqueue!
+    subject.perform
   end
 
   context "creates an CSV-Export" do
     let(:format) { :csv }
 
     it "and saves it" do
-      subject.perform
-
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Name;zusätzliche Adresszeile;Strasse;.*/)
     end
@@ -47,7 +49,7 @@ describe Export::SubscriptionsJob do
       it "and saves it" do
         subject.perform
 
-        lines = file.read.lines
+        lines = read_data_from_generated_file(file).lines
         expect(lines.size).to eq(3)
       end
     end
@@ -57,8 +59,6 @@ describe Export::SubscriptionsJob do
     let(:format) { :xlsx }
 
     it "and saves it" do
-      subject.perform
-
       expect(file.generated_file).to be_attached
     end
 

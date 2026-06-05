@@ -6,7 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::ExportBaseJob < BaseJob
-  PARAMETERS = [:locale, :format, :exporter, :user_id, :options].freeze
+  prepend ObservableJob
+
+  PARAMETERS = parameters + [:locale, :format, :exporter, :user_id, :options].freeze
 
   attr_reader :exporter
 
@@ -40,21 +42,13 @@ class Export::ExportBaseJob < BaseJob
     @user ||= Person.find(@user_id)
   end
 
+  # If this fails with "Couldn't find JobObservation without an ID" you may have tried to enqueue
+  # an export job from a context without an authenticated user
   def export_file
-    async_download_file.write(data, force_encoding: @options.fetch(:encoding, nil))
+    job_observation.write(data, force_encoding: @options.fetch(:encoding, nil))
   end
 
   def data
     exporter.export(@format, entries, ability)
-  end
-
-  def filename
-    @options.fetch(:filename)
-  end
-
-  private
-
-  def async_download_file
-    @async_download_file ||= AsyncDownloadFile.maybe_from_filename(filename, @user_id, @format)
   end
 end

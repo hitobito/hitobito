@@ -1,0 +1,14 @@
+-# Copyright (c) 2012-2026, Puzzle ITC. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+- if current_person.needs_web_socket_connection?
+  = turbo_stream_from(current_person, :job_observation_updates)
+= paginate @job_observations
+
+- title t(".title")
+#job_observations
+  = render @job_observations
+
+= paginate @job_observations

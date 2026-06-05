@@ -8,9 +8,10 @@
 require "spec_helper"
 
 describe MailchimpSynchronizationJob do
+  include DelayedJobSpecHelper
+
   let(:group) { groups(:top_group) }
   let(:mailing_list) { Fabricate(:mailing_list, group: group, mailchimp_api_key: "abc-us1") }
-  let(:now) { Time.zone.now }
 
   subject { MailchimpSynchronizationJob.new(mailing_list.id) }
 
@@ -18,7 +19,7 @@ describe MailchimpSynchronizationJob do
     mailing_list.update!(mailchimp_api_key: "abc-us1", mailchimp_list_id: "1")
   end
 
-  it "sets mailing_list state to syncing if jobs eunqueues" do
+  it "sets mailing_list state to syncing if jobs enqueues" do
     expect do
       subject.enqueue!
     end.to change { Delayed::Job.count }.by 1
@@ -29,40 +30,28 @@ describe MailchimpSynchronizationJob do
   end
 
   it "sets syncing to false after success" do
-    allow_any_instance_of(ActiveSupport::TimeZone).to receive(:now).and_return(now)
-    expect_any_instance_of(MailchimpSynchronizationJob).to receive(:perform)
+    freeze_time
 
-    subject.enqueue!
+    expect(subject).to receive(:perform)
 
-    Delayed::Worker.new.work_off
+    enqueue_and_run_job(subject)
     mailing_list.reload
 
-    expect(mailing_list.mailchimp_syncing).to be false
-    expect(mailing_list.mailchimp_last_synced_at.to_i).to eq(now.to_i)
-    expect(mailing_list.mailchimp_result.state).to eq :unchanged
+    check_mailing_list_status_on_success
   end
 
   it "sets syncing to false and creates log entry when job throws" do
-    allow_any_instance_of(ActiveSupport::TimeZone).to receive(:now).and_return(now)
-    expect_any_instance_of(MailchimpSynchronizationJob).to receive(:perform).and_throw(Exception)
+    freeze_time
 
-    subject.enqueue!
+    expect(subject).to receive(:perform).and_throw(Exception)
 
     expect do
-      Delayed::Worker.new.work_off
+      enqueue_and_run_job(subject)
     end.to change { HitobitoLogEntry.count }.by(1)
-    mailing_list.reload
-    log = HitobitoLogEntry.last
-    expect(log.subject).to eq mailing_list
-    expect(log.category).to eq "mail"
-    expect(log.message).to eq "Mailchimp Abgleich war nicht erfolgreich"
-    expect(JSON.parse(log.payload).deep_symbolize_keys).to eq({
-      data: {exception: "UncaughtThrowError - uncaught throw Exception"}
-    })
 
-    expect(mailing_list.mailchimp_syncing).to be false
-    expect(mailing_list.mailchimp_last_synced_at).to be_nil
-    expect(mailing_list.mailchimp_result.state).to eq :failed
+    mailing_list.reload
+
+    check_mailing_list_status_and_error_logging_on_failure
   end
 
   it "noops if not a mailchimp list" do
@@ -72,6 +61,54 @@ describe MailchimpSynchronizationJob do
     expect_any_instance_of(Synchronize::Mailchimp::Synchronizator).not_to receive(:perform)
     Delayed::Worker.new.work_off
     expect(mailing_list.mailchimp_syncing).to be false
+  end
+
+  describe "initiated by user" do
+    before do
+      allow(Auth).to receive(:current_person).and_return(people(:top_leader))
+    end
+
+    it "should set mailchimp state to syncing and create job observation" do
+      expect do
+        subject.enqueue!
+      end.to change { Delayed::Job.count }.by 1
+
+      mailing_list.reload
+
+      expect(subject.job_observation).not_to be_nil
+      expect(mailing_list.mailchimp_syncing).to be true
+    end
+
+    it "should set correct mailing list status and report success" do
+      freeze_time
+
+      mailchimp_sync_delayed_job = subject.enqueue!
+
+      expect(subject).to receive(:perform)
+      expect(subject.job_observation).to receive(:report_success!).with(1).and_call_original
+
+      run_enqueued_job(mailchimp_sync_delayed_job)
+      mailing_list.reload
+
+      check_mailing_list_status_on_success
+    end
+
+    it "should set correct mailing list status and and report failure" do
+      freeze_time
+
+      mailchimp_sync_delayed_job = subject.enqueue!
+
+      expect(subject).to receive(:perform).and_throw(Exception).twice
+      expect(subject.job_observation).to receive(:report_failure!).and_call_original
+
+      expect do
+        2.times { run_enqueued_job(mailchimp_sync_delayed_job) }
+      end.to change { HitobitoLogEntry.count }.by(2)
+
+      mailing_list.reload
+
+      check_mailing_list_status_and_error_logging_on_failure
+    end
   end
 
   describe "setting" do
@@ -87,5 +124,35 @@ describe MailchimpSynchronizationJob do
       subject.enqueue!
       Delayed::Worker.new.work_off
     end
+  end
+
+  private
+
+  def check_mailing_list_status_on_success
+    expect(mailing_list).to have_attributes({
+      mailchimp_syncing: false,
+      mailchimp_last_synced_at: Time.current,
+      mailchimp_result: have_attributes(state: :unchanged)
+    })
+  end
+
+  def check_mailing_list_status_and_error_logging_on_failure
+    log = HitobitoLogEntry.last
+
+    expect(log).to have_attributes({
+      subject: mailing_list,
+      category: "mail",
+      message: "Mailchimp Abgleich war nicht erfolgreich"
+    })
+
+    expect(JSON.parse(log.payload).deep_symbolize_keys).to eq({
+      data: {exception: "UncaughtThrowError - uncaught throw Exception"}
+    })
+
+    expect(mailing_list).to have_attributes({
+      mailchimp_syncing: false,
+      mailchimp_last_synced_at: nil,
+      mailchimp_result: have_attributes(state: :failed)
+    })
   end
 end

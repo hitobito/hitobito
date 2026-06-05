@@ -6,23 +6,21 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
+  include JobObservationSpecHelper
+
   subject {
     Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:top_group).id,
-      params.merge(filename: filename))
+      params.merge(filename: "event_participation_export"))
   }
 
   let(:participation) { event_participations(:top) }
   let(:user) { participation.person }
   let(:other_user) { Fabricate(:person, first_name: "Other", last_name: "Member", household_key: 1) }
   let(:event) { participation.event }
-  let(:filename) { AsyncDownloadFile.create_name("event_participation_export", user.id) }
 
   let(:params) { {filter: "all"} }
 
-  let(:file) do
-    AsyncDownloadFile
-      .from_filename(filename, format)
-  end
+  let(:file) { subject.job_observation }
 
   before do
     SeedFu.quiet = true
@@ -30,6 +28,7 @@ describe Export::EventParticipationsExportJob do
 
     other_participation = Event::Participation.create(event: event, active: true, person: other_user)
     Event::Role::Participant.create(participation: other_participation)
+    subject.enqueue!
   end
 
   context "creates a CSV-Export" do
@@ -38,7 +37,7 @@ describe Export::EventParticipationsExportJob do
     it "and saves it" do
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
 
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
@@ -53,7 +52,7 @@ describe Export::EventParticipationsExportJob do
     it "and saves it" do
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
@@ -68,7 +67,7 @@ describe Export::EventParticipationsExportJob do
 
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.first).to include "Anmeldedatum"
 
       created_at_index = lines.first.strip.split(";").index("Anmeldedatum")
@@ -88,7 +87,7 @@ describe Export::EventParticipationsExportJob do
 
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/Hauptebene.*/)
@@ -109,7 +108,7 @@ describe Export::EventParticipationsExportJob do
 
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(2)
       expect(lines[0]).to match(/Anrede;Name;zusätzliche Adresszeile;Strasse;Hausnummer;Postfach;PLZ;.*/)
       expect(lines[1]).to match(/Bottom und Other Member.*/).or match(/Other und Bottom Member.*/)

@@ -39,6 +39,7 @@ gesetzt werden. Werte ohne Default müssen in der Regel definiert werden.
 | HITOBITO_STAGE | Für das "Environment" in Sentry und, um einen Info-Header zu konfigurieren | Rails.env |
 | HITOBITO_PROJECT | Für das "Project"-Tag in Sentry | hitobito |
 | HITOBITO_WALLETS_SYNC_SECONDS | Intervall in Sekunden für die Synchronisation von Wallet-Pässen | `180` (3 Minuten) |
+| RAILS_ACTIONCABLE_REDIS_URL | URL zu einem Redis Server, der von ActionCable verwendet wird | redis://localhost:6379/1 |
 
 ### Inbetriebnahme
 

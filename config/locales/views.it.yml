@@ -92,6 +92,8 @@ it:
 
     jump_to_content: "Vai al contenuto principale"
 
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+
   list:
     index:
       title: "%{models}"
@@ -717,7 +719,7 @@ it:
     preconditions: "qualifiche necessarie"
     tabs:
       participants: "partecipanti"
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   event/applications:
     approved: "L'iscrizione è stata accettata"
@@ -735,7 +737,7 @@ it:
     not_allowed_due_to_guest_limit: "Non è possibile aggiungere altri ospiti a questo evento."
 
   event/invitations:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
 
   event/kinds:
@@ -750,7 +752,7 @@ it:
     success: "%{full_entry_label} è stato creato con successo."
     success_for_external_manager: "%{full_entry_label} è stato salvato con successo."
     instructions: "per l'iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all'indirizzo corrispondente"
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     waiting_list: "Tutti i posti sono attualmente occupati, l'iscrizione è in lista d'attesa."
     pending: "È stata creata una pre-registrazione per %{full_entry_label}. La partecipazione non è ancora definitiva e deve essere confermata dall'amministrazione dell'evento."
 
@@ -968,7 +970,7 @@ it:
     tabs:
       deleted: "Cancellato"
       statistics: "Statistica"
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     statistics:
       title: Statistica
       description: "%{subject} in %{groups}"
@@ -1119,7 +1121,7 @@ it:
         esr_number_heading: Riferimento
         currency: Valuta
         amount: Importo
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
     evaluations:
       show:
@@ -1260,7 +1262,7 @@ it:
       other: "%{count} fatture sono state annullate."
 
   payments:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     create:
       flash:
         success: Pagamento sopra i %{amount} è stato registrato
@@ -1327,14 +1329,8 @@ it:
       info: "Sei ora registrato come %{user}"
       end: "Finire l'imitazione"
 
-    file_download:
-      wait_for_downloads: "Die Downloads werden vorbereitet, bitte warten."
-      cancel_downloads: "Downloads abbrechen"
-
-    synchronization:
-      wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein."
-      synchronization_failed: "Beim Senden der Daten an MailChimp ist ein Fehler aufgetreten (%{error})."
-      cancel_synchronization: "Export abbrechen"
+  mailchimp_synchronizations:
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1444,7 +1440,7 @@ it:
           unknown_recipient: Empfänger unbekannt
           retrieved: Empfangen
           bounce_rejected: Bounce abgelehnt
-      export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+      export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
       show:
         recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
       export:
@@ -1989,7 +1985,7 @@ it:
       add_role: Aggiungi ruolo
       set_main_group: Impostare il gruppo principale
 
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     export_email_needed: "Per l'esportazione è necessario un indirizzo e-mail"
 
     multiselect_actions:
@@ -2377,12 +2373,21 @@ it:
     subscription:
       only_persons_with: "Solo persone con"
       persons_excluded_with: "Escludere le persone con:"
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   taggable:
     add_tag: Aggiungere tag
     cannot_create: Seleziona un tag esistente
     no_entry: (nessuno)
+
+  job_observations:
+    index:
+      title: Jobübersicht
+    job_observation:
+      no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
+    notification:
+      job_success: Job erfolgreich abgeschlossen
+      job_error: Fehler bei Jobausführung aufgetreten
 
   version:
     attribute_change:

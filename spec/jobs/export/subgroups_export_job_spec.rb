@@ -6,19 +6,21 @@
 require "spec_helper"
 
 describe Export::SubgroupsExportJob do
-  subject { Export::SubgroupsExportJob.new(user.id, group.id, filename: filename) }
+  include JobObservationSpecHelper
+
+  subject { Export::SubgroupsExportJob.new(user.id, group.id, filename: "subgroups_export") }
 
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
   let(:year) { 2012 }
-  let(:file) { AsyncDownloadFile.from_filename(filename, :csv) }
-  let(:filename) { AsyncDownloadFile.create_name("subgroups_export", user.id) }
+  let(:file) { subject.job_observation }
 
   context "creates a CSV-Export" do
     it "and saves it" do
+      subject.enqueue!
       subject.perform
 
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(10)
       expect(lines[0]).to match(Regexp.new("^#{Export::Csv::UTF8_BOM}Id;Elterngruppe;Name;.*"))
       expect(lines[1]).to match(/^#{group.id};;Top;.*/)

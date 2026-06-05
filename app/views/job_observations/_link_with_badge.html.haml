@@ -1,0 +1,11 @@
+-# Copyright (c) 2012-2026, Puzzle ITC. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+%a#job-observations-link-with-badge.position-relative{href: job_observations_path}
+  = icon('bars-progress')
+  - unfinished_job_count = person.unfinished_job_observations_count
+  - if unfinished_job_count > 0
+    %span.position-absolute.top-0.start-100.translate-middle.badge.rounded-pill.bg-danger
+      = unfinished_job_count

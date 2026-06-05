@@ -42,7 +42,7 @@ class Payment < ActiveRecord::Base
   scope :of_layer, ->(group) { where(invoice: Invoice.where(group: group.groups_in_same_layer)) }
 
   STATES = %w[ebics_imported xml_imported manually_created without_invoice].freeze
-  i18n_enum :status, STATES
+  i18n_enum :status, STATES, scopes: true
   validates :status, inclusion: {in: STATES, allow_nil: true}
 
   attr_writer :esr_number

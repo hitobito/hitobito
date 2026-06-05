@@ -48,9 +48,10 @@ describe ObservableJob do
 
     it "should have reference to job observation when enqueued" do
       job = Test::SuccessfulObservableJob.new
-      job.enqueue!
+      enqueued_job = job.enqueue!
 
       expect(job.job_observation).not_to be_nil
+      expect(enqueued_job.reload.payload_object.job_observation).not_to be_nil
     end
 
     it "should not enqueue job when creating job observation fails" do
@@ -157,13 +158,13 @@ describe ObservableJob do
       enqueued_job = Test::ObservableJobWithProgress.new.enqueue!
 
       expect do
-        run_enqueued_job(enqueued_job)
+        run_enqueued_job(enqueued_job.reload)
       end.to change { Delayed::Job.count }.by(-1)
     end
 
     it "should fail with expected exception" do
       enqueued_job = Test::UnsuccessfulObservableJob.new.enqueue!
-      run_enqueued_job(enqueued_job)
+      run_enqueued_job(enqueued_job.reload)
 
       expect(enqueued_job.last_error).to include("Test exception: Something went wrong during job execution")
     end

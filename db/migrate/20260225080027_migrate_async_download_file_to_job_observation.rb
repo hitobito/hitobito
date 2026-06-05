@@ -5,7 +5,7 @@
 
 class MigrateAsyncDownloadFileToJobObservation < ActiveRecord::Migration[8.0]
   def up
-    ActiveStorage::Attachment.where(record_type: "AsyncDownloadFile").find_each(&:purge_later)
+    purge_attachments("AsyncDownloadFile")
 
     drop_table :async_download_files
 
@@ -30,7 +30,7 @@ class MigrateAsyncDownloadFileToJobObservation < ActiveRecord::Migration[8.0]
   end
 
   def down
-    ActiveStorage::Attachment.where(record_type: "JobObservation").find_each(&:purge_later)
+    purge_attachments("JobObservation")
 
     drop_table :job_observations
 
@@ -42,6 +42,22 @@ class MigrateAsyncDownloadFileToJobObservation < ActiveRecord::Migration[8.0]
       t.string  :timestamp, null: false
 
       t.timestamps
+    end
+  end
+
+  private
+
+  def purge_attachments(record_type)
+    attachments = ActiveStorage::Attachment.where(record_type: record_type)
+
+    attachments.in_batches do |attachment_batch|
+      blob_ids = attachment_batch.pluck(:blob_id)
+
+      attachment_batch.delete_all
+
+      ActiveStorage::Blob.where(id: blob_ids).unattached.find_each do |blob|
+        blob.purge_later
+      end
     end
   end
 end

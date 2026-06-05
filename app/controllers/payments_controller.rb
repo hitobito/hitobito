@@ -86,36 +86,22 @@ class PaymentsController < CrudController
 
   def list_entries
     scope = super
-    scope = scope.joins(<<~SQL)
+    scope = scope.includes(:invoice).joins(<<~SQL)
       LEFT JOIN invoices ON payments.invoice_id = invoices.id
       LEFT JOIN people ON people.id = invoices.recipient_id AND invoices.recipient_type = 'Person'
       LEFT JOIN groups ON groups.id = invoices.recipient_id AND invoices.recipient_type = 'Group'
     SQL
 
-    scope = scope.unassigned if params[:state] == "without_invoice"
     scope = scope.page(params[:page]) if params[:ids].blank?
-    scope.where(received_at: from_param..to_param)
-  end
 
-  def from_param
-    @from_param ||= extract_date_param(:from) || Time.zone.today.beginning_of_year
-  end
-
-  def to_param
-    @to_param ||= extract_date_param(:to) || Time.zone.today.end_of_year
-  end
-
-  def extract_date_param(param)
-    Date.parse(params[param])
-  rescue TypeError, Date::Error
-    nil
+    Payments::Filter.new(params.merge(filter_params)).apply(scope)
   end
 
   def model_scope
     if action_name == "index"
       if parents.one? # only a group present
-        Payment.of_layer(parent).includes(:invoice)
-      else # group and invoice, crashes rightfully if neither is present
+        Payment.of_layer(parent)
+      else # group and invoice expected, crashes rightfully if neither is present
         @invoice.payments # ivar is loaded by the parents-call above
       end
     else

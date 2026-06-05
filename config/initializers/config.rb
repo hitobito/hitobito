@@ -63,14 +63,12 @@ Config.setup do |config|
   #   required(:email).filled(format?: EMAIL_REGEX)
   # end
   config.validation_contract = SettingsContract.new
+
+  # additional config-files
+  settings_dir = Rails.root.join("config", "settings")
+  config.extra_sources = [
+    settings_dir.join("payment_providers.yml").to_s,
+    settings_dir.join("bounce_heuristics.yml").to_s
+  ]
 end
 
-# additional config-files
-# use add_source for extend-only files
-# and prepend_source for files with overwritable settings
-Rails.application.config.to_prepare do
-  settings_dir = Rails.root.join("config", "settings")
-  Settings.add_source!(settings_dir.join("payment_providers.yml").to_s)
-  Settings.prepend_source!(settings_dir.join("bounce_heuristics.yml").to_s)
-  Settings.reload!
-end

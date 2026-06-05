@@ -89,7 +89,17 @@ namespace :hitobito do
 
         MESSAGE
       else
-        puts "✅ OAuth configured"
+        begin
+          OpenSSL::PKey::RSA.new(signing_key)
+          puts "✅ OAuth configured"
+        rescue OpenSSL::PKey::RSAError => e
+          puts <<~MESSAGE
+            ❌ OAuth not correctly configured
+
+              JWT Signing Key is incorrect.
+              #{e.message}
+          MESSAGE
+        end
       end
     end
 

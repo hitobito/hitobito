@@ -32,7 +32,7 @@
     = nav t('navigation.admin/oauth_authorizations'), oauth_active_authorizations_path, %w(oauth_active_authorizations)
   - if can?(:index, ActsAsTaggableOn::Tag)
     = nav ActsAsTaggableOn::Tag.model_name.human(count: 2), tags_path, %w(tags)
-  - if can?(:index, PersonalDocumentLabel)
+  - if FeatureGate.if("personal_documents") && can?(:index, PersonalDocumentLabel)
     = nav PersonalDocumentLabel.model_name.human(count: 2), personal_document_labels_path, %w(personal_document_labels)
   - if can?(:manage, Imap::Mail)
     = nav t('navigation.imap_mails'), imap_mails_path(mailbox: 'inbox'), %w(mails/imap_mails mails/bounces)

@@ -2211,18 +2211,28 @@ fr:
         zero: Aucun rôle a été effacé
         one: Un rôle a été effacé
         other: "%{count} rôles ont été effacés "
+      failure:
+        zero: Es wurde keine Rolle entfernt
+        one: Eine Rolle konnte nicht entfernt werden
+        other: "%{count} Rollen konnten nicht entfernt werden"
     create:
       success:
         zero: Aucun rôle a été créé
         one: Un rôle a été créé
         other: "%{count} rôles ont été créé"
-      failure: Veuillez entrer un rôle valide
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht erstellt werden
+        other: "%{count} Rollen konnten nicht erstellt werden"
     update:
       success:
         zero: Aucun rôle n'a été déplacé
         one: Un rôle a été déplacé
         other: "%{count} rôles ont été déplacés"
-      failure: Veuillez entrer un rôle valide
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht verschoben werden
+        other: "%{count} Rollen konnten nicht verschoben werden"
     move:
       title: Où les personnes doivent-elles être transférées?
       submit: Continuer

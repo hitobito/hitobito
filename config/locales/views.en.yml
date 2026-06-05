@@ -2157,18 +2157,28 @@ en:
         zero: No roles deleted
         one: One role has been deleted
         other: "%{count} roles have been deleted"
+      failure:
+        zero: Es wurde keine Rolle entfernt
+        one: Eine Rolle konnte nicht entfernt werden
+        other: "%{count} Rollen konnten nicht entfernt werden"
     create:
       success:
         zero: No roles created
         one: One role has been created
         other: "%{count} roles have been created"
-      failure: Please enter a valid role
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht erstellt werden
+        other: "%{count} Rollen konnten nicht erstellt werden"
     update:
       success:
         zero: No roles moved
         one: One role has been moved
         other: "%{count} roles have been moved"
-      failure: Please enter a valid role
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht verschoben werden
+        other: "%{count} Rollen konnten nicht verschoben werden"
     move:
       title: Where should these persons be moved to?
       submit: Further

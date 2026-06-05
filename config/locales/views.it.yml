@@ -2210,18 +2210,28 @@ it:
         zero: Non è stato rimosso nessun ruolo
         one: Un ruolo è stato rimosso
         other: "Sono stati rimossi ... ruoli"
+      failure:
+        zero: Es wurde keine Rolle entfernt
+        one: Eine Rolle konnte nicht entfernt werden
+        other: "%{count} Rollen konnten nicht entfernt werden"
     create:
       success:
         zero: Non è stato creato nessun ruolo
         one: È stato creato un ruolo
         other: "Sono stati creati... ruoli."
-      failure: P.f. assegnare un ruolo valido
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht erstellt werden
+        other: "%{count} Rollen konnten nicht erstellt werden"
     update:
       success:
         zero: Nessun ruolo è stato modificato
         one: Un ruolo è stato modificato
         other: "... ruoli sono stati modificati"
-      failure: P.f. assegnare un ruolo valido
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht verschoben werden
+        other: "%{count} Rollen konnten nicht verschoben werden"
     move:
       title: Dove dovrebbero essere trasferite le persone?
       submit: Avanti

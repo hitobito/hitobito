@@ -56,7 +56,7 @@ describe "Dropdown::PeopleExport" do
 
     expect(top_menu_entries).to match_array(%w[CSV Excel vCard PDF Etiketten])
 
-    expect(download_links_opening_new_tab.to match_array(%w[vCard])
+    expect(download_links_opening_new_tab).to match_array(%w[vCard])
 
     expect(submenu_entries("CSV")).to match_array(%w[Spaltenauswahl Adressliste Haushaltsliste])
     expect(submenu_entries("Etiketten")).to match_array(

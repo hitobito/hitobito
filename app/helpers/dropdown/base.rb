@@ -24,6 +24,8 @@ module Dropdown
     end
 
     def to_s
+      return "".html_safe if items.empty?
+
       template.content_tag(:div, id: id, class: "btn-group dropdown") do
         render_dropdown_button + render_items
       end

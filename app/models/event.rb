@@ -78,6 +78,13 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/role_decorator"
   require_dependency "event/role_ability"
 
+  class_attribute :manually_sendable_participant_mails
+  class_attribute :manually_sendable_leader_mails
+  self.manually_sendable_participant_mails = [
+    Event::ParticipationMailer::CONTENT_CONFIRMATION
+  ].freeze
+  self.manually_sendable_leader_mails = manually_sendable_participant_mails
+
   ALLOWED_VISIBLE_CONTACT_ATTRIBUTES = %w[
     picture
     name
@@ -358,6 +365,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       raise ActiveRecord::RecordNotFound, "No event type '#{sti_name}' found" if type.nil?
 
       type
+    end
+
+    def leader_types
+      role_types.select(&:leader?)
     end
 
     def participant_types

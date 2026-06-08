@@ -14,37 +14,46 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:any).may(:show_details, :print)
       .her_own_or_manager_or_for_participations_read_details_events
     permission(:any).may(:create).her_own_if_application_possible
-    permission(:any).may(:show_full, :update).for_participations_full_events
+    permission(:any).may(:show_full, :update, :send_mails).for_participations_full_events
     permission(:any).may(:destroy).her_own_if_application_cancelable
 
     class_side(:index).everybody # via API with session cookie
 
     permission(:group_full)
-      .may(:show, :show_details, :show_full, :print, :create, :update, :destroy)
+      .may(:show, :show_details, :show_full, :print)
       .in_same_group
 
+    permission(:group_full)
+      .may(:send_mails, :create, :update, :destroy)
+      .in_same_group_if_active
+
     permission(:group_and_below_full)
-      .may(:show, :show_details, :show_full, :print, :create, :update, :destroy)
+      .may(:show, :show_details, :show_full, :print)
       .in_same_group_or_below
+
+    permission(:group_and_below_full)
+      .may(:send_mails, :create, :update, :destroy)
+      .in_same_group_or_below_if_active
 
     permission(:layer_full)
       .may(:show, :show_details, :show_full, :print, :update)
       .in_same_layer_or_different_prio
-    permission(:layer_full).may(:create, :destroy).in_same_layer
+
+    permission(:layer_full)
+      .may(:create, :destroy, :send_mails)
+      .in_same_layer_if_active
 
     permission(:layer_and_below_full)
       .may(:show, :show_details, :show_full, :print, :update)
       .in_same_layer_or_below_or_different_prio
-    permission(:layer_and_below_full).may(:create, :destroy).in_same_layer
+
+    permission(:layer_and_below_full)
+      .may(:create, :destroy, :send_mails)
+      .in_same_layer_or_below_if_active
 
     permission(:approve_applications).may(:show).for_applicant_in_same_layer
 
     general(:create).at_least_one_group_not_deleted
-
-    permission(:group_full).may(:mail_confirmation).in_same_group_if_active
-    permission(:group_and_below_full).may(:mail_confirmation).in_same_group_or_below_if_active
-    permission(:layer_full).may(:mail_confirmation).in_same_layer_if_active
-    permission(:layer_and_below_full).may(:mail_confirmation).in_same_layer_if_active
 
     for_self_or_manageds do
       permission(:any).may(:create).her_own_if_application_possible

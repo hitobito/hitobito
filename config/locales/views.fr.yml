@@ -203,7 +203,7 @@ fr:
       already_exists: "est déjà annoncé"
       cannot_see_event: "ne doit pas voir l'événement"
 
-  dropdown/event/participation/mail_dispatch:
+  dropdown/event/participation/send_mail:
     title: Envoyer un e-mail
     confirmation: Es-tu sûr de vouloir envoyer ces e-mails?
 
@@ -497,7 +497,7 @@ fr:
         title: Inscription
       approvals:
         title: Autorisation
-      mail_dispatches:
+      send_mails:
         create:
           success: Un e-mail a été envoyé.
       specific_information: "Informations spécifiques"

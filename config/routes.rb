@@ -314,7 +314,7 @@ Hitobito::Application.routes.draw do
                 post "contact_data/managed" => "managed#update"
               end
             end
-            resource :mail_dispatch, only: [:create], module: :participations
+            resource :send_mail, only: [:create], module: :participations
             resources :messages, only: [:index], module: :participations
             member do
               get "print"

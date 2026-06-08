@@ -5,18 +5,20 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Event::Participations::MailDispatchesController < ApplicationController
+class Event::Participations::SendMailsController < ApplicationController
   def create
-    authorize!(:create, event)
+    authorize!(:send_mails, participation)
     raise "Invalid mail type" unless mail_type_valid?
 
-    send(:"send_#{mail_type}_mail")
+    dispatch_mail
     redirect_to_success
   end
 
   private
 
-  def send_event_application_confirmation_mail
+  def dispatch_mail = send(:"dispatch_#{mail_type}_mail")
+
+  def dispatch_event_application_confirmation_mail
     LocaleSetter.with_locale(person: participation.person) do
       Event::ParticipationMailer.confirmation(participation).deliver_later
     end
@@ -35,7 +37,7 @@ class Event::Participations::MailDispatchesController < ApplicationController
   end
 
   def mail_type_valid?
-    Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS.include?(mail_type)
+    participation.manually_sendable_mails.include?(mail_type)
   end
 
   def redirect_to_success

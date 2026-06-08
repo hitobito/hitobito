@@ -203,7 +203,7 @@ it:
       already_exists: "È già registrato"
       cannot_see_event: "Non ha il permesso di vedere l'evento"
 
-  dropdown/event/participation/mail_dispatch:
+  dropdown/event/participation/send_mail:
     title: Inviare e-mail
     confirmation: Siete sicuri di voler inviare queste mail?
 
@@ -497,7 +497,7 @@ it:
         title: Iscrizione
       approvals:
         title: Attivazione
-      mail_dispatches:
+      send_mails:
         create:
           success: È stata inviata un'e-mail.
       specific_information: "dati specifici"

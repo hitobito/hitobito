@@ -15,6 +15,10 @@ describe Dropdown::Base do
   let(:dropdown) { Dropdown::Base.new(self, "my-dropdown", "my-icon") }
   let(:html) { Capybara::Node::Simple.new(dropdown.to_s) }
 
+  it "renders nothing when no items are added" do
+    expect(dropdown.to_s).to be_empty
+  end
+
   it "renders link for item" do
     entry = groups(:bottom_layer_one)
     dropdown.add_item("the-item", entry)

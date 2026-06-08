@@ -15,8 +15,8 @@
                   :print,
                   { target: '_blank'})
 
-- if can?(:mail_confirmation, entry)
-  = Dropdown::Event::Participation::MailDispatch.new(self, @event, @group, entry)
+- if can?(:send_mails, entry)
+  = Dropdown::Event::Participation::SendMail.new(self, @event, @group, entry)
 
 - if entry.participant_type == Person.sti_name && can?(:edit, entry.person)
   = action_button(t('.change_contact_data_button'),

@@ -75,8 +75,8 @@ class Event::ApplicationMarketController < ApplicationController
   end
 
   def sort_and_decorate(applications)
-    sort_applications(applications)
-    Event::ParticipationDecorator.decorate_collection(applications)
+    sorted = sort_applications(applications)
+    Event::ParticipationDecorator.decorate_collection(sorted)
   end
 
   def sort_applications(applications)

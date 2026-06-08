@@ -10,6 +10,11 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency "event/course/role/participant"
 
+  self.manually_sendable_participant_mails = [
+    Event::ParticipationMailer::CONTENT_CONFIRMATION
+  ].freeze
+  self.manually_sendable_leader_mails = manually_sendable_participant_mails
+
   self.used_attributes -= [:guest_limit]
   self.used_attributes += [:number, :kind_id, :state, :priorization, :group_ids,
     :requires_approval, :display_booking_info, :automatic_assignment, :waiting_list,

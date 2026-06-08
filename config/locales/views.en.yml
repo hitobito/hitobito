@@ -202,7 +202,7 @@ en:
       already_exists: "is already registered"
       cannot_see_event: "must not see the event"
 
-  dropdown/event/participation/mail_dispatch:
+  dropdown/event/participation/send_mail:
     title: E-Mail senden
     confirmation: Bist du sicher, dass du diese Mails versenden willst?
 
@@ -496,7 +496,7 @@ en:
         title: Registration
       approvals:
         title: Approval
-      mail_dispatches:
+      send_mails:
         create:
           success: Es wurde eine E-Mail verschickt.
       specific_information: "Specific information"

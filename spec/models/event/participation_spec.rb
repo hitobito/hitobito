@@ -14,7 +14,7 @@ describe Event::Participation do
     course
   end
 
-  subject { course.participations.new(event: course) }
+  subject { course.participations.new(event: course, participant: people(:top_leader)) }
 
   context "#init_answers" do
     it "creates answers from event" do
@@ -261,6 +261,60 @@ describe Event::Participation do
       version = PaperTrail::Version.order(:created_at, :id).last
       expect(version.event).to eq("update")
       expect(version.main).to eq(participation)
+    end
+  end
+
+  describe "#manually_sendable_mails" do
+    before do
+      allow(Event).to receive(:manually_sendable_participant_mails).and_return(["event_participant_mail"])
+      allow(Event).to receive(:manually_sendable_leader_mails).and_return(["event_leader_mail"])
+      allow(Event::Course).to receive(:manually_sendable_participant_mails).and_return(["course_participant_mail"])
+      allow(Event::Course).to receive(:manually_sendable_leader_mails).and_return(["course_leader_mail"])
+    end
+
+    context "without a leader role" do
+      it "returns participant mails for event participation" do
+        allow(course).to receive(:class).and_return Event
+
+        expect(subject.manually_sendable_mails).to eq ["event_participant_mail"]
+      end
+
+      it "returns participant mails for course participation" do
+        expect(subject.manually_sendable_mails).to eq ["course_participant_mail"]
+      end
+    end
+
+    context "with a leader role" do
+      before do
+        Event::Role::Leader.create!(participation: subject, event: course)
+      end
+
+      it "returns leader mails for event participation" do
+        allow(course).to receive(:class).and_return Event
+
+        expect(subject.manually_sendable_mails).to eq ["event_leader_mail"]
+      end
+
+      it "returns leader mails for course participation" do
+        expect(subject.manually_sendable_mails).to eq ["course_leader_mail"]
+      end
+    end
+
+    context "when class attribute is empty" do
+      before do
+        allow(Event::Course).to receive(:manually_sendable_participant_mails).and_return([])
+        allow(Event::Course).to receive(:manually_sendable_leader_mails).and_return([])
+      end
+
+      it "returns [] for participants" do
+        expect(subject.manually_sendable_mails).to be_empty
+      end
+
+      it "returns [] for leaders" do
+        Event::Role::Leader.create!(participation: subject, event: course)
+
+        expect(subject.manually_sendable_mails).to be_empty
+      end
     end
   end
 end

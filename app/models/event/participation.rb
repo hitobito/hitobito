@@ -34,11 +34,6 @@ class Event::Participation < ActiveRecord::Base
     skip: [:id, :updated_at, :event_id, :participant_id, :participant_type,
       :application_id, :active]
 
-  # These mails can be manually sent to participants in the participation show page via a dropdown
-  MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
-    Event::ParticipationMailer::CONTENT_CONFIRMATION
-  ]
-
   self.demodulized_route_keys = true
 
   attr_accessor :enforce_required_answers
@@ -187,6 +182,14 @@ class Event::Participation < ActiveRecord::Base
     !active
   end
 
+  def manually_sendable_mails
+    if leader?
+      event.class.manually_sendable_leader_mails
+    else
+      event.class.manually_sendable_participant_mails
+    end
+  end
+
   def to_s(*args)
     person.to_s(*args)
   end
@@ -200,6 +203,10 @@ class Event::Participation < ActiveRecord::Base
 
   def person=(value)
     self.participant = value
+  end
+
+  def leader?
+    roles.any? { _1.class.leader? }
   end
 
   def guest?

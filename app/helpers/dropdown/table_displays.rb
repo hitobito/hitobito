@@ -14,6 +14,7 @@ module Dropdown
       first = list.first
       @table_model_class = first.try(:decorated?) ? first.model.class.to_s : first.class.to_s
       @list = list
+      @items = load_items
     end
 
     def to_s
@@ -32,17 +33,20 @@ module Dropdown
       hidden_field_tag("table_model_class", @table_model_class)
     end
 
+    def load_items
+      table_display
+        .available(@list)
+        .select { |c| table_display.column_for(c).label(c) }
+        .sort_by { |c| table_display.column_for(c).label(c) }
+    end
+
     def render_items
       options = {class: "dropdown-menu float-end", data: {turbo_permanent: true}, role: "menu"}
 
       content_tag(:ul, options) do
-        items = table_display
-          .available(@list)
-          .select { |c| table_display.column_for(c).label(c) }
-          .sort_by { |c| table_display.column_for(c).label(c) }
-          .map { |column| render_item("selected[]", table_display.column_for(column), column) }
-
-        safe_join(items)
+        safe_join(items.map { |column|
+          render_item("selected[]", table_display.column_for(column), column)
+        })
       end
     end
 

@@ -1161,21 +1161,21 @@ describe Event::ParticipationsController do
 
     describe "preloading" do
       it "GET#index preloads answers and person" do
-        expect do
+        expect {
           get :index, params: {group_id: group.id, event_id: course.id}
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to make(60).db_queries
+        }.to make(60).db_queries
       end
 
       it "GET#index still preloads when sorting" do
-        expect do
+        expect {
           get :index, params: {group_id: group.id, event_id: course.id, sort: "last_name"}
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to make(57).db_queries
+        }.to make(57).db_queries
       end
 
       it "GET#index preloads questions but increase query count when " do
@@ -1183,12 +1183,12 @@ describe Event::ParticipationsController do
         table_display = top_leader.table_display_for(Event::Participation)
         table_display.selected = %W[event_question_#{question.id}]
         table_display.save!
-        expect do
+        expect {
           get :index, params: {group_id: group.id, event_id: course.id}
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        end.to make(87).db_queries
+        }.to make(87).db_queries
       end
     end
 

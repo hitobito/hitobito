@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Event::Participations::MailDispatchesController do
+describe Event::Participations::SendMailsController do
   include ActiveJob::TestHelper
 
   let(:event) { events(:top_event) }
@@ -33,6 +33,16 @@ describe Event::Participations::MailDispatchesController do
     context "as leader" do
       let(:user) { people(:top_leader) }
 
+      it "sends application confirmation email" do
+        expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
+        expect do
+          post :create,
+            params: {group_id: group, event_id: event, participation_id: participation,
+                     mail_type: :event_application_confirmation}
+        end.to have_enqueued_mail(Event::ParticipationMailer, :confirmation).exactly(1).times
+        expect(flash[:notice]).to eq("Es wurde eine E-Mail verschickt.")
+      end
+
       it "raises if mail_type is not allowed" do
         expect do
           post :create,
@@ -47,14 +57,25 @@ describe Event::Participations::MailDispatchesController do
         end.to raise_error("Invalid mail type")
       end
 
-      it "sends application confirmation email" do
-        expect(LocaleSetter).to receive(:with_locale).with(person: participation.person).and_call_original
+      it "raises if participant mail_type is used for a leader" do
+        allow(Event).to receive(:manually_sendable_leader_mails).and_return(["leader_only_mail"])
+        Event::Role::Leader.create!(participation: participation)
+
         expect do
           post :create,
             params: {group_id: group, event_id: event, participation_id: participation,
                      mail_type: :event_application_confirmation}
-        end.to have_enqueued_mail(Event::ParticipationMailer, :confirmation).exactly(1).times
-        expect(flash[:notice]).to eq("Es wurde eine E-Mail verschickt.")
+        end.to raise_error("Invalid mail type")
+      end
+
+      it "raises if leader mail_type is used for a participant" do
+        allow(Event).to receive(:manually_sendable_leader_mails).and_return(["leader_only_mail"])
+
+        expect do
+          post :create,
+            params: {group_id: group, event_id: event, participation_id: participation,
+                     mail_type: :leader_only_mail}
+        end.to raise_error("Invalid mail type")
       end
     end
   end

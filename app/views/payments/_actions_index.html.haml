@@ -3,4 +3,4 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= button_action_add if @invoice.present? && can?(:new, model_class)
+= action_button(t('.export'), group_payments_path(params.to_unsafe_h.merge(format: :csv)), :download)

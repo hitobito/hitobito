@@ -47,10 +47,10 @@ module ContactableDecorator
       all_social_accounts(true)
   end
 
-  def primary_email
-    if email.present?
-      content_tag(:p, safe_join([h.mail_to(email), block_icon(email)].compact_blank, " "))
-    end
+  def primary_email(prefix: nil)
+    return if email.blank?
+
+    content_tag(:p, safe_join([prefix, h.mail_to(email), block_icon(email)].compact_blank, " "))
   end
 
   def all_emails(only_public = true)
@@ -59,14 +59,14 @@ module ContactableDecorator
       all_additional_emails(only_public)
   end
 
-  def all_additional_emails(only_public = true)
-    nested_values(additional_emails, only_public) do |email|
+  def all_additional_emails(only_public = true, prefix: nil)
+    nested_values(additional_emails, only_public, prefix: prefix) do |email|
       [h.mail_to(email.value), [block_icon(email.value), invoice_icon(email)]]
     end
   end
 
-  def all_phone_numbers(only_public = true)
-    nested_values(phone_numbers, only_public) do |number|
+  def all_phone_numbers(only_public = true, prefix: nil)
+    nested_values(phone_numbers, only_public, prefix: prefix) do |number|
       h.link_to(number.value, "tel:#{number.value}")
     end
   end
@@ -94,16 +94,23 @@ module ContactableDecorator
 
   private
 
-  def nested_values(values, only_public)
-    html = values.collect do |v|
-      next unless !only_public || v.public?
-
-      val, suffix = block_given? ? yield(v) : v.value
-      h.value_with_muted(val, safe_join([v.translated_label, *suffix].compact_blank, " "))
-    end.compact
-
-    html = h.safe_join(html, br)
+  def nested_values(values, only_public, prefix: nil, &block)
+    items = values.filter_map { |record|
+      nested_value_item(record, only_public, prefix: prefix, &block)
+    }
+    html = h.safe_join(items, br)
     content_tag(:p, html) if html.present?
+  end
+
+  def nested_value_item(record, only_public, prefix: nil)
+    return unless !only_public || record.public?
+
+    display, muted_extras = block_given? ? yield(record) : record.value
+    item = h.value_with_muted(
+      display,
+      safe_join([record.translated_label, *muted_extras].compact_blank, " ")
+    )
+    safe_join([prefix, item].compact_blank)
   end
 
   def invoice_icon(contact_account)

@@ -37,8 +37,7 @@ class Payment < ActiveRecord::Base
   after_create :update_invoice, if: :invoice
 
   scope :list, -> { order(Arel.sql("(SELECT MAX(received_at) FROM payments) DESC")) }
-  scope :unassigned, -> { where(invoice_id: nil) }
-  # FIXIT: spec this properly
+  scope :unassigned, -> { unscope(where: :invoice_id).where(invoice_id: nil) }
   scope :of_layer, ->(group) { where(invoice: Invoice.where(group: group.groups_in_same_layer)) }
 
   STATES = %w[ebics_imported xml_imported manually_created without_invoice].freeze

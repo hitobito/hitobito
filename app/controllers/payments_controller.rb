@@ -65,7 +65,6 @@ class PaymentsController < CrudController
   private
 
   def render_tabular_entries_in_background(format)
-    return_path = group_invoices_path(params[:group_id])
     render_tabular_in_background(format, :payment_export)
     redirect_after_enqueued_export(return_path)
   end
@@ -89,6 +88,14 @@ class PaymentsController < CrudController
     ].reduce(&:merge)
   end
 
+  def return_path
+    if invoice_parent?
+      group_invoices_path(params[:group_id])
+    else
+      group_payments_path(params[:group_id])
+    end
+  end
+
   def flash_message
     I18n.t("#{controller_name}.#{action_name}.flash.success", amount: f(entry.amount))
   end
@@ -106,21 +113,28 @@ class PaymentsController < CrudController
       LEFT JOIN groups ON groups.id = invoices.recipient_id AND invoices.recipient_type = 'Group'
     SQL
 
-    scope = scope.page(params[:page]) if params[:ids].blank?
+    scope = scope.page(params[:page]) if html_request? && params[:ids].blank?
 
     Payments::Filter.new(params.merge(filter_params)).apply(scope)
   end
 
   def model_scope
     if action_name == "index"
-      if parents.one? # only a group present
-        Payment.of_layer(parent)
-      else # group and invoice expected, crashes rightfully if neither is present
-        @invoice.payments # ivar is loaded by the parents-call above
-      end
+      return Payment.of_layer(parent) if only_group_parent?
+      return parents.last.payments if invoice_parent?
+
+      Payment
     else
       super
     end
+  end
+
+  def only_group_parent?
+    parents.one? && parents.first.is_a?(Group)
+  end
+
+  def invoice_parent?
+    parents.many? && parents.last.is_a?(Invoice)
   end
 
   def filter_params

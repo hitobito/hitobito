@@ -15,26 +15,37 @@ module Dropdown
         label = I18n.t("global.associations.add")
         super(template, label)
         @main_link = "javascript:void(0)"
-        @button_group_class = "btn-group dropdown align-with-form"
+        @button_group_class = "dropdown align-with-form"
         @group = group
         @event = event
         @admin = admin
 
         init_items
+
+        @button_group_class += " btn-group" if items.present?
+      end
+
+      def render_dropdown_button
+        return super if items.present?
+
+        label_with_link
+      end
+
+      def render_items
+        super if items.present?
       end
 
       private
 
       def label_with_link
-        if main_link
-          template.action_button(label, main_link, icon, in_button_group: true,
-            data: {action: "events--question-template-nested-form#add"})
-        end
+        template.action_button(label, main_link, icon, in_button_group: true,
+          data: {action: "events--question-template-nested-form#add"})
       end
 
       def init_items
         ::Event::QuestionTemplate.applicable_to([group], event_type: event.type, admin:,
-          default: [true, false]).find_each do |question_template|
+          default: [true, false]).each do |question_template|
+        # ::Event::QuestionTemplate.none.each do |question_template|
           derived_question = question_template.derive_question
           add_item(question_template.to_s, "javascript:void(0)",
             data: {action: "events--question-template-nested-form#addFromTemplate",

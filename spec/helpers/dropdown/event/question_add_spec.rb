@@ -32,6 +32,39 @@ describe Dropdown::Event::QuestionAdd do
 
   before { Event::QuestionTemplate.delete_all }
 
+  context "with no templates" do
+    it "does not render a dropdown menu" do
+      is_expected.not_to have_css("ul.dropdown-menu")
+    end
+  end
+
+  context "ordering" do
+    before do
+      create_template("Essen")
+      create_template("Ausrüstung")
+      create_template("Gesundheit")
+    end
+
+    context "with alphabetic sort turned on" do
+      around do |example|
+        original = Event::Question.list_alphabetically
+        Event::Question.list_alphabetically = true
+        example.run
+        Event::Question.list_alphabetically = original
+      end
+
+      it "renders templates in alphabetical order" do
+        expect(subject.all("ul.dropdown-menu li a").map(&:text)).to eq(["Ausrüstung", "Essen", "Gesundheit"])
+      end
+    end
+
+    context "with alphabetic sort turned off (by default)" do
+      it "renders templates in insertion order" do
+        expect(subject.all("ul.dropdown-menu li a").map(&:text)).to eq(["Essen", "Ausrüstung", "Gesundheit"])
+      end
+    end
+  end
+
   context "buttons" do
     before { create_template("Some template") }
 

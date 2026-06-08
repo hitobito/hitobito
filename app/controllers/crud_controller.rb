@@ -133,7 +133,8 @@ class CrudController < ListController
 
   # A label for the current entry, including the model name.
   def full_entry_label
-    "#{models_label(false)} <i>#{ERB::Util.h(entry.to_s)}</i>".html_safe # rubocop:disable Rails/OutputSafety
+    label = entry.class.model_name.human
+    "#{label} <i>#{ERB::Util.h(entry.to_s)}</i>".html_safe
   end
 
   # Url of the index page to return to

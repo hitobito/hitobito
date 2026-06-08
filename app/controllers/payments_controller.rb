@@ -71,7 +71,7 @@ class PaymentsController < CrudController
 
   def render_tabular_in_background(format, filename)
     Export::PaymentsExportJob.new(
-      format, current_person.id, entries.map(&:id),
+      format, current_person.id, list_entries.pluck(&:id),
       {filename: filename}
     ).enqueue!
   end

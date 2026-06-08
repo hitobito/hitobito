@@ -204,8 +204,8 @@ it:
       cannot_see_event: "Non ha il permesso di vedere l'evento"
 
   dropdown/event/participation/send_mail:
-    title: Inviare e-mail
-    confirmation: Siete sicuri di voler inviare queste mail?
+    title: E-Mail senden
+    confirmation: Bist du sicher, dass du diese Mails versenden willst?
 
   dropdown/label_items:
     additional_address:
@@ -499,7 +499,7 @@ it:
         title: Attivazione
       send_mails:
         create:
-          success: È stata inviata un'e-mail.
+          success: Es wurde eine E-Mail verschickt.
       specific_information: "dati specifici"
       application_answers: Dati per l'iscrizione
       admin_answers: Dati amministrativi

@@ -7,6 +7,7 @@ class PaymentsController < CrudController
   include FormatHelper
   include ActionView::Helpers::NumberHelper
   include ExportableRedirect
+  include Api::JsonPaging
 
   self.nesting = [Group]
   self.optional_nesting = [Invoice]
@@ -41,6 +42,7 @@ class PaymentsController < CrudController
     respond_to do |format|
       format.csv { render_tabular_entries_in_background(:csv) }
       format.xlsx { render_tabular_entries_in_background(:xlsx) }
+      format.json { render_entries_json(list_entries) }
       format.html { super }
     end
   end
@@ -73,6 +75,18 @@ class PaymentsController < CrudController
       format, current_person.id, entries.map(&:id),
       {filename: filename}
     ).enqueue!
+  end
+
+  def render_entries_json(entries)
+    paged_entries = entries.page(params[:page])
+    render json: [
+      paging_properties(paged_entries),
+      ListSerializer.new(paged_entries,
+        group: group,
+        page: params[:page],
+        serializer: PaymentSerializer,
+        controller: self)
+    ].reduce(&:merge)
   end
 
   def flash_message

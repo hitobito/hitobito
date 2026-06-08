@@ -7,7 +7,7 @@ on:
         description: "Wagon repository, e.g. hitobito_pbs"
         type: string
       wagon_dependency_repository:
-        description: A wagon this wagon depends on, e.g. hitobito_youth
+        description: Deprecated and ignored parameter. The wagon dependency is now automatically detected from the gemspec.
         required: false
         default: ""
         type: string
@@ -41,11 +41,34 @@ defaults:
     working-directory: hitobito
 
 jobs:
+  detect_wagon_dependency:
+    runs-on: ubuntu-latest
+
+    outputs:
+      wagon_dependency_repository: ${{ steps.determine.outputs.dependency_repo }}
+
+    steps:
+      - name: Determine dependency-repo
+        id: determine
+        env:
+          REPO: ${{ inputs.wagon_repository }}
+
+        working-directory: "."
+        run: |
+          gemspec_source="https://raw.githubusercontent.com/hitobito/${REPO}/master/${REPO}.gemspec"
+          curl --silent -k  "$gemspec_source" > ./gemspec
+
+          dependency_repo=$(grep 'add_dependency.*hitobito_' ./gemspec | sed 's/.*\(hitobito_[-_a-z]*\).*/\1/')
+          echo "dependency_repo=${dependency_repo}" >> "$GITHUB_OUTPUT"
+
   wagon_rubocop:
     name: rubocop
     runs-on: "ubuntu-22.04"
     env:
       RAILS_DB_ADAPTER: nulldb
+
+    needs:
+      - detect_wagon_dependency
 
     steps:
       - name: echo distinct ID ${{ inputs.distinct_id }}
@@ -66,7 +89,7 @@ jobs:
           migrations: false
           assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
@@ -143,6 +166,9 @@ jobs:
       RAILS_ENV: development
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
 
+    needs:
+      - detect_wagon_dependency
+
     # only run seeds on master
     if: ${{ github.ref_name == 'master' }}
     services:
@@ -173,7 +199,7 @@ jobs:
         with:
           assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
@@ -195,6 +221,9 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
+
+    needs:
+      - detect_wagon_dependency
 
     services:
       postgres:
@@ -227,7 +256,7 @@ jobs:
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
@@ -250,6 +279,9 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
+
+    needs:
+      - detect_wagon_dependency
 
     services:
       postgres:
@@ -282,7 +314,7 @@ jobs:
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 

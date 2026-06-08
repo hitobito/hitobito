@@ -82,7 +82,7 @@ module Dropdown
     end
 
     def pdf_link
-      add_item(translate(:pdf), params.merge(format: :pdf), target: :_blank)
+      add_item(translate(:pdf), params.merge(format: :pdf))
     end
 
     def label_links

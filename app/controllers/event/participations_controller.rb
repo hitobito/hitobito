@@ -119,7 +119,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     pdf = Export::Pdf::Participation.render(entry)
     filename = Export::Pdf::Participation.filename(entry)
 
-    send_data pdf, type: :pdf, disposition: "inline", filename: filename
+    send_data pdf, type: :pdf, disposition: "attachment", filename: filename
   end
 
   def destroy

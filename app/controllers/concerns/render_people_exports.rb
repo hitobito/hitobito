@@ -9,7 +9,7 @@ module RenderPeopleExports
 
   def render_pdf(people, group = nil, title = nil)
     pdf = generate_pdf(people, title || group&.name)
-    send_data pdf, type: :pdf, disposition: "inline"
+    send_data pdf, type: :pdf, disposition: "attachment"
   rescue Prawn::Errors::CannotFit
     redirect_back(fallback_location: group_people_path(group, returning: true),
       alert: t("people.pdf.cannot_fit"))

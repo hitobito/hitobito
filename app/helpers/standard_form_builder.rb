@@ -367,14 +367,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
   def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil,
     &block)
-    NestedFieldsForBuilder.new(self).build(assoc, partial_name, record_object, options, limit,
-      &block)
-  end
-
-  def event_questions_nested_fields_for(assoc, partial_name = nil, record_object = nil,
-    options = nil, limit = nil, admin: false, &block)
-    NestedFieldsForBuilder.new(self).build_for_event_questions(assoc, partial_name, record_object,
-      options, limit, admin:, &block)
+    NestedFieldsForBuilder.new(self, assoc, partial_name, record_object, options, limit)
+      .build(&block)
   end
 
   def readonly_value(attr, html_options = {})

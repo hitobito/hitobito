@@ -9,45 +9,37 @@ class NestedFieldsForBuilder
   delegate :content_tag, :capture, :render, :link_to, to: :template
   delegate :fields_for, :object, :template, to: :@form
 
-  def initialize(form)
+  attr_reader :assoc, :partial_name, :record_object, :options, :limit
+
+  def initialize(form, assoc, partial_name = nil, record_object = nil, options = nil, limit = nil)
     @form = form
+    @assoc = assoc
+    @partial_name = partial_name
+    @record_object = record_object
+    @options = options.to_h
+    @limit = limit
   end
 
-  def build(assoc, partial_name, record_object, options, limit, &block)
+  def build(&block)
     stimulus_controller = "nested-form"
-    options = options.to_h
     link_title = options.delete(:link_to_add_title) || I18n.t("global.associations.add")
-    add_button = content_tag(:p,
-      link_to(link_title, "javascript:void(0)", class: "text w-100 align-with-form",
-        data: {action: "nested-form#add"}))
-    templates = new_record_template(assoc, partial_name, stimulus_controller, options, &block)
+    add_button = content_tag(:p) do
+      link_to(link_title,
+        "javascript:void(0)",
+        class: "text w-100 align-with-form",
+        data: {action: "nested-form#add"})
+    end
+    templates = new_record_template(partial_name, stimulus_controller, &block)
 
-    build_nested_form(stimulus_controller, assoc, partial_name, record_object, options, limit,
-      add_button:, templates:, &block)
-  end
-
-  def build_for_event_questions(assoc, partial_name, record_object, options, limit, admin:, &block)
-    stimulus_controller = "events--question-template-nested-form"
-    options = options.to_h
-    add_button = Dropdown::Event::QuestionAdd.new(template, @form.object.groups.first,
-      @form.object, admin:).to_s
-    question_template_record = object.class.reflect_on_association(assoc)&.klass&.new(admin: admin)
-    templates = new_record_template(assoc, partial_name, stimulus_controller, options, &block) +
-      new_record_template(assoc, "event/questions/template_fields", stimulus_controller,
-        options.merge(model_object: question_template_record),
-        target: "questionTemplateFormTemplate")
-
-    build_nested_form(stimulus_controller, assoc, partial_name, record_object, options, limit,
-      add_button:, templates:, &block)
+    build_nested_form(stimulus_controller, add_button:, templates:, &block)
   end
 
   private
 
-  def build_nested_form(stimulus_controller, assoc, partial_name, record_object, options, limit,
-    add_button:, templates:, &block)
+  def build_nested_form(stimulus_controller, add_button:, templates:, &block)
     content_tag(:div, class: "nested-form",
-      data: stimulus_controller_data(stimulus_controller, assoc, limit)) do
-      fields_body(assoc, partial_name, record_object, stimulus_controller, &block) +
+      data: stimulus_controller_data(stimulus_controller)) do
+      fields_body(stimulus_controller, &block) +
         content_tag(:div, class: "controls") do
           add_button + templates
         end
@@ -58,38 +50,44 @@ class NestedFieldsForBuilder
     stimulus_controller.gsub("--", "__").tr("-", "_")
   end
 
-  def stimulus_controller_data(stimulus_controller, assoc, limit)
+  def stimulus_controller_data(stimulus_controller)
     p = prefix(stimulus_controller)
     {controller: stimulus_controller, "#{p}_assoc_value": assoc, "#{p}_limit_value": limit}
   end
 
-  def fields_body(assoc, partial_name, record_object, stimulus_controller, &block)
+  def fields_body(stimulus_controller, &block)
     p = prefix(stimulus_controller)
     content_tag(:div, id: "#{assoc}_fields") do
       fields_for(assoc, record_object) do |fields|
         content_tag(:div, class: "fields", style: ("display: none" if fields.object._destroy)) do
-          (block ? capture(fields,
-            &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
+          render_block_or_partial(fields, partial_name, &block)
         end
       end.to_s.html_safe + content_tag(:div, nil, data: {"#{p}_target": "target"})
     end
   end
 
-  def new_record_template(assoc, partial_name, stimulus_controller, options, target: "template",
-    &block)
+  def new_record_template(partial_name, stimulus_controller, model_object: nil, target: "template", &block)
     p = prefix(stimulus_controller)
     # Use a unique placeholder that includes the association name to avoid
     # collision when this template is nested inside another template
     placeholder = "NEW_#{assoc.to_s.upcase}_RECORD"
     content_tag(:template, data: {"#{p}_target": target}) do
       content_tag(:div, class: "fields", data: {new_record: true}) do
-        fields_for(assoc, options[:model_object] ||
-                   object.class.reflect_on_association(assoc)&.klass&.new,
-          child_index: placeholder) do |fields|
-          (block ? capture(fields,
-            &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
+        record = model_object || options[:model_object] ||
+          object.class.reflect_on_association(assoc)&.klass&.new
+        fields_for(assoc, record, child_index: placeholder) do |fields|
+          render_block_or_partial(fields, partial_name, &block)
         end
       end
     end
+  end
+
+  def render_block_or_partial(fields, partial_name, &block)
+    content = if block_given?
+      capture(fields, &block)
+    else
+      render(partial_name, f: fields)
+    end
+    content + fields.hidden_field(:_destroy)
   end
 end

@@ -7,7 +7,7 @@
 %p.mt-3= t('events.form.explain_application_questions')
 
 = field_set_tag nil do
-  = f.event_questions_nested_fields_for :application_questions do |fields|
+  = NestedFieldsForBuilders::EventQuestion.new(f, :application_questions).build(admin: false) do |fields|
     - if fields.object.derived?
       = render 'event/questions/template_fields', f: fields
     - else

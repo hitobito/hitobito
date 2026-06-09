@@ -657,6 +657,8 @@ de:
 
       personal_document:
         file: Datei
+        filename: Dateiname
+        description: Beschreibung
         personal_document_label_id: Label
         personal_document_label: Label
         author_id: Erstellt von

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_29_091011) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1224,6 +1224,24 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.index ["person_1_id", "person_2_id"], name: "index_person_duplicates_on_person_1_id_and_person_2_id", unique: true
   end
 
+  create_table "personal_document_labels", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "personal_documents", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "personal_document_label_id"
+    t.bigint "author_id", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_personal_documents_on_author_id"
+    t.index ["person_id"], name: "index_personal_documents_on_person_id"
+    t.index ["personal_document_label_id"], name: "index_personal_documents_on_personal_document_label_id"
+  end
+
   create_table "phone_numbers", id: :serial, force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false
@@ -1453,6 +1471,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "people", "self_registration_reasons"
+  add_foreign_key "personal_documents", "people"
+  add_foreign_key "personal_documents", "people", column: "author_id"
   add_foreign_key "subscription_tags", "subscriptions"
   add_foreign_key "subscription_tags", "tags"
 end

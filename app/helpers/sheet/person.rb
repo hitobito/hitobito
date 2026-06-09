@@ -61,9 +61,9 @@ module Sheet
         if: :show_details
     end
 
-    if FeatureGate.enabled?('personal_documents')
+    if FeatureGate.enabled?("personal_documents")
       tab "activerecord.models.personal_document.other",
-          :group_person_personal_documents_path
+        :group_person_personal_documents_path
     end
 
     def link_url

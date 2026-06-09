@@ -28,5 +28,4 @@ class PersonalDocumentsController < CrudController
   def set_person_and_author
     entry.author = current_person
   end
-
 end

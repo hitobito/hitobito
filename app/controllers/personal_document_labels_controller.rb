@@ -7,5 +7,4 @@
 
 class PersonalDocumentLabelsController < CrudController
   self.permitted_attrs = [:name]
-
 end

@@ -54,7 +54,7 @@ describe PersonalDocumentsController do
       end.to change(PersonalDocument, :count).by(1)
 
       expect(response).to redirect_to(
-        group_person_personal_documents_path(group, bottom_member)
+        group_person_personal_documents_path(group, bottom_member, returning: true)
       )
     end
   end

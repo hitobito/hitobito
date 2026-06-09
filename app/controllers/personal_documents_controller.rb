@@ -11,6 +11,14 @@ class PersonalDocumentsController < CrudController
 
   before_save :set_person_and_author
 
+  def create
+    super(location: index_path)
+  end
+
+  def update
+    super(location: index_path)
+  end
+
   private
 
   def build_entry

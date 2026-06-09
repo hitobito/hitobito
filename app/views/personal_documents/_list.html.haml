@@ -1,4 +1,4 @@
 = crud_table do |t|
   - t.col(PersonalDocument.human_attribute_name :file) do |e|
     = link_to icon(:download), e.file
-  - t.attrs(:personal_document_label, :author, :created_at, :updated_at)
+  - t.attrs(:personal_document_label, :filename, :description, :author, :created_at, :updated_at)

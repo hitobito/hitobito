@@ -15,4 +15,8 @@ class PersonalDocument < ApplicationRecord
     personal_document_label&.to_s
   end
 
+  def filename
+    file&.filename.to_s
+  end
+
 end

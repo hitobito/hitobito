@@ -7,12 +7,9 @@
 
 class PersonalDocumentsController < CrudController
   self.nesting = Group, Person
-  self.permitted_attrs = [:file, :personal_document_label_id, :person_id]
+  self.permitted_attrs = [:file, :personal_document_label_id, :person_id, :description]
 
   before_save :set_person_and_author
-
-  # prepend_before_action :parent
-
 
   private
 

@@ -18,5 +18,4 @@ class PersonalDocument < ApplicationRecord
   def filename
     file&.filename.to_s
   end
-
 end

@@ -1,6 +1,6 @@
-## Debugging
+## Fixing a Bug
 
-The debugging workflow aims to resolve an error of mostly unknown cause. It might be an edge-case or data-based exception that is not being handled.
+The bug fixing workflow aims to resolve an error of mostly unknown cause. It might be an edge-case or data-based exception that is not being handled.
 
 - Start with a reason for the bugfix, an error that affects the user
 - Verify that `rubocop` and `brakeman` report no errors locally

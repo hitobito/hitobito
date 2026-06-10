@@ -24,4 +24,3 @@ All graphics are created using [Draw.io](https://draw.io) and are stored as orig
 - [Development Process](process/README.md)
 - [Architecture](../architecture/README.md)
 - [Documentation Guidelines](documentation_guidelines.md)
-- [Workflows](workflows.md)

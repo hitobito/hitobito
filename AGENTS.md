@@ -6,12 +6,25 @@ This project is a web-application with the following stack:
 - Ruby On Rails
 - PostgreSQL
 - Delayed::Job
+- Redis
 
 A brief overview of the application is in the README.md.
 
 The HTML is mostly generated server-side with HAML.
 The Testing Framework is rspec, with capybara.
 Static analysis ist done with rubocop and brakeman.
+
+Hitobito is a web application to manage organisation and communities with complex group hierarchies with people, events, courses and mail-sending features
+
+# Core Models
+
+- People belong to a Group through the persons Roles.
+- Groups are organized hierarchically and have different layers.
+- Roles define permissions which use CanCanCan and a custom AbilityDsl.
+
+## additional concepts and folders
+
+- app/abilities for RBAC with CanCanCan
 
 # Architecture
 
@@ -23,11 +36,13 @@ The wagon always contains the group-structure of the final application and all m
 
 # Workflows
 
-In [Workflows](doc/developer/workflows.md), there are several workflows described.
+There are several workflows described:
 
-- If you are asked for [development](doc/developer/workflows/development.md), [refactoring](doc/developer/workflows/refactoring.md) or [debugging](doc/developer/workflows/debugging.md), read the corresponding file.
-- Select one of the workflows and state which one.
-- If the AI driver objects to the used workflow, change without hesitation
+- [development](.agents/workflows/development.md) (default)
+- [refactoring](.agents/workflows/refactoring.md)
+- [fixing a bug](.agents/workflows/fixing-a-bug.md)
+
+Select one of the workflows and state which one. If the AI driver objects to the used workflow, change without hesitation
 
 # Contribution Guidelines
 

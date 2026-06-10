@@ -52,6 +52,7 @@ it:
       add_another: Salvare ed inserirne altri
       cancel: Interrompere
       close: Chiudere
+      confirm: Bestätigen
       search: Cercare
       back: Indietro
       refresh: Aggiornare
@@ -90,6 +91,8 @@ it:
       input_translation_button: "Mostra i campi di inserimento per le altre lingue disponibili"
 
     jump_to_content: "Vai al contenuto principale"
+
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   list:
     index:
@@ -200,9 +203,9 @@ it:
       already_exists: "È già registrato"
       cannot_see_event: "Non ha il permesso di vedere l'evento"
 
-  dropdown/event/participation/mail_dispatch:
-    title: Inviare e-mail
-    confirmation: Siete sicuri di voler inviare queste mail?
+  dropdown/event/participation/send_mail:
+    title: E-Mail senden
+    confirmation: Bist du sicher, dass du diese Mails versenden willst?
 
   dropdown/label_items:
     additional_address:
@@ -214,6 +217,7 @@ it:
     archive: "archiviare"
     delete: Löschen
     edit_service_token: API-Keys
+    edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
     edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
@@ -476,7 +480,8 @@ it:
       update:
         flash:
           privacy_policy_not_accepted: "Per completare l'iscrizione deve venir accettata la dichiarazione di protezione dei dati."
-
+      flash:
+        application_not_possible: "Zur Zeit sind für diesen Anlass keine Anmeldungen möglich."
     participation_contact_data:
       managed:
         update:
@@ -492,9 +497,9 @@ it:
         title: Iscrizione
       approvals:
         title: Attivazione
-      mail_dispatches:
+      send_mails:
         create:
-          success: È stata inviata un'e-mail.
+          success: Es wurde eine E-Mail verschickt.
       specific_information: "dati specifici"
       application_answers: Dati per l'iscrizione
       admin_answers: Dati amministrativi
@@ -553,6 +558,11 @@ it:
         flash:
           success: Le qualifiche sono state aggiornate con successo.
 
+    question_templates:
+      form:
+        default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
+        inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
+
     register:
       register:
         title:
@@ -604,6 +614,7 @@ it:
     questions:
       add_choice: "Possibile risposta risposta"
       sensitive_caption: Le risposte vengono cancellate %{cutoff} mesi dopo la conclusione dell'evento.
+      required_caption: Diese Frage muss beim Anmelden beantworten werden.
 
   assignments:
     attachment: "Mostrare l'allegato."
@@ -708,7 +719,7 @@ it:
     preconditions: "qualifiche necessarie"
     tabs:
       participants: "partecipanti"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   event/applications:
     approved: "L'iscrizione è stata accettata"
@@ -726,7 +737,7 @@ it:
     not_allowed_due_to_guest_limit: "Non è possibile aggiungere altri ospiti a questo evento."
 
   event/invitations:
-    export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
 
   event/kinds:
@@ -741,7 +752,7 @@ it:
     success: "%{full_entry_label} è stato creato con successo."
     success_for_external_manager: "%{full_entry_label} è stato salvato con successo."
     instructions: "per l'iscrizione definitiva devi stampare questa pagina tramita <i>stampare<i>, firmarla e spedirla per posta all'indirizzo corrispondente"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     waiting_list: "Tutti i posti sono attualmente occupati, l'iscrizione è in lista d'attesa."
     pending: "È stata creata una pre-registrazione per %{full_entry_label}. La partecipazione non è ancora definitiva e deve essere confermata dall'amministrazione dell'evento."
 
@@ -959,7 +970,7 @@ it:
     tabs:
       deleted: "Cancellato"
       statistics: "Statistica"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     statistics:
       title: Statistica
       description: "%{subject} in %{groups}"
@@ -1110,7 +1121,7 @@ it:
         esr_number_heading: Riferimento
         currency: Valuta
         amount: Importo
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
     evaluations:
       show:
@@ -1251,7 +1262,7 @@ it:
       other: "%{count} fatture sono state annullate."
 
   payments:
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     create:
       flash:
         success: Pagamento sopra i %{amount} è stato registrato
@@ -1318,14 +1329,8 @@ it:
       info: "Sei ora registrato come %{user}"
       end: "Finire l'imitazione"
 
-    file_download:
-      wait_for_downloads: "Il download viene preparato, prego attendere"
-      cancel_downloads: "Interrompere il download"
-
-    synchronization:
-      wait_for_synchronization: "I vostri dati vengono ora inviati a MailChimp. Potrebbe volerci un attimo. Dopo di che l'elenco selezionato con i contatti di hitobito verrà aggiornato. "
-      synchronization_failed: "Durante l'invio dei dati a MailChimp si è verificato un errore"
-      cancel_synchronization: "Interrompere l'esportazione"
+  mailchimp_synchronizations:
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1386,6 +1391,67 @@ it:
         server_error: Non è possibile collegarsi al server per le mails, per favore riprova più tardi.
     bounces:
       manage: Rimbalzi
+
+    messages:
+      attrs:
+        dispatch_infos: Verarbeitung
+      dispatches:
+        create:
+          success:
+            message/letter: "Brief wurde als Druckauftrag vorbereitet."
+            message/letter_with_invoice: "Rechnungsbrief wurde als Druckauftrag vorbereitet."
+            message/text_message: "SMS wird versendet."
+          alert:
+            message/letter: "Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden."
+            message/letter_with_invoice: "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
+      actions_show:
+        button_dispatch_letter: Druckauftrag erstellen
+        button_show_assignment: Druckauftrag anzeigen
+        button_duplicate: Duplizieren
+        button_preview: Vorschau
+        button_dispatch_text_message: Senden
+        button_show_pdf: PDF anzeigen
+        recipient_info:
+          valid:
+            message/letter:
+              zero: "Keine Personen mit Adresse vorhanden."
+              one: "%{model_class} wird für eine Person mit Adresse erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+            message/letter_with_invoice:
+              zero: "Keine Personen mit Adresse vorhanden."
+              one: "%{model_class} wird für eine Person mit Adresse erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+            message/text_message:
+              zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
+              one: "%{model_class} wird für eine Person mit Mobiltelefonnummer erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Mobiltelefonnummer erstellt."
+      text_message:
+        fields:
+          remaining_chars: Verbleibende Zeichen
+      letter:
+        fields:
+          send_to_households_options:
+            true: Ein Brief pro Haushalt
+            false: Ein Brief pro Person
+      table:
+        infos:
+          sender: "Absender: %{mail}"
+          sender_rejected: Absender wurde abgelehnt
+          unknown_recipient: Empfänger unbekannt
+          retrieved: Empfangen
+          bounce_rejected: Bounce abgelehnt
+      export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+      show:
+        recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
+      export:
+        section:
+          donation_confirmation:
+            header: "Spenden an %{organisation}"
+            title: "Spendenbestätigung %{year}"
+            received_amount: "Spenden erhalten in der Höhe von"
+            received_from: "%{year} haben wir von"
+            acknowledgement: "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"
+
     recipient_counts:
       index:
         recipient_info:
@@ -1450,66 +1516,6 @@ it:
 
     subscribe: "Iscriversi"
     unsubscribe: "scollegarsi"
-
-  messages:
-    attrs:
-      dispatch_infos: Elaborazione
-    dispatches:
-      create:
-        success:
-          message/letter: "La lettera è stata preparata per la stampa."
-          message/letter_with_invoice: "La lettera con la fattura è stata preparata per la stampa."
-          message/text_message: "L'SMS viene inviato."
-        alert:
-          message/letter: "Appena sarà creato l'ordine di stampa la lettera non potrà più venir rielaborata."
-          message/letter_with_invoice: "Appena sarà creato l'ordine di stampa la lettera con la fattura non potrà più venir rielaborata."
-    actions_show:
-      button_dispatch_letter: Creare l'ordine di stampa
-      button_show_assignment: Mostrare l'ordine di stampa
-      button_duplicate: Duplicare
-      button_preview: Anteprima
-      button_dispatch_text_message: Inviare
-      button_show_pdf: Mostrare il PDF
-      recipient_info:
-        valid:
-          message/letter:
-            zero: "Non ci sono persone con indirizzo."
-            one: "%{model_class} viene creato per una persona con indirizzo."
-            other: "%{model_class} viene creato per %{count} persone con indirizzo."
-          message/letter_with_invoice:
-            zero: "Non ci sono persone con indirizzo."
-            one: "%{model_class} viene creato per una persona con indirizzo."
-            other: "%{model_class} viene creato per %{count} persone con indirizzo."
-          message/text_message:
-            zero: "Non ci sono persone con un numero di telefonino."
-            one: "%{model_class} viene creato per una persona con numero di telefonino."
-            other: "%{model_class} viene creato per %{count} persone con numero di telefonino."
-    text_message:
-      fields:
-        remaining_chars: Caratteri rimanenti
-    letter:
-      fields:
-        send_to_households_options:
-          true: Una lettera per economia domestica.
-          false: Una lettera per persona.
-    table:
-      infos:
-        sender: "Mittente: %{mail}"
-        sender_rejected: Il mittente è stato respinto
-        unknown_recipient: Destinatario sconosciuto
-        retrieved: Ricevere
-        bounce_rejected: Rimbalzo rifiutato
-    export_enqueued: "L'esportazione viene iniziata in retroscena e verrà scaricata al termine."
-    show:
-      recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
-    export:
-      section:
-        donation_confirmation:
-          header: "Donare a %{organisation}"
-          title: "Conferma della donazione %{year}"
-          received_amount: "Ricevuta una donazione per il totale di "
-          received_from: "%{year} abbiamo da"
-          acknowledgement: "La ringraziamo per la sua fiducia e per il suo impegno apprezzato!"
 
   navigation:
     menu: "Menu"
@@ -1816,6 +1822,14 @@ it:
           success: L'accesso è stato sbloccato con successo.
           error: Non puoi sbloccare il tuo login.
 
+    passes:
+      index:
+        title: Pässe
+        show_pass: Anzeigen
+        add_to_google_wallet: Google Wallet
+        add_to_apple_wallet: Apple Wallet
+        download_pdf: Drucken
+
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
 
@@ -1858,6 +1872,9 @@ it:
         many: "%{count} %{role} hanno ricevuto una richiesta d'accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta."
         other: "%{count} %{role} hanno ricevuto una richiesta d'accesso per i loro dati personali. Tutte le modifiche dovute a questa importazione devono essere nuovamente intraprese dopo la conferma della richiesta."
   people:
+    passes_aside:
+      title: Pässe
+
     addresses_sync:
       create:
         scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
@@ -1968,7 +1985,7 @@ it:
       add_role: Aggiungi ruolo
       set_main_group: Impostare il gruppo principale
 
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     export_email_needed: "Per l'esportazione è necessario un indirizzo e-mail"
 
     multiselect_actions:
@@ -2189,18 +2206,28 @@ it:
         zero: Non è stato rimosso nessun ruolo
         one: Un ruolo è stato rimosso
         other: "Sono stati rimossi ... ruoli"
+      failure:
+        zero: Es wurde keine Rolle entfernt
+        one: Eine Rolle konnte nicht entfernt werden
+        other: "%{count} Rollen konnten nicht entfernt werden"
     create:
       success:
         zero: Non è stato creato nessun ruolo
         one: È stato creato un ruolo
         other: "Sono stati creati... ruoli."
-      failure: P.f. assegnare un ruolo valido
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht erstellt werden
+        other: "%{count} Rollen konnten nicht erstellt werden"
     update:
       success:
         zero: Nessun ruolo è stato modificato
         one: Un ruolo è stato modificato
         other: "... ruoli sono stati modificati"
-      failure: P.f. assegnare un ruolo valido
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht verschoben werden
+        other: "%{count} Rollen konnten nicht verschoben werden"
     move:
       title: Dove dovrebbero essere trasferite le persone?
       submit: Avanti
@@ -2346,12 +2373,21 @@ it:
     subscription:
       only_persons_with: "Solo persone con"
       persons_excluded_with: "Escludere le persone con:"
-    export_enqueued: "L'esportazione viene effettuata in secondo piano e non appena essa sarà terminata verrà scaricato il documento"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   taggable:
     add_tag: Aggiungere tag
     cannot_create: Seleziona un tag esistente
     no_entry: (nessuno)
+
+  job_observations:
+    index:
+      title: Jobübersicht
+    job_observation:
+      no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
+    notification:
+      job_success: Job erfolgreich abgeschlossen
+      job_error: Fehler bei Jobausführung aufgetreten
 
   version:
     attribute_change:
@@ -2447,6 +2483,15 @@ it:
     status_valid: Iscrizione valida
     status_invalid: Nessuna iscrizione valida
 
+  passes:
+    verifications:
+      title: Pass-Verifizierung
+      status:
+        valid: Pass ist gültig
+        expired: Pass ist abgelaufen
+        invalid: Pass ist ungültig
+      failed: Dieser Pass konnte nicht verifiziert werden.
+
   wizards:
     steps:
       new_user_form:
@@ -2471,3 +2516,16 @@ it:
   period_invoice_template:
     role_count_item_fields:
       choose_role_types: Selezionare i tipi di rullo
+
+  wallets:
+    google:
+      generation_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
+    apple:
+      member_name: Mitglied
+      generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
+    pass:
+      member_name: Name
+      member_number: Mitgliedernummer
+      valid_from: Gültig von
+      valid_until: Gültig bis
+      description: Beschreibung

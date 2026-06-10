@@ -146,6 +146,14 @@ fr:
           attributes:
             scopes:
               not_match_configured: "ne correspondent pas aux données sur le serveur."
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Veuillez saisir votre nom'
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
@@ -331,6 +339,10 @@ fr:
         one: Donnée pour l'inscription
         many: Données pour l'inscription
         other: Données pour l'inscription
+      event/question_template:
+        one: Vorlage Anmeldeangabe Anlässe
+        many: Vorlagen Anmeldeangaben Anlässe
+        other: Vorlagen Anmeldeangaben Anlässe
       event/answer:
         one: Réponse aux informations d'inscription
         many: Réponses aux informations d'inscription
@@ -395,6 +407,10 @@ fr:
         one: Factures
         many: Factures
         other: Factures
+      message/system_mail:
+        one: System-E-Mail
+        many: System-E-Mails
+        other: System-E-Mails
       message/text_message:
         one: SMS
         many: SMS
@@ -415,6 +431,26 @@ fr:
         one: Note
         many: Notes
         other: Notes
+      pass_definition:
+        one: Pass-Definition
+        many: Pass-Definitionen
+        other: Pass-Definitionen
+      pass_grant:
+        one: Pass-Berechtigung
+        many: Pass-Berechtigungen
+        other: Pass-Berechtigungen
+      pass:
+        one: Ausweis
+        many: Ausweise
+        other: Ausweise
+      wallets/pass_installation:
+        one: Wallet-Installation
+        many: Wallet-Installationen
+        other: Wallet-Installationen
+      wallets/apple_wallet/device_registration:
+        one: Apple-Geräteregistrierung
+        many: Apple-Geräteregistrierungen
+        other: Apple-Geräteregistrierungen
       payment:
         one: paiements
         many: Paiements
@@ -934,26 +970,27 @@ fr:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
-        disclosure: Paramétrage
+        required: Obligatorisch
         sensitive: Sensible
-        disclosures:
-          required: Obligatoire
-          optional: Optionnel
-          hidden: Non affiché
+
+      event/question_template:
+        question: Frage
+        default: Default
+        event_type: Anlasstyp
+        inherit: Vererbung
+
 
       admin_questions:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: Réponse obligatoire
-        disclosure: Paramétrage
 
       application_questions:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
         required: Réponse obligatoire
-        disclosure: Paramétrage
 
       event/role:
         label: Désignation
@@ -961,7 +998,7 @@ fr:
         type: Rôle
         participation: Personne
         remove_participant_role: Supprimer le rôle éventuel de participant.
-        string_long: "%{role} de %{group}"
+        string_long: "%{role} de %{participation}"
 
       family_member:
         kind: Lien de parenté
@@ -970,6 +1007,45 @@ fr:
 
       note:
         text: Texte
+
+      pass_definition:
+        name: Name
+        description: Beschreibung
+        owner: Besitzer
+        template_key: Vorlage
+        background_color: Hintergrundfarbe
+
+      pass_grant:
+        pass_definition: Pass-Definition
+        grantor: Berechtigende Gruppe
+        related_role_types: Rollentypen
+
+      pass:
+        member_name: Mitgliedsname
+        member_number: Mitgliedsnummer
+        person: Person
+        pass_definition: Pass-Definition
+        state: Status
+        valid_from: Gültig von
+        valid_until: Gültig bis
+        states:
+          eligible: Gültig
+          ended: Abgelaufen
+          revoked: Widerrufen
+
+      wallets/pass_installation:
+        pass: Ausweis
+        wallet_type: Wallet-Typ
+        state: Status
+        wallet_identifier: Wallet-ID
+        authentication_token: Authentifizierungs-Token
+        last_synced_at: Letzte Synchronisation
+        sync_error: Synchronisationsfehler
+
+      wallets/apple_wallet/device_registration:
+        pass_installation: Pass-Installation
+        device_library_identifier: Geräte-ID
+        push_token: Push-Token
 
       oauth/application:
         cors_origins: Serveur avec accès via API
@@ -1177,8 +1253,9 @@ fr:
         recipient_count: Nombre de destinataires
         success_count: Réception réussie
         failed_count: Échec de l'envoi
-        sent_at: Traité le
+        sent_at: Verarbeitet am
         recipient_progress: Progression du traitement
+        recipients: Empfänger/in(nen)
 
       message/letter:
         body: Contenu
@@ -1502,17 +1579,45 @@ fr:
         included_calendar_tags: Seulement avec tags
         excluded_calendar_tags: Tags exclues
 
+      job_observation:
+        started_at: Startzeitpunkt
+        finished_at: Endzeitpunkt
+        attempts: Versuche
+        statuses:
+          planned: In der Warteschlange
+          in_progress: In Bearbeitung
+          success: Erfolgreich abgeschlossen
+          error: Bei der Bearbeitung trat ein Fehler auf
+
+  delayed_job:
+    export/event_participations_export_job: Event-Teilnahmen-Export
+    export/events_export_job: Anlass-Export
+    export/export_base_job: Basis-Export
+    export/invitations_export_job: Einladungs-Export
+    export/invoices_job: Rechnungs-Export
+    export/labels_job: Etiketten-Export
+    export/message_job: Nachrichten-Export
+    export/payments_export_job: Zahlungs-Export
+    export/people_export_job: Personen-Export
+    export/subgroups_export_job: Untergruppen-Export
+    export/subscriptions_job: Abonnenten-Export
+    mailchimp_synchronization_job: Mailchimp-Synchronisation
+
   api:
     errors:
       resources:
         id_must_not_be_set: ID ne doit pas être défini
         role_resource:
           group_id:
+            blank: muss ausgefüllt werden
             unwritable_attribute: Ne peut pas être modifié
           person_id:
             unwritable_attribute: kann nicht geändert werden
           type:
             unwritable_attribute: ne peut pas être modifié
+        qualification_resource:
+          person_id:
+            blank: muss ausgefüllt werden
         self_registration_resource:
           adult_consent:
             must_be_accepted: doit être accepté

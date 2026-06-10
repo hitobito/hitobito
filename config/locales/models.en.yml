@@ -144,6 +144,14 @@ en:
           attributes:
             scopes:
               not_match_configured: "do not match the ones configured on the server"
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Please enter a name'
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
@@ -301,6 +309,9 @@ en:
       event/question:
         one: Anmeldeangabe
         other: Anmeldeangaben
+      event/question_template:
+        one: Vorlage Anmeldeangabe Anlässe
+        other: Vorlagen Anmeldeangaben Anlässe
       event/answer:
         one: Antwort auf Anmeldeangabe
         other: Antworten auf Anmeldeangaben
@@ -349,6 +360,9 @@ en:
       message/letter_with_invoice:
         one: Invoice letter
         other: Invoice letters
+      message/system_mail:
+        one: System-E-Mail
+        other: System-E-Mails
       message/text_message:
         one: SMS
         other: SMS
@@ -364,6 +378,21 @@ en:
       note:
         one: Note
         other: Notes
+      pass_definition:
+        one: Pass-Definition
+        other: Pass-Definitionen
+      pass_grant:
+        one: Pass-Berechtigung
+        other: Pass-Berechtigungen
+      pass:
+        one: Ausweis
+        other: Ausweise
+      wallets/pass_installation:
+        one: Wallet-Installation
+        other: Wallet-Installationen
+      wallets/apple_wallet/device_registration:
+        one: Apple-Geräteregistrierung
+        other: Apple-Geräteregistrierungen
       payment:
         one: Payment
         other: Payments
@@ -861,26 +890,27 @@ en:
         question: Question
         choices: Possible answers
         multiple_choices: Multiple choice
-        disclosure: Antwortangabe
+        required: Obligatorisch
         sensitive: Sensitive
-        disclosures:
-          required: Required
-          optional: Optional
-          hidden: Hidden
+
+      event/question_template:
+        question: Frage
+        default: Default
+        event_type: Anlasstyp
+        inherit: Vererbung
+
 
       admin_questions:
         question: Question
         choices: Possible answers
         multiple_choices: Multiple choice
         required: Reply mandatory
-        disclosure: Antwortangabe
 
       application_questions:
         question: Question
         choices: Possible answers
         multiple_choices: Multiple choice
         required: Reply mandatory
-        disclosure: Antwortangabe
 
       event/role:
         label: Description
@@ -897,6 +927,45 @@ en:
 
       note:
         text: Text
+
+      pass_definition:
+        name: Name
+        description: Beschreibung
+        owner: Besitzer
+        template_key: Vorlage
+        background_color: Hintergrundfarbe
+
+      pass_grant:
+        pass_definition: Pass-Definition
+        grantor: Berechtigende Gruppe
+        related_role_types: Rollentypen
+
+      pass:
+        member_name: Mitgliedsname
+        member_number: Mitgliedsnummer
+        person: Person
+        pass_definition: Pass-Definition
+        state: Status
+        valid_from: Gültig von
+        valid_until: Gültig bis
+        states:
+          eligible: Gültig
+          ended: Abgelaufen
+          revoked: Widerrufen
+
+      wallets/pass_installation:
+        pass: Ausweis
+        wallet_type: Wallet-Typ
+        state: Status
+        wallet_identifier: Wallet-ID
+        authentication_token: Authentifizierungs-Token
+        last_synced_at: Letzte Synchronisation
+        sync_error: Synchronisationsfehler
+
+      wallets/apple_wallet/device_registration:
+        pass_installation: Pass-Installation
+        device_library_identifier: Geräte-ID
+        push_token: Push-Token
 
       oauth/application:
         cors_origins: Hosts with API access
@@ -1100,8 +1169,9 @@ en:
         recipient_count: Number of recipients
         success_count: Recipient successful
         failed_count: Recipient failed
-        sent_at: Sent at
+        sent_at: Verarbeitet am
         recipient_progress: Processing progress
+        recipients: Empfänger/in(nen)
 
       message/letter:
         body: Content
@@ -1423,17 +1493,45 @@ en:
         included_calendar_tags: Only with tags
         excluded_calendar_tags: Excluded tags
 
+      job_observation:
+        started_at: Startzeitpunkt
+        finished_at: Endzeitpunkt
+        attempts: Versuche
+        statuses:
+          planned: In der Warteschlange
+          in_progress: In Bearbeitung
+          success: Erfolgreich abgeschlossen
+          error: Bei der Bearbeitung trat ein Fehler auf
+
+  delayed_job:
+    export/event_participations_export_job: Event-Teilnahmen-Export
+    export/events_export_job: Anlass-Export
+    export/export_base_job: Basis-Export
+    export/invitations_export_job: Einladungs-Export
+    export/invoices_job: Rechnungs-Export
+    export/labels_job: Etiketten-Export
+    export/message_job: Nachrichten-Export
+    export/payments_export_job: Zahlungs-Export
+    export/people_export_job: Personen-Export
+    export/subgroups_export_job: Untergruppen-Export
+    export/subscriptions_job: Abonnenten-Export
+    mailchimp_synchronization_job: Mailchimp-Synchronisation
+
   api:
     errors:
       resources:
         id_must_not_be_set: ID must not be set
         role_resource:
           group_id:
+            blank: muss ausgefüllt werden
             unwritable_attribute: can't be changed
           person_id:
             unwritable_attribute: can't be changed
           type:
             unwritable_attribute: can't be changed
+        qualification_resource:
+          person_id:
+            blank: muss ausgefüllt werden
         self_registration_resource:
           adult_consent:
             must_be_accepted: must be accepted

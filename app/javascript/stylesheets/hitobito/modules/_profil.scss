@@ -6,6 +6,7 @@
   @include border-radius(3px);
 }
 .profile-image-overlay {
+  visibility: hidden;
   // Hide image above page by default
   opacity: 0;
   top: -100%;
@@ -22,6 +23,7 @@
   background-color: rgba($color: $black, $alpha: 0.5);
   cursor: pointer;
   &.active {
+    visibility: visible;
     opacity: 1;
     top: 0;
   }

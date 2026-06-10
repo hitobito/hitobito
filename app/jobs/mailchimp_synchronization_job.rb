@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018-2023, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2026, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,26 +26,31 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def success(_job)
-    mailing_list.update(mailchimp_syncing: false,
+    mailing_list.update(
+      mailchimp_syncing: false,
       mailchimp_result: sync.result,
-      mailchimp_last_synced_at: Time.zone.now)
+      mailchimp_last_synced_at: Time.zone.now
+    )
+    if sync.result.state == :partial
+      create_log_entry("Mailchimp Abgleich war teilweise nicht erfolgreich")
+    end
   end
 
   def error(_job, exception, payload = parameters)
     sync.result.exception = exception
     mailing_list.update(mailchimp_syncing: false, mailchimp_result: sync.result)
-    create_log_entry
+    create_log_entry("Mailchimp Abgleich war nicht erfolgreich")
     super
   end
 
   private
 
-  def create_log_entry
+  def create_log_entry(message)
     HitobitoLogEntry.create!(
       subject: mailing_list,
       level: :error,
       category: :mail,
-      message: "Mailchimp Abgleich war nicht erfolgreich",
+      message: message,
       payload: sync.result.to_json
     )
   end

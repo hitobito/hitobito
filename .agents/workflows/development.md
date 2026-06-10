@@ -1,6 +1,6 @@
 ## Development
 
-The development workflow is the default. It is meant for new and changed functionality.
+This workflow is meant for new and changed functionality.
 
 - Start with a reason for the change, a goal that defines how the application should be improved for the user
 - Always write a spec first

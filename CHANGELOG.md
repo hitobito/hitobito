@@ -18,6 +18,7 @@
 - Vorlagen für Anmeldeangaben können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (hitobito_sac_cas#2345)
 - Für OAuth und OIDC sind neu refresh tokens verfügbar, welche für 1 Woche gültig sind (hitobito_pbs#463)
 - Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
+- Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
 
 ## Version 2.9
 

@@ -267,6 +267,19 @@ describe Invoice do
     end
   end
 
+  context "#payable?" do
+    %w[issued sent partial payed excess reminded].each do |state|
+      it "#{state} invoice is payable" do
+        expect(Invoice.new(state: state)).to be_payable
+      end
+    end
+    %w[draft cancelled].each do |state|
+      it "#{state} invoice is not payable" do
+        expect(Invoice.new(state: state)).not_to be_payable
+      end
+    end
+  end
+
   it "knows a filename for the invoice-pdf" do
     invoice = create_invoice
     expect(invoice.sequence_number).to eq "834963567-1"

@@ -84,7 +84,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   # rubocop:disable Style/MutableConstant meant to be extended in wagons
   STATES = %w[draft issued sent partial payed excess reminded cancelled]
   STATES_REMINDABLE = %w[issued sent partial reminded]
-  STATES_PAYABLE = %w[issued sent partial reminded]
+  STATES_PAYABLE = %w[issued sent partial payed excess reminded]
 
   DUE_SINCE = %w[one_day one_week one_month]
   # rubocop:enable Style/MutableConstant meant to be extended in wagons

@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
+
 ## Version 2.9
 
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)

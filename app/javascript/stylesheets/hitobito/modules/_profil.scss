@@ -6,8 +6,8 @@
   @include border-radius(3px);
 }
 .profile-image-overlay {
-  visibility: hidden;
   // Hide image above page by default
+  visibility: hidden;
   opacity: 0;
   top: -100%;
   transition: opacity 0.5s ease, top 0.5s ease;

@@ -46,7 +46,7 @@ describe Event::Date do
     expect(event_date.start_at_min).to eq(10)
   end
 
-  it "should get hours,mins and date seperately" do
+  it "should get hours, mins and date separately" do
     date = Time.zone.local(2012, 12, 12, 18, 10)
     event_date = event.dates.new(label: "foobar")
     # start_at
@@ -65,7 +65,7 @@ describe Event::Date do
     expect(event_date.finish_at_min).to eq(10)
   end
 
-  it "should update hours,mins when a date was stored previously" do
+  it "should update hours, mins when a date was stored previously" do
     date = Time.zone.local(2012, 12, 12).to_date
     event_date = event.dates.new(label: "foobar")
     # set start_at date

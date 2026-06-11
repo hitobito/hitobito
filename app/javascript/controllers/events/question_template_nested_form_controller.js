@@ -28,6 +28,10 @@ export default class extends NestedFormController {
         const label = field.parentElement.querySelector("p")
         if (label) label.textContent = value
       }
+      if (name === "multiple_choices") {
+        newFields.querySelector('[data-multiple-choices-icon="true"]')?.classList.toggle("d-none", !value)
+        newFields.querySelector('[data-multiple-choices-icon="false"]')?.classList.toggle("d-none", !!value)
+      }
     })
   }
 

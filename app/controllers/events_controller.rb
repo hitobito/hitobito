@@ -104,8 +104,12 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     # deleting all choices
     # Otherwise, the choices_attributes key would not present and when the attrs are assigned
     # to the entry, the choices would be reset to the initial values
+    # Derived questions naturally do not submit any choices in the form
+    # so we don't want to accidentaly erase them
     %i[application_questions_attributes admin_questions_attributes].each do |key|
-      model_params.dig(key)&.each_value { |v| v[:choices_attributes] ||= {} }
+      model_params.dig(key)&.each_value do |v|
+        v[:choices_attributes] ||= {} unless v[:template_id].present?
+      end
     end
     super
   end

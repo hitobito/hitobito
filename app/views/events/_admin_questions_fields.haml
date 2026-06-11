@@ -9,7 +9,7 @@
 = field_set_tag nil do
 
   = NestedFieldsForBuilders::EventQuestion.new(f, :admin_questions).build(admin: true) do |fields|
-    - if fields.object.derived?
+    - if fields.object.template_id.present?
       = render 'event/questions/template_fields', f: fields
     - else
       = render 'event/questions/fields', f: fields, admin: true

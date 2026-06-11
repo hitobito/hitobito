@@ -29,7 +29,7 @@ describe "event edit page", js: true do
       fill_in "Kontaktperson", with: ""
       click_save
 
-      expect(page).to have_text "Anlass #{event.name} wurde erfolgreich aktualisiert."
+      expect(page).to have_text "Kurs #{event.name} wurde erfolgreich aktualisiert."
       expect(event.reload.contact).to be_nil
     end
   end

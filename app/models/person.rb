@@ -266,6 +266,15 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   has_many :message_recipients, dependent: :nullify
 
+  has_many :person_duplicates_as_p1,
+    class_name: "PersonDuplicate",
+    foreign_key: :person_1_id,
+    inverse_of: :person_1
+  has_many :person_duplicates_as_p2,
+    class_name: "PersonDuplicate",
+    foreign_key: :person_2_id,
+    inverse_of: :person_2
+
   has_many :people_managers, foreign_key: :managed_id,
     inverse_of: :managed,
     dependent: :destroy

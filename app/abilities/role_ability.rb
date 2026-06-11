@@ -42,7 +42,7 @@ class RoleAbility < AbilityDsl::Base
   end
 
   def non_restricted
-    !subject.restricted?
+    !subject.restricted?(permission:)
   end
 
   # A role giving the current user the permission required to edit/destroy this very role.

@@ -78,7 +78,7 @@ module Role::Types
     end
 
     # Whether this kind of role is specially managed or open for general modifications.
-    def restricted?
+    def restricted?(**opts)
       kind.nil?
     end
 
@@ -120,7 +120,7 @@ module Role::Types
     end
   end
 
-  def restricted?
-    self.class.restricted?
+  def restricted?(**opts)
+    self.class.restricted?(**opts)
   end
 end

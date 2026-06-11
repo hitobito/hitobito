@@ -108,7 +108,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     # so we don't want to accidentaly erase them
     %i[application_questions_attributes admin_questions_attributes].each do |key|
       model_params.dig(key)&.each_value do |v|
-        v[:choices_attributes] ||= {} unless v[:template_id].present?
+        v[:choices_attributes] ||= {} if v[:template_id].blank?
       end
     end
     super

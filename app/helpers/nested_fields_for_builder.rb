@@ -66,7 +66,8 @@ class NestedFieldsForBuilder
     end
   end
 
-  def new_record_template(partial_name, stimulus_controller, model_object: nil, target: "template", &block)
+  def new_record_template(partial_name, stimulus_controller, model_object: nil, target: "template",
+    &block)
     p = prefix(stimulus_controller)
     # Use a unique placeholder that includes the association name to avoid
     # collision when this template is nested inside another template

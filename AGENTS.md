@@ -8,13 +8,14 @@ This project is a web-application with the following stack:
 - Delayed::Job
 - Redis
 
+Hitobito is a web application to manage organisation and communities with complex group hierarchies with people, events, courses and mail-sending features
 A brief overview of the application is in the README.md.
 
 The HTML is mostly generated server-side with HAML.
 The Testing Framework is rspec, with capybara.
-Static analysis ist done with rubocop and brakeman.
-
-Hitobito is a web application to manage organisation and communities with complex group hierarchies with people, events, courses and mail-sending features
+Static analysis is done with rubocop and brakeman.
+CSS and JS are processed with webpacker
+Translations are handled externally, the german (de) locales are the source and under our control.
 
 # Core Models
 

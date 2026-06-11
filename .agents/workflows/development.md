@@ -7,6 +7,7 @@ This workflow is meant for new and changed functionality.
 - The spec should define the desired state
 - The spec should be failing at first
 - Then add the implementation
+- Do not touch locales other than "de"
 - The spec should now be successful
 - Run the specs for all touched classes to avoid regressions
 - Then, run `brakeman` to ensure no new security-problem have been added

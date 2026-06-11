@@ -25,6 +25,12 @@ module Dropdown
         @button_group_class += " btn-group" if items.present?
       end
 
+      def to_s
+        template.content_tag(:div, id: id, class: button_group_class) do
+          render_dropdown_button + render_items
+        end
+      end
+
       def render_dropdown_button
         return super if items.present?
 

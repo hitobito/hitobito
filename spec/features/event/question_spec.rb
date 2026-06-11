@@ -367,7 +367,7 @@ describe EventsController, js: true do
 
       expect do
         click_save
-        expect(page).to have_content("Anlass #{event.name} wurde erfolgreich aktualisiert.")
+        expect(page).to have_content("Kurs #{event.name} wurde erfolgreich aktualisiert.")
       end.to change { Event::Question.count }.by(1)
 
       question = Event::Question.last
@@ -418,7 +418,7 @@ describe EventsController, js: true do
 
       expect do
         click_save
-        expect(page).to have_content("Anlass #{event.name} wurde erfolgreich aktualisiert.")
+        expect(page).to have_content("Kurs #{event.name} wurde erfolgreich aktualisiert.")
       end.to change { Event::Question.count }.by(1)
 
       question = Event::Question.last

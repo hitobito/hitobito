@@ -28,7 +28,7 @@ class GroupResource < ApplicationResource
 
     attribute :require_person_add_requests, :boolean
     attribute(:self_registration_url, :string) do
-      next unless @object.self_registration_active?
+      next unless @object.self_registration_active?(api: true)
 
       context.group_self_registration_url(group_id: @object.id)
     end

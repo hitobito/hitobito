@@ -141,6 +141,11 @@ describe GroupDecorator, :draper_with_helpers do
 
     it { is_expected.to eq [Role::External] }
 
+    it "accepts api parameter" do
+      expect { decorator.allowed_roles_for_self_registration(api: false) }.not_to raise_error
+      expect { decorator.allowed_roles_for_self_registration(api: true) }.not_to raise_error
+    end
+
     describe "allowed_roles_for_self_registration with override in wagon" do
       let(:group) { groups(:bottom_group_one_one) }
 
@@ -152,6 +157,13 @@ describe GroupDecorator, :draper_with_helpers do
         expect(Role::Types::AllowedPermissionsForSelfRegistration).to contain_exactly(:group_read)
         is_expected.to contain_exactly(Role::External)
       end
+    end
+  end
+
+  describe ".all_allowed_roles_for_self_registration" do
+    it "accepts api parameter" do
+      expect { GroupDecorator.all_allowed_roles_for_self_registration(api: false) }.not_to raise_error
+      expect { GroupDecorator.all_allowed_roles_for_self_registration(api: true) }.not_to raise_error
     end
   end
 

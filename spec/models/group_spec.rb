@@ -639,6 +639,11 @@ describe Group do
         group.archived_at = 1.day.ago
         expect(group).not_to be_self_registration_active
       end
+
+      it "accepts api parameter" do
+        expect { group.self_registration_active?(api: false) }.not_to raise_error
+        expect { group.self_registration_active?(api: true) }.not_to raise_error
+      end
     end
   end
 

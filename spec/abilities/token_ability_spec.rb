@@ -627,4 +627,15 @@ describe TokenAbility do
       is_expected.to be_able_to(:index, Qualification)
     end
   end
+
+  describe "#registerable_groups" do
+    let(:token) { service_tokens(:permitted_top_layer_token).tap { |t| t.register_people = true } }
+
+    it "calls self_registration_active scope with api: true" do
+      expect(Group).to receive(:self_registration_active)
+        .with(api: true).at_least(:once)
+        .and_return(Group.none)
+      ability.send(:registerable_groups)
+    end
+  end
 end

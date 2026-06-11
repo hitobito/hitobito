@@ -99,6 +99,11 @@ describe GroupResource, type: :resource do
 
         expect(jsonapi_data[0]["self_registration_url"]).to be_blank
       end
+
+      it "calls self_registration_active? with api: true" do
+        expect_any_instance_of(Group).to receive(:self_registration_active?).with(api: true).and_return(true)
+        render
+      end
     end
 
     describe "optional logo attributes" do

@@ -530,7 +530,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def with_addon(addon, content = nil)
-    content_tag(:div, class: "input-group input-group-sm") do
+    content_tag(:div, class: "input-group input-group-sm w-auto") do
       (block_given? ? yield : content) +
         content_tag(:span, addon, class: "input-group-text")
     end

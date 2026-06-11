@@ -45,7 +45,6 @@ module Dropdown
       def init_items
         ::Event::QuestionTemplate.applicable_to([group], event_type: event.type, admin:,
           default: [true, false]).each do |question_template|
-        # ::Event::QuestionTemplate.none.each do |question_template|
           derived_question = question_template.derive_question
           add_item(question_template.to_s, "javascript:void(0)",
             data: {action: "events--question-template-nested-form#addFromTemplate",

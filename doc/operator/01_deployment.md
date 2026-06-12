@@ -34,14 +34,14 @@ gesetzt werden. Werte ohne Default müssen in der Regel definiert werden.
 | RAILS_MAIL_DOMAIN | Der Domainname für die Mailinglisten/Abos | `RAILS_HOST_NAME`        |
 | RAILS_MAIL_RETRIEVER_TYPE | `pop3` oder `imap`, alles was vom [Mail](https://github.com/mikel/mail) Gem unterstützt wird. | `pop3`                   |
 | RAILS_MAIL_RETRIEVER_CONFIG | Eine Komma-separierte `key: value` Liste mit allen erforderlichen E-Mail Empfangseinstellungen des gewählten Typs, z.B. `address: mailhost.local, port: 995, enable_ssl: true`. Siehe [Mail](https://github.com/mikel/mail#getting-emails-from-a-pop-server) für gültige Optionen. Wenn diese Variable nicht gesetzt ist, funktionieren die Mailinglisten nicht. | -                        |
-| RAILS_CACHE_REDIS_URL | Optional: URL zum redis kompatiblen server welcher für caching verwendet werden soll | - |
-| RAILS_CACHE_REDIS_CONFIG | Optional: Zusätzliche Redis cache konfiguration |  - |
+| RAILS_ACTIONCABLE_REDIS_URL | URL zu einem Redis-Server, der von ActionCable verwendet wird | redis://localhost:6379/1 |
+| RAILS_CACHE_REDIS_URL | Optional: URL zum Redis-kompatiblen Server welcher für Caching verwendet werden soll | - |
+| RAILS_CACHE_REDIS_CONFIG | Optional: Zusätzliche Konfiguration für den Redis-cache | - |
 | MEMCACHE_SERVERS | Komme-getrennte Liste von Memcache Servern in der Form `host:port` | localhost:11211          |
 | SENTRY_DSN | Configuration der Sentry Instanz, an welche Fehler gesendet werden sollen. Falls diese Variable nicht gesetzt ist, werden keine Fehlermeldungen verschickt. | -                        |
 | HITOBITO_STAGE | Für das "Environment" in Sentry und, um einen Info-Header zu konfigurieren | Rails.env |
 | HITOBITO_PROJECT | Für das "Project"-Tag in Sentry | hitobito |
 | HITOBITO_WALLETS_SYNC_SECONDS | Intervall in Sekunden für die Synchronisation von Wallet-Pässen | `180` (3 Minuten) |
-| RAILS_ACTIONCABLE_REDIS_URL | URL zu einem Redis Server, der von ActionCable verwendet wird | redis://localhost:6379/1 |
 
 ### Inbetriebnahme
 

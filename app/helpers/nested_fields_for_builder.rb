@@ -9,6 +9,9 @@ class NestedFieldsForBuilder
   delegate :content_tag, :capture, :render, :link_to, to: :template
   delegate :fields_for, :object, :template, to: :@form
 
+  class_attribute :stimulus_controller
+  self.stimulus_controller = "nested-form"
+
   attr_reader :assoc, :partial_name, :record_object, :options, :limit
 
   def initialize(form, assoc, partial_name = nil, record_object = nil, options = nil, limit = nil)
@@ -21,7 +24,6 @@ class NestedFieldsForBuilder
   end
 
   def build(&block)
-    stimulus_controller = "nested-form"
     link_title = options.delete(:link_to_add_title) || I18n.t("global.associations.add")
     add_button = content_tag(:p) do
       link_to(link_title,
@@ -29,34 +31,34 @@ class NestedFieldsForBuilder
         class: "text w-100 align-with-form",
         data: {action: "nested-form#add"})
     end
-    templates = new_record_template(partial_name, stimulus_controller, &block)
+    templates = new_record_template(partial_name, &block)
 
-    build_nested_form(stimulus_controller, add_button:, templates:, &block)
+    build_nested_form(add_button:, templates:, &block)
   end
 
   private
 
-  def build_nested_form(stimulus_controller, add_button:, templates:, &block)
+  def build_nested_form(add_button:, templates:, &block)
     content_tag(:div, class: "nested-form",
-      data: stimulus_controller_data(stimulus_controller)) do
-      fields_body(stimulus_controller, &block) +
+      data: stimulus_controller_data) do
+      fields_body(&block) +
         content_tag(:div, class: "controls") do
           add_button + templates
         end
     end
   end
 
-  def prefix(stimulus_controller)
+  def prefix
     stimulus_controller.gsub("--", "__").tr("-", "_")
   end
 
-  def stimulus_controller_data(stimulus_controller)
-    p = prefix(stimulus_controller)
+  def stimulus_controller_data
+    p = prefix
     {controller: stimulus_controller, "#{p}_assoc_value": assoc, "#{p}_limit_value": limit}
   end
 
-  def fields_body(stimulus_controller, &block)
-    p = prefix(stimulus_controller)
+  def fields_body(&block)
+    p = prefix
     content_tag(:div, id: "#{assoc}_fields") do
       fields_for(assoc, record_object) do |fields|
         content_tag(:div, class: "fields", style: ("display: none" if fields.object._destroy)) do
@@ -66,9 +68,9 @@ class NestedFieldsForBuilder
     end
   end
 
-  def new_record_template(partial_name, stimulus_controller, model_object: nil, target: "template",
+  def new_record_template(partial_name, model_object: nil, target: "template",
     &block)
-    p = prefix(stimulus_controller)
+    p = prefix
     # Use a unique placeholder that includes the association name to avoid
     # collision when this template is nested inside another template
     placeholder = "NEW_#{assoc.to_s.upcase}_RECORD"

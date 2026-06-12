@@ -20,12 +20,17 @@ class OidcClaimSetup
 
   def add_name_scope_claims
     NAME_ATTRS.each { |attr| add_claim(attr, scope: :name) }
+    add_claim(:given_name, scope: :name) { |owner| owner.first_name }
+    add_claim(:family_name, scope: :name) { |owner| owner.last_name }
   end
 
   def add_role_scope_claims
     (Person::PUBLIC_ATTRS - [:id] + [:address]).each do |attr|
       add_claim(attr, scope: :with_roles)
     end
+    add_claim(:given_name, scope: :with_roles) { |owner| owner.first_name }
+    add_claim(:family_name, scope: :with_roles) { |owner| owner.last_name }
+    add_claim(:locale, scope: :with_roles) { |owner| owner.language }
     add_claim(:roles, scope: :with_roles) { |owner| owner.decorate.roles_for_oauth }
   end
 

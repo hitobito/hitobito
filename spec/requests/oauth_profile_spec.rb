@@ -99,7 +99,9 @@ RSpec.describe "GET oauth/profile", type: :request do
           id: user.id,
           email: user.email,
           first_name: user.first_name,
+          given_name: user.first_name,
           last_name: user.last_name,
+          family_name: user.last_name,
           nickname: nil,
           address: user.address,
           address_care_of: user.address_care_of,
@@ -123,7 +125,9 @@ RSpec.describe "GET oauth/profile", type: :request do
         expect(json).to match({
           id: user.id,
           first_name: user.first_name,
+          given_name: user.first_name,
           last_name: user.last_name,
+          family_name: user.last_name,
           nickname: user.nickname,
           company_name: user.company_name,
           company: user.company,
@@ -140,6 +144,7 @@ RSpec.describe "GET oauth/profile", type: :request do
           birthday: user.birthday.to_s.presence,
           primary_group_id: user.primary_group_id,
           language: user.language,
+          locale: user.language,
           roles: [{
             group_id: user.roles.first.group_id,
             group_name: user.roles.first.group.name,

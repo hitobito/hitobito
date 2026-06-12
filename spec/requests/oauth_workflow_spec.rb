@@ -155,7 +155,7 @@ describe "OauthWorkflow" do
       token = @app.access_tokens.create!(resource_owner_id: user.id, scopes: "email name")
       get oauth_profile_path, headers: {"Authorization" => "Bearer #{token}", :"X-Scope" => "name"}
       expect(json.keys).to eq ["id", "email", "first_name", "last_name", "nickname", "address", "address_care_of",
-        "street", "housenumber", "postbox", "zip_code", "town", "country"]
+        "street", "housenumber", "postbox", "zip_code", "town", "country", "given_name", "family_name"]
     end
 
     it "return error if scope is not configured on application" do

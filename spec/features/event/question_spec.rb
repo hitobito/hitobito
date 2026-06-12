@@ -373,7 +373,8 @@ describe EventsController, js: true do
       question = Event::Question.last
       expect(question).to be_present
       expect(question.question).to eq(question_templates[:course_only].question.question)
-      expect(question.derived).to be true
+      expect(question).to be_derived
+      expect(question.template_id).to eq(question_templates[:course_only].id)
       expect(question.required).to be true
     end
   end
@@ -424,7 +425,8 @@ describe EventsController, js: true do
       question = Event::Question.last
       expect(question).to be_present
       expect(question.question).to eq(question_templates[:admin_course_only].question.question)
-      expect(question.derived).to be true
+      expect(question).to be_derived
+      expect(question.template_id).to eq(question_templates[:admin_course_only].id)
       expect(question.admin).to be true
     end
   end

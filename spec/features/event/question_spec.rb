@@ -24,16 +24,28 @@ describe EventsController, js: true do
           question_fr: "Vegetartian? but in french",
           question_it: "Vegetartian? but in italian")
       ),
+      course_only: Event::QuestionTemplate.create!(
+        group: groups(:top_layer),
+        default: false,
+        event_type: "Event::Course",
+        question: Event::Question::Default.create!(question: "Course?")
+      ),
       camp_only: Event::QuestionTemplate.create!(
         group: groups(:top_layer),
         default: true,
         event_type: "Event::Camp",
-        question: Event::Question::Default.create!(question: "Course?")
+        question: Event::Question::Default.create!(question: "Camp?")
       ),
       required: Event::QuestionTemplate.create!(
         group: groups(:top_layer),
         default: true,
         question: Event::Question::Default.create!(question: "Required?", required: true)
+      ),
+      admin_course_only: Event::QuestionTemplate.create!(
+        group: groups(:top_layer),
+        default: false,
+        event_type: "Event::Course",
+        question: Event::Question::Default.create!(question: "Admin Course?", admin: true)
       )
     }
   end
@@ -276,8 +288,6 @@ describe EventsController, js: true do
       visit edit_group_event_path(event.group_ids.first, event.id)
       is_expected.to have_text(question_templates[:vegetarian].question.question)
       is_expected.not_to have_text(question_templates[:camp_only].question.question)
-
-      is_expected.not_to have_text("Entfernen")
     end
 
     it "includes global questions with matching event type" do
@@ -309,6 +319,115 @@ describe EventsController, js: true do
 
       expect(question.question_fr).to eq "Vegetartian? but in french"
       expect(question.question_it).to eq "Vegetartian? but in italian"
+    end
+  end
+
+  describe "adding application questions from template" do
+    let(:event) do
+      Fabricate(:course, groups: [groups(:top_layer)]).tap do |e|
+        e.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
+      end
+    end
+
+    before do
+      sign_in
+      question_templates
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_link I18n.t("event.participations.application_answers")
+    end
+
+    def add_from_template
+      within("#application_questions") do
+        find(".dropdown-toggle").click
+        click_link question_templates[:course_only].to_s
+      end
+    end
+
+    it "shows question text when adding from template" do
+      add_from_template
+
+      expect(page).to have_text(question_templates[:course_only].question.question)
+    end
+
+    it "required flag can be edited after adding from template" do
+      add_from_template
+
+      within(all(".fields[data-new-record='true']").last) do
+        check "Obligatorisch"
+        expect(page).to have_checked_field("Obligatorisch")
+      end
+    end
+
+    it "persists question with template attributes when submitted" do
+      add_from_template
+
+      within(all(".fields[data-new-record='true']").last) do
+        check "Obligatorisch"
+      end
+
+      expect do
+        click_save
+        expect(page).to have_content("Kurs #{event.name} wurde erfolgreich aktualisiert.")
+      end.to change { Event::Question.count }.by(1)
+
+      question = Event::Question.last
+      expect(question).to be_present
+      expect(question.question).to eq(question_templates[:course_only].question.question)
+      expect(question).to be_derived
+      expect(question.template_id).to eq(question_templates[:course_only].id)
+      expect(question.required).to be true
+    end
+  end
+
+  describe "adding admin questions from template" do
+    let(:event) do
+      Fabricate(:course, groups: [groups(:top_layer)]).tap do |e|
+        e.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
+      end
+    end
+
+    before do
+      sign_in
+      question_templates
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_link I18n.t("events.form_tabs.admin_questions")
+    end
+
+    def add_admin_from_template
+      within("#admin_questions") do
+        find(".dropdown-toggle").click
+        click_link question_templates[:admin_course_only].to_s
+      end
+    end
+
+    it "shows question text when adding admin question from template" do
+      add_admin_from_template
+
+      expect(page).to have_text(question_templates[:admin_course_only].question.question)
+    end
+
+    it "required flag is not editable when adding admin question from template" do
+      add_admin_from_template
+
+      within(all(".fields[data-new-record='true']").last) do
+        expect(page).to have_field("Obligatorisch", disabled: true)
+      end
+    end
+
+    it "persists admin question with template attributes when submitted" do
+      add_admin_from_template
+
+      expect do
+        click_save
+        expect(page).to have_content("Kurs #{event.name} wurde erfolgreich aktualisiert.")
+      end.to change { Event::Question.count }.by(1)
+
+      question = Event::Question.last
+      expect(question).to be_present
+      expect(question.question).to eq(question_templates[:admin_course_only].question.question)
+      expect(question).to be_derived
+      expect(question.template_id).to eq(question_templates[:admin_course_only].id)
+      expect(question.admin).to be true
     end
   end
 

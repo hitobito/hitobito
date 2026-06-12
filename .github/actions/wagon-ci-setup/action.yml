@@ -114,6 +114,11 @@ runs:
       with:
         working-directory: hitobito
 
+    - name: 'Configure Bundler'
+      run: |
+        bundle config set path 'vendor/bundle'
+      shell: bash
+
     - name: "Set up Node"
       uses: actions/setup-node@v6
       with:
@@ -181,7 +186,6 @@ runs:
 
     - name: "Bundle install core"
       run: |
-        bundle config set path 'vendor/bundle'
         bundle install --jobs 4 --retry 3
       working-directory: hitobito
       shell: bash

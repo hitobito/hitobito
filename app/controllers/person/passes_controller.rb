@@ -73,7 +73,7 @@ class Person::PassesController < CrudController
   def render_pdf
     template = pass_definition.template
     pdf = template.pdf_class.new(pass)
-    send_data pdf.render, type: :pdf, disposition: "inline", filename: pdf.filename
+    send_data pdf.render, type: :pdf, disposition: "attachment", filename: pdf.filename
   end
 
   def find_or_create_pass_installation(wallet_type)

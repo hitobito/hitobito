@@ -62,10 +62,6 @@ class Event::ParticipationAbility < AbilityDsl::Base
     end
   end
 
-  on(Event::Guest) do
-    permission(:any).may(:create).if_participating
-  end
-
   def her_own_or_for_leaded_events
     her_own || for_leaded_events
   end

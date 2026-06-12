@@ -57,12 +57,12 @@ class Event::Participation < ActiveRecord::Base
           "event_participations.participant_id = event_guests.id")
   }
 
-  scope :guests_of, ->(main_participant) {
+  scope :guests_of, ->(main_participation) {
     joins("INNER JOIN event_guests " \
           "ON event_participations.participant_type = 'Event::Guest' " \
           "AND event_participations.participant_id = event_guests.id")
       .where(participant_type: "Event::Guest")
-      .where("event_guests.main_applicant_id = ?", main_participant.id) # rubocop:disable Rails/WhereEquals
+      .where(event_guests: {main_applicant_id: main_participation.id})
   }
 
   belongs_to :application, inverse_of: :participation, dependent: :destroy, validate: true

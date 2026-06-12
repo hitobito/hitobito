@@ -10,7 +10,7 @@ class Event::GuestsController < Wizards::BaseController
 
   self.wizard_action = :new
 
-  prepend_before_action :authorize_update_main_person
+  prepend_before_action :authorize_update_of_main_participation
   before_action :enforce_guest_limit
   before_action :init_answers
 
@@ -28,11 +28,11 @@ class Event::GuestsController < Wizards::BaseController
 
   def wizard
     @wizard ||= model_class.new(
-      group: group,
-      event: event,
-      guest_of: guest_of,
+      guest_of: main_participation,
       current_step: params[:step].to_i,
-      current_ability: current_ability,
+      group:,
+      event:,
+      current_ability:,
       **model_params.to_unsafe_h
     )
   end
@@ -49,12 +49,12 @@ class Event::GuestsController < Wizards::BaseController
     guest.to_person
   end
 
-  def guest_of
-    @guest_of ||= event.participations.find(params[:id])
+  def main_participation
+    @main_participation ||= event.participations.find(params[:id])
   end
 
-  def authorize_update_main_person
-    authorize! :update, guest_of
+  def authorize_update_of_main_participation
+    authorize! :update, main_participation
   end
 
   def enforce_guest_limit
@@ -92,6 +92,6 @@ class Event::GuestsController < Wizards::BaseController
   private
 
   def guest_limiter
-    @guest_limiter ||= Events::GuestLimiter.for(event, guest_of)
+    @guest_limiter ||= Events::GuestLimiter.for(event, main_participation)
   end
 end

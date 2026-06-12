@@ -47,15 +47,15 @@ class GroupDecorator < ApplicationDecorator
     end
   end
 
-  def self.all_allowed_roles_for_self_registration(api: false)
+  def self.all_allowed_roles_for_self_registration(context: nil)
     filter_allowed_roles(Role.all_types)
   end
 
-  def allowed_roles_for_self_registration(api: false)
+  def allowed_roles_for_self_registration(context: nil)
     self.class.filter_allowed_roles(role_types)
   end
 
-  private_class_method def self.filter_allowed_roles(role_types)
+  def self.filter_allowed_roles(role_types)
     role_types.reject do |type|
       type.restricted? ||
         (type.permissions - Role::Types::AllowedPermissionsForSelfRegistration).any?

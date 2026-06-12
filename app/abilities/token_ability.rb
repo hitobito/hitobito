@@ -63,6 +63,6 @@ class TokenAbility < Ability
       Group.none
     end
 
-    groups.self_registration_active(api: true).pluck(:id)
+    groups.self_registration_active(context: :api).pluck(:id)
   end
 end

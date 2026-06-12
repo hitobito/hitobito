@@ -217,9 +217,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   scope :without_archived, -> { where(archived_at: nil) }
   scope :without_deleted, -> { where(deleted_at: nil) }
   scope :without_archived_or_deleted, -> { without_archived.without_deleted }
-  scope :self_registration_active, ->(api: false) do
+  scope :self_registration_active, ->(context: nil) do
     active.where(self_registration_role_type:
-      GroupDecorator.all_allowed_roles_for_self_registration(api: api).map(&:sti_name))
+      GroupDecorator.all_allowed_roles_for_self_registration(context:).map(&:sti_name))
   end
 
   ### CLASS METHODS
@@ -341,9 +341,9 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
 
-  def self_registration_active?(api: false)
+  def self_registration_active?(context: nil)
     self_registration_role_type.present? &&
-      decorate.allowed_roles_for_self_registration(api: api)
+      decorate.allowed_roles_for_self_registration(context:)
         .include?(self_registration_role_type.constantize) &&
       archived_at.nil?
   end

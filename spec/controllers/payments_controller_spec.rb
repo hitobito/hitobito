@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -76,6 +76,47 @@ describe PaymentsController do
         params: {group_id: group.id, format: :html, from: 1.year.ago.beginning_of_year, to: 1.year.ago.end_of_year}
 
       expect(assigns(:payments)).to match_array(daterange_payments)
+    end
+
+    context "rendering view" do
+      render_views
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+      let(:current_year) { Time.zone.now.year }
+
+      it "renders search field" do
+        get :index, params: {group_id: group.id}
+
+        expect(dom).to have_field("q")
+      end
+
+      it "renders invoice status dropdown with an entry selectable" do
+        second_value, second_label = Invoice.state_labels.to_a.second
+        expect(second_value).to eq :issued
+        expect(second_label).to eq "Gestellt"
+
+        get :index, params: {group_id: group.id}
+
+        expect(dom).to have_select("invoice_status")
+        expect(dom).to have_select("invoice_status", with_options: [second_label])
+      end
+
+      it "renders payment status dropdown with an entry selectable" do
+        second_value, second_label = Payment.status_labels.to_a.second
+        expect(second_value).to eq :xml_imported
+        expect(second_label).to eq "CAMT"
+
+        get :index, params: {group_id: group.id}
+
+        expect(dom).to have_select("status")
+        expect(dom).to have_select("status", with_options: [second_label])
+      end
+
+      it "renders date range with default values for the current year" do
+        get :index, params: {group_id: group.id}
+
+        expect(dom).to have_field("from", with: "1.1.#{current_year}")
+        expect(dom).to have_field("to", with: "31.12.#{current_year}")
+      end
     end
   end
 end

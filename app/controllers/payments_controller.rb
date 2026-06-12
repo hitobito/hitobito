@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -37,6 +37,8 @@ class PaymentsController < CrudController
   ]
 
   helper_method :filter_params
+
+  alias_method :group, :parent
 
   def index
     respond_to do |format|
@@ -90,9 +92,9 @@ class PaymentsController < CrudController
 
   def return_path
     if invoice_parent?
-      group_invoices_path(params[:group_id])
+      group_invoices_path(params[:group_id], returning: true)
     else
-      group_payments_path(params[:group_id])
+      group_payments_path(params[:group_id], returning: true)
     end
   end
 

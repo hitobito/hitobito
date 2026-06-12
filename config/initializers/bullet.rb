@@ -18,10 +18,13 @@ if defined? Bullet
     association: :picture_attachment
   Bullet.add_safelist type: :unused_eager_loading, class_name: "Person", association: :phone_numbers
 
-  # When loading events via the polymorphic Person::AddRequest#body, it is not possible to include
-  # :groups
+  # When loading events via the polymorphic Person::AddRequest#body,
+  # it is not possible to include :groups
   Bullet.add_safelist type: :n_plus_one_query, class_name: "Event", association: :groups
   Bullet.add_safelist type: :n_plus_one_query, class_name: "Event::Course", association: :groups
+
+  # likewise, recipient to an invoice could be a person or a group
+  Bullet.add_safelist type: :n_plus_one_query, class_name: "Invoice", association: :recipient
 
   # EventKind may not be eager loaded if some event types have kind and others not.
   Bullet.add_safelist type: :n_plus_one_query, class_name: "Event::Course", association: :kind

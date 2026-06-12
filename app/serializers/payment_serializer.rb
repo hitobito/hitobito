@@ -8,6 +8,7 @@ class PaymentSerializer < ApplicationSerializer
 
     map_properties :amount,
       :received_at,
+      :status,
       :reference
   end
 end

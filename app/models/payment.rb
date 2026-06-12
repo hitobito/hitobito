@@ -37,10 +37,11 @@ class Payment < ActiveRecord::Base
   after_create :update_invoice, if: :invoice
 
   scope :list, -> { order(Arel.sql("(SELECT MAX(received_at) FROM payments) DESC")) }
-  scope :unassigned, -> { where(invoice_id: nil) }
+  scope :unassigned, -> { unscope(where: :invoice_id).where(invoice_id: nil) }
+  scope :of_layer, ->(layer) { where(invoice: Invoice.where(group: layer)) }
 
   STATES = %w[ebics_imported xml_imported manually_created without_invoice].freeze
-  i18n_enum :status, STATES
+  i18n_enum :status, STATES, scopes: true
   validates :status, inclusion: {in: STATES, allow_nil: true}
 
   attr_writer :esr_number

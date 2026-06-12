@@ -95,7 +95,11 @@ class Invoice::History
   end
 
   def payment_data(payment)
-    message = "#{invoice.decorate.format_currency(payment.amount)} #{t("invoices.payed")}"
+    message = t(
+      "payments.history.payed",
+      amount: invoice.decorate.format_currency(payment.amount),
+      source: payment.status_label
+    )
 
     HistoryEntryData.new(payment.received_at, message, "green")
   end

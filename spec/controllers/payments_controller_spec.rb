@@ -56,7 +56,7 @@ describe PaymentsController do
     end
 
     it "lists payments" do
-      get :index, params: {group_id: group.id, format: :csv}
+      get :index, params: {group_id: group.id, format: :html}
 
       expect(assigns(:payments)).to match_array(payments)
     end
@@ -64,7 +64,7 @@ describe PaymentsController do
     it "lists payments without invoice" do
       unassigned_payments = payments.sample(3).each { _1.update!(invoice_id: nil) }
 
-      get :index, params: {group_id: group.id, format: :csv, state: :without_invoice}
+      get :index, params: {group_id: group.id, format: :html, status: :without_invoice}
 
       expect(assigns(:payments)).to match_array(unassigned_payments)
     end
@@ -73,7 +73,7 @@ describe PaymentsController do
       daterange_payments = payments.sample(3).each { _1.update!(received_at: 1.year.ago) }
 
       get :index,
-        params: {group_id: group.id, format: :csv, from: 1.year.ago.beginning_of_year, to: 1.year.ago.end_of_year}
+        params: {group_id: group.id, format: :html, from: 1.year.ago.beginning_of_year, to: 1.year.ago.end_of_year}
 
       expect(assigns(:payments)).to match_array(daterange_payments)
     end

@@ -37,7 +37,7 @@ class PaymentsController < CrudController
   ]
 
   helper_method :filter_params
-
+alias_method :group, :parent
   def index
     respond_to do |format|
       format.csv { render_tabular_entries_in_background(:csv) }
@@ -90,9 +90,9 @@ class PaymentsController < CrudController
 
   def return_path
     if invoice_parent?
-      group_invoices_path(params[:group_id])
+      group_invoices_path(params[:group_id], returning: true)
     else
-      group_payments_path(params[:group_id])
+      group_payments_path(params[:group_id], returning: true)
     end
   end
 

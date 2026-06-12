@@ -20,9 +20,8 @@ class PaymentDecorator < ApplicationDecorator
 
   def invoice_status = model.invoice.state_label
 
-  # FIXIT: check if this can be delegated to :helpers somehow
   def format_currency(amount)
-    ActiveSupport::NumberHelper.number_to_currency(amount, {unit: currency, format: "%n %u"})
+    helpers.number_to_currency(amount, {unit: currency, format: "%n %u"})
   end
 
   def currency = model.invoice.decorate.currency

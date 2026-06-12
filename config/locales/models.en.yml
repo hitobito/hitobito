@@ -1521,6 +1521,9 @@ en:
     errors:
       resources:
         id_must_not_be_set: ID must not be set
+        invoice_resource:
+          group_id:
+            blank: must be filled in
         role_resource:
           group_id:
             blank: muss ausgefüllt werden

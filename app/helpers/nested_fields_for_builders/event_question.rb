@@ -7,17 +7,18 @@
 
 module NestedFieldsForBuilders
   class EventQuestion < NestedFieldsForBuilder
+    self.stimulus_controller = "events--question-template-nested-form"
+
     def build(admin:, &block)
-      stimulus_controller = "events--question-template-nested-form"
       add_button = Dropdown::Event::QuestionAdd.new(template, @form.object.groups.first,
         @form.object, admin:).to_s
       question_template_record = object.class.reflect_on_association(assoc)&.klass&.new(admin:)
-      templates = new_record_template(partial_name, stimulus_controller, &block) +
-        new_record_template("event/questions/template_fields", stimulus_controller,
+      templates = new_record_template(partial_name, &block) +
+        new_record_template("event/questions/template_fields",
           model_object: question_template_record,
           target: "questionTemplateFormTemplate")
 
-      build_nested_form(stimulus_controller, add_button:, templates:, &block)
+      build_nested_form(add_button:, templates:, &block)
     end
   end
 end

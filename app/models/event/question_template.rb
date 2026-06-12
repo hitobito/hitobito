@@ -47,7 +47,6 @@ class Event::QuestionTemplate < ActiveRecord::Base
   def derive_question
     attrs = question.attributes.excluding("id", "created_at", "updated_at")
     Event::Question.build(attrs).tap do |derived_question|
-      derived_question.derived = true
       derived_question.template_id = id
 
       # copy translations from template question

@@ -12,7 +12,6 @@
 #  id                :integer          not null, primary key
 #  admin             :boolean          default(FALSE), not null
 #  choices           :string
-#  derived           :boolean          default(FALSE)
 #  multiple_choices  :boolean          default(FALSE), not null
 #  question          :text
 #  required          :boolean          default(FALSE), not null
@@ -110,6 +109,10 @@ class Event::Question < ActiveRecord::Base
     question
   end
 
+  def derived?
+    template_id.present?
+  end
+
   def global?
     event.blank?
   end
@@ -186,7 +189,6 @@ class Event::Question < ActiveRecord::Base
     template_question = Event::QuestionTemplate.find(template_id).question
 
     self.type = template_question.type
-    self.derived = true
 
     [:question, :choices].each do |attribute|
       template_translations = template_question.globalize_locales

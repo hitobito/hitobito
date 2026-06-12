@@ -382,7 +382,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_145056) do
     t.string "type", null: false
     t.boolean "sensitive", default: true, null: false
     t.boolean "required", default: false, null: false
-    t.boolean "derived", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "template_id"

@@ -19,5 +19,18 @@ namespace :app_status do
         exit false
       end
     end
+
+    desc "check if memory usage percentage exceeds configured limit (default 95%). \
+            Configuration env var: MEMORY_USAGE_LIMIT_PERCENTAGE"
+    task memory_usage: :environment do
+      status = AppStatus::MemoryUsage.new
+
+      if status.code == :service_unavailable
+        memory_usage_limit_percentage = status.details[:memory_usage_limit_percentage]
+
+        puts "Memory usage exceeds configured limit of #{memory_usage_limit_percentage}"
+        exit false
+      end
+    end
   end
 end

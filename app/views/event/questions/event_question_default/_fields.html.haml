@@ -1,14 +1,6 @@
 - question = f.object
 - if question.derived?
-  = f.labeled(:question) do
-    = f.hidden_field(:question)
-    %p.py-2= question.question
-  - if question.deserialized_choices.any?
-    = f.labeled(:choices, simple_list(question.choice_items, class: 'ps-3 my-2'))
-    = f.labeled(:multiple_choices) do
-      %p.py-2
-        = question.multiple_choices ? icon(:check) : icon(:times)
-
+  = render "event/questions/derived_fields", f: f
 - else
   = f.labeled_input_field(:question, help: t('events.form.explain_choices'))
   = f.nested_fields_for(:choices, nil, question.deserialized_choices, {model_object: [Choice.new], link_to_add_title: t("event.questions.add_choice")}) do |choices_form|

@@ -9,7 +9,7 @@ module Dropdown
   class Base
     include Translatable
 
-    attr_accessor :template, :label, :main_link, :icon, :button_class
+    attr_accessor :template, :label, :main_link, :icon, :button_class, :button_group_class
     attr_reader :items
 
     delegate :content_tag, :link_to, :safe_join, to: :template
@@ -20,13 +20,14 @@ module Dropdown
       @icon = icon
       @main_link = nil
       @button_class = "btn btn-outline-primary btn-sm"
+      @button_group_class = "btn-group dropdown"
       @items = []
     end
 
     def to_s
       return "".html_safe if items.empty?
 
-      template.content_tag(:div, id: id, class: "btn-group dropdown") do
+      template.content_tag(:div, id: id, class: button_group_class) do
         render_dropdown_button + render_items
       end
     end

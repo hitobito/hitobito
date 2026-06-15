@@ -45,6 +45,8 @@ There are several workflows described:
 
 Select one of the workflows and state which one. If the AI driver objects to the used workflow, change without hesitation
 
+When a workflow references another workflow as a dependency, open and read both files before starting any work. Confirm which files you have read in your first response.
+
 # Contribution Guidelines
 
 If your contribution has been created with AI, please add the emoji "🤖" (:robot-face:) to commit-messages and pull-request titles and descriptions. This helps us categorize and fast-track the relevant contributions.

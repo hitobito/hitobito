@@ -4,4 +4,6 @@ This workflow should not change the functionality, but improve the internal stru
 
 Clarify the goal.
 
-Generally, the [development workflow](./development.md) applies. Read that file. New specs are optional with this workflow.
+Generally, the development workflow applies, read `./development.md` now.
+
+Check for obivious edge-cases that are missing in the specs related to the goal. Otherwise, new specs are optional.

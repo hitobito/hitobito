@@ -10,6 +10,7 @@ The bug fixing workflow aims to resolve an error of mostly unknown cause. It mig
 - Then add the implementation
 - Do not touch locales other than "de"
 - The spec should now be successful
-- Then, run `brakeman` to ensure no new security-problem have been added
+- Update the copyright-notice at the top to cover the current year
+- Then, run `brakeman` to ensure no new security-problems have been added
 - Lastly, run `rubocop` to ensure the code-style is good
 - Write a commit-message, summarizing the need for the change

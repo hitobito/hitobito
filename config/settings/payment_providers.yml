@@ -96,3 +96,15 @@ payment_providers:
     host_id: BCNEBICS
     encryption_hash: cf 96 84 cd 93 d9 77 79 d5 8d 52 db 81 bb d0 31 5f 1f 2d a6 97 ba a3 f1 ef 39 01 0a fd 95 E4 ec
     authentication_hash: 88 0d e9 4a 5b 7d 28 c9 23 66 96 9d df 4a a4 3c bf 74 F1 98 42 1a c8 76 78 03 be 71 ae c8 5a 2a
+
+  - name: bcv
+    url: ebics.bcv.ch/ebics.aspx
+    host_id: BCVDEBICS
+    encryption_hash: d0 d3 59 14 98 12 11 f5 7a 51 3c a5 56 f4 52 c4 80 12 41 34 09 98 b9 67 90 46 f5 f8 ed 71 e2 69
+    authentication_hash: 98 72 63 96 07 c5 72 7d 55 ad a4 b0 eb f5 39 56 0b d0 cd 3d 46 21 ac 23 43 ea db 8a 32 39 b6 02
+
+  - name: bcvs
+    url: https://ebics.swisscom.com/ebics-server/ebics.aspx
+    host_id: BCVSEBICS
+    encryption_hash: fe b2 5a cc 7a 8e d0 8c e2 42 ef de 5d 23 a9 7f 13 17 89 16 30 9e 4c 1b a7 a2 5a 7e 0c af 5d af
+    authentication_hash: 39 33 00 f9 24 52 9c 1d 7c 2d e6 72 2b 9b 54 dc f3 1e 3f fe 3f 5f 75 32 dc 52 29 64 a7 9a be cd

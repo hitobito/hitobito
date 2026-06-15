@@ -144,6 +144,14 @@ en:
           attributes:
             scopes:
               not_match_configured: "do not match the ones configured on the server"
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Please enter a name'
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
@@ -301,6 +309,9 @@ en:
       event/question:
         one: Anmeldeangabe
         other: Anmeldeangaben
+      event/question_template:
+        one: Vorlage Anmeldeangabe Anlässe
+        other: Vorlagen Anmeldeangaben Anlässe
       event/answer:
         one: Antwort auf Anmeldeangabe
         other: Antworten auf Anmeldeangaben
@@ -1259,8 +1270,8 @@ en:
         recipient_email: Recipient e-mail
         recipient_company_name: Company name
         recipient_name: Name
-        recipient_first_name: First name
-        recipient_last_name: Last name
+        recipient_first_name: Vorname
+        recipient_last_name: Nachname
         recipient_address_care_of: additional address line
         recipient_postbox: P.O. Box
         recipient_country: Country

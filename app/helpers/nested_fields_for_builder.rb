@@ -48,33 +48,32 @@ class NestedFieldsForBuilder
     end
   end
 
-  def prefix
+  def stimulus_controller_prefix
     stimulus_controller.gsub("--", "__").tr("-", "_")
   end
 
   def stimulus_controller_data
-    p = prefix
+    p = stimulus_controller_prefix
     {controller: stimulus_controller, "#{p}_assoc_value": assoc, "#{p}_limit_value": limit}
   end
 
   def fields_body(&block)
-    p = prefix
     content_tag(:div, id: "#{assoc}_fields") do
       fields_for(assoc, record_object) do |fields|
         content_tag(:div, class: "fields", style: ("display: none" if fields.object._destroy)) do
           render_block_or_partial(fields, partial_name, &block)
         end
-      end.to_s.html_safe + content_tag(:div, nil, data: {"#{p}_target": "target"})
+      end.to_s.html_safe + content_tag(:div, nil,
+        data: {"#{stimulus_controller_prefix}_target": "target"})
     end
   end
 
   def new_record_template(partial_name, model_object: nil, target: "template",
     &block)
-    p = prefix
     # Use a unique placeholder that includes the association name to avoid
     # collision when this template is nested inside another template
     placeholder = "NEW_#{assoc.to_s.upcase}_RECORD"
-    content_tag(:template, data: {"#{p}_target": target}) do
+    content_tag(:template, data: {"#{stimulus_controller_prefix}_target": target}) do
       content_tag(:div, class: "fields", data: {new_record: true}) do
         record = model_object || options[:model_object] ||
           object.class.reflect_on_association(assoc)&.klass&.new

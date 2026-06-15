@@ -375,5 +375,5 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "brakeman_version": "8.0.4"
+  "brakeman_version": "8.0.5"
 }

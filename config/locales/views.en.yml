@@ -1251,6 +1251,21 @@ en:
     create:
       flash:
         success: Payment of %{amount}has been registered.
+    actions_index:
+      export: "Export (CSV)"
+    table:
+      number_of_payments_shown:
+        one: "%{count} Zahlung angezeigt."
+        other: "%{count} Zahlungen angezeigt."
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    filter:
+      from: Von
+      to: Bis
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    history:
+      payed: "%{amount} bezahlt (%{source})"
 
   period_invoice_templates:
     invoice_runs:
@@ -1505,6 +1520,7 @@ en:
     invoices: "Invoices"
     invoices/single: "Individual invoices"
     invoices/evaluations: "Buchungsbeleg"
+    payments: "Zahlungseingänge"
 
   notes:
     new_note: Add note

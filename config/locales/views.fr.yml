@@ -1279,6 +1279,22 @@ fr:
     create:
       flash:
         success: La facture supérieur à %{amount} saisie.
+    actions_index:
+      export: "Export (CSV)"
+    table:
+      number_of_payments_shown:
+        one: "%{count} Zahlung angezeigt."
+        many: "%{count} Zahlungen angezeigt."
+        other: "%{count} Zahlungen angezeigt."
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    filter:
+      from: Von
+      to: Bis
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    history:
+      payed: "%{amount} bezahlt (%{source})"
 
   period_invoice_templates:
     invoice_runs:
@@ -1542,6 +1558,7 @@ fr:
     invoices: "Factures"
     invoices/single: "Factures individuelles"
     invoices/evaluations: "Pièce comptable"
+    payments: "Zahlungseingänge"
 
   notes:
     new_note: Ajouter une note

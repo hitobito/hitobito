@@ -1489,6 +1489,11 @@ it:
         status: Stato
         payee_person_name: Nome del debitore
         payee_person_address: Indirizzo del debitore
+        statuses:
+          ebics_imported: "EBICS"
+          xml_imported: "CAMT"
+          manually_created: "Manuell"
+          without_invoice: "ohne Rechnung"
 
       payment_reminder:
         invoice: Fattura

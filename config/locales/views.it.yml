@@ -1277,6 +1277,22 @@ it:
     create:
       flash:
         success: Pagamento sopra i %{amount} è stato registrato
+    actions_index:
+      export: "Export (CSV)"
+    table:
+      number_of_payments_shown:
+        one: "%{count} Zahlung angezeigt."
+        many: "%{count} Zahlungen angezeigt."
+        other: "%{count} Zahlungen angezeigt."
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    filter:
+      from: Von
+      to: Bis
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    history:
+      payed: "%{amount} bezahlt (%{source})"
 
   period_invoice_templates:
     invoice_runs:
@@ -1540,6 +1556,7 @@ it:
     invoices: "Fatture"
     invoices/single: "Singole fatture"
     invoices/evaluations: "Estratto conto"
+    payments: "Zahlungseingänge"
 
   notes:
     new_note: Nuova nota

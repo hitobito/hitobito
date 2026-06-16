@@ -19,8 +19,8 @@
   - t.col(Invoice.human_attribute_name(:sequence_number)) { |payment| payment.invoice.sequence_number }
   - t.col(t.sort_header(:invoice_amount, Invoice.human_attribute_name(:total)), class: 'right') { |p| p.decorate.invoice_amount }
   - t.col(t.sort_header(:amount), class: 'right') { |p| p.decorate.amount }
-  - t.col(t.sort_header(:invoice_due_at, Invoice.human_attribute_name(:due_at))) { |p| p.decorate.invoice_due_at }
-  - t.col(t.sort_header(:received_at)) { |p| p.decorate.received_at }
+  - t.col(t.sort_header(:invoice_due_at, Invoice.human_attribute_name(:due_at))) { |p| f(p.decorate.invoice_due_at) }
+  - t.col(t.sort_header(:received_at)) { |p| f(p.decorate.received_at) }
   - t.col(t.sort_header(:invoice_status, t('.invoice_status'))) { |p| p.decorate.invoice_status }
   - t.col(t.sort_header(:status, t('.payment_status'))) { |p| p.decorate.status }
 

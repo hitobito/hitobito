@@ -198,7 +198,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       LEFT JOIN groups ON groups.id = invoices.recipient_id AND invoices.recipient_type = 'Group'
     SQL
     scope = scope.standalone unless parents.any?(InvoiceRun)
-    scope = scope.page(params[:page]) if params[:ids].blank?
+    scope = scope.page(params[:page]) if html_request? && params[:ids].blank?
     Invoice::Filter.new(params.merge(filter_params)).apply(scope).with_recipients
   end
 

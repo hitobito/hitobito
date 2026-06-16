@@ -26,28 +26,58 @@ describe Contactables::InvoicesController do
     end
   end
 
-  context "top leader without finance permission in layer" do
-    before do
-      sign_in(top_leader)
-    end
-
-    it "may index person invoices but has empty list" do
-      get :index, params: {group_id: group.id, person_id: top_leader.id}
-      expect(assigns(:invoices)).to be_empty
-    end
-  end
-
   context "top leader" do
-    before { sign_in(top_leader) }
+    let(:acting_user) { people(:top_leader) }
 
-    it "may view page but sees no invoices" do
-      get :index, params: {group_id: group.id, person_id: top_leader.id}
-      expect(assigns(:invoices)).to be_empty
+    before { sign_in(acting_user) }
+
+    context "without finance permission in layer" do
+      context "for oneself" do
+        it "may list invoices" do
+          get :index, params: {group_id: group.id, person_id: top_leader.id}
+          expect(assigns(:invoices)).to match_array invoices(:invoice, :sent)
+        end
+      end
+
+      context "for managed" do
+        let(:acting_user) do
+          Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)).person.tap do |u|
+            u.manageds << top_leader
+            u.save!
+          end
+        end
+
+        it "may list invoices" do
+          get :index, params: {group_id: group.id, person_id: top_leader.id}
+          expect(assigns(:invoices)).to match_array invoices(:invoice, :sent)
+        end
+      end
+
+      context "for other person" do
+        let(:acting_user) do
+          Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)).person
+        end
+
+        it "may view page but see no invoices" do
+          get :index, params: {group_id: group.id, person_id: top_leader.id}
+          expect(assigns(:invoices)).to be_empty
+        end
+      end
     end
 
     context "with finance permission in layer in which invoices have been created" do
+      let(:acting_user) do
+        Fabricate(Group::BottomLayer::Member.sti_name, group: groups(:bottom_layer_one)).person
+      end
+      let(:group) { groups(:bottom_layer_one) }
+
       before do
-        Fabricate(Group::BottomLayer::Member.sti_name, group: groups(:bottom_layer_one), person: top_leader)
+        Fabricate(Group::BottomLayer::Member.sti_name, group:, person: top_leader)
+      end
+
+      it "may index person invoices sent from own layer" do
+        get :index, params: {group_id: group.id, person_id: top_leader.id}
+        expect(assigns(:invoices)).to match_array invoices(:invoice, :sent)
       end
 
       it "may index person invoices" do
@@ -55,9 +85,24 @@ describe Contactables::InvoicesController do
         expect(assigns(:invoices)).to match_array invoices(:invoice, :sent)
       end
 
-      it "may index group invoices" do
-        get :index, params: {group_id: group.id}
-        expect(assigns(:invoices)).to match_array(invoices(:group_invoice))
+      context "group invoices" do
+        let!(:group_invoice) { Fabricate(:invoice, group: groups(:top_layer), recipient: group) }
+
+        it "may index but not see invoice originating from other layer" do
+          get :index, params: {group_id: group.id}
+          expect(assigns(:invoices)).to be_empty
+        end
+
+        context "with finance permission in originating layer" do
+          before do
+            Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: acting_user)
+          end
+
+          it "may index" do
+            get :index, params: {group_id: group.id}
+            expect(assigns(:invoices)).to match_array([group_invoice])
+          end
+        end
       end
 
       it "may sort invoices by state" do

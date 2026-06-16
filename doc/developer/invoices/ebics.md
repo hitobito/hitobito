@@ -14,7 +14,7 @@ The Gem gets wrapped inside the `app/domain/payment_provider.rb` class.
 
 ### Settings
 
-To setup the bank connection, the payment provider (= bank) needs to be registered inside `config/settings.yml`
+To setup the bank connection, the payment provider (= bank) needs to be registered inside `config/settings/payment_providers.yml` and the label must be translated under the key `de.activerecord.attributes.payment_provider_config.payment_providers.#{bank}`.
 
 The key `payment_providers` contains an array, where payment providers can be inserted as hashes with the following keys:
 

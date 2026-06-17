@@ -61,7 +61,10 @@ module Export::Pdf::Passes::Sections
 
     def render_qr
       qr_code = Passes::VerificationQrCode.new(@pass_decorator).generate
-      qr_image = qr_code.as_png.to_blob
+      qr_image = qr_code.as_png(fill: "ffffff00", border_modules: 5).to_blob
+
+      @pdf.fill_color "ffffff"
+      @pdf.fill_rounded_rectangle(qr_position, QR_SIZE, QR_SIZE, QR_CORNER_RADIUS)
 
       @pdf.image(StringIO.new(qr_image),
         at: qr_position,

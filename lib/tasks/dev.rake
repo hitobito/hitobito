@@ -291,6 +291,12 @@ namespace :dev do
         content_type: "image/png"
       )
 
+      definition.public_send(:"logo_secondary_#{I18n.locale}").attach(
+        io: Rails.root.join("spec", "fixtures", "files", "logo-secondary.png").open,
+        filename: "secondary.png",
+        content_type: "image/png"
+      )
+
       definition.save!
 
       puts "Created PassDefinition ##{definition.id}: #{definition.name}"

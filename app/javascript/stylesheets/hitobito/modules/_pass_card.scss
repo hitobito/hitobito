@@ -127,6 +127,11 @@
     margin-top: auto;
   }
 
+  &-logo-secondary {
+    max-width: 50%;
+    max-height: 70px;
+  }
+
   &-validity {
     font-size: 0.75rem;
     color: var(--pass-text-muted, #666);

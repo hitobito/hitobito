@@ -22,6 +22,8 @@
     = render_extensions :pass_details, locals: { pass: pass }
 
   .pass-card-footer
+    - if pass.secondary_logo_path.present?
+      = image_tag pass.secondary_logo_path, class: 'pass-card-logo-secondary'
     .pass-card-validity
       - if pass.valid_until.present?
         %span

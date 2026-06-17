@@ -6,7 +6,7 @@
 module Export::Pdf::Passes::Sections
   # Renders the front side of the pass card.
   # Displays the pass header with logo and title, member information
-  # including photo and member number, and validity dates.
+  # including member number, validity date and secondary logo.
   # Uses adaptive text colors based on the background color luminance.
   class CardFront
     include Concerns::LogoRenderer
@@ -31,6 +31,7 @@ module Export::Pdf::Passes::Sections
     NAME_SPACING = 6.mm
     VALIDITY_HEIGHT = 8.mm
     VALIDITY_FONT_SIZE = 6
+    SECONDARY_LOGO_HEIGHT = 15.mm
 
     def initialize(pdf, pass_decorator, card_layout)
       @pdf = pdf
@@ -49,13 +50,17 @@ module Export::Pdf::Passes::Sections
       calculate_content_bounds
       render_header
       render_member_info
+      render_secondary_logo
       render_validity_info
+      render_secondary_logo
     end
 
     def calculate_content_bounds
       @inner_width = @card_layout.card_width - (2 * CARD_PADDING)
       @content_x = @card_layout.front_x + CARD_PADDING
       @content_top = @card_layout.card_y - CARD_PADDING
+      @secondary_logo_width = @inner_width / 2
+      @validity_width = @inner_width / 2
     end
 
     def render_header
@@ -122,6 +127,22 @@ module Export::Pdf::Passes::Sections
       end
     end
 
+    def render_secondary_logo
+      y = @card_layout.card_y - @card_layout.card_height + CARD_PADDING + SECONDARY_LOGO_HEIGHT
+
+      @pdf.bounding_box([@content_x, y], width: @secondary_logo_width,
+        height: SECONDARY_LOGO_HEIGHT) do
+        attachment = @pass_decorator.logo_secondary(@pass_decorator.person.language)
+        logo_data = attachment&.variant(format: :png)&.processed&.download
+        return unless logo_data
+
+        @pdf.image(StringIO.new(logo_data),
+          fit: [@secondary_logo_width, SECONDARY_LOGO_HEIGHT],
+          position: :left,
+          vposition: :bottom)
+      end
+    end
+
     def render_validity_info
       return if @pass_decorator.valid_until.blank?
 
@@ -131,8 +152,8 @@ module Export::Pdf::Passes::Sections
 
       with_color(@pass_decorator.text_colors[:muted]) do
         @pdf.text_box validity_line,
-          at: [@content_x + (@inner_width / 2), footer_y],
-          width: @inner_width / 2,
+          at: [@content_x + @secondary_logo_width, footer_y],
+          width: @validity_width,
           height: VALIDITY_HEIGHT,
           size: VALIDITY_FONT_SIZE,
           align: :right,

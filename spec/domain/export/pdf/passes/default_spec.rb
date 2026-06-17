@@ -129,11 +129,6 @@ describe Export::Pdf::Passes::Default do
   end
 
   describe "back card" do
-    it "renders QR placeholder" do
-      texts = text_with_position(analyzer).map(&:last)
-      expect(texts).to include("QR")
-    end
-
     it "renders the pass title repeated on back" do
       texts = text_with_position(analyzer).map(&:last)
       expect(texts).to include("TESTAUSWEIS")

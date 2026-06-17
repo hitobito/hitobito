@@ -16,13 +16,8 @@ module Export::Pdf::Passes::Sections
 
     # Layout constants
     HEADER_HEIGHT = 12.mm
-    FOOTER_OFFSET = 10.mm
+    FOOTER_OFFSET = 2.mm
     LOGO_SPACING = 2.mm
-
-    # Photo dimensions
-    PHOTO_WIDTH = 12.mm
-    PHOTO_HEIGHT = 16.mm
-    PHOTO_SPACING = 2.mm
 
     # Text box dimensions
     TITLE_HEIGHT = 9.mm
@@ -80,26 +75,12 @@ module Export::Pdf::Passes::Sections
 
     def render_member_info
       body_y = @content_top - HEADER_HEIGHT
-      photo_width = render_photo(@content_x, body_y)
 
-      info_x = @content_x + ((photo_width > 0) ? photo_width + PHOTO_SPACING : 0)
-      info_width = @inner_width - ((photo_width > 0) ? photo_width + PHOTO_SPACING : 0)
+      info_x = @content_x
+      info_width = @inner_width
 
       render_member_name(info_x, body_y, info_width)
       render_member_number(info_x, body_y - NAME_SPACING, info_width)
-    end
-
-    def render_photo(x, y)
-      return 0 unless @pass_decorator.person.picture.attached?
-
-      @pass_decorator.person.picture.blob.open do |photo_file|
-        @pdf.image(photo_file,
-          at: [x, y],
-          fit: [PHOTO_WIDTH, PHOTO_HEIGHT])
-      end
-      PHOTO_WIDTH
-    rescue StandardError
-      0
     end
 
     def render_member_name(x, y, width)
@@ -142,32 +123,21 @@ module Export::Pdf::Passes::Sections
     end
 
     def render_validity_info
-      validity_lines = build_validity_lines
-      return if validity_lines.empty?
+      return if @pass_decorator.valid_until.blank?
 
+      label = I18n.t("activerecord.attributes.pass.valid_until")
+      validity_line = "#{label} #{I18n.l(@pass_decorator.valid_until)}"
       footer_y = @card_layout.card_y - @card_layout.card_height + CARD_PADDING + FOOTER_OFFSET
 
       with_color(@pass_decorator.text_colors[:muted]) do
-        @pdf.text_box validity_lines.join("\n"),
-          at: [@content_x, footer_y],
-          width: @inner_width,
+        @pdf.text_box validity_line,
+          at: [@content_x + (@inner_width / 2), footer_y],
+          width: @inner_width / 2,
           height: VALIDITY_HEIGHT,
           size: VALIDITY_FONT_SIZE,
+          align: :right,
           overflow: :shrink_to_fit
       end
-    end
-
-    def build_validity_lines
-      lines = []
-      if @pass_decorator.valid_from.present?
-        label = I18n.t("activerecord.attributes.pass.valid_from")
-        lines << "#{label} #{I18n.l(@pass_decorator.valid_from)}"
-      end
-      if @pass_decorator.valid_until.present?
-        label = I18n.t("activerecord.attributes.pass.valid_until")
-        lines << "#{label} #{I18n.l(@pass_decorator.valid_until)}"
-      end
-      lines
     end
 
     def card_position

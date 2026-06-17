@@ -13,9 +13,6 @@
 
   .pass-card-body
     .pass-card-person-row
-      - if person.picture.attached?
-        .pass-card-photo
-          = image_tag upload_url(person, :picture, size: '72x96'), alt: person.full_name
       .pass-card-person-info
         %p.pass-card-member-name= pass.member_name
         .pass-card-member-number
@@ -26,10 +23,6 @@
 
   .pass-card-footer
     .pass-card-validity
-      - if pass.valid_from.present?
-        %span
-          = Pass.human_attribute_name(:valid_from)
-          = l(pass.valid_from)
       - if pass.valid_until.present?
         %span
           = Pass.human_attribute_name(:valid_until)

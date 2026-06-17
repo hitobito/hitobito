@@ -157,13 +157,12 @@ describe Export::Pdf::Passes::Default do
       # Create a pass grant and role so the Pass PORO computes validity
       grant = Fabricate(:pass_grant, pass_definition: pass_definition, grantor: groups(:top_group))
       grant.role_types = [Group::TopGroup::Leader.sti_name]
+      pass.update!(valid_until: Date.new(2026, 1, 1))
     end
 
-    it "renders valid_from when present" do
+    it "renders valid_until when present" do
       texts = text_with_position(analyzer).map(&:last)
-      # The valid_from is computed from person's role start_on;
-      # top_leader has a Leader role, so the text should include the valid_from label
-      expect(texts).to include(a_string_matching(/#{I18n.t("activerecord.attributes.pass.valid_from")}/))
+      expect(texts).to include(a_string_matching(/#{I18n.t("activerecord.attributes.pass.valid_until")}/))
     end
   end
 

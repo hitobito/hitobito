@@ -122,7 +122,7 @@
   &-footer {
     padding: 0.5rem 1.25rem 0.75rem;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: flex-end;
     margin-top: auto;
   }
@@ -130,6 +130,8 @@
   &-validity {
     font-size: 0.75rem;
     color: var(--pass-text-muted, #666);
+    flex-grow: 1;
+    text-align: right;
 
     span {
       display: block;

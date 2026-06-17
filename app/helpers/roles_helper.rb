@@ -73,6 +73,12 @@ module RolesHelper
     options.merge(selected: selected)
   end
 
+  def roles_type_options(group, entry)
+    GroupDecorator.decorate(group)
+      .possible_roles(person: entry.person)
+      .map { [_1.label, _1.sti_name] }
+  end
+
   def terminate_role_link(role)
     Roles::TerminateRoleLink.new(role, self).render
   end

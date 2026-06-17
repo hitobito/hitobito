@@ -11,6 +11,10 @@ describe :admin_left_nav, js: true do
   context "SelfRegistrationReason" do
     let(:path) { label_formats_path }
 
+    before do
+      allow(FeatureGate).to receive(:enabled?).and_return(false)
+    end
+
     context "with necessary ability" do
       before { sign_in(people(:root)) }
 

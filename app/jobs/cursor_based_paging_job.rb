@@ -90,7 +90,7 @@ class CursorBasedPagingJob < BaseJob
     HitobitoLogEntry.create!(
       level: :info,
       category: log_category,
-      message: format(progress_message, percent)
+      message: format(progress_message, percent, processed_count + processing_count, total)
     )
   end
 

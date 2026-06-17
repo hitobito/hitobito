@@ -39,7 +39,7 @@ describe "FieldVisibility Stimulus Controller", js: true do
     stub_form_with do
       <<~HTML
         <div data-controller="#{ctrl}"
-             data-#{ctrl}-dependent-id-value="my-checkbox"
+             data-#{ctrl}-observed-field-id-value="my-checkbox"
              data-#{ctrl}-show-when-value="1">
           <label for="my-checkbox">Toggle me</label>
           <input type="checkbox" id="my-checkbox" value="1">
@@ -59,7 +59,7 @@ describe "FieldVisibility Stimulus Controller", js: true do
     stub_form_with do
       <<~HTML
         <div data-controller="#{ctrl}"
-             data-#{ctrl}-dependent-id-value="my-select"
+             data-#{ctrl}-observed-field-id-value="my-select"
              data-#{ctrl}-show-when-value="option2">
           <label for="my-select">Pick one</label>
           <select id="my-select">
@@ -83,7 +83,7 @@ describe "FieldVisibility Stimulus Controller", js: true do
     stub_form_with do
       <<~HTML
         <div data-controller="#{ctrl}"
-             data-#{ctrl}-dependent-id-value="radio-group"
+             data-#{ctrl}-observed-field-id-value="radio-group"
              data-#{ctrl}-show-when-value="2">
           <div id="radio-group">
             <label><input type="radio" name="choice" value="1"> Radio 1</label>
@@ -108,7 +108,7 @@ describe "FieldVisibility Stimulus Controller", js: true do
     stub_form_with do
       <<~HTML
         <div data-controller="#{ctrl}"
-             data-#{ctrl}-dependent-id-value="my-select"
+             data-#{ctrl}-observed-field-id-value="my-select"
              data-#{ctrl}-show-when-data-value="highlight">
           <label for="my-select">Pick one</label>
           <select id="my-select">
@@ -132,7 +132,7 @@ describe "FieldVisibility Stimulus Controller", js: true do
     stub_form_with do
       <<~HTML
         <div data-controller="#{ctrl}"
-             data-#{ctrl}-dependent-id-value="radio-group"
+             data-#{ctrl}-observed-field-id-value="radio-group"
              data-#{ctrl}-show-when-data-value="highlight">
           <div id="radio-group">
             <label><input type="radio" name="choice" value="1"> Radio 1</label>
@@ -151,13 +151,13 @@ describe "FieldVisibility Stimulus Controller", js: true do
     expect(page).not_to have_css "h1", text: "hi there"
   end
 
-  it "clears input values when container is hidden with clearInputs" do
+  it "clears input values when container is hidden with clearContainerInputsOnHide" do
     stub_form_with do
       <<~HTML
         <div data-controller="#{ctrl}"
-             data-#{ctrl}-dependent-id-value="my-checkbox"
+             data-#{ctrl}-observed-field-id-value="my-checkbox"
              data-#{ctrl}-show-when-value="1"
-             data-#{ctrl}-clear-inputs-value="true">
+             data-#{ctrl}-clear-container-inputs-on-hide-value="true">
           <label for="my-checkbox">Toggle me</label>
           <input type="checkbox" id="my-checkbox" value="1">
           <div data-#{ctrl}-target="container" class="hidden">

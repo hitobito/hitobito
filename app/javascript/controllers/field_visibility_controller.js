@@ -7,11 +7,11 @@
  * Shows or hides a container target based on another field's value.
  *
  * Values:
- *   dependentId: ID of the field to watch for changes
+ *   observedFieldId: ID of the field to watch for changes
  *   showWhen: Value to check for to show the container (Can be used for inputs, selects or checkboxes)
  *   showWhenPresent: Show whenever the field has any non-empty value
  *   showWhenData: Read a data attribute from the triggering element and show when it is true
- *   clearInputs: Clears the values of the inputs when container is hidden
+ *   clearContainerInputsOnHide: Clears the values of the inputs when container is hidden
  *
  */
 
@@ -21,15 +21,15 @@ export default class extends Controller {
   static targets = ["container"];
 
   static values = {
-    dependentId: String,
+    observedFieldId: String,
     showWhen: String,
     showWhenPresent: { type: Boolean, default: false },
     showWhenData: String,
-    clearInputs: { type: Boolean, default: false },
+    clearContainerInputsOnHide: { type: Boolean, default: false },
   };
 
   connect() {
-    this.dependent = document.getElementById(this.dependentIdValue);
+    this.dependent = document.getElementById(this.observedFieldIdValue);
     if (!this.dependent) return;
 
     this.dependent.addEventListener("change", this.handleChange);
@@ -60,7 +60,7 @@ export default class extends Controller {
 
   hide() {
     this.containerTarget.classList.add("hidden");
-    if (this.clearInputsValue) this.clear();
+    if (this.clearContainerInputsOnHideValue) this.clear();
   }
 
   clear() {

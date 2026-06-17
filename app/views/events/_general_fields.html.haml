@@ -28,7 +28,7 @@
   = f.labeled_input_fields(*entry.used_attributes(:motto, :cost))
 
   - entry.used?(:contact_id) do
-    %div{data: { controller: 'field-visibility', "field-visibility-dependent-id-value": "event_contact", "field-visibility-show-when-present-value": "true" }}
+    %div{data: { controller: 'field-visibility', "field-visibility-observed-field-id-value": "event_contact", "field-visibility-show-when-present-value": "true" }}
       = f.labeled_person_field :contact
       %div{data: { 'field-visibility-target': 'container' }, class: entry.contact_id ? "" : "hidden"}
         = f.labeled_boolean_field :notify_contact_on_participations,

@@ -10,8 +10,8 @@
 .pass-card-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 1.5rem 0;
+  overflow-x: scroll;
 }
 
 .pass-card-sides {
@@ -190,12 +190,5 @@
   .pass-card-sides {
     flex-direction: column;
     align-items: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .pass-card {
-    width: 100%;
-    max-width: 420px;
   }
 }

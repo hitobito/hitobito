@@ -193,3 +193,21 @@
     align-items: center;
   }
 }
+
+@media (max-width: 460px) {
+  .pass-card-wrapper {
+    padding: 0;
+    transform: scale(0.8);
+    transform-origin: top left;
+    width: 125%;
+  }
+}
+
+@media (max-width: 380px) {
+  .pass-card-wrapper {
+    padding: 0;
+    transform: scale(calc(2/3));
+    transform-origin: top left;
+    width: 150%;
+  }
+}

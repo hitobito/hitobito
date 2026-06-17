@@ -16,21 +16,21 @@ module Export::Pdf::Passes::Sections
 
     # Layout constants
     HEADER_HEIGHT = 12.mm
-    FOOTER_OFFSET = 2.mm
+    FOOTER_OFFSET = 4.mm
     LOGO_SPACING = 2.mm
 
     # Text box dimensions
     TITLE_HEIGHT = 9.mm
     TITLE_FONT_SIZE = 9
-    NAME_HEIGHT = 5.mm
-    NAME_FONT_SIZE = 10
-    MEMBER_NUMBER_LABEL_HEIGHT = 3.mm
-    MEMBER_NUMBER_LABEL_FONT_SIZE = 5
+    NAME_HEIGHT = 6.mm
+    NAME_FONT_SIZE = 11
+    MEMBER_NUMBER_LABEL_HEIGHT = 3.5.mm
+    MEMBER_NUMBER_LABEL_FONT_SIZE = 7
     MEMBER_NUMBER_VALUE_HEIGHT = 4.mm
     MEMBER_NUMBER_VALUE_FONT_SIZE = 8
-    NAME_SPACING = 6.mm
+    NAME_SPACING = 7.mm
     VALIDITY_HEIGHT = 8.mm
-    VALIDITY_FONT_SIZE = 6
+    VALIDITY_FONT_SIZE = 7
     SECONDARY_LOGO_HEIGHT = 15.mm
 
     def initialize(pdf, pass_decorator, card_layout)

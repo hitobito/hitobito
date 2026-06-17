@@ -16,22 +16,19 @@ module Export::Pdf::Passes::Sections
     # QR code dimensions
     QR_SIZE = 30.mm
     QR_STROKE_WIDTH = 1
-    QR_TOP_OFFSET = 6.mm
+    QR_TOP_OFFSET = 8.mm
     QR_CORNER_RADIUS = 2.mm
-    QR_LABEL_OFFSET = 2.mm
-    QR_LABEL_HEIGHT = 4.mm
-    QR_LABEL_FONT_SIZE = 8
 
     # Description dimensions
-    DESCRIPTION_OFFSET = 3.mm
+    DESCRIPTION_OFFSET = 2.mm
     DESCRIPTION_HEIGHT = 8.mm
-    DESCRIPTION_FONT_SIZE = 6
+    DESCRIPTION_FONT_SIZE = 7
 
     # Title dimensions
-    TITLE_BOTTOM_OFFSET = 4.mm
+    TITLE_BOTTOM_OFFSET = 5.mm
     TITLE_SPACING = 5.mm
     TITLE_HEIGHT = 4.mm
-    TITLE_FONT_SIZE = 5
+    TITLE_FONT_SIZE = 7
 
     def initialize(pdf, pass_decorator, card_layout)
       @pdf = pdf

@@ -25,6 +25,7 @@
   // Credit card aspect ratio ~85.6mm × 53.98mm ≈ 1.586:1
   width: 420px;
   min-height: 265px;
+  padding: 1.25rem;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
@@ -32,11 +33,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
   // --- Front side ---
 
   &-header {
-    padding: 1rem 1.25rem 0.5rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -55,11 +56,6 @@
     max-width: 100px;
     object-fit: contain;
     flex-shrink: 0;
-  }
-
-  &-body {
-    padding: 0 1.25rem 0.5rem;
-    flex: 1;
   }
 
   &-person-row {
@@ -120,11 +116,9 @@
   }
 
   &-footer {
-    padding: 0.5rem 1.25rem 0.75rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: auto;
   }
 
   &-logo-secondary {
@@ -155,16 +149,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 1.25rem;
+    justify-content: space-between;
     text-align: center;
     height: 100%;
     width: 100%;
+    padding: 1rem 0;
   }
 
   &-qr {
-    width: 120px;
-    height: 120px;
+    width: 147px;
+    height: 147px;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 8px;
     display: flex;

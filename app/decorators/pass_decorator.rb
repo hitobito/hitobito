@@ -21,7 +21,7 @@ class PassDecorator < ApplicationDecorator
   end
 
   def logo_path
-    attachment = definition.logo_icon(person.language)
+    attachment = definition.logo_banner(person.language)
     return nil unless attachment&.attached?
     helpers.url_for(attachment)
   end

@@ -1533,6 +1533,8 @@ it:
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise
+          bcv: Banque Cantonale Vaudoise
+          bcvs: Walliser Kantonalbank
 
       period_invoice_template:
         name: Denominazione

@@ -1448,6 +1448,8 @@ en:
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Neuenburger Kantonalbank
+          bcv: Banque Cantonale Vaudoise
+          bcvs: Walliser Kantonalbank
 
       period_invoice_template:
         name: Description

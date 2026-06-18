@@ -78,6 +78,12 @@ Rails/FilePath:
 Rails/HelperInstanceVariable:
   Enabled: false
 
+# Disabled because belongs_to_required_by_default is set to false in config/application.rb
+# Therefore, belongs_to associations are not automatically validated and explicit presence
+# validation is required.
+Rails/RedundantPresenceValidationOnBelongsTo:
+  Enabled: false
+
 Rails/SkipsModelValidations:
   Exclude:
     - spec/**/*

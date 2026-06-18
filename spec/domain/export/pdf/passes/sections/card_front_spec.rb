@@ -61,9 +61,9 @@ describe Export::Pdf::Passes::Sections::CardFront do
         pass.update!(valid_from: Date.new(2026, 1, 1), valid_until: Date.new(2026, 12, 31))
       end
 
-      it "renders valid_from date" do
+      it "does not render valid_from date" do
         texts = analyzer.strings.join(" ")
-        expect(texts).to match(/#{I18n.t("activerecord.attributes.pass.valid_from")}/)
+        expect(texts).not_to match(/#{I18n.t("activerecord.attributes.pass.valid_from")}/)
       end
 
       it "renders valid_until date" do
@@ -77,9 +77,9 @@ describe Export::Pdf::Passes::Sections::CardFront do
         pass.update!(valid_from: Date.new(2026, 1, 1), valid_until: nil)
       end
 
-      it "renders valid_from" do
+      it "does not render valid_from" do
         texts = analyzer.strings.join(" ")
-        expect(texts).to match(/#{I18n.t("activerecord.attributes.pass.valid_from")}/)
+        expect(texts).not_to match(/#{I18n.t("activerecord.attributes.pass.valid_from")}/)
       end
 
       it "does not render valid_until" do

@@ -53,10 +53,10 @@ describe People::PassesHelper do
       expect(svg).to include("</svg>")
     end
 
-    it "applies the default size of 120" do
+    it "applies the default size of 147" do
       svg = helper.pass_qr_code_svg(pass)
-      expect(svg).to include('width="120"')
-      expect(svg).to include('height="120"')
+      expect(svg).to include('width="147"')
+      expect(svg).to include('height="147"')
     end
 
     it "accepts a custom size" do

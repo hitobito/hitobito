@@ -5,7 +5,7 @@
 
 module Export::Pdf::Passes::Sections
   # Renders the back side of the pass card.
-  # Displays a QR code placeholder, the pass description (if present),
+  # Displays a QR code, the pass description (if present),
   # and the pass title in uppercase.
   # Uses adaptive text colors based on the background color luminance.
   class CardBack
@@ -14,24 +14,21 @@ module Export::Pdf::Passes::Sections
     CARD_PADDING = 4.mm
 
     # QR code dimensions
-    QR_SIZE = 25.mm
+    QR_SIZE = 30.mm
     QR_STROKE_WIDTH = 1
-    QR_TOP_OFFSET = 6.mm
+    QR_TOP_OFFSET = 8.mm
     QR_CORNER_RADIUS = 2.mm
-    QR_LABEL_OFFSET = 2.mm
-    QR_LABEL_HEIGHT = 4.mm
-    QR_LABEL_FONT_SIZE = 8
 
     # Description dimensions
-    DESCRIPTION_OFFSET = 3.mm
+    DESCRIPTION_OFFSET = 2.mm
     DESCRIPTION_HEIGHT = 8.mm
-    DESCRIPTION_FONT_SIZE = 6
+    DESCRIPTION_FONT_SIZE = 7
 
     # Title dimensions
-    TITLE_BOTTOM_OFFSET = 4.mm
+    TITLE_BOTTOM_OFFSET = 5.mm
     TITLE_SPACING = 5.mm
     TITLE_HEIGHT = 4.mm
-    TITLE_FONT_SIZE = 5
+    TITLE_FONT_SIZE = 7
 
     def initialize(pdf, pass_decorator, card_layout)
       @pdf = pdf
@@ -48,7 +45,7 @@ module Export::Pdf::Passes::Sections
 
     def render_content
       calculate_content_bounds
-      render_qr_placeholder
+      render_qr
       render_description
       render_title
     end
@@ -59,43 +56,23 @@ module Export::Pdf::Passes::Sections
       @center_x = @card_layout.back_x + (@card_layout.card_width / 2)
     end
 
-    def render_qr_placeholder
-      qr_x = @center_x - (QR_SIZE / 2)
-      @qr_y = @card_layout.card_y - QR_TOP_OFFSET
+    def render_qr
+      qr_code = Passes::VerificationQrCode.new(@pass_decorator).generate
+      qr_image = qr_code.as_png(fill: "ffffff00", border_modules: 5).to_blob
 
-      draw_qr_background(qr_x)
-      draw_qr_border(qr_x)
-      draw_qr_label(qr_x)
-    end
+      @pdf.fill_color "ffffff"
+      @pdf.fill_rounded_rectangle(qr_position, QR_SIZE, QR_SIZE, QR_CORNER_RADIUS)
 
-    def draw_qr_background(qr_x)
-      with_color(@pass_decorator.text_colors[:text]) do
-        @pdf.fill_rounded_rectangle([qr_x, @qr_y], QR_SIZE, QR_SIZE, QR_CORNER_RADIUS)
-      end
-    end
-
-    def draw_qr_border(qr_x)
-      @pdf.stroke_color @pass_decorator.text_colors[:muted]
-      @pdf.line_width = QR_STROKE_WIDTH
-      @pdf.stroke_rounded_rectangle([qr_x, @qr_y], QR_SIZE, QR_SIZE, QR_CORNER_RADIUS)
-      @pdf.stroke_color "000000"
-    end
-
-    def draw_qr_label(qr_x)
-      with_color(@pass_decorator.text_colors[:label]) do
-        @pdf.text_box "QR",
-          at: [qr_x, @qr_y - (QR_SIZE / 2) + QR_LABEL_OFFSET],
-          width: QR_SIZE,
-          height: QR_LABEL_HEIGHT,
-          size: QR_LABEL_FONT_SIZE,
-          align: :center
-      end
+      @pdf.image(StringIO.new(qr_image),
+        at: qr_position,
+        width: QR_SIZE,
+        height: QR_SIZE)
     end
 
     def render_description
       return if @pass_decorator.description.blank?
 
-      desc_y = @qr_y - QR_SIZE - DESCRIPTION_OFFSET
+      desc_y = qr_y_position - QR_SIZE - DESCRIPTION_OFFSET
 
       with_color(@pass_decorator.text_colors[:muted]) do
         @pdf.text_box @pass_decorator.description,
@@ -106,6 +83,18 @@ module Export::Pdf::Passes::Sections
           align: :center,
           overflow: :shrink_to_fit
       end
+    end
+
+    def qr_position
+      [qr_x_position, qr_y_position]
+    end
+
+    def qr_x_position
+      @center_x - (QR_SIZE / 2)
+    end
+
+    def qr_y_position
+      @card_layout.card_y - QR_TOP_OFFSET
     end
 
     def render_title

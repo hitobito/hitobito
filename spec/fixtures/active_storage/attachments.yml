@@ -14,3 +14,8 @@ top_layer_pass_logo_banner:
   name: logo_banner_de
   record: top_layer_pass (PassDefinition)
   blob: top_layer_pass_logo_banner_blob
+
+top_layer_pass_logo_secondary:
+  name: logo_secondary_de
+  record: top_layer_pass (PassDefinition)
+  blob: top_layer_pass_logo_secondary_blob

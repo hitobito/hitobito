@@ -5,7 +5,8 @@
 
 class PassDecorator < ApplicationDecorator
   delegate :member_number, :member_name, to: :wallet_data_provider
-  delegate :name, :description, :background_color, :logo_icon, :logo_banner, to: :definition
+  delegate :name, :description, :background_color, :logo_icon, :logo_banner, :logo_secondary,
+    to: :definition
   decorates :pass
 
   def definition = pass_definition
@@ -21,7 +22,13 @@ class PassDecorator < ApplicationDecorator
   end
 
   def logo_path
-    attachment = definition.logo_icon(person.language)
+    attachment = definition.logo_banner(person.language)
+    return nil unless attachment&.attached?
+    helpers.url_for(attachment)
+  end
+
+  def secondary_logo_path
+    attachment = definition.logo_secondary(person.language)
     return nil unless attachment&.attached?
     helpers.url_for(attachment)
   end

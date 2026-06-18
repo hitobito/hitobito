@@ -21,7 +21,7 @@ information is available as log entries.
 Swiss Post returns a status code (QSTAT) for each person in the result file.
 See the [Swiss Post QSTAT documentation](https://www.post.ch/-/media/portal-opp/pm/dokumente/merkblatt-status-qstat-shortreport.pdf?sc_lang=de&hash=ABCBEDD36A9D36BE68B0ACCAFAED702B) for the full reference.
 
-If a person get's one of the LOGGINGS_QSTATS, a log entry will be created and the person receives a tag with the corresponding QSTAT code and a timestamp.
+If a person gets one of the LOGGINGS_QSTATS, a log entry will be created and the person receives a tag with the corresponding QSTAT code and a timestamp.
 
 ## Excluded Tags
 

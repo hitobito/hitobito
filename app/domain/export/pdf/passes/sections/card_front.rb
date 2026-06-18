@@ -52,7 +52,6 @@ module Export::Pdf::Passes::Sections
       render_member_info
       render_secondary_logo
       render_validity_info
-      render_secondary_logo
     end
 
     def calculate_content_bounds

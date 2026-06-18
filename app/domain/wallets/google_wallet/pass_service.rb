@@ -60,7 +60,12 @@ module Wallets
       # Currently always :generic. Event ticket support planned for future phase.
       def pass_type = :generic
 
-      def id_prefix = [config.issuer_id, "hitobito", id_prefix_addition&.call].compact.join(".")
+      def id_prefix = [
+        config.issuer_id,
+        "hitobito",
+        Settings.application.stage,
+        id_prefix_addition&.call
+      ].compact.join(".")
 
       # Identifies the pass template shared by all holders of the same PassDefinition.
       def class_id

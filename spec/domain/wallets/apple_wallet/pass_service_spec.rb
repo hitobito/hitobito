@@ -66,12 +66,12 @@ describe Wallets::AppleWallet::PassService do
     end
 
     it "contains serialNumber from pass_installation.wallet_identifier" do
-      expect(data[:serialNumber]).to eq("hitobito.#{installation.id}")
+      expect(data[:serialNumber]).to eq("hitobito.test.#{installation.id}")
     end
 
     it "contains serialNumber contains custom prefix if set" do
       described_class.id_prefix_addition = -> { :test }
-      expect(data[:serialNumber]).to eq("hitobito.test.#{installation.id}")
+      expect(data[:serialNumber]).to eq("hitobito.test.test.#{installation.id}")
     end
 
     it "contains teamIdentifier from Config" do

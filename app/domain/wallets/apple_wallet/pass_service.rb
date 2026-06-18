@@ -165,10 +165,11 @@ module Wallets
         "#{Settings.application.protocol}://#{Settings.application.hostname}#{WEB_SERVICE_PATH}"
       end
 
-      # In a multi-tenant environment (multiple instances sharing the same
-      # pass_type_identifier), the wagon must override this method to include a
-      # tenant-specific identifier to ensure global uniqueness of serial numbers.
-      def id_prefix = ["hitobito", id_prefix_addition&.call].compact.join(".")
+      def id_prefix = [
+        "hitobito",
+        Settings.application.stage,
+        id_prefix_addition&.call
+      ].compact.join(".")
 
       def barcode
         {

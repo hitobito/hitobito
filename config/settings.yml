@@ -8,6 +8,7 @@
 
 application:
   name: hitobito  # set same name in email.sender and email.mass_recipient
+  stage: <%= ENV.fetch('HITOBITO_STAGE', Rails.env) %>
   logo:
     image: logo.png # put under app/assets/images
     height: 30 # pixel, has to bet set as the logo is a background image,

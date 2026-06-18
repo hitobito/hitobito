@@ -12,7 +12,7 @@ module Synchronize::Addresses::SwissPost
     LOG_CATEGORY = "cleanup"
 
     FILE_PATH = Rails.root.join("config", "post-address-sync.yml")
-    KEYS = %w[host path username password query_key batch_key
+    KEYS = %w[host path username password batch_key
       person_constraints role_types excluded_tags].freeze
 
     BATCH_WITH_STATS = "eirene_maintenance_v2_L"

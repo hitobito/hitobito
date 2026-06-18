@@ -182,7 +182,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
 
     recipients = invoices.map(&:recipient).compact
     pdf = Export::Pdf::Labels.new(find_and_remember_label_format).generate(recipients)
-    send_data pdf, type: :pdf, disposition: "inline"
+    send_data pdf, type: :pdf, disposition: "attachment"
   rescue Prawn::Errors::CannotFit
     redirect_back(fallback_location: group_invoices_path(group), alert: t("people.pdf.cannot_fit"))
   end

@@ -24,7 +24,7 @@ class AppStatus::Truemail < AppStatus
   end
 
   def code
-    @truemail_working ? :ok : :service_unavailable
+    @truemail_working ? AppStatus::OK : AppStatus::SERVICE_UNAVAILABLE
   end
 
   private

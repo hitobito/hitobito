@@ -1138,4 +1138,30 @@ describe Person do
       expect(person.needs_web_socket_connection?).to be_falsy
     end
   end
+
+  describe "#remove_address_sync_excluded_tags" do
+    let(:person) { people(:top_leader) }
+    let(:excluded_tag) { ActsAsTaggableOn::Tag.find_or_create_by!(name: "excluded") }
+
+    before do
+      allow(FeatureGate).to receive(:enabled?).and_return(true)
+      allow(Synchronize::Addresses::SwissPost::Config).to receive(:exist?).and_return(true)
+      allow(Synchronize::Addresses::SwissPost::Config).to receive(:excluded_tags).and_return([excluded_tag.name])
+      person.tags << excluded_tag
+    end
+
+    it "removes excluded tags when a relevant address field changes" do
+      expect { person.update!(last_name: "Newname") }.to change { person.tags.reload.count }.by(-1)
+    end
+
+    it "does not remove excluded tags when some other field changes" do
+      expect { person.update!(nickname: "nick") }.not_to change { person.tags.reload.count }
+    end
+
+    it "does not remove excluded tags when address_sync feature is disabled" do
+      allow(FeatureGate).to receive(:enabled?).with("address_sync").and_return(false)
+
+      expect { person.update!(last_name: "Newname") }.not_to change { person.tags.reload.count }
+    end
+  end
 end

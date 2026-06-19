@@ -8,7 +8,10 @@ require "spec_helper"
 describe :dashboard do
   let(:user) { people(:top_leader) }
 
-  before { sign_in(user) }
+  before do
+    allow(FeatureGate).to receive(:enabled?).and_return(false)
+    sign_in(user)
+  end
 
   describe "/dashboard" do
     before do

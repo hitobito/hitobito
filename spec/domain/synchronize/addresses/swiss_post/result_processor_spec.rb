@@ -176,6 +176,7 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
 
   describe "ignored updates" do
     [
+      ["25", "info", "Verstorben / Firma erloschen"],
       ["26", "info", "Umzug ins Ausland"],
       ["27", "info", "Unbekannt weggezogen"],
       ["50", "warn", "Person an Adresse nicht bekannt"],
@@ -189,6 +190,17 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
         end.to change { HitobitoLogEntry.count }
           .and not_change { top_leader.reload.attributes }
         expect(log_entry).to have_attributes(log_entry_attrs.merge(message:, level:))
+      end
+
+      it "creates tag with qstat #{qstat} and timestamp" do
+        travel_to(Time.zone.local(2021, 5, 24)) do
+          expect do
+            process_with do |data|
+              data.entries.last["QSTAT"] = qstat
+            end
+          end.to change { top_leader.tags.count }.by(1)
+          expect(top_leader.tags.last.name).to eq "Post_Adressenabgleich_QSTAT_#{qstat}_20210524"
+        end
       end
     end
   end

@@ -146,6 +146,18 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # Configure which Person attributes can be used to identify a person for login.
   class_attribute :devise_login_id_attrs, default: [:email]
 
+  class_attribute :address_sync_relevant_fields, default: %w[
+    last_name
+    first_name
+    address_care_of
+    street
+    housenumber
+    postbox
+    zip_code
+    town
+    country
+  ]
+
   # define devise before other modules
   devise :database_authenticatable,
     :lockable,
@@ -321,6 +333,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
   after_save :update_household_address
+  after_save :remove_address_sync_excluded_tags, if: :address_sync_fields_changed?
 
   ### SCOPES
 
@@ -572,6 +585,20 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  def address_sync_fields_changed?
+    FeatureGate.enabled?("address_sync") &&
+      (address_sync_relevant_fields & saved_changes.keys).any?
+  end
+
+  def remove_address_sync_excluded_tags
+    return unless Synchronize::Addresses::SwissPost::Config.exist?
+
+    excluded_tags = Synchronize::Addresses::SwissPost::Config.excluded_tags
+    return if excluded_tags.blank?
+
+    tags.where(name: excluded_tags).destroy_all
+  end
 
   def override_blank_email
     self.email = nil if email.blank?

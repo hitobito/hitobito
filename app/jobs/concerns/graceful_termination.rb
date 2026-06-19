@@ -12,36 +12,19 @@ module GracefulTermination
   #   include GracefulTermination
   #
   #   def perform
-  #     handle_termination_signals do
-  #        many.times do
-  #           check_terminated!
+  #     many.times do
+  #       check_terminated!
   #
-  #           perform_work ...
-  #        end
+  #       perform_work ...
   #     end
   #   end
-  #
+  # end
+
+  def should_terminate_with_signal!(signal)
+    @signal = signal
+  end
 
   private
-
-  def handle_termination_signals
-    handle_termination_signal("INT") do
-      handle_termination_signal("TERM") do
-        yield
-      end
-    end
-  end
-
-  def handle_termination_signal(signal)
-    @signal = nil
-    old_handler = trap(signal) do
-      @signal = signal
-      old_handler.call
-    end
-    yield
-  ensure
-    trap(signal, old_handler)
-  end
 
   def check_terminated!
     raise SignalException.new(@signal) if @signal

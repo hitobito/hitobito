@@ -15,6 +15,11 @@ runs:
     - name: 'Set up Ruby'
       uses: ruby/setup-ruby@v1
 
+    - name: 'Configure Bundler'
+      run: |
+        bundle config set --local path 'vendor/bundle'
+      shell: bash
+
     - name: Read .tool-versions
       uses: marocchino/tool-versions-action@v1
       id: readToolVersions
@@ -47,7 +52,6 @@ runs:
 
     - name: 'Bundle install'
       run: |
-        bundle config set path 'vendor/bundle'
         bundle install --jobs 4 --retry 3
       shell: bash
 

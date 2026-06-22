@@ -59,6 +59,10 @@ jobs:
         with:
           working-directory: hitobito
 
+      - name: 'Configure Bundler'
+        run: |
+          bundle config set --local path 'vendor/bundle'
+
       - name: 'Set up Node'
         uses: actions/setup-node@v6
         with:
@@ -106,7 +110,7 @@ jobs:
       - name: 'Bundle install core'
         working-directory: hitobito
         run: |
-          bundle install --jobs 4 --retry 3 --path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: 'Make changes to Gemfile.lock transparent'
         working-directory: hitobito
@@ -119,7 +123,7 @@ jobs:
 #          for d in $hitobito_dir/../hitobito_*; do
 #            cd $d
 #            cp -v $hitobito_dir/Gemfile.lock ./
-#            bundle install --jobs 4 --retry 3 --path vendor/bundle
+#            bundle install --jobs 4 --retry 3
 #          done
 
       - uses: actions/cache@v5

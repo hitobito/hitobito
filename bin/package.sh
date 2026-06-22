@@ -56,7 +56,10 @@ mv -f config/rpm/Wagonfile .
 
 # install gems
 rsync -a ../shared/bundle vendor/
-bundle install --path vendor/bundle --clean --without $BUNDLE_WITHOUT
+bundle config set --local path 'vendor/bundle'
+bundle config set --local clean true
+bundle config set --local without "$BUNDLE_WITHOUT"
+bundle install
 rsync -a --delete vendor/bundle ../shared/
 
 # fix gem shebangs

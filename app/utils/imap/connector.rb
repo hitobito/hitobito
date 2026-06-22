@@ -33,7 +33,7 @@ class Imap::Connector
   def fetch_mails(mailbox, page: 1, per_page: 25)
     perform do
       select_mailbox(mailbox)
-      all_uids = @imap.uid_search(["ALL"])
+      all_uids = fetch_all_uids
       return {mails: [], total_count: 0} if all_uids.empty?
 
       all_uids.sort!.reverse!
@@ -86,6 +86,10 @@ class Imap::Connector
 
     fetch_data = @imap.uid_fetch(page_uids, attributes)
     fetch_data.blank? ? [] : fetch_data.map { |mail| Imap::Mail.build(mail) }.sort
+  end
+
+  def fetch_all_uids
+    @imap.uid_search(["ALL"])
   end
 
   def count(mailbox)

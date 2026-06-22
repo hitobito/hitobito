@@ -24,7 +24,7 @@ class AppStatus::Mail < AppStatus
   end
 
   def code
-    @catch_all_inbox.eql?(CATCH_ALL_INBOX_OK) ? :ok : :service_unavailable
+    @catch_all_inbox.eql?(CATCH_ALL_INBOX_OK) ? AppStatus::OK : AppStatus::SERVICE_UNAVAILABLE
   end
 
   private

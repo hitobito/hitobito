@@ -29,14 +29,19 @@ module AbilityDsl
     end
 
     def configs
-      @configs ||= load
+      load # ensure store is loaded
+      @configs
     end
 
     def load
+      return if @loaded
+
       @configs = {}
+      @attribute_configs = {}
       ability_classes.each do |ability_class|
         Recorder.new(self, ability_class).run
       end
+      @loaded = true
       @configs
     end
 
@@ -46,8 +51,21 @@ module AbilityDsl
       @configs[[config.permission, config.subject_class, config.action]] = config
     end
 
+    # Add an attribute-level permission config.
+    # Configs with the same permission, subject_class, action, and constraint are
+    # overwritten (last registered wins, allowing wagon overrides).
+    def add_attribute_config(config)
+      @attribute_configs[[config.permission, config.subject_class, config.action]] = config
+    end
+
     def config(permission, subject_class, action)
       configs[[permission, subject_class, action]]
+    end
+
+    # Find the attribute config matching a regular config's identity.
+    def attribute_config(permission, subject_class, action)
+      load # ensure store is loaded
+      (@attribute_configs || {})[[permission, subject_class, action]]
     end
 
     def ability_classes
@@ -59,6 +77,7 @@ module AbilityDsl
       AbilityDsl::Store.new.tap do |clone|
         clone.instance_variable_set(:@ability_classes, ability_classes)
         clone.instance_variable_set(:@configs, filtered_configs)
+        clone.instance_variable_set(:@attribute_configs, @attribute_configs)
       end
     end
   end

@@ -43,7 +43,7 @@ describe PersonalDocumentsController do
         personal_document: {
           person_id: bottom_member.id,
           file: Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "files", "images", "logo.png")),
-          personal_document_label_id: personal_document_label.id
+          label_id: personal_document_label.id
         }
       }
     end

@@ -8,7 +8,7 @@
 Fabricator(:personal_document) do
   person { Fabricate(:person) }
   author { Fabricate(:person) }
-  personal_document_label
+  label { Fabricate(:personal_document_label) }
   file do
     Rack::Test::UploadedFile.new(
       Rails.root.join("spec", "fixtures", "files", "images", "logo.png")

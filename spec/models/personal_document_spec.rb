@@ -6,9 +6,9 @@
 require "rails_helper"
 
 RSpec.describe PersonalDocument, type: :model do
-  let(:personal_document_label) { Fabricate(:personal_document_label, name: "Test Label") }
+  let(:label) { Fabricate(:personal_document_label, name: "Test Label") }
 
-  subject(:personal_document) { Fabricate(:personal_document, personal_document_label:) }
+  subject(:personal_document) { Fabricate(:personal_document, label:) }
 
   context "#to_s" do
     it "renders the label" do

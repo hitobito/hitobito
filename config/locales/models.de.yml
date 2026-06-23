@@ -659,8 +659,8 @@ de:
         file: Datei
         filename: Dateiname
         description: Beschreibung
-        personal_document_label_id: Label
-        personal_document_label: Label
+        label_id: Label
+        label: Label
         author_id: Erstellt von
         author: Erstellt von
         created_at: Erstellt am

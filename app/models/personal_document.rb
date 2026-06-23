@@ -5,7 +5,7 @@
 
 class PersonalDocument < ApplicationRecord
   belongs_to :person
-  belongs_to :personal_document_label
+  belongs_to :label, class_name: PersonalDocumentLabel.sti_name
   belongs_to :author, class_name: "Person"
   validates_by_schema
 
@@ -13,7 +13,7 @@ class PersonalDocument < ApplicationRecord
   validates :file, presence: true
 
   def to_s
-    personal_document_label&.to_s
+    label&.to_s
   end
 
   def filename

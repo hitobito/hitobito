@@ -1232,14 +1232,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_094113) do
 
   create_table "personal_documents", force: :cascade do |t|
     t.bigint "person_id", null: false
-    t.bigint "personal_document_label_id"
+    t.bigint "label_id"
     t.bigint "author_id", null: false
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_personal_documents_on_author_id"
+    t.index ["label_id"], name: "index_personal_documents_on_label_id"
     t.index ["person_id"], name: "index_personal_documents_on_person_id"
-    t.index ["personal_document_label_id"], name: "index_personal_documents_on_personal_document_label_id"
   end
 
   create_table "phone_numbers", id: :serial, force: :cascade do |t|

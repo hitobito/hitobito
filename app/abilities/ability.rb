@@ -32,7 +32,6 @@ class Ability
     PeopleManagerAbility,
     PersonAbility,
     Person::AddRequestAbility,
-    PersonalDocumentAbility,
     QualificationAbility,
     RoleAbility,
     SelfRegistrationReasonAbility,
@@ -40,6 +39,10 @@ class Ability
     SubscriptionAbility,
     TagAbility,
     VariousAbility
+
+  if FeatureGate.enabled? "personal_documents"
+    store.register PersonalDocumentAbility
+  end
 
   attr_reader :user_context
 

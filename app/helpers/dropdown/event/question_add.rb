@@ -49,7 +49,8 @@ module Dropdown
       end
 
       def init_items
-        ::Event::QuestionTemplate.applicable_to([group], event_type: event.type, admin:,
+        event_type = event.type.nil? ? "Event" : event.type
+        ::Event::QuestionTemplate.applicable_to([group], event_type:, admin:,
           default: [true, false]).each do |question_template|
           derived_question = question_template.derive_question
           add_item(question_template.to_s, "javascript:void(0)",

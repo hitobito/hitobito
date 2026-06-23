@@ -58,4 +58,72 @@ describe PersonalDocumentsController do
       )
     end
   end
+
+  context "without admin permission" do
+    before { sign_in(bottom_member) }
+
+    describe "GET #index" do
+      it "raises CanCan::AccessDenied when accessing another person's documents" do
+        expect do
+          get :index, params: {group_id: groups(:top_group).id, person_id: top_leader.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #show" do
+      let!(:other_document) { Fabricate(:personal_document, person: top_leader) }
+
+      it "raises CanCan::AccessDenied when accessing another person's document" do
+        expect do
+          get :show, params: {group_id: group.id, person_id: top_leader.id, id: other_document.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #new" do
+      it "raises CanCan::AccessDenied" do
+        expect do
+          get :new, params: {group_id: group.id, person_id: bottom_member.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "POST #create" do
+      it "raises CanCan::AccessDenied" do
+        expect do
+          post :create, params: {group_id: group.id, person_id: bottom_member.id, personal_document: {}}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #edit" do
+      let!(:document) { Fabricate(:personal_document, person: bottom_member) }
+
+      it "raises CanCan::AccessDenied" do
+        expect do
+          get :edit, params: {group_id: group.id, person_id: bottom_member.id, id: document.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "PATCH #update" do
+      let!(:document) { Fabricate(:personal_document, person: bottom_member) }
+
+      it "raises CanCan::AccessDenied" do
+        expect do
+          patch :update, params: {group_id: group.id, person_id: bottom_member.id, id: document.id, personal_document: {}}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "DELETE #destroy" do
+      let!(:document) { Fabricate(:personal_document, person: bottom_member) }
+
+      it "raises CanCan::AccessDenied" do
+        expect do
+          delete :destroy, params: {group_id: group.id, person_id: bottom_member.id, id: document.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 end

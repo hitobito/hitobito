@@ -7,4 +7,12 @@
 
 class PersonalDocumentLabelsController < CrudController
   self.permitted_attrs = [:name]
+
+  def create
+    super(location: index_path)
+  end
+
+  def update
+    super(location: index_path)
+  end
 end

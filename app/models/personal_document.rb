@@ -4,9 +4,10 @@
 # https://github.com/hitobito/hitobito
 
 class PersonalDocument < ApplicationRecord
-  belongs_to :person, optional: false
+  belongs_to :person
   belongs_to :personal_document_label
-  belongs_to :author, class_name: "Person", optional: false
+  belongs_to :author, class_name: "Person"
+  validates_by_schema
 
   has_one_attached :file
   validates :file, presence: true

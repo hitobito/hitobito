@@ -1471,8 +1471,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_094113) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "people", "self_registration_reasons"
-  add_foreign_key "personal_documents", "people"
-  add_foreign_key "personal_documents", "people", column: "author_id"
   add_foreign_key "subscription_tags", "subscriptions"
   add_foreign_key "subscription_tags", "tags"
 end

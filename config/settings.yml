@@ -312,4 +312,4 @@ app_status:
     limit_percentage: <%= ENV.fetch("MEMORY_USAGE_LIMIT_PERCENTAGE", 95).to_i %>
 
 personal_documents:
-  enabled: true
+  enabled: false

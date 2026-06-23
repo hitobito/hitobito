@@ -72,6 +72,19 @@ class PersonResource < ApplicationResource
 
   filter :updated_at, :datetime
 
+  filter :mailing_list_id, :integer, single: true do
+    eq do |scope, value|
+      next Person.none unless can?(:index, MailingList)
+      mailing_list = MailingList.find(value)
+      next Person.none unless can?(:show, mailing_list)
+      scope.where(id: MailingLists::Subscribers.new(mailing_list, Person.select(:id)).people)
+    end
+  end
+
+  def base_scope
+    super.includes(:picture_attachment)
+  end
+
   private
 
   def show_details?(model_instance)

@@ -189,7 +189,9 @@ Hitobito::Application.routes.draw do
         get "qualifications" => "qualifications#new" # route required for language switch
 
         resources :assignments, only: [:show, :edit, :update]
-        resources :personal_documents
+        FeatureGate.if("personal_documents") do
+          resources :personal_documents
+        end
         scope module: "person" do
           resources :assignments, only: [:index]
           resources :subscriptions, only: [:index, :create, :destroy]
@@ -464,7 +466,9 @@ Hitobito::Application.routes.draw do
     resources :job_observations, only: [:index] do
       get :download, on: :member
     end
-    resources :personal_document_labels
+    FeatureGate.if("personal_documents") do
+      resources :personal_document_labels
+    end
   end # scope locale
 
   get "/api", to: "json_api/documentation#index"

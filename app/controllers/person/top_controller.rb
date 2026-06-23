@@ -23,7 +23,9 @@ class Person::TopController < ApplicationController
     flash.keep if html_request?
     format = request.format.to_sym
     format = (format == :html) ? nil : format
-    redirect_to person_home_path(entry, format: format)
+    options = {format: format}
+    options[:token] = params[:token] if params[:token].present?
+    redirect_to person_home_path(entry, options)
   end
 
   def authorize_action

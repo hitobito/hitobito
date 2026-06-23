@@ -21,7 +21,9 @@ class Invoices::TopController < ApplicationController
 
   def redirect_to_group_invoice
     flash.keep if html_request?
-    redirect_to group_invoice_path(entry.group, entry, format: request.format.to_sym)
+    options = {format: request.format.to_sym}
+    options[:token] = params[:token] if params[:token].present?
+    redirect_to group_invoice_path(entry.group, entry, options)
   end
 
   def authorize_action

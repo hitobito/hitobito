@@ -102,6 +102,7 @@ describe Dropdown::Event::QuestionAdd do
     before do
       create_template("Matching event type")
       create_template("Non-matching event type", event_type: "Event::Camp")
+      create_template("Default STI type event", event_type: "Event")
     end
 
     it "renders templates with matching event type" do
@@ -110,6 +111,16 @@ describe Dropdown::Event::QuestionAdd do
 
     it "does not render templates with non-matching event type" do
       is_expected.not_to have_link("Non-matching event type")
+    end
+
+    context "base event" do
+      let(:event) { events(:top_event) }
+
+      # Default sti types have type nil, nil for question templates are for "All" events
+      # it should render the templates with type "Event" for base sti type events
+      it "renders templates for default sti event types" do
+        is_expected.to have_link("Default STI type event")
+      end
     end
   end
 

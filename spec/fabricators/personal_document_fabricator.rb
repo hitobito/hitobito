@@ -11,7 +11,7 @@ Fabricator(:personal_document) do
   personal_document_label
   file do
     Rack::Test::UploadedFile.new(
-      File.open(Rails.root.join("spec", "fixtures", "files", "images", "logo.png"))
+      Rails.root.join("spec", "fixtures", "files", "images", "logo.png")
     )
   end
 end

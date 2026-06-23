@@ -16,4 +16,8 @@ class PersonalDocumentAbility < AbilityDsl::Base
   on(PersonalDocumentLabel) do
     permission(:admin).may(:manage).all
   end
+
+  def person
+    subject.person
+  end
 end

@@ -52,7 +52,7 @@ describe :admin_left_nav, js: true do
     context "with necessary ability" do
       before { sign_in(people(:root)) }
 
-      it "is visible if self registration is enabled" do
+      it "is visible if personal documents are enabled" do
         allow(FeatureGate).to receive(:enabled?).with("personal_documents").and_return(true)
         visit path
         expect(page.find("nav#page-navigation")).to have_link(href: personal_document_labels_path)
@@ -62,13 +62,13 @@ describe :admin_left_nav, js: true do
     context "without necessary ability" do
       before { sign_in(people(:bottom_member)) }
 
-      it "is not visible if self registration is enabled" do
+      it "is not visible if personal documents are enabled" do
         allow(FeatureGate).to receive(:enabled?).with("personal_documents").and_return(true)
         visit path
         expect(page.find("nav#page-navigation")).to have_no_link(href: personal_document_labels_path)
       end
 
-      it "is not visible if self registration is disabled" do
+      it "is not visible if personal documents are disabled" do
         allow(FeatureGate).to receive(:enabled?).with("personal_documents").and_return(false)
         visit path
         expect(page.find("nav#page-navigation")).to have_no_link(href: personal_document_labels_path)

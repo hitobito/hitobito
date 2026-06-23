@@ -3,9 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= info_field_set_tag do
+= field_set_tag(nil, {class: "info"}) do
   = render 'contactable/address_fields', f: f
-
 
   = render_extensions :address_fields, locals: { f: f }
 

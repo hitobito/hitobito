@@ -1,3 +1,5 @@
+- title @person.to_s
+
 = crud_table do |t|
   - t.col(PersonalDocument.human_attribute_name :file) do |e|
     = link_to icon(:download), e.file, target: '_blank'

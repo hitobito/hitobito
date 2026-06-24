@@ -22,6 +22,7 @@
 - Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
 - Vorlagen für Anmeldeangaben und Administrationsangaben können neu bei allen Arten von Anlässen im Erstellungs- und Editierformular eingebunden und verwendet werden (hitobito_sac_cas#2344)
 - Die Banken Banque Cantonale Vaudoise und Walliser Kantonalbank wurden als Ebics Zahlungsschnittstellen hinzugefügt (#4265)
+- Beim Adressabgleich mit der Schweizer Post werden für Postfächer neu PLZ und Ort des Postfachs übernommen (hitobito_sac_cas#2536)
 
 ## Version 2.9
 

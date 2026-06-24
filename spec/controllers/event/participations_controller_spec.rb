@@ -75,6 +75,14 @@ describe Event::ParticipationsController do
       expect(assigns(:participations)).to eq [@leader, @participant]
     end
 
+    it "does not return ambiguous records when ordering by role" do
+      allow(Settings.people).to receive_messages(default_sort: "role")
+      @leader.roles.create!(type: Event::Role::Participant)
+
+      get :index, params: {group_id: group.id, event_id: course.id}
+      expect(assigns(:participations).count).to eq 2
+    end
+
     it "lists only leader_group" do
       get :index, params: {group_id: group.id, event_id: course.id, filters: {participant_type: :teamers}}
       expect(assigns(:participations)).to eq [@leader]

@@ -189,10 +189,10 @@ Hitobito::Application.routes.draw do
         get "qualifications" => "qualifications#new" # route required for language switch
 
         resources :assignments, only: [:show, :edit, :update]
-        FeatureGate.if("personal_documents") do
-          resources :personal_documents
-        end
         scope module: "person" do
+          FeatureGate.if("personal_documents") do
+            resources :personal_documents
+          end
           resources :assignments, only: [:index]
           resources :subscriptions, only: [:index, :create, :destroy]
           post "tags" => "tags#create"

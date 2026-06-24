@@ -5,7 +5,7 @@
 
 class PersonalDocument < ApplicationRecord
   belongs_to :person
-  belongs_to :label, class_name: PersonalDocumentLabel.sti_name
+  belongs_to :label, class_name: "PersonalDocumentLabel"
   belongs_to :author, class_name: "Person"
   validates_by_schema
 

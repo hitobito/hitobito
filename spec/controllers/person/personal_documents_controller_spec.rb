@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe PersonalDocumentsController do
+describe Person::PersonalDocumentsController do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
   let(:group) { bottom_member.groups.first }
@@ -111,7 +111,8 @@ describe PersonalDocumentsController do
 
       it "raises CanCan::AccessDenied" do
         expect do
-          patch :update, params: {group_id: group.id, person_id: bottom_member.id, id: document.id, personal_document: {}}
+          patch :update,
+            params: {group_id: group.id, person_id: bottom_member.id, id: document.id, personal_document: {}}
         end.to raise_error(CanCan::AccessDenied)
       end
     end

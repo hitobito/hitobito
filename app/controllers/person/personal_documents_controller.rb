@@ -5,7 +5,7 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito
 
-class PersonalDocumentsController < CrudController
+class Person::PersonalDocumentsController < CrudController
   self.nesting = Group, Person
   self.permitted_attrs = [:file, :label_id, :description]
 

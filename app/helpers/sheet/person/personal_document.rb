@@ -6,7 +6,9 @@
 # https://github.com/hitobito/hitobito
 
 module Sheet
-  class PersonalDocument < Base
-    self.parent_sheet = Sheet::Person
+  class Person < Base
+    class PersonalDocument < Base
+      self.parent_sheet = Sheet::Person
+    end
   end
 end

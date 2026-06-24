@@ -970,11 +970,11 @@ fr:
         question: Question
         choices: Réponses possibles
         multiple_choices: Sélection multiple
-        required: Obligatorisch
+        required: Obligatoire
         sensitive: Sensible
 
       event/question_template:
-        question: Frage
+        question: Question
         default: Default
         event_type: Anlasstyp
         inherit: Vererbung
@@ -1011,9 +1011,9 @@ fr:
       pass_definition:
         name: Name
         description: Beschreibung
-        owner: Besitzer
-        template_key: Vorlage
-        background_color: Hintergrundfarbe
+        owner: Propriétaire
+        template_key: modèle
+        background_color: couleur d'arrière-plan
 
       pass_grant:
         pass_definition: Pass-Definition
@@ -1022,14 +1022,14 @@ fr:
 
       pass:
         member_name: Mitgliedsname
-        member_number: Mitgliedsnummer
+        member_number: Numéro de membre
         person: Person
         pass_definition: Pass-Definition
         state: Status
-        valid_from: Gültig von
-        valid_until: Gültig bis
+        valid_from: Valable à partir de
+        valid_until: Valable jusqu'au
         states:
-          eligible: Gültig
+          eligible: valable
           ended: Abgelaufen
           revoked: Widerrufen
 
@@ -1044,8 +1044,8 @@ fr:
 
       wallets/apple_wallet/device_registration:
         pass_installation: Pass-Installation
-        device_library_identifier: Geräte-ID
-        push_token: Push-Token
+        device_library_identifier: Identifiant de l'appareil
+        push_token: Token push
 
       oauth/application:
         cors_origins: Serveur avec accès via API
@@ -1253,9 +1253,9 @@ fr:
         recipient_count: Nombre de destinataires
         success_count: Réception réussie
         failed_count: Échec de l'envoi
-        sent_at: Verarbeitet am
+        sent_at: Traité le
         recipient_progress: Progression du traitement
-        recipients: Empfänger/in(nen)
+        recipients: Destinataire·s
 
       message/letter:
         body: Contenu
@@ -1493,8 +1493,8 @@ fr:
         statuses:
           ebics_imported: "EBICS"
           xml_imported: "CAMT"
-          manually_created: "Manuell"
-          without_invoice: "ohne Rechnung"
+          manually_created: "manuell"
+          without_invoice: "sans facture"
 
       payment_reminder:
         invoice: Facture
@@ -1535,7 +1535,7 @@ fr:
           ukb: 'Urner Kantonalbank '
           bcn: Banque Cantonale Neuchâteloise
           bcv: Banque Cantonale Vaudoise
-          bcvs: Walliser Kantonalbank
+          bcvs: Banque Cantonale du Valais
 
       period_invoice_template:
         name: Désignation
@@ -1587,27 +1587,27 @@ fr:
         excluded_calendar_tags: Tags exclues
 
       job_observation:
-        started_at: Startzeitpunkt
-        finished_at: Endzeitpunkt
-        attempts: Versuche
+        started_at: Heure de début
+        finished_at: Heure de fin
+        attempts: Essais
         statuses:
-          planned: In der Warteschlange
-          in_progress: In Bearbeitung
-          success: Erfolgreich abgeschlossen
-          error: Bei der Bearbeitung trat ein Fehler auf
+          planned: En file d'attente
+          in_progress: en cours de traitement
+          success: Terminé avec succès
+          error: Une erreur s'est produite lors du traitement
 
   delayed_job:
-    export/event_participations_export_job: Event-Teilnahmen-Export
-    export/events_export_job: Anlass-Export
-    export/export_base_job: Basis-Export
-    export/invitations_export_job: Einladungs-Export
-    export/invoices_job: Rechnungs-Export
-    export/labels_job: Etiketten-Export
-    export/message_job: Nachrichten-Export
-    export/payments_export_job: Zahlungs-Export
-    export/people_export_job: Personen-Export
-    export/subgroups_export_job: Untergruppen-Export
-    export/subscriptions_job: Abonnenten-Export
+    export/event_participations_export_job: Exportation des participations aux événements
+    export/events_export_job: Exportation d'événement
+    export/export_base_job: Exportation de base
+    export/invitations_export_job: Exportation des invitations
+    export/invoices_job: Exportation des factures
+    export/labels_job: Exportation d'étiquettes
+    export/message_job: Exportation des messages
+    export/payments_export_job: Exportation des paiements
+    export/people_export_job: Exportation des personnes
+    export/subgroups_export_job: Exportation des sous-groupes
+    export/subscriptions_job: Exportation des abonné·e·s
     mailchimp_synchronization_job: Mailchimp-Synchronisation
 
   api:

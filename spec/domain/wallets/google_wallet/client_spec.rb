@@ -217,7 +217,7 @@ describe Wallets::GoogleWallet::Client do
 
       expect {
         client.create_or_update_object({id: "bad"})
-      }.to raise_error(RestClient::BadRequest, "Invalid field value")
+      }.to raise_error(RestClient::BadRequest, "400 Bad Request\nInvalid field value")
     end
 
     it "handles non-JSON error bodies gracefully" do

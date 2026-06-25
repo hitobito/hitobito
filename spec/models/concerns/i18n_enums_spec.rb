@@ -62,6 +62,14 @@ describe I18nEnums do
     expect(Person.gender_labels).to eq(m: "männlich", w: "weiblich")
   end
 
+  it "has class side method to return nil label" do
+    expect(Person.gender_nil_label).to eq "unbekannt"
+  end
+
+  it "returns nil for nil label when _nil key is not defined" do
+    expect(Person.language_nil_label).to be_nil
+  end
+
   context "with i18n_prefix override" do
     before do
       clazz = Class.new(Person) do
@@ -103,6 +111,10 @@ describe I18nEnums do
 
     it "has class side method to return all labels" do
       expect(Individual.gender_identity_labels).to eq(m: "maskulin", w: "feminin")
+    end
+
+    it "has class side method to return nil label" do
+      expect(Individual.gender_identity_nil_label).to eq "undefiniert"
     end
   end
 

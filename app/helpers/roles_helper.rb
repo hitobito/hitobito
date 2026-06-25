@@ -76,6 +76,7 @@ module RolesHelper
   def roles_type_options(group, entry)
     GroupDecorator.decorate(group)
       .possible_roles(person: entry.person)
+      .select { |r| can?(:create, r.new(group:, person: entry.person)) }
       .map { [_1.label, _1.sti_name] }
   end
 

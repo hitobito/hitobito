@@ -88,9 +88,13 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
           data.entries.last["POTerm"] = ""
           data.entries.last["POBoxNo"] = 10
           data.entries.last["POBoxZIP"] = 1235
-          data.entries.last["POBoxTownName"] = "Greatesttown"
+          data.entries.last["POBoxTownName"] = "Greatesttown P.O."
+          data.entries.last["ZIPCode"] = 1236
+          data.entries.last["TownName"] = "Greatesttown"
         end
         expect(top_leader.reload.postbox).to be_nil
+        expect(top_leader.zip_code).to eq("1236")
+        expect(top_leader.town).to eq("Greatesttown")
       end
 
       it "resets postbox if POBoxTerm is blank" do
@@ -106,18 +110,26 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
           data.entries.last["POBoxTerm"] = "Postfach"
           data.entries.last["POBoxNo"] = 10
           data.entries.last["POBoxZIP"] = 1235
-          data.entries.last["POBoxTownName"] = "Greatesttown"
+          data.entries.last["POBoxTownName"] = "Greatesttown P.O."
+          data.entries.last["ZIPCode"] = 1236
+          data.entries.last["TownName"] = "Greatesttown"
         end
-        expect(top_leader.reload.postbox).to eq "Postfach 10 1235 Greatesttown"
+        expect(top_leader.reload.postbox).to eq "Postfach 10"
+        expect(top_leader.zip_code).to eq("1235")
+        expect(top_leader.town).to eq("Greatesttown P.O.")
       end
 
       it "falls back to person zip if POBoxZIP is blank" do
         process_with do |data|
           data.entries.last["POBoxTerm"] = "Postfach"
           data.entries.last["POBoxNo"] = 10
-          data.entries.last["POBoxTownName"] = "Greatesttown"
+          data.entries.last["POBoxTownName"] = "Greatesttown P.O."
+          data.entries.last["ZIPCode"] = 1236
+          data.entries.last["TownName"] = "Greatesttown"
         end
-        expect(top_leader.reload.postbox).to eq "Postfach 10 3456 Greatesttown"
+        expect(top_leader.reload.postbox).to eq "Postfach 10"
+        expect(top_leader.zip_code).to eq("1236")
+        expect(top_leader.town).to eq("Greatesttown P.O.")
       end
 
       it "falls back to person town if POBoxTownName is blank" do
@@ -125,14 +137,19 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
           data.entries.last["POBoxTerm"] = "Postfach"
           data.entries.last["POBoxNo"] = 10
         end
-        expect(top_leader.reload.postbox).to eq "Postfach 10 3456 Greattown"
+        expect(top_leader.reload.postbox).to eq "Postfach 10"
+        expect(top_leader.zip_code).to eq("3456")
+        expect(top_leader.town).to eq("Greattown")
       end
 
       it "handles blank POBoxNo" do
         process_with do |data|
           data.entries.last["POBoxTerm"] = "Postfach"
+          data.entries.last["POBoxTownName"] = "Greatesttown P.O."
         end
-        expect(top_leader.reload.postbox).to eq "Postfach 3456 Greattown"
+        expect(top_leader.reload.postbox).to eq "Postfach"
+        expect(top_leader.zip_code).to eq("3456")
+        expect(top_leader.town).to eq("Greatesttown P.O.")
       end
     end
 

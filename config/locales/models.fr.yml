@@ -1608,7 +1608,7 @@ fr:
     export/people_export_job: Exportation des personnes
     export/subgroups_export_job: Exportation des sous-groupes
     export/subscriptions_job: Exportation des abonné·e·s
-    mailchimp_synchronization_job: Mailchimp-Synchronisation
+    mailchimp_synchronization_job: Synchronisation Mailchimp
 
   api:
     errors:

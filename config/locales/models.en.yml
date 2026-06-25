@@ -1501,28 +1501,28 @@ en:
         excluded_calendar_tags: Excluded tags
 
       job_observation:
-        started_at: Startzeitpunkt
-        finished_at: Endzeitpunkt
-        attempts: Versuche
+        started_at: Start time
+        finished_at: End Time
+        attempts: Attempts
         statuses:
-          planned: In der Warteschlange
-          in_progress: In Bearbeitung
-          success: Erfolgreich abgeschlossen
-          error: Bei der Bearbeitung trat ein Fehler auf
+          planned: Planned
+          in_progress: In progress
+          success: Successfully completed
+          error: An error occurred during processing
 
   delayed_job:
-    export/event_participations_export_job: Event-Teilnahmen-Export
-    export/events_export_job: Anlass-Export
-    export/export_base_job: Basis-Export
-    export/invitations_export_job: Einladungs-Export
-    export/invoices_job: Rechnungs-Export
-    export/labels_job: Etiketten-Export
-    export/message_job: Nachrichten-Export
-    export/payments_export_job: Zahlungs-Export
-    export/people_export_job: Personen-Export
-    export/subgroups_export_job: Untergruppen-Export
-    export/subscriptions_job: Abonnenten-Export
-    mailchimp_synchronization_job: Mailchimp-Synchronisation
+    export/event_participations_export_job: Event participation export
+    export/events_export_job: Event export
+    export/export_base_job: Base export
+    export/invitations_export_job: Invitation export
+    export/invoices_job: Invoice export
+    export/labels_job: Label export
+    export/message_job: Message export
+    export/payments_export_job: Payment export
+    export/people_export_job: People export
+    export/subgroups_export_job: Subgroup export
+    export/subscriptions_job: Subscription export
+    mailchimp_synchronization_job: Mailchimp synchronisation
 
   api:
     errors:

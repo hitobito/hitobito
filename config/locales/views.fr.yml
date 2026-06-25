@@ -1359,7 +1359,7 @@ fr:
       end: "Terminer l'imitation"
 
   mailchimp_synchronizations:
-    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
+    wait_for_synchronization: "Vos données sont en cours d'envoi vers MailChimp. Cela peut prendre quelques instants. Une fois l'opération terminée, la liste sélectionnée sera mise à jour avec les contacts provenant de hitobito. Vous pouvez suivre l'état de la synchronisation dans l'aperçu des tâches : %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1558,7 +1558,7 @@ fr:
     invoices: "Factures"
     invoices/single: "Factures individuelles"
     invoices/evaluations: "Pièce comptable"
-    payments: "Zahlungseingänge"
+    payments: "Reçus de paiement"
 
   notes:
     new_note: Ajouter une note

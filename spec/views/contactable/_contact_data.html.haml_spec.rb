@@ -29,7 +29,7 @@ describe "contactable/_contact_data.html.haml" do
     end
   end
 
-  context "group.contact" do
+  context "group with assigned contact" do
     before do
       current_user.assign_attributes(street: "asdf", town: "fdas", zip_code: 321, country: "AT")
       group.contact = current_user
@@ -37,11 +37,10 @@ describe "contactable/_contact_data.html.haml" do
       render
     end
 
-    it "displays contact info" do
-      is_expected.to have_content("asdf")
-      is_expected.to have_content("fdas")
-      is_expected.to have_content("321")
-      is_expected.to have_content("Österreich")
+    it "displays group info not the contact info" do
+      is_expected.to have_content("foo")
+      is_expected.to have_content("bar")
+      is_expected.to have_content("123")
     end
   end
 end

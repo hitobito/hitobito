@@ -77,7 +77,7 @@ describe InvoiceMailer do
 
   describe :html_body do
     it "includes group address" do
-      expect(html).to match(/Absender: Bottom One, Greatstreet 345, 3456 Greattown/)
+      expect(html).to match(/Absender: Bottom One, 3000 Bern/)
     end
 
     it "lists pins items" do

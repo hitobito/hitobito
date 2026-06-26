@@ -19,8 +19,6 @@ module ContactableDecorator
   def complete_address # rubocop:disable Metrics/AbcSize
     html = "".html_safe
 
-    prepend_complete_address(html)
-
     html << address_care_of << br if address_care_of?
     html << model.address << br if model.address.present?
     html << postbox << br if postbox?
@@ -131,9 +129,6 @@ module ContactableDecorator
       html << country_label
     end
     html
-  end
-
-  def prepend_complete_address(_html)
   end
 
   def decorated_model

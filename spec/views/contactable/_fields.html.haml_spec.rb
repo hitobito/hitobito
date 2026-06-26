@@ -45,6 +45,6 @@ describe "contactable/_fields.html.haml" do
       render
     end
 
-    its([:style]) { should eq "display: none" }
+    its([:style]) { should be_blank }
   end
 end

@@ -34,6 +34,7 @@ describe PeriodInvoiceTemplates::InvoiceRunsController, js: true do
       p3 = Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two)).person
       p3.update!(street: "Greatstreet", zip_code: 8000, town: "Bern")
     end
+    groups(:bottom_layer_one).update!(street: "Greatstreet", zip_code: 3000, town: "Bern")
     groups(:bottom_layer_two).update!(street: "Greatstreet", zip_code: 8000, town: "Bern")
     invoice_configs(:top_layer).update!(currency: "EUR")
   end

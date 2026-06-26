@@ -26,6 +26,7 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
       Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two))
       Fabricate(Group::BottomLayer::LocalGuide.name, group: groups(:bottom_layer_two))
     end
+    groups(:bottom_layer_one).update!(street: "Greatstreet", zip_code: 3000, town: "Bern")
     groups(:bottom_layer_two).update!(street: "Greatstreet", zip_code: 8000, town: "Bern")
   end
 

@@ -939,7 +939,7 @@ it:
 
     statistics:
       people:
-        title: Personenstatistik
+        title: Statistiche sulle persone
       show:
         not_found: "Die angeforderte Statistik wurde nicht gefunden."
         not_available: "Diese Statistik ist für diese Gruppe nicht verfügbar."
@@ -1593,7 +1593,7 @@ it:
     description:
       header: File camt.054 XML
       explain_xml_format:
-        "Un file camt.954 XML è la"
+        "Un file XML camt.054 rappresenta la ripartizione delle registrazioni collettive e la notifica degli addebiti e degli accrediti. Esso contiene una serie di voci contabili diverse che vengono automaticamente assegnate alle fatture esistenti in base al numero ESR."
 
     invalid_file: Il documento caricato non è valido
     parsing_error: Il documento caricato non può essere elaborato (%{error})

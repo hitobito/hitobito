@@ -941,12 +941,12 @@ fr:
 
     statistics:
       people:
-        title: Personenstatistik
+        title: Statistiques sur les personnes
       show:
-        not_found: "Die angeforderte Statistik wurde nicht gefunden."
-        not_available: "Diese Statistik ist für diese Gruppe nicht verfügbar."
+        not_found: "Les statistiques demandées n'ont pas été trouvées."
+        not_available: "Cette statistique n'est pas disponible pour ce groupe."
       index:
-        none_available: "Auf dieser Gruppe sind keine Statistiken verfügbar."
+        none_available: "Aucune statistique n'est disponible pour ce groupe."
 
   groups:
     actions_show:
@@ -1283,9 +1283,9 @@ fr:
       export: "Exportation (CSV)"
     table:
       number_of_payments_shown:
-        one: "%{count} Zahlung angezeigt."
-        many: "%{count} Zahlungen angezeigt."
-        other: "%{count} Zahlungen angezeigt."
+        one: "%{count} paiement affiché."
+        many: "%{count} paiements affichés."
+        other: "%{count} paiements affichés."
       invoice_status: "Statut de la facture"
       payment_status: "Statut du paiement"
     filter:
@@ -1443,15 +1443,15 @@ fr:
         recipient_info:
           valid:
             message/letter:
-              zero: "Keine Personen mit Adresse vorhanden."
+              zero: "Il n'existe aucune personne avec adresse."
               one: "%{model_class} wird für eine Person mit Adresse erstellt."
               other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
             message/letter_with_invoice:
-              zero: "Keine Personen mit Adresse vorhanden."
+              zero: "Il n'existe aucune personne avec adresse."
               one: "%{model_class} wird für eine Person mit Adresse erstellt."
               other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
             message/text_message:
-              zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
+              zero: "Il n'existe aucune personne avec un numéro de téléphone portable."
               one: "%{model_class} wird für eine Person mit Mobiltelefonnummer erstellt."
               other: "%{model_class} wird für %{count} Personen mit Mobiltelefonnummer erstellt."
       text_message:

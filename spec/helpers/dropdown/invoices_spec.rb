@@ -45,5 +45,10 @@ describe "Dropdown::Invoices" do
       expect(dom).to have_link "Nicht zuordenbare Zahlungen",
         href: group_payments_path(group, format: :xlsx, status: :without_invoice)
     end
+
+    it "export sub-items have data-checkable attribute needed for multiselect" do
+      expect(dom).to have_selector("a[data-checkable='true']", text: "Rechnungen")
+      expect(dom).to have_selector("a[data-checkable='true']", text: "Nicht zuordenbare Zahlungen")
+    end
   end
 end

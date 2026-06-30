@@ -44,11 +44,13 @@ module Dropdown
       item = add_item(translate(format), "#")
       item.sub_items << Item.new(
         Invoice.model_name.human(count: 2),
-        export_path(format)
+        export_path(format),
+        **item_options
       )
       item.sub_items << Item.new(
         translate(:payments_without_invoice_csv),
-        payment_export_path(format, {status: :without_invoice})
+        payment_export_path(format, {status: :without_invoice}),
+        **item_options
       )
     end
 

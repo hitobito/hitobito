@@ -318,9 +318,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def i18n_enum_field(attr, labels, html_options = {})
     add_css_class(html_options, FORM_CONTROL_SELECT_WITH_WIDTH)
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
-    collection_select(attr, labels, :first, :last,
-      collection_prompt(attr, html_options),
-      html_options)
+    prompt_options = collection_prompt(attr, html_options)
+    if prompt_options.key?(:include_blank) && !html_options.key?(:include_blank)
+      nil_label = klass.send(:"#{attr}_nil_label") if klass.respond_to?(:"#{attr}_nil_label")
+      prompt_options = {include_blank: nil_label} if nil_label
+    end
+    collection_select(attr, labels, :first, :last, prompt_options, html_options)
   end
 
   def person_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength

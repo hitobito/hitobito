@@ -577,7 +577,7 @@ describe Group do
       its(:country) { should eq "CH" }
     end
 
-    context "discards contact info when contactable is set" do
+    context "preserves contact info when contactable is set" do
       let(:contact) { Fabricate(:person, other_contactable) }
       let(:other_contactable) { {street: "barfoo", zip_code: nil} }
       let!(:other_contactable_role) do
@@ -588,8 +588,8 @@ describe Group do
         group.update_attribute(:contact, contact)
       end
 
-      its(:street) { should eq "barfoo" }
-      its(:zip_code?) { should be_falsey }
+      its(:street) { should eq "An der Foobar" }
+      its(:zip_code?) { should be_truthy }
     end
   end
 

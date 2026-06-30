@@ -105,9 +105,9 @@ module Wallets
       def request(method, path, payload = nil)
         response = RestClient.send(method, *request_args(path, payload))
         JSON.parse(response.body, symbolize_names: true)
-      rescue RestClient::BadRequest => e
+      rescue RestClient::Exception => e
         msg = extract_error_message(e.response)
-        e.message = msg if msg.present?
+        e.message += "\n#{msg}" if msg.present?
         raise
       end
 

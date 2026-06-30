@@ -25,6 +25,8 @@
     = f.fields_for(:answers, admin_answers) do |fans|
       = render 'event/answers/fields', f: fans
 
+= render_extensions :center_fields, locals: { f: f }
+
 = f.labeled_text_area(:additional_information)
 
 - if entry.application && entry.new_record? && entry.participant_type != Event::Guest.sti_name

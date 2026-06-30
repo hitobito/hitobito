@@ -57,6 +57,11 @@ class Event::Participation < ActiveRecord::Base
           "event_participations.participant_id = event_guests.id")
   }
 
+  scope :with_role_type_orders, -> {
+    joins(:roles)
+      .joins("INNER JOIN event_role_type_orders ON event_roles.type = event_role_type_orders.name")
+  }
+
   scope :guests_of, ->(main_participation) {
     joins("INNER JOIN event_guests " \
           "ON event_participations.participant_type = 'Event::Guest' " \
@@ -120,11 +125,19 @@ class Event::Participation < ActiveRecord::Base
 
     # Order people by the order participation types are listed in their event types.
     def order_by_role(event_type)
-      joins(:roles)
-        .select("event_participations.*", :order_weight)
-        .joins("INNER JOIN event_role_type_orders " \
-               "ON event_roles.type = event_role_type_orders.name")
-        .order("event_role_type_orders.order_weight ASC")
+      subquery = with_role_type_orders
+        .with_person_participants
+        .with_guest_participants
+        .reselect(
+          "event_participations.*",
+          :order_weight,
+          order_by_name_statement.as("order_by_name_statement")
+        )
+        .order("event_participations.id, order_weight")
+        .distinct_on(:id)
+
+      Event::Participation.from(subquery, "event_participations")
+        .order(:order_weight, :order_by_name_statement)
     end
 
     def active

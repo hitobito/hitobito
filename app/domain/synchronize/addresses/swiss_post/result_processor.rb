@@ -29,9 +29,7 @@ module Synchronize::Addresses::SwissPost
       first_name: "Prename",
       last_name: "Name",
       address_care_of: "CoAddress",
-      street: "StreetName",
-      zip_code: "ZIPCode",
-      town: "TownName"
+      street: "StreetName"
     }
 
     def initialize(text, invalid_tag, started_at: Date.current)
@@ -72,7 +70,9 @@ module Synchronize::Addresses::SwissPost
       end.to_h
       person.attributes = attrs
       person.housenumber = read_housenumber(row)
-      person.postbox = row["POBoxTerm"].present? ? read_postbox(row) : nil
+      person.postbox = read_postbox(row)
+      person.zip_code = read_zip_code(row)
+      person.town = read_town(row)
 
       if person.save
         updated_people_ids << person.id
@@ -86,12 +86,24 @@ module Synchronize::Addresses::SwissPost
     end
 
     def read_postbox(row)
+      return unless postbox?(row)
+
       [
         row["POBoxTerm"],
-        row["POBoxNo"].presence,
-        (row["POBoxZIP"] || row["ZIPCode"]).presence,
-        (row["POBoxTownName"] || row["TownName"]).presence
+        row["POBoxNo"]
       ].compact_blank.join(" ")
+    end
+
+    def postbox?(row)
+      row["POBoxTerm"].present?
+    end
+
+    def read_zip_code(row)
+      (postbox?(row) && row["POBoxZIP"].presence) || row["ZIPCode"]
+    end
+
+    def read_town(row)
+      (postbox?(row) && row["POBoxTownName"].presence) || row["TownName"]
     end
 
     def create_tag_and_log_error(person)

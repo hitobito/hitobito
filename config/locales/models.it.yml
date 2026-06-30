@@ -224,7 +224,7 @@ it:
         period_invoice_template:
           attributes:
             recipient_source:
-              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
+              readonly_due_to_existing_invoice_runs: non può più essere modificato, poiché esistono già cicli di fatturazione
             end_on:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
@@ -335,9 +335,9 @@ it:
         many: Date
         other: Date
       event/question:
-        one: Anmeldeangabe
-        many: Anmeldeangaben
-        other: Anmeldeangaben
+        one: Dati di iscrizione
+        many: Dati per l'iscrizione
+        other: Dati per l'iscrizione
       event/question_template:
         one: Vorlage Anmeldeangabe Anlässe
         many: Vorlagen Anmeldeangaben Anlässe
@@ -455,9 +455,9 @@ it:
         many: Pagamenti
         other: Pagamenti
       period_invoice_template:
-        one: Sammelrechnung
-        many: Sammelrechnungen
-        other: Sammelrechnungen
+        one: Fattura collettiva
+        many: Fatture collettive
+        other: Fatture collettive
       period_invoice_template/role_count_item:
         one: Rollen-Abrechnung
         many: Rollen-Abrechnungen
@@ -565,7 +565,7 @@ it:
       additional_address:
         translated_label: Denominazione
         street_and_number: Strada/Numero civico # can be removed with next release
-        street: Strasse
+        street: Strada
         housenumber: Numero civico
         postbox: Postfach
         zip_code: CAP
@@ -969,7 +969,7 @@ it:
         question: Domanda
         choices: Possibili risposte
         multiple_choices: Scelta multipla
-        required: Obligatorisch
+        required: Obbligatorio
         sensitive: Delicato
 
       event/question_template:
@@ -1008,8 +1008,8 @@ it:
         text: Testo
 
       pass_definition:
-        name: Name
-        description: Beschreibung
+        name: Nome
+        description: Descrizione
         owner: Besitzer
         template_key: Vorlage
         background_color: Hintergrundfarbe
@@ -1024,7 +1024,7 @@ it:
         member_number: Mitgliedsnummer
         person: Person
         pass_definition: Pass-Definition
-        state: Status
+        state: Stato
         valid_from: Gültig von
         valid_until: Gültig bis
         states:
@@ -1035,7 +1035,7 @@ it:
       wallets/pass_installation:
         pass: Ausweis
         wallet_type: Wallet-Typ
-        state: Status
+        state: Stato
         wallet_identifier: Wallet-ID
         authentication_token: Authentifizierungs-Token
         last_synced_at: Letzte Synchronisation
@@ -1252,9 +1252,9 @@ it:
         recipient_count: Numero di destinatari
         success_count: Destinatario con successo
         failed_count: Destinatario errato
-        sent_at: Verarbeitet am
+        sent_at: Elaborato il
         recipient_progress: avanzamento dell'elaborazione
-        recipients: Empfänger/in(nen)
+        recipients: Destinatari
 
       message/letter:
         body: Contenuto
@@ -1355,8 +1355,8 @@ it:
         recipient_email: Email del destinatario
         recipient_company_name: Nome della ditta
         recipient_name: Nome
-        recipient_first_name: Vorname
-        recipient_last_name: Nachname
+        recipient_first_name: Nome
+        recipient_last_name: Cognome
         recipient_address_care_of: Riga dell'indirizzo aggiuntiva
         recipient_postbox: Casella postale
         recipient_country: Nazione
@@ -1393,8 +1393,8 @@ it:
         cost_centers: Centro di costo
         accounts: Conti
         payments: Entrate pagamenti
-        pp_post: PP-Zeile
-        shipping_method: Liefermethode
+        pp_post: Riga PP
+        shipping_method: Metodo di spedizione
 
       invoice_article:
         number: Numero dell'articolo
@@ -1462,8 +1462,8 @@ it:
         recipients_paid: Destinatario pagato
         amount_total: Importo complessivo
         amount_paid: Importo pagato
-        pp_post: PP-Zeile
-        shipping_method: Liefermethode
+        pp_post: Riga PP
+        shipping_method: Metodo di spedizione
 
       # used for nested attributes
       invoice_items:
@@ -1492,8 +1492,8 @@ it:
         statuses:
           ebics_imported: "EBICS"
           xml_imported: "CAMT"
-          manually_created: "Manuell"
-          without_invoice: "ohne Rechnung"
+          manually_created: "Manuale"
+          without_invoice: "senza fattura"
 
       payment_reminder:
         invoice: Fattura
@@ -1534,13 +1534,13 @@ it:
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise
           bcv: Banque Cantonale Vaudoise
-          bcvs: Walliser Kantonalbank
+          bcvs: Banca cantonale del Vallese
 
       period_invoice_template:
         name: Denominazione
         start_on: Inizio del periodo contabile
         end_on: Fine del periodo contabile
-        recipient_source: Rechnungsempfänger
+        recipient_source: Destinatario della fattura
         items: Voci contabili
 
       period_invoice_template/item:
@@ -1554,7 +1554,7 @@ it:
         role_types: Tipo di rullo
 
       recipient_source:
-        group_type: Empfängergruppen
+        group_type: Gruppi di destinatari
 
       service_token:
         name: Cognome
@@ -1575,7 +1575,7 @@ it:
         event_participations: Partecipanti ad eventi
         mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: host con accesso API
-        qualifications: Qualifikationen
+        qualifications: Qualifiche
 
       calendar:
         name: Nome
@@ -1586,28 +1586,28 @@ it:
         excluded_calendar_tags: Tags esclusi
 
       job_observation:
-        started_at: Startzeitpunkt
-        finished_at: Endzeitpunkt
-        attempts: Versuche
+        started_at: Ora di inizio
+        finished_at: Ora di fine
+        attempts: Tentativi
         statuses:
-          planned: In der Warteschlange
-          in_progress: In Bearbeitung
-          success: Erfolgreich abgeschlossen
-          error: Bei der Bearbeitung trat ein Fehler auf
+          planned: In coda
+          in_progress: In elaborazione
+          success: Completato con successo
+          error: Si è verificato un errore durante l'elaborazione
 
   delayed_job:
-    export/event_participations_export_job: Event-Teilnahmen-Export
-    export/events_export_job: Anlass-Export
-    export/export_base_job: Basis-Export
-    export/invitations_export_job: Einladungs-Export
-    export/invoices_job: Rechnungs-Export
-    export/labels_job: Etiketten-Export
-    export/message_job: Nachrichten-Export
-    export/payments_export_job: Zahlungs-Export
-    export/people_export_job: Personen-Export
-    export/subgroups_export_job: Untergruppen-Export
-    export/subscriptions_job: Abonnenten-Export
-    mailchimp_synchronization_job: Mailchimp-Synchronisation
+    export/event_participations_export_job: Esportazione delle partecipazioni agli eventi
+    export/events_export_job: Esportazione eventi
+    export/export_base_job: Esportazione di base
+    export/invitations_export_job: Esportazione inviti
+    export/invoices_job: Esportazione fatture
+    export/labels_job: Esportazione etichette
+    export/message_job: Esportazione messaggi
+    export/payments_export_job: Esportazione pagamenti
+    export/people_export_job: Esportazione persone
+    export/subgroups_export_job: Esportazione sottogruppi
+    export/subscriptions_job: Esportazione abbonati
+    mailchimp_synchronization_job: Sincronizzazione Mailchimp
 
   api:
     errors:
@@ -1615,7 +1615,7 @@ it:
         id_must_not_be_set: L'ID non deve essere configurato
         role_resource:
           group_id:
-            blank: muss ausgefüllt werden
+            blank: deve essere compilato
             unwritable_attribute: Non può essere modificato
           person_id:
             unwritable_attribute: Non può essere modificato
@@ -1623,7 +1623,7 @@ it:
             unwritable_attribute: Non può essere modificato
         qualification_resource:
           person_id:
-            blank: muss ausgefüllt werden
+            blank: deve essere compilato
         self_registration_resource:
           adult_consent:
             must_be_accepted: Deve essere accettato

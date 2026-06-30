@@ -52,10 +52,11 @@ class Event::ParticipationFilter::List
   end
 
   def apply_default_sort(records)
-    records = records.order_by_role(event) if Settings.people.default_sort == "role"
-
-    records.order_by_name
-      .select(Event::Participation.column_names)
+    if Settings.people.default_sort == "role"
+      records.order_by_role(event)
+    else
+      records.order_by_name.select(Event::Participation.column_names)
+    end
   end
 
   def populate_counts(records)

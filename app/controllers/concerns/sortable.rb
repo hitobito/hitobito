@@ -48,37 +48,51 @@ module Sortable
       scope.select(select_values, sort_expression_attrs)
     end
 
-    # rubocop:todo Metrics/MethodLength
-    def sort_by_sort_expression(entries) # rubocop:todo Metrics/AbcSize
+    def sort_by_sort_expression(entries)
       return entries unless sorting?
 
-      if sort_expression_attrs.empty? # no join needed
+      if sort_expression_attrs.empty?
         entries.reorder(sort_expression)
-      # rubocop:todo Layout/LineLength
-      elsif entries.to_sql.match?(SUBQUERY) # already selecting from a subquery (e.g. people_controller)
-        # rubocop:enable Layout/LineLength
-        entries.reorder(sort_expression.gsub(TABLE_WITH_COLUMN, '\1'))
-      # rubocop:todo Layout/LineLength
-      elsif entries.to_sql.match?(GROUPED_QUERY) # already selecting from a grouped query (e.g. sbv/song_counts_controller.rb)
-        # rubocop:enable Layout/LineLength
-        entries.select(entries.select_values,
-          "MAX(#{sort_expression_attrs}) AS #{sort_expression_attrs.gsub(TABLE_WITH_COLUMN, '\1')}")
-          .joins(join_tables)
-          .reorder(Arel.sql(sort_expression.gsub(TABLE_WITH_COLUMN, '\1')))
+      elsif entries.to_sql.match?(SUBQUERY)
+        sort_subquery(entries)
+      elsif entries.to_sql.match?(GROUPED_QUERY)
+        sort_grouped_query(entries)
       else
-        # rubocop:todo Layout/LineLength
-        subquery = entries.select(sort_expression_attrs).joins(join_tables).unscope(:order).distinct_on(:id)
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        order_statement = order_alias ? "#{order_alias} #{sort_dir} NULLS LAST" : Arel.sql(sort_expression.gsub(
-          # rubocop:enable Layout/LineLength
-          TABLE_WITH_COLUMN, '\1'
-        ))
-        model_class.select("*").from(subquery, :subquery)
-          .reorder(order_statement)
+        sort_with_join(entries)
       end
     end
-    # rubocop:enable Metrics/MethodLength
+
+    # Subquery case (e.g. people_controller).
+    # With order_alias, wraps again to add the sort join and select the alias column.
+    def sort_subquery(entries)
+      return entries.reorder(Arel.sql(sort_expression_columns)) unless order_alias
+
+      entries.unscope(:order)
+        .select("#{model_class.table_name}.*", Arel.sql(sort_expression_attrs))
+        .joins(join_tables)
+        .reorder(Arel.sql("#{order_alias} #{sort_dir} NULLS LAST"))
+    end
+
+    # Grouped query case (e.g. sbv/song_counts_controller.rb).
+    def sort_grouped_query(entries)
+      col = sort_expression_attrs.gsub(TABLE_WITH_COLUMN, '\1')
+      entries
+        .select(entries.select_values, "MAX(#{sort_expression_attrs}) AS #{col}")
+        .joins(join_tables)
+        .reorder(Arel.sql(sort_expression_columns))
+    end
+
+    # Build a subquery that selects and joins the sort column, then wrap and order.
+    def sort_with_join(entries)
+      subquery = entries.select(sort_expression_attrs)
+        .joins(join_tables)
+        .unscope(:order)
+        .distinct_on(:id)
+
+      order = order_alias ? "#{order_alias} #{sort_dir} NULLS LAST" : sort_expression_columns
+
+      model_class.select("*").from(subquery, :subquery).reorder(Arel.sql(order))
+    end
 
     def sorting?
       params[:sort].present? && sortable?(params[:sort])
@@ -106,6 +120,10 @@ module Sortable
     # Return the sort expression to be used in the list query.
     def sort_expression
       Array(sort_columns).collect { |c| "#{c} #{sort_dir}" }.join(", ") + " NULLS LAST"
+    end
+
+    def sort_expression_columns
+      sort_expression.gsub(TABLE_WITH_COLUMN, '\1')
     end
 
     # Return the sort expression attributes without sort directory, to add to query select list

@@ -56,14 +56,32 @@ describe SearchStrategies::PersonSearch do
         expect(result).to include(@bg_leader)
       end
 
+      it "finds accessible person by id" do
+        result = search_class(@bg_leader.id.to_s).search
+
+        expect(result).to include(@bg_leader)
+      end
+
+      it "does not find accessible person by partial id" do
+        result = search_class(@bg_leader.id.to_s[0..-2]).search
+
+        expect(result).not_to include(@bg_leader)
+      end
+
       it "finds accessible person with two terms" do
         result = search_class("#{@bg_leader.last_name[0..5]} #{@bg_leader.first_name[0..3]}").search
 
         expect(result).to include(@bg_leader)
       end
 
-      it "does not find not accessible person" do
+      it "does not find inaccessible person" do
         result = search_class(@bg_member.last_name[0..5]).search
+
+        expect(result).not_to include(@bg_member)
+      end
+
+      it "does not find inaccessible person by id" do
+        result = search_class(@bg_member.id.to_s).search
 
         expect(result).not_to include(@bg_member)
       end
@@ -74,7 +92,7 @@ describe SearchStrategies::PersonSearch do
         expect(result).to include(@no_role)
       end
 
-      it "does not find people not accessible person with deleted role" do
+      it "does not find inaccessible person with deleted role" do
         result = search_class(@bg_member_with_deleted.last_name[0..5]).search
 
         expect(result).not_to include(@bg_member_with_deleted)
@@ -134,24 +152,19 @@ describe SearchStrategies::PersonSearch do
     end
   end
 
-  describe "#search_identifiers" do
+  describe "feature toggle people.search_by_id" do
     before do
-      expect(described_class).to receive(:searchable_identifiers).and_return({id: /\A\d+\z/})
+      allow(FeatureGate).to receive(:enabled?).with("people.search_by_id").and_return(false)
+      expect(described_class).to receive(:searchable_identifiers).and_return({})
     end
 
     context "as leader" do
       let(:user) { people(:top_leader) }
 
-      it "finds person by identifier" do
+      it "does not find person by identifier" do
         result = search_class(@bg_leader.id.to_s).search
 
-        expect(result).to eq([@bg_leader])
-      end
-
-      it "finds local accessible person" do
-        result = search_class(@tg_member.last_name[0..5]).search
-
-        expect(result).to include(@tg_member)
+        expect(result).to eq([])
       end
     end
 

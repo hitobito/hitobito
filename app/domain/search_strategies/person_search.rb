@@ -10,6 +10,7 @@ module SearchStrategies
 
     self.model_class = Person
     self.readables_ability = PersonReadables
+    self.searchable_identifiers = {id: /\A\d+\z/} if FeatureGate.enabled?("people.search_by_id")
 
     def initialize(user, term, page, limit: nil)
       super

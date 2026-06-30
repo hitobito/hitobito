@@ -23,6 +23,7 @@
 - Vorlagen für Anmeldeangaben und Administrationsangaben können neu bei allen Arten von Anlässen im Erstellungs- und Editierformular eingebunden und verwendet werden (hitobito_sac_cas#2344)
 - Die Banken Banque Cantonale Vaudoise und Walliser Kantonalbank wurden als Ebics Zahlungsschnittstellen hinzugefügt (#4265)
 - Beim Adressabgleich mit der Schweizer Post werden für Postfächer neu PLZ und Ort des Postfachs übernommen (hitobito_sac_cas#2536)
+- In der Suchleiste können jetzt Personen via ihre ID gefunden werden (pfadi_de#50)
 
 ## Version 2.9
 

@@ -47,6 +47,7 @@ export default class extends NestedForm {
 
   remove(event) {
     super.remove(event)
+    this.dispatch("remove")
     this.#handleAddButtonVisibility()
     this.#removeRequiredAttributeFromRemovedInputs(event.target)
   }

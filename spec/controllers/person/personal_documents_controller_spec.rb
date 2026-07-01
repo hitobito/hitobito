@@ -35,6 +35,13 @@ describe Person::PersonalDocumentsController do
       end
     end
 
+    describe "GET #new" do
+      it "renders successfully" do
+        get :new, params: {group_id: group.id, person_id: bottom_member.id}
+        expect(response).to be_successful
+      end
+    end
+
     describe "POST #create" do
       let(:personal_document_label) { Fabricate(:personal_document_label) }
       let(:create_params) do

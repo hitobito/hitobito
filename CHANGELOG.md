@@ -2,6 +2,8 @@
 
 ## unreleased
 
+- Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
+- Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
 - Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)
 - Konfigurierbare Ausweise mit Apple und Google Wallet Integration (#3911)
 - Gruppen Sammelrechnungen können kopiert werden (#3754)
@@ -26,7 +28,6 @@
 
 ## Version 2.9
 
-- Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
 - Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
 - API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito/hitobito_sac_cas#2314)

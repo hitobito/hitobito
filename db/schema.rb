@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_23_153514) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_26_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -90,7 +90,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_23_153514) do
     t.string "street_long", limit: 128, null: false
     t.string "street_long_old", limit: 128, null: false
     t.string "town", limit: 128, null: false
-    t.integer "zip_code", null: false
+    t.string "zip_code", null: false
     t.string "state", limit: 128, null: false
     t.text "numbers"
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
@@ -502,7 +502,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_23_153514) do
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email"
-    t.integer "zip_code"
+    t.string "zip_code"
     t.string "town"
     t.string "country"
     t.integer "contact_id"

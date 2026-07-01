@@ -76,20 +76,20 @@ describe Address::Importer do
     bs_bern = Address.find_by(street_short: "Belpstrasse", zip_code: 3007)
     expect(bs_bern.street_long).to eq "Belpstrasse"
     expect(bs_bern.town).to eq "Bern"
-    expect(bs_bern.zip_code).to eq 3007
+    expect(bs_bern.zip_code).to eq "3007"
     expect(bs_bern.numbers).to eq %w[36 37 38 40]
 
     bs_muri = Address.find_by(street_short: "Belpstrasse", zip_code: 3074)
     expect(bs_muri.street_long).to eq "Belpstrasse"
     expect(bs_muri.town).to eq "Muri b. Bern"
-    expect(bs_muri.zip_code).to eq 3074
+    expect(bs_muri.zip_code).to eq "3074"
     expect(bs_muri.numbers).to eq %w[3]
     expect(dir).to be_exist
 
     luzernstrasse = Address.find_by(street_short: "Luzernerstrasse", zip_code: 6030)
     expect(luzernstrasse.street_long).to eq "Luzernerstrasse"
     expect(luzernstrasse.town).to eq "Ebikon"
-    expect(luzernstrasse.zip_code).to eq 6030
+    expect(luzernstrasse.zip_code).to eq "6030"
     expect(luzernstrasse.numbers).to eq %w[25a]
     expect(dir).to be_exist
   end

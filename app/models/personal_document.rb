@@ -3,6 +3,24 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito
 
+# == Schema Information
+#
+# Table name: personal_documents
+#
+#  id          :bigint           not null, primary key
+#  description :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  author_id   :bigint           not null
+#  label_id    :bigint
+#  person_id   :bigint           not null
+#
+# Indexes
+#
+#  index_personal_documents_on_author_id  (author_id)
+#  index_personal_documents_on_label_id   (label_id)
+#  index_personal_documents_on_person_id  (person_id)
+#
 class PersonalDocument < ApplicationRecord
   belongs_to :person
   belongs_to :label, class_name: "PersonalDocumentLabel"

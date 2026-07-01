@@ -310,7 +310,7 @@ fr:
         sign_in: Inscription
       oauth_info:
         sign_in: "Se connecter avec %{name}"
-        info: "Veuillez vous connecter sur %{oauth_app}pour continuer."
+        info: "Veuillez vous connecter sur %{oauth_app} pour continuer."
         no_oauth_app_info: "Veuillez vous connecter pour continuer."
     passwords:
       send_instructions: "Si ton adresse électronique est enregistrée dans notre base de données, tu recevras dans quelques instants un courriel t'expliquant comment réinitialiser ton mot de passe."

@@ -13,7 +13,7 @@ describe Export::Pdf::Invoice do
   let(:person) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
 
-  let(:pdf) { described_class.render(invoice, payment_slip: true, articles: true, reminders: false) }
+  let(:pdf) { described_class.render([invoice], payment_slip: true, articles: true, reminders: false) }
 
   def build_invoice(attrs)
     Invoice.new(attrs.reverse_merge(group: group))
@@ -48,7 +48,7 @@ describe Export::Pdf::Invoice do
     end
 
     subject do
-      pdf = described_class.render(invoice, payment_slip: true, articles: true)
+      pdf = described_class.render([invoice], payment_slip: true, articles: true)
       PDF::Inspector::Text.analyze(pdf)
     end
 
@@ -632,7 +632,7 @@ describe Export::Pdf::Invoice do
 
     context "multiple invoices" do
       let(:pdf) {
-        described_class.render_multiple([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
+        described_class.render([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
           articles: true, reminders: false)
       }
 
@@ -714,6 +714,69 @@ describe Export::Pdf::Invoice do
     end
   end
 
+  context "render" do
+    it "should raise error when calling render with anything else than an array of invoices" do
+      error_message = <<~MSG
+        The method render expects an array of invoice objects. This method is only suitable
+        for small collections of invoices. Either call to_a on your Active Record relation
+        or use render_in_batches with an array of invoice ids.
+      MSG
+
+      expect { described_class.render(Invoice.all, {}) }.to raise_error(error_message)
+      expect { described_class.render([1, 2, 3], {}) }.to raise_error(error_message)
+      expect { described_class.render(invoice, {}) }.to raise_error(error_message)
+    end
+  end
+
+  context "render in batches" do
+    let(:invoice_one) { invoices(:invoice) }
+    let(:invoice_two) { invoices(:sent) }
+    let(:invoice_three) { invoices(:group_invoice) }
+
+    it "should raise error when calling render_in_batches with anything else than an id array" do
+      error_message = <<~MSG
+        The method render_in_batches expects an array of invoice ids. This method is suitable
+        for big collections of invoices but can't be passed an Active Record relation or an
+        array of invoices directly. If you want to render a small collection of invoices use
+        the method render instead or gather the invoice ids first.
+      MSG
+
+      expect { described_class.render_in_batches(Invoice.all, {}) }.to raise_error(error_message)
+      expect { described_class.render_in_batches([invoice_one, invoice_two], {}) }.to raise_error(error_message)
+      expect { described_class.render_in_batches(invoice_one, {}) }.to raise_error(error_message)
+    end
+
+    it "should respect batch size when given in options" do
+      invoice_ids = [invoice_one.id, invoice_two.id, invoice_three.id]
+
+      expect(::Invoice).to receive(:find_in_ordered_batches).with(invoice_ids, batch_size: 2).and_call_original
+
+      described_class.render_in_batches(invoice_ids, batch_size: 2)
+    end
+
+    it "should use default batch size when not given in options" do
+      invoice_ids = [invoice_one.id, invoice_two.id, invoice_three.id]
+
+      expect(::Invoice).to receive(:find_in_ordered_batches).with(invoice_ids, batch_size: 500).and_call_original
+
+      described_class.render_in_batches(invoice_ids, {})
+    end
+
+    it "should generate the same pdf as render" do
+      render_pdf = described_class.render(
+        [invoice_one, invoice_two, invoice_three],
+        payment_slip: true, articles: true, reminders: false
+      )
+
+      render_in_batches_pdf = described_class.render_in_batches(
+        [invoice_one.id, invoice_two.id, invoice_three.id],
+        payment_slip: true, articles: true, reminders: false, batch_size: 2
+      )
+
+      expect(render_pdf).to eql(render_in_batches_pdf)
+    end
+  end
+
   context "when passing job in options" do
     let(:job) do
       job = Test::SuccessfulObservableJob.new
@@ -728,13 +791,13 @@ describe Export::Pdf::Invoice do
     it "should report progress with one invoice" do
       expect(job.job_observation).to receive(:report_progress!).once
 
-      described_class.render(invoice, payment_slip: true, articles: true, reminders: false, job:)
+      described_class.render([invoice], payment_slip: true, articles: true, reminders: false, job:)
     end
 
     it "should report progress with multiple invoices" do
       expect(job.job_observation).to receive(:report_progress!).twice
 
-      described_class.render_multiple([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
+      described_class.render([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
         articles: true, reminders: false, job:)
     end
   end
@@ -827,21 +890,21 @@ describe Export::Pdf::Invoice do
   end
 
   it "renders invoice with articles and payment_slip" do
-    described_class.render(invoice, articles: true, payment_slip: true)
+    described_class.render([invoice], articles: true, payment_slip: true)
   end
 
   it "renders empty invoice articles" do
-    described_class.render(invoice, articles: true)
+    described_class.render([invoice], articles: true)
   end
 
   it "renders empty invoice articles" do
-    described_class.render(invoice, articles: true)
+    described_class.render([invoice], articles: true)
   end
 
   it "renders empty invoice payment slip if without codeline" do
     expect_any_instance_of(Invoice::PaymentSlip).not_to receive(:code_line)
     described_class.render(
-      build_invoice(esr_number: 1, participant_number: 1),
+      [build_invoice(esr_number: 1, participant_number: 1)],
       payment_slip: true
     )
   end
@@ -866,7 +929,7 @@ describe Export::Pdf::Invoice do
     let(:due_at) { sent.due_at + 10.days }
     let(:reminders) { true }
     let(:show) { true }
-    let(:pdf) { described_class.render(sent, articles: true, reminders: reminders) }
+    let(:pdf) { described_class.render([sent], articles: true, reminders: reminders) }
     let!(:reminder) { Fabricate(:payment_reminder, invoice: sent, due_at: due_at, show_invoice_description: show) }
 
     subject { PDF::Inspector::Text.analyze(pdf).show_text }
@@ -920,25 +983,25 @@ describe Export::Pdf::Invoice do
   context "address" do
     it "address with 8 lines does not cause page break" do
       invoice.update(address: 1.upto(8).to_a.join("\n"))
-      pdf = described_class.render(invoice, articles: true)
+      pdf = described_class.render([invoice], articles: true)
       expect(PDF::Inspector::Page.analyze(pdf).pages.size).to eq 1
     end
 
     it "address with 9 lines causes page break" do
       invoice.update(address: 1.upto(10).to_a.join("\n"))
-      pdf = described_class.render(invoice, articles: true)
+      pdf = described_class.render([invoice], articles: true)
       expect(PDF::Inspector::Page.analyze(pdf).pages.size).to eq 2
     end
 
     it "has a compatible encoding" do
       invoice.update(address: "My∙Address")
-      expect { described_class.render(invoice, articles: true) }.not_to raise_error
+      expect { described_class.render([invoice], articles: true) }.not_to raise_error
     end
   end
 
   context "codeline" do
     let(:invoice) { build_invoice(sequence_number: "1-2", participant_number: 1) }
-    let(:pdf) { described_class.render(invoice, payment_slip: true) }
+    let(:pdf) { described_class.render([invoice], payment_slip: true) }
 
     subject { PDF::Inspector::Text.analyze(pdf) }
 
@@ -1008,7 +1071,7 @@ describe Export::Pdf::Invoice do
       )
     end
 
-    let(:pdf) { described_class.render(invoice, payment_slip: true) }
+    let(:pdf) { described_class.render([invoice], payment_slip: true) }
 
     subject { PDF::Inspector::Text.analyze(pdf) }
 

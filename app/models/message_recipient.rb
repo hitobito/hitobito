@@ -38,6 +38,7 @@ class MessageRecipient < ActiveRecord::Base
   STATES = %w[pending sending sent failed blocked].freeze
 
   include I18nEnums
+  include Findable
 
   i18n_enum :state, STATES
 

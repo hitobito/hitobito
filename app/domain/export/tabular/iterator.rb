@@ -9,26 +9,32 @@ module Export::Tabular
   #
   # We use a custom iterator as find_each does not support custom ordering
   class Iterator
+    include Enumerable
+
     def initialize(list, batch_size)
       @list = list
       @batch_size = batch_size
     end
 
-    def each(&)
-      return list.each(&) unless relation?
+    def each(&block)
+      return to_enum(:each) unless block_given?
 
-      in_ordered_batches(&)
+      return list.each(&block) unless relation?
+
+      in_ordered_batches(block)
     end
 
     private
 
     attr_reader :list, :batch_size
 
-    def in_ordered_batches(&block)
+    def in_ordered_batches(block)
       position = 0
       loop do
         batch = list.offset(position).limit(batch_size)
+
         batch.each(&block)
+
         position += batch_size
         break if batch.size < batch_size
       end

@@ -54,12 +54,6 @@ module Dropdown
       )
     end
 
-    def csv_links
-      add_item(translate(:csv), export_path(:csv), **item_options)
-      add_item(translate(:payments_without_invoice_csv),
-        payment_export_path(:csv, {status: :without_invoice}))
-    end
-
     def item_options
       {data: {checkable: true}}
     end

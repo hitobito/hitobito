@@ -25,6 +25,9 @@ class Event::QuestionTemplate < ActiveRecord::Base
   belongs_to :question, dependent: :destroy
   belongs_to :group
 
+  has_many :derived_questions, class_name: "Event::Question", foreign_key: :template_id,
+    dependent: :nullify, inverse_of: false
+
   accepts_nested_attributes_for :question
 
   scope :in_hierarchy, ->(groups) {

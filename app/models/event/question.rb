@@ -159,7 +159,9 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
-  def self.reflect_on_all_associations
+  def self.reflect_on_all_associations(*args)
+    return super if args.any?
+
     super + [Choice::Reflection.new]
   end
 

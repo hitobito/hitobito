@@ -3,7 +3,7 @@
 / #  or later. See the COPYING file at the top-level directory or at
 / #  https://github.com/hitobito/hitobito.
 
-= render 'messages/letter/fields', f: f
+= render 'mailing_lists/messages/letter/fields', f: f
 = f.fields_for :invoice do |fi|
   = field_set_tag do
     = fi.labeled_date_field(:issued_at)

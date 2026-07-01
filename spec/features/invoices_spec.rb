@@ -125,4 +125,41 @@ describe :invoices, js: true do
       end
     end
   end
+
+  describe "export" do
+    let!(:invoices) do
+      group.issued_invoices.destroy_all
+      3.times.map do
+        Fabricate(:invoice, creator: user, group: group, recipient: people(:bottom_member), state: :issued,
+          issued_at: Time.zone.today.beginning_of_year,
+          invoice_items: [InvoiceItem.new(count: 1, unit_cost: 100, name: "Test")])
+      end
+    end
+
+    def click_export_invoices
+      click_link("Export")
+      find_link("CSV").hover
+      within(".dropdown-menu.submenu") { click_link("Rechnungen") }
+
+      expect(page).to have_content("Export wird im Hintergrund gestartet")
+    end
+
+    it "exports only selected invoice when one is selected" do
+      visit group_invoices_path(group)
+
+      find_all("input[name='ids[]']").first.click
+
+      expect(Export::InvoicesJob).to receive(:new).with(:csv, anything, [invoices.first.id], anything).and_call_original
+
+      click_export_invoices
+    end
+
+    it "exports all invoices when none are selected" do
+      visit group_invoices_path(group)
+
+      expect(Export::InvoicesJob).to receive(:new).with(:csv, anything, invoices.map(&:id), anything).and_call_original
+
+      click_export_invoices
+    end
+  end
 end

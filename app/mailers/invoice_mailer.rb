@@ -35,7 +35,7 @@ class InvoiceMailer < ApplicationMailer
   private
 
   def generate_pdf
-    Export::Pdf::Invoice.render(@invoice, pdf_options)
+    Export::Pdf::Invoice.render([@invoice], pdf_options)
   end
 
   def placeholder_recipient_name

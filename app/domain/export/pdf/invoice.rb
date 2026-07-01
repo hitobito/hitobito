@@ -6,6 +6,7 @@
 module Export::Pdf
   module Invoice
     MARGIN = 2.cm
+    BATCH_SIZE = 500
 
     class Runner
       def initialize(invoices, job)
@@ -26,13 +27,16 @@ module Export::Pdf
       def build_pdf(options)
         pdf = Export::Pdf::Document.new(margin: MARGIN).pdf
         customize(pdf)
+
+        invoice_count = @invoices.count
+
         @invoices.each_with_index do |invoice, position|
           LocaleSetter.with_locale(person: invoice.recipient.then {
             _1.is_a?(Person) ? _1 : nil
           }) do
-            @job&.report_progress!(position, @invoices.size)
+            @job&.report_progress!(position, invoice_count)
             invoice_page(pdf, invoice, options)
-            pdf.start_new_page unless invoice == @invoices.last
+            pdf.start_new_page if (position + 1) < invoice_count
           end
         end
         pdf
@@ -81,14 +85,38 @@ module Export::Pdf
 
     self.runner = Runner
 
-    def self.render(invoice, options)
-      job = options.delete(:job)
-      runner.new([invoice], job).render(options)
-    end
+    class << self
+      def render(invoices, options)
+        unless invoices.is_a?(Array) && invoices.all?(::Invoice)
+          raise <<~MSG
+            The method render expects an array of invoice objects. This method is only suitable
+            for small collections of invoices. Either call to_a on your Active Record relation
+            or use render_in_batches with an array of invoice ids.
+          MSG
+        end
 
-    def self.render_multiple(invoices, options)
-      job = options.delete(:job)
-      runner.new(invoices, job).render(options)
+        job = options.delete(:job)
+
+        runner.new(invoices, job).render(options)
+      end
+
+      def render_in_batches(invoice_ids, options)
+        unless invoice_ids.is_a?(Array) && invoice_ids.all?(Integer)
+          raise <<~MSG
+            The method render_in_batches expects an array of invoice ids. This method is suitable
+            for big collections of invoices but can't be passed an Active Record relation or an
+            array of invoices directly. If you want to render a small collection of invoices use
+            the method render instead or gather the invoice ids first.
+          MSG
+        end
+
+        batch_size = options.delete(:batch_size) || BATCH_SIZE
+
+        invoices = ::Invoice.find_in_ordered_batches(invoice_ids, batch_size:)
+        job = options.delete(:job)
+
+        runner.new(invoices, job).render(options)
+      end
     end
   end
 end

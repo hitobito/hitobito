@@ -178,24 +178,6 @@ describe :job_observations, js: true do
     expect(page).not_to have_css("turbo-cable-stream-source", visible: false)
   end
 
-  it "should automatically establish websocket connection when job is enqueued from ui" do
-    visit group_path(groups(:top_group))
-    expect(page).to have_content("TopGroup")
-
-    expect(page).not_to have_css("turbo-cable-stream-source", visible: false)
-    expect(page).not_to have_css("#job-observations-link-with-badge .badge")
-
-    click_link("CSV Untergruppen")
-
-    expect(page).to have_css("turbo-cable-stream-source", visible: false, count: 1)
-    expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
-
-    expect(Delayed::Worker.new.work_off).to eql([1, 0])
-
-    expect(page).not_to have_css("#job-observations-link-with-badge .badge")
-    expect(page).to have_content("Job erfolgreich abgeschlossen")
-  end
-
   def enqueue_job_by_current_and_other_user(job_class)
     user_job = job_class.new
     user_delayed_job = user_job.enqueue!
@@ -217,20 +199,25 @@ describe :job_observations, js: true do
       clear_downloads
     end
 
-    it "should automatically download file when job is enqueued from ui" do
+    it "should automatically establish websocket connection and download file when job is enqueued from ui" do
       visit group_path(groups(:top_group))
       expect(page).to have_content("TopGroup")
 
+      expect(page).not_to have_css("turbo-cable-stream-source", visible: false)
+      expect(page).not_to have_css("#job-observations-link-with-badge .badge")
+
       click_link("CSV Untergruppen")
+      expect(page).to have_content("TopGroup")
 
       expect(page).to have_css("turbo-cable-stream-source", visible: false, count: 1)
       expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
 
       expect(Delayed::Worker.new.work_off).to eql([1, 0])
 
-      expect(page).to have_content("Job erfolgreich abgeschlossen")
-
       wait_for_download
+
+      expect(page).not_to have_css("#job-observations-link-with-badge .badge")
+      expect(page).to have_content("Job erfolgreich abgeschlossen")
 
       expect(downloads.length).to eql(1)
       expect(download).to match(/subgroups_export.csv/)

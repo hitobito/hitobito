@@ -18,7 +18,7 @@
 #  street_short     :string(128)      not null
 #  street_short_old :string(128)      not null
 #  town             :string(128)      not null
-#  zip_code         :integer          not null
+#  zip_code         :string           not null
 #
 # Indexes
 #

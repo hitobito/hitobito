@@ -21,7 +21,7 @@ module Messages
 
     # create invoices for all people on the invoice run
     def batch_create
-      batch_create = Invoice::BatchCreate.new(invoice_run, @people)
+      batch_create = Invoice::BatchCreate.new(invoice_run, nil, limit(@people, @options[:recipient_limit]))
       batch_create.call
 
       @message.update!(

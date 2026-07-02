@@ -49,7 +49,7 @@ class Invoice::BatchCreate
   private
 
   def create_invoices
-    invoice_run.recipients(current_user).each_slice(1000) do |slice|
+    recipients.each_slice(1000) do |slice|
       slice.each do |receiver|
         success = create_invoice(receiver)
         invalid << receiver.id unless success
@@ -128,5 +128,9 @@ class Invoice::BatchCreate
 
   def update_invoice_run
     invoice_run.update(recipients_processed: results.count(true), invalid_recipient_ids: invalid)
+  end
+
+  def recipients
+    @people || invoice_run.recipients(current_user)
   end
 end

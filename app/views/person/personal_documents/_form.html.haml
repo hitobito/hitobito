@@ -1,0 +1,4 @@
+= entry_form do |f|
+  = f.labeled_belongs_to_field :label_id
+  = f.labeled_file_field :file, type: :file, class: 'form-control form-control-sm'
+  = f.labeled_text_area :description, rows: 3

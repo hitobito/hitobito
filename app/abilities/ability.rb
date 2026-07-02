@@ -40,6 +40,10 @@ class Ability
     TagAbility,
     VariousAbility
 
+  if FeatureGate.enabled? "personal_documents"
+    store.register PersonalDocumentAbility
+  end
+
   attr_reader :user_context
 
   def user

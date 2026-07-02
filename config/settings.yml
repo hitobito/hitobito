@@ -310,3 +310,6 @@ wallets:
 app_status:
   memory_usage:
     limit_percentage: <%= ENV.fetch("MEMORY_USAGE_LIMIT_PERCENTAGE", 95).to_i %>
+
+personal_documents:
+  enabled: false

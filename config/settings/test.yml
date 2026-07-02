@@ -41,3 +41,6 @@ additional_address:
     - Rechnung
     - Arbeit
     - Andere
+
+personal_documents:
+  enabled: true

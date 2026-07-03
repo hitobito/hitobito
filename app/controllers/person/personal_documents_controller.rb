@@ -9,7 +9,7 @@ class Person::PersonalDocumentsController < SimpleCrudController
   self.nesting = Group, Person
   self.permitted_attrs = [:file, :label_id, :description]
 
-  before_save :set_author
+  before_create :set_author
 
   def authorize_class
     authorize!(:index, PersonalDocument.new(person: parent))
@@ -18,6 +18,6 @@ class Person::PersonalDocumentsController < SimpleCrudController
   private
 
   def set_author
-    entry.author = current_person
+    entry.author ||= current_person
   end
 end

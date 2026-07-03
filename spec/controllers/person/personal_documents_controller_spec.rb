@@ -65,6 +65,28 @@ describe Person::PersonalDocumentsController do
           group_person_personal_documents_path(group, bottom_member, returning: true)
         )
       end
+
+      it "sets the author to the current user" do
+        post :create, params: create_params
+        expect(PersonalDocument.last.author).to eq(top_leader)
+      end
+    end
+
+    describe "PATCH #update" do
+      let!(:document) { Fabricate(:personal_document, person: bottom_member, author: bottom_member) }
+
+      it "does not overwrite the author" do
+        expect do
+          patch :update, params: {
+            group_id: group.id,
+            person_id: bottom_member.id,
+            id: document.id,
+            personal_document: {description: "updated description"}
+          }
+        end
+          .to change { document.reload.description }.to("updated description")
+          .and not_change { document.reload.author }
+      end
     end
   end
 

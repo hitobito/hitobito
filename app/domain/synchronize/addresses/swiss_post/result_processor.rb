@@ -25,12 +25,6 @@ module Synchronize::Addresses::SwissPost
 
     class_attribute :remote_identifier
     class_attribute :qstat_tag_prefix, default: "Post_Adressenabgleich_QSTAT"
-    class_attribute :fields, default: {
-      first_name: "Prename",
-      last_name: "Name",
-      address_care_of: "CoAddress",
-      street: "StreetName"
-    }
 
     def initialize(text, invalid_tag, started_at: Date.current)
       @data = parse(text)
@@ -65,14 +59,7 @@ module Synchronize::Addresses::SwissPost
     end
 
     def update(person, row)
-      attrs = fields.map do |target, source|
-        [target, row[source]]
-      end.to_h
-      person.attributes = attrs
-      person.housenumber = read_housenumber(row)
-      person.postbox = read_postbox(row)
-      person.zip_code = read_zip_code(row)
-      person.town = read_town(row)
+      assign_attributes(person, row)
 
       if person.save
         updated_people_ids << person.id
@@ -80,6 +67,26 @@ module Synchronize::Addresses::SwissPost
         create_tag_and_log_error(person)
       end
     end
+
+    # necessary for extensions in wagons
+    def assign_attributes(person, row)
+      person.first_name = read_first_name(row)
+      person.last_name = read_last_name(row)
+      person.address_care_of = read_address_care_of(row)
+      person.street = read_street(row)
+      person.housenumber = read_housenumber(row)
+      person.postbox = read_postbox(row)
+      person.zip_code = read_zip_code(row)
+      person.town = read_town(row)
+    end
+
+    def read_first_name(row) = row["Prename"]
+
+    def read_last_name(row) = row["Name"]
+
+    def read_address_care_of(row) = row["CoAddress"]
+
+    def read_street(row) = row["StreetName"]
 
     def read_housenumber(row)
       [row["HouseNo"], row["HouseNoAddition"]].compact_blank.join

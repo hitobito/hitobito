@@ -5,14 +5,6 @@
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito
 
-class PersonalDocumentLabelsController < CrudController
+class PersonalDocumentLabelsController < SimpleCrudController
   self.permitted_attrs = [:name]
-
-  def create
-    super(location: index_path)
-  end
-
-  def update
-    super(location: index_path)
-  end
 end

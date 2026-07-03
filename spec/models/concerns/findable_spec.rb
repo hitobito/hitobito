@@ -7,25 +7,25 @@
 
 require "spec_helper"
 
-describe Findable do
+describe FindableByOrderedIdList do
   it "should raise exception when included in class that is not an Active Record model" do
     stub_const "Poro", Class.new
 
     expect do
-      Poro.class_eval { include Findable }
-    end.to raise_error("Module Findable can only be included in Active Record models")
+      Poro.class_eval { include FindableByOrderedIdList }
+    end.to raise_error("Module FindableByOrderedIdList can only be included in Active Record models")
   end
 
   it "should not raise exception when included in class that is an Active Record model" do
     stub_const "ArModel", Class.new(ActiveRecord::Base)
 
     expect do
-      ArModel.class_eval { include Findable }
+      ArModel.class_eval { include FindableByOrderedIdList }
     end.not_to raise_error
   end
 
   it "should raise exception when calling check_findable_by_id on Active Record model without id column" do
-    stub_const "NotFindable", Class.new(ActiveRecord::Base) { include Findable }
+    stub_const "NotFindable", Class.new(ActiveRecord::Base) { include FindableByOrderedIdList }
     allow(NotFindable).to receive(:column_names).and_return(["name", "age", "favorite_food"])
 
     expect do
@@ -34,7 +34,7 @@ describe Findable do
   end
 
   it "should not raise exception when calling check_findable_by_id on Active Record model with id column" do
-    stub_const "IsFindable", Class.new(ActiveRecord::Base) { include Findable }
+    stub_const "IsFindable", Class.new(ActiveRecord::Base) { include FindableByOrderedIdList }
     allow(IsFindable).to receive(:column_names).and_return(["id", "hobby", "favorite_movie"])
 
     expect do

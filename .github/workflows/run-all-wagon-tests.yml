@@ -68,6 +68,8 @@ jobs:
           COMMON_BRANCH_NAME="${{github.head_ref || github.ref_name}}"
           if [ -z "$INPUT_WAGON_REF" ]; then
             WAGON_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "$COMMON_BRANCH_NAME" || echo 'master')
+          else
+            WAGON_REF=$INPUT_WAGON_REF
           fi
 
           echo "WAGON_REF=$WAGON_REF" >> $GITHUB_ENV

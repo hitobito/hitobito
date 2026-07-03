@@ -2,6 +2,8 @@
 
 ## unreleased
 
+- Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
+- Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
 - Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)
 - Konfigurierbare Ausweise mit Apple und Google Wallet Integration (#3911)
 - Gruppen Sammelrechnungen können kopiert werden (#3754)
@@ -24,10 +26,10 @@
 - Die Banken Banque Cantonale Vaudoise und Walliser Kantonalbank wurden als Ebics Zahlungsschnittstellen hinzugefügt (#4265)
 - Beim Adressabgleich mit der Schweizer Post werden für Postfächer neu PLZ und Ort des Postfachs übernommen (hitobito_sac_cas#2536)
 - In der Suchleiste können jetzt Personen via ihre ID gefunden werden (pfadi_de#50)
+- Bei Gruppen-Adressen (wie bereits bei Personen) sind nun auch alphanumerische PLZs und solche mit führenden Nullen erlaubt (hitobito/hitobito_pfadi_de#86)
 
 ## Version 2.9
 
-- Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
 - Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
 - Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
 - API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito/hitobito_sac_cas#2314)

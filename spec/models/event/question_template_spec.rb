@@ -50,6 +50,16 @@ describe Event::QuestionTemplate do
     end
   end
 
+  describe "#derived_questions" do
+    it "nullifies template_id of derived questions when template is destroyed" do
+      derived_question = template.derive_question
+      derived_question.save!
+
+      expect { template.destroy }
+        .to change { derived_question.reload.template_id }.to(nil)
+    end
+  end
+
   describe "#derive_question" do
     it "creates a new question instance with new translation instances" do
       derived_question = template.derive_question

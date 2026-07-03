@@ -1601,7 +1601,7 @@ it:
     export/export_base_job: Esportazione di base
     export/invitations_export_job: Esportazione inviti
     export/invoices_job: Esportazione fatture
-    export/labels_job: Esportazione etichette
+    export/labels_job: Personen-Export
     export/message_job: Esportazione messaggi
     export/payments_export_job: Esportazione pagamenti
     export/people_export_job: Esportazione persone

@@ -1516,7 +1516,7 @@ en:
     export/export_base_job: Base export
     export/invitations_export_job: Invitation export
     export/invoices_job: Invoice export
-    export/labels_job: Label export
+    export/labels_job: Personen-Export
     export/message_job: Message export
     export/payments_export_job: Payment export
     export/people_export_job: People export

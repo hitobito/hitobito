@@ -1602,7 +1602,7 @@ fr:
     export/export_base_job: Exportation de base
     export/invitations_export_job: Exportation des invitations
     export/invoices_job: Exportation des factures
-    export/labels_job: Exportation d'étiquettes
+    export/labels_job: Personen-Export
     export/message_job: Exportation des messages
     export/payments_export_job: Exportation des paiements
     export/people_export_job: Exportation des personnes

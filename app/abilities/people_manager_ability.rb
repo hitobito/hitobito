@@ -10,16 +10,21 @@ class PeopleManagerAbility < AbilityDsl::Base
     class_side(:index).everybody
     permission(:any).may(:new_managed, :new_manager).everybody
     permission(:any).may(:create_managed, :destroy_managed).if_can_change_managed
-    permission(:any).may(:create_manager, :destroy_manager).if_can_change_manager
+    permission(:any).may(:create_manager).if_can_create_manager
+    permission(:any).may(:destroy_manager).if_can_change_manager
     permission(:any).may(:show).for_leaded_events_or_readable_manageds
-  end
-
-  def if_can_change_manager
-    can?(:change_managers, managed) || creating_new_managed_person?
   end
 
   def if_can_change_managed
     can?(:update, subject.manager)
+  end
+
+  def if_can_create_manager
+    can?(:update_email, managed) && if_can_change_manager || creating_new_managed_person?
+  end
+
+  def if_can_change_manager
+    can?(:change_managers, managed)
   end
 
   def for_leaded_events_or_readable_manageds

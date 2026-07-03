@@ -40,7 +40,7 @@
 #  text_message_provider                   :string           default("aspsms"), not null
 #  town                                    :string
 #  type                                    :string           not null
-#  zip_code                                :integer
+#  zip_code                                :string
 #  created_at                              :datetime
 #  updated_at                              :datetime
 #  contact_id                              :integer

@@ -86,7 +86,7 @@ jobs:
           workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much
           workflow_inputs: |
             {
-              "core_ref": "${{ github.ref || inputs.core_ref }}",
+              "core_ref": "${{ inputs.core_ref || github.ref  }}",
               "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref }}"
             }
 

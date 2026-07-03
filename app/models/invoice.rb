@@ -76,7 +76,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   include PaymentSlips
   include FullTextSearchable
   include Shippable
-  include Findable
+  include FindableByOrderedIdList
 
   ROUND_TO = BigDecimal("0.05")
 

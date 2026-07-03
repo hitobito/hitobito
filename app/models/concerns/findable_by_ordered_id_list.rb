@@ -3,12 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module Findable
+module FindableByOrderedIdList
   extend ActiveSupport::Concern
 
   included do
     unless self < ActiveRecord::Base
-      raise "Module Findable can only be included in Active Record models"
+      raise "Module FindableByOrderedIdList can only be included in Active Record models"
     end
   end
 

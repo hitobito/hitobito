@@ -27,9 +27,7 @@ class Export::InvoicesJob < Export::ExportBaseJob
 
     case @format
     when :pdf
-      Export::Pdf::Invoice.render_in_batches(@invoice_ids, @options.merge({
-        job: self
-      }))
+      Export::Pdf::Invoice.render(entries, @options.merge({ job: self }))
     when :csv
       Export::Tabular::Invoices::List.csv(entries)
     when :xlsx

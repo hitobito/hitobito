@@ -85,38 +85,21 @@ module Export::Pdf
 
     self.runner = Runner
 
-    class << self
-      def render(invoices, options)
-        unless invoices.is_a?(Array) && invoices.all?(::Invoice)
-          raise <<~MSG
-            The method render expects an array of invoice objects. This method is only suitable
-            for small collections of invoices. Either call to_a on your Active Record relation
-            or use render_in_batches with an array of invoice ids.
-          MSG
-        end
-
-        job = options.delete(:job)
-
-        runner.new(invoices, job).render(options)
-      end
-
-      def render_in_batches(invoice_ids, options)
-        unless invoice_ids.is_a?(Array) && invoice_ids.all?(Integer)
-          raise <<~MSG
-            The method render_in_batches expects an array of invoice ids. This method is suitable
-            for big collections of invoices but can't be passed an Active Record relation or an
-            array of invoices directly. If you want to render a small collection of invoices use
-            the method render instead or gather the invoice ids first.
-          MSG
-        end
-
+    def self.render(invoices, options)
+      if invoices.is_a?(::Invoice)
+        invoices = [invoices]
+      elsif invoices.is_a?(ActiveRecord::Relation)
+        invoice_ids = invoices.map(&:id)
         batch_size = options.delete(:batch_size) || BATCH_SIZE
 
         invoices = ::Invoice.find_in_ordered_batches(invoice_ids, batch_size:)
-        job = options.delete(:job)
-
-        runner.new(invoices, job).render(options)
+      else
+        raise "The method render expects a singular invoice or an Active Record relation"
       end
+
+      job = options.delete(:job)
+
+      runner.new(invoices, job).render(options)
     end
   end
 end

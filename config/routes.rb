@@ -190,6 +190,9 @@ Hitobito::Application.routes.draw do
 
         resources :assignments, only: [:show, :edit, :update]
         scope module: "person" do
+          FeatureGate.if("personal_documents") do
+            resources :personal_documents
+          end
           resources :assignments, only: [:index]
           resources :subscriptions, only: [:index, :create, :destroy]
           post "tags" => "tags#create"
@@ -462,6 +465,9 @@ Hitobito::Application.routes.draw do
 
     resources :job_observations, only: [:index] do
       get :download, on: :member
+    end
+    FeatureGate.if("personal_documents") do
+      resources :personal_document_labels
     end
   end # scope locale
 

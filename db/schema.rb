@@ -1224,6 +1224,24 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_094113) do
     t.index ["person_1_id", "person_2_id"], name: "index_person_duplicates_on_person_1_id_and_person_2_id", unique: true
   end
 
+  create_table "personal_document_labels", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "personal_documents", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "label_id"
+    t.bigint "author_id", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_personal_documents_on_author_id"
+    t.index ["label_id"], name: "index_personal_documents_on_label_id"
+    t.index ["person_id"], name: "index_personal_documents_on_person_id"
+  end
+
   create_table "phone_numbers", id: :serial, force: :cascade do |t|
     t.string "contactable_type", null: false
     t.integer "contactable_id", null: false

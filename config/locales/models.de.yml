@@ -1521,7 +1521,7 @@ de:
     export/export_base_job: Basis-Export
     export/invitations_export_job: Einladungs-Export
     export/invoices_job: Rechnungs-Export
-    export/labels_job: Etiketten-Export
+    export/labels_job: Personen-Export
     export/message_job: Nachrichten-Export
     export/payments_export_job: Zahlungs-Export
     export/people_export_job: Personen-Export

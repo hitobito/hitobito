@@ -127,6 +127,14 @@ module EventsHelper
       entry.used_attributes(:required_contact_attrs, :hidden_contact_attrs).any?
   end
 
+  def visible_contact_attribute_checked?(event, attr)
+    if event.new_record?
+      event.class.default_visible_contact_attributes.include?(attr.to_s)
+    else
+      event.visible_contact_attributes.include?(attr.to_s)
+    end
+  end
+
   def attachment_visibility_button(attachment, visibility)
     label = I18n.t(visibility, scope: "activerecord.attributes.event/attachment.visibilities")
     active = attachment.visibility.to_s == visibility.to_s

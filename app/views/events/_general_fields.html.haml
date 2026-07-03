@@ -39,7 +39,8 @@
           - Event::ALLOWED_VISIBLE_CONTACT_ATTRIBUTES.each do |option|
             .form-check
               = label_tag do
-                = check_box_tag("event[visible_contact_attributes][#{option}]]", class: "form-check-input", checked: entry.new_record? || entry.visible_contact_attributes.include?(option.to_s))
+                - checked = entry.new_record? ? entry.class.default_visible_contact_attributes.include?(option.to_s) : entry.visible_contact_attributes.include?(option.to_s)
+                = check_box_tag("event[visible_contact_attributes][#{option}]]", class: "form-check-input", checked: checked)
                 = t(".visible_contact_attributes.#{option}")
 
   = render 'location_fields', f: f

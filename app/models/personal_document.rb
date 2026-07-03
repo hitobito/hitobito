@@ -22,6 +22,9 @@
 #  index_personal_documents_on_person_id  (person_id)
 #
 class PersonalDocument < ApplicationRecord
+  has_paper_trail meta: {main_id: ->(r) { r.person_id },
+                         main_type: Person.sti_name}
+
   belongs_to :person
   belongs_to :label, class_name: "PersonalDocumentLabel"
   belongs_to :author, class_name: "Person"
@@ -30,8 +33,13 @@ class PersonalDocument < ApplicationRecord
   has_one_attached :file
   validates :file, presence: true
 
-  def to_s
-    label&.to_s
+  def to_s(format = :default)
+    case format
+    when :long
+      "#{label} (#{filename})"
+    else
+      label&.to_s
+    end
   end
 
   def filename

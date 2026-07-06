@@ -217,7 +217,7 @@ fr:
     archive: "Archiver"
     delete: Effacer
     edit_service_token: Clefs API
-    edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
+    edit_event_question_template: Modèles, informations d'inscription, événements
     edit_calendar_feeds: Feed du calendrier
 
   dropdown/people_email_export:
@@ -481,7 +481,7 @@ fr:
         flash:
           privacy_policy_not_accepted: "Pour terminer l'inscription, il faut accepter la déclaration de protection des données."
       flash:
-        application_not_possible: "Zur Zeit sind für diesen Anlass keine Anmeldungen möglich."
+        application_not_possible: "Pour le moment, il n'est pas possible de s'inscrire à cet événement."
     participation_contact_data:
       managed:
         update:
@@ -562,8 +562,8 @@ fr:
 
     question_templates:
       form:
-        default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
-        inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
+        default_caption: Ajouté par défaut pour les nouveaux événements
+        inherit_caption: Également disponible aux niveaux inférieurs.
 
     register:
       register:
@@ -616,7 +616,7 @@ fr:
     questions:
       add_choice: "Ajouter une réponse possible"
       sensitive_caption: Les réponses seront supprimées %{cutoff} mois après la fin de l'événement.
-      required_caption: Diese Frage muss beim Anmelden beantworten werden.
+      required_caption: Il faut répondre à cette question lors de l'inscription.
 
   assignments:
     attachment: "afficher les pièces jointes"
@@ -1423,19 +1423,19 @@ fr:
 
     messages:
       attrs:
-        dispatch_infos: Verarbeitung
+        dispatch_infos: Traitement
       dispatches:
         create:
           success:
-            message/letter: "Brief wurde als Druckauftrag vorbereitet."
-            message/letter_with_invoice: "Rechnungsbrief wurde als Druckauftrag vorbereitet."
-            message/text_message: "SMS wird versendet."
+            message/letter: "La lettre a été envoyée à l'impression."
+            message/letter_with_invoice: "La lettre de facturation a été envoyée à l'impression."
+            message/text_message: "SMS envoyé"
           alert:
-            message/letter: "Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden."
-            message/letter_with_invoice: "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
+            message/letter: "Une fois envoyée à l'impression, la lettre ne peut plus être modifiée."
+            message/letter_with_invoice: "Une fois envoyée à l'impression, la facture ne peut plus être modifiée."
       actions_show:
-        button_dispatch_letter: Druckauftrag erstellen
-        button_show_assignment: Druckauftrag anzeigen
+        button_dispatch_letter: Imprimer
+        button_show_assignment: Afficher l'impression
         button_duplicate: Dupliquer
         button_preview: Aperçu
         button_dispatch_text_message: Envoyer
@@ -1444,19 +1444,19 @@ fr:
           valid:
             message/letter:
               zero: "Il n'existe aucune personne avec adresse."
-              one: "%{model_class} wird für eine Person mit Adresse erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+              one: "%{model_class} est créé pour une personne avec adresse."
+              other: "%{model_class} est créé pour %{count} personnes avec adresse."
             message/letter_with_invoice:
               zero: "Il n'existe aucune personne avec adresse."
-              one: "%{model_class} wird für eine Person mit Adresse erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+              one: "%{model_class} est créé pour une personne avec adresse."
+              other: "%{model_class} est créé pour %{count} personnes avec adresse."
             message/text_message:
               zero: "Il n'existe aucune personne avec un numéro de téléphone portable."
-              one: "%{model_class} wird für eine Person mit Mobiltelefonnummer erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Mobiltelefonnummer erstellt."
+              one: "%{model_class} est créé pour une personne avec numéro de portable."
+              other: "%{model_class} est créé pour %{count} personnes avec numéro de portable."
       text_message:
         fields:
-          remaining_chars: Verbleibende Zeichen
+          remaining_chars: Caractères restant
       letter:
         fields:
           send_to_households_options:
@@ -1468,7 +1468,7 @@ fr:
           sender_rejected: L'expéditeur a été supprimé
           unknown_recipient: destinataire inconnu
           retrieved: Recevoir
-          bounce_rejected: Bounce abgelehnt
+          bounce_rejected: Bounce refusé
       export_enqueued: "L'exportation commence en arrière-plan et peut être téléchargée une fois terminée depuis l'aperçu des travaux: %{overview_link}"
       show:
         recipients_empty: La liste des destinataires est vide. Impossible de créer un PDF.
@@ -1476,10 +1476,10 @@ fr:
         section:
           donation_confirmation:
             header: "faire un don à %{organisation}"
-            title: "Spendenbestätigung %{year}"
-            received_amount: "Spenden erhalten in der Höhe von"
-            received_from: "%{year} haben wir von"
-            acknowledgement: "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"
+            title: "confirmation des dons %{year}"
+            received_amount: "Le don a bien été reçu"
+            received_from: "nous avons en %{year} "
+            acknowledgement: "Nous vous remercions pour votre confiance et votre engagement!"
 
     recipient_counts:
       index:
@@ -2236,9 +2236,9 @@ fr:
         one: Un rôle a été effacé
         other: "%{count} rôles ont été effacés "
       failure:
-        zero: Es wurde keine Rolle entfernt
-        one: Eine Rolle konnte nicht entfernt werden
-        other: "%{count} Rollen konnten nicht entfernt werden"
+        zero: Aucun rôle a été effacé
+        one: Un rouleau n'a pas pu être effacé
+        other: "%{count} rouleaux n'ont pas pu être effacé"
     create:
       success:
         zero: Aucun rôle a été créé
@@ -2246,8 +2246,8 @@ fr:
         other: "%{count} rôles ont été créé"
       failure:
         zero: Veuillez entrer un rôle valide
-        one: Eine Rolle konnte nicht erstellt werden
-        other: "%{count} Rollen konnten nicht erstellt werden"
+        one: Impossible de créer un rôle
+        other: "%{count} rôles n'ont pas pu être créés"
     update:
       success:
         zero: Aucun rôle n'a été déplacé
@@ -2255,8 +2255,8 @@ fr:
         other: "%{count} rôles ont été déplacés"
       failure:
         zero: Veuillez entrer un rôle valide
-        one: Eine Rolle konnte nicht verschoben werden
-        other: "%{count} Rollen konnten nicht verschoben werden"
+        one: Un rouleau n'a pas pu être déplacé
+        other: "%{count} rouleaux n'ont pas pu être déplacés"
     move:
       title: Où les personnes doivent-elles être transférées?
       submit: Continuer

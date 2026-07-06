@@ -106,7 +106,7 @@ describe PeopleManagerAbility do
         expect(ability).to be_able_to(:create_manager, build(managed: bottom_member))
       end
 
-      it "may not create manager for bottom member because bottom member has role outside of person layer permissions" do
+      it "may not create manager for bottom member because they have a role outside of person layer permissions" do
         Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: bottom_member)
         expect(ability).not_to be_able_to(:create_manager, build(managed: bottom_member))
       end

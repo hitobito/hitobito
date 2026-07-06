@@ -33,10 +33,10 @@ module Sheet
 
     if FeatureGate.enabled?("personal_documents")
       tab "activerecord.models.personal_document.other",
-          :group_person_personal_documents_path,
-          if: (lambda do |view, _group, person|
-            view.can?(:index, ::PersonalDocument.new(person:))
-          end)
+        :group_person_personal_documents_path,
+        if: (lambda do |view, _group, person|
+          view.can?(:index, ::PersonalDocument.new(person:))
+        end)
     end
 
     tab "people.tabs.history",

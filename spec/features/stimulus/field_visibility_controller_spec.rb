@@ -151,6 +151,72 @@ describe "FieldVisibility Stimulus Controller", js: true do
     expect(page).not_to have_css "h1", text: "hi there"
   end
 
+  it "hides container when checkbox value matches hideWhen" do
+    stub_form_with do
+      <<~HTML
+        <div data-controller="#{ctrl}"
+             data-#{ctrl}-observed-field-id-value="my-checkbox"
+             data-#{ctrl}-hide-when-value="1">
+          <label for="my-checkbox">Toggle me</label>
+          <input type="checkbox" id="my-checkbox" value="1">
+          <h1 data-#{ctrl}-target="container">hi there</h1>
+        </div>
+      HTML
+    end
+
+    expect(page).to have_css "h1", text: "hi there"
+    check "Toggle me"
+    expect(page).not_to have_css "h1", text: "hi there"
+    uncheck "Toggle me"
+    expect(page).to have_css "h1", text: "hi there"
+  end
+
+  it "hides container when field has any value with hideWhenPresent" do
+    stub_form_with do
+      <<~HTML
+        <div data-controller="#{ctrl}"
+             data-#{ctrl}-observed-field-id-value="my-text"
+             data-#{ctrl}-hide-when-present-value="true">
+          <label for="my-text">Text Field</label>
+          <input type="text" id="my-text" value="">
+          <h1 data-#{ctrl}-target="container">hi there</h1>
+        </div>
+      HTML
+    end
+
+    expect(page).to have_css "h1", text: "hi there"
+    fill_in "Text Field", with: "hello"
+    page.send_keys(:tab)
+    expect(page).not_to have_css "h1", text: "hi there"
+    fill_in "Text Field", with: ""
+    page.send_keys(:tab)
+    expect(page).to have_css "h1", text: "hi there"
+  end
+
+  it "hides container based on data attribute of selected option with hideWhenData" do
+    stub_form_with do
+      <<~HTML
+        <div data-controller="#{ctrl}"
+             data-#{ctrl}-observed-field-id-value="my-select"
+             data-#{ctrl}-hide-when-data-value="highlight">
+          <label for="my-select">Pick one</label>
+          <select id="my-select">
+            <option value="1">Option 1</option>
+            <option value="2" data-highlight="true">Option 2</option>
+            <option value="3">Option 3</option>
+          </select>
+          <h1 data-#{ctrl}-target="container">hi there</h1>
+        </div>
+      HTML
+    end
+
+    expect(page).to have_css "h1", text: "hi there"
+    select "Option 2", from: "Pick one"
+    expect(page).not_to have_css "h1", text: "hi there"
+    select "Option 3", from: "Pick one"
+    expect(page).to have_css "h1", text: "hi there"
+  end
+
   it "clears input values when container is hidden with clearContainerInputsOnHide" do
     stub_form_with do
       <<~HTML

@@ -494,6 +494,14 @@ it:
         one: Duplicare
         many: Duplicati
         other: Duplicati
+      personal_document:
+        one: Dokument
+        many: Dokumente
+        other: Dokumente
+      personal_document_label:
+        one: Dokumenten-Label
+        many: Dokumenten-Labels
+        other: Dokumenten-Labels
       people_filter:
         one: filtro
         many: Filtri
@@ -725,6 +733,17 @@ it:
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
+
+      personal_document:
+        file: Datei
+        filename: Dateiname
+        description: Beschreibung
+        label_id: Label
+        label: Label
+        author_id: Erstellt von
+        author: Erstellt von
+        created_at: Erstellt am
+        updated_at: Geändert am
 
       group:
         name: Nome
@@ -1601,7 +1620,7 @@ it:
     export/export_base_job: Esportazione di base
     export/invitations_export_job: Esportazione inviti
     export/invoices_job: Esportazione fatture
-    export/labels_job: Esportazione etichette
+    export/labels_job: Personen-Export
     export/message_job: Esportazione messaggi
     export/payments_export_job: Esportazione pagamenti
     export/people_export_job: Esportazione persone

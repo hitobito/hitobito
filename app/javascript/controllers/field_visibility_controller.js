@@ -11,6 +11,9 @@
  *   showWhen: Value to check for to show the container (Can be used for inputs, selects or checkboxes)
  *   showWhenPresent: Show whenever the field has any non-empty value
  *   showWhenData: Read a data attribute from the triggering element and show when it is true
+ *   hideWhen: Value to check for to hide the container
+ *   hideWhenPresent: Hide whenever the field has any non-empty value
+ *   hideWhenData: Read a data attribute from the triggering element and hide when it is true
  *   clearContainerInputsOnHide: Clears the values of the inputs when container is hidden
  *
  */
@@ -25,6 +28,9 @@ export default class extends Controller {
     showWhen: String,
     showWhenPresent: { type: Boolean, default: false },
     showWhenData: String,
+    hideWhen: String,
+    hideWhenPresent: { type: Boolean, default: false },
+    hideWhenData: String,
     clearContainerInputsOnHide: { type: Boolean, default: false },
   };
 
@@ -41,17 +47,19 @@ export default class extends Controller {
 
   handleChange = (event) => {
     const element = event.target;
-    let visible;
+    const dataCondition = this.showWhenDataValue || this.hideWhenDataValue;
+    const shouldHide = !!(this.hideWhenDataValue || this.hideWhenPresentValue || this.hideWhenValue);
 
-    if (this.showWhenDataValue) {
+    let conditionMet;
+    if (dataCondition) {
       const source = element.tagName === "SELECT" ? element.options[element.selectedIndex] : element;
-      visible = source?.dataset[this.showWhenDataValue] === "true";
+      conditionMet = source?.dataset[dataCondition] === "true";
     } else {
       const value = element.type === "checkbox" ? (element.checked ? element.value : "") : element.value;
-      visible = this.showWhenPresentValue ? !!value : value === this.showWhenValue;
+      conditionMet = this.showWhenPresentValue || this.hideWhenPresentValue ? !!value : value === (this.showWhenValue || this.hideWhenValue);
     }
 
-    visible ? this.show() : this.hide();
+    (shouldHide ? !conditionMet : conditionMet) ? this.show() : this.hide();
   };
 
   show() {

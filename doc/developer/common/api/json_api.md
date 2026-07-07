@@ -426,7 +426,23 @@ Checklist for creating/extending JSON:API endpoints:
 #### Permissions
 
 There are two separate permission checks happening during an API request.
-First, in the controller we have the usual `authorize!` guards. These check the general permission of the user to access the endpoint, and in the case of service tokens or oauth access tokens also whether the right scopes are set.
-Second, in the graphiti resources `app/resources`, we return an `index_ability` which is used for fetching all accessible models from the database. For this there's specific abilities in `app/abilities/json_api`.
+- First, in the controller we have the usual `authorize!` guards. These check the general permission of the user to
+  access the endpoint, and in the case of service tokens or oauth access tokens also whether the right scopes are set.
+- Second, in the graphiti resources `app/resources`, we return an `index_ability` which is used for fetching all
+  accessible models from the database. For this there's specific abilities in `app/abilities/json_api`.
 
-If resources are included within other resources, the index ability of the included resource is checked. This leads to situations that diverge from the behaviour of the main application. For example, `EventResource` can include `contact` (a `PersonResource`). To actually include the contact, the `ServiceToken` also requires the scope `people`. If the scope includes only `events`, the `contact` will be empty. Furthermore, the respective people must have a role in the defined permission range. So if the permission is `layer_read`, but the contact is in another layer, it will also not be included in the response. The same applies for event leaders and participants.
+##### Sideloading via include
+
+If resources are included within other resources, the index ability of the included resource is checked. This leads to
+situations that diverge from the behaviour of the main application. For example, `EventResource` can include `contact`
+(a `PersonResource`). To actually include the contact, the `ServiceToken` also requires the scope `people`. If the scope
+includes only `events`, the `contact` will be empty. Furthermore, the respective people must have a role in the defined
+permission range. So if the permission is `layer_read`, but the contact is in another layer, it will also not be
+included in the response. The same applies for event leaders and participants.
+
+##### Custom permissions
+
+A `ServiceToken`'s `dynamic_user` is a synthetic `Person` with exactly one role, whose `permissions` are derived from
+`ServiceToken::PERMISSIONS` (`layer_read`, `layer_and_below_read`, `layer_full`, `layer_and_below_full`). If your model
+requires custom permissions (e.g. `finance` for Invoice related models) you have to cater for that in
+`ServiceToken#dynamic_user`.

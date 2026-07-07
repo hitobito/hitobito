@@ -166,8 +166,8 @@ class JsonApiController < ActionController::API
   def resource_class
     [
       self.class.name.delete_prefix("JsonApi::")
-      .delete_suffix("Controller")
-      .underscore.singularize.camelize, "Resource"
+        .delete_suffix("Controller")
+        .underscore.singularize.camelize, "Resource"
     ].join.constantize
   end
 

@@ -495,6 +495,14 @@ fr:
         one: Duplicata
         many: Duplicatas
         other: Duplicatas
+      personal_document:
+        one: Dokument
+        many: Dokumente
+        other: Dokumente
+      personal_document_label:
+        one: Dokumenten-Label
+        many: Dokumenten-Labels
+        other: Dokumenten-Labels
       people_filter:
         one: Filtre
         many: Filtres
@@ -726,6 +734,17 @@ fr:
 
       person/add_request/mailing_list:
         label: "%{body} dans %{group}"
+
+      personal_document:
+        file: Datei
+        filename: Dateiname
+        description: Beschreibung
+        label_id: Label
+        label: Label
+        author_id: Erstellt von
+        author: Erstellt von
+        created_at: Erstellt am
+        updated_at: Geändert am
 
       group:
         name: Nom

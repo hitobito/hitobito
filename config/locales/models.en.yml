@@ -426,6 +426,12 @@ en:
       person_duplicate:
         one: Duplicate
         other: Duplicates
+      personal_document:
+        one: Dokument
+        other: Dokumente
+      personal_document_label:
+        one: Dokumenten-Label
+        other: Dokumenten-Labels
       people_filter:
         one: Filter
         other: Filters
@@ -646,6 +652,17 @@ en:
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
+
+      personal_document:
+        file: Datei
+        filename: Dateiname
+        description: Beschreibung
+        label_id: Label
+        label: Label
+        author_id: Erstellt von
+        author: Erstellt von
+        created_at: Erstellt am
+        updated_at: Geändert am
 
       group:
         name: Name

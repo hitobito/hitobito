@@ -1028,8 +1028,8 @@ fr:
         text: Texte
 
       pass_definition:
-        name: Name
-        description: Beschreibung
+        name: Nom
+        description: Description
         owner: Propriétaire
         template_key: modèle
         background_color: couleur d'arrière-plan
@@ -1042,7 +1042,7 @@ fr:
       pass:
         member_name: Mitgliedsname
         member_number: Numéro de membre
-        person: Person
+        person: Personne
         pass_definition: Pass-Definition
         state: Status
         valid_from: Valable à partir de

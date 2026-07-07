@@ -12,7 +12,7 @@ it:
     unknown: Sconosciuto
     nobody: nessuno
     all: Tutti
-    empty: Leer
+    empty: Vuoto
 
     from: Dal
     until: Al
@@ -172,7 +172,7 @@ it:
       caption_used_for_invoices: Utilizzo per le fatture
 
     address_fields:
-      housenumber: Nr.
+      housenumber: N.
       updates_household_address: L'indirizzo viene attualizzato per l'intera economia domestica
 
   custom_content_decorator:
@@ -204,8 +204,8 @@ it:
       cannot_see_event: "Non ha il permesso di vedere l'evento"
 
   dropdown/event/participation/send_mail:
-    title: E-Mail senden
-    confirmation: Bist du sicher, dass du diese Mails versenden willst?
+    title: Invia e-mail
+    confirmation: Sei sicuro di voler inviare queste e-mail?
 
   dropdown/label_items:
     additional_address:
@@ -217,8 +217,8 @@ it:
     archive: "archiviare"
     delete: Cancellare
     edit_service_token: Chiavi API
-    edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
-    edit_calendar_feeds: Kalender-Feeds
+    edit_event_question_template: Modelli Dati di registrazione Eventi
+    edit_calendar_feeds: Registrazioni nel calendario
 
   dropdown/people_email_export:
     button: "Esporta indirizzi e-mail"
@@ -499,7 +499,7 @@ it:
         title: Attivazione
       send_mails:
         create:
-          success: Es wurde eine E-Mail verschickt.
+          success: È stata inviata un'e-mail.
       specific_information: "dati specifici"
       application_answers: Dati per l'iscrizione
       admin_answers: Dati amministrativi
@@ -560,8 +560,8 @@ it:
 
     question_templates:
       form:
-        default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
-        inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
+        default_caption: Viene aggiunto di default ai nuovi eventi
+        inherit_caption: È disponibile anche a livelli inferiori.
 
     register:
       register:
@@ -614,7 +614,7 @@ it:
     questions:
       add_choice: "Possibile risposta risposta"
       sensitive_caption: Le risposte vengono cancellate %{cutoff} mesi dopo la conclusione dell'evento.
-      required_caption: Diese Frage muss beim Anmelden beantworten werden.
+      required_caption: È necessario rispondere a questa domanda al momento della registrazione.
 
   assignments:
     attachment: "Mostrare l'allegato."
@@ -646,7 +646,7 @@ it:
           all: tutti
           only_with_places_available: Solo con posti disponibili
         select_states: Filtrare secondo lo stato
-        time_period: Im Zeitraum von
+        time_period: Nel periodo dal
         until: fino a
       group_filter:
         all_layers: Tutti i gruppi
@@ -875,10 +875,10 @@ it:
   filters:
     attributes:
       match: contiene
-      not_match: enthält nicht
-      equal: ist genau
-      greater: grösser als
-      smaller: kleiner als
+      not_match: non contiene niente
+      equal: è esattamente
+      greater: più grande di
+      smaller: più piccolo di
       before: vor dem
       after: nach dem
       blank: ist leer
@@ -1312,7 +1312,7 @@ it:
           many: "%{count} Empfänger gefunden."
           other: "%{count} Empfänger gefunden."
     form:
-      recipient_source_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_source_group_type_help: Tutti i gruppi di questo tipo presenti in %{group} o al di sotto di esso riceveranno una fattura. Sono esclusi i gruppi che erano già stati eliminati o archiviati alla data di inizio del periodo di fatturazione.
       recipient_source_people_filter_parent_group_help: Alle Personen, die während der Rechnungsperiode eine aktive Rolle in %{group} hatten, bekommen eine Rechnung.
     new:
       title: Definire la fattura collettive
@@ -1425,15 +1425,15 @@ it:
       dispatches:
         create:
           success:
-            message/letter: "Brief wurde als Druckauftrag vorbereitet."
-            message/letter_with_invoice: "Rechnungsbrief wurde als Druckauftrag vorbereitet."
-            message/text_message: "SMS wird versendet."
+            message/letter: "La lettera è stata preparata per la stampa."
+            message/letter_with_invoice: "La lettera con la fattura è stata preparata per la stampa."
+            message/text_message: "L'SMS viene inviato."
           alert:
-            message/letter: "Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden."
-            message/letter_with_invoice: "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
+            message/letter: "Appena sarà creato l'ordine di stampa la lettera non potrà più venir rielaborata."
+            message/letter_with_invoice: "Appena sarà creato l'ordine di stampa la lettera con la fattura non potrà più venir rielaborata."
       actions_show:
-        button_dispatch_letter: Druckauftrag erstellen
-        button_show_assignment: Druckauftrag anzeigen
+        button_dispatch_letter: Creare l'ordine di stampa
+        button_show_assignment: Mostrare l'ordine di stampa
         button_duplicate: Duplicare
         button_preview: Anteprima
         button_dispatch_text_message: Inviare
@@ -1441,43 +1441,43 @@ it:
         recipient_info:
           valid:
             message/letter:
-              zero: "Keine Personen mit Adresse vorhanden."
-              one: "%{model_class} wird für eine Person mit Adresse erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+              zero: "Non ci sono persone con indirizzo."
+              one: "%{model_class} viene creato per una persona con indirizzo."
+              other: "%{model_class} viene creato per %{count} persone con indirizzo."
             message/letter_with_invoice:
-              zero: "Keine Personen mit Adresse vorhanden."
-              one: "%{model_class} wird für eine Person mit Adresse erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+              zero: "Non ci sono persone con indirizzo."
+              one: "%{model_class} viene creato per una persona con indirizzo."
+              other: "%{model_class} viene creato per %{count} persone con indirizzo."
             message/text_message:
-              zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
-              one: "%{model_class} wird für eine Person mit Mobiltelefonnummer erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Mobiltelefonnummer erstellt."
+              zero: "Non ci sono persone con il nummero di natel."
+              one: "%{model_class} viene creato per una persona con numero di telefonino."
+              other: "%{model_class} viene creato per %{count} persone con numero di telefonino."
       text_message:
         fields:
-          remaining_chars: Verbleibende Zeichen
+          remaining_chars: Caratteri rimanenti
       letter:
         fields:
           send_to_households_options:
-            true: Ein Brief pro Haushalt
-            false: Ein Brief pro Person
+            true: Una lettera per economia domestica.
+            false: Una lettera per persona.
       table:
         infos:
-          sender: "Absender: %{mail}"
-          sender_rejected: Absender wurde abgelehnt
+          sender: "Mittente: %{mail}"
+          sender_rejected: Il mittente è stato respinto
           unknown_recipient: Destinatario sconosciuto
-          retrieved: Empfangen
-          bounce_rejected: Bounce abgelehnt
+          retrieved: Ricevere
+          bounce_rejected: Rimbalzo rifiutato
       export_enqueued: "L'esportazione viene avviata in background e, una volta completata, potrà essere scaricata dalla panoramica dei processi: %{overview_link}"
       show:
-        recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
+        recipients_empty: La lista dei destinatari è vuota, non può creare nessun PDF.
       export:
         section:
           donation_confirmation:
-            header: "Spenden an %{organisation}"
-            title: "Spendenbestätigung %{year}"
-            received_amount: "Spenden erhalten in der Höhe von"
-            received_from: "%{year} haben wir von"
-            acknowledgement: "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"
+            header: "Donare a %{organisation}"
+            title: "Conferma della donazione %{year}"
+            received_amount: "Ricevuta una donazione per il totale di "
+            received_from: "%{year} abbiamo da"
+            acknowledgement: "La ringraziamo per la sua fiducia e per il suo impegno apprezzato!"
 
     recipient_counts:
       index:
@@ -1853,10 +1853,10 @@ it:
     passes:
       index:
         title: Pässe
-        show_pass: Anzeigen
+        show_pass: Visualizzare
         add_to_google_wallet: Google Wallet
         add_to_apple_wallet: Apple Wallet
-        download_pdf: Drucken
+        download_pdf: Stampa
 
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
@@ -2235,7 +2235,7 @@ it:
         one: Un ruolo è stato rimosso
         other: "Sono stati rimossi ... ruoli"
       failure:
-        zero: Es wurde keine Rolle entfernt
+        zero: Non è stato rimosso nessun ruolo
         one: Eine Rolle konnte nicht entfernt werden
         other: "%{count} Rollen konnten nicht entfernt werden"
     create:
@@ -2244,7 +2244,7 @@ it:
         one: È stato creato un ruolo
         other: "Sono stati creati... ruoli."
       failure:
-        zero: Bitte geben Sie eine valide Rolle an
+        zero: P.f. assegnare un ruolo valido
         one: Eine Rolle konnte nicht erstellt werden
         other: "%{count} Rollen konnten nicht erstellt werden"
     update:
@@ -2253,7 +2253,7 @@ it:
         one: Un ruolo è stato modificato
         other: "... ruoli sono stati modificati"
       failure:
-        zero: Bitte geben Sie eine valide Rolle an
+        zero: P.f. assegnare un ruolo valido
         one: Eine Rolle konnte nicht verschoben werden
         other: "%{count} Rollen konnten nicht verschoben werden"
     move:

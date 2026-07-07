@@ -88,6 +88,7 @@ export default class extends Controller {
     if (this.element.autofocus) {
       this.tom.focus();
     }
+    this.dispatch("ready");
   }
 
   #getOptions() {

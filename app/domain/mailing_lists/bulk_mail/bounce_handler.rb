@@ -34,7 +34,7 @@ module MailingLists::BulkMail
     end
 
     def perform_analyzed_action!
-      action = analyze_diagnostic_code(@imap_mail.diagnostic_code)
+      action = analyze_diagnostic_codes(Array(@imap_mail.diagnostic_code))
 
       case action
       when :block then block_bounce
@@ -50,6 +50,14 @@ module MailingLists::BulkMail
     rescue NoBounceRecipientDetected
       notify_sentry(:no_recipient, action)
       :unknown
+    end
+
+    def analyze_diagnostic_codes(codes)
+      actions = Settings.email.bounces.diagnostic_codes.keys + [:unknown]
+
+      codes
+        .map { |code| analyze_diagnostic_code(code) }
+        .min_by { |action| actions.index(action) }
     end
 
     def analyze_diagnostic_code(code)

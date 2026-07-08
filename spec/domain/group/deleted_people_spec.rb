@@ -89,6 +89,33 @@ describe Group::DeletedPeople do
     end
   end
 
+  context "group_for_deleted" do
+    let(:group) { groups(:top_layer) }
+    let(:person) { role.person.reload }
+    let(:role) do
+      Fabricate(Group::TopLayer::TopAdmin.name, group: group,
+        start_on: 1.year.ago)
+    end
+
+    let(:child_group) { groups(:bottom_layer_one) }
+    let(:child_group_one) { groups(:bottom_group_one_one) }
+    let(:child_person) { child_role.person.reload }
+    let(:child_role) do
+      Fabricate(Group::BottomGroup::Leader.name, group: child_group_one,
+        start_on: 1.year.ago)
+    end
+
+    before do
+      role.update_column(:end_on, 1.day.ago)
+      child_role.update_column(:end_on, 1.day.ago)
+    end
+
+    it "finds the group of the given deleted person, not some other deleted person" do
+      expect(Group::DeletedPeople.group_for_deleted(person)).to eq(group)
+      expect(Group::DeletedPeople.group_for_deleted(child_person)).to eq(child_group_one)
+    end
+  end
+
   context "when roles are deleted in different series" do
     let(:group) { groups(:top_layer) }
     let(:bottom_group) { groups(:bottom_layer_one) }

@@ -53,8 +53,7 @@ module ApiScopeAbility
         acceptable?(scope)
       end
     end
-
-    scope = subject_class_name.gsub("::", "").pluralize.underscore
+    scope = subject_class_name.gsub("::", "").underscore.pluralize
     ServiceToken.possible_scopes.include?(scope) && acceptable?(scope)
   end
 

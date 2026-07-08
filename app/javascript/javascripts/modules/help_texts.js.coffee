@@ -7,7 +7,7 @@ app = window.App ||= {}
 
 app.HelpTextToggler = {
   hideAll: ->
-    $('.help-text').hide()
+    $('.help-text[data-open=false]').hide()
   toggle: (e) ->
     $('.' + $(this).data('key')).slideToggle()
 }

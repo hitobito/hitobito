@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class HelpTextsController < SimpleCrudController
-  self.permitted_attrs = [:context, :key, :body]
+  self.permitted_attrs = [:context, :key, :body, :start_open]
 
   self.skip_translate_inheritable = true
 

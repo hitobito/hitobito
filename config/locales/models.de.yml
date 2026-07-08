@@ -1229,6 +1229,7 @@ de:
         context: Kontext
         key: Schlüssel
         body: Inhalt
+        start_open: initial Anzeigen
         field:
           one: Feld
           other: Felder

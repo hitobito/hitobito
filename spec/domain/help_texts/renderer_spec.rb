@@ -71,6 +71,17 @@ describe HelpTexts::Renderer do
       expect(subject.render_field(:name)).to be_present
     end
 
+    context "open / closed" do
+      it "is not open per default" do
+        expect(subject.render_field("name")).to match(/data-open="false"/)
+      end
+
+      it "is open if set to be so" do
+        help_texts(:person_field_name).update(start_open: true)
+        expect(subject.render_field("name")).to match(/data-open="true"/)
+      end
+    end
+
     context "sti" do
       let(:controller) { EventsController.new }
 

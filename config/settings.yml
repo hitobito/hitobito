@@ -188,6 +188,8 @@ people:
     enabled: false
     self_service_managed_creation:
       enabled: false
+  search_by_id:
+    enabled: true
 
 event:
   attachments:

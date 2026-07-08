@@ -18,7 +18,8 @@ class Group::DeletedPeople
     end
 
     def group_for_deleted(person)
-      Group.where(id: new.roles_of_deleted_people.select(:group_id)).first
+      Group.where(id: new.roles_of_deleted_people.where(person_id: person.id).select(:group_id))
+        .first
     end
   end
 

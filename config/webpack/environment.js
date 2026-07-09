@@ -71,7 +71,8 @@ const wagonPacksPatterns = [
 ]
 wagonPacksPatterns.flatMap((pattern) => globSync(pattern)).forEach((packPath) => {
   const name = basename(packPath, pathCompleteExtname(packPath))
-  environment.entry.set(name, pathResolve(packPath))
+  const existingEntry = environment.entry.get(name) || []
+  environment.entry.set(name, [...existingEntry, pathResolve(packPath)])
 })
 
 module.exports = environment

@@ -40,7 +40,7 @@
 #  text_message_provider                   :string           default("aspsms"), not null
 #  town                                    :string
 #  type                                    :string           not null
-#  zip_code                                :integer
+#  zip_code                                :string
 #  created_at                              :datetime
 #  updated_at                              :datetime
 #  contact_id                              :integer
@@ -123,7 +123,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   ### CALLBACKS
 
-  before_save :reset_contact_info
   before_save :prevent_changes, if: ->(g) { Group.archival_validation && g.archived? }
   after_create :create_invoice_config, if: :layer?
 
@@ -260,17 +259,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def with_layer
     layer? ? [self] : [layer_group, self]
-  end
-
-  ## readers and query methods for contact info
-  [
-    :address_care_of, :street, :housenumber, :postbox, :town, :zip_code, :country
-  ].each do |attribute|
-    [attribute, :"#{attribute}?"].each do |method|
-      define_method(method) do
-        (contact && contact.public_send(method).presence) || super()
-      end
-    end
   end
 
   def really_destroy!
@@ -442,21 +430,6 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def destroy_orphaned_event(event)
     if event.group_ids.blank? || event.group_ids == [id]
       event.destroy!
-    end
-  end
-
-  def reset_contact_info
-    if contact
-      clear_contacts = {
-        address_care_of: nil,
-        street: nil,
-        housenumber: nil,
-        postbox: nil,
-        town: nil,
-        zip_code: nil,
-        country: nil
-      }
-      assign_attributes(clear_contacts)
     end
   end
 

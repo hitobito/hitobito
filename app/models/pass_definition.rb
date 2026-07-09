@@ -34,6 +34,7 @@ class PassDefinition < ActiveRecord::Base
   Globalized.languages.each do |lang|
     has_one_attached :"logo_icon_#{lang}"
     has_one_attached :"logo_banner_#{lang}"
+    has_one_attached :"logo_secondary_#{lang}"
   end
 
   belongs_to :owner, polymorphic: true # Group (Event in future phase)
@@ -58,7 +59,6 @@ class PassDefinition < ActiveRecord::Base
   validates :logo_icon, presence: true
   validates :logo_banner, presence: true
 
-  # Logo-Attachments validation
   Globalized.languages.each do |lang|
     validates :"logo_icon_#{lang}",
       content_type: %w[image/png image/jpeg],
@@ -66,6 +66,8 @@ class PassDefinition < ActiveRecord::Base
     validates :"logo_banner_#{lang}",
       content_type: %w[image/png image/jpeg],
       aspect_ratio: :landscape
+    validates :"logo_secondary_#{lang}",
+      content_type: %w[image/png image/jpeg]
   end
 
   after_create :populate_passes
@@ -78,17 +80,16 @@ class PassDefinition < ActiveRecord::Base
     Passes::TemplateRegistry.fetch(template_key)
   end
 
-  # Locale-aware accessor for the square icon — similar to Globalize attributes.
-  # Returns the attachment for the requested language (with fallback chain).
-  # Example: definition.logo_icon        → Attachment for I18n.locale
-  #           definition.logo_icon(:fr)   → Attachment for :fr (or fallback)
   def logo_icon(locale = I18n.locale)
     find_localized_attachment(:logo_icon, locale)
   end
 
-  # Locale-aware accessor for the landscape banner — similar to Globalize attributes.
   def logo_banner(locale = I18n.locale)
     find_localized_attachment(:logo_banner, locale)
+  end
+
+  def logo_secondary(locale = I18n.locale)
+    find_localized_attachment(:logo_secondary, locale)
   end
 
   private
@@ -105,7 +106,7 @@ class PassDefinition < ActiveRecord::Base
   # that exists and is attached for an app language — identical to Globalize's
   # Adapter#fetch: traverse chain, return nil when exhausted.
   #
-  # Example: locale = :en, App-Sprachen = [:de, :fr, :it]
+  # Example: locale = :en, app languages = [:de, :fr, :it]
   #   → :en → logo_banner_en? respond_to? no → skip
   #   → :de → logo_banner_de? respond_to? yes, attached? → yes → return logo_banner_de
   #   → if nothing found: nil

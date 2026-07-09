@@ -9,7 +9,7 @@ class AddressSynchronizationJob < CursorBasedPagingJob
   attr_reader :batch_token, :upload_token, :result_token, :data
 
   self.parameters += [:batch_token, :upload_token, :result_token]
-  self.progress_message = "Post Adressabgleich: Fortschritt %d%%"
+  self.progress_message = "Post Adressabgleich: Fortschritt %d%% (%d/%d)"
   self.log_category = Synchronize::Addresses::SwissPost::Config::LOG_CATEGORY
 
   def self.exists?
@@ -60,7 +60,9 @@ class AddressSynchronizationJob < CursorBasedPagingJob
 
   def process_result
     @data = client.download_file(result_token)
-    Synchronize::Addresses::SwissPost::ResultProcessor.new(data, invalid_tag).process
+    Synchronize::Addresses::SwissPost::ResultProcessor.new(
+      data, invalid_tag, started_at: Date.current
+    ).process
   end
 
   def scope

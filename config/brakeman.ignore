@@ -26,11 +26,34 @@
     {
       "warning_type": "SQL Injection",
       "warning_code": 0,
+      "fingerprint": "15ba790037c755c2171f2d18f1a768518173597396ca251bda33349df7fb45e4",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/concerns/sortable.rb",
+      "line": 73,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"#{order_alias} #{sort_dir} NULLS LAST\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Sortable::Prepends",
+        "method": "sort_subquery"
+      },
+      "user_input": "order_alias",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "No SQL Injection possible here, because no user data is handled"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
       "fingerprint": "3a4aa5477a1a1e079bb24001f19c237f1075d2c547f3f814dcef0fa113de2d23",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/qualification.rb",
-      "line": 110,
+      "line": 109,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "where(\"qualifications.finish_at <= :date AND NOT EXISTS (#{\"SELECT 1 FROM qualifications q2\\nINNER JOIN qualification_kinds qk ON qk.id = q2.qualification_kind_id\\nWHERE q2.person_id = qualifications.person_id\\nAND #{subselect_kind_condition(qualification_kind_ids)}\\nAND (\\n  (q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date)) OR\\n  (q2.finish_at < :date AND q2.finish_at + INTERVAL '1 YEAR' * qk.reactivateable >= :date)\\n)\\n\"})\", :date => Time.zone.today, :qualification_kind_ids => qualification_kind_ids)",
       "render_path": null,
@@ -103,32 +126,13 @@
       "note": "HTML Tags ARE allowed here"
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 123,
-      "fingerprint": "edf687f759ec9765bd5db185dbc615c80af77d6e7e19386fc42934e7a80307af",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 3.2.6 ends on 2026-03-31",
-      "file": ".ruby-version",
-      "line": 1,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        1104
-      ],
-      "note": "Ticket exists and is planned for this quarter, see https://github.com/hitobito/hitobito/issues/3689"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "47199546b5f194a214b8b478c8e5639c808086f95e5c918e7bc4e3a8923e13bd",
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/qualification.rb",
-      "line": 92,
+      "line": 91,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "where(\"NOT EXISTS (SELECT 1 FROM qualifications q2 WHERE q2.person_id = qualifications.person_id AND #{subselect_kind_condition(qualification_kind_ids)} AND q2.start_at <= :date AND (q2.finish_at IS NULL OR q2.finish_at >= :date))\", :qualification_kind_ids => qualification_kind_ids, :date => Time.zone.today)",
       "render_path": null,
@@ -189,6 +193,29 @@
         89
       ],
       "note": "only used internally"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "5edf6ee8a7fefec9dabcf24c14538da019fcf06e4d8e92a52672919027aece7c",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/controllers/concerns/sortable.rb",
+      "line": 94,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql((\"#{order_alias} #{sort_dir} NULLS LAST\" or sort_expression_columns))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Sortable::Prepends",
+        "method": "sort_with_join"
+      },
+      "user_input": "order_alias",
+      "confidence": "Medium",
+      "cwe_id": [
+        89
+      ],
+      "note": "No SQL Injection possible here, because no user data is handled"
     },
     {
       "warning_type": "SQL Injection",
@@ -266,7 +293,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/event/participation.rb",
-      "line": 112,
+      "line": 118,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"CASE event_participations.participant_type\\n  WHEN 'Person' THEN #{Person.order_by_name_statement}\\n  WHEN 'Event::Guest' THEN #{Event::Guest.order_by_name_statement}\\n  ELSE ''\\nEND\\n\".squish)",
       "render_path": null,
@@ -329,6 +356,25 @@
       "note": "All input values are ensured to be integer and thus not dangerous"
     },
     {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 121,
+      "fingerprint": "edf687f759ec9765bd5db185dbc615c80af77d6e7e19386fc42934e7a80307af",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 3.2.6 ended on 2026-03-31",
+      "file": ".ruby-version",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ],
+      "note": "Ticket exists and is planned for this quarter, see https://github.com/hitobito/hitobito/issues/3689"
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "f01681cc519400d5ecf1a9daa5fff0deceb0d7540d558c889452271597a7436f",
@@ -375,5 +421,5 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "brakeman_version": "8.0.4"
+  "brakeman_version": "8.0.5"
 }

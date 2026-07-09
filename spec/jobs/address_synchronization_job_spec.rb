@@ -14,7 +14,6 @@ describe AddressSynchronizationJob do
       path: "/api/v1",
       username: "api",
       password: "secret",
-      query_key: "Q1",
       batch_key: "B1",
       role_types: role_types,
       person_constraints: person_constraints,
@@ -141,7 +140,7 @@ describe AddressSynchronizationJob do
 
       expect(HitobitoLogEntry.last.level).to eq "info"
       expect(HitobitoLogEntry.last.category).to eq "cleanup"
-      expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 0%"
+      expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 0% (0/2)"
     end
 
     it "enqueues follow up job to pull results" do
@@ -241,7 +240,7 @@ describe AddressSynchronizationJob do
           .and not_change { Delayed::Job.count }
         expect(HitobitoLogEntry.last.level).to eq "info"
         expect(HitobitoLogEntry.last.category).to eq "cleanup"
-        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 100%"
+        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 100% (2/2)"
       end
 
       it "persists result as attachment via dj callback" do
@@ -293,7 +292,7 @@ describe AddressSynchronizationJob do
 
         expect(HitobitoLogEntry.last.level).to eq "info"
         expect(HitobitoLogEntry.last.category).to eq "cleanup"
-        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 50%"
+        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 50% (1/2)"
 
         followup_job = Delayed::Job.last.payload_object
         expect(followup_job.result_token).to eq "out"
@@ -307,7 +306,7 @@ describe AddressSynchronizationJob do
         expect do
           job.perform
         end.to change { HitobitoLogEntry.count }.by(1)
-        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 0%"
+        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 0% (0/2)"
         expect(Delayed::Job.last.payload_object.cursor).to eq people(:bottom_member).id
 
         stub_api_request(:get, "/checkbatchstatus/batch",
@@ -325,7 +324,7 @@ describe AddressSynchronizationJob do
           run_next_job
         end.to change { HitobitoLogEntry.count }
           .and not_change { top_leader.reload.housenumber }
-        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 50%"
+        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 50% (1/2)"
         expect(Delayed::Job.last.payload_object.cursor).to eq people(:top_leader).id
 
         stub_api_request(:get, "/checkbatchstatus/batch",
@@ -346,7 +345,7 @@ describe AddressSynchronizationJob do
         end.to change { HitobitoLogEntry.count }
           .and change { top_leader.reload.housenumber }
           .and not_change { Delayed::Job.count }
-        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 100%"
+        expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 100% (2/2)"
       end
 
       it "runs three times before finalizing" do

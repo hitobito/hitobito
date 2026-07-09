@@ -12,7 +12,7 @@ en:
     unknown: unknown
     nobody: nobody
     all: all
-    empty: Leer
+    empty: Empty
 
     from: from
     until: to
@@ -52,7 +52,7 @@ en:
       add_another: Save and add more
       cancel: Cancel
       close: close
-      confirm: Bestätigen
+      confirm: Confirm
       search: Search
       back: Back
       refresh: Update
@@ -91,7 +91,7 @@ en:
 
     jump_to_content: "Skip to main content"
 
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
 
   list:
     index:
@@ -171,7 +171,7 @@ en:
       caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
-      housenumber: Nr.
+      housenumber: No.
       updates_household_address: address will be updated for the household
 
   custom_content_decorator:
@@ -203,8 +203,8 @@ en:
       cannot_see_event: "must not see the event"
 
   dropdown/event/participation/send_mail:
-    title: E-Mail senden
-    confirmation: Bist du sicher, dass du diese Mails versenden willst?
+    title: Send an email
+    confirmation: Are you sure you want to send these emails?
 
   dropdown/label_items:
     additional_address:
@@ -214,10 +214,10 @@ en:
     move: "Move"
     merge: "Merge"
     archive: "Archive"
-    delete: Löschen
+    delete: Delete
     edit_service_token: API-Keys
-    edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
-    edit_calendar_feeds: Kalender-Feeds
+    edit_event_question_template: Templates for Registration Details for Events
+    edit_calendar_feeds: Calendar feeds
 
   dropdown/people_email_export:
     button: "Export email addresses"
@@ -480,7 +480,7 @@ en:
         flash:
           privacy_policy_not_accepted: "To complete the registration, you must agree to the data protection declaration."
       flash:
-        application_not_possible: "Zur Zeit sind für diesen Anlass keine Anmeldungen möglich."
+        application_not_possible: "It is not currently possible to register for this event."
     participation_contact_data:
       managed:
         update:
@@ -498,7 +498,7 @@ en:
         title: Approval
       send_mails:
         create:
-          success: Es wurde eine E-Mail verschickt.
+          success: An email has been sent.
       specific_information: "Specific information"
       application_answers: Registration details
       admin_answers: Administration
@@ -559,8 +559,8 @@ en:
 
     question_templates:
       form:
-        default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
-        inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
+        default_caption: Added by default for new events
+        inherit_caption: Also available at lower levels.
 
     register:
       register:
@@ -610,7 +610,7 @@ en:
     questions:
       add_choice: "Add an answer option"
       sensitive_caption: Replies will be deleted %{cutoff} months after the event ends.
-      required_caption: Diese Frage muss beim Anmelden beantworten werden.
+      required_caption: 'This question must be answered during registration. '
 
   assignments:
     attachment: "Show attachment"
@@ -642,7 +642,7 @@ en:
           all: All
           only_with_places_available: Nur mit verfügbaren Plätzen
         select_states: Filter by status
-        time_period: Im Zeitraum von
+        time_period: During the period from
         until: To
       group_filter:
         all_layers: All groups
@@ -715,7 +715,7 @@ en:
     preconditions: "Required qualifications"
     tabs:
       participants: "Participants"
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
 
   event/applications:
     approved: "The application was approved."
@@ -733,7 +733,7 @@ en:
     not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
 
   event/invitations:
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
     description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
 
   event/kinds:
@@ -748,7 +748,7 @@ en:
     success: "%{full_entry_label} has successfully been created. Please check the contact data, and update them if necessary."
     success_for_external_manager: "%{full_entry_label} was successfully created."
     instructions: "For the definite registration you have to print the confirmation of participation by<i>printing</i>, sign it and send it by mail to the corresponding address."
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
     waiting_list: "All places are currently taken, registration is on the waiting list."
     pending: "Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
 
@@ -784,31 +784,31 @@ en:
 
   events/filters:
     new:
-      title: "%{type} filtern"
+      title: "filter %{type}"
     form:
       range:
-        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
-        layer: In der aktuellen Ebene und allen ihren Gruppen
-        group: Nur in der aktuellen Gruppe
-        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+        deep: Current level and below
+        layer: Current level with groups
+        group: Only this group
+        group_deep: This group and below
     general:
-      title: Allgemein
+      title: General
     date_range:
-      date_range_since: Zeitraum von
-      until: bis
+      date_range_since: Period from
+      until: to
     full_text:
-      q: Suchbegriff
+      q: Search term
     state:
       states: Status
     leader:
-      leader: Geleitet von
-      current_user: aktuelle/-r Benutzer/-in
+      leader: Led by
+      current_user: Current user
     kind:
-      kind: Kursart
+      kind: Course type
     kind_category:
-      kind_category: Kurskategorie
+      kind_category: Course Category
     attributes:
-      title: Felder
+      title: Fields
 
   event_decorator:
     apply: "Register"
@@ -854,7 +854,7 @@ en:
     duplicates: "Duplicates"
 
   filter_navigation/events:
-    deep: "Alle"
+    deep: "All"
     layer: "only %{layer}"
     filter: "Filter..."
 
@@ -866,14 +866,14 @@ en:
 
   filters:
     attributes:
-      match: enthält
-      not_match: enthält nicht
-      equal: ist genau
-      greater: grösser als
-      smaller: kleiner als
-      before: vor dem
-      after: nach dem
-      blank: ist leer
+      match: contains
+      not_match: does not contain
+      equal: is equal to
+      greater: bigger than
+      smaller: smaller than
+      before: before
+      after: after
+      blank: is empty
 
   full_text:
     index:
@@ -927,6 +927,15 @@ en:
       approvers:
         title: "Notifications to"
 
+    statistics:
+      people:
+        title: People statistics
+      show:
+        not_found: "Die angeforderte Statistik wurde nicht gefunden."
+        not_available: "Diese Statistik ist für diese Gruppe nicht verfügbar."
+      index:
+        none_available: "Auf dieser Gruppe sind keine Statistiken verfügbar."
+
   groups:
     actions_show:
       export_subgroups: "CSV subgroups"
@@ -960,14 +969,16 @@ en:
     tabs:
       deleted: "Deleted"
       statistics: "Statistics"
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
     statistics:
       title: Statistics
-      description: "%{subject}in %{groups} "
       year: Year
       age: Age
       count: Number
       distribution: Distribution
+      people:
+        title: Personenstatistik
+        description: "%{subject} in %{groups}"
     self_registration:
       alert:
         not_active: Self-registration is not possible in this group.
@@ -1109,7 +1120,7 @@ en:
         esr_number_heading: Reference
         currency: Currency
         amount: Invoice
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
     recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
     evaluations:
       show:
@@ -1209,37 +1220,52 @@ en:
         one: "Invoice %{number} has already been issued."
         other: "%{count} Invoices have already been issued."
       issued_invalid:
-        one: "Rechnung %{number} wurde bereits gestellt."
-        other: "%{count} Rechnungen wurde bereits gestellt."
+        one: "Invoice %{number} has already been issued."
+        other: "%{count} Invoices have already been issued."
       sent_invalid:
-        one: "Rechnung %{number} wurde bereits verschickt."
-        other: "%{count} Rechnungen wurde bereits verschickt."
+        one: "Invoice %{number}has already been sent."
+        other: "%{count}invoices have already been sent."
       payed_invalid:
-        one: "Rechnung %{number} wurde bereits bezahlt."
-        other: "%{count} Rechnungen wurde bereits bezahlt."
+        one: "Invoice %{number}has already been paid."
+        other: "%{count}invoices have already been paid."
       reminded_invalid:
-        one: "Mahnung %{number} wurde bereits erstellt."
-        other: "%{count} Mahnungen wurden bereits erstellt."
+        one: "Reminder %{number}has already been sent."
+        other: "%{count}reminders have already been sent."
       recipient_email_invalid:
-        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
-        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+        one: "Invoice %{number} could not be sent because no recipient email has been found."
+        other: "%{count}invoices could not be sent because no recipient emails have been found."
       payment_reminders_missing:
-        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
-        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        one: "Invoice %{number}could not be reminded because reminder settings are invalid."
+        other: "%{count}reminders could not be sent because reminder settings are invalid."
     invoices:
       invalid_recipients:
-        one: "Für einen Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
-        other: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        one: "A valid invoice could not be generated for one recipient. <br/> %{recipients}"
+        other: "A valid invoice could not be generated for %{count} recipients. <br/> %{recipients}"
     destroy:
       zero: "First, you need to select an invoice."
       one: "Invoice cancelled"
       other: "%{count} Invoices have been cancelled."
 
   payments:
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
     create:
       flash:
         success: Payment of %{amount}has been registered.
+    actions_index:
+      export: "Export (CSV)"
+    table:
+      number_of_payments_shown:
+        one: "%{count} payment is shown."
+        other: "%{count} payments are shown."
+      invoice_status: "Invoice status"
+      payment_status: "Payment status"
+    filter:
+      from: From
+      to: To
+      invoice_status: "Invoice status"
+      payment_status: "Payment status"
+    history:
+      payed: "%{amount} paid (%{source})"
 
   period_invoice_templates:
     invoice_runs:
@@ -1255,11 +1281,11 @@ en:
       form:
         recipient_count_disclaimer: "Please note: If the filter criteria apply to more or fewer recipients in future, the final list of invoices generated may still change."
         recipient_info:
-          one: "%{count} Empfänger gefunden."
-          other: "%{count} Empfänger gefunden."
+          one: "%{count} recipient found."
+          other: "%{count} recipient found."
     form:
-      recipient_source_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
-      recipient_source_people_filter_parent_group_help: Alle Personen, die während der Rechnungsperiode eine aktive Rolle in %{group} hatten, bekommen eine Rechnung.
+      recipient_source_group_type_help: All groups of this type in or below %{group} will receive an invoice. This does not apply to groups that had already been deleted or archived by the start date of the billing period.
+      recipient_source_people_filter_parent_group_help: All individuals who had an active role in group %{group} during the billing period will receive an invoice.
     new:
       title: Define a collective invoice
     actions_index:
@@ -1303,7 +1329,7 @@ en:
       end: "End imitation"
 
   mailchimp_synchronizations:
-    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
+    wait_for_synchronization: "Your data is currently being sent to MailChimp. This may take a moment. Once complete, the selected list will be updated with the contacts from hitobito. You can view the synchronization status on the job overview: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1368,49 +1394,49 @@ en:
       dispatches:
         create:
           success:
-            message/letter: "Brief wurde als Druckauftrag vorbereitet."
-            message/letter_with_invoice: "Rechnungsbrief wurde als Druckauftrag vorbereitet."
-            message/text_message: "SMS wird versendet."
+            message/letter: "The letter has been prepared as a print job."
+            message/letter_with_invoice: "The invoice letter has been prepared as a print job."
+            message/text_message: "Sending SMS"
           alert:
-            message/letter: "Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden."
-            message/letter_with_invoice: "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
+            message/letter: "Once the print job has been created, the letter can no longer be edited."
+            message/letter_with_invoice: "Once the print job has been created, the invoice letter can no longer be edited."
       actions_show:
-        button_dispatch_letter: Druckauftrag erstellen
-        button_show_assignment: Druckauftrag anzeigen
-        button_duplicate: Duplizieren
-        button_preview: Vorschau
-        button_dispatch_text_message: Senden
-        button_show_pdf: PDF anzeigen
+        button_dispatch_letter: Create a print job
+        button_show_assignment: View print job
+        button_duplicate: Duplicate
+        button_preview: Preview
+        button_dispatch_text_message: Send
+        button_show_pdf: Show PDF
         recipient_info:
           valid:
             message/letter:
-              zero: "Keine Personen mit Adresse vorhanden."
-              one: "%{model_class} wird für eine Person mit Adresse erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+              zero: "No people with an address found."
+              one: "%{model_class} is created for a person with an address."
+              other: "%{model_class} is created for %{count} people with an address."
             message/letter_with_invoice:
-              zero: "Keine Personen mit Adresse vorhanden."
-              one: "%{model_class} wird für eine Person mit Adresse erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+              zero: "No people found with address."
+              one: "%{model_class} is created for a person with an address."
+              other: "%{model_class} is created for %{count} people with an address."
             message/text_message:
-              zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
-              one: "%{model_class} wird für eine Person mit Mobiltelefonnummer erstellt."
-              other: "%{model_class} wird für %{count} Personen mit Mobiltelefonnummer erstellt."
+              zero: "No people found with mobile numbers."
+              one: "%{model_class} is created for a person with a mobile phone number."
+              other: "%{model_class} is created for %{count} people with a mobile phone number."
       text_message:
         fields:
-          remaining_chars: Verbleibende Zeichen
+          remaining_chars: Remaining characters
       letter:
         fields:
           send_to_households_options:
-            true: Ein Brief pro Haushalt
-            false: Ein Brief pro Person
+            true: letter per household
+            false: One letter per person
       table:
         infos:
-          sender: "Absender: %{mail}"
-          sender_rejected: Absender wurde abgelehnt
-          unknown_recipient: Empfänger unbekannt
-          retrieved: Empfangen
-          bounce_rejected: Bounce abgelehnt
-      export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+          sender: "Sender: %{mail}"
+          sender_rejected: Sender has been rejected
+          unknown_recipient: Sender unknown
+          retrieved: Receive
+          bounce_rejected: Bounce rejected
+      export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
       show:
         recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
       export:
@@ -1494,6 +1520,7 @@ en:
     invoices: "Invoices"
     invoices/single: "Individual invoices"
     invoices/evaluations: "Buchungsbeleg"
+    payments: "Zahlungseingänge"
 
   notes:
     new_note: Add note
@@ -1932,7 +1959,7 @@ en:
       add_role: Add role
       set_main_group: Set main group
 
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
     export_email_needed: "Email needed for export."
 
     multiselect_actions:
@@ -2318,7 +2345,7 @@ en:
     subscription:
       only_persons_with: "Only people with:"
       persons_excluded_with: "Exclude people with:"
-    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
 
   taggable:
     add_tag: Add tag
@@ -2327,12 +2354,12 @@ en:
 
   job_observations:
     index:
-      title: Jobübersicht
+      title: Job Overview
     job_observation:
-      no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
+      no_progress_provided: This job has no trackable progress
     notification:
-      job_success: Job erfolgreich abgeschlossen
-      job_error: Fehler bei Jobausführung aufgetreten
+      job_success: Job successfully completed
+      job_error: An error occurred during job execution
 
   version:
     attribute_change:
@@ -2470,7 +2497,7 @@ en:
       generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
     pass:
       member_name: Name
-      member_number: Mitgliedernummer
-      valid_from: Gültig von
-      valid_until: Gültig bis
-      description: Beschreibung
+      member_number: Membership number
+      valid_from: Valid from
+      valid_until: Valid until
+      description: Description

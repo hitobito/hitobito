@@ -10,6 +10,7 @@
 # Table name: help_texts
 #
 #  id         :integer          not null, primary key
+#  body_old   :text
 #  controller :string(100)      not null
 #  kind       :string(100)      not null
 #  model      :string(100)

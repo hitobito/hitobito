@@ -61,8 +61,8 @@ module Sheet
       tab "groups.tabs.statistics",
         :group_statistics_path,
         if: (lambda do |view, group|
-          group.layer &&
-          view.can?(:show_statistics, group)
+          view.can?(:show_statistics, group) &&
+            ::Group::Statistics::Registry.available_for(group).any?
         end)
     end
 

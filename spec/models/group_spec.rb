@@ -573,11 +573,11 @@ describe Group do
       its(:street) { should eq "An der Foobar" }
       its(:housenumber) { should eq "23" }
       its(:town) { should eq "thun" }
-      its(:zip_code) { should eq 3600 }
+      its(:zip_code) { should eq "3600" }
       its(:country) { should eq "CH" }
     end
 
-    context "discards contact info when contactable is set" do
+    context "preserves contact info when contactable is set" do
       let(:contact) { Fabricate(:person, other_contactable) }
       let(:other_contactable) { {street: "barfoo", zip_code: nil} }
       let!(:other_contactable_role) do
@@ -588,8 +588,8 @@ describe Group do
         group.update_attribute(:contact, contact)
       end
 
-      its(:street) { should eq "barfoo" }
-      its(:zip_code?) { should be_falsey }
+      its(:street) { should eq "An der Foobar" }
+      its(:zip_code?) { should be_truthy }
     end
   end
 
@@ -1058,6 +1058,25 @@ describe Group do
           Group.rebuild!(false)
         end.to_not raise_error
       end
+    end
+  end
+
+  context "#zip_code" do
+    let(:group) { groups(:top_group) }
+
+    it "stores and reads Swiss zip codes (4 digits)" do
+      group.update!(zip_code: 3007, country: "CH")
+      expect(Group.find(group.id).zip_code).to eq "3007"
+    end
+
+    it "stores and reads zip codes with leading zero" do
+      group.update!(zip_code: "01234", country: "DE")
+      expect(group.reload.zip_code).to eq "01234"
+    end
+
+    it "stores and reads alphanumeric zip codes" do
+      group.update!(zip_code: "W2 1HQ", country: "GB")
+      expect(group.reload.zip_code).to eq "W2 1HQ"
     end
   end
 end

@@ -33,7 +33,7 @@ describe Wallets::GoogleWallet::PassService do
 
   describe "#save_url" do
     it "returns the Google Wallet save URL without syncing" do
-      expected_id = "#{issuer_id}.hitobito.pass.#{service.pass.id}.#{pass_installation.id}"
+      expected_id = "#{issuer_id}.hitobito.test.pass.#{service.pass.id}.#{pass_installation.id}"
       expect(client).to receive(:generate_save_url)
         .with(expected_id, type: :generic)
         .and_return("https://pay.google.com/gp/v/save/jwt-token")
@@ -76,7 +76,7 @@ describe Wallets::GoogleWallet::PassService do
 
         service.create_or_update
 
-        expect(payload[:id]).to eq("#{issuer_id}.hitobito.class.#{definition.id}")
+        expect(payload[:id]).to eq("#{issuer_id}.hitobito.test.class.#{definition.id}")
         expect(payload[:issuerName]).to eq("TopLayer Member Pass")
         expect(payload[:reviewStatus]).to eq("UNDER_REVIEW")
         expect(payload[:multipleDevicesAndHoldersAllowedStatus]).to eq("MULTIPLE_HOLDERS")
@@ -85,7 +85,7 @@ describe Wallets::GoogleWallet::PassService do
     end
 
     describe "generic_object payload" do
-      let(:prefix) { "#{issuer_id}.hitobito" }
+      let(:prefix) { "#{issuer_id}.hitobito.test" }
 
       after { described_class.id_prefix_addition = nil }
 
@@ -201,7 +201,7 @@ describe Wallets::GoogleWallet::PassService do
 
   describe "#revoke" do
     it "sends INACTIVE state to client" do
-      expected_id = "#{issuer_id}.hitobito.pass.#{service.pass.id}.#{pass_installation.id}"
+      expected_id = "#{issuer_id}.hitobito.test.pass.#{service.pass.id}.#{pass_installation.id}"
 
       expect(client).to receive(:create_or_update_object).with(
         {id: expected_id, state: "INACTIVE"},

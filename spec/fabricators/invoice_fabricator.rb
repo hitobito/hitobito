@@ -12,6 +12,11 @@ Fabricator(:invoice) do
   recipient_country { Faker::Address.country }
 end
 
+Fabricator(:invoice_item) do
+  name { Faker::Commerce.product_name }
+  unit_cost { Faker::Number.between(from: 0.25, to: 1200.0).round(2) }
+end
+
 Fabricator(:invoice_article) do
   number { Faker::Number.hexadecimal(digits: 5).to_s.upcase }
   name { Faker::Commerce.product_name }

@@ -16,7 +16,6 @@ describe Synchronize::Addresses::SwissPost::Client do
       path: "/api/v1",
       username: "api",
       password: "secret",
-      query_key: "Q1",
       batch_key: "B1"
     }
   }

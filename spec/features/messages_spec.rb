@@ -41,6 +41,25 @@ describe :messages, js: true do
     end
   end
 
+  context "letter with invoice" do
+    before do
+      Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
+      3.times do
+        person = Fabricate(:person_with_address)
+        Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
+      end
+    end
+
+    it "displays recipient info" do
+      people(:top_leader).update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
+
+      click_link("Rechnungsbrief erstellen")
+
+      is_expected.to have_selector("a", text: "Rechnungsbrief wird für 3 Personen erstellt.")
+      is_expected.to have_text("(Eine Person hat keine vollständige Adresse hinterlegt.)")
+    end
+  end
+
   context "text message" do
     before do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
@@ -104,6 +123,50 @@ describe :messages, js: true do
       expect do
         all("button", text: "Speichern").first.click
         expect(page).to have_content "Print print print! wurde erfolgreich erstellt."
+      end.to change { printer.assignments.count }.by(1)
+
+      is_expected.to have_selector("a", text: "Anhang")
+      click_link("Anhang")
+
+      is_expected.to have_selector("a", text: "Druckauftrag anzeigen")
+    end
+
+    it "creates new letter with invoice and assignment" do
+      people(:top_leader).update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
+
+      click_link("Rechnungsbrief erstellen")
+      is_expected.to have_selector("a", text: "Rechnungsbrief wird für 3 Personen erstellt.")
+
+      fill_in "Betreff", with: "Letter with love and invoice"
+      fill_in_trix_editor "message_body", with: Faker::Lorem.sentences.join
+
+      click_link "Eintrag hinzufügen"
+      within all("#invoice_items_fields .fields").first do
+        fill_in "Name", with: "Turbo Membership"
+        fill_in "Beschreibung", with: "Annual turbo membership"
+        fill_in "Kostenstelle", with: "42"
+        fill_in "Konto", with: "123-456-789"
+        fill_in "MwSt.", with: "19.00"
+        fill_in "Preis", with: "100.00"
+        fill_in "Anzahl", with: "1"
+      end
+
+      expect do
+        click_button("Speichern")
+        expect(page).to have_content "Letter with love and invoice wurde erfolgreich erstellt."
+      end.to change { Message::Letter.count }.by(1)
+
+      is_expected.to have_selector("a", text: "Druckauftrag erstellen")
+      click_link("Druckauftrag erstellen")
+
+      is_expected.to have_text(
+        "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
+      )
+      fill_in "Titel", with: "Please print this beautiful letter"
+      fill_in "Beschreibung", with: "Paper: A4, portrait, extra thick"
+      expect do
+        all("button", text: "Speichern").first.click
+        expect(page).to have_content "Please print this beautiful letter"
       end.to change { printer.assignments.count }.by(1)
 
       is_expected.to have_selector("a", text: "Anhang")

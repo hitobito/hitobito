@@ -22,8 +22,6 @@ module Export::Pdf::Passes::Sections::Concerns
         fit: [LOGO_MAX_WIDTH, LOGO_MAX_HEIGHT])
 
       LOGO_MAX_WIDTH
-    rescue StandardError
-      0
     end
 
     def fetch_logo_data

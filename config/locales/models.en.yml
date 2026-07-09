@@ -426,6 +426,12 @@ en:
       person_duplicate:
         one: Duplicate
         other: Duplicates
+      personal_document:
+        one: Dokument
+        other: Dokumente
+      personal_document_label:
+        one: Dokumenten-Label
+        other: Dokumenten-Labels
       people_filter:
         one: Filter
         other: Filters
@@ -646,6 +652,17 @@ en:
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
+
+      personal_document:
+        file: Datei
+        filename: Dateiname
+        description: Beschreibung
+        label_id: Label
+        label: Label
+        author_id: Erstellt von
+        author: Erstellt von
+        created_at: Erstellt am
+        updated_at: Geändert am
 
       group:
         name: Name
@@ -1404,6 +1421,11 @@ en:
         status: Status
         payee_person_name: Schuldner Name
         payee_person_address: Schuldner Adresse
+        statuses:
+          ebics_imported: "EBICS"
+          xml_imported: "CAMT"
+          manually_created: "Manuell"
+          without_invoice: "ohne Rechnung"
 
       payment_reminder:
         invoice: Invoice
@@ -1443,6 +1465,8 @@ en:
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Neuenburger Kantonalbank
+          bcv: Banque Cantonale Vaudoise
+          bcvs: Walliser Kantonalbank
 
       period_invoice_template:
         name: Description
@@ -1494,28 +1518,28 @@ en:
         excluded_calendar_tags: Excluded tags
 
       job_observation:
-        started_at: Startzeitpunkt
-        finished_at: Endzeitpunkt
-        attempts: Versuche
+        started_at: Start time
+        finished_at: End Time
+        attempts: Attempts
         statuses:
-          planned: In der Warteschlange
-          in_progress: In Bearbeitung
-          success: Erfolgreich abgeschlossen
-          error: Bei der Bearbeitung trat ein Fehler auf
+          planned: Planned
+          in_progress: In progress
+          success: Successfully completed
+          error: An error occurred during processing
 
   delayed_job:
-    export/event_participations_export_job: Event-Teilnahmen-Export
-    export/events_export_job: Anlass-Export
-    export/export_base_job: Basis-Export
-    export/invitations_export_job: Einladungs-Export
-    export/invoices_job: Rechnungs-Export
-    export/labels_job: Etiketten-Export
-    export/message_job: Nachrichten-Export
-    export/payments_export_job: Zahlungs-Export
-    export/people_export_job: Personen-Export
-    export/subgroups_export_job: Untergruppen-Export
-    export/subscriptions_job: Abonnenten-Export
-    mailchimp_synchronization_job: Mailchimp-Synchronisation
+    export/event_participations_export_job: Event participation export
+    export/events_export_job: Event export
+    export/export_base_job: Base export
+    export/invitations_export_job: Invitation export
+    export/invoices_job: Invoice export
+    export/labels_job: Personen-Export
+    export/message_job: Message export
+    export/payments_export_job: Payment export
+    export/people_export_job: People export
+    export/subgroups_export_job: Subgroup export
+    export/subscriptions_job: Subscription export
+    mailchimp_synchronization_job: Mailchimp synchronisation
 
   api:
     errors:

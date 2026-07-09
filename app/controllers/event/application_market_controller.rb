@@ -16,7 +16,7 @@ class Event::ApplicationMarketController < ApplicationController
 
   def index
     @participants = load_participants
-    @applications = sort_and_decorate(load_applications)
+    @applications = Event::ParticipationDecorator.decorate_collection(load_applications)
 
     respond_to do |format|
       format.html
@@ -63,29 +63,31 @@ class Event::ApplicationMarketController < ApplicationController
 
   def load_applications
     applications = Event::Participation
+      .with_person_participants
+      .with_guest_participants
       .includes(:application, :event)
       .references(:application)
       .where(filter_applications)
       .merge(Event::Participation.pending)
-      .distinct
+      .reorder(*applications_sort_expression)
 
     Event::Participation::PreloadParticipations.preload(applications)
 
     applications
   end
 
-  def sort_and_decorate(applications)
-    sort_applications(applications)
-    Event::ParticipationDecorator.decorate_collection(applications)
-  end
-
-  def sort_applications(applications)
-    # do not include nil values in arrays returned by #sort_by
-    applications.to_a.sort_by! do |p|
-      [p.application.priority(event) || 99,
-        p.participant.last_name || "",
-        p.participant.first_name || ""]
-    end
+  def applications_sort_expression
+    [
+      Arel.sql(<<~SQL.squish),
+        CASE
+          WHEN event_applications.priority_1_id = #{event.id} THEN 1
+          WHEN event_applications.priority_2_id = #{event.id} THEN 2
+          WHEN event_applications.priority_3_id = #{event.id} THEN 3
+          ELSE 99
+        END
+      SQL
+      Event::Participation.order_by_name_statement
+    ]
   end
 
   def filter_applications

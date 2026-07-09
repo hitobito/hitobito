@@ -72,15 +72,13 @@ module Synchronize::Addresses::SwissPost
         {Search: Config::STATS_FILES[key], Replacement: token}
       end
 
-      {key: config.batch_key, replaceItems: items}.to_json
+      {key: Config.batch_key, replaceItems: items}.to_json
     end
 
     def endpoint(path) = [Config.host, Config.path, path].join
 
     def auth_header = {Authorization: "Basic #{auth_credentials}"}
 
-    def auth_credentials = Base64.strict_encode64("#{config.username}:#{config.password}")
-
-    def config = Config
+    def auth_credentials = Base64.strict_encode64("#{Config.username}:#{Config.password}")
   end
 end

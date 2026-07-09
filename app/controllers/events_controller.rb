@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,14 +28,14 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
       ],
       application_questions_attributes: [
         :id, :question, :choices, :multiple_choices, :type,
-        :required, :derived, :_destroy,
+        :required, :sensitive, :template_id, :_destroy,
         {
           choices_attributes: [:choice, :_destroy]
         }
       ],
       admin_questions_attributes: [
         :id, :question, :choices, :multiple_choices, :type,
-        :required, :derived, :_destroy,
+        :required, :sensitive, :template_id, :_destroy,
         {
           choices_attributes: [:choice, :_destroy]
         }
@@ -104,8 +104,12 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     # deleting all choices
     # Otherwise, the choices_attributes key would not present and when the attrs are assigned
     # to the entry, the choices would be reset to the initial values
+    # Derived questions naturally do not submit any choices in the form
+    # so we don't want to accidentaly erase them
     %i[application_questions_attributes admin_questions_attributes].each do |key|
-      model_params.dig(key)&.each_value { |v| v[:choices_attributes] ||= {} }
+      model_params.dig(key)&.each_value do |v|
+        v[:choices_attributes] ||= {} if v[:template_id].blank?
+      end
     end
     super
   end

@@ -34,9 +34,9 @@ module People::PassesHelper
   end
 
   # Renders an inline SVG QR code for the pass verification URL.
-  def pass_qr_code_svg(pass, size: 120)
+  def pass_qr_code_svg(pass, size: 147)
     RQRCode::QRCode.new(pass.qrcode_value).as_svg(
-      module_size: 3, standalone: true, use_path: true, viewbox: true,
+      module_size: 3, standalone: true, use_path: true, viewbox: true, offset: 15,
       svg_attributes: {width: size, height: size, class: "pass-card-qr-svg"}
     ).html_safe
   end

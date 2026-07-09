@@ -9,20 +9,12 @@ module Synchronize::Addresses::SwissPost
   class ResultProcessor
     UPDATING_QSTATS = %w[1 2 3 4]
     LOGGINGS_QSTATS = {
+      "25": [:info, "Verstorben / Firma erloschen"],
       "26": [:info, "Umzug ins Ausland"],
       "27": [:info, "Unbekannt weggezogen"],
       "50": [:warn, "Person an Adresse nicht bekannt"],
       "51": [:warn, "Adresse nicht bekannt"]
     }.stringify_keys
-
-    FIELDS = {
-      first_name: "Prename",
-      last_name: "Name",
-      address_care_of: "CoAddress",
-      street: "StreetName",
-      zip_code: "ZIPCode",
-      town: "TownName"
-    }
 
     CSV_OPTIONS = {
       col_sep: Config::COL_SEP,
@@ -32,10 +24,12 @@ module Synchronize::Addresses::SwissPost
     }
 
     class_attribute :remote_identifier
+    class_attribute :qstat_tag_prefix, default: "Post_Adressenabgleich_QSTAT"
 
-    def initialize(text, invalid_tag)
+    def initialize(text, invalid_tag, started_at: Date.current)
       @data = parse(text)
       @invalid_tag = invalid_tag
+      @started_at = started_at
       @updated_people_ids = []
     end
 
@@ -45,6 +39,7 @@ module Synchronize::Addresses::SwissPost
           update(person, row)
         elsif LOGGINGS_QSTATS.key?(qstat)
           create_log_entry(person, *LOGGINGS_QSTATS[qstat])
+          create_qstat_tag(person, qstat)
         end
       end
       destroy_obsolete_taggings
@@ -52,7 +47,7 @@ module Synchronize::Addresses::SwissPost
 
     private
 
-    attr_reader :data, :invalid_tag, :updated_people_ids
+    attr_reader :data, :invalid_tag, :started_at, :updated_people_ids
 
     def each_potential_update
       remote_identifier = self.class.remote_identifier || Generator.fields.invert[:id].to_s
@@ -64,12 +59,7 @@ module Synchronize::Addresses::SwissPost
     end
 
     def update(person, row)
-      attrs = FIELDS.map do |target, source|
-        [target, row[source]]
-      end.to_h
-      person.attributes = attrs
-      person.housenumber = read_housenumber(row)
-      person.postbox = row["POBoxTerm"].present? ? read_postbox(row) : nil
+      assign_attributes(person, row)
 
       if person.save
         updated_people_ids << person.id
@@ -78,17 +68,49 @@ module Synchronize::Addresses::SwissPost
       end
     end
 
+    # necessary for extensions in wagons
+    def assign_attributes(person, row)
+      person.first_name = read_first_name(row)
+      person.last_name = read_last_name(row)
+      person.address_care_of = read_address_care_of(row)
+      person.street = read_street(row)
+      person.housenumber = read_housenumber(row)
+      person.postbox = read_postbox(row)
+      person.zip_code = read_zip_code(row)
+      person.town = read_town(row)
+    end
+
+    def read_first_name(row) = row["Prename"]
+
+    def read_last_name(row) = row["Name"]
+
+    def read_address_care_of(row) = row["CoAddress"]
+
+    def read_street(row) = row["StreetName"]
+
     def read_housenumber(row)
       [row["HouseNo"], row["HouseNoAddition"]].compact_blank.join
     end
 
     def read_postbox(row)
+      return unless postbox?(row)
+
       [
         row["POBoxTerm"],
-        row["POBoxNo"].presence,
-        (row["POBoxZIP"] || row["ZIPCode"]).presence,
-        (row["POBoxTownName"] || row["TownName"]).presence
+        row["POBoxNo"]
       ].compact_blank.join(" ")
+    end
+
+    def postbox?(row)
+      row["POBoxTerm"].present?
+    end
+
+    def read_zip_code(row)
+      (postbox?(row) && row["POBoxZIP"].presence) || row["ZIPCode"]
+    end
+
+    def read_town(row)
+      (postbox?(row) && row["POBoxTownName"].presence) || row["TownName"]
     end
 
     def create_tag_and_log_error(person)
@@ -96,6 +118,12 @@ module Synchronize::Addresses::SwissPost
         "übernommen werden"
       create_log_entry(person, :error, message)
       create_tag(person.taggings, message, invalid_tag)
+    end
+
+    def create_qstat_tag(person, qstat)
+      tag_name = "#{qstat_tag_prefix}_#{qstat}_#{started_at.strftime("%Y%m%d")}"
+      tag = ActsAsTaggableOn::Tag.find_or_create_by!(name: tag_name)
+      person.taggings.find_or_create_by!(tag:, context: :tags)
     end
 
     def create_tag(taggings, message, tag)

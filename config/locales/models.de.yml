@@ -428,6 +428,12 @@ de:
       person_duplicate:
         one: Duplikat
         other: Duplikate
+      personal_document:
+        one: Dokument
+        other: Dokumente
+      personal_document_label:
+        one: Dokumenten-Label
+        other: Dokumenten-Labels
       people_filter:
         one: Filter
         other: Filter
@@ -648,6 +654,17 @@ de:
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
+
+      personal_document:
+        file: Datei
+        filename: Dateiname
+        description: Beschreibung
+        label_id: Label
+        label: Label
+        author_id: Erstellt von
+        author: Erstellt von
+        created_at: Erstellt am
+        updated_at: Geändert am
 
       group:
         name: Name
@@ -1409,6 +1426,11 @@ de:
         status: Status
         payee_person_name: Schuldner Name
         payee_person_address: Schuldner Adresse
+        statuses:
+          ebics_imported: "EBICS"
+          xml_imported: "CAMT"
+          manually_created: "Manuell"
+          without_invoice: "ohne Rechnung"
 
       payment_reminder:
         invoice: Rechnung
@@ -1448,6 +1470,8 @@ de:
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise
+          bcv: Banque Cantonale Vaudoise
+          bcvs: Walliser Kantonalbank
 
       period_invoice_template:
         name: Bezeichnung
@@ -1514,7 +1538,7 @@ de:
     export/export_base_job: Basis-Export
     export/invitations_export_job: Einladungs-Export
     export/invoices_job: Rechnungs-Export
-    export/labels_job: Etiketten-Export
+    export/labels_job: Personen-Export
     export/message_job: Nachrichten-Export
     export/payments_export_job: Zahlungs-Export
     export/people_export_job: Personen-Export

@@ -62,11 +62,11 @@ describe Export::Tabular::Groups::List do
     its(["Kurzname"]) { should == group.short_name }
     its(["Gruppentyp"]) { should == "Bottom Layer" }
     its(["Haupt-E-Mail"]) { should == group.email }
-    its(["Strasse"]) { should == contact.street }
-    its(["Hausnummer"]) { should == contact.housenumber }
-    its(["PLZ"]) { should == contact.zip_code.to_s }
-    its(["Ort"]) { should == contact.town }
-    its(["Land"]) { should == contact.country_label }
+    its(["Strasse"]) { should == group.street }
+    its(["Hausnummer"]) { should == group.housenumber }
+    its(["PLZ"]) { should == group.zip_code.to_s }
+    its(["Ort"]) { should == group.town }
+    its(["Land"]) { should == group.country_label }
     its(["Ebene"]) { should == group.id.to_s }
     its(["Geändert"]) do
       should == "#{I18n.l(group.updated_at.to_date)} #{I18n.l(group.updated_at, format: :time)}"

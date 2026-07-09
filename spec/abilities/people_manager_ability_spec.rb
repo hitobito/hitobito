@@ -56,40 +56,106 @@ describe PeopleManagerAbility do
     end
   end
 
-  [:create_manager, :destroy_manager].each do |action|
+  def person_with_change_managers_but_not_update_email
+    Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: groups(:bottom_layer_one)).person
+  end
+
+  def managed_with_role_in_other_layer
+    Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person.tap do |managed|
+      Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: managed)
+    end
+  end
+
+  describe :create_manager do
     context "top leader" do
       let(:person) { top_leader }
 
-      describe "#{action} manager" do
-        it "may change manager of bottom_member" do
-          expect(ability).to be_able_to(action, build(managed: bottom_member))
-        end
+      it "may create manager for bottom_member" do
+        expect(ability).to be_able_to(:create_manager, build(managed: bottom_member))
+      end
 
-        it "may not change his own manager" do
-          expect(ability).not_to be_able_to(action, build(managed: top_leader))
-        end
+      it "may not create manager for himself" do
+        expect(ability).not_to be_able_to(:create_manager, build(managed: top_leader))
+      end
 
-        it "may change manager of new record" do
-          expect(ability).to be_able_to(action, build(managed: Person.new))
-        end
+      it "may create manager for new record, as self-service creation is always allowed" do
+        expect(ability).to be_able_to(:create_manager, build(managed: Person.new))
       end
     end
 
     context "bottom member" do
       let(:person) { bottom_member }
 
-      describe "#{action} manager" do
-        it "may not change manager of top_leader" do
-          expect(ability).not_to be_able_to(action, build(managed: top_leader))
-        end
+      it "may not create manager for top_leader" do
+        expect(ability).not_to be_able_to(:create_manager, build(managed: top_leader))
+      end
 
-        it "may not change his own manager" do
-          expect(ability).not_to be_able_to(action, build(managed: bottom_member))
-        end
+      it "may not create manager for himself" do
+        expect(ability).not_to be_able_to(:create_manager, build(managed: bottom_member))
+      end
 
-        it "may change manager of new record" do
-          expect(ability).to be_able_to(action, build(managed: Person.new))
-        end
+      it "may create manager for new record, as self-service creation is always allowed" do
+        expect(ability).to be_able_to(:create_manager, build(managed: Person.new))
+      end
+    end
+
+    context "local guide" do
+      let(:person) { Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: groups(:bottom_layer_one)).person }
+
+      it "may create manager for bottom member" do
+        expect(ability).to be_able_to(:create_manager, build(managed: bottom_member))
+      end
+
+      it "may not create manager for bottom member because they have a role outside of person layer permissions" do
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: bottom_member)
+        expect(ability).not_to be_able_to(:create_manager, build(managed: bottom_member))
+      end
+    end
+  end
+
+  describe :destroy_manager do
+    context "top leader" do
+      let(:person) { top_leader }
+
+      it "may destroy manager of bottom_member" do
+        expect(ability).to be_able_to(:destroy_manager, build(managed: bottom_member))
+      end
+
+      it "may not destroy his own manager" do
+        expect(ability).not_to be_able_to(:destroy_manager, build(managed: top_leader))
+      end
+
+      it "may not destroy manager of new record, as it has none to destroy" do
+        expect(ability).not_to be_able_to(:destroy_manager, build(managed: Person.new))
+      end
+    end
+
+    context "bottom member" do
+      let(:person) { bottom_member }
+
+      it "may not destroy manager of top_leader" do
+        expect(ability).not_to be_able_to(:destroy_manager, build(managed: top_leader))
+      end
+
+      it "may not destroy his own manager" do
+        expect(ability).not_to be_able_to(:destroy_manager, build(managed: bottom_member))
+      end
+
+      it "may not destroy manager of new record, as it has none to destroy" do
+        expect(ability).not_to be_able_to(:destroy_manager, build(managed: Person.new))
+      end
+    end
+
+    context "local guide" do
+      let(:person) { Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: groups(:bottom_layer_one)).person }
+
+      it "may destroy manager of bottom member" do
+        expect(ability).to be_able_to(:destroy_manager, build(managed: bottom_member))
+      end
+
+      it "may destroy manager of bottom member even if bottom member has role outside of person layer permissions" do
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: bottom_member)
+        expect(ability).to be_able_to(:destroy_manager, build(managed: bottom_member))
       end
     end
   end

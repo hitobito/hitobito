@@ -44,7 +44,9 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         expect(JSON.parse(response.body)).to eq({
           sub: user.id.to_s,
           first_name: user.first_name,
+          given_name: user.first_name,
           last_name: user.last_name,
+          family_name: user.last_name,
           nickname: "Filou",
           address: "Teststrasse 7",
           address_care_of: nil,
@@ -86,7 +88,9 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         expect(JSON.parse(response.body)).to match({
           sub: user.id.to_s,
           first_name: user.first_name,
+          given_name: user.first_name,
           last_name: user.last_name,
+          family_name: user.last_name,
           nickname: user.nickname,
           company_name: user.company_name,
           company: user.company,
@@ -103,6 +107,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           birthday: user.birthday.to_s.presence,
           primary_group_id: user.primary_group_id,
           language: user.language,
+          locale: user.language,
           roles: [
             {
               group_id: user.roles.first.group_id,

@@ -49,6 +49,10 @@ module I18nEnums
         end.to_h
       end
 
+      define_singleton_method(:"#{attr}_nil_label") do
+        I18n.t("#{prefix}.#{NIL_KEY}", default: nil)
+      end
+
       if queries || scopes
         possible.call(nil).each do |value|
           scope value.to_sym, -> { where(attr => value) } if scopes

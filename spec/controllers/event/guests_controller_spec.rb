@@ -82,10 +82,9 @@ describe Event::GuestsController do
         participation.update!(participant: people(:bottom_member))
       end
 
-      it "refuses to add guests (for now)" do
-        expect do
-          get :new, params: {group_id: group.id, event_id: event.id, id: participation.id}
-        end.to raise_error(ActiveRecord::RecordNotFound)
+      it "allows to add guests" do
+        get :new, params: {group_id: group.id, event_id: event.id, id: participation.id}
+        expect(response).to be_successful
       end
     end
   end

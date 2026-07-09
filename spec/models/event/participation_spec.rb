@@ -136,11 +136,33 @@ describe Event::Participation do
     end
   end
 
-  context ".order_by_role_statement" do
-    it "orders by index of role_types" do
-      event_type = double("event_type", role_types: [Event::Role::Leader, Event::Role::Participant])
-      ordered_participations = Event::Participation.order_by_role(event_type)
-      expect(ordered_participations.to_sql).to include "ORDER BY event_role_type_orders.order_weight ASC"
+  context "#order_by_role" do
+    let(:event_type) { double("event_type", role_types: [Event::Role::Leader, Event::Role::Participant]) }
+    let(:participation_1) { subject }
+    let(:participation_2) { event_participations(:top) }
+    let(:ordered_participations) { Event::Participation.order_by_role(event_type) }
+
+    before do
+      Fabricate(Event::Role::Participant.sti_name, participation: participation_1).participation
+      Fabricate(Event::Role::Leader.sti_name, participation: participation_2).participation
+    end
+
+    it "orders by role type" do
+      expect(ordered_participations).to eq [participation_2, participation_1]
+    end
+
+    it "orders by name if two participations have the same role type" do
+      Fabricate(Event::Role::Leader.sti_name, participation: participation_1)
+      participation_1.person.update!(last_name: "AAA")
+
+      expect(ordered_participations).to eq [participation_1, participation_2]
+    end
+
+    it "does not duplicate participations with multiple event roles" do
+      Fabricate(Event::Role::Participant.sti_name, participation: participation_1)
+
+      expect(participation_1.reload.roles.count).to eq 2
+      expect(ordered_participations.count).to eq 2
     end
   end
 

@@ -318,9 +318,12 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   def i18n_enum_field(attr, labels, html_options = {})
     add_css_class(html_options, FORM_CONTROL_SELECT_WITH_WIDTH)
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
-    collection_select(attr, labels, :first, :last,
-      collection_prompt(attr, html_options),
-      html_options)
+    prompt_options = collection_prompt(attr, html_options)
+    if prompt_options.key?(:include_blank) && !html_options.key?(:include_blank)
+      nil_label = klass.send(:"#{attr}_nil_label") if klass.respond_to?(:"#{attr}_nil_label")
+      prompt_options = {include_blank: nil_label} if nil_label
+    end
+    collection_select(attr, labels, :first, :last, prompt_options, html_options)
   end
 
   def person_field(attr, html_options = {}) # rubocop:disable Metrics/MethodLength
@@ -365,39 +368,10 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil, # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def nested_fields_for(assoc, partial_name = nil, record_object = nil, options = nil, limit = nil,
     &block)
-    content_tag(:div, class: "nested-form", data: {
-      controller: "nested-form", nested_form_assoc_value: assoc, nested_form_limit_value: limit
-    }) do
-      content_tag(:div, id: "#{assoc}_fields") do
-        fields_for(assoc, record_object) do |fields|
-          content_tag(:div, class: "fields", style: ("display: none" if fields.object._destroy)) do
-            (block ? capture(fields,
-              &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
-          end
-        end.to_s.html_safe + content_tag(:div, nil, data: {nested_form_target: "target"})
-      end +
-        content_tag(:div, class: "controls") do
-          options = options.to_h.merge(class: "text w-100 align-with-form")
-          link_title = options.delete(:link_to_add_title) || I18n.t("global.associations.add")
-          content_tag(:p,
-            template.link_to(link_title, "javascript:void(0)", class: "text w-100 align-with-form",
-              data: {action: "nested-form#add"})) +
-            content_tag(:template, data: {nested_form_target: "template"}) do
-              content_tag(:div, class: "fields", data: {new_record: true}) do
-                # Use a unique placeholder that includes the association name to avoid
-                # collision when this template is nested inside another template
-                placeholder = "NEW_#{assoc.to_s.upcase}_RECORD"
-                fields_for(assoc, object.send(assoc).try(:new) || options[:model_object],
-                  child_index: placeholder) do |fields|
-                  (block ? capture(fields,
-                    &block) : render(partial_name, f: fields)) + fields.hidden_field(:_destroy)
-                end
-              end
-            end
-        end
-    end
+    NestedFieldsForBuilder.new(self, assoc, partial_name, record_object, options, limit)
+      .build(&block)
   end
 
   def readonly_value(attr, html_options = {})
@@ -530,7 +504,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def with_addon(addon, content = nil)
-    content_tag(:div, class: "input-group input-group-sm") do
+    content_tag(:div, class: "input-group input-group-sm w-auto") do
       (block_given? ? yield : content) +
         content_tag(:span, addon, class: "input-group-text")
     end

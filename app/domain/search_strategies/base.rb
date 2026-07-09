@@ -43,10 +43,9 @@ module SearchStrategies
       identifiers = matching_identifiers
       return model_class.none if identifiers.blank?
 
-      condition = identifiers.map do |attribute|
-        "#{model_class.table_name}.#{attribute} = :term"
-      end.join(" OR ")
-      accessible_scope.where(condition, term: @term)
+      table = model_class.arel_table
+      condition = identifiers.map { |attribute| table[attribute].eq(@term) }.reduce(:or)
+      accessible_scope.where(condition)
     end
 
     protected

@@ -7,3 +7,4 @@
 
 top_layer_pass_logo_icon_blob: <%= ActiveStorage::FixtureSet.blob filename: "logo-icon.png", service_name: "test_fixtures" %>
 top_layer_pass_logo_banner_blob: <%= ActiveStorage::FixtureSet.blob filename: "logo-banner.png", service_name: "test_fixtures" %>
+top_layer_pass_logo_secondary_blob: <%= ActiveStorage::FixtureSet.blob filename: "logo-secondary.png", service_name: "test_fixtures" %>

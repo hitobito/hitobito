@@ -7,11 +7,11 @@
 
 require "spec_helper"
 
-describe Group::Demographic do
+describe Group::Statistics::Demographic do
   let(:year_now) { 2022 }
   let(:leader) { people(:top_leader) }
   let(:layer) { groups(:top_layer) }
-  let(:demographic) { Group::Demographic.new(layer, year_now) }
+  let(:demographic) { Group::Statistics::Demographic.new(layer, year: year_now) }
   let(:age_groups) { demographic.age_groups }
   let(:total_count) { demographic.total_count }
 
@@ -49,8 +49,8 @@ describe Group::Demographic do
     it "#age_groups" do
       expect(age_groups).to eq(
         [
-          Group::Demographic::AgeGroup.new(year: 1991, age: 31, count: 1, relative_count: 0.25),
-          Group::Demographic::AgeGroup.new(year: 1992, age: 30, count: 3, relative_count: 0.75)
+          Group::Statistics::Demographic::AgeGroup.new(year: 1991, age: 31, count: 1, relative_count: 0.25),
+          Group::Statistics::Demographic::AgeGroup.new(year: 1992, age: 30, count: 3, relative_count: 0.75)
         ]
       )
     end
@@ -65,8 +65,8 @@ describe Group::Demographic do
       it "#age_groups" do
         expect(age_groups).to eq(
           [
-            Group::Demographic::AgeGroup.new(year: 1992, age: 30, count: 3, relative_count: 0.75),
-            Group::Demographic::AgeGroup.new(year: nil, age: nil, count: 1, relative_count: 0.25)
+            Group::Statistics::Demographic::AgeGroup.new(year: 1992, age: 30, count: 3, relative_count: 0.75),
+            Group::Statistics::Demographic::AgeGroup.new(year: nil, age: nil, count: 1, relative_count: 0.25)
           ]
         )
       end

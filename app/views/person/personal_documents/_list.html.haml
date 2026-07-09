@@ -1,0 +1,7 @@
+- title @person.to_s
+
+= crud_table do |t|
+  - t.col(PersonalDocument.human_attribute_name :file) do |e|
+    = link_to icon(:download), e.file, target: '_blank'
+  - t.attrs(:label, :filename, :description, :author, :created_at, :updated_at)
+  - add_table_actions(t)

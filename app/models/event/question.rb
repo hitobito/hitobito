@@ -12,7 +12,6 @@
 #  id                :integer          not null, primary key
 #  admin             :boolean          default(FALSE), not null
 #  choices           :string
-#  derived           :boolean          default(FALSE)
 #  multiple_choices  :boolean          default(FALSE), not null
 #  question          :text
 #  required          :boolean          default(FALSE), not null
@@ -22,6 +21,7 @@
 #  updated_at        :datetime
 #  event_id          :integer
 #  event_question_id :integer          not null
+#  template_id       :integer
 #
 # Indexes
 #
@@ -35,8 +35,6 @@ class Event::Question < ActiveRecord::Base
   self.template_editable = true
 
   include Globalized
-
-  attr_accessor :template_id
 
   # To prevent issues of having paper trail versions when we don't want/need them, we add all
   # translated attributes to the skip list and create own paper trail versions on the
@@ -77,6 +75,8 @@ class Event::Question < ActiveRecord::Base
   attribute :type, default: -> { Event::Question::Default.sti_name }
   attr_accessor :skip_add_answer_to_participations
 
+  attr_readonly :template_id
+
   validates_by_schema
 
   # validate question presence for admin/non-admin questions separately
@@ -84,7 +84,7 @@ class Event::Question < ActiveRecord::Base
   validates :question, presence: {message: :admin_blank}, if: :admin?
   validates :question, presence: {message: :application_blank}, unless: :admin?
 
-  before_create :copy_translations_for_derived_question, if: :derived?
+  before_create :copy_attributes_for_derived_question, if: :template_id
   after_create :add_answer_to_participations
 
   scope :global, -> { where(event_id: nil) }
@@ -107,6 +107,10 @@ class Event::Question < ActiveRecord::Base
 
   def to_s
     question
+  end
+
+  def derived?
+    template_id.present?
   end
 
   def global?
@@ -155,7 +159,9 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
-  def self.reflect_on_all_associations
+  def self.reflect_on_all_associations(*args)
+    return super if args.any?
+
     super + [Choice::Reflection.new]
   end
 
@@ -181,10 +187,11 @@ class Event::Question < ActiveRecord::Base
     end
   end
 
-  def copy_translations_for_derived_question
-    return unless template_id
-
+  def copy_attributes_for_derived_question
     template_question = Event::QuestionTemplate.find(template_id).question
+
+    self.type = template_question.type
+
     [:question, :choices].each do |attribute|
       template_translations = template_question.globalize_locales
         .map { [_1.to_s, nil] }

@@ -7,6 +7,7 @@
 }
 .profile-image-overlay {
   // Hide image above page by default
+  visibility: hidden;
   opacity: 0;
   top: -100%;
   transition: opacity 0.5s ease, top 0.5s ease;
@@ -22,6 +23,7 @@
   background-color: rgba($color: $black, $alpha: 0.5);
   cursor: pointer;
   &.active {
+    visibility: visible;
     opacity: 1;
     top: 0;
   }

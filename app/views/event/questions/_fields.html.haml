@@ -3,8 +3,6 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-= f.hidden_field(:type)
-= f.hidden_field(:derived)
 = f.hidden_field(:template_id)
 
 - # lookup if a partial for the question type and render it if it exists.
@@ -22,9 +20,8 @@
 
 = render_extensions :fields, locals: { f: f }
 
-- unless f.object.derived?
-  .controls.align-with-form
-    = link_to(ta(:remove), "javascript:void(0)", data: { action: "nested-form#remove" })
+.controls.align-with-form
+  = link_to(ta(:remove), "javascript:void(0)", data: { action: "events--question-template-nested-form#remove" })
 
 .controls.fields-separation
   %hr

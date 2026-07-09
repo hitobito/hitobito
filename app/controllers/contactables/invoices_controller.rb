@@ -19,11 +19,26 @@ class Contactables::InvoicesController < ListController
   private
 
   def list_entries
-    scope = super.list
+    Invoice::Filter.new(params).apply(scope.page(params[:page]).per(50))
+  end
+
+  def scope
+    return base_scope if self_or_managed?
+
+    base_scope
+      .joins(group: :layer_group)
+      .where(layer_group: {id: current_ability.user_finance_layer_ids})
+  end
+
+  def base_scope
+    method(:list_entries).super_method.call
+      .list
       .includes(:group)
       .where(search_conditions)
-      .page(params[:page]).per(50)
-    Invoice::Filter.new(params).apply(scope)
+  end
+
+  def self_or_managed?
+    contactable == current_person || current_person.manageds.include?(contactable)
   end
 
   def contactable

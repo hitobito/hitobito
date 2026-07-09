@@ -12,12 +12,12 @@ describe "Datepicker", js: true do
   let(:person) { people(:root) }
 
   before do
-    allow(Settings.application).to receive(:languages).and_return({de: "Deutsch", fr: "Français"})
+    allow(Settings.application).to receive(:languages).and_return({de: "Deutsch", en: "English", fr: "Français"})
     sign_in(person)
     visit list_courses_path(locale: lang) # any path with datepicker is possible
   end
 
-  [:de, :fr].each do |l|
+  [:de, :en, :fr].each do |l|
     context "with lang set to #{l}" do
       let(:lang) { l }
 

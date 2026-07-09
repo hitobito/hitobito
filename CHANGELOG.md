@@ -2,6 +2,10 @@
 
 ## unreleased
 
+- Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)
+- Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
+- Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
+- Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)
 - Konfigurierbare Ausweise mit Apple und Google Wallet Integration (#3911)
 - Gruppen Sammelrechnungen können kopiert werden (#3754)
 - Spezifische E-Mails je nach Zustand der Teilnahme (Nicht zugeteilt, Zugeteilt, Warteliste) (hitobito_sww#289)
@@ -18,9 +22,21 @@
 - Vorlagen für Anmeldeangaben können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (hitobito_sac_cas#2345)
 - Für OAuth und OIDC sind neu refresh tokens verfügbar, welche für 1 Woche gültig sind (hitobito_pbs#463)
 - Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
+- Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
+- Vorlagen für Anmeldeangaben und Administrationsangaben können neu bei allen Arten von Anlässen im Erstellungs- und Editierformular eingebunden und verwendet werden (hitobito_sac_cas#2344)
+- Die Banken Banque Cantonale Vaudoise und Walliser Kantonalbank wurden als Ebics Zahlungsschnittstellen hinzugefügt (#4265)
+- Beim Adressabgleich mit der Schweizer Post werden für Postfächer neu PLZ und Ort des Postfachs übernommen (hitobito_sac_cas#2536)
+- In der Suchleiste können jetzt Personen via ihre ID gefunden werden (pfadi_de#50)
+- Bei Gruppen-Adressen (wie bereits bei Personen) sind nun auch alphanumerische PLZs und solche mit führenden Nullen erlaubt (hitobito/hitobito_pfadi_de#86)
 
 ## Version 2.9
 
+- Vereinheitlichung der Filtergrundlagen von Personen und Anlässen (hitobito/hitobito_sac_cas#2366)
+- Filtermöglichkeiten auf Anlässen (hitobito/hitobito_sac_cas#2367)
+- API-Keys und Kalender Feeds befinden sich neu im Bearbeiten Dropdown der Gruppe (hitobito/hitobito_sac_cas#2314)
+- Qualifkationen wurden in das JSON:API integriert (hitobito_bdp#12)
+- Rechnungen können neu auch als Excel (XLSX) exportiert werden (hitobito_sww#288)
+- Vor- und Nachname des Rechnungsempfängers werden neu strukturiert in separaten Feldern gespeichert (#4164)
 - Event-Teilnahmen wurden in das JSON:API integriert (#3789)
 - Labels von Kontaktinformationen (Telefonnummern etc.) können auf die vordefinierten Werde eingeschränkt werden. In den Personenexporten werden pro vordefiniertem Label eine Spalte ausgegeben (#1800)
 - Es können jetzt, falls aktiviert, Sammelrechnungen erfasst werden. Diese können verwendet werden, um wiederholbare Rechnungsläufe an Gruppen zu versenden, mit berechneten Beträgen basierend auf der Anzahl Rollen, die während einer spezifischen Rechnungseriode in der jeweiligen Empfängergruppe aktiv waren. (#3610)

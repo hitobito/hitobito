@@ -448,11 +448,11 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def init_questions
     application_questions << Event::QuestionTemplate
-      .applicable_to(groups, event_type: self.class.sti_name)
+      .applicable_to(groups, event_type: self.class.sti_name, default: true)
       .map(&:derive_question)
 
     admin_questions << Event::QuestionTemplate
-      .applicable_to(groups, event_type: self.class.sti_name, admin: true)
+      .applicable_to(groups, event_type: self.class.sti_name, default: true, admin: true)
       .map(&:derive_question)
   end
 

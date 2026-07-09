@@ -43,7 +43,7 @@ jobs:
         id: list-wagon-repositories
         run: |
           WAGONS=$(gh repo list hitobito -L 100 --no-archived --json owner,name | \
-            jq 'map(select(.name | test("^hitobito_"))) | map({ owner: .owner.login, repo: .name, name: .name | match("^hitobito_((?!zss)(?!dav).+)$").captures[0].string })')
+            jq 'map(select(.name | test("^hitobito_"))) | map({ owner: .owner.login, repo: .name, name: .name | match("^hitobito_((?!dav).+)$").captures[0].string })')
           echo $WAGONS
           echo "wagons=$WAGONS" | tr -d "\n" >> $GITHUB_OUTPUT
         env:
@@ -68,6 +68,8 @@ jobs:
           COMMON_BRANCH_NAME="${{github.head_ref || github.ref_name}}"
           if [ -z "$INPUT_WAGON_REF" ]; then
             WAGON_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "$COMMON_BRANCH_NAME" || echo 'master')
+          else
+            WAGON_REF=$INPUT_WAGON_REF
           fi
 
           echo "WAGON_REF=$WAGON_REF" >> $GITHUB_ENV
@@ -86,7 +88,7 @@ jobs:
           workflow_job_steps_retry_seconds: 10 # default is 5, set it higher to not strain the API limit too much
           workflow_inputs: |
             {
-              "core_ref": "${{ github.ref || inputs.core_ref }}",
+              "core_ref": "${{ inputs.core_ref || github.ref  }}",
               "wagon_dependency_ref": "${{ inputs.wagon_dependency_ref }}"
             }
 

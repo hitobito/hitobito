@@ -12,8 +12,7 @@
 - if can?(:print, entry)
   = action_button(t('global.button.print'),
                   print_group_event_participation_path(@group, @event, entry, format: :pdf),
-                  :print,
-                  { target: '_blank'})
+                  :print)
 
 - if can?(:send_mails, entry)
   = Dropdown::Event::Participation::SendMail.new(self, @event, @group, entry)

@@ -1,0 +1,13 @@
+- question = f.object
+= f.labeled(:question) do
+  = f.hidden_field(:question)
+  %p.py-2= question.question
+
+%div.choices{class: question.deserialized_choices.any? ? "" : "d-none"}
+  = f.hidden_field(:multiple_choices)
+  - choice_items = simple_list(question&.choice_items, class: 'ps-3 my-2') if question.respond_to?(:choice_items)
+  = f.labeled(:choices, choice_items)
+  = f.labeled(:multiple_choices) do
+    %p.py-2
+      %span{class: ("d-none" unless question.multiple_choices), data: {multiple_choices_icon: "true"}}= icon(:check)
+      %span{class: ("d-none" if question.multiple_choices), data: {multiple_choices_icon: "false"}}= icon(:times)

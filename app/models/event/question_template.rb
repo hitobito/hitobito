@@ -25,6 +25,9 @@ class Event::QuestionTemplate < ActiveRecord::Base
   belongs_to :question, dependent: :destroy
   belongs_to :group
 
+  has_many :derived_questions, class_name: "Event::Question", foreign_key: :template_id,
+    dependent: :nullify, inverse_of: false
+
   accepts_nested_attributes_for :question
 
   scope :in_hierarchy, ->(groups) {
@@ -34,11 +37,11 @@ class Event::QuestionTemplate < ActiveRecord::Base
     where("group_id IN (?) OR (group_id IN (?) AND inherit IS TRUE)", layer_ids, hierarchy_ids)
   }
 
-  def self.applicable_to(groups, event_type: nil, admin: false)
+  def self.applicable_to(groups, event_type: nil, admin: false, default: true)
     return none if groups.blank?
 
     joins(:question)
-      .where(default: true, event_type: [event_type, nil])
+      .where(default:, event_type: [event_type, "", nil])
       .in_hierarchy(groups)
       .merge(Event::Question.where(admin: admin).list)
       .select(attribute_names)
@@ -47,7 +50,6 @@ class Event::QuestionTemplate < ActiveRecord::Base
   def derive_question
     attrs = question.attributes.excluding("id", "created_at", "updated_at")
     Event::Question.build(attrs).tap do |derived_question|
-      derived_question.derived = true
       derived_question.template_id = id
 
       # copy translations from template question

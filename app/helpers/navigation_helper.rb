@@ -53,6 +53,7 @@ module NavigationHelper
        oauth/active_authorizations
        event_feed
        tags
+       personal_document_labels
        hitobito_log_entries
        mails/imap mails/bounces
        api],

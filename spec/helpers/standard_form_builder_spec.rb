@@ -269,6 +269,37 @@ describe "StandardFormBuilder" do
     end
   end
 
+  describe "#i18n_enum_field" do
+    let(:model_class) do
+      Class.new do
+        include ActiveModel::Model
+        include I18nEnums
+        attr_accessor :status
+        i18n_enum :status, %w[active inactive], i18n_prefix: "test.statuses", validations: false
+      end
+    end
+    let(:entry) { model_class.new }
+    let(:form) { StandardFormBuilder.new(:entry, entry, self, {}) }
+    let(:labels) { [[:active, "Aktiv"], [:inactive, "Inaktiv"]] }
+    let(:dom) { Capybara::Node::Simple.new(form.i18n_enum_field(:status, labels)) }
+
+    it "renders a select with the given labels" do
+      expect(dom).to have_css("option", text: "Aktiv")
+      expect(dom).to have_css("option", text: "Inaktiv")
+    end
+
+    it "renders a blank option without _nil translation" do
+      expect(dom).to have_css("option[value='']")
+      expect(dom.find("option[value='']").text).to eq "(keine)"
+    end
+
+    it "renders a blank option with _nil translation" do
+      allow(model_class).to receive(:status_nil_label).and_return("Unbekannt")
+
+      expect(dom).to have_css("option[value='']", text: "Unbekannt")
+    end
+  end
+
   it "handles missing methods" do
     expect { form.blabla }.to raise_error(NoMethodError)
   end

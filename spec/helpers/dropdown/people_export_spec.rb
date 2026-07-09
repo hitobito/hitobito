@@ -42,8 +42,8 @@ describe "Dropdown::PeopleExport" do
     menu.all("> li > a").map(&:text)
   end
 
-  def top_menu_entries_without_submenu
-    menu.all("> li > a", visible: :all).reject { |link| link[:class].to_s.split.include?("dropdown-toggle") }
+  def download_links_opening_new_tab
+    menu.all("> li > a[target='_blank']").map(&:text)
   end
 
   def submenu_entries(name)
@@ -51,22 +51,22 @@ describe "Dropdown::PeopleExport" do
   end
 
   it "renders dropdown" do
-    is_expected.to have_content "Export"
-    is_expected.to have_selector ".btn-group > ul.dropdown-menu"
+    is_expected.to have_content("Export")
+    is_expected.to have_selector(".btn-group > ul.dropdown-menu")
 
-    top_menu_entries_without_submenu.each do |link|
-      expect(link[:target]).to eq("_blank")
-    end
+    expect(top_menu_entries).to match_array(%w[CSV Excel vCard PDF Etiketten])
 
-    expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF Etiketten]
+    expect(download_links_opening_new_tab).to match_array(%w[vCard])
 
-    expect(submenu_entries("CSV")).to match_array %w[Spaltenauswahl Adressliste Haushaltsliste]
-    expect(submenu_entries("Etiketten")).to match_array [
-      "Envelope (C6, 1x1)",
-      "Haushalte zusammenfassen",
-      "Large (A4, 2x5)",
-      "Standard (A4, 3x10)"
-    ]
+    expect(submenu_entries("CSV")).to match_array(%w[Spaltenauswahl Adressliste Haushaltsliste])
+    expect(submenu_entries("Etiketten")).to match_array(
+      [
+        "Envelope (C6, 1x1)",
+        "Haushalte zusammenfassen",
+        "Large (A4, 2x5)",
+        "Standard (A4, 3x10)"
+      ]
+    )
   end
 
   context "mailchimp" do

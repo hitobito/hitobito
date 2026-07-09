@@ -4,6 +4,10 @@
 
 module TableDisplays::People
   class PolymorphicLayerGroupLabelColumn < TableDisplays::PolymorphicColumn
+    def required_model_includes(_attr)
+      [participant: {groups: :layer_group}]
+    end
+
     def allowed?(object, _attr, original_object, _original_attr)
       ability.can?(:show, original_object) || ability.can?(:show, object)
     end

@@ -1,12 +1,11 @@
-#  frozen_string_literal: true
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Hitobito AG. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+# Copyright (c) 2012-2022, Hitobito AG. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
 
 require "spec_helper"
-
 require "net/imap"
 
 describe Imap::Connector do
@@ -33,47 +32,28 @@ describe Imap::Connector do
   end
 
   before do
-    email = double
-    retriever = double
-    allow(Settings).to receive(:email).and_return(email)
-    allow(email).to receive(:retriever).and_return(retriever)
-    allow(retriever).to receive(:config).and_return(imap_config)
+    allow(MailConfig).to receive(:legacy?).and_return(false)
+    allow(MailConfig).to receive(:retriever_imap).and_return(imap_config)
 
-    # use legacy config for now
-    allow(MailConfig).to receive(:legacy?).and_return(true)
+    expect(Net::IMAP).to receive(:new).and_return(net_imap)
+    expect(net_imap).to receive(:login)
+    expect(net_imap).to receive(:close)
+    expect(net_imap).to receive(:disconnect)
   end
 
   describe "#move_by_uid" do
     it "moves mail to existing mailbox" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # move
       expect(net_imap).to receive(:select).with("INBOX")
       expect(net_imap).to receive(:uid_move).with("42", "Failed")
-
-      # disconnect
-      expect(net_imap).to receive(:disconnect)
-      expect(net_imap).to receive(:close)
 
       imap_connector.move_by_uid("42", :inbox, :failed)
     end
 
     it "moves mail to not existing mailbox" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # move
       expect(net_imap).to receive(:select).with("INBOX").and_raise(no_mailbox_error)
       expect(net_imap).to receive(:uid_move).with("42", nil)
 
       expect(imap_connector).to receive(:create_if_missing)
-
-      # disconnect
-      expect(net_imap).to receive(:disconnect)
-      expect(net_imap).to receive(:close)
 
       imap_connector.move_by_uid("42", :inbox, :invalid)
     end
@@ -81,20 +61,9 @@ describe Imap::Connector do
 
   describe "#delete_by_uid" do
     it "deletes mail" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select
       expect(net_imap).to receive(:select).with(nil)
-
-      # expect(net_imap).to receive(:uid_copy).with(uid, 'TRASH')
       expect(net_imap).to receive(:uid_store).with("42", "+FLAGS", [:Deleted])
       expect(net_imap).to receive(:expunge)
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       imap_connector.delete_by_uid("42", "INBOX")
     end
@@ -102,21 +71,12 @@ describe Imap::Connector do
 
   describe "#fetch_mails" do
     it "fetches paginated mails from inbox using uid search" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select and uid_search
       expect(net_imap).to receive(:select).with("INBOX")
       expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([41, 42])
 
-      # uid_fetch for page 1 (UIDs sorted descending: [42, 41])
+      # UIDs sorted descending: [42, 41]
       expect(net_imap).to receive(:uid_fetch).with([42, 41], fetch_attributes)
         .and_return(imap_fetch_data_array)
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       result = imap_connector.fetch_mails(:inbox)
 
@@ -130,58 +90,28 @@ describe Imap::Connector do
     end
 
     it "returns empty result if mailbox empty" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select and uid_search
       expect(net_imap).to receive(:select).with("INBOX")
       expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([])
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       result = imap_connector.fetch_mails(:inbox)
       expect(result).to eq({mails: [], total_count: 0})
     end
 
     it "creates failed mailbox if not existing" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select mailbox fails first time
       expect(net_imap).to receive(:select).with("Failed")
         .and_raise(no_mailbox_error("Mailbox doesn't exist")).once
 
-      # create mailbox and select again
       expect(net_imap).to receive(:create).with("Failed")
       expect(net_imap).to receive(:select).with("Failed")
-
-      # uid_search returns empty
       expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([])
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       result = imap_connector.fetch_mails(:failed)
       expect(result).to eq({mails: [], total_count: 0})
     end
 
     it "raises error if junk mailbox does not exist" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select
       expect(net_imap).to receive(:select).with("Junk")
         .and_raise(no_mailbox_error("Mailbox doesn't exist"))
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       expect do
         imap_connector.fetch_mails(:spam)
@@ -191,22 +121,11 @@ describe Imap::Connector do
 
   describe "#fetch_all_mails" do
     it "fetches all mails from inbox without pagination" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # count
       expect(net_imap).to receive(:select).with("INBOX")
       expect(net_imap).to receive(:status).with("INBOX", array_including("MESSAGES"))
         .and_return("MESSAGES" => 2)
-
-      # fetch all by sequence number
       expect(net_imap).to receive(:fetch).with(1..2, fetch_attributes)
         .and_return(imap_fetch_data_array)
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       mails = imap_connector.fetch_all_mails(:inbox)
 
@@ -216,18 +135,9 @@ describe Imap::Connector do
     end
 
     it "returns empty array if mailbox empty" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # count
       expect(net_imap).to receive(:select).with("INBOX")
       expect(net_imap).to receive(:status).with("INBOX", array_including("MESSAGES"))
         .and_return("MESSAGES" => 0)
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       mails = imap_connector.fetch_all_mails(:inbox)
       expect(mails).to eq([])
@@ -236,27 +146,14 @@ describe Imap::Connector do
 
   describe "#fetch_mail_by_uid" do
     it "fetches mail by uid from inbox" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select inbox
       expect(net_imap).to receive(:select).with("INBOX")
-
-      # fetch
       expect(net_imap).to receive(:uid_fetch).with(42, fetch_attributes)
         .and_return([imap_fetch_data_1])
 
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
-
       mail = imap_connector.fetch_mail_by_uid(42, :inbox)
 
-      # check mail content
       expect(mail.uid).to eq("42")
       expect(mail.subject).to be(imap_fetch_data_1.attr["ENVELOPE"].subject)
-
       expect(mail.date.to_time).to be_within(2.seconds).of(Time.zone.utc_to_local(Time.zone.now))
       expect(mail.sender_email).to eq("john@sender.com")
       expect(mail.sender_name).to eq("sender")
@@ -264,59 +161,26 @@ describe Imap::Connector do
     end
 
     it "fetch empty array from an empty mailbox" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select inbox
       expect(net_imap).to receive(:select).with("INBOX")
-
-      # fetch
       expect(net_imap).to receive(:uid_fetch).with(42, fetch_attributes).and_return([])
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       mails = imap_connector.fetch_mail_by_uid(42, :inbox)
       expect(mails).to eq(nil)
     end
 
     it "creates failed mailbox if not existing" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select nonexistent failed mailbox
-      expect(net_imap).to receive(:select).with("Failed").and_raise(no_mailbox_error("Mailbox doesn't exist")).once
-
-      # select existent failed mailbox
+      expect(net_imap).to receive(:select).with("Failed")
+        .and_raise(no_mailbox_error("Mailbox doesn't exist")).once
       expect(net_imap).to receive(:select).with("Failed").once
-
-      # create mailbox
       expect(net_imap).to receive(:create).with("Failed")
-
-      # fetch
       expect(net_imap).to receive(:uid_fetch).with(43, fetch_attributes).and_return(nil)
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       imap_connector.fetch_mail_by_uid(43, :failed)
     end
 
     it "raises error if junk mailbox does not exist" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select
-      expect(net_imap).to receive(:select).with("Junk").and_raise(no_mailbox_error("Mailbox doesn't exist"))
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
+      expect(net_imap).to receive(:select).with("Junk")
+        .and_raise(no_mailbox_error("Mailbox doesn't exist"))
 
       expect do
         imap_connector.fetch_mails(:spam)
@@ -326,57 +190,26 @@ describe Imap::Connector do
 
   describe "#fetch_mail_uids" do
     it "fetches uids from inbox" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select inbox
       expect(net_imap).to receive(:select).with("INBOX")
-
-      # fetch
       expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return(imap_fetched_uids)
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       mail_uids = imap_connector.fetch_mail_uids(:inbox)
 
-      # check fetched content
       expect(mail_uids.size).to eq(2)
       expect(mail_uids).to eq([42, 43])
     end
 
     it "fetch empty array from an empty mailbox" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select inbox
       expect(net_imap).to receive(:select).with("INBOX")
-
-      # fetch
       expect(net_imap).to receive(:uid_search).with(["ALL"]).and_return([])
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       mail_uids = imap_connector.fetch_mail_uids(:inbox)
       expect(mail_uids).to eq([])
     end
 
     it "raises error if junk mailbox does not exist" do
-      # connect
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login)
-
-      # select
-      expect(net_imap).to receive(:select).with("Junk").and_raise(no_mailbox_error("Mailbox doesn't exist"))
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
+      expect(net_imap).to receive(:select).with("Junk")
+        .and_raise(no_mailbox_error("Mailbox doesn't exist"))
 
       expect do
         imap_connector.fetch_mail_uids(:spam)
@@ -386,58 +219,18 @@ describe Imap::Connector do
 
   describe "#counts" do
     it "counts number of all mailboxes" do
-      # connect
-      expect(Net::IMAP).to receive(:new).once.and_return(net_imap)
-      expect(net_imap).to receive(:login).once
-
-      # select
       expect(net_imap).to receive(:select).with("INBOX")
       expect(net_imap).to receive(:select).with("Junk")
       expect(net_imap).to receive(:select).with("Failed")
 
-      # count each mailbox
       expect(net_imap).to receive(:status).with("INBOX", ["MESSAGES"]).and_return("MESSAGES" => 1)
       expect(net_imap).to receive(:status).with("Junk", ["MESSAGES"]).and_return("MESSAGES" => 1)
       expect(net_imap).to receive(:status).with("Failed", ["MESSAGES"]).and_return("MESSAGES" => 1)
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
 
       counts = imap_connector.counts
 
       expect(counts).to eq("failed" => 1, "inbox" => 1, "spam" => 1)
       expect(imap_connector.counts["failed"]).to eq(1)
-    end
-  end
-
-  describe "imap config by mail.yml" do
-    before do
-      mail_config_file = {imap: imap_config}
-      mail_config_file[:imap][:password] = "cGFzc3dvcmQ=" # base64
-      allow(MailConfig).to receive(:config_file).and_return(mail_config_file)
-      # avoid global caching of retriever_imap config during this spec
-      allow(MailConfig).to receive(:retriever_imap)
-        .and_return(MailConfig.send(:retriever_imap_config))
-      allow(MailConfig).to receive(:legacy?).and_call_original
-    end
-
-    it "retrieves config by config file if present" do
-      expect(Net::IMAP).to receive(:new).and_return(net_imap)
-      expect(net_imap).to receive(:login).with("catch-all@example.com", "password")
-
-      # select
-      expect(net_imap).to receive(:select).with(nil)
-
-      # expect(net_imap).to receive(:uid_copy).with(uid, 'TRASH')
-      expect(net_imap).to receive(:uid_store).with("42", "+FLAGS", [:Deleted])
-      expect(net_imap).to receive(:expunge)
-
-      # disconnect
-      expect(net_imap).to receive(:close)
-      expect(net_imap).to receive(:disconnect)
-
-      imap_connector.delete_by_uid("42", "INBOX")
     end
   end
 

@@ -54,6 +54,23 @@ describe MailchimpSynchronizationJob do
     check_mailing_list_status_and_error_logging_on_failure
   end
 
+  it "creates log entry when sync result is partial" do
+    freeze_time
+
+    partial_result = Synchronize::Mailchimp::Result.new
+    allow(partial_result).to receive(:state).and_return(:partial)
+    allow_any_instance_of(Synchronize::Mailchimp::Synchronizator).to receive(:perform)
+    allow_any_instance_of(Synchronize::Mailchimp::Synchronizator).to receive(:result).and_return(partial_result)
+
+    expect do
+      enqueue_and_run_job(subject)
+    end.to change { HitobitoLogEntry.count }.by(1)
+
+    mailing_list.reload
+
+    check_mailing_list_status_and_partial_logging
+  end
+
   it "noops if not a mailchimp list" do
     subject.enqueue!
 
@@ -133,6 +150,21 @@ describe MailchimpSynchronizationJob do
       mailchimp_syncing: false,
       mailchimp_last_synced_at: Time.current,
       mailchimp_result: have_attributes(state: :unchanged)
+    })
+  end
+
+  def check_mailing_list_status_and_partial_logging
+    log = HitobitoLogEntry.last
+
+    expect(log).to have_attributes({
+      subject: mailing_list,
+      category: "mail",
+      message: "Mailchimp Abgleich war teilweise nicht erfolgreich"
+    })
+
+    expect(mailing_list).to have_attributes({
+      mailchimp_syncing: false,
+      mailchimp_last_synced_at: Time.current
     })
   end
 

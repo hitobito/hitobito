@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-source "https://rubygems.org"
+source "https://rubygems.org", cooldown: 7
 
 gem "rails", "~> 8.0.4"
 gem "wagons"

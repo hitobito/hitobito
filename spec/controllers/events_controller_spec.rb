@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -425,6 +425,29 @@ describe EventsController do
         third = questions.third
         expect(third.question).to eq "Whoo?"
         expect(third.admin).to eq false
+      end
+
+      it "persists the sensitive flag on application and admin questions" do
+        q1 = event.questions.create!(question: "Who?", required: false, sensitive: true)
+        q2 = event.questions.create!(question: "Payed?", required: false, admin: true, sensitive: true)
+
+        put :update, params: {
+          group_id: group.id,
+          id: event.id,
+          event: {
+            name: "testevent",
+            application_questions_attributes: {
+              q1.id.to_s => {id: q1.id, question: "Who?", required: false, sensitive: false}
+            },
+            admin_questions_attributes: {
+              q2.id.to_s => {id: q2.id, question: "Payed?", required: false, sensitive: false}
+            }
+          }
+        }
+
+        expect(assigns(:event)).to be_valid
+        expect(q1.reload.sensitive).to eq false
+        expect(q2.reload.sensitive).to eq false
       end
 
       it "question choices stay deleted when form is invalid after deleting all choices" do

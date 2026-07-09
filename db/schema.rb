@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_01_094113) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -90,7 +90,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.string "street_long", limit: 128, null: false
     t.string "street_long_old", limit: 128, null: false
     t.string "town", limit: 128, null: false
-    t.integer "zip_code", null: false
+    t.string "zip_code", null: false
     t.string "state", limit: 128, null: false
     t.text "numbers"
     t.index ["zip_code", "street_short"], name: "index_addresses_on_zip_code_and_street_short"
@@ -382,9 +382,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.string "type", null: false
     t.boolean "sensitive", default: true, null: false
     t.boolean "required", default: false, null: false
-    t.boolean "derived", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "template_id"
     t.index ["event_id"], name: "index_event_questions_on_event_id"
   end
 
@@ -502,7 +502,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.string "short_name", limit: 31
     t.string "type", null: false
     t.string "email"
-    t.integer "zip_code"
+    t.string "zip_code"
     t.string "town"
     t.string "country"
     t.integer "contact_id"
@@ -1222,6 +1222,24 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_20_143500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["person_1_id", "person_2_id"], name: "index_person_duplicates_on_person_1_id_and_person_2_id", unique: true
+  end
+
+  create_table "personal_document_labels", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "personal_documents", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "label_id"
+    t.bigint "author_id", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_personal_documents_on_author_id"
+    t.index ["label_id"], name: "index_personal_documents_on_label_id"
+    t.index ["person_id"], name: "index_personal_documents_on_person_id"
   end
 
   create_table "phone_numbers", id: :serial, force: :cascade do |t|

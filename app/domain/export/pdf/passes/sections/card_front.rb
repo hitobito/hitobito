@@ -6,7 +6,7 @@
 module Export::Pdf::Passes::Sections
   # Renders the front side of the pass card.
   # Displays the pass header with logo and title, member information
-  # including photo and member number, and validity dates.
+  # including member number, validity date and secondary logo.
   # Uses adaptive text colors based on the background color luminance.
   class CardFront
     include Concerns::LogoRenderer
@@ -16,26 +16,22 @@ module Export::Pdf::Passes::Sections
 
     # Layout constants
     HEADER_HEIGHT = 12.mm
-    FOOTER_OFFSET = 10.mm
+    FOOTER_OFFSET = 4.mm
     LOGO_SPACING = 2.mm
-
-    # Photo dimensions
-    PHOTO_WIDTH = 12.mm
-    PHOTO_HEIGHT = 16.mm
-    PHOTO_SPACING = 2.mm
 
     # Text box dimensions
     TITLE_HEIGHT = 9.mm
     TITLE_FONT_SIZE = 9
-    NAME_HEIGHT = 5.mm
-    NAME_FONT_SIZE = 10
-    MEMBER_NUMBER_LABEL_HEIGHT = 3.mm
-    MEMBER_NUMBER_LABEL_FONT_SIZE = 5
+    NAME_HEIGHT = 6.mm
+    NAME_FONT_SIZE = 11
+    MEMBER_NUMBER_LABEL_HEIGHT = 3.5.mm
+    MEMBER_NUMBER_LABEL_FONT_SIZE = 7
     MEMBER_NUMBER_VALUE_HEIGHT = 4.mm
     MEMBER_NUMBER_VALUE_FONT_SIZE = 8
-    NAME_SPACING = 6.mm
+    NAME_SPACING = 7.mm
     VALIDITY_HEIGHT = 8.mm
-    VALIDITY_FONT_SIZE = 6
+    VALIDITY_FONT_SIZE = 7
+    SECONDARY_LOGO_HEIGHT = 15.mm
 
     def initialize(pdf, pass_decorator, card_layout)
       @pdf = pdf
@@ -54,6 +50,7 @@ module Export::Pdf::Passes::Sections
       calculate_content_bounds
       render_header
       render_member_info
+      render_secondary_logo
       render_validity_info
     end
 
@@ -61,6 +58,8 @@ module Export::Pdf::Passes::Sections
       @inner_width = @card_layout.card_width - (2 * CARD_PADDING)
       @content_x = @card_layout.front_x + CARD_PADDING
       @content_top = @card_layout.card_y - CARD_PADDING
+      @secondary_logo_width = @inner_width / 2
+      @validity_width = @inner_width / 2
     end
 
     def render_header
@@ -80,26 +79,12 @@ module Export::Pdf::Passes::Sections
 
     def render_member_info
       body_y = @content_top - HEADER_HEIGHT
-      photo_width = render_photo(@content_x, body_y)
 
-      info_x = @content_x + ((photo_width > 0) ? photo_width + PHOTO_SPACING : 0)
-      info_width = @inner_width - ((photo_width > 0) ? photo_width + PHOTO_SPACING : 0)
+      info_x = @content_x
+      info_width = @inner_width
 
       render_member_name(info_x, body_y, info_width)
       render_member_number(info_x, body_y - NAME_SPACING, info_width)
-    end
-
-    def render_photo(x, y)
-      return 0 unless @pass_decorator.person.picture.attached?
-
-      @pass_decorator.person.picture.blob.open do |photo_file|
-        @pdf.image(photo_file,
-          at: [x, y],
-          fit: [PHOTO_WIDTH, PHOTO_HEIGHT])
-      end
-      PHOTO_WIDTH
-    rescue StandardError
-      0
     end
 
     def render_member_name(x, y, width)
@@ -141,33 +126,38 @@ module Export::Pdf::Passes::Sections
       end
     end
 
-    def render_validity_info
-      validity_lines = build_validity_lines
-      return if validity_lines.empty?
+    def render_secondary_logo
+      y = @card_layout.card_y - @card_layout.card_height + CARD_PADDING + SECONDARY_LOGO_HEIGHT
 
-      footer_y = @card_layout.card_y - @card_layout.card_height + CARD_PADDING + FOOTER_OFFSET
+      @pdf.bounding_box([@content_x, y], width: @secondary_logo_width,
+        height: SECONDARY_LOGO_HEIGHT) do
+        attachment = @pass_decorator.logo_secondary(@pass_decorator.person.language)
+        logo_data = attachment&.variant(format: :png)&.processed&.download
+        return unless logo_data
 
-      with_color(@pass_decorator.text_colors[:muted]) do
-        @pdf.text_box validity_lines.join("\n"),
-          at: [@content_x, footer_y],
-          width: @inner_width,
-          height: VALIDITY_HEIGHT,
-          size: VALIDITY_FONT_SIZE,
-          overflow: :shrink_to_fit
+        @pdf.image(StringIO.new(logo_data),
+          fit: [@secondary_logo_width, SECONDARY_LOGO_HEIGHT],
+          position: :left,
+          vposition: :bottom)
       end
     end
 
-    def build_validity_lines
-      lines = []
-      if @pass_decorator.valid_from.present?
-        label = I18n.t("activerecord.attributes.pass.valid_from")
-        lines << "#{label} #{I18n.l(@pass_decorator.valid_from)}"
+    def render_validity_info
+      return if @pass_decorator.valid_until.blank?
+
+      label = I18n.t("activerecord.attributes.pass.valid_until")
+      validity_line = "#{label} #{I18n.l(@pass_decorator.valid_until)}"
+      footer_y = @card_layout.card_y - @card_layout.card_height + CARD_PADDING + FOOTER_OFFSET
+
+      with_color(@pass_decorator.text_colors[:muted]) do
+        @pdf.text_box validity_line,
+          at: [@content_x + @secondary_logo_width, footer_y],
+          width: @validity_width,
+          height: VALIDITY_HEIGHT,
+          size: VALIDITY_FONT_SIZE,
+          align: :right,
+          overflow: :shrink_to_fit
       end
-      if @pass_decorator.valid_until.present?
-        label = I18n.t("activerecord.attributes.pass.valid_until")
-        lines << "#{label} #{I18n.l(@pass_decorator.valid_until)}"
-      end
-      lines
     end
 
     def card_position

@@ -99,6 +99,8 @@ An example response could be (formatted here for readability):
   "email": "julia@example.com",
   "first_name": "Julia",
   "last_name": "Keller",
+  "given_name": "Julia",
+  "family_name": "Keller",
   "nickname": "Polka",
   "address": null,
   "zip_code": "",
@@ -150,6 +152,8 @@ When using the `with_roles` scope, the /oauth/profile endpoint yields all public
   "email": "julia@example.com",
   "first_name": "Julia",
   "last_name": "Keller",
+  "given_name": "Julia",
+  "family_name": "Keller",
   "nickname": "Polka",
   "company_name": null,
   "company": false,
@@ -161,6 +165,7 @@ When using the `with_roles` scope, the /oauth/profile endpoint yields all public
   "birthday": "1999-09-09",
   "primary_group_id": 1,
   "language": "de",
+  "locale": "de",
   "roles": [
     {
       "group_id": 1,
@@ -220,6 +225,8 @@ curl -H "Authorization: Bearer A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ" \
   "email": "julia@example.com",
   "first_name": "Julia",
   "last_name": "Keller",
+  "given_name": "Julia",
+  "family_name": "Keller",
   "nickname": "Polka",
   "company_name": null,
   "company": false,
@@ -231,6 +238,7 @@ curl -H "Authorization: Bearer A5t3yMUvKCZLxasqJbQBhu0bRKMvWdwcBSw2DJbUiaQ" \
   "birthday": "1999-09-09",
   "primary_group_id": 1,
   "language": "de",
+  "locale": "de",
   "roles": [
     {
       "group_id": 1,

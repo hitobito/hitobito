@@ -21,13 +21,6 @@ class GroupDecorator < ApplicationDecorator
     helpers.link_to(icon, path, attrs.merge(data: {method: :put, remote: true}))
   end
 
-  def prepend_complete_address(html)
-    if contact
-      html << "c/o #{contact}"
-      html << h.tag(:br)
-    end
-  end
-
   def role_types
     klass.role_types.sort_by(&:label)
   end

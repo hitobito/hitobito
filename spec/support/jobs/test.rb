@@ -48,4 +48,16 @@ module Test
       Rails.logger.debug "Working..."
     end
   end
+
+  class GracefullyTerminatableJob < BaseJob
+    include GracefulTermination
+
+    def perform
+      Rails.logger.debug "Before check_terminated!"
+
+      check_terminated!
+
+      Rails.logger.debug "After check_terminated!"
+    end
+  end
 end

@@ -21,6 +21,7 @@
     = stylesheet_pack_tag 'print', media: 'print'
     - if Rails.env.test?
       = stylesheet_pack_tag 'disable_animations'
+    = javascript_pack_tag 'core', 'data-turbo-track': true
     = javascript_pack_tag 'application', 'data-turbo-track': true
 
     = yield(:head)

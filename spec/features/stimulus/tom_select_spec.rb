@@ -20,7 +20,7 @@ describe "TomSelect Stimulus Controller", js: true do
         render inline: <<~HTML
           <head>
             #{stylesheet_pack_tag "application", media: "screen", "data-turbo-track": true}
-            #{javascript_pack_tag "application", "data-turbo-track": true}
+            #{javascript_pack_tag "core", "data-turbo-track": true}
             <!-- add fake inline favicon to avoid 404 error -->
             <link rel="icon" href="data:image/x-icon;," type="image/x-icon">
           </head>

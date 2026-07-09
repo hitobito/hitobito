@@ -28,6 +28,9 @@ sass.use.splice(-1, 0, { loader: 'resolve-url-loader' })
 // not maintained anymore, so can't update.
 sass.use = sass.use.filter(({ loader }) => loader !== 'postcss-loader')
 
+// Let wagon files resolve imports (e.g. "bootstrap/scss/...") against core's node_modules
+environment.resolvedModules.append('core_node_modules', pathResolve('node_modules'))
+
 // Old-school libraries must be made globally accessible by exposing
 // them to the window object.
 environment.loaders.append('expose query to window object', {

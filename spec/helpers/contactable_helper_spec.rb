@@ -40,6 +40,16 @@ describe ContactableHelper, type: :helper do
         .to have_selector("option[value='#{standard_options.third}'][selected='selected']")
     end
 
+    it "the current value is selected in another language as well" do
+      I18n.with_locale(:fr) do
+        additional_email.label = standard_options.third
+        result = helper.contact_method_label_select(form)
+
+        expect(result)
+          .to have_selector("option[value='#{standard_options.third}'][selected='selected']")
+      end
+    end
+
     it "includes current value as option" do
       additional_email.label = "nonstandard_value"
       result = helper.contact_method_label_select(form)

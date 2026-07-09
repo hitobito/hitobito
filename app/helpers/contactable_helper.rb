@@ -23,12 +23,16 @@ module ContactableHelper
   def contact_method_label_select(form)
     contact_method = form.object
     current_label = contact_method.label
+
     options = (contact_method.class.predefined_labels | [current_label].compact).map do |value|
       translated = contact_method.class.translate_label(value)
       OpenStruct.new(value: value, translated: translated)
     end
-    form.collection_select(:translated_label, options, :value, :translated, {},
-      class: "form-select form-select-sm")
+
+    form.collection_select(
+      :translated_label, options, :value, :translated, {selected: current_label},
+      class: "form-select form-select-sm"
+    )
   end
 
   def contactable_public_field_icon

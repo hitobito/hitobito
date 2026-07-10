@@ -15,6 +15,7 @@
 #  kind       :string(100)      not null
 #  model      :string(100)
 #  name       :string(100)      not null
+#  start_open :boolean          default(FALSE), not null
 #
 # Indexes
 #

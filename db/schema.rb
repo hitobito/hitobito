@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_01_094113) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_08_111416) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -559,6 +559,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_094113) do
     t.string "model", limit: 100
     t.string "kind", limit: 100, null: false
     t.string "name", limit: 100, null: false
+    t.boolean "start_open", default: false, null: false
     t.index ["controller", "model", "kind", "name"], name: "index_help_texts_fields", unique: true
   end
 

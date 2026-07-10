@@ -71,6 +71,18 @@ describe HelpTexts::Renderer do
       expect(subject.render_field(:name)).to be_present
     end
 
+    context "initial state" do
+      it "is set to closed if text should not start open" do
+        help_texts(:person_field_name).update(start_open: false)
+        expect(subject.render_field("name")).to match(/data-initially-closed="true"/)
+      end
+
+      it "is set is not explicitly set so it starts open" do
+        help_texts(:person_field_name).update(start_open: true)
+        expect(subject.render_field("name")).not_to match(/data-initially-closed/)
+      end
+    end
+
     context "sti" do
       let(:controller) { EventsController.new }
 

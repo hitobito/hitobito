@@ -28,7 +28,7 @@
 - Beim Adressabgleich mit der Schweizer Post werden für Postfächer neu PLZ und Ort des Postfachs übernommen (hitobito_sac_cas#2536)
 - In der Suchleiste können jetzt Personen via ihre ID gefunden werden (pfadi_de#50)
 - Bei Gruppen-Adressen (wie bereits bei Personen) sind nun auch alphanumerische PLZs und solche mit führenden Nullen erlaubt (hitobito/hitobito_pfadi_de#86)
-- Initiale Sichtbarkeit von Hilfetexte kann konfiguriert werden (#2686)
+- Initiale Sichtbarkeit von Hilfetexten kann konfiguriert werden (#2686)
 
 ## Version 2.9
 

@@ -46,7 +46,7 @@ class HelpTexts::Renderer
   def render_text(help_text)
     content_tag(:div,
       class: "help-text #{dom_id(help_text)}",
-      data: {open: help_text.start_open}) do
+      data: ({initially_closed: true} if !help_text.start_open)) do
       safe_html(help_text.body) if help_text.body&.to_plain_text&.present?
     end
   end

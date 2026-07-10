@@ -14,7 +14,7 @@ class Imap::Mail
   attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
-  delegate :bounced?, :final_recipient, :diagnostic_code, to: :mail
+  delegate :final_recipient, :diagnostic_code, to: :mail
 
   def self.build(net_imap_mail)
     entry = new
@@ -79,11 +79,11 @@ class Imap::Mail
   end
 
   def generic_bounce?
-    bounced? && bounce_hitobito_message_uid.blank?
+    bounce? && bounce_hitobito_message_uid.blank?
   end
 
   def list_bounce?
-    bounced? && bounce_hitobito_message_uid.present?
+    bounce? && bounce_hitobito_message_uid.present?
   end
 
   def auto_response?
@@ -99,6 +99,10 @@ class Imap::Mail
   end
 
   private
+
+  def bounce?
+    mail.bounced? || mail.diagnostic_code.present?
+  end
 
   def envelope
     @net_imap_mail.attr["ENVELOPE"]

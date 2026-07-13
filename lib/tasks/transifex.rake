@@ -27,7 +27,6 @@ namespace :tx do
   desc "Init a wagon to use transifex"
   task :init do
     sh "tx init"
-    sh "tx set -t YML"
   end
 
   desc "Push source files (=german locales) to transifex"

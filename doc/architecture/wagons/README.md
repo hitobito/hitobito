@@ -61,28 +61,26 @@ The basic structure of a new wagon can be easily generated in the main project, 
 
 Afterwards you need to make the following adjustments:
 
-* Move files from `hitobito/vendor/wagons/[name]` to `hitobito_[name]`
-* Rename `github` to `.github` to enable GH-Actions
-* Initialize a new Git Repo for the wagon
-* Copy `.tool-versions` from the core into the wagon. (or use `wagon activate [name]`)
-* Copy `Gemfile.lock` from the core into the wagon. (or use `wagon gemfile`)
-* Optional: Copy local config from the core into the wagon. (or use `wagon configs`)
 * Adjust Organisation in the license generator (`lib/tasks/license.rake`)  and add the licence everywhere with `rake app:license:insert`.
 * Add the customer organization in `COPYING`.
-* Put you name into `AUTHORS`
 * Edit authors, email, summary und description `hitobito_[name].gemspec`.
+* Put you name into `AUTHORS`
+* Optional: Copy local config from the core into the wagon. (or use `wagon configs`)
 
 If the wagon is the main wagon for a new organization structure, you can additionally do these steps:
 
 * Add Developer and Client Accounts in the seed files: `db/seed/development/1_people.rb` under `devs`.
-* Configure e-mail-adress for the root account in `config/settings.yml`.
+* Optional: Adjust e-mail-adress for the root account in `config/settings.yml`.
 * If the application is multilingual:
-  * create a project in [Transifex](https://www.transifex.com/) (e.g. hitobito_pbs)
+  * Add languages to `config/settings.yml`
+  * Create a project in [Transifex](https://www.transifex.com/) (e.g. hitobito_pbs)
+  * Ensure that Settings > General > Project url is set correctly (e.g. app/transifex.com/hitobito/hitobito_pbs)
   * if the customer should have the option to define the german texts himself, then add a german variant locale to the
     transifex project (e.g. `de_CH` for Switzerland)
-  * make sure there is all required locale files in the wagon's config/locales folder (all non default language files can be empty on init)
-  * create .tx/config and add all files (you might copy it from [here](https://github.com/hitobito/hitobito_die_mitte/blob/master/.tx/config) or use rake tx:init)
-
+  * Rename customer specific locale files to generic `config/locales/wagon.xx.yml` format
+  * Make sure there is all required locale files in the wagon's config/locales folder (all non default language files can be empty on init)
+  * create .tx/config and add all files (you might copy it from
+    [here](https://github.com/hitobito/hitobito_die_mitte/blob/master/.tx/config) or use rake app::tx:init), the host needs be https://transifex.com
 * Also see the guidelines for internationalization
 
 If the wagon is not for a specific organisation and does not define a group structure, you should delete the following files:
@@ -106,7 +104,7 @@ development environment:
 * The very top group is at the beginning. Rename the class in `app/models/group/root.rb` accordingly (e.g.
   (e.g. ‘umbrella organisation’) and define the first roles.
 * Adapt `app/models/[name]/group.rb#root_types` accordingly.
-* Add translations for group and roles in `config/locales/models.[name].de.yml`.
+* Add translations for group and roles in `config/locales/wagon.[name].de.yml`.
 * In `db/seed/development/1_people.rb` adjust the admin role for the developers.
 * Customise the seed of the root group in `db/seed/groups.rb`.
 * Adjust the type of the root group in `spec/fixtures/groups.yml`.

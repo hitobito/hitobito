@@ -1311,6 +1311,7 @@ it:
         context: Contesto
         key: Chiave
         body: Contenuto
+        start_open: initial Anzeigen
         field:
           one: Campo
           many: Campo

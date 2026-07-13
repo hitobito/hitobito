@@ -1312,6 +1312,7 @@ fr:
         context: Contexte
         key: Clef
         body: Contenu
+        start_open: initial Anzeigen
         field:
           one: Champ
           many: Champs

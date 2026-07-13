@@ -1043,6 +1043,11 @@ en:
   group_decorator:
     archived_suffix: "(archived)"
 
+
+  help_texts:
+    form:
+      caption_start_open: Text initial Anzeigen
+
   households:
     edit:
       title: Haushalt verwalten

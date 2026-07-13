@@ -1226,6 +1226,7 @@ en:
         context: Context
         key: Key
         body: Content
+        start_open: initial Anzeigen
         field:
           one: Field
           other: Fields

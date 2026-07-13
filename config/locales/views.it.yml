@@ -1054,6 +1054,11 @@ it:
   group_decorator:
     archived_suffix: "(archiviato)"
 
+
+  help_texts:
+    form:
+      caption_start_open: Text initial Anzeigen
+
   households:
     edit:
       title: Gestire il budget

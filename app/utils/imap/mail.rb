@@ -98,11 +98,11 @@ class Imap::Mail
     @mail ||= ::Mail.read_from_string(@net_imap_mail.attr["RFC822"])
   end
 
-  private
-
   def bounce?
     mail.bounced? || mail.diagnostic_code.present?
   end
+
+  private
 
   def envelope
     @net_imap_mail.attr["ENVELOPE"]

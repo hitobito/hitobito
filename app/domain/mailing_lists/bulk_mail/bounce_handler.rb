@@ -40,13 +40,16 @@ module MailingLists::BulkMail
       when :block then block_bounce
       when :continue then true
       when :register then record_bounce
-      when :internal_error then notify_sentry(:internal_error)
+      when :internal_error then notify_sentry(:internal_error, action)
       else
         record_bounce
-        notify_sentry(:unknown_code)
+        notify_sentry(:unknown_code, action)
       end
 
       action
+    rescue NoBounceRecipientDetected
+      notify_sentry(:no_recipient, action)
+      :unknown
     end
 
     def analyze_diagnostic_code(code)
@@ -110,14 +113,17 @@ module MailingLists::BulkMail
       @bulk_mail_bounce.destroy!
     end
 
-    def notify_sentry(message_code)
+    def notify_sentry(message_code, determined_action)
       message = case message_code
       when :internal_error then "A Bounce had an internal error in its Diagnostic Code"
       when :unknown_code then "A Bounce had a previously unknown Diagnostic Code"
+      when :no_recipient then "A Bounce had an undetectable original recipient"
       end
 
       Sentry.capture_message(message, logger: "bounce_handler", extra: {
-        diagnostic_code: @imap_mail.diagnostic_code
+        diagnostic_code: @imap_mail.diagnostic_code,
+        message_id: @imap_mail.message_id,
+        determined_action: determined_action
       })
     end
   end

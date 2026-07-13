@@ -14,7 +14,7 @@ class Imap::Mail
   attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
-  delegate :final_recipient, :diagnostic_code, to: :mail
+  delegate :message_id, :final_recipient, :diagnostic_code, to: :mail
 
   def self.build(net_imap_mail)
     entry = new

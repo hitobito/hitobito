@@ -304,6 +304,13 @@ groups:
 hitobito_log:
   recipient_emails:
 
+invoices:
+  filter_by_finance_layer:
+    # When enabled, the receiver invoices on a person's invoice tab are filtered
+    # to only show invoices from finance layers the current user has access to.
+    # When disabled, the pre-#4277 behavior is used and all invoices are shown.
+    enabled: true
+
 wallets:
   sync_interval: <%= ENV['HITOBITO_WALLETS_SYNC_SECONDS'].presence || 3.minutes %>
 

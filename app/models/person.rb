@@ -496,6 +496,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     unfinished_job_observations_count > 0
   end
 
+  def event_role_types_for(event)
+    event_roles.where(event_participations: {event_id: event.id}).collect(&:class)
+  end
+
   ### AUTHENTICATION INSTANCE METHODS
 
   # Is this person allowed to login?

@@ -20,14 +20,16 @@ module Export::Tabular::People
     end
 
     def questions_labels
-      questions.map { |question| [:"question_#{question.id}", question.question] }.to_h
+      visible_questions.map { |question| [:"question_#{question.id}", question.question] }.to_h
     end
 
     private
 
-    def questions
-      Event::Question.joins(answers: :participation)
-        .where(event_participations: {id: pluck_ids_from_list("event_participations.id")})
+    def visible_questions
+      return [] if ability.blank? || list.blank?
+
+      Event::Question::VisibleList.new(event: list.first.event, ability:)
+        .questions
     end
 
     def people_ids

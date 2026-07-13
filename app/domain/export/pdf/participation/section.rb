@@ -9,7 +9,7 @@ module Export::Pdf::Participation
   class Section
     include ActionView::Helpers::SanitizeHelper
 
-    attr_reader :pdf, :participation
+    attr_reader :pdf, :participation, :viewer
 
     class_attribute :model_class
 
@@ -20,9 +20,10 @@ module Export::Pdf::Participation
 
     delegate :event, :person, :application, to: :participation
 
-    def initialize(pdf, participation)
+    def initialize(pdf, participation, viewer: nil)
       @pdf = pdf
       @participation = participation
+      @viewer = viewer
     end
 
     private

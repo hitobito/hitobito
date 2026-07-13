@@ -118,17 +118,18 @@ describe MailingLists::BulkMail::BounceHandler do
       expect(last_bounce.email).to eql "nothing@example2.com"
     end
 
-    it "raises for unusual bounces" do
+    it "handles unusual bounces gracefully" do
       unusual_bounce = Mail.read_from_string(
         Rails.root.join("spec", "fixtures", "email", "list_bounce.eml")
         .read.gsub(/^.*nothing@example2.com.*$/, "")
       )
       allow(bounce_imap_mail).to receive(:mail).and_return(unusual_bounce)
 
+      expect(bounce_handler).to receive(:notify_sentry).with(:no_recipient, :unknown)
+
       expect do
         bounce_handler.process
-      end.to raise_error(MailingLists::BulkMail::NoBounceRecipientDetected)
-        .with_message(/Mail seems to be a bounce, but the original recipient could not be detected./)
+      end.to_not change(Bounce, :count)
     end
   end
 
@@ -163,7 +164,7 @@ describe MailingLists::BulkMail::BounceHandler do
 
     it "reports internal errors" do
       expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:internal_error)
-      expect(bounce_handler).to receive(:notify_sentry).once
+      expect(bounce_handler).to receive(:notify_sentry).with(:internal_error, :internal_error).once
 
       expect(bounce_handler).to_not receive(:block_bounce)
       expect(bounce_handler).to_not receive(:record_bounce)
@@ -174,7 +175,7 @@ describe MailingLists::BulkMail::BounceHandler do
     it "records a bounces a reports an error for unknown codes" do
       expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:unknown)
       expect(bounce_handler).to receive(:record_bounce).once
-      expect(bounce_handler).to receive(:notify_sentry).once
+      expect(bounce_handler).to receive(:notify_sentry).with(:unknown_code, :unknown).once
 
       expect(bounce_handler).to_not receive(:block_bounce)
 
@@ -184,7 +185,7 @@ describe MailingLists::BulkMail::BounceHandler do
     it "records a bounces a reports an error for other codes" do
       expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:dunno_dont_care)
       expect(bounce_handler).to receive(:record_bounce).once
-      expect(bounce_handler).to receive(:notify_sentry).once
+      expect(bounce_handler).to receive(:notify_sentry).with(:unknown_code, :dunno_dont_care).once
 
       expect(bounce_handler).to_not receive(:block_bounce)
 

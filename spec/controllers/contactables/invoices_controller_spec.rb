@@ -62,6 +62,12 @@ describe Contactables::InvoicesController do
           get :index, params: {group_id: group.id, person_id: top_leader.id}
           expect(assigns(:invoices)).to be_empty
         end
+
+        it "may list invoices if filter_by_finance_layer=false" do
+          allow(Settings.invoices.filter_by_finance_layer).to receive(:enabled).and_return(false)
+          get :index, params: {group_id: group.id, person_id: top_leader.id}
+          expect(assigns(:invoices)).to match_array invoices(:invoice, :sent)
+        end
       end
     end
 

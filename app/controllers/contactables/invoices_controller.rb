@@ -19,26 +19,28 @@ class Contactables::InvoicesController < ListController
   private
 
   def list_entries
-    Invoice::Filter.new(params).apply(scope.page(params[:page]).per(50))
+    Invoice::Filter.new(params).apply(super.page(params[:page]).per(50))
   end
 
-  def scope
-    return base_scope if self_or_managed?
+  def model_scope
+    scope = filter_by_finance_layer? ? filter_by_finance_layer(super) : super
 
-    base_scope
-      .joins(group: :layer_group)
-      .where(layer_group: {id: current_ability.user_finance_layer_ids})
+    scope.preload(:group)
   end
 
-  def base_scope
-    method(:list_entries).super_method.call
-      .list
-      .includes(:group)
-      .where(search_conditions)
+  def filter_by_finance_layer?
+    FeatureGate.enabled?("invoices.filter_by_finance_layer") &&
+      !self_or_managed?
   end
 
   def self_or_managed?
     contactable == current_person || current_person.manageds.include?(contactable)
+  end
+
+  def filter_by_finance_layer(scope)
+    scope
+      .joins(group: :layer_group)
+      .where(layer_group: {id: current_ability.user_finance_layer_ids})
   end
 
   def contactable

@@ -14,7 +14,7 @@ class Imap::Mail
   attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
-  delegate :final_recipient, :diagnostic_code, to: :mail
+  delegate :message_id, :final_recipient, :diagnostic_code, to: :mail
 
   def self.build(net_imap_mail)
     entry = new
@@ -98,11 +98,11 @@ class Imap::Mail
     @mail ||= ::Mail.read_from_string(@net_imap_mail.attr["RFC822"])
   end
 
-  private
-
   def bounce?
     mail.bounced? || mail.diagnostic_code.present?
   end
+
+  private
 
   def envelope
     @net_imap_mail.attr["ENVELOPE"]

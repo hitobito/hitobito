@@ -18,11 +18,11 @@ describe Imap::Mail do
     end
 
     it "has assumptions" do
-      expect(bounce_imap_mail).to be_bounced
+      expect(bounce_imap_mail).to be_bounce
     end
 
     it "is a list-bounce if it is bounced and a hitobito message uid is present" do
-      expect(bounce_imap_mail).to be_bounced
+      expect(bounce_imap_mail).to be_bounce
       expect(bounce_imap_mail.bounce_hitobito_message_uid).to be_present
 
       expect(bounce_imap_mail).to be_list_bounce
@@ -32,7 +32,7 @@ describe Imap::Mail do
       body = bounce_mail.body.raw_source.gsub("X-Hitobito-Message-UID: a15816bbd204ba20", "")
       expect(bounce_mail.body).to receive(:raw_source).and_return(body)
 
-      expect(bounce_imap_mail).to be_bounced
+      expect(bounce_imap_mail).to be_bounce
       expect(bounce_imap_mail).not_to be_list_bounce
     end
 

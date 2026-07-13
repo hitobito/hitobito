@@ -362,6 +362,71 @@ describe Event do
           .to match("participant_count < events.maximum_participants")
       end
     end
+
+    context "future" do
+      before do
+        event.dates.destroy_all
+      end
+
+      it "includes event with start_at in the future" do
+        event.dates.create!(start_at: 1.day.from_now)
+        expect(Event.future).to include event
+      end
+
+      it "includes event with finish_at in the future even if start_at is in the past" do
+        event.dates.create!(start_at: 1.day.ago, finish_at: 1.day.from_now)
+        expect(Event.future).to include event
+      end
+
+      it "does not include event in the past" do
+        event.dates.create!(start_at: 2.days.ago, finish_at: 1.day.ago)
+        expect(Event.future).not_to include event
+      end
+
+      it "does not include event with only a past start_at and no finish_at" do
+        event.dates.create!(start_at: 1.day.ago)
+        expect(Event.future).not_to include event
+      end
+
+      it "does not include event twice if it has multiple dates" do
+        event.dates.create!(start_at: 1.day.from_now)
+        event.dates.create!(start_at: 3.days.from_now)
+
+        expect(Event.future.count).to eq 1
+      end
+    end
+
+    context "application_period_open" do
+      it "includes event without opening or closing date" do
+        event.update!(application_opening_at: nil, application_closing_at: nil)
+        expect(Event.application_period_open).to include event
+      end
+
+      it "includes event within opening and closing date" do
+        event.update!(application_opening_at: 1.day.ago, application_closing_at: 1.day.from_now)
+        expect(Event.application_period_open).to include event
+      end
+
+      it "includes event with opening date today" do
+        event.update!(application_opening_at: Time.zone.today)
+        expect(Event.application_period_open).to include event
+      end
+
+      it "includes event with closing date today" do
+        event.update!(application_closing_at: Time.zone.today)
+        expect(Event.application_period_open).to include event
+      end
+
+      it "does not include event with opening date in the future" do
+        event.update!(application_opening_at: 1.day.from_now)
+        expect(Event.application_period_open).not_to include event
+      end
+
+      it "does not include event with closing date in the past" do
+        event.update!(application_closing_at: 1.day.ago)
+        expect(Event.application_period_open).not_to include event
+      end
+    end
   end
 
   context "validations" do

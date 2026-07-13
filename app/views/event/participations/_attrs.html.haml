@@ -20,10 +20,9 @@
                answers: @answers.reject(&:admin?),
                title: t('event.participations.application_answers')
 
-      - if can?(:show_full, entry)
-        = render 'answers',
-                 answers: @answers.select(&:admin?),
-                 title: t('event.participations.admin_answers')
+      = render 'answers',
+               answers: @answers.select(&:admin?),
+               title: t('event.participations.admin_answers')
 
       = section t('activerecord.attributes.event/participation.additional_information') do
         %p.multiline= entry.additional_information || '-'

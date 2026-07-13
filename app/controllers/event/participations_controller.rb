@@ -116,7 +116,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def print
     load_answers
-    pdf = Export::Pdf::Participation.render(entry)
+    pdf = Export::Pdf::Participation.render(entry, current_user)
     filename = Export::Pdf::Participation.filename(entry)
 
     send_data pdf, type: :pdf, disposition: "attachment", filename: filename
@@ -341,7 +341,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def init_answers
-    @answers = entry.init_answers
+    @answers = visible_questions.answers(entry.init_answers)
     entry.init_application
   end
 
@@ -360,20 +360,12 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     # Use .to_a to work with in-memory answer objects, preserving unsaved changes
     # on validation failure. Using the .list scope would trigger a DB reload via JOIN,
     # discarding any user input not yet persisted (see #3833).
-    answers = entry.answers.to_a
-    # Eager-load question translations on the already-materialized array.
-    ActiveRecord::Associations::Preloader.new(records: answers,
-      associations: {question: :translations}).call
-    @answers = sorted_answers(answers)
+    @answers = visible_questions.answers(entry.answers.to_a)
     @application = Event::ApplicationDecorator.decorate(entry.application) if entry.application
   end
 
-  def sorted_answers(answers)
-    if Event::Question.list_alphabetically
-      answers.sort_by { |a| a.question.to_s.downcase }
-    else
-      answers.sort_by(&:question_id)
-    end
+  def visible_questions
+    Event::Question::VisibleList.new(event:, ability: current_ability, participation: entry)
   end
 
   def load_precondition_warnings

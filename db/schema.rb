@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_08_111416) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_08_160000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -373,6 +373,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_08_111416) do
     t.string "choices"
     t.index ["event_question_id"], name: "index_event_question_translations_on_event_question_id"
     t.index ["locale"], name: "index_event_question_translations_on_locale"
+  end
+
+  create_table "event_question_visibilities", force: :cascade do |t|
+    t.bigint "question_id"
+    t.string "role_type", null: false
+    t.index ["question_id", "role_type"], name: "idx_event_question_visibilities_unique", unique: true
+    t.index ["question_id"], name: "index_event_question_visibilities_on_question_id"
   end
 
   create_table "event_questions", id: :serial, force: :cascade do |t|

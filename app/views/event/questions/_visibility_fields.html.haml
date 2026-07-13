@@ -1,0 +1,19 @@
+-# Copyright (c) 2026, CEVI Regionalverband ZH-SH-GL. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+- role_types = entry.role_types.reject { |role| role.participant? && f.object.admin }.map(&:to_s)
+- selectable_types = Event::QuestionVisibility.selectable_role_types_for(event: entry, admin: f.object.admin)
+
+= f.labeled(t('.caption')) do
+  .controls.mt-2
+    = hidden_field_tag("#{f.object_name}[visible_role_types][]")
+    - role_types.each do |role_type|
+      - disabled = selectable_types.exclude?(role_type)
+      = label_tag(nil, class: 'checkbox inline') do
+        = check_box_tag("#{f.object_name}[visible_role_types][]", role_type,
+                        f.object.visible_role_types.include?(role_type) || disabled,
+                        disabled: disabled,
+                        id: "#{f.object_name}_visible_role_types_#{role_type.demodulize.underscore}")
+        = role_type.constantize.label

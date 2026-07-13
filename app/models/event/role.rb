@@ -88,6 +88,12 @@ class Event::Role < ActiveRecord::Base
       kind == :participant
     end
 
+    # Whether this role has full access to all participation data, regardless of
+    # any per-question answer visibility configuration.
+    def participations_full?
+      permissions.include?(:participations_full)
+    end
+
     # Whether this role is specially managed or open for general modifications.
     def restricted?
       kind.nil?

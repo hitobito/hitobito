@@ -78,4 +78,49 @@ describe Export::Pdf::Participation::Specifics do
       ].pretty_inspect
     end
   end
+
+  context "answer visibility" do
+    let(:event) { Fabricate(:event, groups: [groups(:top_group)]) }
+    let(:question) { Fabricate(:event_question, event: event) }
+    let(:answer) { participation.answers.find_by!(question: question) }
+
+    before do
+      answer.update!(answer: "some answer")
+    end
+
+    it "shows the answer to the participant themself" do
+      described_class.new(pdf, participation, viewer: person).render
+      expect(text_with_position.flatten).to include("some answer")
+    end
+
+    it "shows the answer to a viewer with full access via other means" do
+      viewer = people(:top_leader)
+      allow(viewer).to receive(:event_role_types_for).with(event).and_return([])
+      described_class.new(pdf, participation, viewer: viewer).render
+
+      expect(text_with_position.flatten).to include("some answer")
+    end
+
+    describe "event role defined access" do
+      let(:cook) { people(:bottom_member) }
+
+      before do
+        allow(cook).to receive(:event_role_types_for).with(event).and_return([Event::Role::Cook])
+      end
+
+      it "hides the answer from a cook" do
+        described_class.new(pdf, participation, viewer: cook).render
+
+        expect(text_with_position.flatten).not_to include("some answer")
+      end
+
+      it "shows the answer to a cook because of defined visible_role" do
+        question.visible_role_types = [Event::Role::Cook.sti_name]
+        question.save!
+
+        described_class.new(pdf, participation, viewer: cook).render
+        expect(text_with_position.flatten).to include("some answer")
+      end
+    end
+  end
 end

@@ -29,17 +29,17 @@ Hier wird davon ausgegangen, dass der Restore in ein Schema namens "database" st
 
 Das erstellte `event.sql`-Script kann auf der DB angewendet werden, von der die Daten gelöscht wurden. Es enthält alle Daten, die beim Löschen eines Events mitgelöscht wurden und in der DB sind. Es enthält keine Attachments. Die Relationen `subscriptions` und `person_add_requests` sind noch nicht enthalten, da diese bisher nicht wiederhergestellt werden mussten.
 
-### Personen trennen
+### Personen trennen / Duplikate wieder herstellen
 
-Um zusammengeführte Personen wieder zu trennen gibt es einen Rake-Task welcher alle nötigen SQL-Queries aus einem alten Dump generiert.
+Um zusammengeführte Personen wieder zu trennen, kann man diesen Task verwenden:
 
 ```bash
-> rake person_merge_revert:run[1234]
+> rake restore:export:duplicate[1234] > duplicate.sql
 ```
 
-Als `duplicate_id` wird die `id` des `person_duplicates`-Eintrags aus dem alten Dump übergeben. Der Dump muss dazu vorher in die DB, gegen welche die Rake Task läuft, eingespielt worden sein.
+Die `id` ist der primary-key des `person_duplicates`-Eintrags aus dem alten Dump. Der Dump muss dazu vorher in die DB, gegen welche der Rake-Task läuft, eingespielt worden sein. Siehe dazu weiter oben "DB vorbereiten".
 
-Es werden verschiedene SQL-Queries ausgegeben welche direkt auf die DB angewendet werden können. Die Rake Task interessiert es nicht welche Person in welche gemerged wurde, die Queries machen für beide ein "INSERT INTO ... ON CONFLICT ...".
+Es werden verschiedene SQL-Queries ausgegeben, welche direkt auf der produktiven DB angewendet werden können. Den Rake-Task interessiert es nicht, welche Person in welche gemerged wurde, die Queries machen für beide ein "INSERT INTO ... ON CONFLICT ...".
 
 Aktuell werden folgende Associations auch wieder zurückgesetzt:
 - Rollen
@@ -48,7 +48,7 @@ Aktuell werden folgende Associations auch wieder zurückgesetzt:
 - Event-Kontakt Einträge
 - Gruppen-Kontakt Einträge
 - Familien
-- MailingListen Abos
+- MailingListen/Abos
 - Event-Einladungen
 - Event-Teilnahmen
 - Gruppen-Anfragen

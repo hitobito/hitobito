@@ -141,13 +141,16 @@ class PersonMergeRevert
   end
 end
 
-namespace :person_merge_revert do
-  desc "Print SQL statements from a dumped DB state to revert person merge"
-  task :run, [:duplicate_id] => [:environment] do |_task, args|
-    duplicate_id = args.fetch(:duplicate_id) { abort("You need to pass a duplicate_id to revert") }
+namespace :restore do
+  namespace :export do
+    desc "Print SQL statements from a dumped DB state to revert person merge"
+    task :duplicate, [:id] => [:environment] do |_task, args|
+      duplicate_id = args.fetch(:id) { abort("You need to pass a duplicate-id to revert") }
 
-    statements = PersonMergeRevert.new(duplicate_id).call
+      statements = PersonMergeRevert.new(duplicate_id).call
 
-    puts statements.join("\n\n")
+      puts statements.map(&:squish).join("\n")
+      warn "#{statements.size} UPSERTS generated."
+    end
   end
 end

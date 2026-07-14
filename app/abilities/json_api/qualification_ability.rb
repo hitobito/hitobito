@@ -8,17 +8,10 @@
 module JsonApi
   class QualificationAbility
     include CanCan::Ability
+    include FullReadablePeople
 
     def initialize(user)
       can :read, Qualification, person: full_readable_people(user)
-    end
-
-    private
-
-    def full_readable_people(user)
-      Person
-        .accessible_by(PersonFullReadables.new(user))
-        .unscope(:select)
     end
   end
 end

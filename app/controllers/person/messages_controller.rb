@@ -25,6 +25,6 @@ class Person::MessagesController < ListController
   end
 
   def authorize_class
-    authorize!(:show_details, person)
+    authorize!(:index_messages, person)
   end
 end

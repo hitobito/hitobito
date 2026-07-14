@@ -22,7 +22,7 @@ class PersonAbility < AbilityDsl::Base
 
     permission(:contact_data).may(:show).other_with_contact_data
 
-    permission(:group_read).may(:show_details).in_same_group
+    permission(:group_read).may(:show_details, :index_messages).in_same_group
     permission(:group_read).may(:show).readable_in_same_group
 
     permission(:group_full).may(:show_full, :history).in_same_group
@@ -33,7 +33,7 @@ class PersonAbility < AbilityDsl::Base
     permission(:group_full).may(:update_email).if_permissions_in_all_capable_groups
     permission(:group_full).may(:create).all # restrictions are on Roles
 
-    permission(:group_and_below_read).may(:show_details).in_same_group_or_below
+    permission(:group_and_below_read).may(:show_details, :index_messages).in_same_group_or_below
     permission(:group_and_below_read).may(:show).readable_in_same_group_or_below
 
     permission(:group_and_below_full)
@@ -49,7 +49,7 @@ class PersonAbility < AbilityDsl::Base
     permission(:group_and_below_full).may(:create).all # restrictions are on Roles
 
     permission(:layer_read)
-      .may(:show_full, :show_details, :history)
+      .may(:show_full, :show_details, :history, :index_messages)
       .in_same_layer
     permission(:layer_read)
       .may(:show)
@@ -65,7 +65,7 @@ class PersonAbility < AbilityDsl::Base
     permission(:layer_full).may(:totp_reset).in_same_layer
 
     permission(:layer_and_below_read)
-      .may(:show_full, :show_details, :history)
+      .may(:show_full, :show_details, :history, :index_messages)
       .in_same_layer_or_visible_below
     permission(:layer_and_below_read)
       .may(:show)
@@ -101,7 +101,7 @@ class PersonAbility < AbilityDsl::Base
       permission(:any).may(:show, :update, :update_email, :primary_group, :totp_reset).herself
 
       permission(:any)
-        .may(:show_details, :show_full)
+        .may(:show_details, :show_full, :index_messages)
         .herself
 
       permission(:any)

@@ -27,9 +27,7 @@ module Sheet
 
     tab "activerecord.models.message.other",
       :messages_group_person_path,
-      if: (lambda do |view, _group, person|
-        view.can?(:show_details, person) && (person.roles.any? || person.root?)
-      end)
+      if: :index_messages
 
     if FeatureGate.enabled?("personal_documents")
       tab "activerecord.models.personal_document.other",

@@ -9,6 +9,36 @@ describe PersonAbility do
   subject { ability }
 
   let(:ability) { Ability.new(role.person.reload) }
+  let(:person) { role.person }
+
+  context "on herself" do
+    let(:role) { roles(:bottom_member) }
+
+    it "may show details" do
+      is_expected.to be_able_to(:show_details, person)
+    end
+
+    it "may index messages" do
+      is_expected.to be_able_to(:index_messages, person)
+    end
+  end
+
+  context "on manageds" do
+    let(:role) { roles(:bottom_member) }
+    let(:managed) do
+      Fabricate(:person).tap { |p| PeopleManager.create!(managed: p, manager: person) }
+    end
+
+    before { managed }
+
+    it "may show details" do
+      is_expected.to be_able_to(:show_details, managed)
+    end
+
+    it "may index messages" do
+      is_expected.to be_able_to(:index_messages, managed)
+    end
+  end
 
   context :layer_and_below_full do
     let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
@@ -857,6 +887,12 @@ describe PersonAbility do
       other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
       is_expected.to be_able_to(:show_details, other.person.reload)
     end
+
+    it "may index messages of others in same group" do
+      other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:index_messages, other.person.reload)
+    end
+
     it "may not view full of others in same group" do
       other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
       is_expected.not_to be_able_to(:show_full, other.person.reload)
@@ -1002,6 +1038,11 @@ describe PersonAbility do
       is_expected.to be_able_to(:show_details, other.person.reload)
     end
 
+    it "may index messages of others in below group" do
+      other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:index_messages, other.person.reload)
+    end
+
     it "may view full of others in below group" do
       other = Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group))
       is_expected.to be_able_to(:show_full, other.person.reload)
@@ -1104,10 +1145,21 @@ describe PersonAbility do
       is_expected.to be_able_to(:show_details, other.person.reload)
     end
 
+    it "may index messages of others in same group" do
+      other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+      is_expected.to be_able_to(:index_messages, other.person.reload)
+    end
+
     it "may view details of others in below group" do
       below = Fabricate(Group::GlobalGroup.name, parent: role.group)
       other = Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: below)
       is_expected.to be_able_to(:show_details, other.person.reload)
+    end
+
+    it "may index messages of others in below group" do
+      below = Fabricate(Group::GlobalGroup.name, parent: role.group)
+      other = Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: below)
+      is_expected.to be_able_to(:index_messages, other.person.reload)
     end
 
     it "may not view full of others in same group" do
@@ -1250,6 +1302,11 @@ describe PersonAbility do
       is_expected.to be_able_to(:show_details, other.person.reload)
     end
 
+    it "may index messages of others in same group" do
+      other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
+      is_expected.to be_able_to(:index_messages, other.person.reload)
+    end
+
     it "may view full of others in same group" do
       other = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
       is_expected.to be_able_to(:show_full, other.person.reload)
@@ -1340,6 +1397,11 @@ describe PersonAbility do
     it "may view details of others in same group" do
       other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
       is_expected.to be_able_to(:show_details, other.person.reload)
+    end
+
+    it "may index messages of others in same group" do
+      other = Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
+      is_expected.to be_able_to(:index_messages, other.person.reload)
     end
 
     it "may not view full of others in same group" do
@@ -1738,6 +1800,10 @@ describe PersonAbility do
 
     it "may show_details herself" do
       is_expected.to be_able_to(:show_details, role.person)
+    end
+
+    it "may index_messages on herself" do
+      is_expected.to be_able_to(:index_messages, role.person)
     end
 
     it "may show_full herself" do

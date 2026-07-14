@@ -83,6 +83,28 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
       is_expected.to eq("<div>Rolle <i>Group::SektionsMitglieder::NonExistentRoleType</i> wurde aktualisiert: " \
                         "Bis wurde von <i>01.03.2026</i> auf <i>01.05.2026</i> geändert.</div>")
     end
+
+    it "builds create text" do
+      PaperTrail::Version.create!(
+        item_type: "Role", item_id: Role.maximum(:id).succ, # id to role that does not exist
+        object: nil,
+        object_changes: {"type" => [nil, "Group::SacCasKurskader::NonExistentRoleType"]}.to_yaml,
+        main: person, event: :create
+      )
+
+      is_expected.to eq("<div>Rolle <i>Group::SacCasKurskader::NonExistentRoleType</i> wurde hinzugefügt.</div>")
+    end
+
+    it "builds removed text" do
+      PaperTrail::Version.create!(
+        item_type: "Role", item_id: Role.maximum(:id).succ, # id to role that does not exist
+        object: nil,
+        object_changes: {"type" => [nil, "Group::SacCasKurskader::NonExistentRoleType"]}.to_yaml,
+        main: person, event: :removed
+      )
+
+      is_expected.to eq("<div>Rolle <i>Group::SacCasKurskader::NonExistentRoleType</i> wurde entfernt.</div>")
+    end
   end
 
   context "mailing list" do

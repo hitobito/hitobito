@@ -77,7 +77,11 @@ module PaperTrail
     end
 
     def reifyed_item
-      if event == "create" || event == "removed"
+      model_type = current_type
+
+      if model_type && !Object.const_defined?(model_type)
+        PaperTrail::VersionDecorator::Wrapped.new(model_type)
+      elsif event == "create" || event == "removed"
         # "removed" is a custom event for habtm where only the join table is destroyed;
         # actual records still exist, so we reify_existing.
         reify_exisiting
@@ -86,18 +90,17 @@ module PaperTrail
       end
     end
 
-    def reify(version)
-      return version.reify unless item_class.column_names.include?("type")
+    def current_type
+      return unless item_class.column_names.include?("type")
 
-      model_type = YAML.safe_load(
-        version.object,
-        permitted_classes: [Date, Time, Symbol]
-      )["type"]
-
-      Object.const_defined?(model_type) ?
-        version.reify :
-        PaperTrail::VersionDecorator::Wrapped.new(model_type)
+      if event == "create" || event == "removed"
+        attrs_from_changeset["type"]
+      else
+        YAML.safe_load(version.object, permitted_classes: [Date, Time, Symbol])["type"]
+      end
     end
+
+    def reify(version) = version.reify
 
     def reify_exisiting
       version.item || build_new_instance

@@ -31,8 +31,8 @@ describe Export::InvoicesJob do
   context "creates a PDF export, it" do
     let(:format) { :pdf }
 
-    it "calls render_multiple with invoices in the same order as invoice_ids" do
-      expect(Export::Pdf::Invoice).to receive(:render_multiple).with(invoices_in_order, anything)
+    it "calls render with invoices in the same order as invoice_ids" do
+      expect(Export::Pdf::Invoice).to receive(:render).with(invoices_in_order, anything)
       subject.perform
     end
   end
@@ -51,7 +51,7 @@ describe Export::InvoicesJob do
     let(:invoice_ids) { [] }
 
     it "does nothing" do
-      expect(Export::Pdf::Invoice).not_to receive(:render_multiple).with(invoices_in_order, anything)
+      expect(Export::Pdf::Invoice).not_to receive(:render).with(invoices_in_order, anything)
       subject.perform
     end
   end

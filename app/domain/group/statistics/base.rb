@@ -58,4 +58,11 @@ class Group::Statistics::Base
   def filter_params
     @filter_params ||= params.permit(*self.class.permitted_params).to_h.symbolize_keys
   end
+
+  def parse_date(value)
+    return nil if value.blank?
+    Date.parse(value)
+  rescue Date::Error, TypeError
+    nil
+  end
 end

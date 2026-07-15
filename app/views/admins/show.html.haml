@@ -1,0 +1,69 @@
+.row
+  .col-xl-3.col-lg-4.col-md-6.col-sm-12
+    %h2= t(".main")
+    %ul.container
+      - if can?(:index, LabelFormat)
+        %li
+          = link_to LabelFormat.model_name.human(count: 2), label_formats_path
+      - if can?(:index, CustomContent)
+        %li
+          = link_to CustomContent.model_name.human(count: 2), custom_contents_path
+      - if can?(:index, HelpText)
+        %li
+          = link_to HelpText.model_name.human(count: 2), help_texts_path
+      - if can?(:index, Oauth::Application)
+        %li
+          = link_to Oauth::Application.model_name.human(count: 2), oauth_applications_path
+      - if current_user.oauth_applications.exists?
+        %li
+          = link_to t('navigation.admin/oauth_authorizations'), oauth_active_authorizations_path
+      - if can?(:index, ActsAsTaggableOn::Tag)
+        %li
+          = link_to ActsAsTaggableOn::Tag.model_name.human(count: 2), tags_path
+
+      = render_extensions(:admin_main)
+
+  .col-xl-3.col-lg-4.col-md-6.col-sm-12
+    %h2= t(".info")
+    %ul.container
+      %li
+        = link_to t('json_api'), api_path
+      - if can?(:manage, Imap::Mail)
+        %li
+          = link_to t('navigation.imap_mails'), imap_mails_path(mailbox: 'inbox')
+      - if can?(:update, current_user)
+        %li
+          = link_to t('navigation.admin/event_feed'), event_feed_path
+      - if can?(:index, HitobitoLogEntry)
+        %li
+          = link_to t('hitobito_log_entries.index.title'), hitobito_log_entries_path
+
+      = render_extensions(:admin_info)
+
+  .col-xl-3.col-lg-4.col-md-6.col-sm-12
+    %h2= t(".events")
+    %ul.container
+      = render_extensions(:admin_event)
+
+      - if can?(:index, Event::Kind)
+        %li
+          = link_to Event::Kind.model_name.human(count: 2), event_kinds_path
+      - if can?(:index, Event::KindCategory)
+        %li
+          = link_to Event::KindCategory.model_name.human(count: 2), event_kind_categories_path
+      - if can?(:index, QualificationKind)
+        %li
+          = link_to QualificationKind.model_name.human(count: 2), qualification_kinds_path
+
+      = render_extensions(:admin_kinds)
+
+  .col-xl-3.col-lg-4.col-md-6.col-sm-12
+    %h2= t(".people")
+    %ul.container
+      - if can?(:index, SelfRegistrationReason)
+        %li
+          = link_to SelfRegistrationReason.model_name.human(count: 2), self_registration_reasons_path
+
+      = render_extensions(:admin_people)
+
+  = render_extensions(:admin_setting_groups)

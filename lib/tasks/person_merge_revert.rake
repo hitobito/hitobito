@@ -7,7 +7,6 @@
 
 class PersonMergeRevert
   REASSIGNED_ASSOCIATIONS = [
-    {table: "roles", fk: "person_id"},
     {table: "invoices", fk: "recipient_id", fk_type: "recipient_type"},
     {table: "notes", fk: "subject_id", fk_type: "subject_type"},
     {table: "notes", fk: "author_id"},
@@ -23,6 +22,7 @@ class PersonMergeRevert
   ].freeze
 
   DUPLICATED_ASSOCIATIONS = [
+    {table: "roles", fk: "person_id"},
     {table: "additional_emails", fk: "contactable_id", fk_type: "contactable_type"},
     {table: "phone_numbers", fk: "contactable_id", fk_type: "contactable_type"},
     {table: "social_accounts", fk: "contactable_id", fk_type: "contactable_type"},
@@ -42,7 +42,8 @@ class PersonMergeRevert
       insert_or_update_statement(@person_1_id),
       insert_or_update_statement(@person_2_id),
       REASSIGNED_ASSOCIATIONS.flat_map { |assoc| reassigned_statements(assoc) },
-      DUPLICATED_ASSOCIATIONS.flat_map { |assoc| duplicated_insert_statements(assoc) }
+      DUPLICATED_ASSOCIATIONS.flat_map { |assoc| duplicated_insert_statements(assoc) },
+      DUPLICATED_ASSOCIATIONS.flat_map { |assoc| duplicate_cleanup_statements(assoc) }
     ].flatten
   end
 
@@ -60,7 +61,7 @@ class PersonMergeRevert
     mergable_columns = Person::MERGABLE_ATTRS.map(&:to_s) & columns
     assignments = mergable_columns.map { |c| "#{c} = EXCLUDED.#{c}" }.join(",\n  ")
 
-    <<~SQL.strip
+    <<~SQL.squish
       INSERT INTO people
         (#{columns.join(", ")})
       VALUES
@@ -74,16 +75,15 @@ class PersonMergeRevert
     table = assoc.fetch(:table)
     fk = assoc.fetch(:fk)
 
-    [[@person_1_id, @person_2_id], [@person_2_id, @person_1_id]].flat_map do |original_id, other_id|
+    [@person_1_id, @person_2_id].flat_map do |original_id|
       row_ids_pointing_at(assoc, original_id).map do |row_id|
         set_clause = ["#{fk} = #{original_id}"]
         set_clause << "#{assoc.fetch(:fk_type)} = 'Person'" if assoc[:fk_type]
 
-        <<~SQL.strip
+        <<~SQL.squish
           UPDATE #{table} SET
             #{set_clause.join(",\n  ")}
-          WHERE id = #{row_id}
-            AND #{fk} = #{other_id}#{type_condition(assoc)};
+          WHERE id = #{row_id};
         SQL
       end
     end
@@ -97,7 +97,7 @@ class PersonMergeRevert
       row_ids_pointing_at(assoc, person_id).map do |row_id|
         values = row_values(table, columns, row_id)
 
-        <<~SQL.strip
+        <<~SQL.squish
           INSERT INTO #{table}
             (#{columns.join(", ")})
           VALUES
@@ -105,6 +105,20 @@ class PersonMergeRevert
           ON CONFLICT (id) DO NOTHING;
         SQL
       end
+    end
+  end
+
+  def duplicate_cleanup_statements(assoc)
+    fk = assoc.fetch(:fk)
+
+    [@person_1_id, @person_2_id].map do |person_id|
+      backup_ids = row_ids_pointing_at(assoc, person_id)
+      not_in_clause = backup_ids.empty? ? "" : " AND id NOT IN (#{backup_ids.join(", ")})"
+
+      <<~SQL.squish
+        DELETE FROM #{assoc.fetch(:table)}
+        WHERE #{fk} = #{person_id}#{type_condition(assoc)}#{not_in_clause};
+      SQL
     end
   end
 

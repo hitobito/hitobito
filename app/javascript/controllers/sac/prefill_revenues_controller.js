@@ -15,49 +15,66 @@ export default class extends Controller {
     const response = await fetch(this.urlValue, { headers: { Accept: "application/json" } })
     const rows = await response.json()
 
-    const incomingDescriptions = new Set(rows.map(r => r.description))
-    for (const el of this.element.querySelectorAll(".fields")) {
-      if (el.style.display !== "none") {
-        const descInput = el.querySelector("input[name*='[description]']")
-        if (descInput && incomingDescriptions.has(descInput.value)) {
-          this.removeRow(el)
-        }
+    const unchangedRows = new Set()
+    this.visibleFieldsElements.forEach(fieldsElement => {
+      const matchingRow = rows.find(row => row.count > 0 && this.matchesRow(fieldsElement, row))
+      if (matchingRow) {
+        unchangedRows.add(matchingRow)
+      } else if (rows.some(({ description }) => description === this.inputValue(fieldsElement, "[description]"))) {
+        this.removeRow(fieldsElement)
       }
-    }
+    })
 
-    rows.forEach(row => this.applyRow(row))
+    const nestedFormElement = this.element.querySelector("[data-controller*='nested-form']")
+    rows
+      .filter(row => row.count > 0 && !unchangedRows.has(row))
+      .forEach(row => this.addRow(nestedFormElement, row))
   }
 
-  applyRow({ description, count, amount }) {
-    if (count > 0) this.addRow(description, count, amount)
+  matchesRow(fieldsElement, { description, count, amount }) {
+    return this.inputValue(fieldsElement, "[description]") === description &&
+      Number(this.inputValue(fieldsElement, "[count]")) === Number(count) &&
+      Number(this.inputValue(fieldsElement, "[amount]")) === Number(amount)
   }
 
-  addRow(description, count, amount) {
-    const nestedFormEl = this.element.querySelector("[data-controller*='nested-form']")
-    const newRow = this.cloneTemplateRow(nestedFormEl)
-    this.setInput(newRow, "[name*='[description]']", description)
-    this.setInput(newRow, "[name*='[count]']", count)
-    this.setInput(newRow, "[name*='[amount]']", amount)
+  inputValue(fieldsElement, selector) {
+    return fieldsElement.querySelector(`input[name*='${selector}']`)?.value
   }
 
-  removeRow(fieldsEl) {
-    fieldsEl.style.display = "none"
-    const destroyInput = fieldsEl.querySelector("input[name*='[_destroy]']")
+  get visibleFieldsElements() {
+    return [...this.element.querySelectorAll(".fields")].filter(fieldsElement => fieldsElement.style.display !== "none")
+  }
+
+  addRow(nestedFormElement, { description, count, amount }) {
+    const newRowElement = this.cloneTemplateRow(nestedFormElement)
+    this.setInputs(newRowElement, { "[description]": description, "[count]": count, "[amount]": amount })
+  }
+
+  removeRow(fieldsElement) {
+    fieldsElement.style.display = "none"
+    const destroyInput = fieldsElement.querySelector("input[name*='[_destroy]']")
     if (destroyInput) destroyInput.value = "1"
   }
 
-  cloneTemplateRow(nestedFormEl) {
-    const assoc = nestedFormEl.dataset.nestedFormAssocValue
+  cloneTemplateRow(nestedFormElement) {
+    const assoc = nestedFormElement.dataset.nestedFormAssocValue
     const placeholder = new RegExp(`NEW_${assoc.toUpperCase()}_RECORD`, "g")
-    const target = nestedFormEl.querySelector("[data-nested-form-target='target']")
-    const template = nestedFormEl.querySelector("template[data-nested-form-target='template']")
-    target.insertAdjacentHTML("beforebegin", template.innerHTML.replace(placeholder, Date.now().toString()))
-    return target.previousElementSibling
+    const targetElement = nestedFormElement.querySelector("[data-nested-form-target='target']")
+    const templateElement = nestedFormElement.querySelector("template[data-nested-form-target='template']")
+    targetElement.insertAdjacentHTML("beforebegin", templateElement.innerHTML.replace(placeholder, this.nextUniqueId()))
+    return targetElement.previousElementSibling
   }
 
-  setInput(container, selector, value) {
-    const el = container.querySelector(`input${selector}`)
-    el.value = value
-    el.dispatchEvent(new Event("input", { bubbles: true }))
+  nextUniqueId() {
+    this.uniqueIdSeq = (this.uniqueIdSeq ?? Date.now()) + 1
+    return this.uniqueIdSeq.toString()
+  }
+
+  setInputs(containerElement, valuesBySelector) {
+    for (const [selector, value] of Object.entries(valuesBySelector)) {
+      const inputElement = containerElement.querySelector(`input[name*='${selector}']`)
+      inputElement.value = value
+      inputElement.dispatchEvent(new Event("input", { bubbles: true }))
+    }
   }
 }

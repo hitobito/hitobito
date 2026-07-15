@@ -5,9 +5,6 @@
 
 import { Controller } from "@hotwired/stimulus"
 
-// This controller can be used to multiply together multiple source values
-// and display the result
-
 export default class extends Controller {
   static targets = ["source", "result"]
 
@@ -15,9 +12,9 @@ export default class extends Controller {
   sourceTargetDisconnected() { this.recalculate() }
 
   recalculate() {
-    const product = this.sourceTargets.reduce(
-      (acc, element) => acc * this.read(element), 1
-    )
+    const product = this.sourceTargets
+      .filter(element => element.closest(".fields")?.style.display !== "none")
+      .reduce((acc, element) => acc * this.read(element), 1)
     this.resultTargets.forEach(
       element => this.write(element, product.toFixed(2))
     )

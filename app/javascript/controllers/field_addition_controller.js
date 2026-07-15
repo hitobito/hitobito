@@ -5,15 +5,15 @@
 
 import { Controller } from "@hotwired/stimulus"
 
-// This controller can be used to add together multiple source values
-// and display the result
-
 export default class extends Controller {
   static targets = ["source", "result"]
 
+  sourceTargetConnected() { this.recalculate() }
+  sourceTargetDisconnected() { this.recalculate() }
+
   recalculate() {
     const sum = this.sourceTargets
-      .filter(el => el.closest(".fields")?.style.display !== "none")
+      .filter(element => element.closest(".fields")?.style.display !== "none")
       .reduce((acc, element) => acc + this.read(element), 0)
     this.resultTargets.forEach(
       element => this.write(element, sum.toFixed(2))

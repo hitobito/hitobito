@@ -193,6 +193,23 @@ describe MailingLists::BulkMail::BounceHandler do
     end
   end
 
+  describe "#analyze_diagnostic_codes" do
+    let(:codes) { ["550 No such user", "550 5.7.1 message content rejected"] }
+
+    it "returns one code" do
+      expect(bounce_handler.analyze_diagnostic_codes(codes)).to be_a Symbol
+    end
+
+    it "returns the highest in the order of the settings" do
+      expect(bounce_handler.analyze_diagnostic_codes(codes)).to eq :block
+      expect(bounce_handler.analyze_diagnostic_codes(codes.reverse)).to eq :block
+    end
+
+    it "may return unknown" do
+      expect(bounce_handler.analyze_diagnostic_codes(["Iiih, Mehl!"])).to eq :unknown
+    end
+  end
+
   describe "#analyze_diagnostic_code can return" do
     it "block" do
       expect(bounce_handler.analyze_diagnostic_code("550 No such user")).to eq :block

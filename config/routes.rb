@@ -44,6 +44,8 @@ Hitobito::Application.routes.draw do
   end
 
   language_scope do
+    resource :admin, only: :show
+
     namespace :oauth do
       resource :profile, only: :show
       resources :applications do

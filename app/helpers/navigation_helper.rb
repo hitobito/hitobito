@@ -40,9 +40,10 @@ module NavigationHelper
        invoice_runs?]},
 
     {label: :admin,
-     url: :label_formats_path,
+     url: :admin_path,
      icon_name: "cog",
-     active_for: %w[self_registration_reasons
+     active_for: %w[admin
+       self_registration_reasons
        label_formats
        custom_contents
        event_kinds
@@ -57,7 +58,7 @@ module NavigationHelper
        hitobito_log_entries
        mails/imap mails/bounces
        api],
-     if: ->(_) { can?(:index, LabelFormat) }}
+     if: ->(_) { can?(:update_settings, current_person) }}
   ]
 
   def render_main_nav

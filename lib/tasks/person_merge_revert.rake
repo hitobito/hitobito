@@ -42,7 +42,8 @@ class PersonMergeRevert
       insert_or_update_statement(@person_1_id),
       insert_or_update_statement(@person_2_id),
       REASSIGNED_ASSOCIATIONS.flat_map { |assoc| reassigned_statements(assoc) },
-      DUPLICATED_ASSOCIATIONS.flat_map { |assoc| duplicated_insert_statements(assoc) }
+      DUPLICATED_ASSOCIATIONS.flat_map { |assoc| duplicated_insert_statements(assoc) },
+      DUPLICATED_ASSOCIATIONS.flat_map { |assoc| duplicate_cleanup_statements(assoc) }
     ].flatten
   end
 
@@ -104,6 +105,20 @@ class PersonMergeRevert
           ON CONFLICT (id) DO NOTHING;
         SQL
       end
+    end
+  end
+
+  def duplicate_cleanup_statements(assoc)
+    fk = assoc.fetch(:fk)
+
+    [@person_1_id, @person_2_id].map do |person_id|
+      backup_ids = row_ids_pointing_at(assoc, person_id)
+      not_in_clause = backup_ids.empty? ? "" : " AND id NOT IN (#{backup_ids.join(", ")})"
+
+      <<~SQL.squish
+        DELETE FROM #{assoc.fetch(:table)}
+        WHERE #{fk} = #{person_id}#{type_condition(assoc)}#{not_in_clause};
+      SQL
     end
   end
 

@@ -77,6 +77,8 @@ class ServiceToken < ActiveRecord::Base
     return [] unless ActiveRecord::Base.connection.data_source_exists?(table_name)
 
     ServiceToken.column_names - NON_SCOPE_ATTRIBUTES
+  rescue ActiveRecord::NoDatabaseError
+    []
   end
 
   def scopes

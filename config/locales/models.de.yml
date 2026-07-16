@@ -55,6 +55,7 @@ de:
 
     errors:
       messages:
+        blank: "muss ausgefüllt werden"
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
       models:
         event/participation_contact_datas/managed:

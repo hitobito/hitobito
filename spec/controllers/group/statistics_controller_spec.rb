@@ -32,6 +32,48 @@ describe Group::StatisticsController do
         expect(flash[:alert]).to be_present
       end
     end
+
+    context "with remembered key" do
+      let(:other_stat) { double("stat", key: :other) }
+
+      def remember(key)
+        session[:list_params] = {"group/statistics_controller" => {key: key}}
+      end
+
+      before do
+        allow(Group::Statistics::Registry).to receive(:available_for)
+          .and_return([Group::Statistics::Demographic, other_stat])
+      end
+
+      it "restores the remembered key when returning" do
+        remember("other")
+        get :index, params: {group_id: group.id, returning: true}
+        expect(response).to redirect_to group_statistic_path(group, :other)
+      end
+
+      it "ignores the remembered key without the returning param" do
+        remember("other")
+        get :index, params: {group_id: group.id}
+        expect(response).to redirect_to group_statistic_path(group, :people)
+      end
+
+      it "falls back to the first available if the remembered key unavailable for that group" do
+        remember("dummy")
+        get :index, params: {group_id: group.id, returning: true}
+        expect(response).to redirect_to group_statistic_path(group, :people)
+      end
+    end
+
+    context "across different groups" do
+      it "carries the remembered key from one group to another" do
+        other_group = groups(:top_layer)
+
+        get :show, params: {group_id: group.id, key: :people}
+        get :index, params: {group_id: other_group.id, returning: true}
+
+        expect(response).to redirect_to group_statistic_path(other_group, :people)
+      end
+    end
   end
 
   describe "GET show" do
@@ -40,6 +82,12 @@ describe Group::StatisticsController do
 
       expect(response).to have_http_status(200)
       expect(assigns(:statistic)).to be_a(Group::Statistics::Demographic)
+    end
+
+    it "stores the shown key in session so it can be recalled later" do
+      get :show, params: {group_id: group.id, key: :people}
+
+      expect(session[:list_params]["group/statistics_controller"]).to eq(key: "people")
     end
 
     it "redirects with alert for unknown key" do

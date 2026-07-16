@@ -60,6 +60,7 @@ module Sheet
     FeatureGate.if("groups.statistics") do
       tab "groups.tabs.statistics",
         :group_statistics_path,
+        params: {returning: true},
         if: (lambda do |view, group|
           view.can?(:show_statistics, group) &&
             ::Group::Statistics::Registry.available_for(group).any?

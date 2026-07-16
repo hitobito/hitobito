@@ -6,19 +6,23 @@
 #  https://github.com/hitobito/hitobito.
 
 class Group::StatisticsController < ApplicationController
+  include Rememberable
+
   helper_method :statistic
 
   before_action :authorize_action
   before_action :gate_feature
 
+  self.remember_params = [:key]
+
   decorates :group
+  prepend_before_action :handle_remember_params, only: [:index, :show]
 
   def index
     if available_statistics.empty?
       redirect_with_alert(:none_available)
     else
-      # Redirect zur ersten verfügbaren Statistik
-      redirect_to group_statistic_path(group, available_statistics.first.key)
+      redirect_to group_statistic_path(group, remembered_or_default_key)
     end
   end
 
@@ -37,6 +41,12 @@ class Group::StatisticsController < ApplicationController
 
   def available_statistics
     @available_statistics ||= Group::Statistics::Registry.available_for(group)
+  end
+
+  def remembered_or_default_key
+    keys = available_statistics.map(&:key)
+    requested = params[:key]&.to_sym
+    keys.include?(requested) ? requested : keys.first
   end
 
   def statistic_class
@@ -61,5 +71,9 @@ class Group::StatisticsController < ApplicationController
 
   def redirect_with_alert(key)
     redirect_to group_path(group), alert: t(".#{key}")
+  end
+
+  def remember_key
+    @remember_key ||= self.class.name.underscore
   end
 end

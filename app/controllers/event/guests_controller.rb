@@ -10,7 +10,7 @@ class Event::GuestsController < Wizards::BaseController
 
   self.wizard_action = :new
 
-  prepend_before_action :authorize_update_of_main_participation
+  prepend_before_action :authorize_create_or_update_of_main_participation
   before_action :enforce_guest_limit
   before_action :init_answers
 
@@ -53,8 +53,38 @@ class Event::GuestsController < Wizards::BaseController
     @main_participation ||= event.participations.find(params[:id])
   end
 
-  def authorize_update_of_main_participation
-    authorize! :update, main_participation
+  # We check if a person can either update or create the main participation
+  # This is needed because we started using :update in
+  # https://github.com/hitobito/hitobito/pull/4264
+  #
+  # Using update only fixed the issue of not being able to add guests for
+  # others but it introduced a bug that if a person registers for an event
+  # and wants to add a guest and can't edit their own participation.
+  #
+  # Currently (July 26) it is only possible to add guests on participations
+  # on the creation of a participation (via the UI, it is always possible with the URL)
+  # so using :create permission here only would make more sense
+  #
+  # The issue with :create is that creating participations is not always connected to
+  # participation permissions. When creating a participation for someone else it
+  # sometimes uses :create permission on a event role, rather than a participation itself.
+  #
+  # Because the :create permission for participations is not setup the same way,
+  # event leaders (or people with an event role with participations_full) do not have
+  # the :create permission on a participations but they do on role so they are able
+  # to create a participation for others with that.
+  #
+  # Instead of just giving people with :participations_full the :create permission
+  # on participations, we decided to just check any of the two permissions for creating
+  # guests for now, until we can rework how the permissions work here.
+  #
+  # Another reason to not add :create for event roles with :participations_full in core
+  # is that some wagons have this as a wagon specific override:
+  # https://github.com/hitobito/hitobito_sww/pull/397
+  # So granting :create permission to any leader roles is probably not wanted in core
+  def authorize_create_or_update_of_main_participation
+    action = can?(:update, main_participation) ? :update : :create
+    authorize!(action, main_participation)
   end
 
   def enforce_guest_limit

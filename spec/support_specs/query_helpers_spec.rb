@@ -155,22 +155,4 @@ describe QueryHelpers do
       end
     end
   end
-
-  describe "expect_query_count (legacy)" do
-    it "verifies specific query counts" do
-      expect_query_count("Person Load" => 1, "Group Load" => 1) do
-        Person.first
-        Group.first
-      end
-    end
-
-    it "shows deprecation warning when used for total count" do
-      expect(RSpec).to receive(:deprecate).with(
-        "expect_query_count { }.to eq(N)",
-        hash_including(replacement: "expect { }.to make(N).db_queries")
-      )
-
-      expect_query_count { Person.first }.to eq(1)
-    end
-  end
 end

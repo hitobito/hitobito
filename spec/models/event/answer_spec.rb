@@ -51,12 +51,12 @@ describe Event::Answer do
         ids = participation.answers.pluck(:id)
 
         list = []
-        expect_query_count do
+        expect do
           list = participation.answers.list.to_a
           expect(list.map { |a| a.question.question })
             .to eq(["GA oder Halbtax?", "Ich bin Vegetarier", "Sonst noch was?"])
           expect(list.map(&:id)).to match_array(ids)
-        end.to eq(3)
+        end.to make(3).db_queries
       end
     end
 
@@ -66,12 +66,12 @@ describe Event::Answer do
         ids = participation.answers.pluck(:id)
 
         list = []
-        expect_query_count do
+        expect do
           list = participation.answers.list.to_a
           expect(list.map { |a| a.question.question })
             .to eq(["Ich bin Vegetarier", "Sonst noch was?", "GA oder Halbtax?"])
           expect(list.map(&:id)).to match_array(ids)
-        end.to eq(3)
+        end.to make(3).db_queries
       end
     end
 

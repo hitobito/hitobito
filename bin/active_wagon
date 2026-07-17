@@ -86,26 +86,36 @@ class Setup
   end
 
   def environment(wagon = nil)
+    specifics = if wagon
+      <<~DIRENV
+        #{"PATH_add ../hitobito/bin" if wagon}
+        export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
+        export RAILS_TMPDIR=../hitobito_#{primary_wagon}/tmp
+        export SPRING_APPLICATION_ID=hit_#{primary_wagon}
+      DIRENV
+
+    else
+      <<~DIRENV
+        PATH_add bin
+        export RAILS_TEST_DB_NAME=hit_core_test
+        export OVERMIND_PROCFILE=#{root.join("Procfile")}
+        export OVERMIND_TITLE="#{overmind_title}"
+      DIRENV
+    end
+
     <<~DIRENV
-      #{"PATH_add ../hitobito/bin" if wagon}
-      PATH_add bin
       export DISABLE_TEST_SCHEMA_MAINTENANCE=1
+      export PRIMARY_WAGON=#{primary_wagon}
       export RAILS_DB_ADAPTER=postgresql
       export RAILS_DB_HOST=127.0.0.1
       export RAILS_DB_PORT=5432
       export RAILS_DB_USERNAME=hitobito
       export RAILS_DB_PASSWORD=hitobito
       export RAILS_DB_NAME=hit_#{primary_wagon || wagon}_dev
-      export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
-      export RAILS_TMPDIR=#{root.join(primary_wagon ? "../hitobito_#{primary_wagon}/tmp" : "tmp")}
-      export SPRING_APPLICATION_ID=hit_#{primary_wagon || "core"}
-      export OVERMIND_PROCFILE=#{root.join("Procfile")}
-      export OVERMIND_TITLE="#{overmind_title}"
-      export PRIMARY_WAGON=#{primary_wagon}
-      export DISABLE_TEST_SCHEMA_MAINTENANCE=1
+      #{specifics.strip}
       #{'export WAGONS="' + wagons.join(" ") + '"' if wagons.any?}
-      log_status "hitobito now uses: #{wagons.any? ? wagons.join(", ") : "just the core"}"
       source_up
+      log_status "hitobito now uses: #{wagons.any? ? wagons.join(", ") : "just the core"}"
     DIRENV
   end
 

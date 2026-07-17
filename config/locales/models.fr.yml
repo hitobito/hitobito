@@ -56,6 +56,7 @@ fr:
 
     errors:
       messages:
+        blank: "muss ausgefüllt werden"
         record_invalid: 'Échec du contrôle de validité: %{errors}'
       models:
         event/participation_contact_datas/managed:

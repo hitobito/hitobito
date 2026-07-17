@@ -54,6 +54,7 @@ en:
 
     errors:
       messages:
+        blank: "muss ausgefüllt werden"
         record_invalid: 'Validity check has failed: %{errors}'
       models:
         event/participation_contact_datas/managed:

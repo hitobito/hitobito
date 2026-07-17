@@ -1056,6 +1056,11 @@ fr:
   group_decorator:
     archived_suffix: "(archivé)"
 
+
+  help_texts:
+    form:
+      caption_start_open: Text initial Anzeigen
+
   households:
     edit:
       title: gérer le ménage

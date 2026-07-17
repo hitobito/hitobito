@@ -61,6 +61,7 @@ class InvoiceRun < ActiveRecord::Base
 
   scope :list, -> { order(:created_at) }
   scope :standalone, -> { where(period_invoice_template_id: nil) }
+  scope :from_template, -> { where.not(period_invoice_template_id: nil) }
 
   validates_by_schema except: :invalid_recipient_ids
 

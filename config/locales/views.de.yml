@@ -1105,6 +1105,10 @@ de:
         one_day: Gestern
         one_week: Einer Woche
         one_month: Einem Monat
+      invoice_type:
+        standalone: Einzelrechnungen
+        from_standalone_invoice_run: aus Rechnungsläufen
+        from_template_invoice_run: aus Rechnungsläufen mit Vorlage
     add: Externe Rechnung erstellen
     add_payments: Zahlungen erfassen
     issued: Rechnung gestellt
@@ -1540,7 +1544,7 @@ de:
     admin/oauth_authorizations: "OAuth-Autorisierungen"
     imap_mails: "Mails und Bounces"
     invoices: "Rechnungen"
-    invoices/single: "Einzelrechnungen"
+    invoices/single: "Rechnungen"
     invoices/evaluations: "Buchungsbeleg"
     payments: "Zahlungseingänge"
 

@@ -68,6 +68,15 @@ module FilterHelper
     time_field(nil, attr, options)
   end
 
+  def direct_filter_inline_checkbox(attr, label, options = {})
+    checked = options.delete(:value) == "1"
+    content_tag(:div) do
+      hidden_field_tag(attr, 0, id: "#{attr}_hidden") +
+        check_box_tag(attr, 1, checked, options) +
+        label_tag(attr, label, class: "checkbox ms-1")
+    end
+  end
+
   def direct_filter_input(options = {})
     add_css_class(options, "input-group mt-2")
     content_tag(:div, options) do

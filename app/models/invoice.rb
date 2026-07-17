@@ -139,8 +139,22 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :one_month, -> { where(invoices: {due_at: ...1.month.ago.to_date}) }
   scope :visible, -> { where.not(state: :cancelled) }
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
-  scope :standalone, -> { where(invoice_run_id: nil) }
   scope :with_recipients, -> { extending(PreloadRecipients) }
+
+  # Partitions invoices into three groups based on origin
+  TYPE_SCOPES = %i[
+    standalone
+    from_standalone_invoice_run
+    from_template_invoice_run
+  ].freeze
+
+  scope :standalone, -> { where(invoice_run_id: nil) }
+  scope :from_standalone_invoice_run, -> {
+    where(invoice_run_id: InvoiceRun.standalone.select(:id))
+  }
+  scope :from_template_invoice_run, -> {
+    where(invoice_run_id: InvoiceRun.from_template.select(:id))
+  }
 
   class << self
     def with_aggregated_payments

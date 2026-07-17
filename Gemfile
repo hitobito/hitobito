@@ -103,7 +103,7 @@ gem "validates_by_schema", "~> 0.3.0" # 0.5.1 does not work well with wagons / w
 gem "validates_zipcode"
 gem "validates_timeliness"
 gem "vcard"
-gem "view_component", "~> 3.12" # later versions break tests (probably drop at some point)
+gem "view_component", "~> 4.12" # later versions break tests (probably drop at some point)
 gem "webpacker"
 gem "sentry-ruby"
 gem "sentry-rails"

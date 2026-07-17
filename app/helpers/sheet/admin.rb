@@ -6,7 +6,7 @@
 module Sheet
   class Admin < Base
     def title
-      I18n.t("navigation.admin")
+      super.presence || I18n.t("navigation.admin")
     end
 
     def left_nav?

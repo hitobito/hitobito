@@ -32,7 +32,7 @@ describe Event::GuestsController do
     end
   end
 
-  let(:user) { people(:top_leader) }
+  let(:user) { people(:bottom_member) }
 
   before do
     sign_in(user)
@@ -48,6 +48,11 @@ describe Event::GuestsController do
         expect(wizard.guest_of.id).to eq(participation.id)
         expect(wizard.current_step).to eq(0)
         is_expected.to render_template("event/guests/new")
+      end
+
+      it "allows to add guests" do
+        get :new, params: {group_id: group.id, event_id: event.id, id: participation.id}
+        expect(response).to be_successful
       end
     end
 
@@ -147,9 +152,8 @@ describe Event::GuestsController do
     }
 
     before do
-      # rubocop:todo Layout/LineLength
-      # call this before the expectation, to make sure the participation is already persisted and does not count towards the change assertions
-      # rubocop:enable Layout/LineLength
+      # call this before the expectation, to make sure the participation is
+      # already persisted and does not count towards the change assertions
       participation
     end
 

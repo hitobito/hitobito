@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+# Unreleased
+
+- Rechungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (hitobito/hitobito_sww#296)
+
 ## Version 2.10
 
 - Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)

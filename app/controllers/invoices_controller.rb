@@ -20,7 +20,13 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
     sequence_number: Invoice.order_by_sequence_number_statement
   }
 
-  self.remember_params += [:year, :state, :due_since, :invoice_run_id]
+  self.remember_params += [
+    :year,
+    :state,
+    :due_since,
+    :invoice_run_id,
+    *Invoice::TYPE_SCOPES
+  ]
 
   self.search_columns = [:title, :sequence_number, "groups.name", "groups.email",
     "people.last_name", "people.first_name", "people.email", "people.company_name"]
@@ -42,7 +48,8 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       :_destroy
     ]]
 
-  helper_method :group, :period_invoice_template, :invoice_run, :filter_params
+  helper_method :group, :period_invoice_template, :invoice_run, :filter_params,
+    :available_invoice_types
 
   after_destroy :update_invoice_run_total
 
@@ -197,7 +204,6 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       LEFT JOIN people ON people.id = invoices.recipient_id AND invoices.recipient_type = 'Person'
       LEFT JOIN groups ON groups.id = invoices.recipient_id AND invoices.recipient_type = 'Group'
     SQL
-    scope = scope.standalone unless parents.any?(InvoiceRun)
     scope = scope.page(params[:page]) if html_request? && params[:ids].blank?
     Invoice::Filter.new(params.merge(filter_params)).apply(scope).with_recipients
   end
@@ -244,6 +250,22 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
 
   def filter_params
     year = invoice_run&.created_at&.year || Time.zone.today.year
-    {from: params[:from] || "1.1.#{year}", to: params[:to] || "31.12.#{year}"}
+
+    {
+      from: params[:from] || "1.1.#{year}",
+      to: params[:to] || "31.12.#{year}"
+    }.merge(invoice_type_defaults)
+  end
+
+  def invoice_type_defaults
+    return {} unless available_invoice_types.many?
+
+    available_invoice_types.index_with { |type| params[type] || "1" }
+  end
+
+  def available_invoice_types
+    @available_invoice_types ||= Invoice::TYPE_SCOPES.select do |type|
+      parent_scope.where(id: Invoice.send(type).select(:id)).exists?
+    end
   end
 end

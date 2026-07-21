@@ -357,6 +357,46 @@ describe Invoice do
     end
   end
 
+  context "type scopes" do
+    let(:invoice) { invoices(:invoice) }
+
+    let(:template) { Fabricate(:period_invoice_template) }
+    let(:plain_run) { Fabricate(:invoice_run, group: invoice.group) }
+
+    let(:template_run) do
+      Fabricate(:invoice_run, group: invoice.group, recipient_source: template.recipient_source,
+        period_invoice_template: template)
+    end
+
+    let!(:from_plain_run_invoice) do
+      Fabricate(:invoice, group: invoice.group, invoice_run: plain_run)
+    end
+
+    let!(:from_template_run_invoice) do
+      Fabricate(:invoice, group: invoice.group, invoice_run: template_run)
+    end
+
+    it ".standalone returns only invoices without an invoice_run" do
+      expect(Invoice.standalone).to include invoice
+      expect(Invoice.standalone).not_to include(from_plain_run_invoice, from_template_run_invoice)
+    end
+
+    it ".from_standalone_invoice_run returns only invoices from a run without a template" do
+      expect(Invoice.from_standalone_invoice_run).to include from_plain_run_invoice
+      expect(Invoice.from_standalone_invoice_run).not_to include(invoice, from_template_run_invoice)
+    end
+
+    it ".from_template_invoice_run returns only invoices from a run with a template" do
+      expect(Invoice.from_template_invoice_run).to include from_template_run_invoice
+      expect(Invoice.from_template_invoice_run).not_to include(invoice, from_plain_run_invoice)
+    end
+
+    it "scopes combined return invoices of all types" do
+      union = Invoice::TYPE_SCOPES.map { |type| Invoice.send(type) }.reduce(:or)
+      expect(union).to match_array Invoice.all
+    end
+  end
+
   context ".draft_or_issued_in" do
     let(:today) { Time.zone.parse("2019-12-16 10:00:00") }
     let(:invoice) { invoices(:invoice) }

@@ -8,6 +8,8 @@
 class Invoice::Filter
   attr_reader :params
 
+  TYPE_SCOPES = Invoice::TYPE_SCOPES
+
   def initialize(params = {})
     @params = params
   end
@@ -19,10 +21,8 @@ class Invoice::Filter
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
     scope = filter_by_ids(scope)
     scope = filter_by_invoice_run_id(scope)
-
-    unless params[:singular]
-      scope = scope.draft_or_issued(from: params[:from], to: params[:to])
-    end
+    scope = filter_by_invoice_type(scope)
+    scope = filter_by_daterange(scope)
 
     cancelled? ? scope : scope.visible
   end
@@ -38,7 +38,8 @@ class Invoice::Filter
   private
 
   def no_params_set?
-    possible_keys = %w[state due_since ids invoice_run_id from to]
+    possible_keys = %w[state due_since ids invoice_run_id from to] +
+      Invoice::TYPE_SCOPES.map(&:to_s)
 
     (params.keys.map(&:to_s) & possible_keys).none?
   end
@@ -65,11 +66,41 @@ class Invoice::Filter
     relation.where(id: invoice_ids)
   end
 
+  def filter_by_daterange(relation)
+    return relation if params[:singular]
+
+    relation.draft_or_issued(from: params[:from], to: params[:to])
+  end
+
+  def filter_by_invoice_type(relation)
+    return relation unless invoice_type_params_present?
+
+    scopes = TYPE_SCOPES
+      .select { |type| type_param_set_or_missing(type) }
+      .map { |type| Invoice.send(type) }
+
+    return relation.none if scopes.empty?
+    return relation if scopes.size == TYPE_SCOPES.size
+
+    relation.where(id: scopes.reduce(:or).select(:id))
+  end
+
+  def invoice_type_params_present?
+    (params.keys.map(&:to_s) & TYPE_SCOPES.map(&:to_s)).any?
+  end
+
   def all_invoices?
     params[:ids] == "all"
   end
 
+  def type_param_set_or_missing(type)
+    ActiveModel::Type::Boolean.new.cast(params[type]) || !params.key?(type)
+  end
+
   def invoice_ids
     @invoice_ids = params[:ids].to_s.split(",")
+  end
+
+  def boolean_param_value(key)
   end
 end

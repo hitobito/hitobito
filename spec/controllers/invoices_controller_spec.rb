@@ -69,17 +69,17 @@ describe InvoicesController do
 
       get :index, params: {group_id: group.id}
 
-      expect_query_count("Invoice Load": 1, "Person Load": 1, "Group Load": 1) do
+      expect do
         assigns(:invoices).to_a
-      end
+      end.to make.db_queries.with("Invoice Load" => 1, "Person Load" => 1, "Group Load" => 1)
 
       invoices = assigns(:invoices).to_a
 
-      expect_query_count do
+      expect {
         invoices.each do |invoice|
           invoice.recipient.to_s
         end
-      end.to eq 0 # recipients are preloaded, so no additional queries
+      }.to make(0).db_queries # recipients are preloaded, so no additional queries
     end
 
     it "finds invoices by title" do

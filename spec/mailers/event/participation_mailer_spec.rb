@@ -48,9 +48,10 @@ describe Event::ParticipationMailer do
 
   describe "event data" do
     it "renders set attributes only" do
+      event.update!(contact: nil)
       is_expected.to match(/Eventus/)
       is_expected.to match(/Daten/)
-      is_expected.not_to match(/Kontaktperson:<br\/>Top Leader/)
+      is_expected.not_to match(/Kontaktperson/)
     end
 
     it "renders location if set" do
@@ -208,6 +209,10 @@ describe Event::ParticipationMailer do
     end
 
     it { is_expected.to match(/Hallo Top/) }
+  end
+
+  context "reply_to" do
+    it_behaves_like "reply_to_contact"
   end
 
   describe "#event_details" do

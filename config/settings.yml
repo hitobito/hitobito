@@ -216,6 +216,7 @@ event:
     delete_additional_information_after_months: 1200
   questions:
     list_alphabetically: false
+  use_contact_as_reply_to: false
 
 downloads:
   folder: <%= Rails.root.join('tmp', 'downloads') %>

@@ -4,7 +4,11 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::RegisterMailer < ApplicationMailer
+  include Event::ReplyToContact
+
   CONTENT_REGISTER_LOGIN = "event_register_login".freeze
+
+  attr_reader :event
 
   def register_login(recipient, group, event, token)
     @recipient = recipient

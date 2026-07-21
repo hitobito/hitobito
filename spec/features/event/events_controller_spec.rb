@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe EventsController, js: true do
   let!(:event) do
-    event = Fabricate(:course, kind: event_kinds(:slk), groups: [groups(:top_group)])
+    event = Fabricate(:course, kind: event_kinds(:slk), groups: [groups(:top_group)], contact: nil)
     event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
     event.init_questions
     event

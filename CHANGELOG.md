@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+# Unreleased
+
+- Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)
+
 ## Version 2.10
 
 - Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)

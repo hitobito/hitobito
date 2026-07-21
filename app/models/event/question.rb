@@ -71,6 +71,8 @@ class Event::Question < ActiveRecord::Base
   belongs_to :event
 
   has_many :answers, dependent: :destroy
+  has_many :question_visibilities, class_name: "Event::QuestionVisibility",
+    dependent: :destroy, inverse_of: :question
 
   attribute :type, default: -> { Event::Question::Default.sti_name }
   attr_accessor :skip_add_answer_to_participations
@@ -115,6 +117,27 @@ class Event::Question < ActiveRecord::Base
 
   def global?
     event.blank?
+  end
+
+  def visible_role_types
+    @visible_role_types ||= if new_record? && question_visibilities.none?
+      default_visible_role_types
+    else
+      question_visibilities.reject(&:marked_for_destruction?).collect(&:role_type)
+    end
+  end
+
+  def visible_role_types=(role_types)
+    @visible_role_types = Array(role_types).compact_blank
+    self.question_visibilities = @visible_role_types.collect do |role_type|
+      Event::QuestionVisibility.new(role_type: role_type)
+    end
+  end
+
+  def visible_to?(role_classes, full_access: false)
+    return true if full_access || role_classes.any?(&:participations_full?)
+
+    (role_classes.collect(&:sti_name) & visible_role_types).any?
   end
 
   def validate_answer(_answer)
@@ -172,6 +195,12 @@ class Event::Question < ActiveRecord::Base
   end
 
   private
+
+  def default_visible_role_types
+    (event&.class || Event).role_types
+      .select { |role_type| role_type.permissions.include?(:participations_read_details) }
+      .collect(&:sti_name)
+  end
 
   def add_answer_to_participations
     return if event.blank? || skip_add_answer_to_participations

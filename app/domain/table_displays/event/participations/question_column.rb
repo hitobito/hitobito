@@ -45,8 +45,10 @@ module TableDisplays::Event::Participations
 
     protected
 
-    def allowed?(object, _attr, _original_object, _original_attr)
-      ability.can?(:index_full_participations, object.event)
+    def allowed?(object, attr, _original_object, _original_attr)
+      Event::Question::VisibleList.new(
+        event: object.event, ability: ability, participation: object, cache: visible_list_cache
+      ).questions.map(&:id).include?(question_id(attr).to_i)
     end
 
     def question_id(attr)
@@ -62,6 +64,12 @@ module TableDisplays::Event::Participations
       target_attr = :answer
 
       super
+    end
+
+    # Shared across every #allowed? call of this column instance, which lives for a whole
+    # table render. Avoids re-querying the event's questions and the viewer's event roles
+    def visible_list_cache
+      @visible_list_cache ||= {}
     end
   end
 end

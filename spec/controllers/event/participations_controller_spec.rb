@@ -260,6 +260,140 @@ describe Event::ParticipationsController do
       end
     end
 
+    context "answer visibility" do
+      let(:cook_participation) { Fabricate(:event_participation, event: course) }
+      let(:cook) { cook_participation.person }
+
+      before do
+        Fabricate(Event::Role::Cook.sti_name, participation: cook_participation)
+        course.questions.first.update!(visible_role_types: [Event::Role::Cook.sti_name])
+        sign_in(cook)
+      end
+
+      it "only assigns answers visible to the viewer's roles" do
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+        expect(assigns(:answers).map(&:question_id)).to eq [course.questions.first.id]
+      end
+
+      it "assigns all answers to a viewer with full access (e.g. group admin)" do
+        sign_in(people(:top_leader))
+
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+        expect(assigns(:answers).size).to eq(2)
+      end
+
+      it "always assigns all answers to the participant viewing their own participation" do
+        sign_in(participation.person)
+
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+        expect(assigns(:answers).size).to eq(2)
+      end
+
+      context "answers" do
+        render_views
+        let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+        context "rendering application answers" do
+          let(:application_question) do
+            Fabricate(:event_question, event: course, admin: false, question: "Shoe size?")
+          end
+
+          before do
+            participation.answers.find_by!(question: application_question).update!(answer: "42")
+          end
+
+          it "shows an application answer to a role explicitly configured as visible" do
+            application_question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_text("Shoe size?")
+            expect(dom).to have_text("42")
+          end
+
+          it "does not show an application answer to a role not configured as visible" do
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_no_text("Shoe size?")
+          end
+
+          it "shows application answers to a viewer with full access, regardless of configuration" do
+            sign_in(people(:top_leader))
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_text("Shoe size?")
+            expect(dom).to have_text("42")
+          end
+
+          it "always shows the participant their own application answer" do
+            sign_in(participation.person)
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_text("Shoe size?")
+            expect(dom).to have_text("42")
+          end
+        end
+
+        context "rendering admin answers" do
+          let(:admin_question) do
+            Fabricate(:event_question, event: course, admin: true, question: "Allergies?")
+          end
+
+          before do
+            participation.answers.find_by!(question: admin_question).update!(answer: "Peanuts")
+          end
+
+          it "shows admin answers to a viewer with full access" do
+            sign_in(people(:top_leader))
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_text("Allergies?")
+            expect(dom).to have_text("Peanuts")
+          end
+
+          it "shows an admin answer to a role explicitly configured as visible, even without show_full" do
+            admin_question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_text("Allergies?")
+            expect(dom).to have_text("Peanuts")
+          end
+
+          it "does not show an admin answer to a role not configured as visible" do
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_no_text("Allergies?")
+          end
+
+          it "does not show the participant their admin answer" do
+            sign_in(participation.person)
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_no_text("Allergies?")
+          end
+
+          it "shows the participant their own admin answer once made visible to their role" do
+            Fabricate(Event::Role::Cook.sti_name, participation: participation)
+            admin_question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+            sign_in(participation.person)
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_text("Allergies?")
+            expect(dom).to have_text("Peanuts")
+          end
+        end
+      end
+    end
+
     context "for other event of same group" do
       before do
         get :show, params: {group_id: group.id, event_id: other_course.id, id: participation.id}
@@ -1186,17 +1320,21 @@ describe Event::ParticipationsController do
         }.to make(57).db_queries
       end
 
-      it "GET#index preloads questions but increase query count when " do
+      it "GET#index increases query count by a bounded amount when a question column is added" do
+        baseline = QueryHelpers.count_queries do
+          get :index, params: {group_id: group.id, event_id: course.id}
+        end.count
+
         TableDisplay.register_multi_column(Event::Participation, TableDisplays::Event::Participations::QuestionColumn)
         table_display = top_leader.table_display_for(Event::Participation)
         table_display.selected = %W[event_question_#{question.id}]
         table_display.save!
-        expect {
+
+        with_column = QueryHelpers.count_queries do
           get :index, params: {group_id: group.id, event_id: course.id}
-          participation = assigns(:participations).first
-          expect(participation.answers).to be_loaded
-          expect(participation.person.phone_numbers).to be_loaded
-        }.to make(87).db_queries
+        end.count
+
+        expect(with_column - baseline).to be_between(25, 26) # 25 for single spec, 26 when run in suite
       end
     end
 

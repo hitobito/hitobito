@@ -251,6 +251,84 @@ describe Event::Question do
     end
   end
 
+  describe "role visibility" do
+    describe "#visible_role_types" do
+      it "defaults a new question to the roles that today have show_details permission" do
+        question = described_class.new(question: "Test?", required: false)
+
+        expect(question.visible_role_types).to match_array(
+          [Event::Role::Cook.sti_name, Event::Role::Helper.sti_name]
+        )
+      end
+
+      it "does not default an already persisted question with no configured roles" do
+        question = events(:top_course).questions.create!(question: "Test?", required: false)
+
+        expect(question.reload.visible_role_types).to eq []
+      end
+
+      it "does not apply the default once roles have been explicitly assigned" do
+        question = described_class.new(question: "Test?", required: false)
+        question.visible_role_types = []
+
+        expect(question.visible_role_types).to eq []
+      end
+    end
+
+    describe "#visible_role_types=" do
+      subject(:question) { described_class.new(question: "Test?", required: false) }
+
+      it "ignores blank entries submitted alongside checked roles" do
+        question.visible_role_types = ["", Event::Role::Cook.sti_name]
+
+        expect(question.visible_role_types).to eq [Event::Role::Cook.sti_name]
+        expect(question.question_visibilities).to all(be_valid)
+      end
+
+      it "results in an empty list when only the blank entry is submitted" do
+        question.visible_role_types = [""]
+
+        expect(question.visible_role_types).to eq []
+      end
+    end
+
+    describe "#visible_to?" do
+      subject(:question) { described_class.new(question: "Test?", required: false) }
+
+      it "is always visible to roles with the participations_full permission" do
+        expect(question.visible_to?([Event::Role::Leader])).to eq true
+        expect(question.visible_to?([Event::Role::AssistantLeader])).to eq true
+      end
+
+      it "is not visible to other roles when no roles are configured as visible" do
+        question.visible_role_types = []
+
+        expect(question.visible_to?([Event::Role::Cook])).to eq false
+        expect(question.visible_to?([Event::Role::Speaker])).to eq false
+      end
+
+      it "is visible to roles explicitly configured as visible" do
+        question.visible_role_types = [Event::Role::Cook.sti_name]
+
+        expect(question.visible_to?([Event::Role::Cook])).to eq true
+        expect(question.visible_to?([Event::Role::Speaker])).to eq false
+      end
+
+      it "is not visible when the viewer has no matching role at all" do
+        question.visible_role_types = [Event::Role::Cook.sti_name]
+
+        expect(question.visible_to?([])).to eq false
+      end
+
+      it "is always visible when the caller signals full_access, regardless of roles" do
+        question.visible_role_types = []
+
+        expect(question.visible_to?([], full_access: true)).to eq true
+        expect(question.visible_to?([Event::Role::Speaker], full_access: true)).to eq true
+      end
+    end
+  end
+
   context "paper trails", versioning: true do
     let(:event) { events(:top_course) }
 

@@ -24,11 +24,15 @@ module Export::Pdf::Participation
     private
 
     def answers
-      participation.answers
-        .list
-        .joins(:question)
-        .includes(:question)
-        .where(event_questions: {admin: false})
+      visible_list.answers(participation.answers.list).reject(&:admin?)
+    end
+
+    def visible_list
+      Event::Question::VisibleList.new(
+        event: participation.event,
+        ability: Ability.new(viewer || participation.person),
+        participation: participation
+      )
     end
 
     def additional_information_label

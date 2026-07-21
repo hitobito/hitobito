@@ -473,12 +473,16 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       event.participant_count = 0
       event.applicant_count = 0
       event.teamer_count = 0
-      application_questions.each do |q|
-        event.application_questions.build(q.attributes.excluding("id"))
+      # rubocop:disable Rails/FindEach -- questions per event are few, order must be preserved
+      application_questions.includes(:question_visibilities).each do |q|
+        new_question = event.application_questions.build(q.attributes.excluding("id"))
+        new_question.visible_role_types = q.visible_role_types
       end
-      admin_questions.each do |q|
-        event.admin_questions.build(q.attributes.excluding("id"))
+      admin_questions.includes(:question_visibilities).each do |q|
+        new_question = event.admin_questions.build(q.attributes.excluding("id"))
+        new_question.visible_role_types = q.visible_role_types
       end
+      # rubocop:enable Rails/FindEach
     end
   end
 

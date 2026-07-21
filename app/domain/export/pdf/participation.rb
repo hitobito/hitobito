@@ -8,10 +8,10 @@
 module Export::Pdf
   module Participation
     class Runner
-      def render(participation)
+      def render(participation, viewer = participation.person)
         pdf = Export::Pdf::Document.new.pdf
         pdf.font_size 9
-        sections.each { |section| section.new(pdf, participation).render }
+        sections.each { |section| section.new(pdf, participation, viewer:).render }
         pdf.number_pages(I18n.t("event.participations.print.page_of_pages"),
           at: [0, 0],
           align: :right,
@@ -30,8 +30,8 @@ module Export::Pdf
 
     self.runner = Runner
 
-    def self.render(participation)
-      runner.new.render(participation)
+    def self.render(participation, viewer = participation.person)
+      runner.new.render(participation, viewer)
     end
 
     def self.filename(participation)

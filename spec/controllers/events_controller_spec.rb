@@ -450,6 +450,31 @@ describe EventsController do
         expect(q2.reload.sensitive).to eq false
       end
 
+      it "persists visible_role_types on application and admin questions" do
+        q1 = event.questions.create!(question: "Who?", required: false)
+        q2 = event.questions.create!(question: "Payed?", required: false, admin: true)
+
+        put :update, params: {
+          group_id: group.id,
+          id: event.id,
+          event: {
+            name: "testevent",
+            application_questions_attributes: {
+              q1.id.to_s => {id: q1.id, question: "Who?", required: false,
+                             visible_role_types: [Event::Role::Cook.sti_name]}
+            },
+            admin_questions_attributes: {
+              q2.id.to_s => {id: q2.id, question: "Payed?", required: false,
+                             visible_role_types: [Event::Role::Helper.sti_name]}
+            }
+          }
+        }
+
+        expect(assigns(:event)).to be_valid
+        expect(q1.reload.visible_role_types).to eq [Event::Role::Cook.sti_name]
+        expect(q2.reload.visible_role_types).to eq [Event::Role::Helper.sti_name]
+      end
+
       it "question choices stay deleted when form is invalid after deleting all choices" do
         q1 = event.questions.create!(question: "Who?", required: false, choices: "all,some")
         q2 = event.questions.create!(question: "Payed?", required: false, admin: true, choices: "yes,no")
@@ -613,6 +638,36 @@ describe EventsController do
 
       expect(event.reload.visible_contact_attributes).not_to include("name")
       expect(event.reload.visible_contact_attributes).to include("email")
+    end
+  end
+
+  context "question visibility fields" do
+    render_views
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+    let(:course) { Fabricate(:course, groups: [group]) }
+
+    let(:application_question) do
+      Fabricate(:event_question, event: course, admin: false, question: "Shoe size?")
+    end
+
+    let(:admin_question) do
+      Fabricate(:event_question, event: course, admin: true, question: "Allergies?")
+    end
+
+    before do
+      application_question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+      admin_question
+      sign_in(people(:top_leader))
+    end
+
+    it "renders a disabled, checked checkbox for participations_full roles and reflects " \
+      "the configured visibility for other roles" do
+      get :edit, params: {group_id: group.id, id: course.id}
+
+      expect(dom).to have_field(Event::Role::Leader.label, disabled: true, checked: true)
+      expect(dom).to have_field(Event::Role::AssistantLeader.label, disabled: true, checked: true)
+      expect(dom).to have_field(Event::Role::Cook.label, checked: true)
+      expect(dom).to have_field(Event::Role::Helper.label, checked: false)
     end
   end
 

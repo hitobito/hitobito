@@ -900,6 +900,26 @@ describe Event do
       d = event.duplicate
       expect(d.group_ids.size).to eq(2)
     end
+
+    it "copies a configured question visibility instead of falling back to the default" do
+      question = Fabricate(:event_question, event: event)
+      question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+
+      d = event.duplicate
+
+      duplicated = d.application_questions.detect { |q| q.question == question.question }
+      expect(duplicated.visible_role_types).to eq [Event::Role::Cook.sti_name]
+    end
+
+    it "copies an explicitly empty question visibility instead of falling back to the default" do
+      question = Fabricate(:event_question, event: event, admin: true)
+      question.update!(visible_role_types: [])
+
+      d = event.duplicate
+
+      duplicated = d.admin_questions.detect { |q| q.question == question.question }
+      expect(duplicated.visible_role_types).to eq []
+    end
   end
 
   context "group timestamps" do

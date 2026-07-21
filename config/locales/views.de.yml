@@ -614,6 +614,8 @@ de:
       add_choice: "Antwortmöglichkeit hinzufügen"
       sensitive_caption: Antworten werden %{cutoff} Monate nach Ende des Anlasses gelöscht.
       required_caption: Diese Frage muss beim Anmelden beantworten werden.
+      visibility_fields:
+        caption: "Sichtbar für"
 
   assignments:
     attachment: "Anhang anzeigen"

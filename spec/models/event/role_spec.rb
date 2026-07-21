@@ -18,6 +18,21 @@ describe Event::Role do
     end
   end
 
+  describe ".participations_full?" do
+    it "is true for roles with the participations_full permission" do
+      expect(Event::Role::Leader.participations_full?).to eq true
+      expect(Event::Role::AssistantLeader.participations_full?).to eq true
+    end
+
+    it "is false for roles without the participations_full permission" do
+      expect(Event::Role::Cook.participations_full?).to eq false
+      expect(Event::Role::Helper.participations_full?).to eq false
+      expect(Event::Role::Speaker.participations_full?).to eq false
+      expect(Event::Role::Treasurer.participations_full?).to eq false
+      expect(Event::Role::Participant.participations_full?).to eq false
+    end
+  end
+
   context "save together with participation" do
     let(:course) do
       course = Fabricate(:course, groups: [groups(:top_layer)], kind: event_kinds(:slk))

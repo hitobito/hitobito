@@ -183,6 +183,29 @@ describe ObservableJob do
     end
   end
 
+  context "re-enqueueing the same job instance" do
+    before do
+      allow(Auth).to receive(:current_person).and_return(person)
+    end
+
+    it "creates a new observation if new job instance job is scheduled twice" do
+      expect { Test::SuccessfulObservableJob.new.enqueue! }.to change { JobObservation.count }.by(1)
+      expect { Test::SuccessfulObservableJob.new.enqueue! }.to change { JobObservation.count }.by(1)
+    end
+
+    it "updates existing observation if same job instance is re-scheduled as done by LimitConcurrentExecutions" do
+      job = Test::SuccessfulObservableJob.new
+      job.enqueue!
+      observation = job.job_observation
+
+      rescheduled_job = nil
+      expect { rescheduled_job = job.enqueue! }.not_to change { JobObservation.count }
+
+      expect(job.job_observation).to eq observation
+      expect(observation.reload.delayed_job).to eq rescheduled_job
+    end
+  end
+
   context "job observation id" do
     it "has job_observation_id in the parameters array of all observable jobs", :aggregate_failures do
       Rails.autoloaders.main.eager_load_dir("app/jobs")

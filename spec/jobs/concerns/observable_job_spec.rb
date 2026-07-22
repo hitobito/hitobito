@@ -188,7 +188,7 @@ describe ObservableJob do
       allow(Auth).to receive(:current_person).and_return(person)
     end
 
-    it "creates a new observation if new job instance job is scheduled twice" do
+    it "creates a new observation for each enqueued job instance of the same job class" do
       expect { Test::SuccessfulObservableJob.new.enqueue! }.to change { JobObservation.count }.by(1)
       expect { Test::SuccessfulObservableJob.new.enqueue! }.to change { JobObservation.count }.by(1)
     end

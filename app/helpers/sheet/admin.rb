@@ -5,6 +5,10 @@
 
 module Sheet
   class Admin < Base
+    def title
+      super.presence || I18n.t("navigation.admin")
+    end
+
     def left_nav?
       true
     end

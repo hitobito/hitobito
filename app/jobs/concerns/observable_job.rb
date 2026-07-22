@@ -24,11 +24,7 @@ module ObservableJob
     return super unless enqueueing_person
 
     ActiveRecord::Base.transaction do
-      job_observation = JobObservation.create!(
-        person: enqueueing_person, job_class: self.class.name,
-        reports_progress:, filename: @options&.dig(:filename),
-        filetype: @format, max_attempts: try(:max_attempts)
-      )
+      job_observation = find_or_create_job_observation(enqueueing_person)
       @job_observation_id = job_observation.id
 
       delayed_job = super
@@ -66,5 +62,19 @@ module ObservableJob
 
   def job_observation
     @job_observation ||= JobObservation.find(@job_observation_id)
+  end
+
+  private
+
+  # Reuse the observation if this job instance was already enqueued once (e.g. rescheduled by
+  # BackgroundJobs::LimitConcurrentExecutions) instead of creating a duplicate.
+  def find_or_create_job_observation(enqueueing_person)
+    return JobObservation.find(@job_observation_id) if @job_observation_id
+
+    JobObservation.create!(
+      person: enqueueing_person, job_class: self.class.name,
+      reports_progress:, filename: @options&.dig(:filename),
+      filetype: @format, max_attempts: try(:max_attempts)
+    )
   end
 end

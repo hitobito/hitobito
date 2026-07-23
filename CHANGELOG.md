@@ -7,6 +7,7 @@
 - Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
 - Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)
 - Konfigurierbare Ausweise mit Apple und Google Wallet Integration (#3911)
+- Rechnungen können neu via JSON:API erstellt werden (`POST /api/invoices`), inklusive Sideposting der Positionen (#4257)
 - Gruppen Sammelrechnungen können kopiert werden (#3754)
 - Spezifische E-Mails je nach Zustand der Teilnahme (Nicht zugeteilt, Zugeteilt, Warteliste) (hitobito_sww#289)
 - Optionale PP-Zeile auf Rechnungen (hitobito_swb#246)

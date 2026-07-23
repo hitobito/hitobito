@@ -81,9 +81,9 @@ describe :job_observations, js: true do
   it "should update pagination when jobs are enqueued" do
     allow(Kaminari.config).to receive(:default_per_page).and_return(2)
 
-    job = Test::SuccessfulObservableJob.new
+    job_class = Test::SuccessfulObservableJob
     2.times do
-      delayed_job = job.enqueue!
+      delayed_job = job_class.new.enqueue!
       JobObservation.where(delayed_job:).update!(job_class: "FirstJob")
     end
 
@@ -94,7 +94,7 @@ describe :job_observations, js: true do
       expect(page).to have_content("First job", count: 2)
       expect(page).not_to have_content("Letzte")
 
-      delayed_job = job.enqueue!
+      delayed_job = job_class.new.enqueue!
       JobObservation.where(delayed_job:).update!(job_class: "SecondJob")
 
       expect(page).to have_content("First job", count: 1)
@@ -107,7 +107,7 @@ describe :job_observations, js: true do
       expect(page).not_to have_content("Second job")
       expect(page).to have_content("Erste")
 
-      delayed_job = job.enqueue!
+      delayed_job = job_class.new.enqueue!
       JobObservation.where(delayed_job:).update!(job_class: "SecondJob")
 
       expect(page).to have_content("First job", count: 2)

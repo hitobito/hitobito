@@ -205,7 +205,7 @@ GEM
     crack (1.0.0)
       bigdecimal
       rexml
-    crass (1.0.6)
+    crass (1.0.7)
     csv (3.3.5)
     csv-safe (3.3.1)
       csv (~> 3.0)
@@ -430,7 +430,7 @@ GEM
       activesupport (>= 4)
       lograge (< 1.0)
       railties (>= 4)
-    loofah (2.25.1)
+    loofah (2.25.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     magiclabs-userstamp (3.0)

@@ -39,7 +39,8 @@ describe PersonResource, type: :resource do
         :language,
         :primary_group_id,
         :updated_at,
-        :additional_information
+        :additional_information,
+        :tag_list
       ]
     end
 
@@ -109,6 +110,16 @@ describe PersonResource, type: :resource do
         computed_attrs.each do |attr, attr_definition|
           expect(data.public_send(attr)).to eq(attr_definition.call(person))
         end
+      end
+
+      it "includes tag_list" do
+        person.tag_list = ["zeta", "alpha"]
+        person.save!
+
+        render
+
+        data = jsonapi_data[0]
+        expect(data.tag_list).to eq(["alpha", "zeta"])
       end
     end
 

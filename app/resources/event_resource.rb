@@ -38,6 +38,9 @@ class EventResource < ApplicationResource
     attribute :maximum_participants, :integer
     attribute :created_at, :datetime
     attribute :updated_at, :datetime, filterable: true
+    attribute :tag_list, :array do
+      @object.tags.map(&:name).sort
+    end
   end
 
   belongs_to :contact, resource: PersonResource, writable: false
@@ -75,6 +78,6 @@ class EventResource < ApplicationResource
   end
 
   def base_scope
-    super.includes(:groups, :translations)
+    super.includes(:groups, :translations, :tags)
   end
 end

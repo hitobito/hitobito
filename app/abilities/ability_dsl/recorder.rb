@@ -88,6 +88,7 @@ module AbilityDsl
       def initialize(store, ability_class, subject_class, permission)
         super(store, ability_class, subject_class)
         @permission = permission
+        @attr_config = nil
       end
 
       def may(*actions)
@@ -95,12 +96,48 @@ module AbilityDsl
         self
       end
 
+      # Declare which attributes are permitted (allowlist) for this permission/action/constraint.
+      # Usage:
+      #   permission(:any).may(:update).permitted_attrs(:last_name, :nickname).herself
+      def permitted_attrs(*attrs)
+        @attr_config = {attrs: attrs, kind: :permit}
+        self
+      end
+
+      # Declare which attributes are excluded (denylist) for this permission/action/constraint.
+      # All other attributes remain permitted.
+      # Usage:
+      #   permission(:any).may(:update).except_attrs(:first_name).herself
+      def except_attrs(*attrs)
+        @attr_config = {attrs: attrs, kind: :except}
+        self
+      end
+
       private
 
       def constraint(constraint)
+        method = @attr_config.present? ? :attribute_constraint : :general_constraint
         @actions.each do |action|
-          add_config(@permission, action, constraint)
+          send(method, action, constraint)
         end
+      end
+
+      def general_constraint(action, constraint)
+        add_config(@permission, action, constraint)
+      end
+
+      def attribute_constraint(action, constraint)
+        # For kind == :except, we need a regular can rule (broad permission)
+        # plus an attribute config that will generate a cannot rule.
+        # For :permit, we only need the attribute config (can with attrs).
+        general_constraint(action, constraint) if @attr_config[:kind] == :except
+
+        @store.add_attribute_config(
+          AbilityDsl::AttributeConfig.new(
+            @permission, @subject_class, action, @ability_class, constraint,
+            @attr_config[:attrs], @attr_config[:kind]
+          )
+        )
       end
     end
 

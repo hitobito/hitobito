@@ -27,20 +27,26 @@ function definitionsFromWagonContext(context) {
     })
 }
 
-// Load all the controllers from wagons for local dev setup
-const devWagonCtrlContext = require.context(
-  "../../../../",
-  true,
-  /\bhitobito_[^/]+\/app\/javascript\/controllers\/.*_controller\.js$/
-)
-stimulus.load(definitionsFromWagonContext(devWagonCtrlContext))
-
-// Load all the controllers from wagons for prod
-const prodWagonCtrlContext = require.context(
-  "../../../",
-  true,
-  /\bvendor\/wagons\/hitobito_[^/]+\/app\/javascript\/controllers\/.*_controller\.js$/
-)
-stimulus.load(definitionsFromWagonContext(prodWagonCtrlContext))
+// Wagons are siblings of the core directory in development/test but are moved
+// to vendor/wagons before asset precompilation in production, so this broad
+// context is only needed outside of production to avoid scanning the filesystem
+// root in Docker containers.
+if (process.env.NODE_ENV === "production") {
+  // Load all the controllers from wagons for prod
+  const prodWagonCtrlContext = require.context(
+    "../../../",
+    true,
+    /\bvendor\/wagons\/hitobito_[^/]+\/app\/javascript\/controllers\/.*_controller\.js$/
+  )
+  stimulus.load(definitionsFromWagonContext(prodWagonCtrlContext))
+} else {
+  // Load all the controllers from wagons for local dev setup.
+  const devWagonCtrlContext = require.context(
+    "../../../../",
+    true,
+    /\bhitobito_[^/]+\/app\/javascript\/controllers\/.*_controller\.js$/
+  )
+  stimulus.load(definitionsFromWagonContext(devWagonCtrlContext))
+}
 
 export { Application, Controller, stimulus, definitionsFromContext }

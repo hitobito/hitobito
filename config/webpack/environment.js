@@ -61,6 +61,15 @@ environment.loaders.append("expose moment to window object", {
   }]
 })
 
+// Detect whether wagon directories are mounted as siblings (local dev/test) or
+// have been moved to vendor/wagons (CI and production Docker builds). This flag
+// is evaluated once at compile time by DefinePlugin so webpack can dead-code-
+// eliminate the unused require.context branch and avoid scanning the filesystem root.
+const hasSiblingWagons = globSync(pathJoin("..", "hitobito_*", "app", "javascript")).length > 0
+environment.plugins.append("sibling-wagons-flag",
+  new webpack.DefinePlugin({ WEBPACK_SIBLING_WAGONS: JSON.stringify(hasSiblingWagons) })
+)
+
 environment.plugins.append("exclude unused moment locales",
   new webpack.ContextReplacementPlugin(
     /moment[\\\/]locale$/,

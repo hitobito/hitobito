@@ -27,26 +27,25 @@ function definitionsFromWagonContext(context) {
     })
 }
 
-// Wagons are siblings of the core directory in development/test but are moved
-// to vendor/wagons before asset precompilation in production, so this broad
-// context is only needed outside of production to avoid scanning the filesystem
-// root in Docker containers.
-if (process.env.NODE_ENV === "production") {
-  // Load all the controllers from wagons for prod
-  const prodWagonCtrlContext = require.context(
-    "../../../",
-    true,
-    /\bvendor\/wagons\/hitobito_[^/]+\/app\/javascript\/controllers\/.*_controller\.js$/
-  )
-  stimulus.load(definitionsFromWagonContext(prodWagonCtrlContext))
-} else {
-  // Load all the controllers from wagons for local dev setup.
+// WEBPACK_SIBLING_WAGONS is set at compile time by DefinePlugin in environment.js.
+// It is true when wagon directories are mounted as siblings (local dev/test) and
+// false when they have been moved to vendor/wagons (CI test and Docker production
+// builds). webpack dead-code-eliminates the unused branch, so the broad ../../../../
+// context is never evaluated where it would scan the filesystem root.
+if (WEBPACK_SIBLING_WAGONS) {
   const devWagonCtrlContext = require.context(
     "../../../../",
     true,
     /\bhitobito_[^/]+\/app\/javascript\/controllers\/.*_controller\.js$/
   )
   stimulus.load(definitionsFromWagonContext(devWagonCtrlContext))
+} else {
+  const prodWagonCtrlContext = require.context(
+    "../../../",
+    true,
+    /\bvendor\/wagons\/hitobito_[^/]+\/app\/javascript\/controllers\/.*_controller\.js$/
+  )
+  stimulus.load(definitionsFromWagonContext(prodWagonCtrlContext))
 }
 
 export { Application, Controller, stimulus, definitionsFromContext }

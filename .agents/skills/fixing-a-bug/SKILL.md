@@ -16,6 +16,7 @@ Any bugfix task: reproducing and resolving a defect. For new functionality, use 
 ## Process
 
 1. State the reason for the bugfix — the error affecting the user.
+1. Work on a feature-branch, name it "fix/SHORT-NAME-OF-ISSUE"
 1. Verify `bundle exec rake rubocop` and `bundle exec rake brakeman` report no errors locally before starting.
 1. Write a spec that reproduces the bug BEFORE changing any other code. It must fail first.
 1. Implement the fix.

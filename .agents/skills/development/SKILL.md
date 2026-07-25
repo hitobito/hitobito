@@ -16,6 +16,7 @@ Default workflow for feature work or behavior changes. For resolving a defect, u
 ## Process
 
 1. State the reason for the change — the goal describing how the application should improve for the user.
+1. Work on a feature-branch, name it "feature/SHORT-NAME-OF-ISSUE"
 1. Write a spec first, defining the desired state. It must fail before any implementation exists.
 1. Implement the change.
 1. Do not touch locales other than `de`, not even german variants like `de_CH` or `de_DE`.

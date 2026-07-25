@@ -18,5 +18,5 @@ Structural changes with no intended behavior change. For new or changed function
 ## Process
 
 1. Clarify the goal of the refactor with the user.
-2. Follow the `development` skill's process.
-3. Check for obvious edge cases related to the goal that are missing from the specs. Beyond that, new specs are optional.
+1. Follow the `development` skill's process.
+1. Check for obvious edge cases related to the goal that are missing from the specs. Beyond that, new specs are optional.

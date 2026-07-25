@@ -55,9 +55,11 @@ module MailingLists::BulkMail
     end
 
     def analyze_diagnostic_codes(codes)
+      actions = Settings.email.bounces.diagnostic_codes.keys + [:unknown]
+
       codes
         .map { |code| analyze_diagnostic_code(code) }
-        .min_by { |action| Settings.email.bounces.diagnostic_codes.keys.index(action) }
+        .min_by { |action| actions.index(action) }
     end
 
     def analyze_diagnostic_code(code)

@@ -1,0 +1,213 @@
+Return-Path: <MAILER-DAEMON>
+X-Original-To: leaders@hitobito.example.com
+Delivered-To: leaders@hitobito.example.com
+Received: from mx03.hitobito.example.com (mx03.hitobito.example.com [45.81.71.124])
+	by mailstore02.cloud.hitobito.example.com (Postfix) with ESMTPS id 8D22972E
+	for <leaders@hitobito.example.com>; Fri, 24 Jul 2026 17:36:24 +0200 (CEST)
+Received: from mailin-001.mailprovider.example.com (mailin-001.mailprovider.example.com [193.247.246.41])
+	by mx03.hitobito.example.com (Postfix) with ESMTPS id 0E1CD72
+	for <leaders@hitobito.example.com>; Fri, 24 Jul 2026 17:36:24 +0200 (CEST)
+Received: from relay-003.mailprovider.example.com ([138.188.175.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 128/128 bits)
+	(Client did not present a certificate)
+	by mailin-001.mailprovider.example.com Mailanbieterin AG with ESMTPS
+	id nHP3wySo4qLQknHwlwblHt; Fri, 24 Jul 2026 15:36:23 +0000
+X-Originating-IP: 138.188.175.26
+Date: Fri, 24 Jul 2026 15:36:23 +0000
+Message-Id: <3-1349451765.1784907383@mail.example.net>
+From: MAILER-DAEMON@mail.example.net
+To: srs0=tp8egbd1=fs=hitobito.example.com=tim.tester@srs.mail.example.net
+Subject: Delivery Status Notification
+MIME-Version: 1.0
+Content-Type: multipart/report; boundary="------------I305M09060309060P_976317849073830"
+
+This is a multi-part message in MIME format.
+
+--------------I305M09060309060P_976317849073830
+Content-Type: text/plain; charset=UTF-8;
+Content-Transfer-Encoding: 8bit
+
+
+
+la version franÃ§aise ci-dessous
+per la versione italiana vedere sotto
+english version below
+
+
+
+Diese Nachricht wurde automatisch erstellt.
+Ce message a Ã©tÃ© gÃ©nÃ©rÃ© automatiquement.
+Questo messaggio Ã¨ stato generato automaticamente.
+This is an automatically generated e-mail.
+
+
+
+
+Liebe RedMail-E-Mail-Kundin, lieber RedMail-E-Mail-Kunde,
+
+Ihre E-Mail hat folgende EmpfÃ¤ngeradresse nicht erreicht:
+   * lisa.tester@othermailer.example.org
+
+Der Grund fÃ¼r diese Abweisung kann eine falsch eingegebene Adresse, ein
+nicht existierendes Mailkonto, ein volles Postfach oder ein temporÃ¤rer
+Fehler auf der EmpfÃ¤ngerseite sein. Bitte Ã¼berprÃ¼fen Sie die
+EmpfÃ¤ngeradresse und schicken Sie das E-Mail erneut. Details zur
+Abweisung entnehmen Sie der von der EmpfÃ¤ngerseite generierten Meldung,
+welche wir unten angehÃ¤ngt haben.
+
+Bei Bedarf erreichen Sie uns, wie auf folgender Seite erlÃ¤utert:
+www.mailprovider.example.com/mail-contact
+
+Freundliche GrÃ¼sse,
+Ihre Mailanbieterin
+
+Diese Nachricht wurde automatisch erstellt. Antworten auf diese
+Nachricht kÃ¶nnen nicht bearbeitet werden.
+
+----
+
+
+ChÃ¨re cliente e-mail RedMail, cher client e-mail RedMail,
+
+Votre e-mail n'est pas parvenu Ã  l'adresse du destinataire suivant:
+   * lisa.tester@othermailer.example.org
+
+Ce refus peut Ãªtre dÃ» Ã  une saisie d'adresse erronÃ©e, un compte de
+messagerie inexistant, une boÃ®te aux lettres pleine ou une erreur
+temporaire du cÃ´tÃ© du destinataire. Veuillez vÃ©rifier l'adresse du
+destinataire et envoyer l'e-mail Ã  nouveau. Vous trouverez des dÃ©tails
+concernant le refus dans la notification gÃ©nÃ©rÃ©e du cÃ´tÃ© du
+destinataire, et que nous avons jointe Ã  ce message.
+
+En cas de besoin, vous pouvez nous joindre comme expliquÃ© sur la page
+suivante:
+www.mailprovider.example.com/mail-contact
+
+SincÃ¨res salutations
+Votre Mailanbieterin
+
+Ce message a Ã©tÃ© gÃ©nÃ©rÃ© automatiquement. Nous ne pouvons pas traiter les
+rÃ©ponses Ã  ce dernier.
+
+----
+
+
+Gentile cliente e-mail RedMail,
+
+La sua e-mail non ha raggiunto il seguente indirizzo:
+   * lisa.tester@othermailer.example.org
+
+Il motivo del rifiuto puÃ² essere l'inserimento di un indirizzo
+scorretto, un account e-mail non esistente, una casella di posta piena
+oppure un errore temporaneo dal destinatario.
+La preghiamo di verificare l'indirizzo(i) del destinatario e di inviare
+di nuovo l'e-mail. Maggiori dettagli sulla mancata ricezione sono
+riportati nel messaggio generato dal destinatario che trova in allegato.
+
+Se necessario potrÃ  contattarci come spiegato nella pagina seguente:
+www.mailprovider.example.com/mail-contact
+
+Cordiali saluti,
+Mailanbieterin
+
+Questo messaggio Ã¨ stato generato automaticamente. Eventuali risposte
+non verranno elaborate.
+
+----
+
+
+Dear RedMail e-mail customer,
+
+Your e-mail did not reach the following recipient address:
+   * lisa.tester@othermailer.example.org
+
+This could be because the e-mail address you entered was incorrect or
+does not exist, or because the inbox is full or there may have been a
+temporary error with the recipient's e-mail. Please check the
+address(es) you entered and send the e-mail again. You can find details
+on the rejection in the recipient-generated e-mail attached below.
+
+If you have any questions, please contact us via:
+www.mailprovider.example.com/mail-contact
+
+Best regards,
+Mailanbieterin
+
+This is an automatically generated e-mail, please do not reply.
+
+
+
+
+
+--------------I305M09060309060P_976317849073830
+Content-Type: message/delivery-status; charset=UTF-8;
+Content-Transfer-Encoding: 8bit
+
+Reporting-MTA: dns; mail.example.net [10.250.205.120]
+Received-From-MTA: dns; dovecot-backend-035.int.mailprovider.example.com [10.250.202.186]
+Arrival-Date: Fri, 24 Jul 2026 15:36:21 +0000
+
+
+Final-recipient: rfc822; lisa.tester@othermailer.example.org
+Diagnostic-Code: smtp; 552 5.2.2 <lisa.tester@othermailer.example.org>: user is over quota
+
+Last-attempt-Date: Fri, 24 Jul 2026 15:36:23 +0000
+
+
+
+--------------I305M09060309060P_976317849073830
+Content-Type: text/rfc822-headers
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment
+
+Received: from dovecot-backend-035.int.mailprovider.example.com ([10.250.202.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 256/256 bits)
+	(Client did not present a certificate)
+	by relay-003.mailprovider.example.com Mailanbieterin AG with ESMTPS
+	id nHwjwhgD1jJMxnHwjwkCpF; Fri, 24 Jul 2026 15:36:21 +0000
+X-Originating-IP: 10.250.202.186
+X-Sieve: Pigeonhole Sieve 0.5.22.1 (02dbc0f4)
+X-Sieve-Redirected-From: 39224773486710163298@40431500879136594731
+Delivered-To: 39224773486710163298@40431500879136594731
+Received: from dovecot-director-006.int.mailprovider.example.com ([10.250.205.83])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	by dovecot-backend-035.int.mailprovider.example.com with LMTPS
+	id GBdvDH4NY2rW/x0AMnOlfg:T9731:P1:P1
+	(envelope-from <leaders@hitobito.example.com>)
+	for <39224773486710163298@40431500879136594731>; Fri, 24 Jul 2026 15:36:21 +0000
+Received: from dovecot-proxy-006.int.mailprovider.example.com ([10.250.205.83])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	by dovecot-director-006.int.mailprovider.example.com with LMTPS
+	id GBdvDH4NY2rW/x0AMnOlfg:T9731:P1
+	(envelope-from <leaders@hitobito.example.com>)
+	for <39224773486710163298@40431500879136594731>; Fri, 24 Jul 2026 15:36:21 +0000
+Received: from mailin-009.mailprovider.example.com ([10.250.205.83])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	by dovecot-proxy-006.int.mailprovider.example.com with LMTPS
+	id GBdvDH4NY2rW/x0AMnOlfg:T9731
+	(envelope-from <leaders@hitobito.example.com>)
+	for <lisa.tester@mail.example.net>; Fri, 24 Jul 2026 15:36:21 +0000
+Received: from mx04.hitobito.example.com ([45.81.71.239])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 256/256 bits)
+	(Client did not present a certificate)
+	by mailin-009.mailprovider.example.com Mailanbieterin AG with ESMTPS
+	id nHwiw8hFi8aIUnHwiwUxGZ; Fri, 24 Jul 2026 15:36:20 +0000
+Received: from mailstore02.cloud.hitobito.example.com (mail.hitobito.example.com [45.81.71.99])
+	by mx04.hitobito.example.com (Postfix) with ESMTPS id 66B0B176
+	for <lisa.tester@mail.example.net>; Fri, 24 Jul 2026 17:36:20 +0200 (CEST)
+Message-ID: <07e37ec6-1b6e-4c2f-9a0b-833d0ed9fe96@hitobito.example.com>
+x-ms-reactions: disallow
+Date: Fri, 24 Jul 2026 17:36:19 +0200
+MIME-Version: 1.0
+Content-Language: en-US
+To: lisa.tester@mail.example.net
+From: Tim Tester <leaders@hitobito.example.com>
+Subject: Testmail aus Hitobito
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+
+--------------I305M09060309060P_976317849073830--
+
+
+

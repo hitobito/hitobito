@@ -183,6 +183,45 @@ describe ObservableJob do
     end
   end
 
+  context "re-enqueueing the same job instance" do
+    before do
+      allow(Auth).to receive(:current_person).and_return(person)
+    end
+
+    it "creates a new observation for each enqueued job instance of the same job class" do
+      expect { Test::SuccessfulObservableJob.new.enqueue! }.to change { JobObservation.count }.by(1)
+      expect { Test::SuccessfulObservableJob.new.enqueue! }.to change { JobObservation.count }.by(1)
+    end
+
+    context "when limited to single concurrent execution" do
+      before do
+        allow(Settings.delayed_jobs.concurrency).to receive(:jobs).and_return(%w[Test::SuccessfulObservableJob])
+
+        locked = Test::SuccessfulObservableJob.new
+        locked_record = locked.enqueue!
+        locked_record.update!(locked_at: Time.zone.now, locked_by: "dummy-worker")
+
+        @blocked = Test::SuccessfulObservableJob.new
+        @blocked_record = @blocked.enqueue!
+
+        expect(locked.job_observation).not_to eq(@blocked.job_observation)
+      end
+
+      it "reschedules using existing observation" do
+        expect do
+          Delayed::Worker.new.work_off
+        end.to not_change { Delayed::Job.count }
+          .and not_change { JobObservation.count }
+
+        # the second blocked job gets destroyed and re-scheduled
+        expect { @blocked_record.reload }.to raise_error(ActiveRecord::RecordNotFound)
+
+        rescheduled = Delayed::Job.find_by("locked_at IS NULL and handler LIKE '%Test::SuccessfulObservableJob%'")
+        expect(rescheduled.payload_object.job_observation).to eq(@blocked.job_observation)
+      end
+    end
+  end
+
   context "job observation id" do
     it "has job_observation_id in the parameters array of all observable jobs", :aggregate_failures do
       Rails.autoloaders.main.eager_load_dir("app/jobs")

@@ -7,7 +7,7 @@
 
 source "https://rubygems.org", cooldown: 7
 
-gem "rails", "~> 8.0.4"
+gem "rails", "~> 8.0.5.1"
 gem "wagons"
 gem "active_record_distinct_on"
 gem "activerecord-nulldb-adapter"

@@ -25,6 +25,18 @@ application:
     logo_url: http://puzzle.ch
     links: {}
 
+  # Optional meta tags, rendered in the application layout.
+  # Each list item is a hash whose key/value pairs become HTML attributes of a <meta> tag.
+  # All keys and values are passed through as-is, values must be strings.
+  #
+  # Example:
+  #   meta_tags:
+  #     - http-equiv: refresh
+  #       content: "30"
+  #     - name: keywords
+  #       content: "hitobito, community, scouting"
+  meta_tags: []
+
   # The languages available in the menu
   languages:
     # first entry is considered the default language

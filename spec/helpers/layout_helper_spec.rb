@@ -11,6 +11,39 @@ describe LayoutHelper do
   include Webpacker::Helper
   include UploadDisplayHelper
 
+  describe "#meta_tags_from_settings" do
+    it "renders nothing when meta tags are not configured" do
+      allow(Settings.application).to receive(:meta_tags).and_return(nil)
+      expect(helper.meta_tags_from_settings).to be_blank
+    end
+
+    it "renders nothing when meta tags are empty" do
+      allow(Settings.application).to receive(:meta_tags).and_return([])
+      expect(helper.meta_tags_from_settings).to be_blank
+    end
+
+    it "renders meta tags with arbitrary keys" do
+      allow(Settings.application).to receive(:meta_tags).and_return([
+        {name: "description",
+         content: "My site"},
+        {"http-equiv" => "refresh",
+         :content => "30"},
+        {property: "og:site_name",
+         content: "hitobito"}
+      ])
+
+      node = Capybara::Node::Simple.new(helper.meta_tags_from_settings)
+      expect(node).to have_css('meta[name="description"][content="My site"]', visible: :hidden)
+      expect(node).to have_css('meta[http-equiv="refresh"][content="30"]', visible: :hidden)
+      expect(node).to have_css('meta[property="og:site_name"][content="hitobito"]', visible: :hidden)
+    end
+
+    it "skips blank meta tag entries" do
+      allow(Settings.application).to receive(:meta_tags).and_return([{}, nil])
+      expect(helper.meta_tags_from_settings).to be_blank
+    end
+  end
+
   describe "#header_logo" do
     context "with group" do
       let(:group) { groups(:bottom_group_one_one_one) }

@@ -17,6 +17,7 @@ describe "OauthWorkflow", js: true do
     visit root_path
     within("#page-navigation") do
       click_link "Einstellungen"
+      click_link "Allgemein"
       click_link "OAuth Applikationen"
     end
     click_link "Erstellen"

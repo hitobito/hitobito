@@ -57,6 +57,11 @@ module AbilityDsl
       @course_offerers ||= Group.course_offerers.pluck(:id)
     end
 
+    def participation_details_person_ids
+      @participation_details_person_ids ||=
+        participation_details_participations.distinct.pluck(:participant_id).to_set
+    end
+
     private
 
     def init_permission_lookup_tables
@@ -148,6 +153,12 @@ module AbilityDsl
     def find_events_with_permission(permission)
       participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }
         .collect(&:event_id)
+    end
+
+    def participation_details_participations
+      ::Event::Participation
+        .accessible_by(JsonApi::EventParticipationDetailsAbility.new(user))
+        .where(participant_type: ::Person.sti_name)
     end
   end
 end

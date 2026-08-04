@@ -14,7 +14,7 @@ describe AdditionalEmailResource, type: :resource do
   describe "serialization" do
     let(:role) { roles(:bottom_member) }
     let!(:person) { role.person }
-    let!(:additional_email) { Fabricate(:additional_email, contactable: person) }
+    let!(:additional_email) { Fabricate(:additional_email, contactable: person, public: false) }
 
     context "without appropriate permission" do
       let(:user) { Fabricate(:person) }

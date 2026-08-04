@@ -89,6 +89,21 @@ eingerichtet werden, welche auf die Applikations-Sendeadresse lautet (`Settings.
 werden (z.B. `MAILER-DAEMON@puzzle.ch`). Bei dieser Liste sollte eine Person der Organisation als 
 Abonnent vorhanden sein, welcher sich um die fehlerhaften Adressen kümmert.
 
+#### Meta Tags
+
+Pro Umgebung können Meta Tags im HTML `<head>` ergänzt werden. Dazu wird in der `config/settings.local.yml` (oder einer entsprechenden Konfiguration, die im Wagon über `Settings.add_source!` geladen wird) folgender Block definiert:
+
+```yaml
+application:
+  meta_tags:
+    - name: "description"
+      content: "Meine Organisation"
+    - "http-equiv": "refresh"
+      content: "30"
+```
+
+Die Werte müssen Strings sein. Jeder Hash in der Liste wird 1:1 als `<meta>`-Tag mit den entsprechenden Attributen ausgegeben.
+
 #### Dummy Daten (Development Seed)
 
 Um auf der Integration die Development Seed Daten zu laden, kann folgender Symlink erstellt werden. 

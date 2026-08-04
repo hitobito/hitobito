@@ -126,4 +126,24 @@ describe "layouts/application.html.haml" do
       end
     end
   end
+
+  context "meta tags from settings" do
+    let(:person) { people(:top_leader) }
+
+    it "renders multiple configured meta tags" do
+      allow(Settings.application).to receive(:meta_tags).and_return([
+        {name: "test meta tag", content: "hello world"},
+        {"http-equiv" => "foo", :content => "bar"}
+      ])
+      render
+      expect(subject).to have_css('meta[name="test meta tag"][content="hello world"]', visible: :hidden)
+      expect(subject).to have_css('meta[http-equiv="foo"][content="bar"]', visible: :hidden)
+    end
+
+    it "renders without configured meta tags" do
+      allow(Settings.application).to receive(:meta_tags).and_return(nil)
+      expect { render }.not_to raise_error
+      expect(subject).to have_css("title", visible: :hidden)
+    end
+  end
 end

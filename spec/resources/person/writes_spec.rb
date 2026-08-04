@@ -60,10 +60,6 @@ describe PersonResource, type: :resource do
       PersonResource.find(payload)
     end
 
-    before do
-      allow(context).to receive(:entry).and_return(person)
-    end
-
     it "works" do
       expect {
         expect(instance.update_attributes).to eq(true)
@@ -112,18 +108,20 @@ describe PersonResource, type: :resource do
         new_birthday = Time.zone.today
         payload[:data][:attributes][:gender] = "w"
         payload[:data][:attributes][:birthday] = new_birthday.to_json
+        payload[:data][:attributes][:additional_information] = "Allergies"
 
-        allow(context).to receive(:entry).and_return(person)
         expect {
           expect(instance.update_attributes).to eq(true)
         }.to change { person.reload.updated_at }
           .and change { person.gender }.to("w")
           .and change { person.birthday }.to(new_birthday)
+          .and change { person.additional_information }.to("Allergies")
       end
     end
 
     context "without show_details permission, it" do
       before do
+        allow(ability).to receive(:can?).and_call_original
         allow(ability).to receive(:can?).with(:show_details, person).and_return(false)
       end
 
@@ -132,7 +130,15 @@ describe PersonResource, type: :resource do
         payload[:data][:attributes][:gender] = "w"
         payload[:data][:attributes][:birthday] = new_birthday.to_json
 
-        expect { instance.update_attributes }.to raise_error(Graphiti::Errors::InvalidRequest)
+        expect { instance.update_attributes }.to raise_error(CanCan::AccessDenied)
+        expect(person.reload.gender).to eq "m"
+      end
+
+      it "does not update additional_information" do
+        payload[:data][:attributes][:additional_information] = "Allergies"
+
+        expect { instance.update_attributes }.to raise_error(CanCan::AccessDenied)
+        expect(person.reload.additional_information).to be_blank
       end
     end
 

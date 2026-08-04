@@ -2791,7 +2791,7 @@
         "additional_information": {
           "type": "string",
           "readable": "guarded",
-          "writable": true,
+          "writable": "guarded",
           "description": null
         }
       },

@@ -89,6 +89,50 @@ describe InvoiceResource, type: :resource do
           expect(instance.update_attributes).to eq(true)
         }.to change { invoice.invoice_items.count }.by(1)
       end
+
+      describe "recipient detail attributes" do
+        # the acting person is the recipient, so they may see their own details
+        let(:invoice) { Fabricate(:invoice, group: groups(:bottom_layer_one), recipient: person) }
+
+        let(:attrs) do
+          payload.deep_merge(
+            data: {
+              relationships: {
+                recipient: {
+                  data: {
+                    id: person.id.to_s,
+                    type: "people",
+                    method: "update"
+                  }
+                }
+              }
+            },
+            included: [{
+              id: person.id.to_s,
+              type: "people",
+              attributes: {
+                additional_information: "Allergies"
+              }
+            }]
+          )
+        end
+
+        it "can be updated with show_details permission" do
+          instance = InvoiceResource.find(attrs)
+          expect {
+            expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
+          }.to change { person.reload.additional_information }.to("Allergies")
+        end
+
+        it "cannot be updated without show_details permission" do
+          allow(ability).to receive(:can?).and_call_original
+          allow(ability).to receive(:can?).with(:show_details, person).and_return(false)
+
+          instance = InvoiceResource.find(attrs)
+          expect { instance.update_attributes }.to raise_error(CanCan::AccessDenied)
+          expect(person.reload.additional_information).to be_blank
+        end
+      end
     end
   end
 end

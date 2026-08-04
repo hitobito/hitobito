@@ -2790,7 +2790,7 @@
         },
         "additional_information": {
           "type": "string",
-          "readable": true,
+          "readable": "guarded",
           "writable": true,
           "description": null
         }

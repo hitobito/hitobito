@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -57,9 +57,15 @@ module AbilityDsl
       @course_offerers ||= Group.course_offerers.pluck(:id)
     end
 
+    # In hitobito/hitobito_pbs#466, cbe and ama found no easy better place to put this.
+    # It is a complex calculation which needs to be cached in the request context,
+    # similar to course_offerers which we already have here.
+    def participation_details_people
+      ::Person.where(id: participation_details_participations.select(:participant_id))
+    end
+
     def participation_details_person_ids
-      @participation_details_person_ids ||=
-        participation_details_participations.distinct.pluck(:participant_id).to_set
+      @participation_details_person_ids ||= participation_details_people.pluck(:id).to_set
     end
 
     private

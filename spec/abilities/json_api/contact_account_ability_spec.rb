@@ -66,9 +66,26 @@ describe JsonApi::ContactAccountAbility do
         is_expected.not_to be_able_to(:read, phone_number)
       end
 
-      it "may not read public phone_numbers" do
+      it "may read public phone_numbers" do
         phone_number.public = true
-        is_expected.not_to be_able_to(:read, phone_number)
+        is_expected.to be_able_to(:read, phone_number)
+      end
+    end
+
+    context "when the details of a participation of the contactable are readable" do
+      let(:event) { events(:top_course) }
+      let!(:participation) do
+        Fabricate(:event_participation, event: event, participant: person, active: true)
+      end
+
+      before do
+        Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group), person: user)
+        expect(Ability.new(user)).to be_able_to(:show_details, participation)
+      end
+
+      it "may read non-public phone_numbers" do
+        phone_number.public = false
+        is_expected.to be_able_to(:read, phone_number)
       end
     end
   end
@@ -108,7 +125,7 @@ describe JsonApi::ContactAccountAbility do
         is_expected.to be_able_to(:read, contact_account)
       end
 
-      it "may not read non-public phone_numbers" do
+      it "may read non-public phone_numbers" do
         contact_account.public = false
         is_expected.to be_able_to(:read, contact_account)
       end
@@ -119,9 +136,9 @@ describe JsonApi::ContactAccountAbility do
         expect(main_ability).not_to be_able_to(:read, group)
       end
 
-      it "may not read public phone_numbers" do
+      it "may read public phone_numbers" do
         contact_account.public = true
-        is_expected.not_to be_able_to(:read, contact_account)
+        is_expected.to be_able_to(:read, contact_account)
       end
 
       it "may not read non-public phone_numbers" do

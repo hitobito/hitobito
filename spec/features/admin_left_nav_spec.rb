@@ -21,7 +21,8 @@ describe :admin_left_nav, js: true do
       it "is visible if self registration is enabled" do
         allow(FeatureGate).to receive(:enabled?).with(:self_registration_reason).and_return(true)
         visit path
-        expect(page.find("nav#page-navigation")).to have_link(href: self_registration_reasons_path)
+        expect(page.find("nav#page-navigation"))
+          .to have_link(href: self_registration_reasons_path, visible: :all)
       end
     end
 

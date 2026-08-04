@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module NavigationHelper
-  MAIN = [ # rubocop:disable Style/MutableConstant extended in wagons
+  MAIN = [
     {label: :groups,
      url: :groups_path,
      icon_name: "users",
@@ -40,25 +40,82 @@ module NavigationHelper
        invoice_runs?]},
 
     {label: :admin,
-     url: :label_formats_path,
+     url: :admin_path,
      icon_name: "cog",
-     active_for: %w[self_registration_reasons
-       label_formats
-       custom_contents
-       event_kinds
-       event_kind_categories
-       qualification_kinds
-       oauth/applications
-       help_texts
-       oauth/active_authorizations
-       event_feed
-       tags
-       personal_document_labels
-       hitobito_log_entries
-       mails/imap mails/bounces
-       api],
-     if: ->(_) { can?(:index, LabelFormat) }}
+     active_for: ->(_) { admin_active_for_paths },
+     if: ->(_) { can?(:update_settings, current_person) }}
   ]
+
+  ADMIN_GROUPS = {
+    main: {
+      heading: "admins.show.main",
+      items: [
+        Item.new(model: LabelFormat, path: :label_formats_path),
+        Item.new(model: CustomContent, path: :custom_contents_path),
+        Item.new(model: HelpText, path: :help_texts_path),
+        Item.new(model: Oauth::Application, path: :oauth_applications_path),
+        Item.new(label: "navigation.admin/oauth_authorizations",
+          path: :oauth_active_authorizations_path,
+          if: ->(_) { current_user.oauth_applications.exists? }),
+        Item.new(model: ActsAsTaggableOn::Tag, path: :tags_path),
+        FeatureGate.if("personal_documents") do
+          Item.new(model: PersonalDocumentLabel, path: :personal_document_labels_path)
+        end
+      ].compact_blank
+    },
+    info: {
+      heading: "admins.show.info",
+      items: [
+        Item.new(label: "json_api", path: :api_path),
+        Item.new(label: "navigation.imap_mails",
+          path: ->(_) { imap_mails_path(mailbox: "inbox") },
+          active_for: "mails/imap",
+          if: ->(_) { can?(:manage, Imap::Mail) }),
+        Item.new(label: "navigation.admin/event_feed",
+          path: :event_feed_path,
+          if: ->(_) { can?(:update, current_user) }),
+        Item.new(label: "hitobito_log_entries.index.title",
+          path: :hitobito_log_entries_path,
+          if: ->(_) { can?(:index, HitobitoLogEntry) })
+      ]
+    },
+    events: {
+      heading: "admins.show.events",
+      items: [
+        Item.new(model: Event::Kind, path: :event_kinds_path),
+        Item.new(model: Event::KindCategory, path: :event_kind_categories_path),
+        Item.new(model: QualificationKind, path: :qualification_kinds_path)
+      ]
+    },
+    people: {
+      heading: "admins.show.people",
+      items: [
+        Item.new(model: SelfRegistrationReason, path: :self_registration_reasons_path)
+      ]
+    }
+  }
+
+  # Unfiltered by visibility on purpose as evaluated on every page and only affects highlighting
+  def admin_active_for_paths
+    ADMIN_GROUPS.values.flat_map { |group| group[:items] }
+      .map { |item| item.active_for(self) }
+  end
+
+  def admin_current_group_key
+    ADMIN_GROUPS.find do |_key, group|
+      group[:items].any? { |item| item.visible?(self) && item.current?(self) }
+    end&.first
+  end
+
+  def admin_groups_by_heading
+    ADMIN_GROUPS.sort_by { |_key, group| t(group[:heading]) }
+  end
+
+  # A group's visible items, sorted by their translated label.
+  def admin_group_items(group)
+    group[:items].select { |item| item.visible?(self) }
+      .sort_by { |item| item.label(self) }
+  end
 
   def render_main_nav
     content_tag_nested(:ul, MAIN, class: "nav-left-list") do |options|
@@ -70,13 +127,17 @@ module NavigationHelper
 
   def main_nav_section(options)
     url = send(options[:url])
-    active = section_active?(url, options[:active_for], options[:inactive_for])
+    active = section_active?(url, resolve_active_for(options[:active_for]), options[:inactive_for])
     classes = "nav-left-section"
     classes += " active" if active
     content_tag(:li, class: classes) do
       concat(link_to(icon(options[:icon_name]) + I18n.t("navigation.#{options[:label]}"), url))
       concat(sheet.render_left_nav) if active && sheet.left_nav?
     end
+  end
+
+  def resolve_active_for(active_for)
+    active_for.is_a?(Proc) ? instance_eval(&active_for) : active_for
   end
 
   def nav(label, url, active_for = [], inactive_for = [])

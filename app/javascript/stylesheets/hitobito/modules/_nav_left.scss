@@ -88,11 +88,8 @@
   .divider {
     display: block;
     color: $gray-darker;
-    text-transform: uppercase;
-    font-size: 0.7rem;
     padding-left: $nav-left-padding-full;
-    margin-top: 1rem;
-    margin-left: 3px;
+    margin-top: 0.2rem;
   }
 
   .nav-left-section-link~.divider,

@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
+
 ## Version 2.10
 
 - Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module NavigationHelper
-  MAIN = [ # rubocop:disable Style/MutableConstant extended in wagons
+  MAIN = [
     {label: :groups,
      url: :groups_path,
      icon_name: "users",
@@ -46,7 +46,7 @@ module NavigationHelper
      if: ->(_) { can?(:update_settings, current_person) }}
   ]
 
-  ADMIN_GROUPS = { # rubocop:disable Style/MutableConstant extended in wagons
+  ADMIN_GROUPS = {
     main: {
       heading: "admins.show.main",
       items: [
@@ -58,12 +58,10 @@ module NavigationHelper
           path: :oauth_active_authorizations_path,
           if: ->(_) { current_user.oauth_applications.exists? }),
         Item.new(model: ActsAsTaggableOn::Tag, path: :tags_path),
-        Item.new(model: PersonalDocumentLabel,
-          path: :personal_document_labels_path,
-          if: ->(_) {
-            FeatureGate.enabled?("personal_documents") && can?(:index, PersonalDocumentLabel)
-          })
-      ]
+        FeatureGate.if("personal_documents") do
+          Item.new(model: PersonalDocumentLabel, path: :personal_document_labels_path)
+        end
+      ].compact_blank
     },
     info: {
       heading: "admins.show.info",

@@ -14,7 +14,7 @@ describe SocialAccountResource, type: :resource do
   describe "serialization" do
     let(:role) { roles(:bottom_member) }
     let!(:person) { role.person }
-    let!(:social_account) { Fabricate(:social_account, contactable: person, label: "Webseite") }
+    let!(:social_account) { Fabricate(:social_account, contactable: person, label: "Webseite", public: false) }
 
     context "without appropriate permission" do
       let(:user) { Fabricate(:person) }

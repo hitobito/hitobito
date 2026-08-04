@@ -63,5 +63,15 @@ RSpec.describe "people#index", type: :request do
       expect(response.status).to eq(200), response.body
       expect(response_body.dig(:included, 0, :type)).to eq "event_participations"
     end
+
+    it "does not return the public contacts of people which are not readable" do
+      other = Fabricate(:person)
+      phone_number = Fabricate(:phone_number, contactable: other, public: true)
+
+      jsonapi_get "/api/people", params: {include: "phone_numbers"}
+      expect(response.status).to eq(200), response.body
+      expect(d.map(&:id)).not_to include(other.id)
+      expect(json["included"].to_a.pluck("id")).not_to include(phone_number.id.to_s)
+    end
   end
 end

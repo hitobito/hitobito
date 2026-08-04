@@ -14,7 +14,7 @@ describe PhoneNumberResource, type: :resource do
   describe "serialization" do
     let(:role) { roles(:bottom_member) }
     let!(:person) { role.person }
-    let!(:phone_number) { Fabricate(:phone_number, contactable: person) }
+    let!(:phone_number) { Fabricate(:phone_number, contactable: person, public: false) }
 
     context "without appropriate permission" do
       let(:user) { Fabricate(:person) }

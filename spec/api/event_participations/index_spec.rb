@@ -127,6 +127,19 @@ describe "event_participations#index", type: :request do
           expect(person["attributes"]["additional_information"]).to eq "internal note"
           expect(person["attributes"]).to have_key("birthday")
         end
+
+        it "is exposed with all phone numbers" do
+          public_number = Fabricate(:phone_number, contactable: participant, public: true)
+          private_number = Fabricate(:phone_number, contactable: participant, public: false)
+
+          jsonapi_get "/api/event_participations",
+            params: {include: "participant.phone_numbers", filter: {event_id: event.id}}
+          expect(response.status).to eq(200), response.body
+
+          numbers = json["included"].to_a.select { |inc| inc["type"] == "phone_numbers" }
+          expect(numbers.pluck("id"))
+            .to match_array [public_number.id.to_s, private_number.id.to_s]
+        end
       end
 
       context "without participation details permission" do
@@ -142,6 +155,18 @@ describe "event_participations#index", type: :request do
           expect(person["attributes"]["first_name"]).to eq participant.first_name
           expect(person["attributes"]).not_to have_key("additional_information")
           expect(person["attributes"]).not_to have_key("birthday")
+        end
+
+        it "is exposed with public phone numbers only" do
+          public_number = Fabricate(:phone_number, contactable: participant, public: true)
+          Fabricate(:phone_number, contactable: participant, public: false)
+
+          jsonapi_get "/api/event_participations",
+            params: {include: "participant.phone_numbers", filter: {event_id: event.id}}
+          expect(response.status).to eq(200), response.body
+
+          numbers = json["included"].to_a.select { |inc| inc["type"] == "phone_numbers" }
+          expect(numbers.pluck("id")).to eq [public_number.id.to_s]
         end
       end
     end

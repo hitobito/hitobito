@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-.container
+.container{style: 'margin-left: 1rem'}
   .row.row-cols-1.row-cols-sm-2.row-cols-md-3.row-cols-lg-4
     - admin_groups_by_heading.each do |_key, group|
       - items = admin_group_items(group)

@@ -54,5 +54,47 @@ describe "event_participations#index", type: :request do
       expect(response.status).to eq(200), response.body
       expect(response_body.dig(:included)).to be_nil
     end
+
+    describe "participant without any role" do
+      let(:event) { events(:top_course) }
+      let(:participant) { Fabricate(:person, additional_information: "internal note") }
+      let!(:participation) do
+        Fabricate(:event_participation, event: event, participant: participant, active: true)
+      end
+
+      def included_people
+        json["included"].to_a.select { |inc| inc["type"] == "people" }
+      end
+
+      it "is not readable through the people endpoint" do
+        jsonapi_get "/api/people"
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).not_to include(participant.id)
+      end
+
+      it "is exposed as participant from the participations endpoint" do
+        jsonapi_get "/api/event_participations",
+          params: {include: "participant", filter: {event_id: event.id}}
+        expect(response.status).to eq(200), response.body
+        expect(included_people.pluck("id")).to include(participant.id.to_s)
+      end
+
+      it "is exposed as participant from the events endpoint" do
+        jsonapi_get "/api/events",
+          params: {include: "participations.participant", filter: {id: event.id}}
+        expect(response.status).to eq(200), response.body
+        expect(included_people.pluck("id")).to include(participant.id.to_s)
+      end
+
+      it "is exposed without roles" do
+        jsonapi_get "/api/event_participations",
+          params: {include: "participant.roles", filter: {event_id: event.id}}
+        expect(response.status).to eq(200), response.body
+
+        person = included_people.find { |inc| inc["id"] == participant.id.to_s }
+        expect(person["attributes"]["first_name"]).to eq participant.first_name
+        expect(person["relationships"]["roles"]["data"]).to be_empty
+      end
+    end
   end
 end

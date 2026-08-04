@@ -111,7 +111,7 @@ gem "sentry-delayed_job"
 
 # load after others because dependencies
 gem "kaminari"
-gem "graphiti-openapi", github: "puzzle/graphiti-openapi", tag: "standalone/0.6.7"
+gem "graphiti-openapi", github: "puzzle/graphiti-openapi", tag: "standalone/0.6.8"
 
 gem "active_storage_validations" # validate filesize, dimensions and content-type of uploads
 

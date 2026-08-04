@@ -43,7 +43,7 @@ class PersonResource < ApplicationResource
     @object.decorate.picture_full_url
   end
   attribute :updated_at, :datetime
-  attribute :additional_information, :string
+  attribute :additional_information, :string, readable: :show_details?
 
   belongs_to :primary_group, resource: GroupResource, writable: false
 
@@ -75,12 +75,11 @@ class PersonResource < ApplicationResource
   private
 
   def show_details?(model_instance)
-    can?(:show_details, model_instance)
+    can?(:show_details, model_instance) ||
+      current_ability.user_context.participation_details_person_ids.include?(model_instance.id)
   end
 
   def write_details?
-    # no model_instance method argument is given when writable is called,
-    # so we have to access current entry by controller context
     can?(:show_details, context.entry) && can?(:update, context.entry)
   end
 end

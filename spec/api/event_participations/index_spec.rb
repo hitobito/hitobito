@@ -66,6 +66,11 @@ describe "event_participations#index", type: :request do
         json["included"].to_a.select { |inc| inc["type"] == "people" }
       end
 
+      def included_additional_information
+        included_people.find { |inc| inc["id"] == participant.id.to_s }
+          .dig("attributes", "additional_information")
+      end
+
       it "is not readable through the people endpoint" do
         jsonapi_get "/api/people"
         expect(response.status).to eq(200), response.body
@@ -94,6 +99,50 @@ describe "event_participations#index", type: :request do
         person = included_people.find { |inc| inc["id"] == participant.id.to_s }
         expect(person["attributes"]["first_name"]).to eq participant.first_name
         expect(person["relationships"]["roles"]["data"]).to be_empty
+      end
+
+      it "does not cache the service token's permissions across requests" do
+        read_only_token = service_token.dup
+        read_only_token.update!(name: "ReadOnly", permission: :layer_and_below_read, token: nil)
+
+        jsonapi_get "/api/event_participations",
+          params: {include: "participant", filter: {event_id: event.id}}
+        expect(response.status).to eq(200), response.body
+        expect(included_additional_information).to eq "internal note"
+
+        jsonapi_get "/api/event_participations",
+          params: {include: "participant", filter: {event_id: event.id}},
+          headers: {"X-TOKEN" => read_only_token.token}
+        expect(response.status).to eq(200), response.body
+        expect(included_additional_information).to be_nil
+      end
+
+      context "with participation details permission" do
+        it "is exposed with details" do
+          jsonapi_get "/api/event_participations",
+            params: {include: "participant", filter: {event_id: event.id}}
+          expect(response.status).to eq(200), response.body
+
+          person = included_people.find { |inc| inc["id"] == participant.id.to_s }
+          expect(person["attributes"]["additional_information"]).to eq "internal note"
+          expect(person["attributes"]).to have_key("birthday")
+        end
+      end
+
+      context "without participation details permission" do
+        # layer_and_below_read grants :show on the participation, but not :show_details
+        before { service_token.update!(permission: :layer_and_below_read) }
+
+        it "is exposed without details" do
+          jsonapi_get "/api/event_participations",
+            params: {include: "participant", filter: {event_id: event.id}}
+          expect(response.status).to eq(200), response.body
+
+          person = included_people.find { |inc| inc["id"] == participant.id.to_s }
+          expect(person["attributes"]["first_name"]).to eq participant.first_name
+          expect(person["attributes"]).not_to have_key("additional_information")
+          expect(person["attributes"]).not_to have_key("birthday")
+        end
       end
     end
   end

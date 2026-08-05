@@ -141,7 +141,6 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
   scope :with_recipients, -> { extending(PreloadRecipients) }
 
-  # Partitions invoices into three groups based on origin
   TYPE_SCOPES = %i[
     standalone
     from_standalone_invoice_run

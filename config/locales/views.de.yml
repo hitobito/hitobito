@@ -1115,7 +1115,7 @@ de:
       invoice_type:
         standalone: Einzelrechnungen
         from_standalone_invoice_run: aus Rechnungsläufen
-        from_template_invoice_run: aus Rechnungsläufen mit Vorlage
+        from_template_invoice_run: aus Sammelrechnungen
     add: Externe Rechnung erstellen
     add_payments: Zahlungen erfassen
     issued: Rechnung gestellt

@@ -54,7 +54,11 @@ class TokenAbility < Ability
   def can_register_people? = write_permission? && acceptable?(:register_people)
 
   def registerable_groups
-    groups = case token.permission.to_sym
+    registerable_groups_scope.self_registration_active.pluck(:id)
+  end
+
+  def registerable_groups_scope
+    case token.permission.to_sym
     when :layer_and_below_full
       token.layer.self_and_descendants
     when :layer_full
@@ -62,7 +66,5 @@ class TokenAbility < Ability
     else
       Group.none
     end
-
-    groups.self_registration_active.pluck(:id)
   end
 end

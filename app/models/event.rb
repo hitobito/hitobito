@@ -253,6 +253,20 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   serialize :required_contact_attrs, type: Array, coder: NilArrayCoder
   serialize :hidden_contact_attrs, type: Array, coder: NilArrayCoder
 
+  ### SCOPES
+
+  scope :future, -> {
+    joins(:dates).where(
+      "event_dates.start_at > :now OR event_dates.finish_at > :now", now: Time.zone.now
+    ).distinct
+  }
+
+  scope :application_period_open, -> {
+    today = Time.zone.today
+    where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today)
+      .where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today)
+  }
+
   ### CLASS METHODS
 
   class << self
@@ -331,9 +345,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     # Events that are open for applications.
     def application_possible
-      today = Time.zone.today
-      where("events.application_opening_at IS NULL OR events.application_opening_at <= ?", today)
-        .where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today)
+      application_period_open
         .where("events.maximum_participants IS NULL OR events.maximum_participants <= 0 OR " \
             "events.participant_count < events.maximum_participants")
     end

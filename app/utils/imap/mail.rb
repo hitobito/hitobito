@@ -14,7 +14,7 @@ class Imap::Mail
   attr_accessor :net_imap_mail
 
   delegate :subject, :sender, to: :envelope
-  delegate :message_id, :final_recipient, :diagnostic_code, to: :mail
+  delegate :message_id, :final_recipient, to: :mail
 
   def self.build(net_imap_mail)
     entry = new
@@ -99,10 +99,28 @@ class Imap::Mail
   end
 
   def bounce?
-    mail.bounced? || mail.diagnostic_code.present?
+    mail.bounced? || diagnostic_code.present?
+  end
+
+  def diagnostic_code
+    mail.diagnostic_code.presence || all_diagnostic_codes
   end
 
   private
+
+  def all_diagnostic_codes
+    codes = delivery_status_parts.flat_map do |part|
+      # very abbreviated version of the mail-gem's #diagnostic_code, from Mail::Part
+      parsed = Mail::Header.new(part.raw_source)
+      Array(parsed["diagnostic-code"]).map(&:value)
+    end.compact
+
+    codes.one? ? codes.first : codes
+  end
+
+  def delivery_status_parts
+    mail.parts.select { |part| part.mime_type == "message/delivery-status" }
+  end
 
   def envelope
     @net_imap_mail.attr["ENVELOPE"]

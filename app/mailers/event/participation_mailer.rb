@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipationMailer < ApplicationMailer
+  include Event::ReplyToContact
+
   CONTENT_CONFIRMATION = "event_application_confirmation"
   CONTENT_NOTIFICATION = "event_application_notification"
   CONTENT_NOTIFICATION_PENDING = "event_application_notification_pending"

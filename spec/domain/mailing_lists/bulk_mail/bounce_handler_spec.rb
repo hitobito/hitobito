@@ -208,6 +208,16 @@ describe MailingLists::BulkMail::BounceHandler do
     it "may return unknown" do
       expect(bounce_handler.analyze_diagnostic_codes(["Iiih, Mehl!"])).to eq :unknown
     end
+
+    it "does not raise with mixed known and unknown codes" do
+      codes = ["550 No such user", "Iiih, Mehl!"]
+      expect { bounce_handler.analyze_diagnostic_codes(codes) }.not_to raise_error
+    end
+
+    it "picks known action ahead of unknown when both present" do
+      codes = ["Iiih, Mehl!", "550 No such user"]
+      expect(bounce_handler.analyze_diagnostic_codes(codes)).to eq :block
+    end
   end
 
   describe "#analyze_diagnostic_code can return" do

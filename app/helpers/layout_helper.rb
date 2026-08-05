@@ -24,6 +24,14 @@ module LayoutHelper
     true
   end
 
+  def meta_tags_from_settings
+    tags = Array.wrap(Settings.application&.meta_tags).filter_map do |attrs|
+      next if attrs.blank?
+      tag(:meta, attrs, true)
+    end
+    safe_join(tags, "\n")
+  end
+
   # render a single button
   def action_button(label, url, icon = nil, options = {})
     if @in_button_group || options[:in_button_group]

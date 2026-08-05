@@ -133,6 +133,13 @@ en:
         success: "%{model} was successfully deleted."
         failure: "%{model} could not be deleted."
 
+  admins:
+    show:
+      main: Allgemein
+      info: Information
+      events: Anlässe und Kurse
+      people: Mitgliederverwaltung
+
   blocked:
     index:
       title: Login blocked

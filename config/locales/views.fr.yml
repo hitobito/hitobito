@@ -134,6 +134,13 @@ fr:
         success: "%{model} a été effacé avec succès."
         failure: "%{model} n'a pas pu être effacé."
 
+  admins:
+    show:
+      main: Allgemein
+      info: Information
+      events: Anlässe und Kurse
+      people: Mitgliederverwaltung
+
   blocked:
     index:
       title: Login bloqué

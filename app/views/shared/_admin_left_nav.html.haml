@@ -1,44 +1,18 @@
--#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
 %ul.nav-left-list
-  - if can?(:index, LabelFormat)
-    = nav LabelFormat.model_name.human(count: 2), label_formats_path, %w(label_formats)
-  - if can?(:update, current_user)
-    = nav t('navigation.admin/event_feed'), event_feed_path, %w(event_feed)
-  - if can?(:index, CustomContent)
-    = nav CustomContent.model_name.human(count: 2), custom_contents_path, %w(custom_contents)
-  - if can?(:index, HelpText)
-    = nav HelpText.model_name.human(count: 2), help_texts_path, %w(help_texts)
-  - if can?(:index, SelfRegistrationReason)
-    = nav SelfRegistrationReason.model_name.human(count: 2), self_registration_reasons_path, %w(self_registration_reasons)
-
-  = render_extensions(:admin_nav_main)
-
-  - if can?(:index, Event::Kind)
-    = nav Event::Kind.model_name.human(count: 2), event_kinds_path, %w(event_kinds)
-  - if can?(:index, Event::KindCategory)
-    = nav Event::KindCategory.model_name.human(count: 2), event_kind_categories_path, %w(event_kind_categories)
-  - if can?(:index, QualificationKind)
-    = nav QualificationKind.model_name.human(count: 2), qualification_kinds_path, %w(qualification_kinds)
-
-  = render_extensions(:admin_nav_event)
-
-  - if can?(:index, Oauth::Application)
-    = nav Oauth::Application.model_name.human(count: 2), oauth_applications_path, %w(oauth_applications)
-  - if current_user.oauth_applications.exists?
-    = nav t('navigation.admin/oauth_authorizations'), oauth_active_authorizations_path, %w(oauth_active_authorizations)
-  - if can?(:index, ActsAsTaggableOn::Tag)
-    = nav ActsAsTaggableOn::Tag.model_name.human(count: 2), tags_path, %w(tags)
-  - if FeatureGate.enabled?("personal_documents") && can?(:index, PersonalDocumentLabel)
-    = nav PersonalDocumentLabel.model_name.human(count: 2), personal_document_labels_path, %w(personal_document_labels)
-  - if can?(:manage, Imap::Mail)
-    = nav t('navigation.imap_mails'), imap_mails_path(mailbox: 'inbox'), %w(mails/imap_mails mails/bounces)
-  - if can?(:index, HitobitoLogEntry)
-    = nav t('hitobito_log_entries.index.title'), hitobito_log_entries_path
-
-  = render_extensions(:admin_nav_kinds)
-
-  = nav t('json_api'), api_path
+  - current_group_key = admin_current_group_key
+  - admin_groups_by_heading.each do |key, group|
+    - items = admin_group_items(group)
+    - next if items.empty?
+    - dom_id = "admin-nav-group-#{key}"
+    %li.divider
+      %a.inline{href: "##{dom_id}", data: {bs_toggle: :collapse}}
+        = t(group[:heading])
+    %li.collapse{id: dom_id, class: (key == current_group_key ? "show" : nil)}
+      %ul.nav-left-list
+        - items.each do |item|
+          = nav item.label(self), item.url(self), Array(item.active_for(self))

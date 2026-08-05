@@ -134,6 +134,13 @@ it:
         success: "%{model} è stato cancellato con successo."
         failure: "%{model} non può essere cancellato."
 
+  admins:
+    show:
+      main: Allgemein
+      info: Information
+      events: Anlässe und Kurse
+      people: Mitgliederverwaltung
+
   blocked:
     index:
       title: Login bloccato

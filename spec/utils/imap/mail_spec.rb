@@ -41,6 +41,33 @@ describe Imap::Mail do
     end
   end
 
+  describe "#generic_bounce?" do
+    let(:helpful_return_imap_mail) { Imap::Mail.new }
+    let(:helpful_return_mail) {
+      Mail.read_from_string(Rails.root.join("spec", "fixtures", "email", "helpful-return.eml").read)
+    }
+
+    before do
+      allow(helpful_return_imap_mail).to receive(:mail).and_return(helpful_return_mail)
+    end
+
+    it "is a bounce" do
+      expect(helpful_return_imap_mail).to be_bounce
+    end
+
+    it "has no hitobito message uid" do
+      expect(helpful_return_imap_mail.bounce_hitobito_message_uid).to be_blank
+    end
+
+    it "is a generic bounce" do
+      expect(helpful_return_imap_mail).to be_generic_bounce
+    end
+
+    it "has a diagnostic-code" do
+      expect(helpful_return_imap_mail.diagnostic_code).to match(/user is over quota/)
+    end
+  end
+
   describe "X-Original-To header" do
     let(:imap_mail) { Imap::Mail.build(imap_fetch_data) }
     let(:imap_fetch_data) do

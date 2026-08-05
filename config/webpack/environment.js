@@ -1,55 +1,76 @@
-const { environment } = require('@rails/webpacker')
-const { sync: globSync } = require('glob')
-const { basename, join: pathJoin, resolve: pathResolve } = require('path')
-const { extensions } = require('@rails/webpacker/package/config')
+const { environment } = require("@rails/webpacker")
+const { sync: globSync } = require("glob")
+const { basename, join: pathJoin, resolve: pathResolve } = require("path")
+const { extensions } = require("@rails/webpacker/package/config")
 
-const pathCompleteExtname = require('path-complete-extname')
-const webpack = require('webpack')
-const wagonFile = require('./loaders/wagon-file')
-const coffee = require('./loaders/coffee')
-const erb = require('./loaders/erb')
+const pathCompleteExtname = require("path-complete-extname")
+const webpack = require("webpack")
+const wagonFile = require("./loaders/wagon-file")
+const coffee = require("./loaders/coffee")
+const erb = require("./loaders/erb")
 
 // Replace default file loader with custom wagon-aware file loader
-const fileLoaderIndex = environment.loaders.findIndex(l => l.key === 'file');
+const fileLoaderIndex = environment.loaders.findIndex(l => l.key === "file");
 environment.loaders[fileLoaderIndex].value = wagonFile
 
 // Transpile CoffeeScript
-environment.loaders.prepend('coffee', coffee)
+environment.loaders.prepend("coffee", coffee)
 
 // Allow to use .js.erb and .scss.erb templates
-environment.loaders.append('erb', erb)
+environment.loaders.append("erb", erb)
 
 // Bundle images referenced within SASS files
-const sass = environment.loaders.find(l => l.key === 'sass').value
-sass.use.splice(-1, 0, { loader: 'resolve-url-loader' })
+const sass = environment.loaders.find(l => l.key === "sass").value
+sass.use.splice(-1, 0, { loader: "resolve-url-loader" })
 
 // Remove postcss-loader to avoid a parsing bug with PostCSS
 // 7.0.39. This would be fixed with 8.4.31, but @rails/webpacker is
 // not maintained anymore, so can't update.
-sass.use = sass.use.filter(({ loader }) => loader !== 'postcss-loader')
+sass.use = sass.use.filter(({ loader }) => loader !== "postcss-loader")
+
+// Let wagon files resolve imports (e.g. "bootstrap/scss/...") against core's node_modules
+environment.resolvedModules.append("core_node_modules", pathResolve("node_modules"))
+
+// Enable modern JS syntax for wagon JS files e.g. class fields in Stimulus controllers
+const wagonJsDirPatterns = [
+  pathJoin("..", "hitobito_*", "app", "javascript"),
+  pathJoin("vendor", "wagons", "hitobito_*", "app", "javascript"),
+]
+const wagonJsDirs = wagonJsDirPatterns.flatMap((pattern) => globSync(pattern)).map((dir) => pathResolve(dir))
+const babel = environment.loaders.find(l => l.key === "babel").value
+babel.include = [...babel.include, ...wagonJsDirs]
 
 // Old-school libraries must be made globally accessible by exposing
 // them to the window object.
-environment.loaders.append('expose query to window object', {
-  test: require.resolve('jquery'),
+environment.loaders.append("expose query to window object", {
+  test: require.resolve("jquery"),
   use: [{
-    loader: 'expose-loader',
+    loader: "expose-loader",
     options: {
-      exposes: ['jQuery', '$'],
+      exposes: ["jQuery", "$"],
     }
   }]
 })
-environment.loaders.append('expose moment to window object', {
-  test: require.resolve('moment'),
+environment.loaders.append("expose moment to window object", {
+  test: require.resolve("moment"),
   use: [{
-    loader: 'expose-loader',
+    loader: "expose-loader",
     options: {
-      exposes: 'moment',
+      exposes: "moment",
     }
   }]
 })
 
-environment.plugins.append('exclude unused moment locales',
+// Detect whether wagon directories are mounted as siblings (local dev/test) or
+// have been moved to vendor/wagons (CI and production Docker builds). This flag
+// is evaluated once at compile time by DefinePlugin so webpack can dead-code-
+// eliminate the unused require.context branch and avoid scanning the filesystem root.
+const hasSiblingWagons = globSync(pathJoin("..", "hitobito_*", "app", "javascript")).length > 0
+environment.plugins.append("sibling-wagons-flag",
+  new webpack.DefinePlugin({ WEBPACK_SIBLING_WAGONS: JSON.stringify(hasSiblingWagons) })
+)
+
+environment.plugins.append("exclude unused moment locales",
   new webpack.ContextReplacementPlugin(
     /moment[\\\/]locale$/,
     /^\.\/(en|de|fr|it)$/
@@ -63,15 +84,16 @@ environment.plugins.append('exclude unused moment locales',
 // vendor wagons aswell, instead of the local setup
 const wagonExtGlob = extensions.length === 1
   ? `**/*${extensions[0]}`
-  : `**/*{${extensions.join(',')}}`
+  : `**/*{${extensions.join(",")}}`
 
 const wagonPacksPatterns = [
-  pathJoin('..', 'hitobito_*', 'app', 'javascript', 'packs', wagonExtGlob),
-  pathJoin('vendor', 'wagons', 'hitobito_*', 'app', 'javascript', 'packs', wagonExtGlob),
+  pathJoin("..", "hitobito_*", "app", "javascript", "packs", wagonExtGlob),
+  pathJoin("vendor", "wagons", "hitobito_*", "app", "javascript", "packs", wagonExtGlob),
 ]
 wagonPacksPatterns.flatMap((pattern) => globSync(pattern)).forEach((packPath) => {
   const name = basename(packPath, pathCompleteExtname(packPath))
-  environment.entry.set(name, pathResolve(packPath))
+  const existingEntry = environment.entry.get(name) || []
+  environment.entry.set(name, [...existingEntry, pathResolve(packPath)])
 })
 
 module.exports = environment

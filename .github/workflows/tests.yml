@@ -18,7 +18,7 @@ on:
 
 jobs:
   rubocop:
-    runs-on: 'ubuntu-22.04'
+    runs-on: 'ubuntu-24.04'
     env:
       RAILS_DB_ADAPTER: nulldb
 
@@ -37,7 +37,7 @@ jobs:
           bundle exec rake rubocop
 
   main-specs:
-    runs-on: 'ubuntu-22.04'
+    runs-on: 'ubuntu-24.04'
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -83,7 +83,7 @@ jobs:
           bundle exec rake ci:setup:env spec:without_features
 
   feature-specs:
-    runs-on: 'ubuntu-22.04'
+    runs-on: 'ubuntu-24.04'
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -136,7 +136,7 @@ jobs:
             tmp/capybara
 
   pending-specs:
-    runs-on: 'ubuntu-22.04'
+    runs-on: 'ubuntu-24.04'
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql

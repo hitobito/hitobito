@@ -44,4 +44,8 @@ describe Event::RegisterMailer do
       expect(mail.to).to eq [person.email]
     end
   end
+
+  context "reply_to" do
+    it_behaves_like "reply_to_contact"
+  end
 end

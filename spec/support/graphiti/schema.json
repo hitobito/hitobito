@@ -2790,8 +2790,8 @@
         },
         "additional_information": {
           "type": "string",
-          "readable": true,
-          "writable": true,
+          "readable": "guarded",
+          "writable": "guarded",
           "description": null
         }
       },

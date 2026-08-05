@@ -28,7 +28,8 @@ class Event::ParticipationResource < ApplicationResource
   belongs_to :event
   polymorphic_belongs_to :participant do
     group_by(:participant_type) do
-      on(:Person)
+      on(:Person).belongs_to :person, resource: PersonResource,
+        base_scope: ::Person.all # hitobito/hitobito_pbs#466
       on(:"Event::Guest")
     end
   end

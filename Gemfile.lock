@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/puzzle/graphiti-openapi.git
-  revision: f4ee80f5eb26b05c0033805d6e4f4e2407a49c61
-  tag: standalone/0.6.7
+  revision: 8bf9aa028fb05f0eaf8c46501ac7c7ecc8477da8
+  tag: standalone/0.6.8
   specs:
     graphiti-openapi (0.6.6)
       activemodel

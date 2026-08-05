@@ -3,6 +3,7 @@
 ## unreleased
 
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
+- In der JSON:API können die gleichen Personendaten von Eventteilnehmern abgerufen werden wie im UI (pbs#466)
 
 ## Version 2.10
 

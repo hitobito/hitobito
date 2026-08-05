@@ -75,15 +75,18 @@ RSpec.describe "events#index", type: :request do
       let(:event) { Event.first }
       let(:params) { {include: "contact"} }
 
-      it "returns nothing without people scope" do
+      it "returns the contact even without people scope" do
         event.update_attribute(:contact_id, people(:bottom_member).id)
 
         make_request
 
         expect(response.status).to eq(200)
         data = json["data"]
-        expect(data[0]["relationships"]["contact"]["data"]).to be_nil
-        expect(json["included"]).to be_nil
+        contact_id = data[0]["relationships"]["contact"]["data"]["id"]
+        contact = json["included"].first { |inc| inc["type"] == "person" && inc.id == contact_id }
+        expect(contact["attributes"]["first_name"]).to eq("Bottom")
+        expect(contact["attributes"]["last_name"]).to eq("Member")
+        expect(contact["attributes"]["email"]).to eq(people(:bottom_member).email)
       end
 
       describe "with people scope" do
@@ -175,12 +178,14 @@ RSpec.describe "events#index", type: :request do
           expect(guest_data["attributes"]["email"]).to eq guest.email
         end
 
-        it "may not see included person if token has no permission" do
+        it "may see included person even if token has no general people permission" do
           service_token.update(people: false)
           make_request
           expect(response.status).to eq(200), response.body
           expect(json["data"][0]["relationships"]["participations"]["data"].size).to eq(1)
-          expect(json["included"][0]["relationships"]["participant"]["data"]).to be_nil
+          expect(json["included"][0]["relationships"]["participant"]["data"]["type"]).to eq "people"
+          expect(json["included"][0]["relationships"]["participant"]["data"]["id"]).to eq bottom_member.id.to_s
+          expect(json["included"].last["id"]).to eq bottom_member.id.to_s
         end
       end
     end

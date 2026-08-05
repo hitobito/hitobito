@@ -21,5 +21,11 @@
           = direct_filter_date(:from, t('.from'), value: filter_params[:from], data: { submit: true })
         .mb-3
           = direct_filter_date(:to, t('.to'), value: filter_params[:to], data: {submit: true })
+    - if available_invoice_types.many?
+      .d-lg-flex.justify-content-between
+        .d-lg-inline-flex.gap-3.me-4
+          - available_invoice_types.each do |type|
+            = direct_filter_inline_checkbox(type, t("invoices.filter.invoice_type.#{type}"),
+              value: filter_params[type], data: { submit: true })
 
 - params[:q] = nil # Reset param so quicksearch filter does not get populated

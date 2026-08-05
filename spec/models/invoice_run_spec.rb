@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2022-2026, Die Mitte Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
 require "spec_helper"
 
 describe InvoiceRun do
@@ -6,6 +13,37 @@ describe InvoiceRun do
   let(:group) { groups(:top_layer) }
   let(:person) { people(:top_leader) }
   let(:other_person) { people(:bottom_member) }
+
+  describe "::scopes" do
+    let(:template) do
+      PeriodInvoiceTemplate.create!(
+        name: "tmpl",
+        group: group,
+        recipient_source: GroupsFilter.create!(parent: group, group_type: group.class.name,
+          active_at: Time.zone.today),
+        start_on: 1.year.ago,
+        end_on: Time.zone.today,
+        items_attributes: [{
+          name: "Mitgliedsbeitrag",
+          type: PeriodInvoiceTemplate::RoleCountItem.name,
+          dynamic_cost_parameters: {unit_cost: "5.00", role_types: [Group::TopGroup::Leader.name]}
+        }]
+      )
+    end
+
+    it ".standalone returns invoice_runs without a period_invoice_template" do
+      subject.update!(group: group, title: :title, recipient_source: PeopleFilter.new)
+      expect(InvoiceRun.standalone).to include subject
+      expect(InvoiceRun.from_template).not_to include subject
+    end
+
+    it ".from_template returns invoice_runs with a period_invoice_template" do
+      subject.update!(group: group, title: :title, recipient_source: template.recipient_source,
+        period_invoice_template: template)
+      expect(InvoiceRun.from_template).to include subject
+      expect(InvoiceRun.standalone).not_to include subject
+    end
+  end
 
   describe "recipients" do
     let(:leader) { people(:top_leader) }

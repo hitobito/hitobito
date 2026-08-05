@@ -151,6 +151,23 @@ describe Contactables::InvoicesController do
           expect(dom).to have_field("from", with: "1.1.#{current_year}")
           expect(dom).to have_field("to", with: "31.12.#{current_year}")
         end
+
+        it "does not render invoice type checkboxes" do
+          get :index, params: {group_id: group.id, person_id: top_leader.id}
+          Invoice::TYPE_SCOPES.each do |type|
+            expect(dom).not_to have_field(type.to_s)
+          end
+        end
+
+        it "does not restrict by invoice type when the filter form is submitted" do
+          invoices(:invoice).update!(invoice_run: Fabricate(:invoice_run))
+          get :index, params: {
+            group_id: group.id, person_id: top_leader.id,
+            from: "1.1.#{current_year}", to: "31.12.#{current_year}"
+          }
+          expect(response).to be_successful
+          expect(assigns(:invoices)).to match_array invoices(:invoice, :sent)
+        end
       end
     end
   end

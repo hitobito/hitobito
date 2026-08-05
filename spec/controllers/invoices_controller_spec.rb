@@ -69,17 +69,17 @@ describe InvoicesController do
 
       get :index, params: {group_id: group.id}
 
-      expect_query_count("Invoice Load": 1, "Person Load": 1, "Group Load": 1) do
+      expect do
         assigns(:invoices).to_a
-      end
+      end.to make.db_queries.with("Invoice Load" => 1, "Person Load" => 1, "Group Load" => 1)
 
       invoices = assigns(:invoices).to_a
 
-      expect_query_count do
+      expect {
         invoices.each do |invoice|
           invoice.recipient.to_s
         end
-      end.to eq 0 # recipients are preloaded, so no additional queries
+      }.to make(0).db_queries # recipients are preloaded, so no additional queries
     end
 
     it "finds invoices by title" do
@@ -181,6 +181,31 @@ describe InvoicesController do
       invoice.update(due_at: 2.weeks.ago)
       get :index, params: {group_id: group.id, due_since: :one_week}
       expect(assigns(:invoices)).to have(1).item
+    end
+
+    context "invoice type filter" do
+      let(:plain_run) { Fabricate(:invoice_run) }
+
+      let!(:from_plain_run_invoice) do
+        Fabricate(:invoice, group: invoice.group, invoice_run: plain_run)
+      end
+
+      it "shows invoices of every type by default" do
+        get :index, params: {group_id: group.id}
+        expect(assigns(:invoices)).to include(invoice, from_plain_run_invoice)
+      end
+
+      it "excludes invoices from runs when from_standalone_invoice_run is deselected" do
+        get :index, params: {group_id: group.id, from_standalone_invoice_run: "0"}
+        expect(assigns(:invoices)).to include invoice
+        expect(assigns(:invoices)).not_to include from_plain_run_invoice
+      end
+
+      it "excludes standalone invoices when standalone is deselected" do
+        get :index, params: {group_id: group.id, standalone: "0"}
+        expect(assigns(:invoices)).not_to include invoice
+        expect(assigns(:invoices)).to include from_plain_run_invoice
+      end
     end
 
     it "ignores page param when passing in ids" do
@@ -310,6 +335,22 @@ describe InvoicesController do
         get :index, params: {group_id: group.id}
         expect(dom).to have_field("from", with: "1.1.#{current_year}")
         expect(dom).to have_field("to", with: "31.12.#{current_year}")
+      end
+
+      it "renders no invoice type checkboxes when the group only has one type of invoice" do
+        get :index, params: {group_id: group.id}
+        Invoice::TYPE_SCOPES.each do |type|
+          expect(dom).not_to have_field(type.to_s)
+        end
+      end
+
+      it "renders a checkbox per type present, checked by default, once several types exist" do
+        Fabricate(:invoice, group: invoice.group, invoice_run: Fabricate(:invoice_run))
+
+        get :index, params: {group_id: group.id}
+        expect(dom).to have_field("Einzelrechnungen", checked: true)
+        expect(dom).to have_field("from_standalone_invoice_run", checked: true)
+        expect(dom).not_to have_field("from_template_invoice_run")
       end
     end
   end

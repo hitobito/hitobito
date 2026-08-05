@@ -12,6 +12,11 @@ Fabricator(:invoice) do
   recipient_country { Faker::Address.country }
 end
 
+Fabricator(:invoice_run) do
+  title { Faker::Name.name }
+  recipient_source { PeopleFilter.new }
+end
+
 Fabricator(:invoice_item) do
   name { Faker::Commerce.product_name }
   unit_cost { Faker::Number.between(from: 0.25, to: 1200.0).round(2) }

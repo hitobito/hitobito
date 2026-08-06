@@ -1112,6 +1112,10 @@ it:
         one_day: Ieri
         one_week: Fra una settimana
         one_month: Fra un mese
+      invoice_type:
+        standalone: Einzelrechnungen
+        from_standalone_invoice_run: aus Rechnungsläufen
+        from_template_invoice_run: aus Sammelrechnungen
     add: Redigere una fattura esterna
     add_payments: Inserire un pagamento
     issued: Fattura emessa
@@ -1566,7 +1570,7 @@ it:
     admin/oauth_authorizations: "Autorizzazioni OAuth"
     imap_mails: "Mail e rimbalzi"
     invoices: "Fatture"
-    invoices/single: "Singole fatture"
+    invoices/single: "Rechnungen"
     invoices/evaluations: "Estratto conto"
     payments: "Entrate pagamenti"
 

@@ -631,86 +631,194 @@ describe Export::Pdf::Invoice do
     end
 
     context "multiple invoices" do
+      let(:invoice_one) { invoices(:invoice) }
+      let(:invoice_two) { invoices(:sent) }
+
+      let(:person_one) { people(:top_leader) }
+      let(:person_two) { people(:bottom_member) }
+
       let(:pdf) {
-        described_class.render_multiple([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
-          articles: true, reminders: false)
+        described_class.render(
+          ::Invoice.find_by_ids_keeping_order([invoice_one.id, invoice_two.id]),
+          payment_slip: true, articles: true, reminders: false
+        )
       }
 
       before do
         person.update!(language: :fr)
-        invoice.recipient = person
+        invoice_one.update!(recipient: person)
+
+        invoice_two.update!(recipient: person_two)
       end
 
       it "renders multiple invoices each with individual language of recipient" do
         invoice_text = [
           [347, 685, "No. de facture:"],
-          [453, 685, "1-10"],
-          [347, 672, "Date de la facture:"],
-          [453, 672, "26.09.2022"],
-          [347, 659, "Échue le:"],
-          [453, 659, "26.10.2022"],
-          [347, 646, "Auteur de la facture:"],
-          [453, 646, "Top Leader"],
-          [347, 632, "No TVA:"],
-          [453, 632, "CH 1234"],
-          [57, 686, "Max Mustermann"],
-          [57, 674, "Musterweg 2"],
-          [57, 662, "8000 Alt Tylerland"],
-          [57, 537, "articles de factures"],
-          [405, 537, "Quantité"],
-          [473, 537, "Prix"],
-          [505, 537, "Montant"],
-          [389, 522, "Montant"],
-          [506, 522, "0.00 CHF"],
-          [389, 504, "montant total"],
-          [490, 504, "1'500.00 CHF"],
-          [14, 275, "Récépissé"],
-          [14, 251, "Compte/payable à"],
-          [14, 242, "CH93 0076 2011 6238 5295 7"],
-          [14, 233, "Acme Corp"],
-          [14, 225, "Hallesche Str. 37"],
-          [14, 216, "3007 Hinterdupfing"],
-          [14, 197, "Numéro de référence"],
-          [14, 189, "00 00834 96356 70000 00000 00019"],
-          [14, 170, "Payable par"],
-          [14, 161, "Max Mustermann"],
-          [14, 152, "Musterweg 2"],
-          [14, 144, "8000 Alt Tylerland"],
-          [14, 89, "Devise"],
-          [71, 89, "Montant"],
-          [14, 77, "CHF"],
-          [71, 77, "1 500.00"],
-          [106, 39, "Point de dépôt"],
-          [190, 275, "Section paiement"],
-          [190, 88, "Devise"],
-          [247, 88, "Montant"],
-          [190, 76, "CHF"],
-          [247, 76, "1 500.00"],
-          [346, 276, "Compte/payable à"],
-          [346, 265, "CH93 0076 2011 6238 5295 7"],
-          [346, 254, "Acme Corp"],
-          [346, 244, "Hallesche Str. 37"],
-          [346, 233, "3007 Hinterdupfing"],
-          [346, 212, "Numéro de référence"],
-          [346, 201, "00 00834 96356 70000 00000 00019"],
-          [346, 180, "Payable par"],
-          [346, 169, "Max Mustermann"],
-          [346, 158, "Musterweg 2"],
-          [346, 147, "8000 Alt Tylerland"],
-          [57, 537, "Rechnungsartikel"],
-          [412, 537, "Anzahl"],
-          [469, 537, "Preis"],
-          [512, 537, "Betrag"],
-          [405, 522, "Zwischenbetrag"],
-          [506, 522, "0.00 CHF"],
-          [405, 504, "Gesamtbetrag"],
-          [506, 504, "0.00 CHF"]
+          [429, 685, "376803389-2"],
+          [57, 686, "Top Leader"],
+          [57, 674, "Greatstreet 345"],
+          [57, 662, "3456 Greattown"],
+          [57, 554, "Person Invoice"],
+          [57, 521, "articles de factures"],
+          [355, 521, "Quantité"],
+          [423, 521, "Prix"],
+          [455, 521, "Montant"],
+          [523, 521, "TVA"],
+          [57, 506, "pens"],
+          [383, 506, "3"],
+          [422, 506, "1.50"],
+          [472, 506, "4.50"],
+          [520, 506, "8.0%"],
+          [57, 491, "pins"],
+          [383, 491, "1"],
+          [422, 491, "0.50"],
+          [472, 491, "0.50"],
+          [405, 476, "Montant"],
+          [506, 476, "5.00 CHF"],
+          [405, 461, "TVA"],
+          [506, 461, "0.35 CHF"],
+          [405, 443, "montant total"],
+          [506, 443, "5.35 CHF"],
+          [72, 171, "376803389-4"],
+          [252, 171, "376803389-4"],
+          [2, 145, ""],
+          [17, 145, ""],
+          [32, 145, ""],
+          [46, 145, ""],
+          [61, 145, ""],
+          [75, 145, ""],
+          [90, 145, ""],
+          [105, 145, "5"],
+          [133, 145, "3"],
+          [148, 145, "5"],
+          [180, 145, ""],
+          [195, 145, ""],
+          [210, 145, ""],
+          [224, 145, ""],
+          [239, 145, ""],
+          [253, 145, ""],
+          [268, 145, ""],
+          [283, 145, "5"],
+          [311, 145, "3"],
+          [326, 145, "5"],
+          [352, 196, "00 00376 80338 90000 00000 00021"],
+          [7, 115, "00 00376 80338 90000 00000 00021"],
+          [7, 101, "Top Leader"],
+          [7, 84, "Greatstreet 345"],
+          [7, 68, "3456 Greattown"],
+          [352, 145, "Top Leader"],
+          [352, 128, "Greatstreet 345"],
+          [352, 112, "3456 Greattown"],
+          [272, 45, "0100000005353>000037680338900000000000021+"],
+          [464, 45, "376803389000004>"],
+          [347, 685, "Rechnungsnummer:"],
+          [453, 685, "376803389-3"],
+          [347, 672, "Rechnungsdatum:"],
+          [453, 672, "03.07.2026"],
+          [347, 659, "Fällig bis:"],
+          [453, 659, "23.07.2026"],
+          [57, 686, "Top Leader"],
+          [57, 674, "Greatstreet 345"],
+          [57, 662, "3456 Greattown"],
+          [57, 554, "Sent Person Invoice"],
+          [57, 521, "Rechnungsartikel"],
+          [412, 521, "Anzahl"],
+          [469, 521, "Preis"],
+          [512, 521, "Betrag"],
+          [57, 506, "needles"],
+          [433, 506, "1"],
+          [472, 506, "0.50"],
+          [522, 506, "0.50"],
+          [405, 491, "Zwischenbetrag"],
+          [506, 491, "0.50 CHF"],
+          [405, 473, "Gesamtbetrag"],
+          [506, 473, "0.50 CHF"],
+          [72, 171, "376803389-4"],
+          [252, 171, "376803389-4"],
+          [2, 145, ""],
+          [17, 145, ""],
+          [32, 145, ""],
+          [46, 145, ""],
+          [61, 145, ""],
+          [75, 145, ""],
+          [90, 145, ""],
+          [105, 145, "0"],
+          [133, 145, "5"],
+          [148, 145, "0"],
+          [180, 145, ""],
+          [195, 145, ""],
+          [210, 145, ""],
+          [224, 145, ""],
+          [239, 145, ""],
+          [253, 145, ""],
+          [268, 145, ""],
+          [283, 145, "0"],
+          [311, 145, "5"],
+          [326, 145, "0"],
+          [352, 196, "00 00376 80338 90000 00000 00036"],
+          [7, 115, "00 00376 80338 90000 00000 00036"],
+          [7, 101, "Top Leader"],
+          [7, 84, "Greatstreet 345"],
+          [7, 68, "3456 Greattown"],
+          [352, 145, "Top Leader"],
+          [352, 128, "Greatstreet 345"],
+          [352, 112, "3456 Greattown"],
+          [272, 45, "0100000000509>000037680338900000000000036+"],
+          [464, 45, "376803389000004>"]
         ]
 
         invoice_text.each_with_index do |text, i|
           expect(text_with_position[i]).to eq(text)
         end
       end
+    end
+  end
+
+  context "render" do
+    let(:invoice_one) { invoices(:invoice) }
+    let(:invoice_two) { invoices(:sent) }
+    let(:invoice_three) { invoices(:group_invoice) }
+
+    it "should raise error when calling render with anything else than a singular invoice or an Active Record relation" do
+      error_message = "The method render expects a singular invoice or an Active Record relation"
+
+      expect { described_class.render(Invoice.all, {}) }.not_to raise_error
+      expect { described_class.render(invoice_one, {}) }.not_to raise_error
+
+      expect { described_class.render([invoice_one, invoice_two], {}) }.to raise_error(error_message)
+      expect { described_class.render([1, 2, 3], {}) }.to raise_error(error_message)
+    end
+
+    it "should respect batch size when given in options" do
+      invoice_ids = [invoice_one.id, invoice_two.id, invoice_three.id]
+      invoices = ::Invoice.find_by_ids_keeping_order(invoice_ids)
+
+      expect(::Invoice).to receive(:find_in_ordered_batches).with(invoice_ids, batch_size: 2).and_call_original
+
+      described_class.render(invoices, batch_size: 2)
+    end
+
+    it "should use default batch size when not given in options" do
+      invoice_ids = [invoice_one.id, invoice_two.id, invoice_three.id]
+      invoices = ::Invoice.find_by_ids_keeping_order(invoice_ids)
+
+      expect(::Invoice).to receive(:find_in_ordered_batches).with(invoice_ids, batch_size: 500).and_call_original
+
+      described_class.render(invoices, {})
+    end
+
+    it "should generate the same pdf when given an Active Record relation as with a single invoice" do
+      render_pdf = described_class.render(
+        invoice_one,
+        payment_slip: true, articles: true, reminders: false
+      )
+
+      render_with_relation_pdf = described_class.render(
+        ::Invoice.find_by_ids_keeping_order([invoice_one.id]),
+        payment_slip: true, articles: true, reminders: false, batch_size: 2
+      )
+
+      expect(render_pdf).to eql(render_with_relation_pdf)
     end
   end
 
@@ -734,8 +842,11 @@ describe Export::Pdf::Invoice do
     it "should report progress with multiple invoices" do
       expect(job.job_observation).to receive(:report_progress!).twice
 
-      described_class.render_multiple([invoice, build_invoice(recipient: people(:bottom_member))], payment_slip: true,
-        articles: true, reminders: false, job:)
+      invoice_one = invoices(:invoice)
+      invoice_two = invoices(:sent)
+      invoices = ::Invoice.find_by_ids_keeping_order([invoice_one.id, invoice_two.id])
+
+      described_class.render(invoices, payment_slip: true, articles: true, reminders: false, job:)
     end
   end
 

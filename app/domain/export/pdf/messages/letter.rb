@@ -9,6 +9,7 @@ module Export::Pdf::Messages
   class Letter
     MARGIN = 2.5.cm
     PREVIEW_LIMIT = 4
+    BATCH_SIZE = 500
 
     class << self
       def export(_format, letter)
@@ -49,10 +50,13 @@ module Export::Pdf::Messages
 
     def build_pdf
       customize
+
+      recipient_count = recipients.count
+
       recipients.each_with_index do |recipient, position|
-        @job&.report_progress!(position, recipients.size)
+        @job&.report_progress!(position, recipient_count)
         render_sections(recipient)
-        pdf.start_new_page unless last?(recipient)
+        pdf.start_new_page if (position + 1) < recipient_count
       end
     rescue PDF::Core::Errors::EmptyGraphicStateStack
       Rails.logger.warn "Unable to stamp content for letter: #{@letter.id}"
@@ -91,10 +95,6 @@ module Export::Pdf::Messages
       pdf.font_size 9
     end
 
-    def last?(recipient)
-      recipients.last == recipient
-    end
-
     def sections
       @sections ||= [Header, Content].collect do |section|
         section.new(pdf, @letter, @options.slice(:debug, :stamped))
@@ -102,29 +102,29 @@ module Export::Pdf::Messages
     end
 
     def recipients
-      @recipients ||= message_recipients
+      @recipients ||=
+        MessageRecipient.find_in_ordered_batches(recipient_ids, batch_size: BATCH_SIZE)
     end
 
-    def message_recipients # rubocop:todo Metrics/MethodLength
-      recipients = @letter.message_recipients.select("message_recipients.*", "people.last_name")
+    # We have to pluck people.last_name because Postgres doesn't allow ordering by a column
+    # that isn't selected when doing SELECT DISTINCT.
+    def recipient_ids # rubocop:todo Metrics/MethodLength
+      recipients = @letter.message_recipients
+        .joins(:person)
         .where.not(person_id: nil)
-        .joins(:person).order(last_name: :asc)
+        .order(last_name: :asc)
         .distinct
 
       if @letter.send_to_households?
-        recipients = recipients.unscope(:select)
-          .select("MAX(people.last_name)", "MAX(message_recipients.id)",
-            "MAX(people.last_name) AS last_name",
-            "MAX(message_recipients.message_id)",
-            "MAX(message_recipients.person_id)",
-            "MAX(message_recipients.phone_number)",
-            "MAX(message_recipients.email)", "MAX(message_recipients.created_at)",
-            "MAX(message_recipients.failed_at)", "MAX(message_recipients.error)",
-            "MAX(message_recipients.invoice_id)", "MAX(message_recipients.state)",
-            "MAX(message_recipients.salutation)", "MAX(message_recipients.error)",
-            :address).group(:address)
+        recipients
+          .group(:address)
+          .pluck("MAX(message_recipients.id)", "MAX(people.last_name) AS last_name")
+          .map(&:first)
+      else
+        recipients
+          .pluck("message_recipients.id", "people.last_name")
+          .map(&:first)
       end
-      recipients
     end
   end
 end

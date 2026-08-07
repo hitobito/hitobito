@@ -19,9 +19,7 @@ class Export::InvoicesJob < Export::ExportBaseJob
   end
 
   def entries
-    Invoice.where(id: @invoice_ids).order(Arel.sql(
-      "array_position(ARRAY[?]::int[], invoices.id)", @invoice_ids
-    ))
+    Invoice.find_by_ids_keeping_order(@invoice_ids)
   end
 
   def data
@@ -29,9 +27,7 @@ class Export::InvoicesJob < Export::ExportBaseJob
 
     case @format
     when :pdf
-      Export::Pdf::Invoice.render_multiple(entries, @options.merge({
-        job: self
-      }))
+      Export::Pdf::Invoice.render(entries, @options.merge({ job: self }))
     when :csv
       Export::Tabular::Invoices::List.csv(entries)
     when :xlsx

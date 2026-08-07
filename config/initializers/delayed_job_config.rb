@@ -9,6 +9,7 @@ Rails.application.reloader.to_prepare do
   # Therefore we use a high value here to allow for exceptionally long running jobs.
   # By default, BaseJobs have a shorter max_run_time configured.
   Delayed::Worker.max_run_time = 24.hours
+  Delayed::Worker.plugins << BackgroundJobs::Reloader if Rails.env.development?
   Delayed::Worker.plugins << BackgroundJobs::Logging
   Delayed::Worker.plugins << BackgroundJobs::LimitConcurrentExecutions
   Delayed::Worker.plugins << BackgroundJobs::PaperTrailed

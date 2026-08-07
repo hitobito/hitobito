@@ -1635,6 +1635,9 @@ fr:
     errors:
       resources:
         id_must_not_be_set: ID ne doit pas être défini
+        invoice_resource:
+          group_id:
+            blank: doit être renseigné
         role_resource:
           group_id:
             blank: muss ausgefüllt werden

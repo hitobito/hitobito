@@ -70,6 +70,15 @@ if Rails.const_defined?(:Console)
   with_papertrail_metadata
 end
 
+def load_fabricators
+  require 'fabrication'
+  location = "spec/fabricators"
+  wagon_locations = Wagons.all.map { |w| Pathname(w.root).join(location) }
+  Fabrication.configure do |c|
+    c.fabricator_path = [location] + wagon_locations.map { |l| l.relative_path_from(Rails.root).to_s }
+  end
+end
+
 def form_for(model, name: model.class.table_name.singularize, options: {})
   ActionController::Base.helpers.extend(UtilityHelper)
   StandardFormBuilder.new(model.class.name, model, ActionController::Base.helpers, options)

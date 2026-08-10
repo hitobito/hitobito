@@ -30,14 +30,16 @@ describe HealthzController do
         expect(response.status).to eq(200)
 
         expect(json).to eq("app_status" =>
-                           {"code" => "ok",
-                            "details" => {
-                              "memory_usage_determinable" => true,
-                              "memory_usage_exceeds_limit" => false,
-                              "memory_usage_limit_percentage" => 95,
-                              "truemail_working" => true,
-                              "validated_email" => "hitobito@puzzle.ch"
-                            }})
+                             {"code" => "ok",
+                              "details" => {
+                                "memory_usage_determinable" => true,
+                                "memory_usage_exceeds_limit" => false,
+                                "memory_usage_limit_percentage" => 95,
+                                "truemail_working" => true,
+                                "validated_email" => "hitobito@puzzle.ch",
+                                "database_connected" => true,
+                                "pending_migrations" => false
+                              }})
       end
     end
 
@@ -50,14 +52,16 @@ describe HealthzController do
         expect(response.status).to eq(503)
 
         expect(json).to eq("app_status" =>
-                           {"code" => "service_unavailable",
-                            "details" => {
-                              "memory_usage_determinable" => true,
-                              "memory_usage_exceeds_limit" => false,
-                              "memory_usage_limit_percentage" => 95,
-                              "truemail_working" => false,
-                              "validated_email" => "hitobito@puzzle.ch"
-                            }})
+                             {"code" => "service_unavailable",
+                              "details" => {
+                                "memory_usage_determinable" => true,
+                                "memory_usage_exceeds_limit" => false,
+                                "memory_usage_limit_percentage" => 95,
+                                "truemail_working" => false,
+                                "validated_email" => "hitobito@puzzle.ch",
+                                "database_connected" => true,
+                                "pending_migrations" => false
+                              }})
       end
     end
   end
@@ -74,13 +78,15 @@ describe HealthzController do
         expect(response.status).to eq(200)
 
         expect(json).to eq("app_status" =>
-                           {"code" => "ok",
-                            "details" => {
-                              "memory_usage_determinable" => true,
-                              "memory_usage_exceeds_limit" => false,
-                              "memory_usage_limit_percentage" => 95,
-                              "truemail_working" => true
-                            }})
+                             {"code" => "ok",
+                              "details" => {
+                                "memory_usage_determinable" => true,
+                                "memory_usage_exceeds_limit" => false,
+                                "memory_usage_limit_percentage" => 95,
+                                "truemail_working" => true,
+                                "database_connected" => true,
+                                "pending_migrations" => false
+                              }})
       end
     end
 
@@ -93,13 +99,15 @@ describe HealthzController do
         expect(response.status).to eq(503)
 
         expect(json).to eq("app_status" =>
-                           {"code" => "service_unavailable",
-                            "details" => {
-                              "memory_usage_determinable" => true,
-                              "memory_usage_exceeds_limit" => false,
-                              "memory_usage_limit_percentage" => 95,
-                              "truemail_working" => false
-                            }})
+                             {"code" => "service_unavailable",
+                              "details" => {
+                                "memory_usage_determinable" => true,
+                                "memory_usage_exceeds_limit" => false,
+                                "memory_usage_limit_percentage" => 95,
+                                "truemail_working" => false,
+                                "database_connected" => true,
+                                "pending_migrations" => false
+                              }})
       end
     end
 
@@ -110,19 +118,60 @@ describe HealthzController do
         ].each do |memory_file|
           allow(File).to receive(:exist?).and_return(true)
           allow(File).to receive(:exist?).with(memory_file).and_return(false)
-
           get :show
-
           expect(response.status).to eq(503)
-
           expect(json).to eq("app_status" =>
+                               {"code" => "service_unavailable",
+                                "details" => {
+                                  "memory_usage_determinable" => false,
+                                  "memory_usage_limit_percentage" => 95,
+                                  "truemail_working" => true,
+                                  "database_connected" => true,
+                                  "pending_migrations" => false
+                                }})
+        end
+      end
+    end
+
+    context "when database is not connected" do
+      it "has HTTP status 503" do
+        allow(ActiveRecord::Base).to receive(:connected?).and_return(false)
+
+        get :show
+
+        expect(response.status).to eq(503)
+
+        expect(json).to eq("app_status" =>
                              {"code" => "service_unavailable",
                               "details" => {
-                                "memory_usage_determinable" => false,
+                                "database_connected" => false,
+                                "memory_usage_determinable" => true,
+                                "memory_usage_exceeds_limit" => false,
                                 "memory_usage_limit_percentage" => 95,
+                                "pending_migrations" => false,
                                 "truemail_working" => true
                               }})
-        end
+      end
+    end
+
+    context "when database has pending migrations" do
+      it "has HTTP status 503" do
+        allow_any_instance_of(ActiveRecord::MigrationContext).to receive(:needs_migration?).and_return(true)
+
+        get :show
+
+        # expect(response.status).to eq(503)
+
+        expect(json).to eq("app_status" =>
+                             {"code" => "service_unavailable",
+                              "details" => {
+                                "database_connected" => true,
+                                "memory_usage_determinable" => true,
+                                "memory_usage_exceeds_limit" => false,
+                                "memory_usage_limit_percentage" => 95,
+                                "pending_migrations" => true,
+                                "truemail_working" => true
+                              }})
       end
     end
   end

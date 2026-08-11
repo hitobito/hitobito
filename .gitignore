@@ -67,18 +67,23 @@ TAGS
 .byebug_history
 .envrc
 .generators
-.github/copilot-instructions.md
-.github/prompts
 .idea
 .nvimrc
 .project
 .pry_history
 .pry-history
-.superpowers*
 .vscode
 .vimrc
 /todo.tasks
 /tags
+
+# custom AI-setup
+.github/copilot-instructions.md
+.github/prompts
+.claude/settings.local.json
+.claude/plans
+.opencode/
+.superpowers*
 
 # for experiments with webpack
 /public/packs
@@ -106,5 +111,3 @@ Gemfile.local.lock
 
 # git knows to ignore its directory, other tools only using this file do not
 .git/
-.claude/settings.local.json
-.claude/plans

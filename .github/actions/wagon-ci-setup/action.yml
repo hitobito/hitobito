@@ -92,9 +92,15 @@ runs:
       env:
         WAGON_REPO: ${{ inputs.wagon_repository }}
         INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
+        GH_REPOSITORY: ${{ github.repository }}
+        CURRENT_SHA: ${{ github.sha }}
       run: |
-        WAGON_REF="$INPUT_WAGON_REF"
-        if [ -z "$INPUT_WAGON_REF" ] && [ "$WAGON_REPO" != '' ]; then
+        if [ -n "$INPUT_WAGON_REF" ]; then
+          WAGON_REF="$INPUT_WAGON_REF"
+        elif [ "$GH_REPOSITORY" == "hitobito/$WAGON_REPO" ]; then
+          # This wagon triggered the run, so github.sha is the commit under test, even from a fork.
+          WAGON_REF="$CURRENT_SHA"
+        elif [ "$WAGON_REPO" != '' ]; then
           WAGON_REF=$(git ls-remote --heads https://github.com/hitobito/$WAGON_REPO | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
         fi
 

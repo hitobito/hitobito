@@ -143,7 +143,7 @@ describe JsonApi::EventParticipationAbility do
     describe "guests" do
       it "may read her own guests" do
         other = Fabricate(:event_participation, participant: Fabricate(:event_guest, main_applicant: participation))
-        expect(accessible_by(:bottom_member)).to eq [participation, other]
+        expect(accessible_by(:bottom_member)).to match_array [participation, other]
       end
 
       it "may not read other guests" do

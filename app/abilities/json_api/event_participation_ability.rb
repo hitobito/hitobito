@@ -21,7 +21,8 @@ module JsonApi
     def initialize(user)
       @user_context = AbilityDsl::UserContext.new(user)
 
-      define_abilities_from_person
+      define_abilities_from_person if user.id
+      define_abilities_from_service_token_or_person
     end
 
     private
@@ -32,18 +33,18 @@ module JsonApi
       :permission_layer_ids, :permission_group_ids, to: :user_context
 
     def define_abilities_from_person # rubocop:disable Metrics/AbcSize
-      if user.id
-        # herself
-        can_read_if(participant_type: "Person", participant_id: user.id)
+      # herself
+      can_read_if(participant_type: "Person", participant_id: user.id)
 
-        # guests
-        can_read_if(participant_type: "Event::Guest", participant_id: guests_for_user.select(:id))
+      # guests
+      can_read_if(participant_type: "Event::Guest", participant_id: guests_for_user.select(:id))
 
-        # managers
-        can_read_if(participant_type: "Person",
-          participant_id: user.people_manageds.select(:managed_id))
-      end
+      # managers
+      can_read_if(participant_type: "Person",
+        participant_id: user.people_manageds.select(:managed_id))
+    end
 
+    def define_abilities_from_service_token_or_person
       # from event roles and event.participations_visible
       can_read_if(event_id: participation_read_events)
 

@@ -105,6 +105,18 @@ class PaymentsController < CrudController
   def assign_attributes
     super
     entry.status = :manually_created
+    payee_attributes = build_payee_attributes
+    entry.payee_attributes = payee_attributes if payee_attributes
+  end
+
+  def build_payee_attributes
+    if parent.is_a?(Invoice) && parent.recipient.is_a?(Person)
+      person_address = parent.recipient_address_values_without_name
+      person_name = (parent.recipient_address_values - person_address)[0]
+      {
+        person_id: parent.recipient_id, person_name:, person_address: person_address.join("\n")
+      }
+    end
   end
 
   def list_entries

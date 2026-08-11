@@ -71,11 +71,14 @@ if Rails.const_defined?(:Console)
 end
 
 def load_fabricators
-  require 'fabrication'
+  require "fabrication"
+
   location = "spec/fabricators"
   wagon_locations = Wagons.all.map { |w| Pathname(w.root).join(location) }
   Fabrication.configure do |c|
-    c.fabricator_path = [location] + wagon_locations.map { |l| l.relative_path_from(Rails.root).to_s }
+    c.fabricator_path = [location] + wagon_locations.map { |l|
+      l.relative_path_from(Rails.root).to_s
+    }
   end
 end
 

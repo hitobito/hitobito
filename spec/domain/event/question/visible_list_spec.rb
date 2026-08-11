@@ -72,6 +72,15 @@ describe Event::Question::VisibleList do
         questions = questions_seen_by(cook_participation.person, participation)
         expect(questions).to eq [cook_question]
       end
+
+      it "considers event roles held by a managed person (Elternzugang)" do
+        Fabricate(Event::Role::Cook.sti_name, participation:)
+        manager = Fabricate(:person)
+        PeopleManager.create!(manager:, managed: participation.person)
+
+        questions = questions_seen_by(manager, participation)
+        expect(questions).to eq [cook_question]
+      end
     end
 
     describe "loading, ordering and chaching" do

@@ -74,6 +74,10 @@ class Event::Role < ActiveRecord::Base
       model_name.human
     end
 
+    def label_plural
+      model_name.human(count: 2)
+    end
+
     # Whether this role is a leader type.
     def leader?
       kind == :leader
@@ -88,8 +92,7 @@ class Event::Role < ActiveRecord::Base
       kind == :participant
     end
 
-    # Whether this role has full access to all participation data, regardless of
-    # any per-question answer visibility configuration.
+    # Whether this role has full access to all participation data.
     def participations_full?
       permissions.include?(:participations_full)
     end

@@ -16,4 +16,4 @@
                         f.object.visible_role_types.include?(role_type) || disabled,
                         disabled: disabled,
                         id: "#{f.object_name}_visible_role_types_#{role_type.demodulize.underscore}")
-        = role_type.constantize.label
+        = role_type.constantize.label_plural

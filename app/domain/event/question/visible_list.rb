@@ -45,8 +45,10 @@ class Event::Question::VisibleList
   end
 
   def role_types
-    @cache[[:role_types, event.id, ability.user_context.user.id]] ||=
-      ability.user_context.user.event_role_types_for(event)
+    @cache[[:role_types, event.id, ability.user_context.user.id]] ||= begin
+      user = ability.user_context.user
+      ([user] + user.manageds).flat_map { |person| person.event_role_types_for(event) }
+    end
   end
 
   def full_access?

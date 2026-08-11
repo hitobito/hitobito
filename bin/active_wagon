@@ -92,6 +92,7 @@ class Setup
         export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
         export RAILS_TMPDIR=../hitobito_#{primary_wagon}/tmp
         export SPRING_APPLICATION_ID=hit_#{primary_wagon}
+        export WAGON=#{wagon}
       DIRENV
 
     else
@@ -131,7 +132,7 @@ class Setup
     YOUTH_DEPENDENT_WAGONS.product([%w[youth]]).to_h.merge({
       "tenants" => %w[generic],
       "bdp" => %w[pfadi_de],
-      "dpsg" => %w[pfadi_de],
+      "dpsg" => %w[pfadi_de]
     })
   end
 

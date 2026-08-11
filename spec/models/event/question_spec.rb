@@ -273,6 +273,12 @@ describe Event::Question do
 
         expect(question.visible_role_types).to eq []
       end
+
+      it "defaults a new admin question to no roles" do
+        question = described_class.new(admin: true, question: "Test?", required: false)
+
+        expect(question.visible_role_types).to eq []
+      end
     end
 
     describe "#visible_role_types=" do

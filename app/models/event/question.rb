@@ -197,6 +197,8 @@ class Event::Question < ActiveRecord::Base
   private
 
   def default_visible_role_types
+    return [] if admin?
+
     (event&.class || Event).role_types
       .select { |role_type| role_type.permissions.include?(:participations_read_details) }
       .collect(&:sti_name)

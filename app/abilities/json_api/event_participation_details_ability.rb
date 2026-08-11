@@ -14,5 +14,22 @@ module JsonApi
     self.group_permissions = [:group_full]
     self.include_visible_participations = false
     self.include_pending_applications = false
+
+    private
+
+    def define_abilities_from_service_token_or_person
+      super
+
+      # The details of a participation are only readable for normal users with a _full
+      # permission or a corresponding event role. A service token has no event roles, and
+      # requiring a write (_full) permission for reading participant data would be unintuitive.
+      # So we allow service tokens with the event_participations scope separately, on the
+      # events of their permitted groups.
+      if token&.event_participations?
+        can_read_if(event: {groups: {id: token.permitted_groups.pluck(:id)}})
+      end
+    end
+
+    def token = user.service_token
   end
 end

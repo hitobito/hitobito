@@ -1,4 +1,4 @@
-#  Copyright (c) 2018 - 2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018 - 2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -55,6 +55,14 @@ class ServiceToken < ActiveRecord::Base
   ]
 
   i18n_enum :permission, PERMISSIONS, queries: true
+
+  def permitted_groups
+    if permission.to_s.include?("_and_below_")
+      layer.self_and_descendants
+    else
+      layer.groups_in_same_layer
+    end
+  end
 
   # Required as a substitute user for PeopleFilter and JSON Api
   # with PersonFetchables and in other places

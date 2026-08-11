@@ -64,15 +64,12 @@ describe "event_participations participant", type: :request do
         expect(person["relationships"]["roles"]["data"]).to be_empty
       end
 
-      it "does not cache the service token's permissions across requests" do
-        read_only_token = Fabricate(:service_token, layer: groups(:top_layer),
-          name: "ReadOnly", token: "ReadOnly", permission: :layer_and_below_read,
-          people: true, events: true, event_participations: true)
-
+      it "does not cache the readable details across requests" do
         get_participations
         expect(included_additional_information).to eq "internal note"
 
-        get_participations(headers: {"X-TOKEN" => read_only_token.token})
+        sign_in(Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)).person)
+        get_participations
         expect(included_additional_information).to be_nil
       end
 
@@ -97,9 +94,35 @@ describe "event_participations participant", type: :request do
         end
       end
 
-      context "without participation details permission" do
-        # layer_and_below_read grants :show on the participation, but not :show_details
+      context "with a read only token" do
         before { service_token.update!(permission: :layer_and_below_read) }
+
+        it "is exposed with details" do
+          get_participations
+
+          person = included_people.find { |inc| inc["id"] == participant.id.to_s }
+          expect(person["attributes"]["additional_information"]).to eq "internal note"
+          expect(person["attributes"]).to have_key("birthday")
+        end
+
+        it "is exposed with all phone numbers" do
+          public_number = Fabricate(:phone_number, contactable: participant, public: true)
+          private_number = Fabricate(:phone_number, contactable: participant, public: false)
+
+          get_participations(includes: "participant.phone_numbers")
+
+          numbers = json["included"].to_a.select { |inc| inc["type"] == "phone_numbers" }
+          expect(numbers.pluck("id"))
+            .to match_array [public_number.id.to_s, private_number.id.to_s]
+        end
+      end
+
+      context "as a person with layer_and_below_read" do
+        let(:user) do
+          Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)).person
+        end
+
+        before { sign_in(user) }
 
         it "is exposed without details" do
           get_participations

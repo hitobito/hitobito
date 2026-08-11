@@ -134,6 +134,13 @@ fr:
         success: "%{model} a été effacé avec succès."
         failure: "%{model} n'a pas pu être effacé."
 
+  admins:
+    show:
+      main: Allgemein
+      info: Information
+      events: Anlässe und Kurse
+      people: Mitgliederverwaltung
+
   blocked:
     index:
       title: Login bloqué
@@ -1107,6 +1114,10 @@ fr:
         one_day: hier
         one_week: une semaine
         one_month: un mois
+      invoice_type:
+        standalone: Einzelrechnungen
+        from_standalone_invoice_run: aus Rechnungsläufen
+        from_template_invoice_run: aus Sammelrechnungen
     add: Établir une facture externe
     add_payments: Saisir un paiement
     issued: Facture établie
@@ -1561,7 +1572,7 @@ fr:
     admin/oauth_authorizations: "Autoriser OAuth"
     imap_mails: "Mails et bounces"
     invoices: "Factures"
-    invoices/single: "Factures individuelles"
+    invoices/single: "Rechnungen"
     invoices/evaluations: "Pièce comptable"
     payments: "Reçus de paiement"
 

@@ -133,6 +133,13 @@ en:
         success: "%{model} was successfully deleted."
         failure: "%{model} could not be deleted."
 
+  admins:
+    show:
+      main: Allgemein
+      info: Information
+      events: Anlässe und Kurse
+      people: Mitgliederverwaltung
+
   blocked:
     index:
       title: Login blocked
@@ -1093,6 +1100,10 @@ en:
         one_day: yesterday
         one_week: one week
         one_month: one month
+      invoice_type:
+        standalone: Einzelrechnungen
+        from_standalone_invoice_run: aus Rechnungsläufen
+        from_template_invoice_run: aus Sammelrechnungen
     add: Create external invoice
     add_payments: Capture payment
     issued: Invoice sent
@@ -1523,7 +1534,7 @@ en:
     admin/oauth_authorizations: "OAuth authentifications"
     imap_mails: "Mails und Bounces"
     invoices: "Invoices"
-    invoices/single: "Individual invoices"
+    invoices/single: "Rechnungen"
     invoices/evaluations: "Buchungsbeleg"
     payments: "Zahlungseingänge"
 

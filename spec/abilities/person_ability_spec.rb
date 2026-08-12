@@ -339,6 +339,44 @@ describe PersonAbility do
     end
   end
 
+  context :see_invisible_from_above do
+    let(:role) do
+      Fabricate(Group::TopGroup::InvisiblePeopleManager.name.to_sym, group: groups(:top_group))
+    end
+    let(:invisible) { Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one)) }
+
+    it "does not grant write access on its own" do
+      expect(invisible).not_to be_visible_from_above
+      is_expected.to be_able_to(:show, invisible.person.reload)
+      is_expected.not_to be_able_to(:update, invisible.person.reload)
+    end
+
+    context "combined with layer_and_below_full" do
+      before do
+        Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group),
+          person: role.person)
+      end
+
+      it "may show invisible people below" do
+        is_expected.to be_able_to(:show, invisible.person.reload)
+      end
+
+      it "may update invisible people below" do
+        is_expected.to be_able_to(:update, invisible.person.reload)
+      end
+
+      it "may change managers of invisible people below" do
+        is_expected.to be_able_to(:change_managers, invisible.person.reload)
+      end
+
+      it "may not show or update invisible people outside the layer hierarchy" do
+        other = Fabricate(Role::External.name.to_sym, group: Fabricate(Group::TopLayer.name.to_sym))
+        is_expected.not_to be_able_to(:show, other.person.reload)
+        is_expected.not_to be_able_to(:update, other.person.reload)
+      end
+    end
+  end
+
   context :layer_and_below_read do
     # member with additional group_full role
     let(:role) { Fabricate(Group::TopGroup::Secretary.name.to_sym, group: groups(:top_group)) }

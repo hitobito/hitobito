@@ -99,35 +99,47 @@ describe PersonWritables do
       expect(role.permissions).to include(:see_invisible_from_above)
     end
 
-    context "own group" do
-      let(:group) { role.group }
-
-      it "may get people with visible_from_above=true" do
-        other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
-        expect(other).to be_visible_from_above
-        is_expected.to include(other.person)
-      end
-
-      it "may get people with visible_from_above=false" do
-        other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
-        expect(other).not_to be_visible_from_above
-        is_expected.to include(other.person)
-      end
+    it "does not return people, as the permission alone grants read access only" do
+      visible = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
+      invisible = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
+      expect(visible).to be_visible_from_above
+      expect(invisible).not_to be_visible_from_above
+      is_expected.not_to include(visible.person, invisible.person)
     end
 
-    context "lower group" do
-      let(:group) { groups(:bottom_layer_one) }
-
-      it "ay get people with visible_from_above=true" do
-        other = Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
-        expect(other).to be_visible_from_above
-        is_expected.to include(other.person)
+    context "combined with layer_and_below_full" do
+      before do
+        Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group),
+          person: role.person)
       end
 
-      it "may get people with visible_from_above=false" do
-        other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
-        expect(other).not_to be_visible_from_above
-        is_expected.to include(other.person)
+      context "own group" do
+        it "returns people with visible_from_above=true" do
+          other = Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group))
+          expect(other).to be_visible_from_above
+          is_expected.to include(other.person)
+        end
+
+        it "returns people with visible_from_above=false" do
+          other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
+          expect(other).not_to be_visible_from_above
+          is_expected.to include(other.person)
+        end
+      end
+
+      context "lower group" do
+        it "returns people with visible_from_above=true" do
+          other = Fabricate(Group::BottomLayer::Leader.name.to_sym,
+            group: groups(:bottom_layer_one))
+          expect(other).to be_visible_from_above
+          is_expected.to include(other.person)
+        end
+
+        it "returns people with visible_from_above=false" do
+          other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
+          expect(other).not_to be_visible_from_above
+          is_expected.to include(other.person)
+        end
       end
     end
   end

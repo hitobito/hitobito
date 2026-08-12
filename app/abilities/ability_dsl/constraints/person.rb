@@ -71,12 +71,12 @@ module AbilityDsl::Constraints
     end
 
     def non_restricted_in_same_layer_or_visible_below
-      non_restricted_in_same_layer || visible_below || can_see_invisible_in_layer_or_above
+      non_restricted_in_same_layer || visible_below ||
+        (in_same_layer_or_below && can_see_invisible_in_layer_or_above)
     end
 
     def can_see_invisible_in_layer_or_above
-      contains_any?(person.groups_hierarchy_ids,
-        user_context.permission_layer_ids(:see_invisible_from_above))
+      contains_any?(person.groups_hierarchy_ids, user_see_invisible_layer_ids)
     end
 
     def local_hiearchy_ids(groups)

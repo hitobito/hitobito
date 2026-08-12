@@ -153,6 +153,16 @@ module Group::NestedSet
         "#{quoted_tbl}.rgt <= #{sanitize_nested_set_bound(rgt)}"
     end
 
+    # Generates a SQL condition string for checking if groups are below or at any of the
+    # given groups, i.e. the union of their subtrees. Nil if no groups are given.
+    def in_subtrees_of(groups)
+      return if groups.blank?
+
+      collapse_groups_to_highest(groups)
+        .collect { |group| "(#{below_or_at_condition(group.lft, group.rgt)})" }
+        .join(" OR ")
+    end
+
     # Generates a SQL condition string for checking if groups are above or at given bounds.
     # Includes the group at the bounds itself plus all ancestors.
     # lft/rgt accept Integer values, hardcoded column references (e.g., "other_table.lft"),
@@ -165,6 +175,12 @@ module Group::NestedSet
     end
 
     private
+
+    # If group B is a child of group A, B is collapsed into A.
+    # e.g. input [A,B] -> output [A]
+    def collapse_groups_to_highest(groups)
+      groups.reject { |group| groups.any? { |other| other.is_ancestor_of?(group) } }
+    end
 
     # Validates a nested-set bound value against SQL injection.
     # Three forms are accepted:

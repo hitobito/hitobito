@@ -11,7 +11,7 @@ module NavigationHelper
      url: :groups_path,
      icon_name: "users",
      active_for: %w[groups people],
-     inactive_for: %w[invoices invoice_articles invoice_config payment_process
+     inactive_for: %w[invoices invoice_articles invoice_config payment_process payments
        period_invoice_templates invoice_runs?]},
 
     {label: :events,
@@ -37,6 +37,7 @@ module NavigationHelper
        invoice_config
        payment_process
        period_invoice_templates
+       payments
        invoice_runs?]},
 
     {label: :admin,

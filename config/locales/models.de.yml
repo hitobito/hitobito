@@ -315,6 +315,9 @@ de:
       event/question_template:
         one: Vorlage Anmeldeangabe Anlässe
         other: Vorlagen Anmeldeangaben Anlässe
+      event/question_visibility:
+        one: Sichtbare Rolle
+        other: Sichtbare Rollen
       event/answer:
         one: Antwort auf Anmeldeangabe
         other: Antworten auf Anmeldeangaben
@@ -912,6 +915,7 @@ de:
         multiple_choices: Mehrfachauswahl
         required: Obligatorisch
         sensitive: Sensibel
+        question_visibilities: Sichtbare Rollen
 
       event/question_template:
         question: Frage

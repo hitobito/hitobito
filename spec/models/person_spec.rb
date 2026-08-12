@@ -1164,4 +1164,27 @@ describe Person do
       expect { person.update!(last_name: "Newname") }.not_to change { person.tags.reload.count }
     end
   end
+
+  describe "#event_role_types_for" do
+    let(:event) { events(:top_course) }
+    let(:other_event) { Fabricate(:event, groups: [groups(:top_group)]) }
+    let(:person) { people(:top_leader) }
+
+    it "returns the Event::Role classes held for the given event" do
+      participation = Fabricate(:event_participation, event:, participant: person)
+      Fabricate(Event::Role::Cook.name.to_sym, participation:)
+      Fabricate(Event::Role::Helper.name.to_sym, participation:)
+
+      expect(person.event_role_types_for(event)).to match_array(
+        [Event::Role::Cook, Event::Role::Helper]
+      )
+    end
+
+    it "does not return roles held for a different event" do
+      participation = Fabricate(:event_participation, event: other_event, participant: person)
+      Fabricate(Event::Role::Cook.name.to_sym, participation:)
+
+      expect(person.event_role_types_for(event)).to eq([])
+    end
+  end
 end

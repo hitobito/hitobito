@@ -777,48 +777,32 @@ describe Export::Pdf::Invoice do
   context "render" do
     let(:invoice_one) { invoices(:invoice) }
     let(:invoice_two) { invoices(:sent) }
-    let(:invoice_three) { invoices(:group_invoice) }
 
-    it "should raise error when calling render with anything else than a singular invoice or an Active Record relation" do
-      error_message = "The method render expects a singular invoice or an Active Record relation"
+    it "should raise error when calling render with something that is not a singular " \
+      "invoice or an Enumerable" do
+      error_message = "The method render expects a singular invoice or an Enumerable of invoices"
 
-      expect { described_class.render(Invoice.all, {}) }.not_to raise_error
       expect { described_class.render(invoice_one, {}) }.not_to raise_error
+      expect { described_class.render(Invoice.all, {}) }.not_to raise_error
+      expect { described_class.render([invoice_one, invoice_two], {}) }.not_to raise_error
 
-      expect { described_class.render([invoice_one, invoice_two], {}) }.to raise_error(error_message)
-      expect { described_class.render([1, 2, 3], {}) }.to raise_error(error_message)
+      expect { described_class.render("not an invoice", {}) }.to raise_error(error_message)
+      expect { described_class.render(nil, {}) }.to raise_error(error_message)
     end
 
-    it "should respect batch size when given in options" do
-      invoice_ids = [invoice_one.id, invoice_two.id, invoice_three.id]
-      invoices = ::Invoice.find_by_ids_keeping_order(invoice_ids)
-
-      expect(::Invoice).to receive(:find_in_ordered_batches).with(invoice_ids, batch_size: 2).and_call_original
-
-      described_class.render(invoices, batch_size: 2)
-    end
-
-    it "should use default batch size when not given in options" do
-      invoice_ids = [invoice_one.id, invoice_two.id, invoice_three.id]
-      invoices = ::Invoice.find_by_ids_keeping_order(invoice_ids)
-
-      expect(::Invoice).to receive(:find_in_ordered_batches).with(invoice_ids, batch_size: 500).and_call_original
-
-      described_class.render(invoices, {})
-    end
-
-    it "should generate the same pdf when given an Active Record relation as with a single invoice" do
+    it "should generate the same pdf for a singular invoice as for a batched Enumerable " \
+      "containing just that invoice" do
       render_pdf = described_class.render(
         invoice_one,
         payment_slip: true, articles: true, reminders: false
       )
 
-      render_with_relation_pdf = described_class.render(
-        ::Invoice.find_by_ids_keeping_order([invoice_one.id]),
-        payment_slip: true, articles: true, reminders: false, batch_size: 2
+      render_with_batch_pdf = described_class.render(
+        ::Invoice.find_in_ordered_batches([invoice_one.id], batch_size: 2),
+        payment_slip: true, articles: true, reminders: false
       )
 
-      expect(render_pdf).to eql(render_with_relation_pdf)
+      expect(render_pdf).to eql(render_with_batch_pdf)
     end
   end
 

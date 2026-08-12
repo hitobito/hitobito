@@ -6,14 +6,10 @@
 module Export::Pdf
   module Invoice
     MARGIN = 2.cm
-    BATCH_SIZE = 500
 
     class Runner
       def initialize(invoices, job)
         @invoices = invoices
-        # rubocop:todo Layout/LineLength
-        @invoice_config = invoices.first.invoice_config # we assume that all invoices have the same invoice config
-        # rubocop:enable Layout/LineLength
         @job = job
         @metadata = {first_pages_of_invoices: [], pages_with_payment_slip: []}
       end
@@ -86,15 +82,10 @@ module Export::Pdf
     self.runner = Runner
 
     def self.render(invoices, options)
-      if invoices.is_a?(::Invoice)
-        invoices = [invoices]
-      elsif invoices.is_a?(ActiveRecord::Relation)
-        invoice_ids = invoices.pluck(:id)
-        batch_size = options.delete(:batch_size) || BATCH_SIZE
+      invoices = [invoices] if invoices.is_a?(::Invoice)
 
-        invoices = ::Invoice.find_in_ordered_batches(invoice_ids, batch_size:)
-      else
-        raise "The method render expects a singular invoice or an Active Record relation"
+      unless invoices.is_a?(Enumerable)
+        raise "The method render expects a singular invoice or an Enumerable of invoices"
       end
 
       job = options.delete(:job)

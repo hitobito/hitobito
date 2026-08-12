@@ -32,7 +32,9 @@ describe Export::InvoicesJob do
     let(:format) { :pdf }
 
     it "calls render with invoices in the same order as invoice_ids" do
-      expect(Export::Pdf::Invoice).to receive(:render).with(invoices_in_order, anything)
+      expect(Export::Pdf::Invoice).to receive(:render) do |entries, _options|
+        expect(entries.to_a).to eq(invoices_in_order)
+      end
       subject.perform
     end
   end
@@ -41,7 +43,20 @@ describe Export::InvoicesJob do
     let(:format) { :csv }
 
     it "export tabular CSV with invoices in the same order as invoice_ids" do
-      expect(Export::Tabular::Invoices::List).to receive(:csv).with(invoices_in_order)
+      expect(Export::Tabular::Invoices::List).to receive(:csv) do |entries|
+        expect(entries.to_a).to eq(invoices_in_order)
+      end
+      subject.perform
+    end
+  end
+
+  context "creates an XLSX export, it" do
+    let(:format) { :xlsx }
+
+    it "export tabular XLSX with invoices in the same order as invoice_ids" do
+      expect(Export::Tabular::Invoices::List).to receive(:xlsx) do |entries|
+        expect(entries.to_a).to eq(invoices_in_order)
+      end
       subject.perform
     end
   end

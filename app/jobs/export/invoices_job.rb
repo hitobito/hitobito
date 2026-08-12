@@ -19,15 +19,15 @@ class Export::InvoicesJob < Export::ExportBaseJob
   end
 
   def entries
-    Invoice.find_by_ids_keeping_order(@invoice_ids)
+    Invoice.find_in_ordered_batches(@invoice_ids)
   end
 
   def data
-    return if entries.blank?
+    return if @invoice_ids.empty?
 
     case @format
     when :pdf
-      Export::Pdf::Invoice.render(entries, @options.merge({ job: self }))
+      Export::Pdf::Invoice.render(entries, @options.merge({job: self}))
     when :csv
       Export::Tabular::Invoices::List.csv(entries)
     when :xlsx

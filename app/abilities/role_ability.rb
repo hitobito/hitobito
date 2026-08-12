@@ -32,13 +32,11 @@ class RoleAbility < AbilityDsl::Base
   end
 
   def in_same_layer_or_visible_below
-    in_same_layer_if_active ||
-      (
-        subject.visible_from_above? &&
-        permission_in_layers?(group.layer_hierarchy.collect(&:id)) &&
-        in_active_group
-      ) ||
-      can_see_invisible_in_layer_or_above
+    return false unless in_active_group
+
+    in_same_layer ||
+      (in_same_layer_or_below &&
+        (subject.visible_from_above? || can_see_invisible_in_layer_or_above))
   end
 
   def non_restricted
@@ -57,10 +55,7 @@ class RoleAbility < AbilityDsl::Base
   end
 
   def can_see_invisible_in_layer_or_above
-    contains_any?(
-      subject.group.layer_hierarchy.collect(&:id),
-      user_context.permission_layer_ids(:see_invisible_from_above)
-    )
+    contains_any?(group.layer_hierarchy.collect(&:id), user_see_invisible_layer_ids)
   end
 
   def her_own

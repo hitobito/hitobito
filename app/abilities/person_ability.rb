@@ -71,6 +71,10 @@ class PersonAbility < AbilityDsl::Base
       .may(:show)
       .readable_in_same_layer_or_visible_below
 
+    permission(:see_invisible_from_above)
+      .may(:show, :show_full, :show_details, :history)
+      .in_same_layer_or_below
+
     permission(:layer_and_below_full)
       .may(:update, :primary_group, :send_password_instructions, :log, :approve_add_request,
         :show_tags, :create_tags, :assign_tags, :index_notes, :security)

@@ -142,5 +142,27 @@ describe PersonWritables do
         end
       end
     end
+
+    context "combined with layer_and_below_full further down" do
+      # Each permission applies downwards from its own role: :see_invisible_from_above from
+      # the top layer, :layer_and_below_full from bottom_layer_one. Writing a person needs
+      # both of them above her, so bottom_layer_two stays read only.
+      before do
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one),
+          person: role.person)
+      end
+
+      it "returns invisible people in the layer_and_below_full subtree" do
+        other = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one))
+        is_expected.to include(other.person)
+      end
+
+      it "does not return people outside that subtree" do
+        visible = Fabricate(Group::BottomLayer::Leader.name.to_sym,
+          group: groups(:bottom_layer_two))
+        invisible = Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_two))
+        is_expected.not_to include(visible.person, invisible.person)
+      end
+    end
   end
 end

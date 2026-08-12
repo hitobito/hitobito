@@ -5,9 +5,8 @@
 #  or at https://github.com/hitobito/hitobito.
 
 module Export::Tabular
-  # This does not support scopes with limit
-  #
-  # We use a custom iterator as find_each does not support custom ordering
+  # Custom Iterator to allow batching through ordered relation
+  # noops if relation already has a limit defined
   class Iterator
     include Enumerable
 
@@ -19,7 +18,7 @@ module Export::Tabular
     def each(&block)
       return to_enum(:each) unless block_given?
 
-      return list.each(&block) unless relation?
+      return list.each(&block) unless batchable?
 
       in_ordered_batches(block)
     end
@@ -39,6 +38,8 @@ module Export::Tabular
         break if batch.size < batch_size
       end
     end
+
+    def batchable? = relation? && list.limit_value.nil?
 
     def relation? = list.is_a?(ActiveRecord::Relation)
   end

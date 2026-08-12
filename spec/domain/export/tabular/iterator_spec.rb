@@ -43,10 +43,23 @@ describe Export::Tabular::Iterator do
       let(:batch_size) { 1 }
 
       it "issues one extra query to detect the end of the relation" do
-        [0, 1, 2, 3].each do |offset|
-          expect(list).to receive(:offset).with(offset).once.and_call_original
+        queries = []
+        subscription = ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+          queries << payload[:binds].last(2).map(&:value) if payload[:sql].include?(%("people"."id"))
         end
-        iterator.each { |_person| }
+
+        begin
+          iterator.each { |_person| }
+        ensure
+          ActiveSupport::Notifications.unsubscribe(subscription)
+        end
+
+        expect(queries).to eq [
+          [1, 0], # LIMIT 1 OFFSET 0
+          [1, 1], # LIMIT 1 OFFSET 1
+          [1, 2], # LIMIT 1 OFFSET 2
+          [1, 3]  # LIMIT 1 OFFSET 3 -- the extra query that detects the end
+        ]
       end
     end
 
@@ -54,6 +67,8 @@ describe Export::Tabular::Iterator do
       let(:batch_size) { 1000 }
 
       it "yields all records in a single batch" do
+        expect(list).to receive(:limit).with(1000).once.and_call_original
+        expect(list).to receive(:offset).with(0).once.and_call_original
         expect { |b| iterator.each(&b) }.to yield_successive_args(*people)
       end
     end
@@ -68,13 +83,12 @@ describe Export::Tabular::Iterator do
     end
 
     context "relation with a pre-existing limit" do
-      # documented caveat (see class comment): the batch limit overrides any
-      # limit already present on the given scope instead of composing with it
       let(:list) { Person.where(id: people.map(&:id)).order(:first_name).limit(1) }
       let(:batch_size) { 1000 }
 
-      it "ignores the original limit and yields all records" do
-        expect { |b| iterator.each(&b) }.to yield_successive_args(*people)
+      it "does not batch and respects the original limit" do
+        expect(list).not_to receive(:offset)
+        expect { |b| iterator.each(&b) }.to yield_successive_args(people.first)
       end
     end
 

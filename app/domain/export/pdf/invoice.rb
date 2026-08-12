@@ -89,7 +89,7 @@ module Export::Pdf
       if invoices.is_a?(::Invoice)
         invoices = [invoices]
       elsif invoices.is_a?(ActiveRecord::Relation)
-        invoice_ids = invoices.map(&:id)
+        invoice_ids = invoices.pluck(:id)
         batch_size = options.delete(:batch_size) || BATCH_SIZE
 
         invoices = ::Invoice.find_in_ordered_batches(invoice_ids, batch_size:)

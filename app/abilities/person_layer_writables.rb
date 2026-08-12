@@ -46,7 +46,7 @@ class PersonLayerWritables < GroupBasedFetchables
     OrCondition.new.tap do |condition|
       append_group_conditions(condition)
       visible_from_above_condition(condition)
-      see_invisible_from_above_condition(condition)
+      see_invisible_from_above_condition(condition) if layer_group_ids_above.present?
       condition.or(*manager_condition)
     end
   end

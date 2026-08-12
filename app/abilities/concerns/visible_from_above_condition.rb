@@ -1,47 +1,30 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Pfadibewegung Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito
+
 module VisibleFromAboveCondition
   extend ActiveSupport::Concern
 
   def visible_from_above_condition(condition)
-    return if layer_groups_above.blank?
+    query = Group.in_subtrees_of(layer_groups_above)
+    return if query.nil?
 
-    visible_from_above_groups = OrCondition.new
-    collapse_groups_to_highest(layer_groups_above) do |layer_group|
-      visible_from_above_groups.or(Group.below_or_at_condition(layer_group.lft, layer_group.rgt))
-    end
-
-    query = "(#{visible_from_above_groups.to_a.first}) AND roles.type IN (?)"
-    args = visible_from_above_groups.to_a[1..] + [Role.visible_types.collect(&:sti_name)]
-    condition.or(query, *args)
+    condition.or("(#{query}) AND roles.type IN (?)", Role.visible_types.collect(&:sti_name))
   end
 
   def see_invisible_from_above_condition(condition)
-    return if layer_groups_see_invisible_from_above.blank?
+    query = Group.in_subtrees_of(layer_groups_see_invisible_from_above)
+    return if query.nil?
 
-    see_invisible_from_above_groups = OrCondition.new
-    collapse_groups_to_highest(layer_groups_see_invisible_from_above) do |layer_group|
-      see_invisible_from_above_groups.or(
-        Group.below_or_at_condition(layer_group.lft, layer_group.rgt)
-      )
-    end
-
-    condition.or(*see_invisible_from_above_groups.to_a)
+    condition.or(query)
   end
 
   def layer_groups_see_invisible_from_above
-    # rubocop:todo Layout/LineLength
-    @layer_groups_unconfined_below ||= Group.where(id: layer_group_ids_with_permissions(:see_invisible_from_above))
-    # rubocop:enable Layout/LineLength
-  end
-
-  private
-
-  # If group B is a child of group A, B is collapsed into A.
-  # e.g. input [A,B] -> output A
-  def collapse_groups_to_highest(layer_groups)
-    layer_groups.each do |group|
-      unless layer_groups.any? { |g| g.is_ancestor_of?(group) }
-        yield group
-      end
-    end
+    @layer_groups_unconfined_below ||= Group.where(
+      id: layer_group_ids_with_permissions(:see_invisible_from_above)
+    )
   end
 end

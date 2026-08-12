@@ -158,6 +158,10 @@ module AbilityDsl
       user_context.permission_layer_ids(:finance)
     end
 
+    def user_see_invisible_layer_ids
+      user_context.permission_layer_ids(:see_invisible_from_above)
+    end
+
     # Are any items of the existing list present in the list of required items?
     def contains_any?(required, existing)
       (required & existing).present?

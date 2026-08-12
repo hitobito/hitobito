@@ -68,6 +68,7 @@ module Export::Pdf::Messages
       @options[:stamped] = false
       @sections = nil
       @pdf = nil
+      @recipients = nil
     end
 
     def render_sections(recipient)

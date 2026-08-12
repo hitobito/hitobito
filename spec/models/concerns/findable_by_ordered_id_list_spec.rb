@@ -62,4 +62,30 @@ describe FindableByOrderedIdList do
       MessageRecipient.find_in_ordered_batches(message_recipient_ids, batch_size: 2).each {}
     end.to make(5).db_queries
   end
+
+  it "should raise when the batch enumerator from find_in_ordered_batches is iterated twice" do
+    message_recipient_ids = 3.times.map { Fabricate(:message_recipient).id }
+    enumerator = MessageRecipient.find_in_ordered_batches(message_recipient_ids, batch_size: 2)
+
+    enumerator.each {}
+
+    expect { enumerator.each {} }.to raise_error(/can only be iterated once/)
+  end
+
+  it "should raise when any Enumerable method re-iterates an already consumed batch enumerator" do
+    message_recipient_ids = 3.times.map { Fabricate(:message_recipient).id }
+    enumerator = MessageRecipient.find_in_ordered_batches(message_recipient_ids, batch_size: 2)
+
+    enumerator.pluck(:id)
+
+    expect { enumerator.pluck(:id) }.to raise_error(/can only be iterated once/)
+  end
+
+  it "should still allow #count to be called any number of times on the batch enumerator" do
+    message_recipient_ids = 3.times.map { Fabricate(:message_recipient).id }
+    enumerator = MessageRecipient.find_in_ordered_batches(message_recipient_ids, batch_size: 2)
+
+    expect(enumerator.count).to eq(3)
+    expect(enumerator.count).to eq(3)
+  end
 end

@@ -31,8 +31,12 @@ module FindableByOrderedIdList
 
     def batch_enumerator(ids, batch_size)
       entry_count = ids.count
+      iterated = false
 
       enumerator = Enumerator.new(entry_count) do |yielder|
+        raise_if_already_iterated!(iterated)
+        iterated = true
+
         ids.each_slice(batch_size) do |id_batch|
           find_by_ids_keeping_order(id_batch).each do |entry|
             yielder << entry
@@ -43,6 +47,15 @@ module FindableByOrderedIdList
       enumerator.define_singleton_method(:count) { entry_count }
 
       enumerator
+    end
+
+    def raise_if_already_iterated!(iterated)
+      return unless iterated
+
+      raise "This batch enumerator (from find_in_ordered_batches) can only be iterated " \
+        "once. It was already consumed, so calling #each/#map/#pluck/#to_a etc. again " \
+        "would re-run every underlying query instead of reusing the previous result. " \
+        "Fetch and memoize whatever you need during the first pass."
     end
 
     def check_findable_by_id(method)

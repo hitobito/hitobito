@@ -647,8 +647,8 @@ describe Export::Pdf::Invoice do
       before do
         person.update!(language: :fr)
         invoice_one.update!(recipient: person)
-
         invoice_two.update!(recipient: person_two)
+        invoice_two.update_columns(issued_at: Date.new(2026, 7, 3), due_at: Date.new(2026, 7, 23))
       end
 
       it "renders multiple invoices each with individual language of recipient" do
@@ -766,7 +766,6 @@ describe Export::Pdf::Invoice do
           [272, 45, "0100000000509>000037680338900000000000036+"],
           [464, 45, "376803389000004>"]
         ]
-
         invoice_text.each_with_index do |text, i|
           expect(text_with_position[i]).to eq(text)
         end

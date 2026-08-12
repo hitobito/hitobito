@@ -36,7 +36,10 @@ module Sheet
     FeatureGate.if("groups.period_invoice_templates") do
       tab "activerecord.models.invoice.other",
         :group_received_invoices_path,
-        params: {returning: true}
+        params: {returning: true},
+        if: (lambda do |view, group|
+          view.can?(:index_received_invoices, group)
+        end)
     end
 
     tab "activerecord.models.mailing_list.other",

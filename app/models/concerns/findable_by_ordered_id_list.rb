@@ -46,7 +46,7 @@ module FindableByOrderedIdList
     end
 
     def check_findable_by_id(method)
-      unless respond_to?(:column_names) && column_names.include?("id")
+      unless column_names.include?("id")
         raise "Method #{method} can only be used on Active Record models with an id column"
       end
     end

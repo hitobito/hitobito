@@ -137,21 +137,11 @@ module AbilityDsl
     end
 
     def user_group_ids
-      case permission
-      when :see_invisible_from_above
-        user.groups_with_permission(:see_invisible_from_above).to_a.collect(&:id)
-      else
-        user_context.permission_group_ids(permission) || []
-      end
+      user_context.permission_group_ids(permission) || []
     end
 
     def user_layer_ids
-      case permission
-      when :see_invisible_from_above
-        user_context.layer_ids(user.groups_with_permission(:see_invisible_from_above).to_a)
-      else
-        user_context.permission_layer_ids(permission) || []
-      end
+      user_context.permission_layer_ids(permission) || []
     end
 
     def user_finance_layer_ids

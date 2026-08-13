@@ -24,9 +24,17 @@ const imagePath = (name) => images(name, true);
 // Action Text
 require("trix")
 require("@rails/actiontext")
-// prevent adding attachments via drag and drop
+
+// prevent attaching files via drag and drop if the trix editor is nested below an element with class "no-attachments"
 document.addEventListener('trix-file-accept', function(event) {
-  if(event.target.parentNode.parentNode.classList.contains('no-attachments')) {
+  if (event.target.closest('.no-attachments')) {
     event.preventDefault();
+  }
+});
+
+// prevent attaching files via pasting if the trix editor is nested below an element with class "no-attachments"
+document.addEventListener('trix-attachment-add', function(event) {
+  if (event.target.closest('.no-attachments')) {
+    event.attachment.remove();
   }
 });

@@ -618,6 +618,8 @@ en:
       add_choice: "Add an answer option"
       sensitive_caption: Replies will be deleted %{cutoff} months after the event ends.
       required_caption: 'This question must be answered during registration. '
+      visibility_fields:
+        caption: "Sichtbar für"
 
   assignments:
     attachment: "Show attachment"

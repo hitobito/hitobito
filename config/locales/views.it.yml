@@ -622,6 +622,8 @@ it:
       add_choice: "Possibile risposta risposta"
       sensitive_caption: Le risposte vengono cancellate %{cutoff} mesi dopo la conclusione dell'evento.
       required_caption: È necessario rispondere a questa domanda al momento della registrazione.
+      visibility_fields:
+        caption: "Sichtbar für"
 
   assignments:
     attachment: "Mostrare l'allegato."

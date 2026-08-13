@@ -624,6 +624,8 @@ fr:
       add_choice: "Ajouter une réponse possible"
       sensitive_caption: Les réponses seront supprimées %{cutoff} mois après la fin de l'événement.
       required_caption: Il faut répondre à cette question lors de l'inscription.
+      visibility_fields:
+        caption: "Sichtbar für"
 
   assignments:
     attachment: "afficher les pièces jointes"

@@ -4,7 +4,8 @@
 
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)
-- Rechungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (sww#296)
+- Rechnungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (sww#296)
+- Rechnungen können auch für Empfänger ohne Strasse/Postfach erstellt werden (sww#349)
 - In der JSON:API können die gleichen Personendaten von Eventteilnehmern abgerufen werden wie im UI (pbs#466)
 
 ## Version 2.10

@@ -1,7 +1,10 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+#  https://github.com/hitobito/hitobito
+
 require "spec_helper"
 
 describe CustomContent do
@@ -111,6 +114,13 @@ describe CustomContent do
       subject.subject_fr = "Placeholders missing"
 
       is_expected.not_to be_valid
+    end
+
+    it "is invalid with attachments" do
+      subject.body = "<div>Some content</div>" \
+        '<action-text-attachment sgid="invalid" content-type="image/png"></action-text-attachment>'
+      expect(subject).not_to be_valid
+      expect(subject.errors[:body]).to include(I18n.t("errors.messages.attachments_not_allowed"))
     end
   end
 

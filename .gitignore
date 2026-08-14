@@ -35,7 +35,7 @@ doc/developer/development.html
 doc/developer/assets/**/*
 spec/reports
 stats.json
-
+bin/bisect-check
 
 # precompiled assets
 .sass-cache

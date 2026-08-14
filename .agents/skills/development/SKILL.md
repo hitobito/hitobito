@@ -18,7 +18,7 @@ Default workflow for feature work or behavior changes. For resolving a defect, u
 1. State the reason for the change — the goal describing how the application should improve for the user.
 2. Write a spec first, defining the desired state. It must fail before any implementation exists.
 3. Implement the change.
-4. Do not touch locales other than `de`.
+4. Do not touch locales other than `de`, not even `de_CH`.
 5. Confirm the spec now passes.
 6. Run the specs for all touched classes to catch regressions.
 7. Update the copyright notice at the top of touched files to cover the current year.

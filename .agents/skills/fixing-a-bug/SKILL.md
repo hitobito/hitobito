@@ -19,7 +19,7 @@ Any bugfix task: reproducing and resolving a defect. For new functionality, use 
 2. Verify `rubocop` and `brakeman` report no errors locally before starting.
 3. Write a spec that reproduces the bug BEFORE changing any other code. It must fail first.
 4. Implement the fix.
-5. Do not touch locales other than `de`.
+5. Do not touch locales other than `de`, not even `de_CH`.
 6. Confirm the spec now passes.
 7. Update the copyright notice at the top of touched files to cover the current year.
 8. Run `brakeman` — no new security findings.

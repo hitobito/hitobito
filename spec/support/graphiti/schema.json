@@ -36,6 +36,30 @@
           "writable": true,
           "description": null
         },
+        "first_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "last_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "organization_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "organization": {
+          "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "address_care_of": {
           "type": "string",
           "readable": true,
@@ -86,6 +110,10 @@
         "public": {},
         "contactable_id": {},
         "contactable_type": {},
+        "first_name": {},
+        "last_name": {},
+        "organization_name": {},
+        "organization": {},
         "address_care_of": {},
         "street": {},
         "housenumber": {},
@@ -153,6 +181,58 @@
             "match",
             "not_match"
           ]
+        },
+        "first_name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "last_name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "organization_name": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "organization": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
         },
         "address_care_of": {
           "type": "string",

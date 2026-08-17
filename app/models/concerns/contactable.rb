@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,7 +21,10 @@ module Contactable
         :_destroy],
       additional_addresses_attributes: [
         :id,
-        :name,
+        :first_name,
+        :last_name,
+        :organization,
+        :organization_name,
         :translated_label,
         :street,
         :housenumber,

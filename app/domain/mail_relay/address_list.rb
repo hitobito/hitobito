@@ -30,7 +30,7 @@ module MailRelay
 
     def preferred_emails(person)
       additional_emails_with_default(person).select do |email|
-        sanitized_labels.include?(email.label.strip.downcase)
+        sanitized_labels.include?(email.label.to_s.strip.downcase)
       end.collect(&:email)
     end
 

@@ -171,12 +171,10 @@ fr:
       placeholder_value: Courriel
       placeholder_type: Type (privé, professionnel, …)
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
-      tooltip_invoices: Utilisée à la place de l'adresse e-mail principale lors de l'envoi de factures.
 
     additional_address_fields:
       placeholder_type: Type (facture, travail ..)
       caption_uses_contactable_name: Reprendre le nom de la personne
-      caption_used_for_invoices: Utilisé pour les factures
 
     address_fields:
       housenumber: N°

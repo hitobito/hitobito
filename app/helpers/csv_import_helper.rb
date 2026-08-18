@@ -40,7 +40,7 @@ module CsvImportHelper
     parts = key.split("_")
     key = parts.last
     assoc = parts[0..-2].join("_").pluralize
-    contact = p.send(assoc).find { |c| c.label.downcase == key }
+    contact = p.send(assoc).find { |c| c.label.to_s.downcase == key }
     contact && contact.value
   end
 

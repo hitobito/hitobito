@@ -5,5 +5,5 @@
 Fabricator(:phone_number) do
   contactable { Fabricate(:person) }
   number { Faker::Base.numerify("+41 77 ### ## ##") }
-  label { Settings.phone_number.predefined_labels.sample }
+  category_id { |attrs| attrs[:category]&.id || ActiveRecord::FixtureSet.identify(:phone_number_person_other) }
 end

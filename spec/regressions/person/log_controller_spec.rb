@@ -52,13 +52,13 @@ describe Person::LogController, type: :controller do
 
       changes = (1..7).map { |x| dom.find(".row.mb-3 .col-8 div:nth-child(#{x})").text }
       expect(changes).to eq [
-        "Telefonnummer +41 79 123 45 67 (Foo) wurde hinzugefügt.",
+        "Telefonnummer +41 79 123 45 67 (Andere, Foo) wurde hinzugefügt.",
         "Zugriffsanfrage für Top Group TopGroup wurde gestellt.",
-        "Telefonnummer +41 79 123 45 67 (Foo) wurde hinzugefügt.",
+        "Telefonnummer +41 79 123 45 67 (Andere, Foo) wurde hinzugefügt.",
         "Haupt-E-Mail wurde von top_leader@example.com auf new@hito.example.com geändert.",
         "PLZ wurde von 3456 auf 3007 geändert.",
         "Ort wurde von Greattown auf Bern geändert.",
-        "Social Media Adresse Bar (Foo) wurde hinzugefügt."
+        "Social Media Adresse Bar (Andere, Foo) wurde hinzugefügt."
       ]
     end
 
@@ -72,7 +72,7 @@ describe Person::LogController, type: :controller do
       get :index, params: {id: test_entry.id, group_id: top_group.id}
 
       expect(text_at(".mb-3:nth-of-type(1) .col-4")).to eq "Donnerstag, 27. November 2025, 09:33 Uhr"
-      expect(text_at(".mb-3:nth-of-type(1) .col-8")).to eq "Social Media Adresse Bar (Foo) wurde hinzugefügt."
+      expect(text_at(".mb-3:nth-of-type(1) .col-8")).to eq "Social Media Adresse Bar (Andere, Foo) wurde hinzugefügt."
       expect(text_at(".mb-3:nth-of-type(2) .col-4")).to eq "Mittwoch, 26. November 2025, 09:33 Uhr"
       expect(text_at(".mb-3:nth-of-type(2) .col-8")).to(
         eq("PLZ wurde von 3456 auf 3007 geändert.Ort wurde von Greattown auf Bern geändert.")

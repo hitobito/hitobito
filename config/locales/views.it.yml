@@ -171,12 +171,10 @@ it:
       placeholder_value: Email
       placeholder_type: Tipo (privato, lavoro, ...)
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
-      tooltip_invoices: Viene utilizzato al posto dell'indirizzo e-mail principale per l'invio delle fatture.
 
     additional_address_fields:
       placeholder_type: Denominazione (fattura, lavoro ...)
       caption_uses_contactable_name: Assumere il nome della persona
-      caption_used_for_invoices: Utilizzo per le fatture
 
     address_fields:
       housenumber: N.

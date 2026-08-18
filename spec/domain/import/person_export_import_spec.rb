@@ -30,7 +30,7 @@ describe "export import person" do
 
     Fabricate(:phone_number, contactable: exported, label: "Privat")
     Fabricate(:phone_number, contactable: exported, label: "Mobil")
-    Fabricate(:additional_email, contactable: exported)
+    Fabricate(:additional_email, contactable: exported, label: "Privat")
     Fabricate(:social_account, contactable: exported, label: "Webseite")
 
     csv = export(exported)
@@ -49,10 +49,14 @@ describe "export import person" do
     expect_attrs_equal(imported, exported, excluded)
 
     exported.reload
+    # category_id is excluded: CSV export/import still maps contact accounts by
+    # their (free-text) label column only (see Import::ContactAccountFields),
+    # so a category assigned on the exported record isn't preserved through the
+    # round trip yet -- that's pending the Import checkpoint of #4359.
     %w[phone_numbers social_accounts additional_emails].each do |assoc|
       expect(imported.send(assoc).size).to eq(exported.send(assoc).to_a.size)
       exported.send(assoc).each_with_index do |e, i|
-        expect_attrs_equal(imported.send(assoc)[i], e, %w[id contactable_id])
+        expect_attrs_equal(imported.send(assoc)[i], e, %w[id contactable_id category_id])
       end
     end
   end

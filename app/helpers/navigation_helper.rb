@@ -91,7 +91,8 @@ module NavigationHelper
     people: {
       heading: "admins.show.people",
       items: [
-        Item.new(model: SelfRegistrationReason, path: :self_registration_reasons_path)
+        Item.new(model: SelfRegistrationReason, path: :self_registration_reasons_path),
+        Item.new(model: ContactAccountCategory, path: :contact_account_categories_path)
       ]
     }
   }

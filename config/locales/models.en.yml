@@ -94,6 +94,10 @@ en:
         year_must_be_four_digits: must contain no more than a 4-digit year
         year_must_be_after_1900: must include a year from 1900 onwards
       models:
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "must be enabled when '%{attribute}' is enabled"
         cors_origin:
           attributes:
             origin:
@@ -250,6 +254,9 @@ en:
       calendar:
         one: Calendar feed
         other: Calendar feeds
+      contact_account_category:
+        one: Contact details category
+        other: Contact details categories
       custom_content:
         one: Text
         other: Texts
@@ -1244,6 +1251,15 @@ en:
         category: Category
         subject: Subject
         message: Message
+
+      contact_account_category:
+        key: Key
+        contact_account_type: Contact type
+        contactable_type: Applies to
+        unique_per_contactable: Unique per contactable
+        used_for_invoices: Used for invoices
+        position: Position
+        name: Description
 
       label_format:
         name: Description

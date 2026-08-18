@@ -435,6 +435,8 @@ Hitobito::Application.routes.draw do
 
     resources :self_registration_reasons
 
+    resources :contact_account_categories, except: :destroy
+
     resources :custom_contents, only: [:index, :edit, :update]
     get "custom_contents/:id" => "custom_contents#edit"
 

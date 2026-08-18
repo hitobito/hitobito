@@ -96,6 +96,10 @@ fr:
         year_must_be_four_digits: ne doit pas comporter plus de quatre chiffres pour l'année
         year_must_be_after_1900: doit comporter une année à partir de 1900
       models:
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "doit être activé lorsque « %{attribute} » est activé"
         cors_origin:
           attributes:
             origin:
@@ -260,6 +264,10 @@ fr:
         one: Feed du calendrier
         many: Feed du calendrier
         other: Feed du calendrier
+      contact_account_category:
+        one: Catégorie de coordonnées
+        many: Catégories de coordonnées
+        other: Catégories de coordonnées
       custom_content:
         one: Texte
         many: Textes
@@ -1333,6 +1341,15 @@ fr:
         category: Catégorie
         subject: Sujet
         message: Message
+
+      contact_account_category:
+        key: Clé
+        contact_account_type: Type de contact
+        contactable_type: S'applique à
+        unique_per_contactable: Unique par contact
+        used_for_invoices: Utilisé pour les factures
+        position: Position
+        name: Désignation
 
       label_format:
         name: Désignation

@@ -95,6 +95,10 @@ de:
         year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
         year_must_be_after_1900: muss eine Jahreszahl ab 1900 enthalten
       models:
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "muss aktiviert sein, wenn '%{attribute}' aktiviert ist"
         cors_origin:
           attributes:
             origin:
@@ -252,6 +256,9 @@ de:
       calendar:
         one: Kalender-Feed
         other: Kalender-Feeds
+      contact_account_category:
+        one: Kontaktangaben-Kategorie
+        other: Kontaktangaben-Kategorien
       custom_content:
         one: Text
         other: Texte
@@ -1249,6 +1256,15 @@ de:
         category: Kategorie
         subject: Subjekt
         message: Meldung
+
+      contact_account_category:
+        key: Schlüssel
+        contact_account_type: Kontaktangaben-Typ
+        contactable_type: Gilt für
+        unique_per_contactable: Nur einmal pro Person/Gruppe
+        used_for_invoices: Für Rechnungen verwenden
+        position: Reihenfolge
+        name: Bezeichnung
 
       label_format:
         name: Bezeichnung

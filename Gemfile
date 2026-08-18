@@ -45,7 +45,7 @@ gem "gibbon"
 gem "globalize"
 gem "googleauth" # Used for the google wallet integration
 gem "jwt" # Used for signing Google Wallet save URLs
-gem "graphiti"
+gem "graphiti", "1.13.3"
 gem "graphiti-rails"
 gem "haml"
 gem "http_accept_language"

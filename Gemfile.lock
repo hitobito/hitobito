@@ -339,13 +339,14 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
-    graphiti (1.10.2)
+    graphiti (1.13.3)
       activesupport (>= 5.2)
       concurrent-ruby (>= 1.2, < 2.0)
       dry-types (>= 0.15.0, < 2.0)
       graphiti_errors (~> 1.1.0)
       jsonapi-renderer (~> 0.2, >= 0.2.2)
       jsonapi-serializable (~> 0.3.0)
+      ostruct (>= 0.5)
     graphiti-rails (0.4.1)
       graphiti (~> 1.2)
       railties (>= 5.0)
@@ -905,7 +906,7 @@ DEPENDENCIES
   gibbon
   globalize
   googleauth
-  graphiti
+  graphiti (= 1.13.3)
   graphiti-openapi!
   graphiti-rails
   graphiti_spec_helpers

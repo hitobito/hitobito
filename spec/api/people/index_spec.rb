@@ -47,6 +47,33 @@ RSpec.describe "people#index", type: :request do
       end
     end
 
+    describe "nil filtering" do
+      before do
+        people(:top_leader).update!(nickname: "Toppy")
+        people(:bottom_member).update!(nickname: nil)
+      end
+
+      context "with an empty value" do
+        let(:params) { {filter: {nickname: ""}} }
+
+        it "returns the people without a value" do
+          make_request
+          expect(response.status).to eq(200), response.body
+          expect(d.map(&:id)).to match_array([people(:bottom_member).id])
+        end
+      end
+
+      context "with an empty value and the not_eq operator" do
+        let(:params) { {filter: {nickname: {not_eq: ""}}} }
+
+        it "returns the people with a value" do
+          make_request
+          expect(response.status).to eq(200), response.body
+          expect(d.map(&:id)).to match_array([people(:top_leader).id])
+        end
+      end
+    end
+
     describe "layer_group" do
       let(:params) { {include: "layer_group"} }
 

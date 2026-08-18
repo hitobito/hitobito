@@ -44,6 +44,31 @@ describe PaymentsController do
       expect(assigns(:payment)).to be_invalid
       expect(response).to redirect_to(group_invoice_path(group, invoice))
     end
+
+    context "payee attributes" do
+      it "sets payee attributes from the person recipient" do
+        invoice.update!(state: :sent)
+        post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: invoice.total}}
+
+        payee = assigns(:payment).payee
+        expect(payee.person_id).to eq invoice.recipient_id
+        expect(payee.person_name).to eq "Top Leader"
+        expect(payee.person_address).to eq "Greatstreet 345\n3456 Greattown"
+      end
+
+      it "does not set payee attributes when the invoice recipient is a group" do
+        sign_in(people(:top_leader))
+        group_invoice = invoices(:group_invoice)
+        group_invoice.update_columns(state: :sent)
+
+        expect do
+          post :create, params: {group_id: groups(:top_group).id, invoice_id: group_invoice.id,
+                                 payment: {amount: group_invoice.total}}
+        end.to change { group_invoice.payments.count }.by(1)
+
+        expect(assigns(:payment).payee).to be_nil
+      end
+    end
   end
 
   describe "GET#index" do

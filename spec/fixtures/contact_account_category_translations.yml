@@ -1,0 +1,564 @@
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+phone_number_person_mobile_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_mobile) %>
+  locale: de
+  name: "Mobil"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_mobile_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_mobile) %>
+  locale: fr
+  name: "Mobile"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_mobile_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_mobile) %>
+  locale: it
+  name: "Cellulare"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_mobile_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_mobile) %>
+  locale: en
+  name: "Mobile"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_landline_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_landline) %>
+  locale: de
+  name: "Festnetz"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_landline_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_landline) %>
+  locale: fr
+  name: "Ligne fixe"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_landline_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_landline) %>
+  locale: it
+  name: "Telefono fisso"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_landline_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_landline) %>
+  locale: en
+  name: "Landline"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_work_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_work) %>
+  locale: de
+  name: "Arbeit"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_work_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_work) %>
+  locale: fr
+  name: "Professionnel"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_work_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_work) %>
+  locale: it
+  name: "Ufficio"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_work_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_work) %>
+  locale: en
+  name: "Work"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_other_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_other) %>
+  locale: de
+  name: "Andere"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_other_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_other) %>
+  locale: fr
+  name: "Autre"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_other_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_other) %>
+  locale: it
+  name: "Altro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_other_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_person_other) %>
+  locale: en
+  name: "Other"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_office_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_office) %>
+  locale: de
+  name: "Büro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_office_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_office) %>
+  locale: fr
+  name: "Bureau"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_office_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_office) %>
+  locale: it
+  name: "Ufficio"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_office_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_office) %>
+  locale: en
+  name: "Office"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_mobile_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_mobile) %>
+  locale: de
+  name: "Mobil"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_mobile_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_mobile) %>
+  locale: fr
+  name: "Mobile"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_mobile_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_mobile) %>
+  locale: it
+  name: "Cellulare"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_mobile_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_mobile) %>
+  locale: en
+  name: "Mobile"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_other_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_other) %>
+  locale: de
+  name: "Andere"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_other_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_other) %>
+  locale: fr
+  name: "Autre"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_other_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_other) %>
+  locale: it
+  name: "Altro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_other_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:phone_number_group_other) %>
+  locale: en
+  name: "Other"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_facebook_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_facebook) %>
+  locale: de
+  name: "Facebook"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_facebook_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_facebook) %>
+  locale: fr
+  name: "Facebook"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_facebook_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_facebook) %>
+  locale: it
+  name: "Facebook"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_facebook_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_facebook) %>
+  locale: en
+  name: "Facebook"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_x_twitter_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_x_twitter) %>
+  locale: de
+  name: "X (Twitter)"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_x_twitter_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_x_twitter) %>
+  locale: fr
+  name: "X (Twitter)"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_x_twitter_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_x_twitter) %>
+  locale: it
+  name: "X (Twitter)"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_x_twitter_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_x_twitter) %>
+  locale: en
+  name: "X (Twitter)"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_other_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_other) %>
+  locale: de
+  name: "Andere"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_other_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_other) %>
+  locale: fr
+  name: "Autre"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_other_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_other) %>
+  locale: it
+  name: "Altro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_other_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_other) %>
+  locale: en
+  name: "Other"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_private_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_private) %>
+  locale: de
+  name: "Privat"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_private_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_private) %>
+  locale: fr
+  name: "Privé"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_private_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_private) %>
+  locale: it
+  name: "Privato"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_private_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_private) %>
+  locale: en
+  name: "Private"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_work_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_work) %>
+  locale: de
+  name: "Arbeit"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_work_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_work) %>
+  locale: fr
+  name: "Professionnel"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_work_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_work) %>
+  locale: it
+  name: "Ufficio"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_work_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_work) %>
+  locale: en
+  name: "Work"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_invoices_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_invoices) %>
+  locale: de
+  name: "Rechnungsadresse"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_invoices_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_invoices) %>
+  locale: fr
+  name: "Adresse de facturation"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_invoices_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_invoices) %>
+  locale: it
+  name: "Indirizzo di fatturazione"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_invoices_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_invoices) %>
+  locale: en
+  name: "Invoice"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_other_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_other) %>
+  locale: de
+  name: "Andere"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_other_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_other) %>
+  locale: fr
+  name: "Autre"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_other_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_other) %>
+  locale: it
+  name: "Altro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_other_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_person_other) %>
+  locale: en
+  name: "Other"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_office_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_office) %>
+  locale: de
+  name: "Büro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_office_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_office) %>
+  locale: fr
+  name: "Bureau"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_office_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_office) %>
+  locale: it
+  name: "Ufficio"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_office_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_office) %>
+  locale: en
+  name: "Office"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_invoices_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_invoices) %>
+  locale: de
+  name: "Rechnungsadresse"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_invoices_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_invoices) %>
+  locale: fr
+  name: "Adresse de facturation"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_invoices_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_invoices) %>
+  locale: it
+  name: "Indirizzo di fatturazione"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_invoices_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_invoices) %>
+  locale: en
+  name: "Invoice"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_work_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_work) %>
+  locale: de
+  name: "Arbeit"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_work_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_work) %>
+  locale: fr
+  name: "Professionnel"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_work_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_work) %>
+  locale: it
+  name: "Ufficio"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_work_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_work) %>
+  locale: en
+  name: "Work"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_invoices_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_invoices) %>
+  locale: de
+  name: "Rechnungsadresse"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_invoices_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_invoices) %>
+  locale: fr
+  name: "Adresse de facturation"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_invoices_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_invoices) %>
+  locale: it
+  name: "Indirizzo di fatturazione"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_invoices_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_invoices) %>
+  locale: en
+  name: "Invoice"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_other_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_other) %>
+  locale: de
+  name: "Andere"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_other_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_other) %>
+  locale: fr
+  name: "Autre"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_other_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_other) %>
+  locale: it
+  name: "Altro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_other_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_other) %>
+  locale: en
+  name: "Other"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_invoices_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_invoices) %>
+  locale: de
+  name: "Rechnungsadresse"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_invoices_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_invoices) %>
+  locale: fr
+  name: "Adresse de facturation"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_invoices_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_invoices) %>
+  locale: it
+  name: "Indirizzo di fatturazione"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_invoices_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_invoices) %>
+  locale: en
+  name: "Invoice"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

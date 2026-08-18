@@ -1,0 +1,204 @@
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+phone_number_person_mobile:
+  contact_account_type: PhoneNumber
+  contactable_type: Person
+  key: mobile
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_landline:
+  contact_account_type: PhoneNumber
+  contactable_type: Person
+  key: landline
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 1
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_work:
+  contact_account_type: PhoneNumber
+  contactable_type: Person
+  key: work
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 2
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_person_other:
+  contact_account_type: PhoneNumber
+  contactable_type: Person
+  key: other
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 3
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_office:
+  contact_account_type: PhoneNumber
+  contactable_type: Group
+  key: office
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_mobile:
+  contact_account_type: PhoneNumber
+  contactable_type: Group
+  key: mobile
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 1
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+phone_number_group_other:
+  contact_account_type: PhoneNumber
+  contactable_type: Group
+  key: other
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 2
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_facebook:
+  contact_account_type: SocialAccount
+  contactable_type: Person
+  key: facebook
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_x_twitter:
+  contact_account_type: SocialAccount
+  contactable_type: Person
+  key: x_twitter
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 1
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_other:
+  contact_account_type: SocialAccount
+  contactable_type: Person
+  key: other
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 2
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_private:
+  contact_account_type: AdditionalEmail
+  contactable_type: Person
+  key: private
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_work:
+  contact_account_type: AdditionalEmail
+  contactable_type: Person
+  key: work
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 1
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_invoices:
+  contact_account_type: AdditionalEmail
+  contactable_type: Person
+  key: invoices
+  unique_per_contactable: true
+  used_for_invoices: true
+  position: 2
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_person_other:
+  contact_account_type: AdditionalEmail
+  contactable_type: Person
+  key: other
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 3
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_office:
+  contact_account_type: AdditionalEmail
+  contactable_type: Group
+  key: office
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_invoices:
+  contact_account_type: AdditionalEmail
+  contactable_type: Group
+  key: invoices
+  unique_per_contactable: true
+  used_for_invoices: true
+  position: 1
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_work:
+  contact_account_type: AdditionalAddress
+  contactable_type: Person
+  key: work
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_invoices:
+  contact_account_type: AdditionalAddress
+  contactable_type: Person
+  key: invoices
+  unique_per_contactable: true
+  used_for_invoices: true
+  position: 1
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_person_other:
+  contact_account_type: AdditionalAddress
+  contactable_type: Person
+  key: other
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 2
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_invoices:
+  contact_account_type: AdditionalAddress
+  contactable_type: Group
+  key: invoices
+  unique_per_contactable: true
+  used_for_invoices: true
+  position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

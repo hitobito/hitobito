@@ -20,8 +20,13 @@ module Globalized
   included do
     before_destroy :remember_translated_label
 
-    class_attribute :list_alphabetically
+    class_attribute :list_alphabetically, :default_list_order
     self.list_alphabetically = true
+    self.default_list_order = [:id]
+
+    scope :with_translation, -> {
+      includes(:translations).where(translations: {locale: I18n.locale})
+    }
   end
 
   module ClassMethods
@@ -103,7 +108,12 @@ module Globalized
         .includes(:translations)
         .select("#{table_name}.*", translated_label_column)
         .distinct
-      list_alphabetically ? scope.order("#{translated_label_column} NULLS LAST") : scope.order(:id)
+
+      if list_alphabetically
+        scope.order("#{translated_label_column} NULLS LAST")
+      else
+        scope.order(*default_list_order)
+      end
     end
 
     def left_join_translation

@@ -96,6 +96,10 @@ en:
       models:
         additional_address:
           name_missing: 'Bitte geben Sie einen Namen ein'
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "must be enabled when '%{attribute}' is enabled"
         cors_origin:
           attributes:
             origin:
@@ -252,6 +256,9 @@ en:
       calendar:
         one: Calendar feed
         other: Calendar feeds
+      contact_account_category:
+        one: Contact details category
+        other: Contact details categories
       custom_content:
         one: Text
         other: Texts
@@ -1251,6 +1258,15 @@ en:
         category: Category
         subject: Subject
         message: Message
+
+      contact_account_category:
+        key: Key
+        contact_account_type: Contact type
+        contactable_type: Applies to
+        unique_per_contactable: Unique per contactable
+        used_for_invoices: Used for invoices
+        position: Position
+        name: Description
 
       label_format:
         name: Description

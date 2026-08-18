@@ -14,10 +14,12 @@
 #  label            :string
 #  mailings         :boolean          default(TRUE), not null
 #  public           :boolean          default(TRUE), not null
+#  category_id      :bigint
 #  contactable_id   :integer          not null
 #
 # Indexes
 #
+#  index_additional_emails_on_category_id                          (category_id)
 #  index_additional_emails_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #  index_additional_emails_on_contactable_where_invoices_true      (contactable_id,contactable_type) UNIQUE WHERE (invoices = true)
 #
@@ -30,13 +32,6 @@ class AdditionalEmail < ActiveRecord::Base
   self.value_attr = :email
 
   validates_by_schema
-
-  # A dot at the end is invalid due to translation purpose
-  validates :label, format: {without: /[.]$\z/}
-
-  validates :invoices, uniqueness: {scope: [:contactable_id, :contactable_type], conditions: -> {
-    where(invoices: true)
-  }}, if: :invoices
 
   normalizes :email, with: ->(attribute) { attribute.downcase }
 

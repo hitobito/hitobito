@@ -18,6 +18,7 @@ module ContactAccountResource
 
     attribute(:label, :string) { @object.translated_label }
     attribute :public, :boolean
+    attribute :category_id, :integer
 
     attribute :contactable_id, :integer
     attribute :contactable_type, :string

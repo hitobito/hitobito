@@ -5,6 +5,11 @@
 
 module ContactAccount
   extend ActiveSupport::Concern
+  # Still included for #predefined_labels/#translate_label, which
+  # Dropdown::LabelItems and Contactable::Address (address_type-based PDF label
+  # export) still read directly. Those -- and this include -- are retired once
+  # they're migrated onto ContactAccountCategory in a later step of #4359; the new
+  # category-based UI added here does not use this mechanism at all.
   include NormalizedI18nLabels
 
   included do
@@ -15,24 +20,43 @@ module ContactAccount
     has_paper_trail meta: {main: :contactable}
 
     belongs_to :contactable, polymorphic: true
+    belongs_to :category, class_name: "ContactAccountCategory", optional: true
 
-    validates :label, presence: true
-    after_validation :mirror_label_errors_to_translated_label
+    validate :assert_category_unique_per_contactable, if: -> { category&.unique_per_contactable? }
   end
 
   def to_s(_format = :default)
-    "#{value} (#{label})"
+    category_label.presence ? "#{value} (#{category_label})" : value.to_s
   end
 
   def value
     send(value_attr)
   end
 
+  # label is a purely descriptive, optional free-text addition to category
+  # (analogous to Role#label) and carries no business logic of its own.
+  # Records not yet backfilled with a category (category_id still nil) fall back
+  # to the old translated label, so they keep displaying correctly in the
+  # meantime instead of showing a raw, untranslated string.
+  def category_label
+    return translated_label unless category
+
+    [category.to_s, label.presence].compact.join(", ")
+  end
+
   private
 
-  # The form field is bound to translated_label (a virtual attribute writing through to
-  # label), so errors added to :label alone are not shown next to that field.
-  def mirror_label_errors_to_translated_label
-    errors[:label].each { |message| errors.add(:translated_label, message) }
+  # Checked against the contactable's in-memory association rather than a fresh DB
+  # query, so a sibling marked for destruction in the same nested-attributes submit
+  # (e.g. "replace this entry with a new one under the same category") is correctly
+  # excluded, matching how ActiveRecord's own autosave validation treats siblings.
+  def assert_category_unique_per_contactable
+    return unless contactable
+
+    siblings = contactable.public_send(self.class.name.demodulize.tableize)
+    duplicate = siblings.find do |sibling|
+      sibling != self && !sibling.marked_for_destruction? && sibling.category_id == category_id
+    end
+    errors.add(:category, :already_assigned, category: duplicate.category.to_s) if duplicate
   end
 end

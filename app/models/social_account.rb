@@ -12,10 +12,12 @@
 #  label            :string
 #  name             :string           not null
 #  public           :boolean          default(TRUE), not null
+#  category_id      :bigint
 #  contactable_id   :integer          not null
 #
 # Indexes
 #
+#  index_social_accounts_on_category_id                          (category_id)
 #  index_social_accounts_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 class SocialAccount < ActiveRecord::Base

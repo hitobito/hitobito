@@ -6,13 +6,6 @@
 require "spec_helper"
 
 describe PhoneNumber do
-  context ".normalize_label" do
-    it "reuses existing label" do
-      a1 = Fabricate(:phone_number, label: "privat", number: "+41 44 123 45 67")
-      expect(a1.label).to eq("Privat")
-    end
-  end
-
   context ".valid" do
     it "number must be present" do
       a1 = Fabricate.build(:phone_number, label: "privat", number: nil)
@@ -38,23 +31,6 @@ describe PhoneNumber do
       a1 = Fabricate.build(:phone_number, number: "0441234567")
       expect(a1.valid?).to eq(true)
       expect(a1.number).to eq("+41 44 123 45 67")
-    end
-  end
-
-  context "#available_labels" do
-    subject { PhoneNumber.available_labels }
-
-    it { is_expected.to include(Settings.phone_number.predefined_labels.first) }
-
-    it "excludes labels from database" do
-      Fabricate(:phone_number, label: "Foo", number: "+41 44 123 45 67")
-      is_expected.not_to include("Foo")
-    end
-
-    it "includes labels from database and predefined only once" do
-      predef = Settings.phone_number.predefined_labels.first
-      Fabricate(:phone_number, label: predef, number: "+41 44 123 45 67")
-      expect(subject.count(predef)).to eq(1)
     end
   end
 

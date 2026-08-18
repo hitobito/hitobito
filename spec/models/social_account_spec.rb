@@ -5,31 +5,6 @@
 require "spec_helper"
 
 describe SocialAccount do
-  context ".normalize_label" do
-    it "reuses existing label" do
-      Fabricate(:social_account, label: "Foo")
-      a2 = Fabricate(:social_account, label: "fOO")
-      expect(a2.label).to eq("Foo")
-    end
-  end
-
-  context "#available_labels" do
-    subject { SocialAccount.available_labels }
-
-    it { is_expected.to include(Settings.social_account.predefined_labels.first) }
-
-    it "excludes labels from database" do
-      Fabricate(:social_account, label: "Foo")
-      is_expected.not_to include("Foo")
-    end
-
-    it "includes labels from database and predefined only once" do
-      predef = Settings.social_account.predefined_labels.first
-      Fabricate(:social_account, label: predef)
-      expect(subject.count(predef)).to eq(1)
-    end
-  end
-
   context "paper trails", versioning: true do
     let(:person) { people(:top_leader) }
 

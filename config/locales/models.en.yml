@@ -164,8 +164,6 @@ en:
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
           attributes:
             base:
-              max_one_additional_invoice_address: Only one address can be selected as the billing address.
-              additional_address_labels_must_be_unique: The names of the other addresses must be unique.
               cannot_have_managers_and_manageds: '%{name} cannot have both administrator and children.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: The child could not be added as they are already an administrator.
@@ -503,7 +501,8 @@ en:
         category: Category
 
       additional_address:
-        translated_label: Bezeichnung
+        category: Category
+        label: Bezeichnung
         first_name: Vorname
         last_name: Nachname
         organization_name: Firmenname
@@ -520,7 +519,7 @@ en:
         public: Public
 
       additional_addresses:
-        translated_label: Bezeichnung
+        category: Category
         label: Description
         street: Street
         postbox: Postfach
@@ -1014,6 +1013,7 @@ en:
 
       phone_number:
         number: Number
+        category: Category
         label: Type
         public: Public
 
@@ -1043,6 +1043,7 @@ en:
       # used for nested phone_numbers
       phone_numbers:
         number: Phone number
+        category: Category
         label: Phone number type
         public: Public
 
@@ -1122,18 +1123,21 @@ en:
 
       social_account:
         name: Name
+        category: Category
         label: Type
         public: Public
 
       # used for nested social accounts
       social_accounts:
         name: Social Media Account
+        category: Category
         label: Social Media Type
         public: Public
 
       additional_email:
         email: E-Mail
         name: Further e-mail
+        category: Category
         label: Further e-mail type
         public: Public
         mailings: Mailing
@@ -1142,6 +1146,7 @@ en:
       additional_emails:
         email: E-Mail
         name: Further e-mail
+        category: Category
         label: Further e-mail type
         public: Public
         mailings: Versand
@@ -1610,6 +1615,9 @@ en:
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:
+    attributes:
+      category:
+        already_assigned: "%{category} has already been assigned"
     messages:
       invalid_zipcode: is not valid
       attachments_not_allowed: "Attachments not allowed"

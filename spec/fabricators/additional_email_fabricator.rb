@@ -5,5 +5,5 @@
 Fabricator(:additional_email) do
   contactable { Fabricate(:person) }
   email { "#{Faker::Internet.user_name}@hitobito.example.com" }
-  label { "Privat" }
+  category_id { |attrs| attrs[:category]&.id || ActiveRecord::FixtureSet.identify(:additional_email_person_other) }
 end

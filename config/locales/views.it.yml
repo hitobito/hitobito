@@ -160,16 +160,11 @@ it:
     public_check_box:
       tooltip: Annotazioni private sono visibili solo al proprio gruppo. Se sei un capo nel tuo gruppo, le annotazioni marcate come pubbliche saranno visibili anche ai capi e responsabili di altri gruppi,.
 
-    phone_number_fields:
-      placeholder_type: Tipo (privato, lavoro, ...)
-
     social_account_fields:
-      placeholder_value: Sito internet, nome skype, profilo...
-      placeholder_type: Tipo (Skype, Facebook...)
+      placeholder_value: Sito internet, profilo...
 
     additional_email_fields:
       placeholder_value: Email
-      placeholder_type: Tipo (privato, lavoro, ...)
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
       tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 

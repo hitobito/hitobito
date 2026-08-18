@@ -75,8 +75,7 @@ class NestedFieldsForBuilder
     placeholder = "NEW_#{assoc.to_s.upcase}_RECORD"
     content_tag(:template, data: {"#{stimulus_controller_prefix}_target": target}) do
       content_tag(:div, class: "fields", data: {new_record: true}) do
-        record = model_object || options[:model_object] ||
-          object.class.reflect_on_association(assoc)&.klass&.new
+        record = model_object || options[:model_object] || new_record_instance
         fields_for(assoc, record, child_index: placeholder) do |fields|
           render_block_or_partial(fields, partial_name, &block)
         end
@@ -91,5 +90,21 @@ class NestedFieldsForBuilder
       render(partial_name, f: fields)
     end
     content + fields.hidden_field(:_destroy)
+  end
+
+  # For associations whose target has a polymorphic :contactable association
+  # (i.e. the four ContactAccount models), pre-assign it to the top-level form's
+  # object so the template row already knows its contactable_type -- e.g. to pick
+  # the right ContactAccountCategory list -- even though it is never persisted as-is.
+  # The top-level object isn't always a real AR record itself (e.g.
+  # Event::ParticipationContactData wraps a Person without being one) -- fall
+  # back to its #person, if it has one, rather than assigning the wrapper itself
+  # as the polymorphic contactable.
+  def new_record_instance
+    klass = object.class.reflect_on_association(assoc)&.klass
+    return klass&.new unless klass&.reflect_on_association(:contactable)
+
+    contactable = object.is_a?(ActiveRecord::Base) ? object : object.try(:person)
+    contactable ? klass.new(contactable:) : klass.new
   end
 end

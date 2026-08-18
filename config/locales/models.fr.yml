@@ -166,8 +166,6 @@ fr:
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
           attributes:
             base:
-              max_one_additional_invoice_address: Une seule adresse peut être choisie comme adresse de facturation.
-              additional_address_labels_must_be_unique: Les désignations des autres adresses doivent être uniques.
               cannot_have_managers_and_manageds: '%{name} ne peut pas avoir à la fois des administrateurs et des enfants.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: L'enfant n'a pas pu être ajouté, car il est déjà administrateur.
@@ -587,7 +585,8 @@ fr:
         category: Catégorie
 
       additional_address:
-        translated_label: Désignation
+        category: Catégorie
+        label: Désignation
         first_name: Vorname
         last_name: Nachname
         organization_name: Firmenname
@@ -604,7 +603,7 @@ fr:
         public: Public
 
       additional_addresses:
-        translated_label: Bezeichnung
+        category: Catégorie
         label: Désignation
         street: Rue
         postbox: Postfach
@@ -1098,6 +1097,7 @@ fr:
 
       phone_number:
         number: Numéro
+        category: Catégorie
         label: Type
         public: Public
 
@@ -1127,6 +1127,7 @@ fr:
       # used for nested phone_numbers
       phone_numbers:
         number: Numéro de téléphone
+        category: Catégorie
         label: Type de numéro de téléphone
         public: Public
 
@@ -1210,18 +1211,21 @@ fr:
 
       social_account:
         name: Nom
+        category: Catégorie
         label: Type
         public: Public
 
       # used for nested social accounts
       social_accounts:
         name: Nom du réseau social
+        category: Catégorie
         label: Type de réseau social
         public: Public
 
       additional_email:
         email: Adresse e-mail
         name: Adresse e-mail supplémentaire
+        category: Catégorie
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
@@ -1230,6 +1234,7 @@ fr:
       additional_emails:
         email: Courriel
         name: Adresse e-mail supplémentaire
+        category: Catégorie
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
@@ -1700,6 +1705,9 @@ fr:
       qualifications: Consulter, créer et supprimer toutes les qualifications auxquelles tu as accès
 
   errors:
+    attributes:
+      category:
+        already_assigned: "%{category} est déjà attribué"
     messages:
       invalid_zipcode: n'est pas valable
       attachments_not_allowed: "ne doit pas contenir d'annexe"

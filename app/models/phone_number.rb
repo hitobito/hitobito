@@ -12,10 +12,12 @@
 #  label            :string
 #  number           :string           not null
 #  public           :boolean          default(TRUE), not null
+#  category_id      :bigint
 #  contactable_id   :integer          not null
 #
 # Indexes
 #
+#  index_phone_numbers_on_category_id                          (category_id)
 #  index_phone_numbers_on_contactable_id_and_contactable_type  (contactable_id,contactable_type)
 #
 class PhoneNumber < ActiveRecord::Base

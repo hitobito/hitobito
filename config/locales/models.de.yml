@@ -165,8 +165,6 @@ de:
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
           attributes:
             base:
-              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
-              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
               cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
@@ -505,7 +503,8 @@ de:
         category: Kategorie
 
       additional_address:
-        translated_label: Bezeichnung
+        category: Kategorie
+        label: Bezeichnung
         first_name: Vorname
         last_name: Nachname
         organization_name: Firmenname
@@ -522,7 +521,7 @@ de:
         public: Öffentlich
 
       additional_addresses:
-        translated_label: Bezeichnung
+        category: Kategorie
         label: Bezeichnung
         street: Strasse
         postbox: Postfach
@@ -1016,6 +1015,7 @@ de:
 
       phone_number:
         number: Nummer
+        category: Kategorie
         label: Typ
         public: Öffentlich
 
@@ -1045,6 +1045,7 @@ de:
       # used for nested phone_numbers
       phone_numbers:
         number: Telefonnummer
+        category: Kategorie
         label: Telefonnummer Typ
         public: Öffentlich
 
@@ -1125,18 +1126,21 @@ de:
 
       social_account:
         name: Name
+        category: Kategorie
         label: Typ
         public: Öffentlich
 
       # used for nested social accounts
       social_accounts:
         name: Social Media Name
+        category: Kategorie
         label: Social Media Typ
         public: Öffentlich
 
       additional_email:
         email: E-Mail
         name: Weitere E-Mail
+        category: Kategorie
         label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
@@ -1145,6 +1149,7 @@ de:
       additional_emails:
         email: E-Mail
         name: Weitere E-Mail
+        category: Kategorie
         label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
@@ -1615,6 +1620,9 @@ de:
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:
+    attributes:
+      category:
+        already_assigned: "%{category} ist bereits vergeben"
     messages:
       invalid_zipcode: ist nicht gültig
       attachments_not_allowed: "darf keine Anhänge enthalten"

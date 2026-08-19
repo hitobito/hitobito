@@ -23,6 +23,15 @@ describe "event_participations#index", type: :request do
       end
     end
 
+    describe "filtering by event role type" do
+      let(:params) { {include: "roles", filter: {roles: {type: "Event::Role::Leader"}}} }
+
+      it "works" do
+        make_request
+        expect(response.status).to eq(200), response.body
+      end
+    end
+
     describe "filtering by participant id and type" do
       let(:participation) { event_participations(:top) }
 

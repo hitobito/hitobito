@@ -25,6 +25,11 @@ module Export::Pdf::Invoice
     # Renders the QR payment slip according to the Swiss QR Bill standard v2.3
     # (in force since 21 November 2025).
     #
+    # **WARNING**: if you make changes to the QR Bill payment slip, always check
+    # the generated slip with the SIX Swiss QR Bill Validator
+    # at https://validation.iso-payments.ch/qrrechnung/
+    # Make sure to check edge case slips, e.g. minimal address fields, full address fields...
+    #
     # IMPORTANT — address rules for the QR code and Zahlteil:
     # Only the structured address type «S» is permitted (type «K» / combined address was
     # retired on 22 November 2025). The structured address contains exactly these fields:

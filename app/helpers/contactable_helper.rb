@@ -30,8 +30,7 @@ module ContactableHelper
     end
 
     form.collection_select(
-      :translated_label, options, :value, :translated, {selected: current_label},
-      class: "form-select form-select-sm"
+      :translated_label, options, :value, :translated, selected: current_label
     )
   end
 

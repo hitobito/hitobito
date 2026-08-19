@@ -43,6 +43,12 @@ class PersonResource < ApplicationResource
   attribute :picture, :string do
     @object.decorate.picture_full_url
   end
+  attribute :tag_list, :array, writable: false, filterable: false, sortable: false do
+    @object.tags
+      .reject { |tag| PersonTags::Validation.tag_names.include?(tag.name) }
+      .map(&:name)
+      .sort
+  end
   attribute :updated_at, :datetime
   attribute :additional_information, :string, readable: :show_details?, writable: :write_details?
 
@@ -72,6 +78,10 @@ class PersonResource < ApplicationResource
   has_many :event_participations, resource: Event::ParticipationResource, writable: false
 
   filter :updated_at, :datetime
+
+  def base_scope
+    super.includes(:tags)
+  end
 
   private
 

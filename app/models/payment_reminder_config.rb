@@ -25,7 +25,7 @@ class PaymentReminderConfig < ActiveRecord::Base
 
   belongs_to :invoice_config
 
-  validates :title, :text, length: {maximum: 255}
+  validates :title, length: {maximum: 255}
 
   validates_by_schema
 

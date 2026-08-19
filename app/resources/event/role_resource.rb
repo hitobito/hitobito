@@ -17,6 +17,6 @@ class Event::RoleResource < ApplicationResource
   belongs_to :participation
 
   def base_scope
-    Event::Role
+    Event::Role.all
   end
 end

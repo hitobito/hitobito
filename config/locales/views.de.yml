@@ -395,6 +395,8 @@ de:
     "403":
       title: "Zugriff verweigert"
       explanation: "Du bist nicht berechtigt auf diese Resource zuzugreifen."
+      update_email:
+        explanation: "Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern."
     "404":
       title: "Diese Seite gibt es leider nicht (404)"
       explanation: "Vielleicht haben Sie die Adresse falsch eingegeben oder die Seite ist inzwischen gelöscht worden."

@@ -64,6 +64,11 @@ class JsonApiController < ActionController::API
     title: I18n.t("errors.403.title"),
     message: ->(error) { I18n.t("errors.403.explanation") }
 
+  register_exception PersonResource::UpdateEmailNotAllowed,
+    status: 403,
+    title: I18n.t("errors.403.title"),
+    message: ->(error) { I18n.t("errors.403.update_email.explanation") }
+
   register_exception JsonApiUnauthorized,
     status: 401,
     title: I18n.t("errors.401.title"),

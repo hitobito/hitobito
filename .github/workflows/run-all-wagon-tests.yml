@@ -42,21 +42,18 @@ jobs:
       - name: 'List wagon repositories'
         id: list-wagon-repositories
         run: |
-          SKIP_LIST='["dav", "florist"]'
           WAGONS=$(gh repo list hitobito -L 100 --no-archived --json owner,name | \
-            jq -c --argjson skip "$SKIP_LIST" '
-              map(
-                select(.name | test("^hitobito_")) |
-                (.name | capture("^hitobito_(?<suffix>.+)$").suffix) as $suffix |
-                select($skip | contains([$suffix]) | not) |
-                { owner: .owner.login, repo: .name, name: $suffix }
-              )
-            ')
+            jq -c --arg skip "$SKIP_WAGONS" '($skip | split(" ")) as $skipped |
+              map(select(.name | startswith("hitobito_")) |
+                { owner: .owner.login, repo: .name, name: .name | ltrimstr("hitobito_") } |
+                select(.name | IN($skipped[]) | not))')
           echo "$WAGONS"
           echo "wagons=$WAGONS" >> $GITHUB_OUTPUT
         env:
           # This PAT needs access to all repos, Read access to metadata and Read and Write access to actions, code, and pull requests
           GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
+          # Space-separated wagon names to exclude
+          SKIP_WAGONS: ${{ vars.WAGON_TESTS_SKIP_WAGONS }}
 
   run-wagon-tests:
     name: 'Run ${{ matrix.wagon.name }} wagon tests'

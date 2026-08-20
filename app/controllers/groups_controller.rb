@@ -35,6 +35,9 @@ class GroupsController < CrudController
   before_render_form :load_contacts
   after_save :update_main_self_registration_group
 
+  respond_to :js, only: :confirm_deletion
+  skip_authorize_resource only: [:confirm_deletion]
+
   def index
     flash.keep if html_request?
     redirect_to group_path(Group.root_id, format: request.format.to_sym)
@@ -81,6 +84,11 @@ class GroupsController < CrudController
   end
 
   def person_notes
+  end
+
+  def confirm_deletion
+    authorize!(:destroy, entry)
+    entry
   end
 
   private

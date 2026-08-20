@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Dialog erstellt, um das Löschen von Gruppen schwieriger zu machen (#1976)
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)
 - Rechungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (sww#296)

@@ -25,6 +25,19 @@ RSpec.describe "events#show", type: :request do
       end
     end
 
+    describe "event which is not globally visible" do
+      before do
+        event.update!(globally_visible: false)
+        service_token.update!(permission: :layer_read)
+      end
+
+      it "works for a token in the same layer" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.id).to eq(event.id)
+      end
+    end
+
     describe "course" do
       let(:event) { events(:top_course) }
       let(:params) { {include: "leaders,contact"} }

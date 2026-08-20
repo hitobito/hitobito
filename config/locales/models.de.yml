@@ -505,7 +505,7 @@ de:
         town: Ort
         country: Land
         postbox: Postfach
-        address_care_of: zusätz. Adresszeile
+        address_care_of: zusätl. Adresszeile
         public: Öffentlich
 
       additional_addresses:

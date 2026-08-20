@@ -119,6 +119,29 @@ describe PersonResource, type: :resource do
       end
     end
 
+    context "with update_email permission, it" do
+      it "updates email" do
+        payload[:data][:attributes][:email] = "new@example.com"
+
+        expect {
+          expect(instance.update_attributes).to eq(true)
+        }.to change { person.reload.email }.to("new@example.com")
+      end
+    end
+
+    context "without update_email permission in all groups of a dual-homed person, it" do
+      let!(:other_role) do
+        Fabricate(Group::BottomLayer::Member.name, person: person, group: groups(:bottom_layer_two))
+      end
+
+      it "does not update email" do
+        payload[:data][:attributes][:email] = "new@example.com"
+
+        expect { instance.update_attributes }.to raise_error(PersonResource::UpdateEmailNotAllowed)
+        expect(person.reload.email).not_to eq("new@example.com")
+      end
+    end
+
     context "without show_details permission, it" do
       before do
         allow(ability).to receive(:can?).and_call_original

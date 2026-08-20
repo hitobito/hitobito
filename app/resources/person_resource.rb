@@ -13,11 +13,15 @@ class PersonResource < ApplicationResource
 
   DETAIL_ATTRS = %w[gender birthday additional_information].freeze
 
+  class UpdateEmailNotAllowed < StandardError; end
+
   def authorize_update(model)
     changed_details = model.changed_attribute_names_to_save & DETAIL_ATTRS
 
     super do |ability, model_from_db|
       ability.authorize!(:show_details, model_from_db) if changed_details.present?
+
+      raise UpdateEmailNotAllowed if model.changes.include?("email") && !ability.can?(:update_email, model_from_db)
     end
   end
 

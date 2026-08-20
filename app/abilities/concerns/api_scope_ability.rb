@@ -41,7 +41,7 @@ module ApiScopeAbility
     case action.to_sym
     when :show, :show_full, :show_details, :index, :list_available, :read
       true
-    when :create, :update, :destroy, :manage
+    when :create, :update, :update_email, :destroy, :manage
       write_permission?
     end
   end

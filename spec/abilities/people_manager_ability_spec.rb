@@ -113,6 +113,45 @@ describe PeopleManagerAbility do
     end
   end
 
+  describe :create_managed do
+    context "top leader" do
+      let(:person) { top_leader }
+
+      it "may create managed for bottom_member" do
+        expect(ability).to be_able_to(:create_managed, build(managed: bottom_member))
+      end
+
+      it "may not create managed for himself" do
+        expect(ability).not_to be_able_to(:create_managed, build(managed: top_leader))
+      end
+    end
+
+    context "bottom member" do
+      let(:person) { bottom_member }
+
+      it "may not create managed for top_leader" do
+        expect(ability).not_to be_able_to(:create_managed, build(managed: top_leader))
+      end
+
+      it "may not create managed for himself" do
+        expect(ability).not_to be_able_to(:create_managed, build(managed: bottom_member))
+      end
+    end
+
+    context "local guide" do
+      let(:person) { Fabricate(Group::BottomLayer::LocalGuide.name.to_sym, group: groups(:bottom_layer_one)).person }
+
+      it "may create managed for bottom member" do
+        expect(ability).to be_able_to(:create_managed, build(managed: bottom_member))
+      end
+
+      it "may not create managed for bottom member because they have a role outside of person layer permissions" do
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_two), person: bottom_member)
+        expect(ability).not_to be_able_to(:create_managed, build(managed: bottom_member))
+      end
+    end
+  end
+
   describe :destroy_manager do
     context "top leader" do
       let(:person) { top_leader }

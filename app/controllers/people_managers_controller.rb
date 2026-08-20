@@ -19,8 +19,6 @@ class PeopleManagersController < ApplicationController
   end
 
   def create
-    assign_attributes
-
     success = ActiveRecord::Base.transaction do
       if entry.save && entry.managed.valid? && entry.manager.valid?
         yield entry if block_given?
@@ -63,12 +61,12 @@ class PeopleManagersController < ApplicationController
     authorize!(:index, PeopleManager)
   end
 
-  def assign_attributes
-    entry.attributes = model_params
+  def entry
+    @entry ||= params[:id] ? find_entry : build_entry
   end
 
-  def entry
-    @entry ||= person.send(assoc).build
+  def build_entry
+    person.send(assoc).build(model_params)
   end
 
   def find_entry

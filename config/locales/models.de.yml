@@ -1478,6 +1478,7 @@ de:
           bcn: Banque Cantonale Neuchâteloise
           bcv: Banque Cantonale Vaudoise
           bcvs: Walliser Kantonalbank
+          szkb: Schwyzer Kantonalbank
 
       period_invoice_template:
         name: Bezeichnung

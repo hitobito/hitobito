@@ -93,9 +93,49 @@ social_account_person_x_twitter:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+social_account_person_website:
+  contact_account_type: SocialAccount
+  contactable_type: Person
+  key: website
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 2
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
 social_account_person_other:
   contact_account_type: SocialAccount
   contactable_type: Person
+  key: other
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 3
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_facebook:
+  contact_account_type: SocialAccount
+  contactable_type: Group
+  key: facebook
+  unique_per_contactable: true
+  used_for_invoices: false
+  position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_website:
+  contact_account_type: SocialAccount
+  contactable_type: Group
+  key: website
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 1
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_other:
+  contact_account_type: SocialAccount
+  contactable_type: Group
   key: other
   unique_per_contactable: false
   used_for_invoices: false
@@ -163,6 +203,16 @@ additional_email_group_invoices:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+additional_email_group_other:
+  contact_account_type: AdditionalEmail
+  contactable_type: Group
+  key: other
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 2
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
 additional_address_person_work:
   contact_account_type: AdditionalAddress
   contactable_type: Person
@@ -200,5 +250,15 @@ additional_address_group_invoices:
   unique_per_contactable: true
   used_for_invoices: true
   position: 0
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_other:
+  contact_account_type: AdditionalAddress
+  contactable_type: Group
+  key: other
+  unique_per_contactable: false
+  used_for_invoices: false
+  position: 1
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

@@ -255,6 +255,34 @@ social_account_person_x_twitter_en:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+social_account_person_website_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_website) %>
+  locale: de
+  name: "Webseite"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_website_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_website) %>
+  locale: fr
+  name: "Site web"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_website_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_website) %>
+  locale: it
+  name: "Sito web"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_person_website_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_website) %>
+  locale: en
+  name: "Website"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
 social_account_person_other_de:
   contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_other) %>
   locale: de
@@ -278,6 +306,90 @@ social_account_person_other_it:
 
 social_account_person_other_en:
   contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_person_other) %>
+  locale: en
+  name: "Other"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_facebook_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_facebook) %>
+  locale: de
+  name: "Facebook"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_facebook_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_facebook) %>
+  locale: fr
+  name: "Facebook"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_facebook_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_facebook) %>
+  locale: it
+  name: "Facebook"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_facebook_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_facebook) %>
+  locale: en
+  name: "Facebook"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_website_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_website) %>
+  locale: de
+  name: "Webseite"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_website_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_website) %>
+  locale: fr
+  name: "Site web"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_website_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_website) %>
+  locale: it
+  name: "Sito web"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_website_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_website) %>
+  locale: en
+  name: "Website"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_other_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_other) %>
+  locale: de
+  name: "Andere"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_other_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_other) %>
+  locale: fr
+  name: "Autre"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_other_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_other) %>
+  locale: it
+  name: "Altro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+social_account_group_other_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:social_account_group_other) %>
   locale: en
   name: "Other"
   created_at: <%= Time.zone.now %>
@@ -451,6 +563,34 @@ additional_email_group_invoices_en:
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
+additional_email_group_other_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_other) %>
+  locale: de
+  name: "Andere"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_other_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_other) %>
+  locale: fr
+  name: "Autre"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_other_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_other) %>
+  locale: it
+  name: "Altro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_email_group_other_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_email_group_other) %>
+  locale: en
+  name: "Other"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
 additional_address_person_work_de:
   contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_person_work) %>
   locale: de
@@ -560,5 +700,33 @@ additional_address_group_invoices_en:
   contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_invoices) %>
   locale: en
   name: "Invoice"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_other_de:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_other) %>
+  locale: de
+  name: "Andere"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_other_fr:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_other) %>
+  locale: fr
+  name: "Autre"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_other_it:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_other) %>
+  locale: it
+  name: "Altro"
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+additional_address_group_other_en:
+  contact_account_category_id: <%= ActiveRecord::FixtureSet.identify(:additional_address_group_other) %>
+  locale: en
+  name: "Other"
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

@@ -29,6 +29,7 @@ class ContactAccountCategory < ApplicationRecord
 
   CONTACT_ACCOUNT_TYPES = [AdditionalAddress, AdditionalEmail, PhoneNumber, SocialAccount]
   CONTACTABLE_TYPES = [Person, Group]
+  OTHER_KEY = "other"
 
   self.list_alphabetically = false
   self.default_list_order = [:contactable_type, :contact_account_type, :position]
@@ -48,6 +49,9 @@ class ContactAccountCategory < ApplicationRecord
 
   attr_readonly :key, :contact_account_type, :contactable_type
 
+  scope :used_for_invoices, -> { where(used_for_invoices: true) }
+  scope :other, -> { where(key: OTHER_KEY) }
+
   def self.for(contact_account_type, contactable_type)
     with_translation
       .where(contact_account_type: contact_account_type, contactable_type: contactable_type)
@@ -55,7 +59,7 @@ class ContactAccountCategory < ApplicationRecord
   end
 
   def other?
-    key == "other"
+    key == OTHER_KEY
   end
 
   def to_s

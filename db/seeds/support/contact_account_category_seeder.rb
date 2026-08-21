@@ -5,130 +5,130 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# Seeds the initial ContactAccountCategory rows derived from the previous
-# config/settings.yml predefined_labels lists.
+# Seeds the ContactAccountCategory rows derived from the previous
+# config/settings.yml predefined_labels lists. #seed is idempotent per row
+# (via seed_once), so it can run again on every deploy to pick up categories
+# added by a later release without touching or duplicating existing ones.
 #
-# Runs only once: if any ContactAccountCategory already exists, #seed is a no-op,
-# so manually created categories are never touched or duplicated.
+# ContactAccountCategoryMigrationJob is only run the very first time #seed
+# runs (i.e. when the table was completely empty beforehand), so the one-time
+# backfill never re-runs on an already-migrated install. Run synchronously
+# rather than enqueued -- #seed is called from a migration (see
+# db/migrate/*_seed_and_backfill_contact_account_categories.rb), so the
+# backfill is guaranteed to have finished before a new release starts serving
+# traffic, instead of racing an async job against the deploy.
 class ContactAccountCategorySeeder
-  CATEGORIES = [
-    # PhoneNumber
-    {contact_account_type: "PhoneNumber", contactable_type: "Person", key: "mobile",
-     name: {de: "Mobil", fr: "Mobile", it: "Cellulare", en: "Mobile"}},
-    {contact_account_type: "PhoneNumber", contactable_type: "Person", key: "landline",
-     name: {de: "Festnetz", fr: "Ligne fixe", it: "Telefono fisso", en: "Landline"}},
-    {contact_account_type: "PhoneNumber", contactable_type: "Person", key: "work",
-     name: {de: "Arbeit", fr: "Professionnel", it: "Ufficio", en: "Work"}},
-    {contact_account_type: "PhoneNumber", contactable_type: "Person", key: "other",
-     name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}},
+  # Nested as contact_account_type => contactable_type => [{key:, name:, ...}],
+  # so all the categories for one combination -- and their relative
+  # order/position -- are readable together. Wagons extend this by digging
+  # into (or building) the nested structure directly, e.g.:
+  #   ContactAccountCategorySeeder::CATEGORIES["PhoneNumber"]["Person"] <<
+  #     {key: "natel", name: {de: "Natel", fr: "Natel", it: "Natel", en: "Mobile"}}
+  CATEGORIES = {
+    "PhoneNumber" => {
+      "Person" => [
+        {key: "mobile", name: {de: "Mobil", fr: "Mobile", it: "Cellulare", en: "Mobile"}},
+        {key: "landline",
+         name: {de: "Festnetz", fr: "Ligne fixe", it: "Telefono fisso", en: "Landline"}},
+        {key: "work", name: {de: "Arbeit", fr: "Professionnel", it: "Ufficio", en: "Work"}},
+        {key: "other", name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
+      ],
+      "Group" => [
+        {key: "office", name: {de: "Büro", fr: "Bureau", it: "Ufficio", en: "Office"}},
+        {key: "mobile", name: {de: "Mobil", fr: "Mobile", it: "Cellulare", en: "Mobile"}},
+        {key: "other", name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
+      ]
+    },
+    "SocialAccount" => {
+      "Person" => [
+        {key: "facebook", name: {de: "Facebook", fr: "Facebook", it: "Facebook", en: "Facebook"}},
+        {key: "x_twitter",
+         name: {de: "X (Twitter)", fr: "X (Twitter)", it: "X (Twitter)", en: "X (Twitter)"}},
+        {key: "website", unique_per_contactable: false,
+         name: {de: "Webseite", fr: "Site web", it: "Sito web", en: "Website"}},
+        {key: "linkedin", name: {de: "LinkedIn", fr: "LinkedIn", it: "LinkedIn", en: "LinkedIn"}},
+        {key: "instagram",
+         name: {de: "Instagram", fr: "Instagram", it: "Instagram", en: "Instagram"}},
+        {key: "bluesky", name: {de: "Bluesky", fr: "Bluesky", it: "Bluesky", en: "Bluesky"}},
+        {key: "mastodon", name: {de: "Mastodon", fr: "Mastodon", it: "Mastodon", en: "Mastodon"}},
+        {key: "other", name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
+      ],
+      "Group" => [
+        {key: "facebook", name: {de: "Facebook", fr: "Facebook", it: "Facebook", en: "Facebook"}},
+        {key: "x_twitter",
+         name: {de: "X (Twitter)", fr: "X (Twitter)", it: "X (Twitter)", en: "X (Twitter)"}},
+        {key: "website", unique_per_contactable: false,
+         name: {de: "Webseite", fr: "Site web", it: "Sito web", en: "Website"}},
+        {key: "linkedin", name: {de: "LinkedIn", fr: "LinkedIn", it: "LinkedIn", en: "LinkedIn"}},
+        {key: "instagram",
+         name: {de: "Instagram", fr: "Instagram", it: "Instagram", en: "Instagram"}},
+        {key: "bluesky", name: {de: "Bluesky", fr: "Bluesky", it: "Bluesky", en: "Bluesky"}},
+        {key: "mastodon", name: {de: "Mastodon", fr: "Mastodon", it: "Mastodon", en: "Mastodon"}},
+        {key: "other", name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
+      ]
+    },
+    "AdditionalEmail" => {
+      "Person" => [
+        {key: "private", name: {de: "Privat", fr: "Privé", it: "Privato", en: "Private"}},
+        {key: "work", name: {de: "Arbeit", fr: "Professionnel", it: "Ufficio", en: "Work"}},
+        {key: "invoices", used_for_invoices: true,
+         name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
+                it: "Indirizzo di fatturazione", en: "Invoice"}},
+        {key: "other", name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
+      ],
+      "Group" => [
+        {key: "office", name: {de: "Büro", fr: "Bureau", it: "Ufficio", en: "Office"}},
+        {key: "invoices", used_for_invoices: true,
+         name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
+                it: "Indirizzo di fatturazione", en: "Invoice"}},
+        {key: "other", name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
+      ]
+    },
+    "AdditionalAddress" => {
+      "Person" => [
+        {key: "work", name: {de: "Arbeit", fr: "Professionnel", it: "Ufficio", en: "Work"}},
+        {key: "invoices", used_for_invoices: true,
+         name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
+                it: "Indirizzo di fatturazione", en: "Invoice"}},
+        {key: "other", name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
+      ],
+      "Group" => [
+        {key: "invoices", used_for_invoices: true,
+         name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
+                it: "Indirizzo di fatturazione", en: "Invoice"}},
+        {key: "other", name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
+      ]
+    }
+  }
 
-    {contact_account_type: "PhoneNumber", contactable_type: "Group", key: "office",
-     name: {de: "Büro", fr: "Bureau", it: "Ufficio", en: "Office"}},
-    {contact_account_type: "PhoneNumber", contactable_type: "Group", key: "mobile",
-     name: {de: "Mobil", fr: "Mobile", it: "Cellulare", en: "Mobile"}},
-    {contact_account_type: "PhoneNumber", contactable_type: "Group", key: "other",
-     name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}},
-
-    # SocialAccount
-    {contact_account_type: "SocialAccount", contactable_type: "Person", key: "facebook",
-     name: {de: "Facebook", fr: "Facebook", it: "Facebook", en: "Facebook"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Person", key: "x_twitter",
-     name: {de: "X (Twitter)", fr: "X (Twitter)", it: "X (Twitter)", en: "X (Twitter)"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Person", key: "website",
-     unique_per_contactable: false,
-     name: {de: "Webseite", fr: "Site web", it: "Sito web", en: "Website"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Person", key: "linkedin",
-     name: {de: "LinkedIn", fr: "LinkedIn", it: "LinkedIn", en: "LinkedIn"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Person", key: "instagram",
-     name: {de: "Instagram", fr: "Instagram", it: "Instagram", en: "Instagram"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Person", key: "bluesky",
-     name: {de: "Bluesky", fr: "Bluesky", it: "Bluesky", en: "Bluesky"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Person", key: "mastodon",
-     name: {de: "Mastodon", fr: "Mastodon", it: "Mastodon", en: "Mastodon"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Person", key: "other",
-     name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}},
-
-    {contact_account_type: "SocialAccount", contactable_type: "Group", key: "facebook",
-     name: {de: "Facebook", fr: "Facebook", it: "Facebook", en: "Facebook"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Group", key: "x_twitter",
-     name: {de: "X (Twitter)", fr: "X (Twitter)", it: "X (Twitter)", en: "X (Twitter)"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Group", key: "website",
-     unique_per_contactable: false,
-     name: {de: "Webseite", fr: "Site web", it: "Sito web", en: "Website"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Group", key: "linkedin",
-     name: {de: "LinkedIn", fr: "LinkedIn", it: "LinkedIn", en: "LinkedIn"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Group", key: "instagram",
-     name: {de: "Instagram", fr: "Instagram", it: "Instagram", en: "Instagram"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Group", key: "bluesky",
-     name: {de: "Bluesky", fr: "Bluesky", it: "Bluesky", en: "Bluesky"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Group", key: "mastodon",
-     name: {de: "Mastodon", fr: "Mastodon", it: "Mastodon", en: "Mastodon"}},
-    {contact_account_type: "SocialAccount", contactable_type: "Group", key: "other",
-     name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}},
-
-    # AdditionalEmail
-    {contact_account_type: "AdditionalEmail", contactable_type: "Person", key: "private",
-     name: {de: "Privat", fr: "Privé", it: "Privato", en: "Private"}},
-    {contact_account_type: "AdditionalEmail", contactable_type: "Person", key: "work",
-     name: {de: "Arbeit", fr: "Professionnel", it: "Ufficio", en: "Work"}},
-    {contact_account_type: "AdditionalEmail", contactable_type: "Person", key: "invoices",
-     used_for_invoices: true,
-     name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
-            it: "Indirizzo di fatturazione", en: "Invoice"}},
-    {contact_account_type: "AdditionalEmail", contactable_type: "Person", key: "other",
-     name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}},
-
-    {contact_account_type: "AdditionalEmail", contactable_type: "Group", key: "office",
-     name: {de: "Büro", fr: "Bureau", it: "Ufficio", en: "Office"}},
-    {contact_account_type: "AdditionalEmail", contactable_type: "Group", key: "invoices",
-     used_for_invoices: true,
-     name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
-            it: "Indirizzo di fatturazione", en: "Invoice"}},
-    {contact_account_type: "AdditionalEmail", contactable_type: "Group", key: "other",
-     name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}},
-
-    # AdditionalAddress
-    {contact_account_type: "AdditionalAddress", contactable_type: "Person", key: "work",
-     name: {de: "Arbeit", fr: "Professionnel", it: "Ufficio", en: "Work"}},
-    {contact_account_type: "AdditionalAddress", contactable_type: "Person", key: "invoices",
-     used_for_invoices: true,
-     name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
-            it: "Indirizzo di fatturazione", en: "Invoice"}},
-    {contact_account_type: "AdditionalAddress", contactable_type: "Person", key: "other",
-     name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}},
-
-    {contact_account_type: "AdditionalAddress", contactable_type: "Group", key: "invoices",
-     used_for_invoices: true,
-     name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
-            it: "Indirizzo di fatturazione", en: "Invoice"}},
-    {contact_account_type: "AdditionalAddress", contactable_type: "Group", key: "other",
-     name: {de: "Andere", fr: "Autre", it: "Altro", en: "Other"}}
-  ].freeze
+  def self.category_count
+    CATEGORIES.sum { |_contact_account_type, by_contactable_type|
+      by_contactable_type.sum { |_contactable_type, rows| rows.size }
+    }
+  end
 
   def seed
-    return if ContactAccountCategory.exists?
-
+    first_time = ContactAccountCategory.none?
     ContactAccountCategory.seed_once(:contact_account_type, :contactable_type, :key, *seed_data)
+    ContactAccountCategoryMigrationJob.new.perform if first_time
   end
 
   private
 
-  # Builds the flat, SeedFu-ready rows: one hash per category, with the position
-  # computed per (contact_account_type, contactable_type) group and the globalized
-  # name expanded into its per-locale accessors (name_de=, name_fr=, ...), since
-  # SeedFu assigns attributes directly and has no notion of the current I18n.locale.
   def seed_data
-    CATEGORIES
-      .group_by { |attrs| [attrs[:contact_account_type], attrs[:contactable_type]] }
-      .flat_map do |_group, rows|
-        rows.each_with_index.map { |attrs, position| row_for(attrs, position) }
+    CATEGORIES.flat_map do |contact_account_type, by_contactable_type|
+      by_contactable_type.flat_map do |contactable_type, rows|
+        rows.each_with_index.map do |attrs, position|
+          row_for(contact_account_type, contactable_type, attrs, position)
+        end
       end
+    end
   end
 
-  def row_for(attrs, position)
+  def row_for(contact_account_type, contactable_type, attrs, position)
     {
-      contact_account_type: attrs.fetch(:contact_account_type),
-      contactable_type: attrs.fetch(:contactable_type),
+      contact_account_type: contact_account_type,
+      contactable_type: contactable_type,
       key: attrs.fetch(:key),
       unique_per_contactable: attrs.fetch(:unique_per_contactable, attrs.fetch(:key) != "other"),
       used_for_invoices: attrs.fetch(:used_for_invoices, false),

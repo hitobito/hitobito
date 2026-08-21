@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,12 +24,15 @@ describe Export::Tabular::People::ParticipationsAddress do
     let(:attributes) { people_list.attributes }
     let(:attribute_labels) { people_list.attribute_labels }
 
-    before { PhoneNumber.create!(contactable: person, label: "Privat", number: "0791234567") }
+    before do
+      person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+        number: "0791234567")
+    end
 
-    it "includes predefined phone number columns" do
-      expect(attribute_labels).to have_key(:phone_number_privat)
-      expect(attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
-      expect(row(0)[attributes.index(:phone_number_privat)]).to eq "+41 79 123 45 67"
+    it "includes category-based phone number columns" do
+      expect(attribute_labels).to have_key(:phone_number_landline)
+      expect(attribute_labels[:phone_number_landline]).to eq "Telefonnummer Festnetz"
+      expect(row(0)[attributes.index(:phone_number_landline)]).to eq "+41 79 123 45 67"
     end
   end
 end

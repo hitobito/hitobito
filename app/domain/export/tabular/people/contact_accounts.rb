@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -6,39 +6,28 @@
 module Export::Tabular::People
   module ContactAccounts
     class << self
-      def key(model, label)
-        :"#{model.model_name.to_s.underscore}_#{label_or_default(label, model).downcase}"
+      # Generic "model + value" key/human formatters. Used both for
+      # ContactAccountCategory-based columns (value is a category's #key/#to_s)
+      # and, unrelatedly, for QualificationKind columns (value is a
+      # qualification_kind's id/label) -- callers always pass a real,
+      # non-blank value.
+      def key(model, value)
+        :"#{model.model_name.to_s.underscore}_#{value.to_s.downcase}"
       end
 
-      def human(model, label)
-        "#{model.model_name.human} #{label_or_default(label, model)}"
+      def human(model, value)
+        "#{model.model_name.human} #{value}"
       end
 
-      def custom_label_key(model)
-        :"#{model.model_name.to_s.underscore}_custom_label"
-      end
-
-      def custom_label_human(model)
-        label_text = I18n.t("activerecord.attributes.contact_account.custom_label")
-        "#{model.model_name.human(count: :other)} #{label_text}"
-      end
-
-      def predefined_labels(model)
-        contact_account_settings(model)&.predefined_labels || []
-      end
-
-      def custom_label_enabled?(model)
-        contact_account_settings(model)&.custom_label&.enabled
-      end
-
-      private
-
-      def contact_account_settings(model)
-        Settings.send(model.table_name.singularize)
-      end
-
-      def label_or_default(label, model)
-        label || predefined_labels(model).first
+      # ContactAccountCategory rows for each of the given models, indexed by #key
+      # (see .key above). Shared by PersonRow (built standalone, e.g. in specs)
+      # and Export::Tabular::People::PeopleAddress (shared once across a whole
+      # export, see PeopleAddress#row_for).
+      def categories_by_key(models, contactable_type)
+        models.index_with do |model|
+          ContactAccountCategory.for(model.sti_name, contactable_type)
+            .index_by { |category| key(model, category.key) }
+        end
       end
     end
   end

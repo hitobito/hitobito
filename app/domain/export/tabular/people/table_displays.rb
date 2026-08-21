@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2022, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -35,6 +35,7 @@ module Export::Tabular::People
     def row_for(entry, format = nil)
       row = row_class.new(entry, table_display, format)
       row.ability = ability
+      row.contact_account_categories = contact_account_categories
       row
     end
 

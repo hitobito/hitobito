@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,24 +17,36 @@ module Export::Tabular::People
     end
 
     def association_attributes
-      label_attributes_for(AdditionalEmail).merge(label_attributes_for(PhoneNumber))
+      contact_account_attributes
     end
 
-    def label_attributes_for(model)
-      predefined_label_attributes(model).merge(custom_label_attributes(model))
-    end
-
-    def predefined_label_attributes(model)
-      ContactAccounts.predefined_labels(model).each_with_object({}) do |label, result|
-        result[ContactAccounts.key(model, label)] =
-          ContactAccounts.human(model, model.translate_label(label))
+    def contact_account_attributes
+      account_attribute_types.each_with_object({}) do |model, result|
+        result.merge!(label_attributes_for(model))
       end
     end
 
-    def custom_label_attributes(model)
-      return {} unless ContactAccounts.custom_label_enabled?(model)
+    def account_attribute_types
+      [AdditionalEmail, PhoneNumber]
+    end
 
-      {ContactAccounts.custom_label_key(model) => ContactAccounts.custom_label_human(model)}
+    def label_attributes_for(model)
+      contact_account_categories[model].transform_values do |category|
+        ContactAccounts.human(model, category)
+      end
+    end
+
+    # Resolved once per export and shared with every row (see #row_for), so a
+    # large export doesn't re-query ContactAccountCategory per row per column.
+    def contact_account_categories
+      @contact_account_categories ||=
+        ContactAccounts.categories_by_key(account_attribute_types, Person.sti_name)
+    end
+
+    def row_for(entry, format = nil)
+      row = super
+      row.contact_account_categories = contact_account_categories
+      row
     end
 
     def build_attribute_labels

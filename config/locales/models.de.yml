@@ -1112,7 +1112,6 @@ de:
               other: Zukünftige
 
       contact_account:
-        custom_label: Freitext
         predefined_labels:
           privat: Privat
           mobil: Mobil

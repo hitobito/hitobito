@@ -23,10 +23,10 @@ describe Export::Tabular::People::PeopleAddress do
       ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
         "zusätzliche Adresszeile", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
         "Hauptebene", "Rollen",
-        "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Vater",
-        "Weitere E-Mail Mutter", "Weitere E-Mail Andere", "Weitere E-Mails Freitext",
-        "Telefonnummer Privat", "Telefonnummer Mobil", "Telefonnummer Arbeit",
-        "Telefonnummer Vater", "Telefonnummer Mutter", "Telefonnummer Fax", "Telefonnummer Andere"]
+        "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Rechnungsadresse",
+        "Weitere E-Mail Andere",
+        "Telefonnummer Mobil", "Telefonnummer Festnetz", "Telefonnummer Arbeit",
+        "Telefonnummer Andere"]
     end
 
     subject { csv }
@@ -52,14 +52,17 @@ describe Export::Tabular::People::PeopleAddress do
     context "roles and phone number" do
       before do
         Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one), person: person)
-        person.phone_numbers.create!(label: "vater", number: "+41 44 123 45 67")
-        person.additional_emails.create!(label: "Vater", email: "vater@example.com")
-        person.additional_emails.create!(label: "Mutter", email: "mutter@example.com", public: false)
+        person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+          number: "+41 44 123 45 67")
+        person.additional_emails.create!(category: contact_account_categories(:additional_email_person_work),
+          email: "vater@example.com")
+        person.additional_emails.create!(category: contact_account_categories(:additional_email_person_private),
+          email: "mutter@example.com", public: false)
       end
 
-      its(["Telefonnummer Vater"]) { should eq "'+41 44 123 45 67" }
-      its(["Weitere E-Mail Vater"]) { should eq "vater@example.com" }
-      its(["Weitere E-Mail Mutter"]) { should be_nil }
+      its(["Telefonnummer Festnetz"]) { should eq "'+41 44 123 45 67" }
+      its(["Weitere E-Mail Arbeit"]) { should eq "vater@example.com" }
+      its(["Weitere E-Mail Privat"]) { should be_nil }
 
       it "roles should be complete" do
         expect(subject["Rollen"].split(", ")).to match_array(["Member Bottom One / Group 11", "Leader Top / TopGroup"])

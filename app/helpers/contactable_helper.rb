@@ -39,7 +39,7 @@ module ContactableHelper
       title: t("contactable.public_check_box.tooltip")) do
       safe_join([
         t("activerecord.attributes.social_account.public"),
-        icon(:info, class: "ms-1")
+        icon(:"info-circle", class: "ms-1 text-secondary")
       ], " ")
     end
   end

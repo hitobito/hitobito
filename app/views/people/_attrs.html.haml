@@ -7,25 +7,27 @@
   %article.col-lg
     = render 'contact_data', person: entry, only_public: cannot?(:show_details, entry)
     - if can?(:show_details, entry)
-      %h2= t('.additional_data')
-      %div
-        = render_attrs(entry, :birthday, :gender)
+      %section
+        %h2= t('.additional_data')
+        %div
+          = render_attrs(entry, :birthday, :gender)
 
-        = render_extensions :details, locals: { show_full: can?(:show_full, entry) }
+          = render_extensions :details, locals: { show_full: can?(:show_full, entry) }
 
-        = render_present_attrs(entry, :created_info, :updated_info)
-        - if can?(:update, entry)
-          = render_present_attrs(entry, :login_status) 
+          = render_present_attrs(entry, :created_info, :updated_info)
+          - if can?(:update, entry)
+            = render_present_attrs(entry, :login_status) 
 
-        - if Person.language_labels.many?
-          = render_attrs(entry, :language)
+          - if Person.language_labels.many?
+            = render_attrs(entry, :language)
 
-        - FeatureGate.if(:self_registration_reason) do
-          = render_present_attrs(entry, :self_registration_reason_text)
+          - FeatureGate.if(:self_registration_reason) do
+            = render_present_attrs(entry, :self_registration_reason_text)
 
       - if entry.additional_information?
-        %h2= Person.human_attribute_name(:additional_information)
-        %p.multiline= safe_auto_link(entry.additional_information)
+        %section
+          %h2= Person.human_attribute_name(:additional_information)
+          %p.multiline= safe_auto_link(entry.additional_information)
 
     = render_extensions :show_left
 

@@ -6,10 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 # Seeds the initial ContactAccountCategory rows derived from the previous
-# config/settings.yml predefined_labels lists.
+# config/settings.yml predefined_labels lists, then enqueues
+# ContactAccountCategoryMigrationJob to backfill existing ContactAccount rows.
 #
-# Runs only once: if any ContactAccountCategory already exists, #seed is a no-op,
-# so manually created categories are never touched or duplicated.
+# Runs only once: if any ContactAccountCategory already exists, #seed is a no-op
+# (including the job enqueue), so manually created categories are never touched
+# or duplicated, and the backfill never re-runs on an already-migrated install.
 class ContactAccountCategorySeeder
   CATEGORIES = [
     # PhoneNumber
@@ -109,6 +111,7 @@ class ContactAccountCategorySeeder
     return if ContactAccountCategory.exists?
 
     ContactAccountCategory.seed_once(:contact_account_type, :contactable_type, :key, *seed_data)
+    ContactAccountCategoryMigrationJob.new.enqueue!
   end
 
   private

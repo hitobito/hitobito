@@ -66,9 +66,9 @@ describe Dropdown::LabelItems do
         expect(node).to have_link text, href: "#"
         sublist = node.find("a", text: text).sibling("ul")
         expect(sublist).to have_link "Hauptadresse", href: export_link(label_format, :main)
-        expect(sublist).to have_link "Rechnung", href: export_link(label_format, "Rechnung")
-        expect(sublist).to have_link "Arbeit", href: export_link(label_format, "Arbeit")
-        expect(sublist).to have_link "Andere", href: export_link(label_format, "Andere")
+        expect(sublist).to have_link "Rechnungsadresse", href: export_link(label_format, "invoices")
+        expect(sublist).to have_link "Arbeit", href: export_link(label_format, "work")
+        expect(sublist).to have_link "Andere", href: export_link(label_format, "other")
       end
     end
   end

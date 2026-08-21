@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -40,8 +40,8 @@ module RenderPeopleExports
   def generate_pdf(people, group)
     if params[:label_format_id]
       household = true?(params[:household])
-      label = params[:address_type]
-      Export::Pdf::Labels.new(find_and_remember_label_format, label: label).generate(people,
+      category_key = params[:address_type]
+      Export::Pdf::Labels.new(find_and_remember_label_format, category_key:).generate(people,
         household)
     else
       Export::Pdf::List.render(people, group)

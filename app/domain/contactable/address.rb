@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Contactable::Address
-  def initialize(contactable, label: nil)
+  def initialize(contactable, category_key: nil)
     @contactable = contactable
-    @label = label
-    @addressable = additional_addresses.find { |a| a.label == label } || contactable
+    @addressable = additional_addresses.find { |a| a.category&.key == category_key } || contactable
   end
 
   def for_letter
@@ -104,7 +103,8 @@ class Contactable::Address
   end
 
   def invoice_addressable
-    @invoice_addressable ||= additional_addresses.find(&:invoices?) || contactable
+    @invoice_addressable ||= additional_addresses.find { |a| a.category&.used_for_invoices? } ||
+      contactable
   end
 
   def contactable_and_company_name

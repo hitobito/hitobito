@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,15 +12,15 @@ describe Import::Person do
     subject { Import::Person.fields.pluck(:key) }
 
     it "contains social media" do
-      is_expected.to include("social_account_skype")
+      is_expected.to include("social_account_facebook")
     end
 
     it "contains phone number" do
-      is_expected.to include("phone_number_vater")
+      is_expected.to include("phone_number_work")
     end
 
     it "contains additional email" do
-      is_expected.to include("additional_email_vater")
+      is_expected.to include("additional_email_work")
     end
   end
 
@@ -28,24 +28,24 @@ describe Import::Person do
     subject { Import::Person.fields.pluck(:value) }
 
     it "contains social media" do
-      is_expected.to include("Social Media Adresse Skype")
+      is_expected.to include("Social Media Adresse Facebook")
     end
 
     it "contains phone number" do
-      is_expected.to include("Telefonnummer Mutter")
+      is_expected.to include("Telefonnummer Arbeit")
     end
 
     it "contains additional email" do
-      is_expected.to include("Weitere E-Mail Mutter")
+      is_expected.to include("Weitere E-Mail Arbeit")
     end
   end
 
   context "extract contact accounts" do
     let(:data) do
       {first_name: "foo",
-       social_account_skype: "foobar",
-       phone_number_vater: "0123",
-       additional_email_mutter: "mutter@example.com"}
+       social_account_facebook: "foobar",
+       phone_number_work: "0123",
+       additional_email_work: "mutter@example.com"}
     end
     let(:person) { Person.new }
 
@@ -55,15 +55,15 @@ describe Import::Person do
 
     its(:first_name) { should eq "foo" }
     its("phone_numbers.first") { should be_present }
-    its("phone_numbers.first.label") { should eq "Vater" }
+    its("phone_numbers.first.category") { should eq contact_account_categories(:phone_number_person_work) }
     its("phone_numbers.first.number") { should eq "0123" }
 
     its("social_accounts.first") { should be_present }
-    its("social_accounts.first.label") { should eq "Skype" }
+    its("social_accounts.first.category") { should eq contact_account_categories(:social_account_person_facebook) }
     its("social_accounts.first.name") { should eq "foobar" }
 
     its("additional_emails.first") { should be_present }
-    its("additional_emails.first.label") { should eq "Mutter" }
+    its("additional_emails.first.category") { should eq contact_account_categories(:additional_email_person_work) }
     its("additional_emails.first.email") { should eq "mutter@example.com" }
   end
 
@@ -141,42 +141,46 @@ describe Import::Person do
     context "keeps existing contact accounts" do
       let(:person) do
         p = Fabricate(:person, email: "foo@example.com")
-        p.phone_numbers.create!(number: "+41 44 123 45 67", label: "Privat")
-        p.phone_numbers.create!(number: "+41 77 456 78 90", label: "Mobil")
-        p.social_accounts.create!(name: "foo", label: "Skype")
-        p.social_accounts.create!(name: "foo", label: "MSN")
-        p.additional_emails.create!(email: "foo@example.com", label: "Mutter")
-        p.additional_emails.create!(email: "bar@example.com", label: "Vater")
+        p.phone_numbers.create!(number: "+41 44 123 45 67",
+          category: contact_account_categories(:phone_number_person_landline))
+        p.phone_numbers.create!(number: "+41 77 456 78 90",
+          category: contact_account_categories(:phone_number_person_mobile))
+        p.social_accounts.create!(name: "foo", category: contact_account_categories(:social_account_person_facebook))
+        p.social_accounts.create!(name: "foo", category: contact_account_categories(:social_account_person_x_twitter))
+        p.additional_emails.create!(email: "foo@example.com",
+          category: contact_account_categories(:additional_email_person_private))
+        p.additional_emails.create!(email: "bar@example.com",
+          category: contact_account_categories(:additional_email_person_work))
         p
       end
 
       let(:data) do
         {first_name: "foo",
          email: "foo@example.com",
-         social_account_skype: "foo",
-         social_account_msn: "bar",
-         phone_number_mobil: "+41 77 789 01 23",
-         additional_email_mutter: "bar@example.com",
-         additional_email_privat: "privat@example.com"}
+         social_account_facebook: "foo",
+         social_account_x_twitter: "bar",
+         phone_number_mobile: "+41 77 789 01 23",
+         additional_email_work: "bar@example.com",
+         additional_email_invoices: "privat@example.com"}
       end
 
-      its("phone_numbers.first.label") { should eq "Privat" }
+      its("phone_numbers.first.category") { should eq contact_account_categories(:phone_number_person_landline) }
       its("phone_numbers.first.number") { should eq "+41 44 123 45 67" }
-      its("phone_numbers.second.label") { should eq "Mobil" }
+      its("phone_numbers.second.category") { should eq contact_account_categories(:phone_number_person_mobile) }
       its("phone_numbers.second.number") { should eq "+41 77 456 78 90" }
 
-      its("social_accounts.first.label") { should eq "Skype" }
+      its("social_accounts.first.category") { should eq contact_account_categories(:social_account_person_facebook) }
       its("social_accounts.first.name") { should eq "foo" }
-      its("social_accounts.second.label") { should eq "MSN" }
+      its("social_accounts.second.category") { should eq contact_account_categories(:social_account_person_x_twitter) }
       its("social_accounts.second.name") { should eq "foo" }
-      its("social_accounts.third.label") { should eq "Msn" }
-      its("social_accounts.third.name") { should eq "bar" }
 
-      its("additional_emails.first.label") { should eq "Mutter" }
+      its("additional_emails.first.category") { should eq contact_account_categories(:additional_email_person_private) }
       its("additional_emails.first.email") { should eq "foo@example.com" }
-      its("additional_emails.second.label") { should eq "Vater" }
+      its("additional_emails.second.category") { should eq contact_account_categories(:additional_email_person_work) }
       its("additional_emails.second.email") { should eq "bar@example.com" }
-      its("additional_emails.third.label") { should eq "Privat" }
+      its("additional_emails.third.category") {
+        should eq contact_account_categories(:additional_email_person_invoices)
+      }
       its("additional_emails.third.email") { should eq "privat@example.com" }
     end
 
@@ -242,42 +246,46 @@ describe Import::Person do
     context "overrides existing contact accounts" do
       let(:person) do
         p = Fabricate(:person, email: "foo@example.com")
-        p.phone_numbers.create!(number: "+41 44 123 45 67", label: "Privat")
-        p.phone_numbers.create!(number: "+41 77 456 78 90", label: "Mobil")
-        p.social_accounts.create!(name: "foo", label: "Skype")
-        p.social_accounts.create!(name: "foo", label: "MSN")
-        p.additional_emails.create!(email: "foo@example.com", label: "Mutter")
-        p.additional_emails.create!(email: "bar@example.com", label: "Vater")
+        p.phone_numbers.create!(number: "+41 44 123 45 67",
+          category: contact_account_categories(:phone_number_person_landline))
+        p.phone_numbers.create!(number: "+41 77 456 78 90",
+          category: contact_account_categories(:phone_number_person_mobile))
+        p.social_accounts.create!(name: "foo", category: contact_account_categories(:social_account_person_facebook))
+        p.social_accounts.create!(name: "foo", category: contact_account_categories(:social_account_person_x_twitter))
+        p.additional_emails.create!(email: "foo@example.com",
+          category: contact_account_categories(:additional_email_person_private))
+        p.additional_emails.create!(email: "bar@example.com",
+          category: contact_account_categories(:additional_email_person_work))
         p
       end
 
       let(:data) do
         {first_name: "foo",
          email: "foo@example.com",
-         social_account_skype: "foo",
-         social_account_msn: "bar",
-         phone_number_mobil: "+41 77 789 01 23",
-         additional_email_mutter: "bar@example.com",
-         additional_email_privat: "privat@example.com"}
+         social_account_facebook: "foo",
+         social_account_x_twitter: "bar",
+         phone_number_mobile: "+41 77 789 01 23",
+         additional_email_work: "bar@example.com",
+         additional_email_invoices: "privat@example.com"}
       end
 
-      its("phone_numbers.first.label") { should eq "Privat" }
+      its("phone_numbers.first.category") { should eq contact_account_categories(:phone_number_person_landline) }
       its("phone_numbers.first.number") { should eq "+41 44 123 45 67" }
-      its("phone_numbers.second.label") { should eq "Mobil" }
+      its("phone_numbers.second.category") { should eq contact_account_categories(:phone_number_person_mobile) }
       its("phone_numbers.second.number") { should eq "+41 77 789 01 23" }
 
-      its("social_accounts.first.label") { should eq "Skype" }
+      its("social_accounts.first.category") { should eq contact_account_categories(:social_account_person_facebook) }
       its("social_accounts.first.name") { should eq "foo" }
-      its("social_accounts.second.label") { should eq "MSN" }
-      its("social_accounts.second.name") { should eq "foo" }
-      its("social_accounts.third.label") { should eq "Msn" }
-      its("social_accounts.third.name") { should eq "bar" }
+      its("social_accounts.second.category") { should eq contact_account_categories(:social_account_person_x_twitter) }
+      its("social_accounts.second.name") { should eq "bar" }
 
-      its("additional_emails.first.label") { should eq "Mutter" }
-      its("additional_emails.first.email") { should eq "bar@example.com" }
-      its("additional_emails.second.label") { should eq "Vater" }
+      its("additional_emails.first.category") { should eq contact_account_categories(:additional_email_person_private) }
+      its("additional_emails.first.email") { should eq "foo@example.com" }
+      its("additional_emails.second.category") { should eq contact_account_categories(:additional_email_person_work) }
       its("additional_emails.second.email") { should eq "bar@example.com" }
-      its("additional_emails.third.label") { should eq "Privat" }
+      its("additional_emails.third.category") {
+        should eq contact_account_categories(:additional_email_person_invoices)
+      }
       its("additional_emails.third.email") { should eq "privat@example.com" }
     end
 

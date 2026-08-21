@@ -1,11 +1,11 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
 describe Import::PersonColumnGuesser do
-  let(:headers) { %w[Geschlecht vorname Name skype] }
+  let(:headers) { %w[Geschlecht vorname Name facebook] }
   let(:guesser) { Import::PersonColumnGuesser.new(headers, params) }
   let(:nil_key) { {key: nil} }
   let(:params) { {} }
@@ -15,7 +15,7 @@ describe Import::PersonColumnGuesser do
   context "maps default values for header" do
     its(["Geschlecht"]) { should eq field_for(:gender) }
     its(["vorname"]) { should eq field_for(:first_name) }
-    its(["skype"]) { should eq field_for(:social_account_skype) }
+    its(["facebook"]) { should eq field_for(:social_account_facebook) }
 
     context "handles noexisting headers" do
       let(:headers) { %w[Geburtsdatum Email] }

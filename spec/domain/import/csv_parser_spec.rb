@@ -145,16 +145,13 @@ describe Import::CsvParser do
           "country" => "Schweiz",
           "gender" => nil,
           "birthday" => nil,
-          "phone_number_andere" => nil,
-          "phone_number_arbeit" => "+41 44 123 45 67",
-          "phone_number_fax" => "+41 32 109 87 65",
-          "phone_number_mobil" => "0800 123 333",
-          "phone_number_mutter" => "+49 345 592055912",
-          "phone_number_privat" => "077 901 23 45",
-          "phone_number_vater" => "+49 6334 39335476",
-          "social_account_skype" => "dale_walter",
-          "social_account_msn" => "christina.reilly",
-          "social_account_webseite" => "bosco.com",
+          "phone_number_work" => "+41 44 123 45 67",
+          "phone_number_mobile" => "0800 123 333",
+          "phone_number_landline" => "077 901 23 45",
+          "phone_number_other" => "+49 6334 39335476",
+          "social_account_facebook" => "dale_walter",
+          "social_account_x_twitter" => "christina.reilly",
+          "social_account_other" => "bosco.com",
           "additional_information" =>
             "Qui repellendus quas quibusdam reprehenderit. " \
             "Qui mollitia quo molestias debitis adipisci nostrum sed. " \

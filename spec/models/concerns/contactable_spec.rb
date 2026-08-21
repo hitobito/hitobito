@@ -17,13 +17,15 @@ describe Contactable do
   context "#invoice_address" do
     let(:group) { groups(:top_layer) }
 
-    it "returns additional_email with invoice flag" do
-      group.additional_emails.create!(email: "foo@bar.com", contactable: group, label: "Privat", invoices: true)
+    it "returns additional_email with used_for_invoices category" do
+      category = contact_account_categories(:additional_email_group_invoices)
+      group.additional_emails.create!(email: "foo@bar.com", contactable: group, category: category)
       expect(group.invoice_email).to eq "foo@bar.com"
     end
 
-    it "returns group primary email when no additional_email with invoice_flag" do
-      group.additional_emails.create!(email: "foo@bar.com", contactable: group, label: "Privat", invoices: false)
+    it "returns group primary email when no additional_email has a used_for_invoices category" do
+      category = contact_account_categories(:additional_email_group_office)
+      group.additional_emails.create!(email: "foo@bar.com", contactable: group, category: category)
       expect(group.invoice_email).to eq group.email
     end
   end

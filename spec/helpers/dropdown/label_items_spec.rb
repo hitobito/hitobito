@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -27,8 +27,8 @@ describe Dropdown::LabelItems do
 
   let(:standard) { label_formats(:standard) }
 
-  def export_link(format, address_type = nil)
-    params = {label_format_id: label_formats(format).id, format: :pdf, address_type:}.compact_blank
+  def export_link(format, category_key = nil)
+    params = {label_format_id: label_formats(format).id, format: :pdf, category_key:}.compact_blank
     group_people_path(group_id, params)
   end
 
@@ -66,9 +66,9 @@ describe Dropdown::LabelItems do
         expect(node).to have_link text, href: "#"
         sublist = node.find("a", text: text).sibling("ul")
         expect(sublist).to have_link "Hauptadresse", href: export_link(label_format, :main)
-        expect(sublist).to have_link "Rechnung", href: export_link(label_format, "Rechnung")
-        expect(sublist).to have_link "Arbeit", href: export_link(label_format, "Arbeit")
-        expect(sublist).to have_link "Andere", href: export_link(label_format, "Andere")
+        expect(sublist).to have_link "Rechnungsadresse", href: export_link(label_format, "invoices")
+        expect(sublist).to have_link "Arbeit", href: export_link(label_format, "work")
+        expect(sublist).to have_link "Andere", href: export_link(label_format, "other")
       end
     end
   end

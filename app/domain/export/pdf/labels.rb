@@ -1,15 +1,15 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module Export::Pdf
   class Labels
-    attr_reader :format, :label
+    attr_reader :format, :category_key
 
-    def initialize(format, label: nil)
+    def initialize(format, category_key: nil)
       @format = format
-      @label = label
+      @category_key = category_key
     end
 
     def generate(contactables, household = false)
@@ -75,11 +75,11 @@ module Export::Pdf
     end
 
     def household_address(contactable, name)
-      Person::Address.new(contactable.first, label: label).for_pdf_label(name)
+      Person::Address.new(contactable.first, category_key:).for_pdf_label(name)
     end
 
     def address(contactable, name)
-      Person::Address.new(contactable, label: label).for_pdf_label(name, format.nickname?)
+      Person::Address.new(contactable, category_key:).for_pdf_label(name, format.nickname?)
     end
 
     def position(pdf, i) # rubocop:todo Metrics/AbcSize

@@ -90,6 +90,7 @@ Hitobito::Application.routes.draw do
         end
       end
       member do
+        get :confirm_deletion
         get :deleted_subgroups
         get :export_subgroups
         post :reactivate

@@ -18,9 +18,8 @@ class HealthzController < ActionController::Base
   private
 
   def app_status
-    @truemail_status ||= AppStatus::Truemail.new(AppStatus.auth_token == params[:token])
     memory_usage_status = AppStatus::MemoryUsage.new
 
-    AppStatus::Composed.new(@truemail_status, memory_usage_status)
+    AppStatus::Composed.new(memory_usage_status)
   end
 end

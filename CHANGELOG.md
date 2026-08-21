@@ -6,9 +6,9 @@
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)
 - Rechungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (sww#296)
 - In der JSON:API können die gleichen Personendaten von Eventteilnehmern abgerufen werden wie im UI (pbs#466)
+- Klick auf einen Rechnungs-Vorschlag in der globalen Suche führt wieder direkt zur Rechnung statt auf einen 404er (#4399)
 
 ## Version 2.10
-
 - Pro Frage kann neu festgelegt werden, welche Rollen des Anlass/Kurses die Antworten sehen dürfen. Die Hauptleitung sieht immer alle Antworten (#4046)
 - Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)
 - Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)

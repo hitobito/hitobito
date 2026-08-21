@@ -143,6 +143,14 @@ describe MailingLists::BulkMail::BounceHandler do
       bounce_handler.perform_analyzed_action!
     end
 
+    it "does not raise NoMethodError when Bounce.record returns nil on block" do
+      expect(bounce_imap_mail).to receive(:bounced_mail_addresses).and_return(["nothing@example2.com"])
+      expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:block)
+      expect(::Bounce).to receive(:record).and_return(nil)
+
+      expect { bounce_handler.perform_analyzed_action! }.not_to raise_error
+    end
+
     it "does nothing for minor issues on the recipient end" do
       expect(bounce_handler).to receive(:analyze_diagnostic_code).and_return(:continue)
       expect(bounce_handler).to_not receive(:block_bounce)

@@ -1,0 +1,189 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Dry-runs the #4359 ContactAccountCategory migration end to end -- pending
+# schema migrations, the ContactAccountCategorySeeder, and
+# ContactAccountCategoryMigrationJob -- against the currently configured
+# database, all inside one transaction that's always rolled back at the
+# end. Safe to run against a copy of production data to preview what the
+# real migration would actually do, without changing anything.
+#
+# Rather than just printing label counts before and after separately, this
+# snapshots (id, contactable_type, label) for every not-yet-categorized row
+# before migrating, then joins that snapshot against each row's resulting
+# category afterwards -- one line per (contactable_type, category), listing
+# every label that ended up there with its count, descending -- so a glance
+# tells you what matched cleanly, what's piling up as "no category" (i.e.
+# not yet matched by key, translation or LABEL_KEY_MAPPING), and whether
+# some other category is unexpectedly catching labels it shouldn't. Pulls
+# one row per ContactAccount into memory per model, so expect a noticeable
+# delay (not just a query) against a very large database.
+#
+# Usage: bin/dry_run_contact_account_categories
+
+require_relative "../config/environment"
+load File.expand_path("count_contact_account_labels", __dir__)
+require Rails.root.join("db", "seeds", "support", "contact_account_category_seeder.rb")
+
+MIGRATED_MODELS = [ContactAccountCategory, PhoneNumber, SocialAccount, AdditionalEmail,
+  AdditionalAddress].freeze
+NO_CATEGORY = "(unchanged, no category)"
+
+def migrate!
+  ActiveRecord::Base.connection_pool.migration_context.migrate
+  ActiveRecord::Base.connection.schema_cache.clear!
+  MIGRATED_MODELS.each(&:reset_column_information)
+end
+
+def seed_and_backfill!
+  ContactAccountCategorySeeder.new.seed
+  ContactAccountCategoryMigrationJob.new.perform
+end
+
+# Only rows the migration job will actually consider (category_id IS NULL),
+# so an already-migrated row from a previous real run doesn't drown out
+# the interesting, still-to-be-decided ones.
+def snapshot_before(type)
+  scope = type.column_names.include?("category_id") ? type.where(category_id: nil) : type
+  scope.pluck(:id, :contactable_type, :label)
+end
+
+# {id => {category_name:, reset:}} -- reset is true when the migration cleared
+# the label (it's nil afterwards), false when the account's own label survived.
+def outcome_info(type, ids)
+  rows = type.where(id: ids).pluck(:id, :category_id, :label)
+  names = category_names_by_id(rows.filter_map { |_id, category_id, _label| category_id }.uniq)
+
+  rows.to_h do |id, category_id, label|
+    [id, {category_name: names[category_id] || NO_CATEGORY, reset: label.nil?}]
+  end
+end
+
+def label_counts_by_row(rows)
+  rows.group_by { |(_id, _contactable_type, label)| label.presence || "(blank)" }
+    .transform_values(&:size)
+end
+
+# {[contactable_type, category_name_or_NO_CATEGORY] => {reset_boolean => {label_or_"(blank)" => count}}}
+def compare(type, before_rows)
+  outcome_by_id = outcome_info(type, before_rows.map(&:first))
+
+  before_rows
+    .group_by { |(id, contactable_type, _label)|
+      [contactable_type, outcome_by_id[id][:category_name]]
+    }
+    .transform_values { |group_rows| split_by_reset(group_rows, outcome_by_id) }
+end
+
+def split_by_reset(rows, outcome_by_id)
+  rows.group_by { |(id, *_rest)| outcome_by_id[id][:reset] }
+    .transform_values { |group_rows| label_counts_by_row(group_rows) }
+end
+
+LINE_WIDTH = 120
+INDENT = "    "
+LABEL_INDENT = "      "
+
+# Greedy word-wrap: never splits a single "label=count" part, just breaks
+# between parts once the next one would push the line past LINE_WIDTH.
+def wrap(parts, indent = INDENT)
+  lines = [indent]
+  parts.each do |part|
+    candidate = (lines.last == indent) ? "#{lines.last}#{part}" : "#{lines.last}, #{part}"
+    if candidate.length > LINE_WIDTH && lines.last != indent
+      lines << "#{indent}#{part}"
+    else
+      lines[-1] = candidate
+    end
+  end
+  lines
+end
+
+# Collapsing only kicks in once a group has a long tail worth hiding -- a
+# handful of labels is always easier to just read than to summarize.
+COLLAPSE_LABEL_COUNT = 20
+
+# Rather than a fixed "count > 5" cutoff, keep whole count-tiers (all labels
+# sharing the same count, highest first) as long as they still fit within
+# COLLAPSE_LABEL_COUNT -- so a tier of borderline-frequent labels (e.g.
+# count 4 or 3) is shown individually whenever there's room, instead of
+# always being swept into the collapsed tail just because it's below some
+# fixed number.
+def shown_labels(sorted)
+  shown = []
+  sorted.chunk(&:last).each do |_count, tier|
+    break if shown.size + tier.size > COLLAPSE_LABEL_COUNT
+
+    shown.concat(tier)
+  end
+  shown
+end
+
+def collapsed_label_parts(sorted)
+  shown = shown_labels(sorted)
+  hidden = sorted - shown
+  parts = shown.map { |label, count| "#{label}=#{count}" }
+  if hidden.any?
+    max = hidden.map(&:last).max
+    parts << "... #{hidden.size} more (max=#{max}, total=#{hidden.sum(&:last)})"
+  end
+  parts
+end
+
+def label_parts(labels)
+  sorted = labels.sort_by { |_label, count| -count }
+  return sorted.map { |label, count| "#{label}=#{count}" } if sorted.size <= COLLAPSE_LABEL_COUNT
+
+  collapsed_label_parts(sorted)
+end
+
+def print_label_group(title, labels)
+  return if labels.empty?
+
+  puts "    #{title}:"
+  wrap(label_parts(labels), LABEL_INDENT).each { |line| puts line }
+end
+
+def print_comparison_line(comparison, contactable_type, category_name, total)
+  groups = comparison[[contactable_type, category_name]]
+
+  puts "  #{contactable_type},#{category_name} (#{total}):"
+  print_label_group("label reset", groups[true] || {})
+  print_label_group("label kept", groups[false] || {})
+  puts
+end
+
+CONTACTABLE_TYPE_ORDER = %w[Person Group].freeze
+
+def sort_key(contactable_type, count)
+  [CONTACTABLE_TYPE_ORDER.index(contactable_type) || CONTACTABLE_TYPE_ORDER.size, -count]
+end
+
+def group_total(groups)
+  groups.values.sum { |labels| labels.values.sum }
+end
+
+def print_comparison(type, comparison)
+  totals = comparison.transform_values { |groups| group_total(groups) }
+    .select { |_key, count| count > MIN_COUNT }
+  return if totals.empty?
+
+  puts "== #{type}"
+  sorted = totals.sort_by { |(contactable_type, _name), count| sort_key(contactable_type, count) }
+  sorted.each do |(contactable_type, category_name), total|
+    print_comparison_line(comparison, contactable_type, category_name, total)
+  end
+end
+
+ActiveRecord::Base.transaction do
+  before_snapshots = ACCOUNT_TYPES.to_h { |type| [type, snapshot_before(type)] }
+
+  migrate!
+  seed_and_backfill!
+
+  ACCOUNT_TYPES.each { |type| print_comparison(type, compare(type, before_snapshots[type])) }
+
+  raise ActiveRecord::Rollback
+end
+
+puts "Rolled back -- no changes were kept."

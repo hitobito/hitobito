@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -62,7 +62,7 @@ describe Export::Tabular::People::PersonRow do
     before do
       person.additional_addresses << Fabricate.build(:additional_address, address_attrs.merge(label: "Rechnung"))
       person.additional_addresses << Fabricate.build(:additional_address,
-        address_attrs.merge(label: "Weitere", housenumber: 4, name: "test", uses_contactable_name: false))
+        address_attrs.merge(label: "Weitere", housenumber: 4, last_name: "test", uses_contactable_name: false))
     end
 
     it { expect(row.fetch(:additional_address_rechnung)).to eq "Top Leader, Langestrasse 3, 8000 Zürich" }

@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -7,9 +7,14 @@
   = f.labeled(:translated_label) do
     = contact_method_label_field(f)
   = f.indented do
-    = f.input_field(:uses_contactable_name, data: { action: 'additional-address#toggle'}, caption: t('.caption_uses_contactable_name'))
+    - caption_key = entry.is_a?(Person) ? '.caption_uses_contactable_name_person' : '.caption_uses_contactable_name_group'
+    = f.input_field(:uses_contactable_name, data: { action: 'additional-address#toggle'}, caption: t(caption_key))
   %div{data: { 'additional-address-target' => 'toggle'}, class: ("hidden" if f.object.uses_contactable_name)}
-    = f.labeled_input_field(:name)
+    = f.labeled_input_field(:first_name)
+    = f.labeled_input_field(:last_name)
+    = f.labeled_boolean_field(:organization, data: { action: 'additional-address#toggleOrganization' })
+    %div{data: { 'additional-address-target' => 'organizationToggle'}, class: ("hidden" unless f.object.organization)}
+      = f.labeled_input_field(:organization_name)
   = f.labeled_input_field(:address_care_of)
   = f.labeled(:street, label_class: "#{StandardFormBuilder::LABEL_CLASSES} required", class: 'd-flex') do
     %div.col-9

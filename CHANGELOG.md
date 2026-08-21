@@ -6,6 +6,7 @@
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)
 - Rechungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (sww#296)
 - In der JSON:API können die gleichen Personendaten von Eventteilnehmern abgerufen werden wie im UI (pbs#466)
+- Zusätzliche Adressen erhalten dieselben Namensfelder (Vorname, Nachname, Firma/Firmenname) wie die Hauptadresse und sind neu auch im JSON:API verfügbar (#4411)
 
 ## Version 2.10
 

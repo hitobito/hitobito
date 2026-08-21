@@ -109,7 +109,7 @@ module MailingLists::BulkMail
 
       bounced_mails.map do |email|
         ::Bounce.record(email, mailing_list_id: source_message&.mailing_list_id)
-      end
+      end.compact
     end
 
     def block_bounce

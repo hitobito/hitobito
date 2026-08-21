@@ -13,6 +13,8 @@ describe :groups_delete, type: :feature, js: true do
 
   before { sign_in(user) }
 
+  let(:delete_label) { I18n.t("groups.confirm_deletion.delete") }
+
   def open_delete_modal
     visit group_path(group)
     first(".btn-group.dropdown .dropdown-toggle").click
@@ -20,93 +22,53 @@ describe :groups_delete, type: :feature, js: true do
   end
 
   describe "confirm_deletion modal" do
-    it "displays confirmation modal from the actions dropdown" do
+    it "renders modal content and a disabled delete button" do
       open_delete_modal
 
       expect(page).to have_current_path(group_path(group))
       expect(page).to have_selector("#confirm-group-deletion.modal", visible: :visible)
       expect(page).to have_selector(".modal-title", text: group.name)
-    end
-
-    it "shows warning message in the modal" do
-      open_delete_modal
-
       expect(page).to have_content("Achtung")
       expect(page).to have_content(group.name)
-    end
-
-    it "displays a text input field for confirmation" do
-      open_delete_modal
-
       expect(page).to have_selector("input[data-action='confirm-deletion#validate']")
+      within("#confirm-group-deletion") do
+        expect(page).to have_button(delete_label, disabled: true)
+      end
     end
 
-    it "delete button is disabled by default" do
+    it "toggles delete button only for an exact group-name match" do
       open_delete_modal
+      delete_button = find("#confirm-group-deletion button.btn-danger")
 
-      delete_button = find("#confirm-group-deletion a.btn-danger")
-      expect(delete_button[:class]).to include("disabled")
-    end
-
-    it "enables delete button when correct group name is entered" do
-      open_delete_modal
-      fill_in "group-name", with: group.name
-
-      delete_button = find("#confirm-group-deletion a.btn-danger")
-      expect(delete_button[:class]).not_to include("disabled")
-    end
-
-    it "keeps delete button disabled when incorrect name is entered" do
-      open_delete_modal
+      expect(delete_button).to be_disabled
 
       fill_in "group-name", with: "Wrong Group Name"
-
-      delete_button = find("#confirm-group-deletion a.btn-danger")
-      expect(delete_button[:class]).to include("disabled")
-    end
-
-    it "keeps delete button disabled when partial name is entered" do
-      open_delete_modal
+      expect(delete_button).to be_disabled
 
       fill_in "group-name", with: group.name[0..5]
+      expect(delete_button).to be_disabled
 
-      delete_button = find("#confirm-group-deletion a.btn-danger")
-      expect(delete_button[:class]).to include("disabled")
+      fill_in "group-name", with: group.name
+      expect(delete_button).not_to be_disabled
+
+      fill_in "group-name", with: ""
+      expect(delete_button).to be_disabled
+
+      fill_in "group-name", with: group.name
+      expect(delete_button).not_to be_disabled
     end
 
-    it "deletes the group when delete button is clicked with correct name" do
+    it "deletes the group when the enabled delete button is submitted" do
       open_delete_modal
       group_id = group.id
 
       fill_in "group-name", with: group.name
       within("#confirm-group-deletion") do
-        click_link "Gruppen und Rollen definitiv löschen"
+        click_button delete_label
       end
 
       expect(page).to have_current_path(group_path(group.parent))
       expect(Group.with_deleted.find(group_id)).to be_deleted
-    end
-
-    it "correctly re-enables button when clearing and re-entering name" do
-      open_delete_modal
-
-      fill_in "group-name", with: group.name
-      delete_button = find("#confirm-group-deletion a.btn-danger")
-      expect(delete_button[:class]).not_to include("disabled")
-
-      fill_in "group-name", with: ""
-      expect(delete_button[:class]).to include("disabled")
-
-      fill_in "group-name", with: group.name
-      expect(delete_button[:class]).not_to include("disabled")
-    end
-
-    it "shows danger styling on delete button" do
-      open_delete_modal
-
-      delete_button = find("#confirm-group-deletion a.btn-danger")
-      expect(delete_button[:class]).to include("btn-danger")
-      expect(delete_button[:class]).to include("disabled")
     end
   end
 end

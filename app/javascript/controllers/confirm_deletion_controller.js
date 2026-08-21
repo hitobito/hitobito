@@ -19,8 +19,6 @@ export default class extends Controller {
       event.target.value.toLowerCase().trim() === this.expectedValue.toLowerCase();
 
     this.submitButtonTarget.disabled = !isValid;
-    this.submitButtonTarget.classList.toggle("disabled", !isValid);
     this.submitButtonTarget.setAttribute("aria-disabled", (!isValid).toString());
-    this.submitButtonTarget.tabIndex = isValid ? 0 : -1;
   }
 }

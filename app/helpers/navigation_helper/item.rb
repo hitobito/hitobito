@@ -28,7 +28,9 @@ module NavigationHelper
     end
 
     def label(view)
-      label_key ? view.t(label_key) : model.model_name.human(count: 2)
+      return model.model_name.human(count: 2) unless label_key
+
+      view.t(label_key, application_name: Settings.application.name)
     end
 
     def url(view)

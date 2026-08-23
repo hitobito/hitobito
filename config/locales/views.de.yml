@@ -147,7 +147,7 @@ de:
 
   changelog:
     index:
-      meta_description: Hitobito Changelog Seite
+      meta_description: "%{application_name} Changelog Seite"
   contactable:
     address_or_email: "%{address} oder %{email}"
     fields:
@@ -313,7 +313,7 @@ de:
       signed_out: "Du bist jetzt abgemeldet."
       new:
         sign_in: Anmelden
-        meta_description: Anmeldeseite für Hitobito
+        meta_description: "Anmeldeseite für %{application_name}"
       form:
         login_identity: Haupt-E-Mail
         sign_in: Anmelden
@@ -329,7 +329,7 @@ de:
       no_token: "Du kannst diese Seite nicht aufrufen, wenn Du nicht von einem Passwort Zurücksetzen E-Mail kommst. Falls Du von einem solchen E-Mail kommst, bitte überprüfe, dass Du die vollständige URL verwendest."
       new:
         reset_password_button: "Passwort zurücksetzen"
-        meta_description: Hitobito Passwort zurücksetzen Seite
+        meta_description: "%{application_name} Passwort zurücksetzen Seite"
     confirmations:
       new:
         resend_confirmation_instructions: "E-Mail-Adresse bestätigen"
@@ -359,7 +359,7 @@ de:
         old_password: "Altes Passwort"
         new_password: "Neues Passwort"
         new_password_confirmation: "Neues Passwort bestätigen"
-        meta_description: "Hitobito Passwort ändern Seite"
+        meta_description: "%{application_name} Passwort ändern Seite"
       person:
         updated: "Dein Passwort wurde aktualisiert."
 
@@ -370,7 +370,7 @@ de:
           greeting: "Hallo %{name}!"
           information_html: "Du kannst deine E-Mail-Adresse mit dem folgenden Link bestätigen:"
           link_text: "%{email} bestätigen"
-          footer: "Diese E-Mail wurde von Hitobito gesendet"
+          footer: "Diese E-Mail wurde von %{application_name} gesendet"
       reset_password_instructions:
         subject: "Anleitung für das Setzen Deines Passworts"
         body:
@@ -385,7 +385,7 @@ de:
           greeting: "Hallo %{name}!"
           information_html: "Dein Account wurde aufgrund von zu vielen Fehlversuchen beim Login gesperrt.<br>Klicke auf den folgenden Link um Deinen Account zu entsperren:"
           link_text: "Meinen Account entsperren"
-          footer: "Diese E-Mail wurde von Hitobito gesendet"
+          footer: "Diese E-Mail wurde von %{application_name} gesendet"
 
   errors:
     link_to_main: "Hauptseite"
@@ -1002,7 +1002,7 @@ de:
       alert:
         not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
       show:
-        meta_description: Selbstregistrierungsseite für Hitobito
+        meta_description: "Selbstregistrierungsseite für %{application_name}"
       form:
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         submit: Registrieren
@@ -1082,7 +1082,7 @@ de:
     tabs:
       all: Alle
     index:
-      title: Hitobito Log
+      title: "Hitobito Log"
     list:
       from: Von
       to: Bis
@@ -1365,7 +1365,7 @@ de:
       end: "Imitation beenden"
 
   mailchimp_synchronizations:
-    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus %{application_name} aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1634,7 +1634,7 @@ de:
       xml_file: "XML Datei"
   public_events:
     show:
-      meta_description: Öffentliche Kursanmeldeseite für Hitobito
+      meta_description: "Öffentliche Kursanmeldeseite für %{application_name}"
 
   qualifications:
     in_years: "%{years} Jahre"
@@ -1929,7 +1929,7 @@ de:
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
 
       impersonate_user: Imitieren
-      impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.
+      impersonate_user_tooltip: "Du kannst %{application_name} so bedienen, als wärst du als diese Person eingeloggt."
       impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
 
     actions_index:

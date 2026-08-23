@@ -12,7 +12,8 @@ class MailchimpSynchronizationsController < ApplicationController
     MailchimpSynchronizationJob.new(mailing_list.id).enqueue!
     flash[:notice] = translate(
       ".wait_for_synchronization",
-      overview_link: helpers.link_to(t("job_observations.index.title"), job_observations_path)
+      overview_link: helpers.link_to(t("job_observations.index.title"), job_observations_path),
+      application_name: Settings.application.name
     )
 
     redirect_to(action: :index, controller: :subscriptions)

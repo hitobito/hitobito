@@ -13,7 +13,7 @@
       %br/
       %ul.ms-3
         - @type.permissions.each do |perm|
-          %li= t("activerecord.attributes.role.class.permission.description.#{perm}")
+          %li= t("activerecord.attributes.role.class.permission.description.#{perm}", application_name: Settings.application.name)
     - else
       = t('.role_only_public', role: @type.label, group: @group)
 

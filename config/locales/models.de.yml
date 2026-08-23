@@ -162,7 +162,7 @@ de:
               max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
               additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
               cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
-              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
             email:
               taken: >
@@ -296,16 +296,16 @@ de:
         other: Küche
       event/role/helper:
         one: Helfer/-in
-        other: Helfer/-innen
+        other: Helfende
       event/role/participant:
         one: Teilnehmer/-in
-        other: Teilnehmer/-innen
+        other: Teilnehmende
       event/role/treasurer:
         one: Kassier
         other: Kassiere
       event/role/speaker:
         one: Referent/-in
-        other: Referent/-innen
+        other: Referierende
       event/date:
         one: Datum
         other: Daten
@@ -734,8 +734,8 @@ de:
         contact: Kontaktperson
         creator_id: Ersteller
         notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
-        maximum_participants: Maximale Teilnehmerzahl
-        minimum_participants: Minimale Teilnehmerzahl
+        maximum_participants: Maximale Teilnehmendenzahl
+        minimum_participants: Minimale Teilnehmendenzahl
         contact_id: Kontaktperson
         description: Beschreibung
         location: Ort / Adresse

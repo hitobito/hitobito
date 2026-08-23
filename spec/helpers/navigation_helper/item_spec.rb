@@ -58,7 +58,9 @@ describe NavigationHelper::Item do
 
   describe "#label" do
     it "translates the :label key when given" do
-      allow(view).to receive(:t).with("json_api").and_return("JSON API")
+      allow(view).to receive(:t)
+        .with("json_api", application_name: Settings.application.name)
+        .and_return("JSON API")
       item = described_class.new(label: "json_api", path: :api_path)
 
       expect(item.label(view)).to eq("JSON API")

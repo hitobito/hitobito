@@ -51,7 +51,8 @@ module RolesHelper
     return role.label if role.permissions.blank?
 
     permissions = role.permissions.map do |p|
-      t(p, scope: "activerecord.attributes.role.class.permission.description").chomp(".")
+      t(p, scope: "activerecord.attributes.role.class.permission.description",
+        application_name: Settings.application.name).chomp(".")
     end
     "#{role.label} (#{permissions.join(", ")})"
   end

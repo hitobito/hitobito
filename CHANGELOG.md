@@ -1,11 +1,14 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)
+- Rechungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (sww#296)
+- In der JSON:API können die gleichen Personendaten von Eventteilnehmern abgerufen werden wie im UI (pbs#466)
+
 ## Version 2.10
 
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
-
-## Version 2.10
-
 - Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
 - Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
 - Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)

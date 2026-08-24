@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -55,6 +55,17 @@ module AbilityDsl
 
     def course_offerers
       @course_offerers ||= Group.course_offerers.pluck(:id)
+    end
+
+    # In hitobito/hitobito_pbs#466, cbe and ama found no easy better place to put this.
+    # It is a complex calculation which needs to be cached in the request context,
+    # similar to course_offerers which we already have here.
+    def participation_details_people
+      ::Person.where(id: participation_details_participations.select(:participant_id))
+    end
+
+    def participation_details_person_ids
+      @participation_details_person_ids ||= participation_details_people.pluck(:id).to_set
     end
 
     private
@@ -148,6 +159,12 @@ module AbilityDsl
     def find_events_with_permission(permission)
       participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }
         .collect(&:event_id)
+    end
+
+    def participation_details_participations
+      ::Event::Participation
+        .accessible_by(JsonApi::EventParticipationDetailsAbility.new(user))
+        .where(participant_type: ::Person.sti_name)
     end
   end
 end

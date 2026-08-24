@@ -40,7 +40,8 @@ class EventResource < ApplicationResource
     attribute :updated_at, :datetime, filterable: true
   end
 
-  belongs_to :contact, resource: PersonResource, writable: false
+  belongs_to :contact, resource: PersonResource, writable: false,
+    base_scope: ::Person.all # hitobito/hitobito_pbs#466
   belongs_to :kind, resource: Event::KindResource, writable: false
   has_many :dates, resource: Event::DateResource, writable: false
   has_many :participations, resource: Event::ParticipationResource, writable: false

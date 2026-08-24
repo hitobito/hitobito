@@ -279,6 +279,21 @@ describe GroupsController do
       end
     end
 
+    describe "#confirm_deletion" do
+      let(:group) { groups(:bottom_group_one_two) }
+
+      render_views
+
+      it "renders the confirmation dialog javascript" do
+        get :confirm_deletion, params: {id: group}, format: :js
+
+        expect(response).to have_http_status(:ok)
+        expect(response.media_type).to eq("text/javascript")
+        expect(response.body).to include("confirm-group-deletion")
+        expect(response.body).to include("modal('show')")
+      end
+    end
+
     describe "#deleted_subgroups" do
       let(:group) { groups(:bottom_group_one_one) }
 

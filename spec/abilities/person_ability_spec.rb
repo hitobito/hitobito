@@ -358,7 +358,9 @@ describe PersonAbility do
       end
 
       it "may not modify invisible roles in an archived group" do
-        groups(:bottom_layer_one).archive!
+        # update the column directly instead of calling Group#archive! to avoid callback `reset_contact_info`
+        # which prevents the archive! (this callback is removed in master branch anyway)
+        groups(:bottom_layer_one).update_column(:archived_at, Time.current)
         is_expected.not_to be_able_to(:update, invisible.reload)
         is_expected.not_to be_able_to(:destroy, invisible.reload)
       end

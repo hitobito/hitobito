@@ -65,12 +65,16 @@ class PeopleManagersController < ApplicationController
     @entry ||= params[:id] ? find_entry : build_entry
   end
 
-  def build_entry
-    person.send(assoc).build(model_params)
-  end
-
   def find_entry
     person.send(assoc).find(params[:id])
+  end
+
+  def build_entry
+    person.send(assoc).build(permitted_params)
+  end
+
+  def model_params
+    params[:people_manager] || ActionController::Parameters.new
   end
 
   def person

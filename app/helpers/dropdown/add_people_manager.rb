@@ -44,7 +44,7 @@ module Dropdown
     end
 
     def create_managed?
-      can?(:create_managed, PeopleManager.new(manager: @person)) && can?(:lookup_manageds, Person)
+      can?(:lookup_manageds, Person)
     end
 
     def create_manager?

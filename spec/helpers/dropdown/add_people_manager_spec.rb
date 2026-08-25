@@ -20,10 +20,10 @@ describe Dropdown::AddPeopleManager do
   end
 
   it "renders dropdown toggle with 3 links" do
-    expect(html).to have_css("a", count: 3)
     expect(html).to have_link "Erstellen", class: "dropdown-toggle"
     expect(html).to have_link "Verwalter*in zuweisen", class: "dropdown-item", href: new_person_manager_path(person)
     expect(html).to have_link "Kind zuweisen", class: "dropdown-item", href: new_person_managed_path(person)
+    expect(html).to have_css("a", count: 3)
   end
 
   context "when ability user and person are identical" do

@@ -21,8 +21,8 @@ class Person::ManagedsController < PeopleManagersController
     person_manageds_path(person)
   end
 
-  def model_params
-    params.require(:people_manager).permit(
+  def permitted_params
+    model_params.permit(
       :managed_id,
       managed_attributes: [:first_name, :last_name, :gender, :birthday]
     )

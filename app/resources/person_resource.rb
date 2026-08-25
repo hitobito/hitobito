@@ -18,7 +18,7 @@ class PersonResource < ApplicationResource
   def authorize_update(model)
     changed_details = model.changed_attribute_names_to_save & DETAIL_ATTRS
 
-    super do |ability, model_from_db|1
+    super do |ability, model_from_db|
       ability.authorize!(:show_details, model_from_db) if changed_details.present?
 
       raise UpdateEmailNotAllowed if model.changes.include?("email") && ability.cannot?(:update_email, model_from_db)

@@ -392,6 +392,8 @@ en:
     "403":
       title: "Access denied"
       explanation: "You are not authorized to access this resource."
+      update_email:
+        explanation: "Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern."
     "404":
       title: "Page not found (404)"
       explanation: "Maybe you typed the address incorrectly, or the page has been deleted."

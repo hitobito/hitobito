@@ -1473,6 +1473,7 @@ en:
           bcn: Neuenburger Kantonalbank
           bcv: Banque Cantonale Vaudoise
           bcvs: Walliser Kantonalbank
+          szkb: Schwyzer Kantonalbank
 
       period_invoice_template:
         name: Description

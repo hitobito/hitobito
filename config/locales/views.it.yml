@@ -393,6 +393,8 @@ it:
     "403":
       title: "Accesso negato"
       explanation: "Non hai il diritto di accedere a questa risorsa."
+      update_email:
+        explanation: "Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern."
     "404":
       title: "questa pagina purtroppo non esiste (404)"
       explanation: "forse ha inserito l'indirizzo in maniera errata oppure questa pagina è stata cancellata nel frattempo."

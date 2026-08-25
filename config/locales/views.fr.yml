@@ -393,6 +393,8 @@ fr:
     "403":
       title: "Accès refusé"
       explanation: "Tu n'es pas autorisé·e à accéder à cette ressource."
+      update_email:
+        explanation: "Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern."
     "404":
       title: "Cette page n'existe pas (404)"
       explanation: "L'adresse entrée est erronée ou la page a été effacée."

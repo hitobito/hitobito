@@ -127,7 +127,7 @@ RUN    bundle config set --local deployment 'true' \
     && bundle install \
     && bundle clean \
     && bundle exec bootsnap precompile --gemfile \
-    && bundle exec rails locales:patch_de
+    && RAILS_DB_ADAPTER=nulldb bundle exec rails locales:patch_de
 
 # only copy things needed for yarning
 # COPY package.json yarn.lock ./

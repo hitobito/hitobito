@@ -76,7 +76,8 @@ If the wagon is the main wagon for a new organization structure, you can additio
   * Create a project in [Transifex](https://www.transifex.com/) (e.g. hitobito_pbs)
   * Ensure that Settings > General > Project url is set correctly (e.g. app/transifex.com/hitobito/hitobito_pbs)
   * if the customer should have the option to define the german texts himself, then add a german variant locale to the
-    transifex project (e.g. `de_CH` for Switzerland)
+    transifex project (e.g. `de_CH` for Switzerland, `de_DE` for Germany) and set the same locale as
+    `application.german_variant` in the wagon's `config/settings.yml` (the core defaults to `de_CH`)
   * Rename customer specific locale files to generic `config/locales/wagon.xx.yml` format
   * Make sure there is all required locale files in the wagon's config/locales folder (all non default language files can be empty on init)
   * create .tx/config and add all files (you might copy it from

@@ -14,7 +14,7 @@
 .row
   %h3.form-subtitle.col-md-3.col-xl-2.mt-3= Message::TextMessage.model_name.human(count: 2)
 = f.labeled_input_field(:text_message_username)
-= f.labeled_input_field(:text_message_password)
+= f.labeled_input_field(:text_message_password, autocomplete: 'new-password')
 = f.labeled(:text_message_provider) do
   - Group::PROVIDER_VALUES.each do |value|
     = f.inline_radio_button(:text_message_provider, value, t("activerecord.attributes.group.text_message_providers.#{value}"))

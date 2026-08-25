@@ -1111,18 +1111,6 @@ de:
               one: Zukünftig
               other: Zukünftige
 
-      contact_account:
-        predefined_labels:
-          privat: Privat
-          mobil: Mobil
-          arbeit: Arbeit
-          vater: Vater
-          mutter: Mutter
-          fax: Fax
-          andere: Andere
-          webseite: Webseite
-          rechnung: Rechnung
-
       social_account:
         name: Name
         category: Kategorie

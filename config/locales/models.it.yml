@@ -1195,19 +1195,6 @@ it:
               one: In futuro
               many: Futuro
               other: Futuro
-      contact_account:
-        custom_label: Testo libero
-        predefined_labels:
-          privat: Privato
-          mobil: Cellulare
-          arbeit: Ufficio
-          vater: Padre
-          mutter: Madre
-          fax: Fax
-          andere: Altro
-          webseite: Sito web
-          rechnung: Fattura
-
       social_account:
         name: Nickname
         category: Categoria

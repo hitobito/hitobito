@@ -52,10 +52,6 @@ class AdditionalAddress < ApplicationRecord
 
   before_validation :copy_name_from_contactable, if: :uses_contactable_name
 
-  def self.predefined_labels
-    Settings.additional_address.predefined_labels
-  end
-
   def name
     if organization? && organization_name.present?
       organization_name

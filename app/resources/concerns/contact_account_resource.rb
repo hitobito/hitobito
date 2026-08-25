@@ -16,7 +16,7 @@ module ContactAccountResource
     self.readable_class = JsonApi::ContactAccountAbility
     self.acceptable_scopes += %w[people]
 
-    attribute(:label, :string) { @object.translated_label }
+    attribute :label, :string
     attribute :public, :boolean
     attribute :category_id, :integer
 

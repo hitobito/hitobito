@@ -36,11 +36,6 @@ groups:
 
 additional_address:
   enabled: false
-  predefined_labels:
-    - --
-    - Rechnung
-    - Arbeit
-    - Andere
 
 personal_documents:
   enabled: true

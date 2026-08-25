@@ -40,11 +40,11 @@ describe SocialAccountResource, type: :resource do
         expect(data.public).to eq social_account.public
       end
 
-      it "translates label" do
+      it "exposes the raw label, regardless of locale" do
         I18n.with_locale(:fr) { render }
         data = jsonapi_data[0]
         expect(data.id).to eq(social_account.id)
-        expect(data.label).to eq "Site web"
+        expect(data.label).to eq "Webseite"
       end
     end
   end

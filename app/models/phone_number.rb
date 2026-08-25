@@ -41,10 +41,4 @@ class PhoneNumber < ActiveRecord::Base
       self.number = phone.international
     end
   end
-
-  class << self
-    def predefined_labels
-      Settings.phone_number.predefined_labels
-    end
-  end
 end

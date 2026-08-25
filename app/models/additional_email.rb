@@ -34,10 +34,4 @@ class AdditionalEmail < ActiveRecord::Base
   validates_by_schema
 
   normalizes :email, with: ->(attribute) { attribute.downcase }
-
-  class << self
-    def predefined_labels
-      Settings.additional_email.predefined_labels
-    end
-  end
 end

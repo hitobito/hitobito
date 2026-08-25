@@ -1196,19 +1196,6 @@ fr:
               one: Futur
               many: Futur
               other: Futur
-      contact_account:
-        custom_label: Texte libre
-        predefined_labels:
-          privat: Privé
-          mobil: Mobile
-          arbeit: Professionnel
-          vater: Père
-          mutter: Mère
-          fax: Fax
-          andere: Autre
-          webseite: Site web
-          rechnung: Facture
-
       social_account:
         name: Nom
         category: Catégorie

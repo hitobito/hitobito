@@ -1108,19 +1108,6 @@ en:
             future:
               one: In the future
               other: Future
-      contact_account:
-        custom_label: Free text
-        predefined_labels:
-          privat: Private
-          mobil: Mobile
-          arbeit: Work
-          vater: Father
-          mutter: Mother
-          fax: Fax
-          andere: Other
-          webseite: Website
-          rechnung: Invoice
-
       social_account:
         name: Name
         category: Category

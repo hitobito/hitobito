@@ -28,10 +28,4 @@ class SocialAccount < ActiveRecord::Base
   self.value_attr = :name
 
   validates_by_schema
-
-  class << self
-    def predefined_labels
-      Settings.social_account.predefined_labels
-    end
-  end
 end

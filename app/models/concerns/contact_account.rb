@@ -5,17 +5,9 @@
 
 module ContactAccount
   extend ActiveSupport::Concern
-  # Still included for #predefined_labels/#translate_label, which
-  # Dropdown::LabelItems and Contactable::Address (address_type-based PDF label
-  # export) still read directly. Those -- and this include -- are retired once
-  # they're migrated onto ContactAccountCategory in a later step of #4359; the new
-  # category-based UI added here does not use this mechanism at all.
-  include NormalizedI18nLabels
 
   included do
     class_attribute :value_attr
-
-    self.labels_translations_key = "activerecord.attributes.contact_account.predefined_labels"
 
     has_paper_trail meta: {main: :contactable}
 
@@ -35,13 +27,10 @@ module ContactAccount
 
   # label is a purely descriptive, optional free-text addition to category
   # (analogous to Role#label) and carries no business logic of its own.
-  # Records not yet backfilled with a category (category_id still nil) fall back
-  # to the old translated label, so they keep displaying correctly in the
-  # meantime instead of showing a raw, untranslated string.
+  # category may still be nil here for an unsaved, not-yet-categorized record
+  # (e.g. a new row in a form preview).
   def category_label
-    return translated_label unless category
-
-    [category.to_s, label.presence].compact.join(", ")
+    [category&.to_s, label.presence].compact.join(", ")
   end
 
   private

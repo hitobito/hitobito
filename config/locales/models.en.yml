@@ -313,6 +313,9 @@ en:
       event/question_template:
         one: Vorlage Anmeldeangabe Anlässe
         other: Vorlagen Anmeldeangaben Anlässe
+      event/question_visibility:
+        one: Sichtbare Rolle
+        other: Sichtbare Rollen
       event/answer:
         one: Antwort auf Anmeldeangabe
         other: Antworten auf Anmeldeangaben
@@ -910,6 +913,7 @@ en:
         multiple_choices: Multiple choice
         required: Obligatorisch
         sensitive: Sensitive
+        question_visibilities: Sichtbare Rollen
 
       event/question_template:
         question: Frage
@@ -1469,6 +1473,7 @@ en:
           bcn: Neuenburger Kantonalbank
           bcv: Banque Cantonale Vaudoise
           bcvs: Walliser Kantonalbank
+          szkb: Schwyzer Kantonalbank
 
       period_invoice_template:
         name: Description

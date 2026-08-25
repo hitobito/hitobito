@@ -21,9 +21,9 @@ class PersonResource < ApplicationResource
     super do |ability, model_from_db|
       ability.authorize!(:show_details, model_from_db) if changed_details.present?
 
-      raise UpdateEmailNotAllowed if model.changes.include?("email") && ability.cannot?(
-        :update_email, model_from_db
-      )
+      next unless model.changes.include?("email")
+
+      raise UpdateEmailNotAllowed if ability.cannot?(:update_email, model_from_db)
     end
   end
 

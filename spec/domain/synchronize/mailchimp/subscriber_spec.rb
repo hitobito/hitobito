@@ -31,8 +31,8 @@ describe Synchronize::Mailchimp::Subscriber do
 
     before do
       mailing_list.subscriptions.create!(subscriber: person)
-      person.additional_emails <<
-        AdditionalEmail.new(label: "vater", email: "vater@example.com", mailings: true)
+      Fabricate(:additional_email, contactable: person, label: "vater", email: "vater@example.com",
+        mailings: true)
     end
 
     subject { described_class.mailing_list_subscribers(mailing_list) }
@@ -53,11 +53,8 @@ describe Synchronize::Mailchimp::Subscriber do
 
       before do
         mailing_list.subscriptions.create(subscriber: bottom_member)
-        bottom_member.additional_emails.create!({
-          label: "vater bottom",
-          email: "vater+bottom@example.com",
-          mailings: true
-        })
+        Fabricate(:additional_email, contactable: bottom_member, label: "vater bottom",
+          email: "vater+bottom@example.com", mailings: true)
         mailing_list.mailchimp_include_additional_emails = true
       end
 
@@ -78,8 +75,8 @@ describe Synchronize::Mailchimp::Subscriber do
 
     before do
       mailing_list.subscriptions.create!(subscriber: person)
-      person.additional_emails <<
-        AdditionalEmail.new(label: "vater", email: "vater@example.com", mailings: true)
+      Fabricate(:additional_email, contactable: person, label: "vater", email: "vater@example.com",
+        mailings: true)
     end
 
     subject(:subscribers) { described_class.mailing_list_subscribers(mailing_list) }
@@ -127,11 +124,8 @@ describe Synchronize::Mailchimp::Subscriber do
 
       before do
         mailing_list.subscriptions.create(subscriber: bottom_member)
-        bottom_member.additional_emails.create!({
-          label: "vater bottom",
-          email: "vater+bottom@example.com",
-          mailings: true
-        })
+        Fabricate(:additional_email, contactable: bottom_member, label: "vater bottom",
+          email: "vater+bottom@example.com", mailings: true)
         mailing_list.mailchimp_include_additional_emails = true
       end
 

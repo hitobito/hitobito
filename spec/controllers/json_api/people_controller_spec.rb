@@ -1440,7 +1440,8 @@ describe JsonApi::PeopleController, type: [:request] do
               attributes: {
                 label: "Ds Grosi",
                 contactable_type: "additional_emails",
-                email: "new.hitobito@example.com"
+                email: "new.hitobito@example.com",
+                category_id: contact_account_categories(:additional_email_person_other).id
               }
             }
           ]

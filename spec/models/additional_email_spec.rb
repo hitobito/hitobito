@@ -54,9 +54,11 @@ describe AdditionalEmail do
   context "paper trails", versioning: true do
     let(:person) { people(:top_leader) }
 
+    let(:category) { contact_account_categories(:additional_email_person_other) }
+
     it "sets main on create" do
       expect do
-        person.additional_emails.create!(label: "Foo", email: "bar@bar.com")
+        person.additional_emails.create!(label: "Foo", email: "bar@bar.com", category:)
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
@@ -65,7 +67,7 @@ describe AdditionalEmail do
     end
 
     it "sets main on update" do
-      account = person.additional_emails.create(label: "Foo", email: "bar@bar.com")
+      account = person.additional_emails.create(label: "Foo", email: "bar@bar.com", category:)
       expect do
         account.update!(email: "bur@bur.com")
       end.to change { PaperTrail::Version.count }.by(1)
@@ -76,7 +78,7 @@ describe AdditionalEmail do
     end
 
     it "sets main on destroy" do
-      account = person.additional_emails.create(label: "Foo", email: "bar@bar.com")
+      account = person.additional_emails.create(label: "Foo", email: "bar@bar.com", category:)
       expect do
         account.destroy!
       end.to change { PaperTrail::Version.count }.by(1)

@@ -26,7 +26,7 @@
 #  town                  :string           not null
 #  uses_contactable_name :boolean          default(TRUE), not null
 #  zip_code              :string           not null
-#  category_id           :bigint
+#  category_id           :bigint           not null
 #  contactable_id        :bigint
 #
 # Indexes

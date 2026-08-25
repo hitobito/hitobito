@@ -14,7 +14,7 @@
 #  label            :string
 #  mailings         :boolean          default(TRUE), not null
 #  public           :boolean          default(TRUE), not null
-#  category_id      :bigint
+#  category_id      :bigint           not null
 #  contactable_id   :integer          not null
 #
 # Indexes

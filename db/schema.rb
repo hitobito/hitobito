@@ -85,7 +85,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_18_090000) do
     t.boolean "public", default: true, null: false
     t.boolean "mailings", default: true, null: false
     t.boolean "invoices", default: false
-    t.bigint "category_id"
+    t.bigint "category_id", null: false
     t.index ["category_id"], name: "index_additional_emails_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
@@ -1285,7 +1285,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_18_090000) do
     t.string "number", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
-    t.bigint "category_id"
+    t.bigint "category_id", null: false
     t.index ["category_id"], name: "index_phone_numbers_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_phone_numbers_on_contactable_id_and_contactable_type"
   end
@@ -1404,7 +1404,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_18_090000) do
     t.string "name", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
-    t.bigint "category_id"
+    t.bigint "category_id", null: false
     t.index ["category_id"], name: "index_social_accounts_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_social_accounts_on_contactable_id_and_contactable_type"
   end

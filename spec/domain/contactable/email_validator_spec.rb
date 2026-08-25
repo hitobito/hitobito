@@ -93,7 +93,8 @@ describe Contactable::EmailValidator do
   def create_invalid_additional_email(person, email)
     AdditionalEmail
       .new(contactable: person,
-        email: email)
+        email: email,
+        category: contact_account_categories(:additional_email_person_other))
       .save!(validate: false)
   end
 end

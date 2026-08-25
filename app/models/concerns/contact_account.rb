@@ -20,7 +20,7 @@ module ContactAccount
     has_paper_trail meta: {main: :contactable}
 
     belongs_to :contactable, polymorphic: true
-    belongs_to :category, class_name: "ContactAccountCategory", optional: true
+    belongs_to :category, class_name: "ContactAccountCategory"
 
     validate :assert_category_unique_per_contactable, if: -> { category&.unique_per_contactable? }
   end

@@ -38,7 +38,7 @@ describe "event/participations/_attrs.html.haml" do
     context "with PeopleManager assigned" do
       let!(:manager) do
         Fabricate(:person).tap do |manager|
-          manager.phone_numbers.create(number: "+41 44 123 45 57", label: "Privat")
+          Fabricate(:phone_number, contactable: manager, number: "+41 44 123 45 57", label: "Privat")
           participation.person.managers << manager
         end
       end

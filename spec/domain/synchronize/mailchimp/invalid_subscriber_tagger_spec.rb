@@ -24,9 +24,7 @@ describe Synchronize::Mailchimp::InvalidSubscriberTagger do
   end
 
   it "tags by secondary email" do
-    AdditionalEmail.create!(
-      email: "foo@bar.com", contactable: person, label: "Privat", mailings: true
-    )
+    Fabricate(:additional_email, contactable: person, email: "foo@bar.com", label: "Privat", mailings: true)
     list.update(mailchimp_include_additional_emails: true)
 
     expect do

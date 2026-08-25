@@ -36,10 +36,11 @@ describe PhoneNumber do
 
   context "paper trails", versioning: true do
     let(:person) { people(:top_leader) }
+    let(:category) { contact_account_categories(:phone_number_person_other) }
 
     it "sets main on create" do
       expect do
-        person.phone_numbers.create!(label: "Foo", number: "+41 44 123 45 67")
+        person.phone_numbers.create!(label: "Foo", number: "+41 44 123 45 67", category:)
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
@@ -48,7 +49,7 @@ describe PhoneNumber do
     end
 
     it "sets main on update" do
-      account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67")
+      account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67", category:)
       expect do
         account.update!(number: "021 987 65 43")
       end.to change { PaperTrail::Version.count }.by(1)
@@ -59,7 +60,7 @@ describe PhoneNumber do
     end
 
     it "sets main on destroy" do
-      account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67")
+      account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67", category:)
       expect do
         account.destroy!
       end.to change { PaperTrail::Version.count }.by(1)

@@ -35,7 +35,8 @@ describe PeopleFiltersController do
         user.update_columns(email: "not-an-email")
         AdditionalEmail
           .new(contactable: user,
-            email: "mail@nodomain")
+            email: "mail@nodomain",
+            category: contact_account_categories(:additional_email_person_other))
           .save!(validate: false)
         Contactable::EmailValidator.new.validate_people
 

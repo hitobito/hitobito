@@ -8,9 +8,24 @@
 require "spec_helper"
 
 describe ContactAccountCategoryMigrationJob do
+  before do
+    [:additional_addresses, :additional_emails, :phone_numbers, :social_accounts].each do |table|
+      ActiveRecord::Base.connection.change_column_null(table, :category_id, true)
+    end
+  end
+
   let(:person) { people(:top_leader) }
 
   def run = described_class.new.perform
+
+  # category is required by validation now, but these examples simulate
+  # not-yet-migrated data -- build normally (any category satisfies presence),
+  # then null it out via update_column, bypassing both the validation and the
+  # loosened DB constraint above.
+  def uncategorize!(record)
+    record.update_column(:category_id, nil)
+    record
+  end
 
   # Exercises the generic label-matching/other-fallback behavior of
   # ContactAccountCategoryMigrationJob against a concrete contact_account_type/
@@ -36,7 +51,7 @@ describe ContactAccountCategoryMigrationJob do
 
     if (label_mapping = opts[:label_mapping])
       it "matches a known label case and whitespace insensitively and clears the label" do
-        record = Fabricate(factory, contactable:, category_id: nil, label: "  #{label_mapping[:label].upcase}  ")
+        record = uncategorize!(Fabricate(factory, contactable:, label: "  #{label_mapping[:label].upcase}  "))
 
         run
 
@@ -45,7 +60,7 @@ describe ContactAccountCategoryMigrationJob do
       end
 
       it "also matches when the label is already the category's own key" do
-        record = Fabricate(factory, contactable:, category_id: nil, label: label_mapping[:key])
+        record = uncategorize!(Fabricate(factory, contactable:, label: label_mapping[:key]))
 
         run
 
@@ -55,7 +70,7 @@ describe ContactAccountCategoryMigrationJob do
 
       it "falls back to other when the mapped category itself no longer exists" do
         ContactAccountCategory.where(contact_account_type:, contactable_type:, key: label_mapping[:key]).delete_all
-        record = Fabricate(factory, contactable:, category_id: nil, label: label_mapping[:label])
+        record = uncategorize!(Fabricate(factory, contactable:, label: label_mapping[:label]))
 
         run
 
@@ -65,7 +80,7 @@ describe ContactAccountCategoryMigrationJob do
     end
 
     it "falls back to the other category and keeps the label when nothing matches" do
-      record = Fabricate(factory, contactable:, category_id: nil, label: "Ferienwohnung")
+      record = uncategorize!(Fabricate(factory, contactable:, label: "Ferienwohnung"))
 
       run
 
@@ -74,7 +89,7 @@ describe ContactAccountCategoryMigrationJob do
     end
 
     it "sets other for rows with a blank label" do
-      record = Fabricate(factory, contactable:, category_id: nil, label: nil)
+      record = uncategorize!(Fabricate(factory, contactable:, label: nil))
 
       run
 
@@ -82,7 +97,7 @@ describe ContactAccountCategoryMigrationJob do
     end
 
     it "treats a whitespace-only label the same as a blank one" do
-      record = Fabricate(factory, contactable:, category_id: nil, label: "   ")
+      record = uncategorize!(Fabricate(factory, contactable:, label: "   "))
 
       run
 
@@ -101,8 +116,9 @@ describe ContactAccountCategoryMigrationJob do
 
   describe "used_for_invoices" do
     it "assigns the category and clears the label when it exactly matches the category's name" do
-      email = person.additional_emails.create!(email: "invoices@example.com", label: "  RECHNUNGSADRESSE  ",
-        invoices: true)
+      email = uncategorize!(person.additional_emails.create!(email: "invoices@example.com",
+        label: "  RECHNUNGSADRESSE  ", invoices: true,
+        category: contact_account_categories(:additional_email_person_other)))
 
       run
 
@@ -112,7 +128,8 @@ describe ContactAccountCategoryMigrationJob do
     end
 
     it "assigns the category but keeps the label when it doesn't exactly match the category's name" do
-      email = person.additional_emails.create!(email: "invoices@example.com", label: "Rechnung", invoices: true)
+      email = uncategorize!(person.additional_emails.create!(email: "invoices@example.com", label: "Rechnung",
+        invoices: true, category: contact_account_categories(:additional_email_person_other)))
 
       run
 
@@ -122,11 +139,13 @@ describe ContactAccountCategoryMigrationJob do
     end
 
     it "leaves category nil and keeps the label when no used_for_invoices or other category exists" do
+      other_category = contact_account_categories(:additional_email_person_private)
       ContactAccountCategory
         .where(contact_account_type: "AdditionalEmail", contactable_type: "Person")
         .where("used_for_invoices OR key = 'other'").delete_all
 
-      email = person.additional_emails.create!(email: "invoices@example.com", label: "Rechnung", invoices: true)
+      email = uncategorize!(person.additional_emails.create!(email: "invoices@example.com", label: "Rechnung",
+        invoices: true, category: other_category))
 
       run
 
@@ -136,7 +155,8 @@ describe ContactAccountCategoryMigrationJob do
     end
 
     it "prioritizes the used_for_invoices category even when the label matches something else, but keeps the label" do
-      email = person.additional_emails.create!(email: "invoices@example.com", label: "Arbeit", invoices: true)
+      email = uncategorize!(person.additional_emails.create!(email: "invoices@example.com", label: "Arbeit",
+        invoices: true, category: contact_account_categories(:additional_email_person_other)))
 
       run
 
@@ -149,7 +169,8 @@ describe ContactAccountCategoryMigrationJob do
         .where(contact_account_type: "AdditionalEmail", contactable_type: "Person", used_for_invoices: true)
         .delete_all
 
-      email = person.additional_emails.create!(email: "invoices@example.com", label: "Rechnung", invoices: true)
+      email = uncategorize!(person.additional_emails.create!(email: "invoices@example.com", label: "Rechnung",
+        invoices: true, category: contact_account_categories(:additional_email_person_private)))
 
       run
 
@@ -159,8 +180,8 @@ describe ContactAccountCategoryMigrationJob do
 
     it "assigns the used_for_invoices category for AdditionalAddress on a Group" do
       group = groups(:top_group)
-      address = Fabricate(:additional_address, contactable: group, category_id: nil, label: "Rechnungsadresse",
-        invoices: true)
+      address = uncategorize!(Fabricate(:additional_address, contactable: group, label: "Rechnungsadresse",
+        invoices: true))
 
       run
 
@@ -171,9 +192,13 @@ describe ContactAccountCategoryMigrationJob do
 
   describe "label matching" do
     it "handles multiple different labels within the same run without cross-contamination" do
-      mobile = person.phone_numbers.create!(number: "+41 78 000 00 08", label: "Mobil")
-      landline = person.phone_numbers.create!(number: "+41 78 000 00 09", label: "Privat")
-      unmapped = person.phone_numbers.create!(number: "+41 78 000 00 10", label: "Ferienwohnung")
+      other_category = contact_account_categories(:phone_number_person_other)
+      mobile = uncategorize!(person.phone_numbers.create!(number: "+41 78 000 00 08", label: "Mobil",
+        category: other_category))
+      landline = uncategorize!(person.phone_numbers.create!(number: "+41 78 000 00 09", label: "Privat",
+        category: other_category))
+      unmapped = uncategorize!(person.phone_numbers.create!(number: "+41 78 000 00 10", label: "Ferienwohnung",
+        category: other_category))
 
       run
 
@@ -268,7 +293,7 @@ describe ContactAccountCategoryMigrationJob do
       let(:group) { groups(:top_group) }
 
       it "matches a label equal to a category's own key, case insensitively" do
-        address = Fabricate(:additional_address, contactable: group, category_id: nil, label: "OTHER")
+        address = uncategorize!(Fabricate(:additional_address, contactable: group, label: "OTHER"))
 
         run
 
@@ -277,7 +302,7 @@ describe ContactAccountCategoryMigrationJob do
       end
 
       it "matches a label equal to a category's translated name" do
-        address = Fabricate(:additional_address, contactable: group, category_id: nil, label: "andere")
+        address = uncategorize!(Fabricate(:additional_address, contactable: group, label: "andere"))
 
         run
 
@@ -290,8 +315,8 @@ describe ContactAccountCategoryMigrationJob do
       it "matches a translation case and whitespace insensitively and clears the label" do
         # AdditionalEmail/Group has no "büro" entry in LABEL_KEY_MAPPING (only "arbeit" does),
         # so this can only be resolved via the "office" category's own German name.
-        email = Fabricate(:additional_email, contactable: groups(:top_group), category_id: nil,
-          label: "  BÜRO  ")
+        email = uncategorize!(Fabricate(:additional_email, contactable: groups(:top_group),
+          label: "  BÜRO  "))
 
         run
 
@@ -300,8 +325,8 @@ describe ContactAccountCategoryMigrationJob do
       end
 
       it "matches an exact translation containing punctuation" do
-        account = Fabricate(:social_account, contactable: people(:top_leader), category_id: nil,
-          label: "X (Twitter)")
+        account = uncategorize!(Fabricate(:social_account, contactable: people(:top_leader),
+          label: "X (Twitter)"))
 
         run
 
@@ -314,8 +339,8 @@ describe ContactAccountCategoryMigrationJob do
         # phrase containing it, not an exact match -- the category is still
         # assigned, but the label carries more information than the category
         # alone, so it's kept rather than cleared.
-        email = Fabricate(:additional_email, contactable: groups(:top_group), category_id: nil,
-          label: "Neues Büro Zürich")
+        email = uncategorize!(Fabricate(:additional_email, contactable: groups(:top_group),
+          label: "Neues Büro Zürich"))
 
         run
 
@@ -327,8 +352,8 @@ describe ContactAccountCategoryMigrationJob do
         # "Arbeit" (work) appears earlier in the string, but "private" has a lower
         # :position than "work" for AdditionalEmail/Person -- category order wins,
         # not where the match happens to start in the label.
-        email = Fabricate(:additional_email, contactable: people(:top_leader), category_id: nil,
-          label: "Arbeit (Privat)")
+        email = uncategorize!(Fabricate(:additional_email, contactable: people(:top_leader),
+          label: "Arbeit (Privat)"))
 
         run
 

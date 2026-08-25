@@ -7,10 +7,11 @@ require "spec_helper"
 describe SocialAccount do
   context "paper trails", versioning: true do
     let(:person) { people(:top_leader) }
+    let(:category) { contact_account_categories(:social_account_person_other) }
 
     it "sets main on create" do
       expect do
-        person.social_accounts.create!(label: "Foo", name: "Bar")
+        person.social_accounts.create!(label: "Foo", name: "Bar", category:)
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
@@ -19,7 +20,7 @@ describe SocialAccount do
     end
 
     it "sets main on update" do
-      account = person.social_accounts.create(label: "Foo", name: "Bar")
+      account = person.social_accounts.create(label: "Foo", name: "Bar", category:)
       expect do
         account.update!(name: "Bur")
       end.to change { PaperTrail::Version.count }.by(1)
@@ -30,7 +31,7 @@ describe SocialAccount do
     end
 
     it "sets main on destroy" do
-      account = person.social_accounts.create(label: "Foo", name: "Bar")
+      account = person.social_accounts.create(label: "Foo", name: "Bar", category:)
       expect do
         account.destroy!
       end.to change { PaperTrail::Version.count }.by(1)

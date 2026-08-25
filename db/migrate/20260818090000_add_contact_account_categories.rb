@@ -14,9 +14,12 @@ class AddContactAccountCategories < ActiveRecord::Migration[8.0]
     add_category_references
     make_additional_address_label_freetext
     seed_and_backfill_categories
+    make_category_not_nullable
   end
 
   def down
+    CONTACT_ACCOUNT_TABLES.each { |table| change_column_null table, :category_id, true }
+
     change_column_null :additional_addresses, :label, false
     add_index :additional_addresses, [:contactable_id, :contactable_type, :label], unique: true
 
@@ -62,5 +65,9 @@ class AddContactAccountCategories < ActiveRecord::Migration[8.0]
 
     require Rails.root.join("db", "seeds", "support", "contact_account_category_seeder")
     ContactAccountCategorySeeder.new.seed
+  end
+
+  def make_category_not_nullable
+    CONTACT_ACCOUNT_TABLES.each { |table| change_column_null table, :category_id, false }
   end
 end

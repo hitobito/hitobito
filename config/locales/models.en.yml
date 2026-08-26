@@ -503,7 +503,7 @@ en:
         town: Place
         country: Country
         postbox: P.O. Box
-        address_care_of: additional address line
+        address_care_of: zusätzl. Adresszeile
         public: Public
 
       additional_addresses:

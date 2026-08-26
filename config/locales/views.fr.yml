@@ -171,7 +171,7 @@ fr:
       placeholder_value: Courriel
       placeholder_type: Type (privé, professionnel, …)
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
-      tooltip_invoices: Utilisée à la place de l'adresse e-mail principale lors de l'envoi de factures.
+      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
       placeholder_type: Type (facture, travail ..)
@@ -751,7 +751,7 @@ fr:
 
   event/invitations:
     export_enqueued: "L'exportation commence en arrière-plan et peut être téléchargée une fois terminée depuis l'aperçu des travaux: %{overview_link}"
-    description: "Les personnes invitées peuvent s'inscrire ou se désinscrire via la page%{model_name}. Elles ne reçoivent pas de mail automatique."
+    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Die Personen erhalten keine automatische Einladungs-Mail."
 
   event/kinds:
     global:
@@ -1976,7 +1976,7 @@ fr:
           être modifiée que par une personne hiérarchiquement supérieure à chacun
           de ces rôles.
     fields:
-      format_birthday: (dd.mm.yyyy)
+      format_birthday: (TT.MM.JJJJ)
       no_sensitive_information: ""
 
     list:

@@ -586,7 +586,7 @@ fr:
         town: Lieu
         country: Pays
         postbox: Case postale
-        address_care_of: ligne d'adresse supplémentaire
+        address_care_of: zusätzl. Adresszeile
         public: Public
 
       additional_addresses:
@@ -814,7 +814,7 @@ fr:
         cost: Coûts
         contact: 'Personne de contact '
         creator_id: Crée par
-        notify_contact_on_participations: Informer par e-mail la personne de contact lors d'une connexion
+        notify_contact_on_participations: Notifier la personne de contact par e-mail de toute nouvelle inscription.
         maximum_participants: Nombre maximal de participants
         minimum_participants: Nombre minimal de participants
         contact_id: 'Personne de contact '

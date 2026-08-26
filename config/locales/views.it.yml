@@ -171,7 +171,7 @@ it:
       placeholder_value: Email
       placeholder_type: Tipo (privato, lavoro, ...)
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
-      tooltip_invoices: Viene utilizzato al posto dell'indirizzo e-mail principale per l'invio delle fatture.
+      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
       placeholder_type: Denominazione (fattura, lavoro ...)
@@ -749,7 +749,7 @@ it:
 
   event/invitations:
     export_enqueued: "L'esportazione viene avviata in background e, una volta completata, potrà essere scaricata dalla panoramica dei processi: %{overview_link}"
-    description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
+    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Die Personen erhalten keine automatische Einladungs-Mail."
 
   event/kinds:
     global:
@@ -1975,7 +1975,7 @@ it:
           L'indirizzo email principale di una persona con più ruoli può essere cambiato
           unicamente da un utente che è superiore a tutti questi ruoli.
     fields:
-      format_birthday: (gg.mm.aaaa)
+      format_birthday: (TT.MM.JJJJ)
       no_sensitive_information: ""
 
     list:

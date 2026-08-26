@@ -170,7 +170,7 @@ en:
       placeholder_value: E-Mail
       placeholder_type: Designation (Home, Work, ...)
       tooltip_mailings: Shipments of subscriptions, confirmations via e-mail, etc. will be sent in addition to all addresses selected here.
-      tooltip_invoices: Wird anstelle der Haupt E-Mail Adresse beim verschicken von Rechnungen verwendet.
+      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
       placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
@@ -745,7 +745,7 @@ en:
 
   event/invitations:
     export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
-    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
+    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Die Personen erhalten keine automatische Einladungs-Mail."
 
   event/kinds:
     global:
@@ -1923,7 +1923,7 @@ en:
           The main e-mail address of a person with multiple roles can only be changed
           by a superordinate user.
     fields:
-      format_birthday: (dd.mm.yyy)
+      format_birthday: (TT.MM.JJJJ)
       no_sensitive_information: ""
 
     list:

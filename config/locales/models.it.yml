@@ -585,7 +585,7 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: zusätzl. Adresszeile
         public: Pubblico
 
       additional_addresses:

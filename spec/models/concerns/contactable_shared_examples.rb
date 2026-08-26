@@ -73,6 +73,19 @@ shared_examples "enforces category uniqueness per contactable" do |opts|
 
     expect(contactable.valid?).to eq true
   end
+
+  it "does not leave the contactable's association cached as empty afterwards" do
+    # Regression test: the uniqueness check reads contactable.public_send(association),
+    # which loads and caches that association on the contactable as a side effect. Since
+    # this runs pre-save, that read used to find no siblings (this record doesn't exist in
+    # the DB yet) and leave that now-stale, empty cache behind for the rest of the
+    # contactable's lifetime in memory -- hiding entries created this way (as opposed to
+    # contactable.public_send(association).create!(...), which keeps the cache in sync
+    # itself) from any later read.
+    Fabricate(factory, contactable:, category: unique_category, **factory_attrs)
+
+    expect(contactable.public_send(association).count).to eq 1
+  end
 end
 
 shared_examples "fixing common autocomplete issues" do |column|

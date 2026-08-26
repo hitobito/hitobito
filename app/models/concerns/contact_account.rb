@@ -15,6 +15,8 @@ module ContactAccount
     belongs_to :category, class_name: "ContactAccountCategory"
 
     validate :assert_category_unique_per_contactable, if: -> { category&.unique_per_contactable? }
+    after_commit :reset_contactable_association_cache, on: :create,
+      if: -> { category&.unique_per_contactable? }
   end
 
   def to_s(_format = :default)
@@ -47,5 +49,27 @@ module ContactAccount
       sibling != self && !sibling.marked_for_destruction? && sibling.category_id == category_id
     end
     errors.add(:category, :already_assigned, category: duplicate.category.to_s) if duplicate
+  end
+
+  # The uniqueness check above reads contactable.public_send(assoc), which loads and
+  # caches that association on the contactable as a side effect. Since validation runs
+  # pre-save, that read can find this record missing (it doesn't exist in the DB yet)
+  # and cache that -- stale, now that this record is saved -- state on the contactable
+  # for the rest of its lifetime in memory.
+  #
+  # Only relevant when this record was created directly (e.g.
+  # PhoneNumber.create!(contactable: person, ...)) rather than via the association
+  # (e.g. person.phone_numbers.create!(...)): the latter keeps the association's target
+  # in sync itself -- but only *after* the whole create! call (all callbacks included)
+  # finishes, so that can't be detected from within a plain after_save (it would always
+  # look "not yet synced" there, and resetting unconditionally was observed to make the
+  # record show up twice the next time the association is read). Deferred to
+  # after_commit so the association's own bookkeeping -- if any -- has already run by
+  # the time this checks it.
+  def reset_contactable_association_cache
+    return unless contactable
+
+    association = contactable.association(self.class.name.demodulize.tableize.to_sym)
+    association.reset unless association.target.include?(self)
   end
 end

@@ -664,10 +664,10 @@ describe EventsController do
       "the configured visibility for other roles" do
       get :edit, params: {group_id: group.id, id: course.id}
 
-      expect(dom).to have_field(Event::Role::Leader.label, disabled: true, checked: true)
-      expect(dom).to have_field(Event::Role::AssistantLeader.label, disabled: true, checked: true)
-      expect(dom).to have_field(Event::Role::Cook.label, checked: true)
-      expect(dom).to have_field(Event::Role::Helper.label, checked: false)
+      expect(dom).to have_field(Event::Role::Leader.label_plural, disabled: true, checked: true)
+      expect(dom).to have_field(Event::Role::AssistantLeader.label_plural, disabled: true, checked: true)
+      expect(dom).to have_field(Event::Role::Cook.label_plural, checked: true)
+      expect(dom).to have_field(Event::Role::Helper.label_plural, checked: false)
     end
   end
 

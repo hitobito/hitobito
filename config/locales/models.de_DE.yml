@@ -1,6 +1,1639 @@
-#  Copyright (c) 2012-2026, Puzzle ITC. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 de_DE:
+  time:
+    formats:
+      time: "%H:%M"
+      date_time: "%d.%m.%Y %H:%M"
+      date_time_millis: "%d.%m.%Y %H:%M:%S.%L"
+      month_year: '%B %Y'
+
+  date:
+    formats:
+      default: '%d.%m.%Y'
+      long: '%e %B %Y'
+      short: '%e %b'
+      with_day: '%a %d.%m.%Y'
+
+  number:
+    currency:
+      format:
+        delimiter: ''''
+        format: '%u %n'
+        separator: .
+        precision: 2
+    format:
+      delimiter: ''''
+      precision: 2
+      separator: .
+
+  attributes:
+    created_info: Erstellt
+    updated_info: Geändert
+    deleted_info: Gelöscht
+    archived_info: Archiviert
+
+  activemodel:
+    models:
+      roles/termination:
+        one: Austritt
+        other: Austritte
+      household:
+        one: Haushalt
+        other: Haushalte
+    attributes:
+      roles/termination:
+        terminate_on: Austrittsdatum
+      household:
+        members: Haushaltsmitglieder
+      choice:
+        choice: Antwortmöglichkeit
+
+    errors:
+      messages:
+        blank: "muss ausgefüllt werden"
+        record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
+      models:
+        event/participation_contact_datas/managed:
+          attributes:
+            base:
+              duplicates_present: Diese Person existiert bereits. Bitte kontaktiere die Adressverwaltung um sie als dein Kind zu registrieren.
+        roles/termination:
+          attributes:
+            terminate_on:
+              too_early: "muss in der Zukunft liegen"
+              too_late: "darf nicht nach dem %{date} sein"
+            role:
+              not_terminatable: "ist nicht kündbar"
+        household:
+          attributes:
+            members:
+              minimum_members: Der Haushalt wird aufgelöst da weniger als 2 Personen vorhanden sind.
+              household_address: "Die Adresse '%{address}' wird für alle Personen in diesem Haushalt übernommen."
+
+        household_member:
+          attributes:
+            base:
+              in_other_household_present: "%{person_name} ist bereits Mitglied eines anderen Haushalts."
+  activerecord:
+    errors:
+      messages:
+        at_least_one_present: Mindestens eine %{model_name} muss aufgefüllt werden
+        type_not_allowed: kann hier nicht erstellt werden
+        must_be_after_opening: muss nach dem Anmeldebeginn sein
+        must_have_same_type: müssen von demselben Typ sein
+        greater_than: muss grösser als %{count} sein
+        greater_than_or_equal_to: muss grösser oder gleich %{count} sein
+        must_exist: müssen vorhanden sein
+        readonly: darf nicht verändert werden
+        cannot_be_later_than_today: kann nicht später als heute sein
+        is_not_a_decimal_number: muss eine Dezimalzahl sein
+        year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
+        year_must_be_after_1900: muss eine Jahreszahl ab 1900 enthalten
+      models:
+        cors_origin:
+          attributes:
+            origin:
+              invalid_host: enthält einen ungültigen Host
+              missing_hostname: muss einen Hostnamen enthalten
+              missing_scheme: muss ein Protokoll (http:// oder https://) enthalten
+              suffix_present: darf keinen Pfad und keinen Slash am Ende haben
+        custom_content:
+          placeholder_missing: 'muss den Platzhalter %{placeholder} enthalten'
+        event:
+          attributes:
+            base:
+              contact_attr_mandatory: "'%{attribute}' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden"
+              contact_attr_invalid: "'%{attribute}' ist kein gültiges Personen-Attribut"
+              contact_attr_hidden_required: "'%{attribute}' kann nicht als obligatorisch und 'nicht anzeigen' gesetzt werden"
+        event/date:
+          attributes:
+            finish_at:
+              not_after_start: 'muss nach Von liegen'
+        event/question:
+          attributes:
+            choices:
+              requires_more_than_one_choice: 'muss mindestens zwei Anworten enthalten'
+              requires_exactly_one_choice: 'muss genau eine Antwort enthalten'
+            question:
+              application_blank: für Anmeldeangabe muss ausgefüllt werden
+              admin_blank: für Administationsangabe muss ausgefüllt werden
+        event/participation:
+          attributes:
+            person_id:
+              taken: ist bereits angemeldet
+        group:
+          attributes:
+            self_registration_role_type:
+              blank: 'muss ausgefüllt werden wenn "Anzeige auf Loginseite" ausgewählt ist'
+        mailing_list:
+          attributes:
+            mail_name:
+              not_allowed: "'%{mail_name}' darf nicht verwendet werden"
+            mail_name_not_allowed:
+            additional_sender:
+              invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
+        message/letter_with_invoice:
+          attributes:
+            base:
+              invoice_items_required: Mindestens ein Rechnungsposten ist erforderlich
+              invoice_items_invalid: Mindestens ein Rechnungsposten ist ungültig
+        oauth/application:
+          attributes:
+            scopes:
+              not_match_configured: "stimmen nicht mit den auf dem Server hinterlegten überein."
+        pass_definition:
+          attributes:
+            background_color:
+              invalid_hex_color: "muss ein gültiger 6-stelliger Hexadezimalwert beginnend mit # sein"
+        pass_grant:
+          attributes:
+            related_role_types:
+              blank: Es muss mindestens ein Rollentyp gewählt werden
+        person:
+          name_missing: 'Bitte geben Sie einen Namen ein'
+          readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
+          attributes:
+            base:
+              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
+              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
+              cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da er/sie bereits verwaltet wird.
+              managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
+            email:
+              taken: >
+                  ist bereits vergeben. Diese Adresse muss für alle Personen eindeutig
+                  sein, da sie beim Login verwendet wird. Du kannst jedoch unter 'Weitere
+                  E-Mails' Adressen eintragen, welche bei anderen Personen als Haupt-E-Mail
+                  vergeben sind (Die Haupt-E-Mail kann leer gelassen werden).
+            self_registration_reason_custom_text:
+              either_preset_or_custom: kann nicht gesetzt werden, wenn ein vordefinierter Eintrittsgrund ausgewählt wurde.
+        person/add_request:
+          attributes:
+            person_id:
+              taken: wurde bereits angefragt
+        person_duplicates:
+          invalid_role: "Rolle %{role} von %{person} ist fürs Zusammenführen nicht gültig, da die andere Person eventuell bereits eine Rolle hat, welche diese Rolle nicht mehr erlaubt, diese muss manuell korrigiert/etnfernt werden. Info: %{message}"
+        people_manager:
+          manager_and_managed_the_same: Verwalter*in und Kind müssen unterschiedliche Personen sein.
+
+          attributes:
+            manager_id:
+              taken: ist bereits gesetzt.
+          manager_and_managed_the_same: kann sich nicht selber verwalten.
+        qualification:
+          attributes:
+            qualification_kind_id:
+              exists_for_timeframe: 'existiert in dieser Zeitspanne bereits'
+        qualification_kind:
+          attributes:
+            validity:
+              not_a_valid_number: 'muss grösser oder gleich Null sein um %{model} reaktivierbar zu machen'
+        subscription:
+          attributes:
+            subscriber_id:
+              group_not_allowed: 'Diese Gruppe kann hier nicht hinzugefügt werden'
+              event_not_allowed: 'Dieser Anlass kann hier nicht hinzugefügt werden'
+        tag:
+          attributes:
+            name:
+              must_be_unique: 'existiert bereits'
+
+        invoice:
+          recipient_address_or_email_required: 'Empfänger Adresse oder E-Mail muss ausgefüllt werden'
+          recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
+          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
+          attributes:
+            invoice_config:
+              invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
+        invoice_config:
+          not_valid: 'Rechnungseinstellungen sind ungültig. Passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
+          attributes:
+            iban:
+              required: 'muss ausgefüllt werden'
+            account_number:
+              required: 'muss ausgefüllt werden'
+              invalid_check_digit: 'ist nicht gültig; Inkorrekte Prüfziffer'
+            logo:
+              attached_unless_disabled: 'muss angegeben werden, wenn eine Logoposition gewählt ist'
+        period_invoice_template:
+          attributes:
+            recipient_source:
+              readonly_due_to_existing_invoice_runs: darf nicht mehr verändert werden, da bereits Rechnungsläufe existieren
+            end_on:
+              must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
+        role:
+          attributes:
+            end_on:
+              must_be_later_than_start_on: kann nicht vor Von sein
+
+
+    models:
+      acts_as_taggable_on/tag:
+        one: Tag
+        other: Tags
+      additional_email:
+        one: Weitere E-Mail
+        other: Weitere E-Mails
+      additional_address:
+        one: Weitere Adresse
+        other: Weitere Adressen
+      assignment:
+        one: Auftrag
+        other: Aufträge
+      bounce:
+        one: Bounce
+        other: Bounces
+      calendar:
+        one: Kalender-Feed
+        other: Kalender-Feeds
+      custom_content:
+        one: Text
+        other: Texte
+      dispatch:
+        one: Versand
+        other: Versand
+      event:
+        one: Anlass
+        other: Anlässe
+      event/course:
+        one: Kurs
+        other: Kurse
+      event/participation:
+        one: Teilnahme
+        other: Teilnahmen
+      event/application:
+        one: Anmeldung
+        other: Anmeldungen
+      event/attachment:
+        one: 'Anhang'
+        other: 'Anhänge'
+      event/kind:
+        one: Kursart
+        other: Kursarten
+      event/kind_category:
+        one: Kurskategorie
+        other: Kurskategorien
+      event/invitation:
+        one: Einladung
+        other: Einladungen
+      event/role:
+        one: Anlass Rolle
+        other: Anlass Rollen
+      event/role/assistant_leader:
+        one: Leitung
+        other: Leitung
+      event/role/leader:
+        one: Hauptleitung
+        other: Hauptleitung
+      event/role/cook:
+        one: Küche
+        other: Küche
+      event/role/helper:
+        one: Helfer/-in
+        other: Helfer/-innen
+      event/role/participant:
+        one: Teilnehmer/-in
+        other: Teilnehmer/-innen
+      event/role/treasurer:
+        one: Kassier
+        other: Kassiere
+      event/role/speaker:
+        one: Referent/-in
+        other: Referent/-innen
+      event/date:
+        one: Datum
+        other: Daten
+      event/question:
+        one: Anmeldeangabe
+        other: Anmeldeangaben
+      event/question_template:
+        one: Vorlage Anmeldeangabe Anlässe
+        other: Vorlagen Anmeldeangaben Anlässe
+      event/question_visibility:
+        one: Sichtbare Rolle
+        other: Sichtbare Rollen
+      event/answer:
+        one: Antwort auf Anmeldeangabe
+        other: Antworten auf Anmeldeangaben
+      family_member:
+        one: Familienmitglied
+        other: Familienmitglieder
+      group:
+        one: Gruppe
+        other: Gruppen
+      group_setting:
+        one: Einstellung
+        other: Einstellungen
+      help_text:
+        one: Hilfetext
+        other: Hilfetexte
+      hitobito_log_entry:
+        one: Hitobito Log Eintrag
+        other: Hitobito Log Einträge
+      invoice:
+        one: Rechnung
+        other: Rechnungen
+      invoice_article:
+        one: Rechnungsartikel
+        other: Rechnungsartikel
+      invoice_config:
+        one: Rechnungseinstellungen
+        other: Rechnungseinstellungen
+      invoice_item:
+        one: Rechnungsposten
+        other: Rechnungsposten
+      invoice_run:
+        one: Rechnungslauf
+        other: Rechnungsläufe
+      label_format:
+        one: Etikettenformat
+        other: Etikettenformate
+      message:
+        one: Nachricht
+        other: Nachrichten
+      message/bulk_mail:
+        one: Mail
+        other: Mails
+      message/letter:
+        one: Brief
+        other: Briefe
+      message/letter_with_invoice:
+        one: Rechnungsbrief
+        other: Rechnungsbriefe
+      message/system_mail:
+        one: System-E-Mail
+        other: System-E-Mails
+      message/text_message:
+        one: SMS
+        other: SMS
+      message_template:
+        one: Rechnungsvorlage
+        other: Rechnungsvorlagen
+      mail_log:
+        one: Verlauf
+        other: Verlauf
+      mailing_list:
+        one: Abo
+        other: Abos
+      note:
+        one: Notiz
+        other: Notizen
+      pass_definition:
+        one: Pass-Definition
+        other: Pass-Definitionen
+      pass_grant:
+        one: Pass-Berechtigung
+        other: Pass-Berechtigungen
+      pass:
+        one: Ausweis
+        other: Ausweise
+      wallets/pass_installation:
+        one: Wallet-Installation
+        other: Wallet-Installationen
+      wallets/apple_wallet/device_registration:
+        one: Apple-Geräteregistrierung
+        other: Apple-Geräteregistrierungen
+      payment:
+        one: Zahlung
+        other: Zahlungen
+      period_invoice_template:
+        one: Sammelrechnung
+        other: Sammelrechnungen
+      period_invoice_template/role_count_item:
+        one: Rollen-Abrechnung
+        other: Rollen-Abrechnungen
+      oauth/application:
+        one: OAuth Applikation
+        other: OAuth Applikationen
+      oauth/access_token:
+        one: OAuth Zugangstoken
+        other: OAuth Zugangstokens
+      oauth/access_grant:
+        one: OAuth Autorisierung
+        other: OAuth Autorisierungen
+      payment_reminder:
+        one: Mahnung
+        other: Mahnungen
+      payment_provider_config:
+        one: Zahlungsschnittstelle
+        other: Zahlungsschnittstellen
+      person:
+        one: Person
+        other: Personen
+      person/add_request:
+        one: Zugriffsanfrage
+        other: Anfragen
+      person_duplicate:
+        one: Duplikat
+        other: Duplikate
+      personal_document:
+        one: Dokument
+        other: Dokumente
+      personal_document_label:
+        one: Dokumenten-Label
+        other: Dokumenten-Labels
+      people_filter:
+        one: Filter
+        other: Filter
+      people_manager:
+        one: Verwalter*in
+        other: Verwalter*innen
+      phone_number:
+        one: Telefonnummer
+        other: Telefonnummern
+      qualification:
+        one: Qualifikation
+        other: Qualifikationen
+      qualification_kind:
+        one: Qualifikationsart
+        other: Qualifikationsarten
+      role:
+        one: Rolle
+        other: Rollen
+      salutation:
+        one: Anrede
+        other: Anreden
+        personal:
+          label: persönliche Anrede
+        default:
+          label: Hallo [Name]
+          value:
+            m: Hallo %{greeting_name}
+            w: Hallo %{greeting_name}
+            other: Hallo %{greeting_name}
+        available:
+          lieber_vorname:
+            label: Liebe*r [Vorname]
+            value:
+              m: Lieber %{first_name}
+              w: Liebe %{first_name}
+              other: Liebe*r %{first_name}
+      self_registration_reason:
+        one: Vordefinierter Eintrittsgrund
+        other: Vordefinierte Eintrittsgründe
+      service_token:
+        one: API-Key
+        other: API-Keys
+      social_account:
+        one: Social Media Adresse
+        other: Social Media Adressen
+      subscription:
+        one: Abonnent
+        other: Abonnenten
+      tag:
+        one: Tag
+        other: Tags
+    attributes:
+      acts_as_taggable_on/tag:
+        name: Name
+        taggings_count: Anzahl
+        category: Kategorie
+
+      additional_address:
+        translated_label: Bezeichnung
+        street_and_number: Strasse/Nummer # can be removed with next release
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        postbox: Postfach
+        address_care_of: zusätz. Adresszeile
+        public: Öffentlich
+
+      additional_addresses:
+        label: Bezeichnung
+        street: Strasse
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        postbox: Postfach
+
+      bounces:
+        email: E-Mail
+        count: Anzahl Bounces
+        blocked_at: Sperrzeitpunkt
+        mailing_list_ids: Abo-IDs
+
+      cantons:
+        ag: Aargau
+        ai: Appenzell Innerrhoden
+        ar: Appenzell Ausserrhoden
+        be: Bern
+        bl: Basel-Land
+        bs: Basel-Stadt
+        fr: Freiburg
+        ge: Genf
+        gl: Glarus
+        gr: Graubünden
+        ju: Jura
+        lu: Luzern
+        ne: Neuenburg
+        nw: Nidwalden
+        ow: Obwalden
+        sg: St. Gallen
+        sh: Schaffhausen
+        so: Solothurn
+        sz: Schwyz
+        tg: Thurgau
+        ti: Tessin
+        ur: Uri
+        vd: Waadt
+        vs: Wallis
+        zg: Zug
+        zh: Zürich
+
+      assignment:
+        title: Titel
+        description: Beschreibung
+        state: Status
+        read_at: Gelesen am
+
+      cors_origins:
+        origin: Host mit API-Zugriff
+
+      person:
+        id: Personennummer
+        salutation: Anrede
+        first_name: Vorname
+        last_name: Nachname
+        name: Name
+        company_name: Firmenname
+        company: Firma
+        nickname: Übername
+        email: Haupt-E-Mail
+        emails: E-Mails
+        layer_group: Hauptebene
+        password: Passwort
+        password_confirmation: Passwort Bestätigung
+        current_password: Altes Passwort
+        address_care_of: zusätzliche Adresszeile
+        address: Adresse
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        gender: Geschlecht
+        genders:
+          m: männlich
+          w: weiblich
+          _nil: unbekannt
+        birthday: Geburtstag
+        years: Alter
+        additional_information: Zusätzliche Angaben
+        remember_me: Angemeldet bleiben
+        phone_numbers: Telefonnummern
+        social_accounts: Social Media
+        additional_emails: Weitere E-Mails
+        additional_addresses: Weitere Adressen
+        family_members: Familienmitglieder
+        picture: Neues Foto hochladen
+        remove_picture: Aktuelles Foto entfernen
+        roles: Rollen
+        tags: Tags
+        title: Titel
+        household_key: Haushalts-ID
+        created_at: Erstellt
+        updated_at: Geändert
+        login_status: Login
+        language: Sprache
+        languages:
+          de: Deutsch
+          en: Englisch
+          fr: Französisch
+          it: Italienisch
+          rm: Rätoromanisch
+
+        primary_group_id: Hauptgruppe
+        layer_group_label: Hauptebene
+        self_registration_reason: Eintrittsgrund
+        self_registration_reason_text: Eintrittsgrund
+        self_registration_reason_custom_text: Benutzerdefinierter Eintrittsgrund
+        managers: Verwalter*innen
+        manageds: Kinder
+        people_managers: Verwalter*innen
+        people_manageds: Kinder
+        people_managers_attributes: Verwalter*innen
+        people_manageds_attributes: Kinder
+        readable_manageds: Kinder
+
+      people_manager:
+        manager_id: Verwalter*in
+        managed_id: Kind
+
+      people_managers:
+        manager_id: Verwalter*in
+        managed_id: Kind
+
+      people_manageds:
+        manager_id: Kind
+        managed_id: Verwalter*in
+
+      person_duplicate:
+        birth_year: Jahrgang
+        roles_list: Rollen
+        person_name: Vorname / Name / Übername
+        company_name: Firmenname
+        town: Ort
+
+      person/add_request:
+        person: Person
+        requester: Anfrage von
+        body: Anfrage für
+        created_at: Datum
+
+      person/add_request/event:
+        label: "%{body} in %{group}"
+        deleted_event: Gelöschter Anlass
+
+      person/add_request/mailing_list:
+        label: "%{body} in %{group}"
+
+      personal_document:
+        file: Datei
+        filename: Dateiname
+        description: Beschreibung
+        label_id: Label
+        label: Label
+        author_id: Erstellt von
+        author: Erstellt von
+        created_at: Erstellt am
+        updated_at: Geändert am
+
+      group:
+        name: Name
+        short_name: Kurzname
+        email: Haupt-E-Mail
+        address: Adresse
+        address_care_of: zusätzliche Adresszeile
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        contact_id: Kontaktperson
+        contact: Kontaktperson
+        contactable: Kontaktangaben
+        phone_numbers: Telefonnummern
+        social_accounts: Social Media
+        additional_emails: Weitere E-Mails
+        additional_addresses: Weitere Adressen
+        language: Sprache
+        layer_group: Ebene
+        parent_id: Elterngruppe
+        layer_group_id: Ebene
+        type: Gruppentyp
+        type_name: Gruppentyp
+        description: Beschreibung
+        member_count: Anzahl Mitglieder
+        updated_at: Geändert
+        self_registration: Externe Registrierung
+        self_registration_role_type: Rollentyp
+        self_registration_link: Externe Registrierung
+        self_registration_notification_email: Benachrichtigungs-E-Mail
+        self_registration_require_adult_consent: Einverständnis von Erziehungsberechtigten
+        main_self_registration_group: Anzeige auf Loginseite
+        custom_self_registration_title: Titel bei der Registrierung
+        nextcloud_url: Link zu Nextcloud
+        remove_logo: Aktuelles Gruppenlogo entfernen
+        privacy_policy_title: DSE/Datenschutzerklärung Titel
+        privacy_policy: DSE/Datenschutzerklärung
+        remove_privacy_policy: DSE/Datenschutzerklärung entfernen
+        letter_logo: Brieflogo
+        remove_letter_logo: Brieflogo entfernen
+        letter_address_position: Adressposition
+        letter_address_positions:
+          left: Links
+          right: Rechts
+        text_message_provider: SMS Anbieter
+        text_message_providers:
+          aspsms: Aspsms
+        text_message_username: SMS Benutzername
+        text_message_password: SMS Password
+        text_message_originator: SMS Absender
+
+      event:
+        group_ids: Gruppen
+        groups: Gruppen
+        state: Status
+        name: Name
+        number: Nummer
+        motto: Motto
+        cost: Kosten
+        contact: Kontaktperson
+        creator_id: Ersteller
+        notify_contact_on_participations: Kontaktperson über neue Anmeldung per Mail benachrichtigen
+        maximum_participants: Maximale Teilnehmerzahl
+        minimum_participants: Minimale Teilnehmerzahl
+        contact_id: Kontaktperson
+        description: Beschreibung
+        location: Ort / Adresse
+        application_opening_at: Anmeldebeginn
+        application_closing_at: Anmeldeschluss
+        application_conditions: Aufnahmebedingungen
+        external_applications: Externe Anmeldungen
+        signature: Unterschrift erforderlich
+        signature_confirmation: Zweitunterschrift erforderlich
+        signature_confirmation_text: Zweitunterschrift von
+        dates: Daten
+        dates_full: Daten
+        booking_info: Anmeldungen
+        questions: Fragen
+        kind_id: Art
+        teamer_count: Anzahl Leitungsteam
+        participant_count: Anzahl Teilnehmende
+        applicant_count: Anzahl Anmeldungen
+        applications_cancelable: Abmeldung
+        display_booking_info: Anzeige Anmeldestand
+        participations_visible: Teilnehmersichtbarkeit
+        waiting_list: Nationale Warteliste
+        requires_approval: Empfehlung nötig
+        globally_visible: Sichtbarkeit
+        automatic_assignment: Automatische Zuteilung
+        application_questions: Anmeldeangaben
+        admin_questions: Administrationsangaben
+        no_name: "[Kein Name]"
+        visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
+        guest_limit: Maximale Anzahl Gäste pro Person
+
+      event/contact_attrs:
+        required: Obligatorisch
+        optional: Optional
+        hidden: Nicht anzeigen
+
+      event/guest:
+        first_name: Vorname
+        last_name: Nachname
+        nickname: Übername
+        company_name: Firmenname
+        email: Haupt-E-Mail
+        address_care_of: zusätzliche Adresszeile
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        gender: Geschlecht
+        genders:
+          m: männlich
+          w: weiblich
+          _nil: unbekannt
+        birthday: Geburtstag
+        phone_number: Telefonnummer
+        language: Sprache
+        main_applicant: Hauptperson
+
+      participant:
+        first_name: Vorname
+        last_name: Nachname
+        nickname: Übername
+        company_name: Firmenname
+        email: Haupt-E-Mail
+        address_care_of: zusätzliche Adresszeile
+        street: Strasse
+        housenumber: Hausnummer
+        postbox: Postfach
+        zip_code: PLZ
+        town: Ort
+        country: Land
+        gender: Geschlecht
+        genders:
+          m: männlich
+          w: weiblich
+          _nil: unbekannt
+        birthday: Geburtstag
+        phone_number: Telefonnummer
+        language: Sprache
+        main_applicant: Hauptperson
+        additional_information: Zusätzliche Angaben
+        phone_numbers: Telefonnummern
+
+      event/answer:
+        answer: Antwort
+
+      answers:
+        answer: Antwort
+
+      event/application:
+        priority_1_id: "Kurs"
+        priority_2_id: "1. Ausweichkurs"
+        priority_3_id: "2. Ausweichkurs"
+        waiting_list_comment: 'Bemerkung'
+
+      event/attachment:
+        file: Datei
+        visibility: Sichtbarkeit
+        visibilities:
+          _nil: Unsichtbar
+          team: Nur für Leitungsteam sichtbar
+          participants: Für Leitungsteam und Teilnehmende sichtbar
+          global: Global sichtbar
+
+      event/course:
+        kind_id: Kursart
+        state: Status
+        number: Kursnummer
+        state_translated: Status
+        priorization: Priorisierung
+        requires_approval: Freigabe
+        training_days: Ausbildungstage
+
+      event/date:
+        label: Bezeichnung
+        location: Ort
+        start_at: Von
+        finish_at: Bis
+
+      dates:
+        label: Beschreibung/Ort
+        start_at: Von Datum
+        finish_at: Bis Datum
+
+      event/kind:
+        label: Verbandsbezeichnung
+        short_name: Kurzname
+        kind_category: Kurskategorie
+        kind_category_id: Kurskategorie
+        minimum_age: Mindestalter
+        preconditions: Vorbedingungen
+        prolongations: Verlängert
+        qualification_kinds: Qualifiziert für
+        general_information: Standardbeschreibung
+        application_conditions: Aufnahmebedingungen
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
+
+      event/kind_category:
+        label: Bezeichnung
+        order: Sortierschlüssel
+        kinds: Kursarten
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
+
+      event/kind_qualification_kinds:
+        validities:
+          valid: Muss gültig sein
+          valid_or_expired: Muss gültig oder weggefallen sein
+          valid_or_reactivatable: Muss gültig oder reaktivierbar sein
+
+      event/invitation:
+        participation_type: Teilnahmerolle
+        created_at: Erstellungsdatum
+        declined_at: Ablehnungsdatum
+        status: Status
+        statuses:
+          open: Eingeladen
+          accepted: Angenommen
+          declined: Abgelehnt
+
+      event/participation:
+        participant_id: Teilnehmer
+        event_id: Event
+        additional_information: Bemerkungen
+        answers: Fragen
+        created_at: Anmeldedatum
+        roles: Rolle
+        active: Aktiv
+
+      event/question:
+        question: Frage
+        choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
+        required: Obligatorisch
+        sensitive: Sensibel
+        question_visibilities: Sichtbare Rollen
+
+      event/question_template:
+        question: Frage
+        default: Default
+        event_type: Anlasstyp
+        inherit: Vererbung
+
+
+      admin_questions:
+        question: Frage
+        choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
+
+      application_questions:
+        question: Frage
+        choices: Mögliche Antworten
+        multiple_choices: Mehrfachauswahl
+        required: Antwort obligatorisch
+
+      event/role:
+        label: Bezeichnung
+        person: Person
+        type: Rolle
+        participation: Person
+        remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
+        string_long: "%{role} von %{participation}"
+
+      family_member:
+        kind: Verwandschaftsverhältnis
+        kinds:
+          sibling: Geschwister
+
+      note:
+        text: Text
+
+      pass_definition:
+        name: Name
+        description: Beschreibung
+        owner: Besitzer
+        template_key: Vorlage
+        background_color: Hintergrundfarbe
+
+      pass_grant:
+        pass_definition: Pass-Definition
+        grantor: Berechtigende Gruppe
+        related_role_types: Rollentypen
+
+      pass:
+        member_name: Mitgliedsname
+        member_number: Mitgliedsnummer
+        person: Person
+        pass_definition: Pass-Definition
+        state: Status
+        valid_from: Gültig von
+        valid_until: Gültig bis
+        states:
+          eligible: Gültig
+          ended: Abgelaufen
+          revoked: Widerrufen
+
+      wallets/pass_installation:
+        pass: Ausweis
+        wallet_type: Wallet-Typ
+        state: Status
+        wallet_identifier: Wallet-ID
+        authentication_token: Authentifizierungs-Token
+        last_synced_at: Letzte Synchronisation
+        sync_error: Synchronisationsfehler
+
+      wallets/apple_wallet/device_registration:
+        pass_installation: Pass-Installation
+        device_library_identifier: Geräte-ID
+        push_token: Push-Token
+
+      oauth/application:
+        cors_origins: Hosts mit API-Zugriff
+        uid: Client ID
+        secret: Client secret
+        redirect_uri: Redirect URIs
+        description: Beschreibung
+        additional_audiences: Weitere Audiences
+        skip_consent_screen: Einwilligung überspringen
+
+      phone_number:
+        number: Nummer
+        label: Typ
+        public: Öffentlich
+
+      qualification:
+        qualification_kind: Qualifikation
+        qualification_kind_id: Qualifikation
+        start_at: Seit
+        origin: Ursprung
+        finish_at: Bis
+        reactivateable_until: Reaktivierbar bis
+        string: '%{kind}'
+        string_with_origin: '%{kind} (von %{origin})'
+        string_with_finish_at: '%{kind} (bis %{finish_at})'
+        string_with_finish_at_and_origin: '%{kind} (bis %{finish_at}, von %{origin})'
+        open_training_days: Offene Ausbildungstage
+
+      qualification_kind:
+        label: Bezeichnung
+        description: Beschreibung
+        validity: Gültigkeit
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
+        reactivateable: Reaktivierbar
+        required_training_days: Erforderliche Ausbildungstage
+
+      # used for nested phone_numbers
+      phone_numbers:
+        number: Telefonnummer
+        label: Telefonnummer Typ
+        public: Öffentlich
+
+      group_setting:
+        var: Einstellung
+        settings:
+          text_message_provider: SMS Provider
+          messages_letter: Briefe
+        username: Benutzername
+        password: Passwort
+        provider: Provider
+        originator: Absender
+        picture: Logo
+        address_position: Adressposition
+        address_positions:
+          left: Links
+          right: Rechts
+
+      role:
+        label: Bezeichnung
+        type: Rolle
+        group_id: Gruppe
+        person: Person
+        person_id: Person
+        string_long: '%{role} in %{group}'
+        dates: Daten
+        created_at: Erstellt um
+        start_on: Von
+        end_on: Bis
+        end_on_in_name: bis
+        class:
+          archived: '%{role_kind} (archiviert)'
+          permission:
+            description:
+              admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
+              layer_and_below_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
+              layer_and_below_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
+              layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
+              layer_read: Alles Lesen auf dieser Ebene.
+              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
+              group_and_below_read: Lesen auf der Gruppe und allen darunter liegendne Gruppen (ohne Ebenen).
+              group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
+              group_read: Lesen auf der Gruppe.
+              contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
+              qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
+              approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
+              finance: Erstellen und Verwalten von Rechnungen.
+              layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
+              impersonation: Hitobito als andere Person bedienen.
+              see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
+              manual_deletion: Löschen von Personen ohne Rollen
+          kind:
+            member:
+              one: Mitglied
+              other: Mitglieder
+            passive:
+              one: Passiv
+              other: Passive
+            external:
+              one: Extern
+              other: Externe
+            future:
+              one: Zukünftig
+              other: Zukünftige
+      contact_account:
+        custom_label: Freitext
+        predefined_labels:
+          privat: Privat
+          mobil: Mobil
+          arbeit: Arbeit
+          vater: Vater
+          mutter: Mutter
+          fax: Fax
+          andere: Andere
+          webseite: Webseite
+          rechnung: Rechnung
+
+      social_account:
+        name: Name
+        label: Typ
+        public: Öffentlich
+
+      # used for nested social accounts
+      social_accounts:
+        name: Social Media Name
+        label: Social Media Typ
+        public: Öffentlich
+
+      additional_email:
+        email: E-Mail
+        name: Weitere E-Mail
+        label: Weitere E-Mail Typ
+        public: Öffentlich
+        mailings: Versand
+        invoices: Rechnung
+
+      additional_emails:
+        email: E-Mail
+        name: Weitere E-Mail
+        label: Weitere E-Mail Typ
+        public: Öffentlich
+        mailings: Versand
+        invoices: Rechnung
+
+      mailing_list:
+        name: Name
+        description: Beschreibung
+        publisher: Herausgeber
+        subscribable: Selbst an/abmelden
+        subscribable_mode: Personen sind standardmässig
+        subscribable_modes:
+          opt_out: Angemeldet (opt-out)
+          opt_in: Abgemeldet (opt-in)
+        subscribable_for: Selbst an/abmelden
+        subscribable_fors:
+          anyone: Alle
+          configured: Nur konfigurierte Abonnenten
+          nobody: Niemand
+        mail_name: Mailinglisten Adresse
+        mail_address: Mailingliste
+        mail_address_link: Mailingliste
+        subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
+        additional_sender: Zusätzlicher Absender
+        preferred_labels: Bevorzugte E-Mail-Labels
+        main_email: Versand an Haupt E-Mail
+        mailchimp_api_key: 'MailChimp API-Schlüssel'
+        mailchimp_list_id: 'MailChimp Listen-ID'
+        mailchimp_sync: 'MailChimp Sync'
+        mailchimp_state: 'Mailchimp Status'
+        mailchimp_states:
+          unchanged: Unverändert
+          success: Aktualisiert
+          partial: Teilweise
+          failed: Fehlgeschlagen
+        mailchimp_include_additional_emails: 'Alle Versandadressen synchronisieren'
+
+      mail_log:
+        updated_at: Bearbeitet am
+        mail_from: Absender
+        mail_subject: Betreff
+        status: Status
+        statuses:
+          retreived: Wird gesendet
+          bulk_delivering: Wird gesendet
+          completed: Gesendet
+          sender_rejected: Absender abgelehnt
+          unknown_recipient: Fehler
+
+      message:
+        source: Empfänger
+        subject: Betreff
+        state: Zustand
+        type: Typ
+        states:
+          draft: Entwurf
+          pending: Vorbereitet
+          processing: in Bearbeitung
+          finished: Abgeschlossen
+          failed: Fehlgeschlagen
+        recipient_count: Anzahl Empfänger
+        success_count: Empfänger erfolgreich
+        failed_count: Empfänger fehlerhaft
+        sent_at: Verarbeitet am
+        recipient_progress: Verarbeitungsfortschritt
+        recipients: Empfänger/in(nen)
+
+      message/letter:
+        body: Inhalt
+        salutation: Anrede
+        pp_post: PP-Zeile
+        donation_confirmation: Spendenbestätigung
+        shipping_method: Liefermethode
+        shipping_methods:
+          own: Eigener Versand
+          normal: B-Post
+          priority: A-Post
+        send_to_households: Haushalte
+        date_location_text: Datum und Ort
+
+      message_recipient:
+        address: Adresse
+        country: Land
+        printed_address: Briefadresse
+        salutation: Briefanrede
+        town: Ort
+        zip_code: PLZ
+
+      subscription:
+        related_role_types: Rollen
+        subscriber_id: '' # not used, error messages require different labels
+      people_filter:
+        name: Name
+
+      custom_content:
+        label: Text
+        subject: Betreff
+        body: Inhalt
+
+      help_text:
+        context: Kontext
+        key: Schlüssel
+        body: Inhalt
+        start_open: initial Anzeigen
+        field:
+          one: Feld
+          other: Felder
+        action:
+          one: Seite
+          other: Seiten
+      hitobito_log_entry:
+        created_at: Aufgezeichnet um
+        level: Level
+        category: Kategorie
+        subject: Subjekt
+        message: Meldung
+
+      label_format:
+        name: Bezeichnung
+        page_size: Seitengrösse
+        landscape: Format
+        font_size: Schriftgrösse
+        width: Etikettenbreite
+        height: Etikettenhöhe
+        count_horizontal: Anzahl nebeneinander
+        count_vertical: Anzahl übereinander
+        padding_top: Rand oben
+        padding_left: Rand links
+        dimensions: Anzahl
+        nickname: Übername auf Etikett
+        pp_post: PP-Zeile
+
+      invoice:
+        currency: Währung
+        title: Titel
+        description: Text
+        invoice_items: Rechnungsposten
+        invoice_item_article: Rechnungsartikel
+        invoice_config: Rechnungseinstellung
+        state: Status
+        sequence_number: Nummer
+        esr_number: Referenz Nummer
+        reference: Referenz
+        amount_paid: Bezahlt
+        hide_total: Ohne Total
+        payment_slips:
+          ch_es: Roter Einzahlungsschein Post (CH)
+          ch_bes: Roter Einzahlungsschein Bank (CH)
+          ch_esr: Oranger Einzahlungsschein Post (CH)
+          ch_besr: Oranger Einzahlungsschein Bank (CH)
+          no_ps: Keiner
+          qr: QR Rechnung
+        states:
+          draft: Entwurf
+          issued: Gestellt
+          sent: per Mail versendet
+          partial: Teilzahlung
+          payed: Bezahlt
+          excess: Überzahlung
+          reminded: Gemahnt
+          cancelled: Storniert
+        recipient: Empfänger
+        recipient_email: Empfänger E-Mail
+        recipient_company_name: Firmenname
+        recipient_name: Name
+        recipient_first_name: Vorname
+        recipient_last_name: Nachname
+        recipient_address_care_of: zusätz. Adresszeile
+        recipient_postbox: Postfach
+        recipient_country: Land
+        recipient_street: Strasse
+        recipient_housenumber: Hausnummer
+        recipient_zip_code: PLZ
+        recipient_town: Ort
+        recipient_address: Empfänger Adresse
+        payee_name: Zahlungsempfänger Name
+        payee_street: Zahlungsempfänger Strasse
+        payee_housenumber: Zahlungsempfänger Hausnummer
+        payee_zip_code: Zahlungsempfänger PLZ
+        payee_town: Zahlungsempfänger Ort
+        payee_country: Zahlungsempfänger Land
+        due_at: Fällig am
+        issued_at: Gestellt am
+        sent_at: Verschickt am
+        last_payment_at: Zahlung am
+        cost: Betrag
+        total: Rechnungsbetrag
+        total_inkl_vat: Total inkl. MwSt.
+        vat: MwSt.
+        vat_number: MwSt. Nummer
+        payment_information: Zahlungsinformation
+        payment_purpose: Zahlungszweck
+        address: Absender Adresse
+        beneficiary: Zugunsten von
+        payee: Einzahlung für
+        account_number: Kontonummer
+        iban: IBAN
+        payment_slip: Einzahlungsschein
+        participant_number: Teilnehmernummer
+        creator: Rechnungssteller
+        cost_centers: Kostenstellen
+        accounts: Konten
+        payments: Zahlungseingänge
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
+
+      invoice_article:
+        number: Artikelnummer
+        name: Bezeichnung
+        description: Beschreibung
+        category: Kategorie
+        unit_cost: Preis
+        vat_rate: MwSt.
+        cost_center: Kostenstelle
+        account: Konto
+
+      invoice_config:
+        currency: Währung
+        payment_information: Zahlungsinformation
+        address: Absender Adresse
+        account_number: Kontonummer
+        iban: IBAN
+        due_days: Tage bis Fällig
+        contact: Kontaktperson
+        contact_id: Kontaktperson
+        beneficiary: Zugunsten von
+        email: Antwort an E-Mail Adresse
+        logo_position: Logo Position
+        logo_positions:
+          disabled: Kein Logo
+          left: Links
+          right: Rechts
+        payee: Alter Zahlungsempfänger
+        payee_address: Einzahlung für
+        payee_name: Name
+        payee_street: Strasse
+        payee_housenumber: Hausnummer
+        payee_zip_code: PLZ
+        payee_town: Ort
+        payee_country: Land
+        payment_slip: Einzahlungsschein
+        payment_slips:
+          qr: QR Rechnung
+          no_ps: Keiner
+        reference_prefix: QR-Referenz
+        participant_number: Teilnehmernummer
+        payment_reminder_configs: Mahnungen
+        remove_logo: Aktuelles Logo entfernen
+        vat_number: MwSt. Nummer
+        donation_increase_percentage: Erhöhung in %
+        donation_calculation_year_amount: Anzahl Jahre
+        sender_name: E-Mail Absendername
+        custom_content: E-Mail Vorlage
+
+      invoice_item:
+        name: Name
+        description: Beschreibung
+        vat_rate: MwSt.
+        unit_cost: Preis
+        count: Anzahl
+        cost: Betrag
+        cost_center: Kostenstelle
+        account: Konto
+
+
+      invoice_run:
+        title: Titel
+        recipient_source: Empfänger
+        recipients_total: Empfänger Insgesamt
+        recipients_paid: Empfänger Bezahlt
+        amount_total: Betrag insgesamt
+        amount_paid: Betrag bezahlt
+        pp_post: PP-Zeile
+        shipping_method: Liefermethode
+
+      # used for nested attributes
+      invoice_items:
+        name: Name
+        description: Beschreibung
+        vat_rate: MwSt.
+        unit_cost: Preis
+        count: Anzahl
+        cost: Betrag
+        cost_center: Kostenstelle
+        account: Konto
+
+      message_template:
+        title: Titel
+        body: Text
+
+      payment:
+        invoice: Rechnung
+        amount: Betrag
+        received_at: Eingangsdatum
+        reference: Zahlungsreferenz
+        transaction_identifier: Transaktionsidentifikator
+        status: Status
+        payee_person_name: Schuldner Name
+        payee_person_address: Schuldner Adresse
+        statuses:
+          ebics_imported: "EBICS"
+          xml_imported: "CAMT"
+          manually_created: "Manuell"
+          without_invoice: "ohne Rechnung"
+
+      payment_reminder:
+        invoice: Rechnung
+        message: Nachricht
+        due_at: Fällig am
+
+      payment_reminder_config:
+        title: Titel
+        text: Text
+        due_days: Tage bis Fällig
+        show_invoice_description: Ursprünglichen Rechnungstext vor Mahnungstext anzeigen
+
+      payment_reminder_configs:
+        title: Titel der Mahnung
+        text: Text der Mahnung
+        due_days: Fälligkeitszeitraum der Mahnung
+
+      payment_provider_config:
+        payment_provider: Zahlungsschnittstelle
+        partner_identifier: Kunden-ID
+        user_identifier: Teilnehmer-ID
+        password: Passwort
+        ini_letter: INI-Brief
+        payment_providers:
+          bancastato: BancaStato
+          bekb: BEKB | BCBE
+          creditsuisse: Credit Suisse
+          lukb: Luzerner Kantonalbank
+          postfinance-test: Postfinance Testumgebung
+          postfinance: Postfinance
+          raiffeisen: Raiffeisen Schweiz
+          sgkb: St.Galler Kantonalbank
+          tkb: Thurgauer Kantonalbank
+          ubs: UBS
+          valiant: Valiant
+          zkb: Zürcher Kantonalbank
+          zugerkb: Zuger Kantonalbank
+          ukb: Urner Kantonalbank
+          bcn: Banque Cantonale Neuchâteloise
+          bcv: Banque Cantonale Vaudoise
+          bcvs: Walliser Kantonalbank
+          szkb: Schwyzer Kantonalbank
+
+      period_invoice_template:
+        name: Bezeichnung
+        start_on: Rechnungsperiode Start
+        end_on: Rechnungsperiode Ende
+        recipient_source: Rechnungsempfänger
+        items: Rechnungsposten
+
+      period_invoice_template/item:
+        name: Name
+        unit_cost: Preis
+        cost_center: Kostenstelle
+        account: Konto
+        vat_rate: MwSt.
+
+      period_invoice_template/role_count_item:
+        role_types: Rollentypen
+
+      recipient_source:
+        group_type: Empfängergruppen
+
+      service_token:
+        name: Name
+        description: Beschreibung
+        key: Key
+        range: Zugriffsbereich
+        abilities: Rechte
+        last_access: Letzter Zugriff
+        layer_read: Leserechte auf dieser Ebene
+        layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebenen
+        layer_full: Lese- und Schreibrechte auf dieser Ebene
+        layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
+        people: Personen
+        register_people: Neue Personen registrieren (braucht Schreibrechte)
+        groups: Gruppen
+        events: Anlässe
+        invoices: Rechnungen
+        event_participations: Teilnehmende von Anlässen
+        mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
+        cors_origins: Hosts mit API-Zugriff
+        qualifications: Qualifikationen
+
+      calendar:
+        name: Name
+        description: Beschreibung
+        included_calendar_groups: Aus den Gruppen
+        excluded_calendar_groups: Ausgeschlossene Gruppen
+        included_calendar_tags: Nur mit Tags
+        excluded_calendar_tags: Ausgeschlossene Tags
+
+      job_observation:
+        started_at: Startzeitpunkt
+        finished_at: Endzeitpunkt
+        attempts: Versuche
+        statuses:
+          planned: In der Warteschlange
+          in_progress: In Bearbeitung
+          success: Erfolgreich abgeschlossen
+          error: Bei der Bearbeitung trat ein Fehler auf
+
+  delayed_job:
+    export/event_participations_export_job: Event-Teilnahmen-Export
+    export/events_export_job: Anlass-Export
+    export/export_base_job: Basis-Export
+    export/invitations_export_job: Einladungs-Export
+    export/invoices_job: Rechnungs-Export
+    export/labels_job: Personen-Export
+    export/message_job: Nachrichten-Export
+    export/payments_export_job: Zahlungs-Export
+    export/people_export_job: Personen-Export
+    export/subgroups_export_job: Untergruppen-Export
+    export/subscriptions_job: Abonnenten-Export
+    mailchimp_synchronization_job: Mailchimp-Synchronisation
+
+  api:
+    errors:
+      resources:
+        id_must_not_be_set: ID darf nicht gesetzt sein
+        role_resource:
+          group_id:
+            blank: muss ausgefüllt werden
+            unwritable_attribute: kann nicht geändert werden
+          person_id:
+            unwritable_attribute: kann nicht geändert werden
+          type:
+            unwritable_attribute: kann nicht geändert werden
+        qualification_resource:
+          person_id:
+            blank: muss ausgefüllt werden
+        self_registration_resource:
+          adult_consent:
+            must_be_accepted: muss akzeptiert werden
+          privacy_policy_accepted:
+            must_be_accepted: muss akzeptiert werden
+
+  doorkeeper:
+    scopes:
+      email: Lesen deiner E-Mail Adresse
+      name: Lesen deiner E-Mail Adresse und Name
+      with_roles: Lesen deiner Stammdaten und Rollen
+      openid: Lesen deines OIDC Identity Tokens
+      api: Lesen aller Personen, Gruppen, Events, Abos und Rechnungen auf die du Zugriff hast, via die JSON-Schnittstellen
+      events: Lesen aller Events, auf die du Zugriff hast
+      event_participations: Lesen aller Event-Teilnahmen, auf die du Zugriff hast
+      groups: Lesen aller Gruppen, auf die du Zugriff hast
+      people: Lesen aller Personen, auf die du Zugriff hast
+      invoices: Lesen aller Rechnungen, auf die du Zugriff hast
+      mailing_lists: Lesen aller Abos, auf die du Zugriff hast
+      nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
+      register_people: Erstellen von Personen via Selbstregistrierung
+      qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
+
+  errors:
+    messages:
+      invalid_zipcode: ist nicht gültig
+      attachments_not_allowed: "darf keine Anhänge enthalten"
+      invalid_money: "muss auf 5 Rappen gerundet werden"
+      invalid_iban: "ist nicht gültig"
+      invalid_decimal_format: "ist nicht gültig, maximal %{precision} Zeichen erlaubt mit %{scale} Nachkommastellen"
+      no_permission: "Zugriff verweigert"
+      # timeliness
+      invalid_date: "ist kein gültiges Datum"
+      invalid_time: "ist keine gültige Zeit"
+      invalid_datetime: "ist kein gültiges Datum"
+      is_at: "muss %{restriction} sein"
+      before: "muss vor %{restriction} sein"
+      on_or_before: "muss %{restriction} oder davor sein"
+      after: "muss nach %{restriction} sein"
+      on_or_after: "muss %{restriction} oder danach sein"
+      # devise
+      expired: "ist abgelaufen, bitte neu anfordern"
+      not_found: "nicht gefunden"
+      already_confirmed: "wurde bereits bestätigt"
+      not_locked: "ist nicht gesperrt"
+      not_saved:
+        one: "Konnte %{resource} nicht speichern: ein Fehler."
+        other: "Konnte %{resource} nicht speichern: %{count} Fehler."
+      # active_storage_validations
+      content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
+      file_size_out_of_range: "darf nicht grösser als %{max_size} sein"
+      limit_out_of_range: "Anzahl ist ausserhalb des gültigen Bereichs (%{min} - %{max})"
+      image_metadata_missing: "ist kein gültiges Bild"
+      dimension_min_inclusion: "muss grösser oder gleich %{width} x %{height} Pixel sein"
+      dimension_max_inclusion: "muss kleiner oder gleich %{width} x %{height} Pixel sein"
+      dimension_width_inclusion: "Bildbreite muss zwischen %{min} und %{max} Pixel liegen"
+      dimension_height_inclusion: "Bildhöhe muss zwischen %{min} und %{max} Pixel liegen"
+      dimension_width_greater_than_or_equal_to: "Bildbreite muss grösser oder gleich %{length} Pixel sein"
+      dimension_height_greater_than_or_equal_to: "Bildhöhe muss grösser oder gleich %{length} Pixel sein"
+      dimension_width_less_than_or_equal_to: "Breite muss kleiner oder gleich %{length} Pixel sein"
+      dimension_height_less_than_or_equal_to: "Höhe muss kleiner oder gleich %{length} Pixel sein"
+      dimension_width_equal_to: "Bildbreite muss genau %{length} Pixel sein"
+      dimension_height_equal_to: "Bildhöhe muss genau %{length} Pixel sein"
+      aspect_ratio_not_square: "muss quadratisch sein"
+      aspect_ratio_not_portrait: "muss Hochformat sein"
+      aspect_ratio_not_landscape: "muss Querformat sein"
+      aspect_ratio_is_not: "muss ein Bildseitenverhältnis von %{aspect_ratio} haben"
+      aspect_ratio_unknown: "hat ein unbekanntes Bildseitenverhältnis"
+
+  validates_timeliness:
+    error_value_formats:
+      date: "%d.%m.%Y"
+      time: '%H:%M'
+      datetime: "%d.%m.%Y %H:%M"

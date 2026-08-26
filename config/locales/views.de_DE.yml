@@ -1,6 +1,2526 @@
-#  Copyright (c) 2012-2026, Puzzle ITC. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 de_DE:
+  # global scope
+  global:
+    "yes": "ja"
+    "no": "nein"
+    ok: OK
+    unknown: unbekannt
+    nobody: niemand
+    all: Alle
+    empty: Leer
+
+    from: Von
+    until: Bis
+    no_list_entries: Keine Einträge gefunden.
+    confirm_delete: Wollen Sie diesen Eintrag wirklich löschen?
+    do_not_fill: Bitte dieses Feld nicht ausfüllen
+    chosen_no_results: Keine Einträge gefunden
+    selected: Ausgewählt
+    extended_select_all: Alle %{count} auswählen
+    columns: Spalten
+    start_on: ab %{date}
+    not_allowed: "fehlende Berechtigung"
+
+    environment: Umgebung
+
+    gender:
+      male: männlich
+      female: weiblich
+      male_short: m
+      female_short: w
+
+    associations:
+      # association keys may be customized per model with the prefix
+      # 'activerecord.associations.{model}.' or even per actual association with
+      # 'activerecord.associations.models.{holder_model}.{assoc_name}.'
+      no_entry: (keine)
+      none_available: (keine verfügbar)
+      please_select: Bitte auswählen
+      add: Eintrag hinzufügen
+      remove: Entfernen
+      not_allowed: Nicht erlaubt
+      deleted_entry: Gelöschter Eintrag %{class_name}(#%{class_id})
+
+    button:
+      save: Speichern
+      add: Hinzufügen
+      add_another: Speichern und weitere erfassen
+      cancel: Abbrechen
+      close: Schliessen
+      confirm: Bestätigen
+      search: Suchen
+      back: Zurück
+      refresh: Aktualisieren
+      print: Drucken
+      copy: Kopieren
+      next: Weiter
+
+    link:
+      show: Anzeigen
+      edit: Bearbeiten
+      add: Erstellen
+      delete: Löschen
+      list: Liste
+      override: Werte übernehmen
+
+    errors:
+      header:
+        one: "Ein Fehler verhinderte das Speichern dieses Eintrages:"
+        other: "%{count} Fehler verhinderten das Speichern dieses Eintrages:"
+    tabs:
+      info: Info
+      settings: Einstellungen
+      log: Log
+
+    search:
+      placeholder: "Suchen..."
+      placeholder_person: "Person suchen..."
+      placeholder_group: "Gruppe suchen..."
+      placeholder_event: "Anlass suchen..."
+      placeholder_company_name: "Firmennamen suchen..."
+
+    form:
+      additional_languages: "Zusätzlich ausgefüllte Sprachen"
+      locale_indicator: "Sprache dieses Eingabefelds"
+      input_translation_button: "Eingabefelder für weitere verfügbare Sprachen anzeigen"
+
+    jump_to_content: "Zum Hauptinhalt springen"
+
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+
+  list:
+    index:
+      title: "%{models}"
+
+  crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "%{model} erstellen"
+    edit:
+      title: "%{model} bearbeiten"
+    create:
+      flash:
+        success: "%{model} wurde erfolgreich erstellt."
+    update:
+      flash:
+        success: "%{model} wurde erfolgreich aktualisiert."
+    destroy:
+      flash:
+        success: "%{model} wurde erfolgreich gelöscht."
+        failure: "%{model} konnte nicht gelöscht werden."
+
+  modal_crud:
+    show:
+      title: "%{model}"
+    new:
+      title: "%{model} erstellen"
+    edit:
+      title: "%{model} bearbeiten"
+    create:
+      flash:
+        success: "%{model} wurde erfolgreich erstellt."
+    update:
+      flash:
+        success: "%{model} wurde erfolgreich aktualisiert."
+    destroy:
+      flash:
+        success: "%{model} wurde erfolgreich gelöscht."
+        failure: "%{model} konnte nicht gelöscht werden."
+
+  admins:
+    show:
+      main: Allgemein
+      info: Information
+      events: Anlässe und Kurse
+      people: Mitgliederverwaltung
+
+  blocked:
+    index:
+      title: Login gesperrt
+
+  changelog:
+    index:
+      meta_description: Hitobito Changelog Seite
+  contactable:
+    address_or_email: "%{address} oder %{email}"
+    fields:
+      zip_town: PLZ/Ort
+
+    contact_data:
+      invoices_tooltip_title: Wird für Rechnungen verwendet
+      blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
+
+    public_check_box:
+      tooltip: Private Einträge sind nur für die eigene Gruppe sichtbar. Als öffentlich markierte Einträge sind auch für Leitungspersonen aus anderen Gruppen sichtbar, wenn du selbst eine Leitungsperson bist.
+
+    phone_number_fields:
+      placeholder_type: Bezeichnung (Privat, Arbeit...)
+
+    social_account_fields:
+      placeholder_value: Website, Skypename, Profillink...
+      placeholder_type: Art (Skype, Facebook...)
+
+    additional_email_fields:
+      placeholder_value: E-Mail
+      placeholder_type: Bezeichnung (Privat, Arbeit ..)
+      tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
+      tooltip_invoices: Wird anstelle der Haupt E-Mail Adresse beim verschicken von Rechnungen verwendet.
+
+    additional_address_fields:
+      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
+      caption_uses_contactable_name: Namen der Person übernehmen
+      caption_used_for_invoices: Für Rechnungen verwenden
+
+    address_fields:
+      housenumber: Nr.
+      updates_household_address: Adresse wird für den ganzen Haushalt aktualisiert
+
+  custom_content_decorator:
+    available_placeholders: "Verfügbare Platzhalter: %{placeholders}"
+    available_placeholders_empty: "Keine Platzhalter vorhanden"
+
+  dropdown:
+    last_used: "Zuletzt benutzt"
+
+  dropdown/event/group_filter:
+    all_groups: "Alle Gruppen"
+
+  dropdown/event/events_export:
+    button: Export
+    csv: CSV
+    xlsx: Excel
+
+  dropdown/event/role_add:
+    add: "Person hinzufügen"
+
+  dropdown/event/invitation_add:
+    add: "Person einladen"
+
+  dropdown/event/participant_add:
+    as: "als %{role}"
+    register_new_managed: Neues Kind erfassen und anmelden
+    disabled_messages:
+      already_exists: "ist bereits angemeldet"
+      cannot_see_event: "darf den Anlass nicht sehen"
+
+  dropdown/event/participation/send_mail:
+    title: E-Mail senden
+    confirmation: Bist du sicher, dass du diese Mails versenden willst?
+
+  dropdown/label_items:
+    additional_address:
+      main: Hauptadresse
+
+  dropdown/group_edit:
+    move: "Verschieben"
+    merge: "Fusionieren"
+    archive: "Archivieren"
+    delete: Löschen
+    edit_service_token: API-Keys
+    edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
+    edit_calendar_feeds: Kalender-Feeds
+
+  dropdown/people_email_export:
+    button: "Export E-Mail Adressen"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
+
+  dropdown/people_export:
+    button: "Export"
+    csv: "CSV"
+    xlsx: "Excel"
+    vcard: "vCard"
+    labels: "Etiketten"
+    pdf: "PDF"
+    emails: "E-Mail Adressen"
+    emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
+    emails_semicolon_separated: "Semikolon getrennt (Outlook)"
+    addresses: "Adressliste"
+    households: "Haushaltsliste"
+    everything: "Alle Angaben"
+    household_option: "Haushalte zusammenfassen"
+    selection: "Spaltenauswahl"
+
+  dropdown/people_login:
+    button: "Login"
+    send_login: Login schicken
+    activate_totp: Zwei-Faktor-Authentifizierung einrichten
+    reset_totp: Zwei-Faktor-Authentifizierung zurücksetzen
+    disable_totp: Zwei-Faktor-Authentifizierung deaktivieren
+    unblock_person: Login entsperren
+
+  dropdown/invoices:
+    download: "Export"
+    print: "Drucken"
+    labels: "Etiketten"
+    full: "Rechnung inkl. Einzahlungsschein"
+    esr_only: "Einzahlungsschein separat"
+    original_invoice: "Originalrechnung inkl. Einzahlungsschein"
+    articles_only: "Rechnung separat"
+    csv: "CSV"
+    xlsx: "Excel"
+    pdf: "PDF"
+    payments_without_invoice_csv: "Nicht zuordenbare Zahlungen"
+
+  dropdown/invoice_new:
+    invoice: "Normale Rechnung"
+
+  dropdown/invoice_sending:
+    button: "Rechnung stellen / mahnen"
+    set_state: "Status setzen (Gestellt/Gemahnt)"
+    send_mail: "Status setzen (Gestellt/Gemahnt) und per E-Mail verschicken"
+
+  dropdown/letter_with_invoice:
+    print: Drucken
+    letters_with_invoice: Rechnungsbriefe
+
+  dropdown/letter_with_invoice_new:
+    invoice: "Normale Rechnung"
+
+  dropdown/invoices/evaluation:
+    download: "Export"
+    csv: "CSV"
+    xlsx: "XLSX"
+
+  dropdown/period_invoice_templates/add_item:
+    add_item: Rechnungsposten hinzufügen
+
+  devise:
+    failure:
+      already_authenticated: "Du bist bereits angemeldet."
+      unauthenticated: "Du musst Dich anmelden oder registrieren, bevor Du fortfahren kannst."
+      unconfirmed: "Du musst Deinen Account bestätigen, bevor Du fortfahren kannst."
+      last_attempt: "Du hast noch einen Versuch bevor Dein Account gesperrt wird."
+      locked: "Dein Account ist für 1 Stunde gesperrt."
+      invalid: "Ungültige Anmeldedaten."
+      invalid_token: "Der Anmelde-Token ist ungültig."
+      timeout: "Deine Sitzung ist abgelaufen, bitte melde Dich erneut an."
+      inactive: "Dein Account ist nicht aktiv."
+      not_found_in_database: "Ungültige Anmeldedaten."
+      signin_not_allowed: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
+      not_permitted_to_view_page: "Sie sind nicht berechtigt, diese Seite anzuzeigen"
+    sessions:
+      signed_in: ""
+      signed_out: "Du bist jetzt abgemeldet."
+      new:
+        sign_in: Anmelden
+        meta_description: Anmeldeseite für Hitobito
+      form:
+        login_identity: Haupt-E-Mail
+        sign_in: Anmelden
+      oauth_info:
+        sign_in: "Anmelden mit %{name}"
+        info: "Bitte melde dich an, um weiter zu %{oauth_app} zu gelangen."
+        no_oauth_app_info: "Bitte melde dich an, um weiter zu gelangen."
+    passwords:
+      send_instructions: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, erhältst du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen kannst."
+      updated: "Dein Passwort wurde geändert. Du bist jetzt angemeldet."
+      updated_not_active: "Dein Passwort wurde geändert."
+      send_paranoid_instructions: "Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Dein Passwort zurücksetzen können."
+      no_token: "Du kannst diese Seite nicht aufrufen, wenn Du nicht von einem Passwort Zurücksetzen E-Mail kommst. Falls Du von einem solchen E-Mail kommst, bitte überprüfe, dass Du die vollständige URL verwendest."
+      new:
+        reset_password_button: "Passwort zurücksetzen"
+        meta_description: Hitobito Passwort zurücksetzen Seite
+    confirmations:
+      new:
+        resend_confirmation_instructions: "E-Mail-Adresse bestätigen"
+        submit: "Bestätigungs-E-Mail senden"
+      send_instructions: "Du erhältst in wenigen Minuten eine E-Mail, mit der Du Deine E-Mail-Adresse bestätigen kannst."
+      send_paranoid_instructions: "Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Du sie bestätigen kannst."
+      confirmed: "Vielen Dank für die Bestätigung deiner E-Mail-Adresse. Du kannst dich jetzt anmelden."
+    unlocks:
+      send_instructions: "Du erhältst in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Deinen Account entsperren können."
+      unlocked: "Dein Account wurde erfolgreich entsperrt."
+      send_paranoid_instructions: "Falls Deine E-Mail-Adresse in unserer Datenbank existiert erhältst Du in wenigen Minuten eine E-Mail mit der Anleitung, wie Du Deinen Account entsperren kannst."
+    omniauth_callbacks:
+      success: "Du hast Dich erfolgreich mit Deinem %{kind}-Account angemeldet."
+      failure: 'Du konntest nicht Deinem %{kind}-Account angemeldet werden, weil "%{reason}".'
+    registrations:
+      signed_up: "Du hast dich erfolgreich registriert."
+      signed_up_but_unconfirmed: "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
+      signed_up_but_inactive: "Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account inaktiv ist."
+      signed_up_but_locked: "Du hast dich erfolgreich registriert. Wir konnten Dich noch nicht anmelden, da Dein Account gesperrt ist."
+      signed_up_but_no_email: "Du hast dich erfolgreich registriert. Wir konnten Dich nicht anmelden, da du keine Mailadresse angegeben hast."
+      updated: "Dein Passwort wurde aktualisiert."
+      update_needs_confirmation: "Deine Daten wurden aktualisiert, aber Du musst Deine neue E-Mail-Adresse bestätigen. Du erhältst in wenigen Minuten eine E-Mail, mit der Du die Änderung Deiner E-Mail-Adresse abschließen kannst."
+      destroyed: "Dein Account wurde gelöscht."
+      edit:
+        change_password: "Passwort ändern"
+        set_password: "Passwort setzen"
+        old_password: "Altes Passwort"
+        new_password: "Neues Passwort"
+        new_password_confirmation: "Neues Passwort bestätigen"
+        meta_description: "Hitobito Passwort ändern Seite"
+      person:
+        updated: "Dein Passwort wurde aktualisiert."
+
+    mailer:
+      confirmation_instructions:
+        subject: "Anleitung zur Bestätigung Deiner E-Mail-Adresse"
+        body:
+          greeting: "Hallo %{name}!"
+          information_html: "Du kannst deine E-Mail-Adresse mit dem folgenden Link bestätigen:"
+          link_text: "%{email} bestätigen"
+          footer: "Diese E-Mail wurde von Hitobito gesendet"
+      reset_password_instructions:
+        subject: "Anleitung für das Setzen Deines Passworts"
+        body:
+          greeting: "Hallo %{name}!"
+          reset_instructions:
+            with_password: "Du kannst dein %{application_name} Passwort unter folgendem Link zurücksetzen."
+            without_password_html: "Willkommen bei %{application_name}! Du wurdest neu erfasst und hast ein Login erhalten.<br>Bitte setze ein Passwort unter dem folgenden Link."
+          ignore_information_html: "Wenn du dein Passwort nicht ändern willst, kannst du dieses E-Mail ignorieren.<br><br>Dein Passwort ändert sich nicht ohne dass du auf dem obigen Link gehst und dort ein neues Passwort vergibst."
+      unlock_instructions:
+        subject: "Anleitung um Deinen Account freizuschalten"
+        body:
+          greeting: "Hallo %{name}!"
+          information_html: "Dein Account wurde aufgrund von zu vielen Fehlversuchen beim Login gesperrt.<br>Klicke auf den folgenden Link um Deinen Account zu entsperren:"
+          link_text: "Meinen Account entsperren"
+          footer: "Diese E-Mail wurde von Hitobito gesendet"
+
+  errors:
+    link_to_main: "Hauptseite"
+    "401":
+      title: "Login benötigt"
+      explanation: "Du must dich einloggen bevor du auf diese Resource zugreifen kannst."
+    "403":
+      title: "Zugriff verweigert"
+      explanation: "Du bist nicht berechtigt auf diese Resource zuzugreifen."
+      update_email:
+        explanation: "Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern."
+    "404":
+      title: "Diese Seite gibt es leider nicht (404)"
+      explanation: "Vielleicht haben Sie die Adresse falsch eingegeben oder die Seite ist inzwischen gelöscht worden."
+    "500":
+      title: "Entschuldigung, da ging etwas schief (500)"
+      explanation: "Wir haben eine Meldung erhalten und werden das Problem so rasch als möglich anschauen."
+    "503":
+      title: "Entschuldigung, die Seite ist momentan nicht verfügbar (503)"
+      explanation: "Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern."
+      instruction: "Bitte versuchen Sie es später nochmals."
+    unsupported_page_size:
+      title: "Seitengrösse ist nicht unterstützt"
+      explanation: "Die angefragte Seitengrösse page[size]=%{size} ist grösser als die maximale Seitengrösse %{max}. "
+
+  export/tabular/events/list:
+    group_names: "Organisatoren"
+    duration: Zeitraum
+    date: "Datum %{index}"
+
+  event:
+    guests:
+      new:
+        title: Gast hinzufügen
+        add_more_guests: "Anmelden und weiteren Gast hinzufügen (max. %{limit})"
+    run_by: "Durchgeführt von"
+    applied_to: Anmeldung an
+    alternative_dates: Ausweichdaten
+    priorities: "Anmeldeprioritäten"
+    lists:
+      courses:
+        title: "Verfügbare Kurse"
+        no_category: Andere Kurse
+        explanation: "Hier werden Kurse deiner Gruppe, sowie deren Übergruppen angezeigt. Andere Kurse findest du bei der organisierenden Gruppe."
+        csv_export_button: "CSV Export"
+        ical_export_button: "Kalender Export"
+      events:
+        title: "Demnächst stattfindende Anlässe"
+        explanation: "Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe."
+      apply_until: "bis %{date}"
+    application_market:
+      application:
+        modal_title: Wollen Sie diese Anmeldung bestätigen?
+        confirm_and_send_mail: Bestätigen und E-Mail senden
+        confirm_and_send_no_mail: Bestätigen ohne E-Mail
+      participant:
+        modal_title: Wollen Sie diese Zuteilung entfernen?
+        confirm_and_send_mail: Bestätigen und E-Mail senden
+        confirm_and_send_no_mail: Bestätigen ohne E-Mail
+      already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
+      maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
+      participation:
+        registered_at: "Anmeldung am %{datetime}"
+        town: Wohnort
+      prio_buttons:
+        national_waitinglist: "nationale Warteliste"
+      index:
+        assigned_participants: "Zugeteilte Teilnehmende"
+        add_participant: Teilnehmer/-in hinzufügen
+      waiting_list_link:
+        title_active: "Entfernen von der Warteliste"
+        title_inactive: "Hinzufügen zur Warteliste"
+        label: "nationale Warteliste"
+      popover_waiting_list:
+        waiting_list_info: Setze diese Person auf die Warteliste für Kurse der Art %{event_kind}.
+
+    attachments:
+      create:
+        failure: "Upload fehlgeschlagen: %{errors}."
+      destroy:
+        failure: "Löschen fehlgeschlagen: %{errors}."
+      update:
+        failure: "Aktualisieren fehlgeschlagen: %{errors}."
+
+    kinds:
+      form:
+        help_minimum_age: "Jahre (Jahrgang am ersten Kursdatum massgebend)"
+        qualifications:
+          for_participants: "Qualifikationen für Teilnehmende"
+          for_leaders: "Qualifikationen für Leitende"
+      precondition_fields:
+        add_precondition_grouping: "+ Vorbedingungen hinzufügen"
+        add_precondition: "Hinzufügen"
+      qualifications:
+        or: oder
+        and: und
+
+    participation_contact_datas:
+      edit:
+        title: Kontaktangaben der teilnehmenden Person
+        wizard_title: Kontaktangaben
+        save: Weiter
+      update:
+        flash:
+          privacy_policy_not_accepted: "Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
+      flash:
+        application_not_possible: "Zur Zeit sind für diesen Anlass keine Anmeldungen möglich."
+    participation_contact_data:
+      managed:
+        update:
+          flash:
+            privacy_policy_not_accepted: "Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
+
+        edit:
+          title: Neues Kind registrieren und am Anlass anmelden
+          save: Weiter
+
+    participations:
+      edit:
+        title: Anmeldung
+      approvals:
+        title: Freigabe
+      send_mails:
+        create:
+          success: Es wurde eine E-Mail verschickt.
+      specific_information: "Spezifische Angaben"
+      application_answers: Anmeldeangaben
+      admin_answers: Administrationsangaben
+      no_answer_given: "(nicht beantwortet)"
+      actions_show:
+        change_contact_data_button: "Kontaktdaten ändern"
+        link_to_person: "Personenprofil anzeigen"
+      actions_approval:
+        approve_button: "Freigeben"
+        reject_button: "Ablehnen"
+      fields:
+        send_email: E-Mail an Teilnehmer/in senden
+        registration_details: Anmeldeangaben
+        administrative_information: Administrationsangaben
+      form:
+        title_new: "Anmeldung als %{role}"
+        title_edit: "Anmeldung von %{person} bearbeiten"
+        apply: "Anmelden"
+      new:
+        add_guests: "Anmelden und Gast hinzufügen (max. %{limit})"
+      application_fields:
+        alternative_dates_info: "Bitte gib weitere Kurse an, welche dir gehen würden."
+        course_information: "Informationen zu den Kursen"
+      print:
+        signature: Unterschrift
+        signature_confirmation: Vorname, Name, Unterschrift
+        heading_event/course: Kursanmeldung %{year}
+        heading_event: Anmeldung Anlass
+        read_and_agreed_for_event: Ich erfülle die Voraussetzungen für den Anlass, habe die Anlassbeschreibung gelesen und bin damit einverstanden.
+        read_and_agreed_for_event_course: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
+        requirements_for_event: Voraussetzungen für den Anlass
+        requirements_for_event_course: Voraussetzungen für den Kurs
+        page_of_pages: "Seite <page> von <total>"
+      priorities:
+        on_waiting_list: Auf Warteliste
+      list:
+        incomplete: Pflichtangaben fehlen
+      guest_of_info:
+        with_main_applicant: "(Gast von %{main_applicant_name})"
+        without_main_applicant: "(Gast von abgemeldeter Person)"
+      cancel_application:
+        explanation: Du bist für diesen Anlass angemeldet.
+        pending: Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.
+        waiting_list: Du bist auf der Warteliste für diesen Anlass.
+        caption: Abmelden
+        confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
+        managed:
+          explanation: "%{person} ist für diesen Anlass angemeldet."
+          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
+
+    qualifications:
+      index:
+        save: Qualifikationen aktualisieren
+      update:
+        flash:
+          success: Die Qualifikationen wurden erfolgreich aktualisiert.
+
+    question_templates:
+      form:
+        default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
+        inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
+
+    register:
+      register:
+        title:
+          participant: Kontaktdaten der teilnehmenden Person erfassen
+          manager: Kontaktdaten der erziehungsberechtigten Person
+        flash:
+          privacy_policy_not_accepted: Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
+        email_check:
+          enter_email: Bitte gib deine E-Mailadresse ein, mit der du dich registrieren möchtest.
+      index:
+        sign_in: Anmelden
+        login: Login
+        no_login: Du hast noch kein Login?
+      email_check:
+        next: Weiter
+        enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für den Anlass anmelden kannst.
+        next_for_manager: Mein Kind anmelden
+      manager_fields:
+        manager_first_name: Vorname erziehungsberechtigte Person
+        manager_last_name: Nachname erziehungsberechtigte Person
+
+    invitation_lists:
+      create:
+        hint: "<br />Hinweis: Allfällig bestehende Einladungen wurden nicht aktualisiert."
+        success:
+          one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' eingeladen"
+          other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' eingeladen"
+      new:
+        title: Personen zu einem %{event_label} einladen
+        event_search: Anlass Suchen...
+        submit: Einladen
+
+    participation_lists:
+      create:
+        success:
+          one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' hinzugefügt"
+          other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' hinzugefügt"
+        failure:
+          one: "Eine Person konnte nicht zum %{event_type} '%{event}' hinzugefügt werden"
+          other: "%{count} Personen konnten nicht zum %{event_type} '%{event}' hinzugefügt werden"
+      new:
+        title: Personen einem %{event_label} zuweisen
+        event_search: Anlass Suchen...
+        submit: Hinzufügen
+
+    questions:
+      add_choice: "Antwortmöglichkeit hinzufügen"
+      sensitive_caption: Antworten werden %{cutoff} Monate nach Ende des Anlasses gelöscht.
+      required_caption: Diese Frage muss beim Anmelden beantworten werden.
+      visibility_fields:
+        caption: "Sichtbar für"
+
+  assignments:
+    attachment: "Anhang anzeigen"
+    form:
+      attachment:
+        subject: "Nachrichten Betreff:"
+
+  second_factor_authentication:
+    flash:
+      success:
+        registered: Zwei-Faktor-Authentifizierung erfolgreich aktiviert
+        signed_in: Erfolgreich eingeloggt
+
+      failure: One-Time Code inkorrekt
+    new:
+      title: Zwei-Faktor-Authentifizierung
+      hint_registered_html: "Bitte gib den angezeigten Code aus deiner Authenticator-App an, um deine Identität zu bestätigen."
+      hint_unregistered_html: "Bitte scanne den QR-Code mit deinem Smartphone mittels Authenticator-App und gib den angezeigten Code an, um die Zwei-Faktor-Authentifizierung zu aktivieren. Noch keine Authenticator-App installiert? Wir empfehlen dir %{link} "
+      copy_secret: "hier"
+      hint_copy_secret_html: "Wenn du den 2FA-Schlüssel direkt kopieren möchtest, kannst du %{link} klicken, um ihn zu kopieren."
+    form:
+      totp_code: One-Time Code
+      totp_code_placeholder: Bitte sechsstelligen Code eingeben...
+      submit: Absenden
+  events:
+    courses:
+      filter:
+        places_available:
+          all: Alle
+          only_with_places_available: Nur mit verfügbaren Plätzen
+        select_states: Nach Status filtern
+        time_period: Im Zeitraum von
+        until: bis
+      group_filter:
+        all_layers: Alle Gruppen
+        filter_by_layer: Veranstalter
+        select_layers: Gruppen suchen...
+    actions_show:
+      copy_share_link: Direktlink kopieren
+    application_fields:
+      caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
+      caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
+      signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
+    attachments:
+      public_attachments_hint: Global sichtbare Anhänge sind öffentlich, da der Anlass externe Anmeldungen erlaubt
+      add: "hinzufügen"
+    banner_open_invitation:
+      explanation: Du wurdest zu diesem Anlass eingeladen.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen."
+      buttons:
+        accept: Anmelden
+        decline: Abmelden
+    banner_declined_invitation:
+      explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
+      managed:
+        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
+    form:
+      caption_external_applications: "Externe können sich für diesen Anlass anmelden."
+      caption_prioritization: "Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben."
+      caption_requires_approval: "Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen."
+      caption_participations_visible: "Teilnehmende können sich gegenseitig in der Teilnehmerliste sehen."
+      times_are_optional: Uhrzeiten sind optional
+      explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
+      explain_choices: "Für Freitextantwort keine Antwortmöglichkeiten hinzufügen."
+      explain_admin_questions:
+        Hier kannst du weitere Angaben pro Teilnehmer/-in definieren, welche nur für die Anlassverwaltung verwendet werden.
+      explain_contact_attrs:
+        Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung abgefragt werden sollen.
+      caption_applications_cancelable: Teilnehmende können sich selbst abmelden.
+      caption_display_booking_info: Die Anzahl Anmeldungen/Plätze ist auf der Kursliste für alle sichtbar.
+      caption_automatic_assignment:
+        Anmeldungen werden automatisch zugeteilt, sofern noch freie Plätze verfügbar sind.
+      caption_waiting_list:
+        Wenn keine Plätze mehr frei sind, landen neue Anmeldungen automatisch auf der nationalen Warteliste.
+      caption_globally_visible: "%{model_name} ist für die ganze Datenbank sichtbar"
+      label_notify_contact_on_participations: Benachrichtigung
+    form_tabs:
+      general: Allgemein
+      application_questions: Anmeldeangaben
+      admin_questions: Administrationsangaben
+      contact_attrs: Kontaktangaben
+    general_fields:
+      visible_contact_attributes:
+        all: Alle Kontaktdaten anzeigen
+        name: Name anzeigen
+        address: Adresse anzeigen
+        phone_number: Telefonnummer anzeigen
+        email: E-Mail anzeigen
+        social_account: Social Media anzeigen
+        picture: Profilfoto anzeigen
+      kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
+    global:
+      link:
+        add_event: Anlass erstellen
+        add_event/course: Kurs erstellen
+        duplicate: Duplizieren
+    minimum_age_with_years: "%{minimum_age} Jahre (Jahrgang)"
+    new:
+      title_event: Anlass erstellen
+      title_event/course: Kurs erstellen
+    preconditions: "Erforderliche Qualifikationen"
+    tabs:
+      participants: "Teilnehmende"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+
+  event/applications:
+    approved: "Die Anmeldung wurde freigegeben."
+    rejected: "Die Anmeldung wurde abgelehnt."
+    directly_to_waiting_list: "Es sind alle Plätze belegt, daher ist die Anmeldung direkt auf der Warteliste."
+
+  event/application_decorator:
+    approval:
+      approved: "Kursfreigabe bestätigt"
+      rejected: "Kursfreigabe abgelehnt"
+      missing: "Kursfreigabe ausstehend"
+
+  event/guests:
+    guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
+    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
+
+  event/invitations:
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
+
+  event/kinds:
+    global:
+      link:
+        add: Kursart erstellen
+    new:
+      title: Kursart erstellen
+
+  event/participations:
+    full_entry_label: "%{model_label} von <i>%{person}</i> in <i>%{event}</i>"
+    success: "%{full_entry_label} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an."
+    success_for_external_manager: "%{full_entry_label} wurde erfolgreich erstellt."
+    instructions: "Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken."
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    waiting_list: "Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste."
+    pending: "Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+
+    show:
+      link:
+        delete: "Anmeldung löschen"
+
+  event/participation_decorator:
+    tooltips:
+      ok: "Markiert Kurs als bestanden und vergibt Qualifikationen."
+      remove: "Markiert Kurs als nicht bestanden und entfernt Qualifikationen."
+
+  event/precondition_checker:
+    preconditions_not_fulfilled: "<b>Vorbedingungen für Anmeldung sind nicht erfüllt.</b>"
+    below_minimum_age: "Altersgrenze von %{course_minimum_age} Jahren ist unterschritten."
+    qualifications_missing: "Folgende Qualifikationen fehlen oder sind abgelaufen: %{missing}"
+    some_qualifications_missing: "Erforderliche Qualifikationen fehlen."
+
+  event/register:
+    not_logged_in: "Du musst dich einloggen um dich für den Anlass '%{event}' anzumelden."
+    person_found: "Wir haben dich in unserer Datenbank gefunden."
+    email_sent: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich direkt für den Anlass anmelden kannst."
+    email_invalid: "Bitte gib eine gültige E-Mail ein"
+    form_data_missing: "Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest."
+    registered: "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben für die Anmeldung."
+    application_window_closed: "Das Anmeldefenster für diesen Anlass ist geschlossen."
+    no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
+    email_sent_manager: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst."
+    registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
+
+  event/roles:
+    full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"
+
+  events/filters:
+    new:
+      title: "%{type} filtern"
+    form:
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+    general:
+      title: Allgemein
+    date_range:
+      date_range_since: Zeitraum von
+      until: bis
+    full_text:
+      q: Suchbegriff
+    state:
+      states: Status
+    leader:
+      leader: Geleitet von
+      current_user: aktuelle/-r Benutzer/-in
+    kind:
+      kind: Kursart
+    kind_category:
+      kind_category: Kurskategorie
+    attributes:
+      title: Felder
+
+  event_decorator:
+    apply: "Anmelden"
+    applied: "Angemeldet"
+    not_possible: "nicht möglich"
+    participants_info:
+      one: "%{count} Anmeldung"
+      other: "%{count} Anmeldungen"
+    participants_info_with_limit:
+      one: "%{count} Anmeldung für %{limit} Plätze"
+      other: "%{count} Anmeldungen für %{limit} Plätze"
+    active_participants_info:
+      one: "%{count} Anmeldung zugeteilt"
+      other: "%{count} Anmeldungen zugeteilt"
+    issue_only: "Vergibt die %{model} %{issued} unmittelbar per %{until} (letztes Kursdatum)."
+    prolong_only:
+      one: "Verlängert existierende Qualifikation %{prolonged} unmittelbar per %{until} (letztes Kursdatum)."
+      other: "Verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum)."
+    issue_and_prolong: "Vergibt die %{model} %{issued} und verlängert existierende Qualifikationen %{prolonged} unmittelbar per %{until} (letztes Kursdatum)."
+
+  event_feeds:
+    integrate: In Kalender integrieren
+    show:
+      title: Meine Anlässe in Kalender integrieren
+      url: "URL: %{url}"
+      create_url: Adresse erstellen
+      url_description: "Mit dieser Adresse kannst du von anderen Anwendungen aus auf deine Anlässe zugreifen. Achtung: Gib diese Adresse nur an Personen weiter, die alle deine Termindetails sehen dürfen."
+      reset_url: URL zurücksetzen
+      reset_url_description: "Wenn du Missbrauch vermutest, kannst du die Adresse zurücksetzen und dadurch die aktuelle ungültig machen. Alle Kalender die noch die alte Adresse kennen, können danach nicht mehr deine Anlässe sehen."
+    update:
+      flash:
+        create: Adresse wurde erstellt.
+        reset: Adresse wurde aktualisiert.
+
+  filter_navigation/dropdown:
+    additional_views: "Weitere Ansichten"
+
+  filter_navigation/people:
+    custom_filter: "Eigener Filter"
+    entire_layer: "Gesamte Ebene"
+    entire_group: "Gesamte Gruppe"
+    new_filter: "Neuer Filter..."
+    duplicates: "Duplikate"
+
+  filter_navigation/events:
+    deep: "Alle"
+    layer: "nur %{layer}"
+    filter: "Filter..."
+
+  filter_navigation/event/participations:
+    predefined_filters:
+      all: Alle Personen
+      teamers: Leitungsteam
+      participants: Teilnehmende
+
+  filters:
+    attributes:
+      match: enthält
+      not_match: enthält nicht
+      equal: ist genau
+      greater: grösser als
+      smaller: kleiner als
+      before: vor dem
+      after: nach dem
+      blank: ist leer
+
+  full_text:
+    index:
+      title: "Ergebnisse"
+      incomplete_search_request: "Bitte geben Sie mindestens drei Zeichen ein."
+
+  group:
+    archive:
+      flash:
+        success: Gruppe wurde erfolgreich archiviert.
+        failure: "Gruppe konnte nicht archiviert werden: %{error}"
+
+    deleted_people:
+      list:
+        manual_deletion: Datenlöschung
+
+    merge:
+      select:
+        title: "%{group} fusionieren"
+        explanation: >
+            Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe
+            und Personen samt Rollen beider Gruppen zusammengeführt.  Abos werden
+            nicht übernommen. Die bisherigen Gruppen werden danach unter 'Gelöscht'
+            weiterhin einsehbar sein.
+        merge_is_irreversible: Dieser Vorgang kann nicht mehr rückgängig gemacht werden!
+        new_group_name: "Name der neuen Gruppe"
+        merge_group_with: "%{group} fusionieren mit"
+        merge_button: "Gruppe fusionieren"
+
+    move:
+      select:
+        title: "Gruppe verschieben"
+        select_group: "Bitte wählen Sie die Gruppe aus, in die verschoben werden soll."
+
+    person_add_requests:
+      actions_index:
+        activate: Manuelle Freigabe aktivieren
+        deactivate: Deaktivieren
+        activate_title: Manuelle Freigabe aktivieren
+        deactivate_title: Manuelle Freigabe deaktivieren
+
+      index:
+        activated: Manuelle Freigabe ist aktiviert
+        deactivated: Manuelle Freigabe ist nicht aktiviert
+        explanation: >
+            Wenn aktiv, werden Personen dieser Ebene erst zu Gruppen, Anlässen und
+            Abos hinzugefügt, nachdem eine zugriffsberechtigte Person die Freigabe
+            erteilt.
+      list:
+        approve: Akzeptieren
+        reject: Ablehnen
+
+      approvers:
+        title: "Benachrichtigungen an"
+
+    statistics:
+      people:
+        title: Personenstatistik
+      show:
+        not_found: "Die angeforderte Statistik wurde nicht gefunden."
+        not_available: "Diese Statistik ist für diese Gruppe nicht verfügbar."
+      index:
+        none_available: "Auf dieser Gruppe sind keine Statistiken verfügbar."
+
+  groups:
+    actions_show:
+      export_subgroups: "CSV Untergruppen"
+      reactivate: "Reaktivieren"
+      confirm_archive: >
+          Wollen Sie diese Gruppe wirklich archivieren? Sie kann dann nicht mehr bearbeitet
+          werden und sämtliche Rollen werden ebenfalls archiviert.
+      membership_invoice_button: Mitgliedsrechnung
+      sync_addresses_button: Adressenabgleich
+    attrs:
+      contact_details: "Kontaktangaben"
+      additional_information: "Weitere Angaben"
+    deleted_subgroups:
+      no_deleted_sub_groups: "Keine gelöschten Gruppen vorhanden."
+    form:
+      help_contact: "Adresse und öffentliche Telefonnummern dieser Person verwenden."
+      help_self_registration_require_adult_consent: Bei der Registrierung abfragen, ob die Person schon 18 Jahre ist bzw. das Einverständnis der Erziehungsberechtigten hat.
+      help_main_self_registration_group: "Den Registrierungslink dieser Gruppe auf der Hauptloginseite anzeigen."
+      hint_external_registration: "Es sind keine Rollen mit Rechten auswählbar"
+    form_tabs:
+      general: "Allgemein"
+      messages: "Nachrichten"
+    global:
+      link:
+        add: Gruppe erstellen
+        deleted_person: Ohne Rollen
+    new:
+      title: "%{model} erstellen"
+    reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."
+    subgroups: "Untergruppen"
+    tabs:
+      deleted: "Gelöscht"
+      statistics: "Statistiken"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    statistics:
+      title: Statistiken
+      year: Jahrgang
+      age: Alter
+      count: Anzahl
+      distribution: Verteilung
+      people:
+        title: Personenstatistik
+        description: "%{subject} in %{groups}"
+    self_registration:
+      alert:
+        not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
+      show:
+        meta_description: Selbstregistrierungsseite für Hitobito
+      form:
+        privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
+        submit: Registrieren
+        has_account: Du hast bereits ein Login?
+        to_login_page: Anmelden und Einschreiben
+      main_person:
+        notes: Bemerkungen
+      adult_consent_field:
+        caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.
+      create:
+        email_taken: E-Mail wird bereits verwendet. Melde dich an oder registrier dich mit einer anderen E-Mail-Adresse.
+        flash:
+          privacy_policy_not_accepted: Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
+    self_inscription:
+      show:
+        role_exists: Du hast diese Rolle in dieser Gruppe bereits.
+        disabled: Die Selbstregistrierung ist für diese Gruppe deaktiviert
+      create:
+        role_saved: Die Rolle wurde erfolgreich gespeichert
+      form:
+        inscribe: Einschreiben
+        description: Hier kannst du dich für die Gruppe einschreiben.
+
+  groups_filter:
+    description: "Alle %{group_type_plural} in %{parent}"
+
+  group/deleted_people:
+    list:
+      confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
+
+  groups/self_registration:
+    new:
+      title: "Registrierung zu %{group_name}"
+
+  group/person_add_requests:
+    deactivated: Manuelle Freigabe deaktiviert
+    activated: Manuelle Freigabe aktiviert
+    global:
+      no_list_entries: Momentan sind keine Anfragen offen.
+
+  group/merge:
+    success: "Die gewählten Gruppen wurden zur neuen Gruppe %{new_group_name} fusioniert."
+    failure: "Die gewählten Gruppen können nicht fusioniert werden."
+    no_candidates: >
+        Es sind keine gleichen Gruppen zum Fusionieren vorhanden oder Du verfügst
+        dort nicht über die nötigen Berechtigungen.
+    group_name_missing: "Name für neue Gruppe muss definiert werden."
+    no_group_selected: "Bitte wähle eine Gruppe mit der fusioniert werden soll."
+    not_allowed: "Leider fehlt dir die Berechtigung um diese Gruppen zu fusionieren."
+    invoice_config_not_merged: >
+        Die Rechnungseinstellungen werden nicht automatisch übernommen. Bitte nimm
+        hierfür die jetzt korrekten Einstellungen manuell vor.
+  group/move:
+    success: "%{group} wurde nach %{target} verschoben."
+    failure: "Diese Gruppe kann nicht verschoben werden oder Du verfügst nicht über die nötigen Berechtigungen."
+    choose_group: "Bitte wähle eine Gruppe aus."
+
+  group_decorator:
+    archived_suffix: " (archiviert)"
+
+
+  help_texts:
+    form:
+      caption_start_open: Text initial Anzeigen
+
+  households:
+    edit:
+      title: Haushalt verwalten
+      shared_address_info: Alle Personen teilen sich dieselbe Adresse.
+      placeholder_search_person: Person suchen und hinzufügen ...
+    members_table_row:
+      unconfirmed_email_info: Die E-Mail Adresse muss bestätigt werden, bevor die Person aus der Familie entfernt werden kann.
+
+  hitobito_log_entries:
+    tabs:
+      all: Alle
+    index:
+      title: Hitobito Log
+    list:
+      from: Von
+      to: Bis
+    email_error_table:
+      created_at: Erstellt am
+      category: Kategorie
+      subject: Subjekt
+      message: Meldung
+      payload: Payload
+
+  import/csv_parser:
+    read_error: "Fehler beim Lesen von %{filename}: %{error}"
+    encoding_error: "Das Encoding konnte leider nicht erkannt werden. Ist es eine Binärdatei?"
+    contains_no_data: "Enthält keine Daten"
+    read_success:
+      one: "%{count} Datensatz erfolgreich gelesen."
+      other: "%{count} Datensätze erfolgreich gelesen."
+  import/person_importer:
+    row_with_error: "Zeile %{row}: %{errors}"
+
+  import/person_duplicate_finder:
+    duplicates: "%{count} Treffer in Duplikatserkennung."
+
+  invoices:
+    filter:
+      from: Von
+      to: Bis
+      due_since: Fällig seit
+      due_since_list:
+        one_day: Gestern
+        one_week: Einer Woche
+        one_month: Einem Monat
+      invoice_type:
+        standalone: Einzelrechnungen
+        from_standalone_invoice_run: aus Rechnungsläufen
+        from_template_invoice_run: aus Sammelrechnungen
+    add: Externe Rechnung erstellen
+    add_payments: Zahlungen erfassen
+    issued: Rechnung gestellt
+    sent: Rechnung per Mail versendet
+    reminder_sent: Mahnung gestellt, fällig am %{date} (%{title})
+    payed: bezahlt
+    cancel: Stornieren
+    destroy:
+      flash:
+        success: Rechnung wurde storniert.
+    actions_show:
+      confirm_cancel: Wollen Sie diese Rechnung wirklich stornieren?
+    pdf:
+      amount_open: Offener Betrag
+      total: Gesamtbetrag
+      total_vat: MwSt.
+      cost: Zwischenbetrag
+      invoice_number: Rechnungsnummer
+      invoice_date: Rechnungsdatum
+      due_at: Fällig bis
+      creator: Rechnungssteller
+      vat_number: MwSt. Nummer
+      payment: Eingegangene Zahlung
+      payment_slip_qr:
+        receipt_title: Empfangsschein
+        payment_title: Zahlteil
+        receiving_office: Annahmestelle
+        creditor_heading: Konto / Zahlbar an
+        debitor_heading: Zahlbar durch
+        esr_number_heading: Referenznummer
+        currency: Währung
+        amount: Betrag
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
+    evaluations:
+      show:
+        title: Buchungsbeleg
+        deficit: Teilzahlung
+        excess: Überzahlung
+        table:
+          name: Produktbezeichnung
+          count: Anzahl
+          amount_paid: Betrag bezahlt
+          vat: MwSt.
+          account: Konto
+          cost_center: Kostenstelle
+          total: "Total:"
+        filter:
+          from: Von
+          to: Bis
+    table:
+      number_of_invoices_shown:
+        one: "%{count} Rechnung angezeigt."
+        other: "%{count} Rechnungen angezeigt."
+  invoices/by_article:
+    index:
+      title: 'Rechnungen zu Artikel "%{name}"'
+      subtitle: 'Konto: "%{account}", Kostenstelle: "%{cost_center}", %{from} – %{to}'
+
+  invoice_configs:
+    form_tabs:
+      general: Allgemein
+      email: E-Mail
+      layout: Layout
+    update:
+      flash:
+        success: Rechnungseinstellungen wurden erfolgreich aktualisiert
+        provider_initialization_failed: Einrichten der Zahlungsschnittstelle %{payment_provider} ist fehlgeschlagen
+        provider_initialization_succeeded: Einrichten der Zahlungsschnittstelle %{payment_provider} war erfolgreich
+    general_fields:
+      payment: "Einzahlung für"
+      payment_information_help: "Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden"
+      deprecated_payee_help: "Alter Zahlungsempfänger vor Umstellung auf neues QR-Rechnungsformat"
+      address_help: "Erscheint auf dem Brief als Absenderadresse"
+      payee_help: "Erscheint auf dem Einzahlungsschein"
+      beneficiary_help: "Erscheint auf dem Einzahlungsschein"
+      account_number_example: "Beispiel: 01-162-5"
+      iban_example: "Beispiel: CH93 0076 2011 6238 5295 7"
+      variable_donation_appeal: "Variabler Spendenaufruf"
+      donation_calculation_year_amount_explanation: Anzahl verganenen Jahre, die für die Spendenberechnung beachtet werden.
+      donation_increase_percentage_explanation: Prozentsatz, für die Spendenberechnung
+    email_fields:
+      email_help:
+        Antworten auf Rechnungs-E-Mails sollen entweder an die Adresse des aktuellen Benutzers oder an die hier konfigurierte Adresse gesendet werden.
+      email_validation: Darf keine E-Mail-Adresse sein.
+      sender_name_help: Rechnungs-E-Mails werden unter diesem Namen versendet.
+      custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Vorlage verwendet.
+    reminder_fields:
+      third_level: "Für alle weiteren Mahnungen, wird die dritte Mahnstufe wiederholt."
+    provider_fields:
+      reset_payment_provider_warning: "Sollten Daten hier geändert werden, muss der Initialisierungsprozess der Rechnungsschnittstelle neu ausgeführt werden."
+    custom_content_fields:
+      subject: Betreff
+      body: Inhalt
+      remove: E-Mail Vorlage entfernen
+
+  invoice_runs:
+    destroys:
+      show:
+        title: Rechnungslauf löschen
+        non_draft_info: 'Im Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+        confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+    form:
+      invoice_articles:
+        variable_donation:
+          name: Variabler Spendenaufruf
+          number: Spenden
+          description: Spendenaufruf anhand bereits vorhandenen Spendenbeträgen
+      recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+      recipient_info:
+        one: "Rechnung wird für eine Person erstellt."
+        other: "Rechnung wird für %{count} Personen erstellt."
+    create:
+      one: "Rechnung <i>%{title}</i> wurde erstellt."
+      other: "Rechnung <i>%{title}</i> wurde für %{count} Empfänger erstellt."
+    create_batch: "Rechnung <i>%{title}</i> wird für %{count} Empfänger im Hintergrund erstellt."
+    update:
+      zero: "Es muss mindestens eine Rechnung ausgewählt werden."
+      model_error: "Rechnung %{number} ist ungültig - %{error}."
+      issued:
+        one: "Rechnung %{number} wurde gestellt."
+        other: "%{count} Rechnungen wurden gestellt."
+      reminded:
+        one: "Rechnung %{number} wurde gemahnt."
+        other: "%{count} Rechnungen wurden gemahnt."
+      send_notification:
+        one: "Rechnung %{number} wird im Hintergrund per E-Mail verschickt."
+        other: "%{count} Rechnungen werden im Hintergrund per E-Mail verschickt."
+      invalid_state:
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
+      issued_invalid:
+        one: "Rechnung %{number} wurde bereits gestellt."
+        other: "%{count} Rechnungen wurde bereits gestellt."
+      sent_invalid:
+        one: "Rechnung %{number} wurde bereits verschickt."
+        other: "%{count} Rechnungen wurde bereits verschickt."
+      payed_invalid:
+        one: "Rechnung %{number} wurde bereits bezahlt."
+        other: "%{count} Rechnungen wurde bereits bezahlt."
+      reminded_invalid:
+        one: "Mahnung %{number} wurde bereits erstellt."
+        other: "%{count} Mahnungen wurden bereits erstellt."
+      recipient_email_invalid:
+        one: "Rechnung %{number} konnte nicht verschickt werden, da keine Empfänger E-Mail hinterlegt ist."
+        other: "%{count} Rechnungen konnten nicht verschickt werden, da keine Empfänger E-Mails hinterlegt sind."
+      payment_reminders_missing:
+        one: "Rechnung %{number} konnte nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+        other: "%{count} Rechnungen konnten nicht gemahnt werden, da die Mahnungseinstellungen ungültig sind."
+    invoices:
+      invalid_recipients:
+        one: "Für einen Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+        other: "Für %{count} Empfänger konnte keine gültige Rechnung erzeugt werden.<br/>%{recipients}"
+    destroy:
+      zero: "Zuerst muss eine Rechnung ausgewählt werden."
+      one: "Rechnung wurde storniert."
+      other: "%{count} Rechnungen wurden storniert."
+
+  payments:
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    create:
+      flash:
+        success: Zahlung über %{amount} wurde erfasst.
+    actions_index:
+      export: "Export (CSV)"
+    table:
+      number_of_payments_shown:
+        one: "%{count} Zahlung angezeigt."
+        other: "%{count} Zahlungen angezeigt."
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    filter:
+      from: Von
+      to: Bis
+      invoice_status: "Rechnungsstatus"
+      payment_status: "Zahlungsstatus"
+    history:
+      payed: "%{amount} bezahlt (%{source})"
+
+  period_invoice_templates:
+    invoice_runs:
+      actions_index:
+        add:
+          zero: "Rechnungslauf fahren"
+          other: "Weiteren Rechnungslauf fahren"
+      destroys:
+        show:
+          title: Rechnungslauf löschen
+          non_draft_info: 'In diesem Rechnungslauf ist mindestens eine Rechnung enthalten, welche weder den Status "Entwurf" noch "Storniert" hat. Daher kann der Rechnungslauf nicht gelöscht werden.'
+          confirm_delete: Willst du diesen Rechnungslauf wirklich löschen?
+      form:
+        recipient_count_disclaimer: "Hinweis: Falls die Filterbedingungen in Zukunft auf mehr oder weniger Empfänger zutreffen, kann die finale Liste der erstellten Rechnungen noch ändern."
+        recipient_info:
+          one: "%{count} Empfänger gefunden."
+          other: "%{count} Empfänger gefunden."
+    form:
+      recipient_source_group_type_help: Alle Gruppen von diesem Typ in oder unterhalb %{group} bekommen eine Rechnung. Ausgenommen sind Gruppen, welche bereits zum Startdatum der Rechnungsperiode gelöscht oder archiviert waren.
+      recipient_source_people_filter_parent_group_help: Alle Personen, die während der Rechnungsperiode eine aktive Rolle in %{group} hatten, bekommen eine Rechnung.
+    new:
+      title: Sammelrechnung definieren
+    actions_index:
+      link:
+        add_for_groups: Neue Sammelrechnung an Gruppen
+        add_for_people: Neue Sammelrechnung an Personen
+    tabs:
+      info: Info
+      invoice_runs: Rechnungsläufe
+
+  label_formats:
+    global_labels: "Globale Etikettenformate"
+    global_labels_activated: "Globale Etikettenformate anzeigen"
+    own_labels: Meine Etikettenformate
+    see_global_labels: "Globale Etikettenformate anzeigen"
+    form:
+      portrait: "Hochformat"
+      landscape: "Querformat"
+    global:
+      link:
+        add: Etikettenformat erstellen
+    new:
+      title: Etikettenformat erstellen
+
+  layouts:
+    nav:
+      sign_out: "Abmelden"
+
+    unauthorized:
+      forgot_password: "Passwort vergessen?"
+      need_confirmation_email: "Keine Bestätigungs-E-Mail bekommen?"
+      main_self_registration: "Kein Account? Registrieren Sie sich hier."
+
+    footer:
+      available_under_license: "verfügbar unter der"
+      developed_by: "Entwickelt von"
+      source_code: "Quellcode"
+
+    user_impersonation:
+      info: "Du bist jetzt als %{user} angemeldet"
+      end: "Imitation beenden"
+
+  mailchimp_synchronizations:
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
+
+  mailing_lists:
+    subscriber_lists:
+      create:
+        success:
+          one: "Eine Person wurde erfolgreich zum Abo '%{mailing_list}' hinzugefügt"
+          other: "%{count} Personen wurden erfolgreich zum Abo '%{mailing_list}' hinzugefügt"
+    global:
+      link:
+        add: Abo erstellen
+    form:
+      help_additional_sender: "Neben den Administratoren darf diese E-Mail ebenfalls Nachrichten an die Mailing Liste senden."
+      caption_main_email: "Versand nur an Haupt E-Mail Adresse"
+      caption_main_email_with_preferred_labels: "Versand auch an Haupt E-Mail Adresse"
+      caption_subscribable: "Abonnenten dürfen sich selbst an-/abmelden"
+      caption_subscribers_may_post: "Abonnenten dürfen auf die Mailingliste schreiben"
+      caption_anyone_may_post: "Beliebige Absender/-innen dürfen auf die Mailingliste schreiben"
+      caption_delivery_report: "E-Mail mit Bestätigung an Absender schicken"
+      help_preferred_labels: "E-Mails werden falls vorhanden, nur an E-Mailadressen mit dieser Bezeichnung verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind."
+      help_mailchimp_sync: "Abonnenten können an die MailChimp-Liste exportiert werden. Diese Aktion überschreibt die MailChimp-Liste und bestehende Kontakte werden gelöscht."
+    form_tabs:
+      general: Allgemein
+      email: Mailing-Liste (E-Mail)
+      mailchimp: MailChimp
+    imap_mails:
+      manage: Postfach
+      mailboxes:
+        inbox: Eingang
+        spam: Spam
+        failed: Fehlgeschlagen
+      move_to:
+        inbox: in Eingang
+        spam: in Spam
+        failed: in Fehlgeschlagen
+      headers:
+        subject: Betreff
+        sender: Absender
+        date: Datum
+        state: Status
+        states:
+          unknown_recipient: Empfänger unbekannt
+          retreived: Empfangen
+          bulk_delivering: Wird gesendet
+          completed: Abgeschlossen
+          sender_rejected: Absender abgelehnt
+          state_unavailable: Kein Status vorhanden
+      not_available: Keine Mails in dieser Mailbox vorhanden.
+      flash:
+        deleted:
+          one: "Mail erfolgreich gelöscht"
+          other: "%{count} Mails erfolgreich gelöscht"
+        moved:
+          one: "Mail erfolgreich verschoben"
+          other: "%{count} Mails erfolgreich verschoben"
+        server_error: Verbindung zum Mailserver nicht möglich, bitte versuche es später erneut.
+    bounces:
+      manage: Bounces
+
+    messages:
+      attrs:
+        dispatch_infos: Verarbeitung
+      dispatches:
+        create:
+          success:
+            message/letter: "Brief wurde als Druckauftrag vorbereitet."
+            message/letter_with_invoice: "Rechnungsbrief wurde als Druckauftrag vorbereitet."
+            message/text_message: "SMS wird versendet."
+          alert:
+            message/letter: "Sobald der Druckauftrag erstellt wurde, kann der Brief nicht mehr bearbeitet werden."
+            message/letter_with_invoice: "Sobald der Druckauftrag erstellt wurde, kann der Rechnungsbrief nicht mehr bearbeitet werden."
+      actions_show:
+        button_dispatch_letter: Druckauftrag erstellen
+        button_show_assignment: Druckauftrag anzeigen
+        button_duplicate: Duplizieren
+        button_preview: Vorschau
+        button_dispatch_text_message: Senden
+        button_show_pdf: PDF anzeigen
+        recipient_info:
+          valid:
+            message/letter:
+              zero: "Keine Personen mit Adresse vorhanden."
+              one: "%{model_class} wird für eine Person mit Adresse erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+            message/letter_with_invoice:
+              zero: "Keine Personen mit Adresse vorhanden."
+              one: "%{model_class} wird für eine Person mit Adresse erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Adresse erstellt."
+            message/text_message:
+              zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
+              one: "%{model_class} wird für eine Person mit Mobiltelefonnummer erstellt."
+              other: "%{model_class} wird für %{count} Personen mit Mobiltelefonnummer erstellt."
+      text_message:
+        fields:
+          remaining_chars: Verbleibende Zeichen
+      letter:
+        fields:
+          send_to_households_options:
+            true: Ein Brief pro Haushalt
+            false: Ein Brief pro Person
+      table:
+        infos:
+          sender: "Absender: %{mail}"
+          sender_rejected: Absender wurde abgelehnt
+          unknown_recipient: Empfänger unbekannt
+          retrieved: Empfangen
+          bounce_rejected: Bounce abgelehnt
+      export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+      show:
+        recipients_empty: Empfängerliste ist leer, kann kein PDF erstellen.
+      export:
+        section:
+          donation_confirmation:
+            header: "Spenden an %{organisation}"
+            title: "Spendenbestätigung %{year}"
+            received_amount: "Spenden erhalten in der Höhe von"
+            received_from: "%{year} haben wir von"
+            acknowledgement: "Wir danken Ihnen für Ihr Vertrauen und Ihr geschätztes Engagement!"
+
+    recipient_counts:
+      index:
+        recipient_info:
+          message/letter:
+            households:
+              valid:
+                zero: "Keine Haushalte mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für einen Haushalt erstellt."
+                other: "%{model_class} wird für %{count} Haushalte erstellt."
+              invalid:
+                one: "Ein Haushalt hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+            people:
+              valid:
+                zero: "Keine Personen mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+          message/letter_with_invoice:
+            households:
+              valid:
+                zero: "Keine Haushalte mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für einen Haushalt erstellt."
+                other: "%{model_class} wird für %{count} Haushalte erstellt."
+              invalid:
+                one: "Ein Haushalt hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+            people:
+              valid:
+                zero: "Keine Personen mit vollständiger Adresse vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Adresse hinterlegt."
+                other: "%{count} weitere haben keine vollständige Adresse hinterlegt."
+          message/text_message:
+            people:
+              valid:
+                zero: "Keine Personen mit Mobiltelefonnummer vorhanden."
+                one: "%{model_class} wird für eine Person erstellt."
+                other: "%{model_class} wird für %{count} Personen erstellt."
+              invalid:
+                one: "Eine Person hat keine vollständige Mobiltelefonnummer hinterlegt."
+                other: "%{count} weitere haben keine Mobiltelefonnummer hinterlegt."
+  mailing_list_decorator:
+    may_subscribe: "Abonnenten dürfen sich selbst an/abmelden"
+    may_not_subscribe: "Abonnenten dürfen sich <strong>nicht</strong> selbst an/abmelden"
+    subscribers_must_opt_in: "Abonnenten müssen sich <strong>selbst</strong> an/abmelden"
+    subscribers_may_post: "Abonnenten dürfen auf die Mailingliste schreiben"
+    subscribers_may_not_post: "Abonnenten dürfen <strong>nicht</strong> auf die Mailingliste schreiben"
+    anyone_may_post: "Beliebige Absender/-innen dürfen auf die Mailingliste schreiben"
+    anyone_may_not_post: "Beliebige Absender/-innen dürfen <strong>nicht</strong> auf die Mailingliste schreiben"
+    delivery_report: "Absender erhalten ein E-Mail als Versandbestätigung"
+    no_delivery_report: "Absender erhalten kein E-Mail als Versandbestätigung"
+
+    subscribe: "Anmelden"
+    unsubscribe: "Abmelden"
+
+  navigation:
+    menu: "Menü"
+    groups: "Gruppen"
+    events: "Anlässe"
+    courses: "Kurse"
+    admin: "Einstellungen"
+    admin/event_feed: "Kalender integrieren"
+    admin/oauth_authorizations: "OAuth-Autorisierungen"
+    imap_mails: "Mails und Bounces"
+    invoices: "Rechnungen"
+    invoices/single: "Rechnungen"
+    invoices/evaluations: "Buchungsbeleg"
+    payments: "Zahlungseingänge"
+
+  notes:
+    new_note: Neue Notiz
+    note:
+      created: vor %{time_ago}
+    paginator:
+      newer_notes: Neuere Beiträge
+      older_notes: Altere Beiträge
+    destroy:
+      failure: "Löschen der Notiz fehlgeschlagen: %{errors}."
+
+  oauth:
+    applications:
+      form:
+        help_cors_origins: Falls einer der Scopes "api", "groups", "people", "events", "mailing_lists" oder "invoices" aktiviert ist, dürfen Webseiten auf diesen Hosts die Daten aus der JSON-Schnittstelle vom Browser aus abrufen (CORS).
+        help_native_redirect_uris: Ein Eintrag pro Zeile. Für lokale Tests <code class='bg-light'>%{native_redirect_uri}</code> verwenden.
+        help_additional_audiences: Zusätzliche Einträge für den <code class='bg-light'>aud</code> Key im JWT Access Token.
+        skip_consent_screen_explanation: Applikation ist verbandsintern und vertrauenswürdig, Consent Screen überspringen
+      attrs:
+        profile_endpoint_help:
+          Profile Informationen des Benutzers können über diesen Endpoint bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden. Der gewünschte Scope kann als X-Scope Header übergeben werden.
+        profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
+    access_grants:
+      list:
+        title: Aktive %{model_name} für %{uri}
+    authorizations:
+      title: Meine OAuth-Autorisierungen
+      revoke: "Zugang zu <i>%{application}</i> wurde annulliert"
+    tabs:
+      grants: Autorisierungen
+      tokens: Zugangstoken
+
+  payment_processes:
+    description:
+      header: camt.054 XML Datei
+      explain_xml_format:
+        "Eine camt.054 XML Datei ist die Sammelbuchungs-auflösung und Belastungs- und Gutschriftsanzeige. Diese enthält eine Reihe verschiedene Buchungspositionen welche automatisiert auf Basis der ESR Nummer bestehenden Rechnungen zugeordnet werden."
+
+    invalid_file: Die hochgeladene Datei ist nicht gültig.
+    parsing_error: Die hochgeladene kann nicht verarbeitet werden (%{error}).
+    job_enqueued: "Zahlungen werden im Hintergrund erfasst."
+    payments:
+      valid_with_invoice:
+        one: Es wurde eine gültige Zahlung mit dazugehöriger Rechnung erkannt.
+        other: Es wurden %{count} gültige Zahlungen mit dazugehörige Rechnungen erkannt.
+      valid_without_invoice:
+        one: Es wurde eine gültige Zahlung ohne dazugehörige Rechnung erkannt.
+        other: Es wurden %{count} gültige Zahlungen ohne dazugehörige Rechnungen erkannt.
+      invalid:
+        one: Es wurde eine ungültige Zahlung erkannt.
+        other: Es wurden %{count} ungültige Zahlungen erkannt.
+    show:
+      valid_payments_with_invoice: Zuordenbare Zahlungen
+      valid_payments_with_invoice_and_dates: Zuordenbare Zahlungen vom %{from} bis %{to}
+      valid_payments_without_invoice: Nicht Zuordenbar
+      valid_payments_without_invoice_and_dates: Nicht zuordenbare Zahlungen vom %{from} bis %{to}
+      invalid_payments: Ungültige Zahlungen
+      amount_open: Offen
+      create:
+        zero: Zahlung importieren
+        one: Zahlung importieren
+        other: "%{count} Zahlungen importieren"
+      icon_tooltip_invoice_missing: Kann keiner Rechnung zugeordnet werden
+      icon_tooltip_invoice_not_payable: Die Rechnung kann in diesem Zustand nicht beglichen werden
+      icon_tooltip_settles: Begleicht die offene Rechnung
+      icon_tooltip_exceeds: Übersteigt die offene Rechnung um %{difference}
+      icon_tooltip_undercuts: Unterschreitet die offene Rechnung um %{difference}
+    new:
+      upload_button: "Hochladen"
+      xml_file: "XML Datei"
+  public_events:
+    show:
+      meta_description: Öffentliche Kursanmeldeseite für Hitobito
+
+  qualifications:
+    in_years: "%{years} Jahre"
+    valid_until: "bis %{date}"
+    unlimited: "unbeschränkt"
+
+  qualification_kinds:
+    global:
+      link:
+        add: Qualifikationsart erstellen
+    form:
+      help_validity_in_years: "Jahre ab Qualifikationsdatum; bis Ende des entsprechenden Jahres"
+      help_reactivateable_in_years: "Jahre ab Gültigkeitsende"
+      help_required_training_days: |
+          Mindestens so viele Ausbildungstage sind während der Gültigkeitsdauer zu absolvieren, um bestehende Qualifikationen zu verlängern.
+          Diese können auch über mehrere Kurse aufgeteilt werden.
+          Leer lassen, um Ausbildungstage nicht zu berücksichtigen und Qualifikationen unmittelbar bei jedem entsprechenden Kursbesuch zu verlängern.
+    new:
+      title: Qualifikationsart erstellen
+
+  paper_trail/version_decorator:
+    by: "geändert durch %{author}"
+
+  person_duplicates:
+    merge:
+      new:
+        title: Personen zusammenführen
+      form:
+        select_person: Wessen Daten sollen beim Zusammenführen den Vorrang haben?
+        merge_hint: Beim Zusammenführen werden die Rollen, Telefonnummern, zusätzlichen E-Mails, Social Media Einträge, Rechnungen, Notizen, Tags, Abos, Familienmitglieder, Event Einladungen und Teilnahmen sowie auch Qualifikationen übernommen. Alle anderen Daten dieser Person wie z.B. Log Einträge usw. werden gelöscht.
+        merge_hint_invalid: Diese Person hat ungültige Daten.
+        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
+        invalid_persons: Die Einträge können erst zusammengeführt werden wenn beide gültig sind.
+        reload: Erneut prüfen
+      action: Zusammenführen
+      success: Die Personen Einträge wurden erfolgreich zusammengeführt.
+      success_with_validation_errors: Die Personen Einträge wurden trotz gewisser ungültiger Daten zusammengeführt.
+    ignore:
+      new:
+        title: Duplikat wirklich ignorieren?
+        confirm: Handelt es sich bei den beiden Einträgen für %{person} wirklich nicht um ein Duplikat?
+        irreversible: Dieser Vorgang kann nicht rückgängig gemacht werden.
+      action: Ignorieren
+      success: Der Duplikats-Eintrag wurde erfolgreich entfernt.
+
+  person:
+    confirm_delete: "Sämtliche Daten zu %{person} werden endgültig gelöscht, inkl. Teilnahmen und Qualifikationen. Lösche diese Person nur, wenn niemand mehr diese Daten benötigt."
+
+    add_requests:
+      body_list:
+        open_requests:
+          one: "1 offene Anfrage."
+          other: "%{count} offene Anfragen."
+        request_to: Anfrage an
+        cancel: Zugriffsanfrage zurückziehen
+
+      creator:
+        group:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Rolle wird erstellt, sobald die Anfrage freigegeben wird. Allfällige Details zur Rolle müssen nach der Freigabe erneut angegeben werden."
+          failure: "Die Rolle konnte nicht erstellt werden, da für %{person} eine Zugriffsanfrage erforderlich ist. %{errors}."
+        event:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Teilnahme wird erstellt, sobald die Anfrage freigegeben wird. Allfällige Informationen zur Teilnahme müssen nach der Freigabe erneut angegeben werden."
+          failure: "Die Teilnahme konnte nicht erstellt werden, da für %{person} eine Zugriffsanfrage erforderlich ist. %{errors}."
+        mailing_list:
+          success: "Wir haben eine Zugriffsanfrage für %{person} versendet. Die Person wird zum Abo hinzugefügt, sobald die Anfrage freigegeben wird."
+          failure: "%{person} konnte nicht hinzugefügt werden, da für diese Person eine Zugriffsanfrage erforderlich ist. %{errors}."
+
+      approve:
+        success_notice: "Die Zugriffsanfrage für %{person} wurde freigegeben."
+        failure_notice: "Die Zugriffsanfrage für %{person} konnte nicht freigegeben werden: %{errors}."
+      reject:
+        success_notice: "Die Zugriffsanfrage für %{person} wurde abgelehnt."
+      cancel:
+        success_notice: "Die Zugriffsanfrage für %{person} wurde zurückgezogen."
+
+      status:
+        group:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+        event:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+        mailing_list:
+          approved: "Die Zugriffsanfrage für %{person} wurde bereits freigegeben."
+          rejected: "Die Zugriffsanfrage für %{person} wurde bereits abgelehnt."
+
+    impersonation:
+      create:
+        email_must_be_confirmed: Die Person hat ihre E-Mail Adresse noch nicht bestätigt und kann somit nicht imitiert werden.
+
+    history:
+      events:
+        event_label: "Name / Gruppe"
+      index:
+        future_roles_title: "Zukünftige Rollen"
+        inactive_roles_title: "Inaktive Rollen"
+        qualified: "Bestanden"
+        not_qualified: "Nicht bestanden"
+        training_days:
+          one: "%{count} Ausbildungstag"
+          other: "%{count} Ausbildungstage"
+    family:
+      fields:
+        is_in_family_with: "Ist Teil der Familie von"
+
+    csv_imports:
+      description:
+        header: CSV Dateien
+        explain_csv_format:
+          'Eine CSV Datei enthält auf jeder Zeile die Angaben einer Person. Die erste Zeile enthält die Feldnamen. Die einzelnen Felder sind mit einem Seperator getrennt. ((, ; :) oder Tab) Falls ein Feldwert selber einen Seperator enthält, muss er mit Anführungszeichen (") ergänzt werden. Beispiel:'
+        example: |
+            Vorname,Nachname,E-Mail,Ort,Geschlecht
+            Hans,Muster,hans@beispiel.ch,Bern,m
+            Vreni,Bischofsberger,vreni@beispiel.net,"Zürich, New York",w
+        explain_field_names: Es können beliebige Feldnamen verwendet werden. Die Felder in der CSV Datei können im nächsten Schritt den Feldern in der Applikation zugeordnet werden.
+        explain_role:
+          Allen Personen einer Datei wird die gleiche Rolle vergeben, welche ebenfalls im nächsten Schritt ausgewählt werden kann.
+        special_fields: Spezielle Feldwerte
+        explain_special_fields_html: Die folgenden Felder müssen einen der <em>kursiven</em> Werte beinhalten.
+
+      preview_table:
+        icon_tooltip_invalid: "Ungültige Werte"
+        icon_tooltip_updated: "Wird aktualisiert"
+        icon_tooltip_created: "Wird neu erfasst"
+        icon_tooltip_request: "Wird angefragt"
+
+      define_mapping:
+        choose_role: "Rolle auswählen"
+        choose_role_help: "Allen importierten Personen wird diese Rolle zugewiesen"
+        assign_columns_to_fields: "Spalten zu Feldern zuordnen"
+        column_from_csv: "Spalte aus CSV"
+        field_in_database: "Feld in der Datenbank"
+        preview: "Vorschau"
+        update_behaviour: Aktualisierungsverhalten
+        keep_behaviour: >
+            Nur leere Felder in der Datenbank mit Daten aus dem CSV aktualisieren,
+            bestehende Werte bleiben erhalten.
+        keep_behaviour_tags: Tags werden ergänzt.
+        override_behaviour: >
+            Bestehende Werte in der Datenbank mit Daten aus dem CSV überschreiben.
+            Leere Werte im CSV löschen dabei bestehende in der Datenbank.
+        override_behaviour_tags: Tags werden gelöscht oder ersetzt.
+        update_behaviour_explanation: >
+            Dieses Verhalten betrifft nur in der Datenbank bereits existierende Personen.
+            Neue Personen werden immer vollständig entsprechend den Daten aus dem
+            CSV erstellt.
+      new:
+        upload_button: "Hochladen"
+        csv_file: "CSV Datei"
+
+      preview:
+        import_now_button: Personen jetzt importieren
+        import_details_html: >
+            Folgende Personen werden mit der <strong>Rolle %{role}</strong> in die
+            <strong>Gruppe %{group}</strong> importiert.
+    add_request_mailer:
+      request_link: Anfrage beantworten
+
+    subscriptions:
+      index:
+        my_subscriptions: Meine Abos
+        available_subscriptions: Verfügbare Abos
+      create:
+        success: <i>%{person}</i> wurde für <i>%{mailing_list}</i> angemeldet.
+      destroy:
+        success: <i>%{person}</i> wurde von <i>%{mailing_list}</i> abgemeldet.
+    tags:
+      tag:
+        category_validation:
+          email_primary_invalid: Haupt-E-Mail ungültig
+          email_additional_invalid: Weitere E-Mail ungültig
+          address_invalid: Adresse befindet sich nicht im Verzeichnis
+          post_address_check_invalid: Post-Adressabgleich fehlerhaft
+
+    security_tools:
+      index:
+        account: Account
+        last_sign_in_at: "Letztes Login: "
+        no_last_sign_in: "Bisher kein Login aufgezeichnet"
+        person_has_2FA: Diese Person hat die Zwei-Faktor-Authentifizierung aktiviert
+        person_no_2FA: Diese Person hat die Zwei-Faktor-Authentifizierung nicht aktiviert
+        person_has_login: Diese Person hat eine Haupt-E-Mail-Adresse und somit Zugang zum System
+        person_no_login: Diese Person hat keine Haupt-E-Mail-Adresse und somit keinen Zugang zum System
+        security_and_privacy: Sicherheit und Datenschutz
+        override_password: "Passwort überschreiben"
+        confirm_reset: "Achtung: Damit wird das Passwort überschrieben. Willst du das wirklich?"
+        groups_and_roles_that_see_me: Rollen, die auf mich Zugriff haben
+        load_roles_that_see_me: "Gruppen und Rollen laden"
+        load_roles_that_see_me_hint: "Dies kann einige Sekunden dauern"
+        block_person: Login sperren
+        confirm_block_person: "Achtung: Damit kann sich diese Person nicht mehr einloggen. Willst du das wirklich?"
+        unblock_person: Login entsperren
+        confirm_unblock_person: "Achtung: Damit kann ist die Person nicht mehr blockiert. Willst du das wirklich?"
+        person_blocked: Login ist gesperrt
+        person_not_blocked: Login ist nicht gesperrt
+
+      groups_and_roles_that_see_me:
+        deleted_groups: Gelöschte Gruppen
+
+      password_override:
+        flashes:
+          success: Das Passwort wurde überschrieben. Die Person wurde informiert und kann über die Funktion "Passwort vergessen" jederzeit ein neues Passwort anfordern.
+
+      block_person:
+        flashes:
+          success: Login wurde erfolgreich gesperrt.
+          error: Du kannst dein eigenes Login nicht sperren.
+
+      unblock_person:
+        flashes:
+          success: Login wurde erfolgreich entsperrt.
+          error: Du kannst dein eigenes Login nicht entsperren.
+
+    passes:
+      index:
+        title: Pässe
+        show_pass: Anzeigen
+        add_to_google_wallet: Google Wallet
+        add_to_apple_wallet: Apple Wallet
+        download_pdf: Drucken
+
+  person/csv_imports:
+    invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
+
+    duplicate_keys:
+      one: "%{list} wurde mehrfach zugewiesen."
+      other: "%{list} wurden mehrfach zugewiesen."
+    preview:
+      new:
+        one: "%{count} %{role} wird neu importiert."
+        other: "%{count} %{role} werden neu importiert."
+      updated:
+        one: "%{count} %{role} wird aktualisiert."
+        other: "%{count} %{role} werden aktualisiert."
+      failed:
+        one: "%{count} %{role} wird nicht importiert."
+        other: "%{count} %{role} werden nicht importiert."
+      requests:
+        one: "%{count} %{role} wird eine Zugriffsanfrage für ihre Personendaten erhalten, die Daten werden nicht importiert."
+        other: "%{count} %{role} werden eine Zugriffsanfrage für ihre Personendaten erhalten, die Daten werden nicht importiert."
+    create:
+      new:
+        one: "%{count} %{role} wurde erfolgreich importiert."
+        other: "%{count} %{role} wurden erfolgreich importiert."
+      updated:
+        one: "%{count} %{role} wurde erfolgreich aktualisiert."
+        other: "%{count} %{role} wurden erfolgreich aktualisiert."
+      failed:
+        one: "%{count} %{role} wurde nicht importiert."
+        other: "%{count} %{role} wurden nicht importiert."
+      requests:
+        one: "%{count} %{role} hat eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfrage erneut vorgenommen werden."
+        other: "%{count} %{role} haben eine Zugriffsanfrage für ihre Personendaten erhalten. Allfällige Änderungen durch diesen Import müssen nach der Bestätigung der Anfragen erneut vorgenommen werden."
+  people:
+    passes_aside:
+      title: Pässe
+
+    addresses_sync:
+      create:
+        scheduled: Der Adressenabgleich wurde erfolgreich gestartet.
+        running: Aktuell ist noch ein Adressenabgleich in Arbeit.
+
+    send_password_instructions: Login Informationen wurden verschickt.
+    send_password_instructions_invalid_email: Die Login-Informationen wurden nicht verschickt da die hinterlegte E-Mail Adresse ungültig ist.
+    years_old: (%{years} Jahre alt)
+
+    update_email_must_be_confirmed: Die geänderte E-Mail-Adresse muss noch bestätigt werden, bevor sie aktiv wird. Dazu wurde ein Bestätigungslink an %{new_mail} gesendet.
+
+    tabs:
+      history: Verlauf
+      security_tools: Sicherheit
+      colleagues: Mitarbeiter/-innen
+      invoices: Rechnungen
+      subscriptions: Abos
+
+    actions_show:
+      send_login_tooltip:
+        new: Die Person hat noch kein Login.<br><br>Diese Aktion sendet ihr einen Link damit sie ihr Passwort setzen kann.
+        resend: Die Person hat einen Link zum Setzen des Passworts erhalten, aber noch keines gesetzt.<br><br>Diese Aktion sendet ihr den Link erneut.
+        reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
+
+      impersonate_user: Imitieren
+      impersonate_user_tooltip: Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt.
+      impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
+
+    actions_index:
+      add_person: Person hinzufügen
+      import_list: Liste importieren
+      person_duplicate_list: Duplikate
+
+    add_requests:
+      approve_title: "Anfrage akzeptieren"
+      reject_title: "Anfrage ablehnen"
+
+    attrs:
+      additional_data: Weitere Angaben
+      events: Meine nächsten %{event_type_label}
+
+    contact_data:
+      address_link_aria_label: Adresse in nominatim.openstreetmap.org öffnen
+      lives_in_household_with: Wohnt im Haushalt mit
+      profile_picture_alt: Profilbild
+
+    email_field:
+      used_as_login: Wird als Login verwendet
+      only_changeable_by_superior: >
+          Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur von einem
+          über alle diese Rollen übergeordneten Benutzer geändert werden.
+    fields:
+      format_birthday: (dd.mm.yyyy)
+      no_sensitive_information: ""
+
+    list:
+      number_of_people_shown:
+        one: "%{count} Person angezeigt."
+        other: "%{count} Personen angezeigt."
+      number_of_people_hidden:
+        one: "%{count} weitere Person ist für dich nicht sichtbar."
+        other: "%{count} weitere Personen sind für dich nicht sichtbar."
+    log:
+      no_changes: Bisher wurden keine Änderungen aufgezeichnet.
+
+    manual_deletions:
+      show:
+        title: "%{full_name} löschen?"
+        minimize: "Person minimieren"
+        delete: "Person definitiv löschen"
+        explanation:
+          delete: Wird eine Person gelöscht, werden sämtliche Daten unwiderruflich entfernt.
+          minimize: Bei der Minimierung wird die Person nicht gelöscht, es werden aber die meisten personspezifischen Daten entfernt.
+        unable_to_delete_or_minimize: "Person kann aus folgenden Gründen nicht gelöscht oder minimiert werden:"
+        unable_to_delete: "Person kann aus folgenden Gründen nicht gelöscht werden:"
+        unable_to_minimize: "Person kann aus folgenden Gründen nicht minimiert werden:"
+        proceed_anyways: Ignorieren und Aktion trotzdem ausführen
+      minimize:
+        success: "%{full_name} wurde erfolgreich minimiert."
+      delete:
+        success: "%{full_name} wurde erfolgreich gelöscht."
+      errors:
+        participated_in_recent_event: "Person nahm kürzlich an einem Anlass teil"
+        already_minimized: "Person wurde bereits minimiert"
+
+    pdf:
+      cannot_fit: Die Adressen passen nicht in das definierte Etikettenformat.
+
+    print:
+      name: "Name"
+      address: "Adresse"
+      email: "E-Mail"
+      home_phone: "Privat"
+      mobile_phone: "Mobil"
+
+    privacy_policy_acceptance_field:
+      acceptance_caption:
+        for_self: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
+        for_someone_else: "Ich bestätige, dass ich das Einverständnis dieser Person oder ihrer erziehungsberechtigten Person für die folgenden Bestimmungen eingeholt habe:"
+
+    roles:
+      title: Aktive Rollen
+      convertable_title: Zukünftige Rollen
+
+    roles_aside:
+      add_role: Rolle hinzufügen
+      set_main_group: Hauptgruppe setzen
+
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_email_needed: "Für den Export wird eine E-Mail Adresse benötigt."
+
+    multiselect_actions:
+      role_actions:
+        button: Rollen
+        remove: Rollen entfernen
+        move: Rollen verschieben
+        add: Rolle hinzufügen
+
+      add_participation: Zu Veranstaltung hinzufügen
+      tag_lists: Tags
+      remove_tags: Tags entfernen
+      add_tags: Tags hinzufügen
+      add_to_mailing_list: Zu Abo hinzufügen
+
+    totp_reset:
+      flashes:
+        success: Du wirst beim nächsten Login aufgefordert, Zwei-Faktor-Authentifizierung erneut einzurichten
+
+    totp_disable:
+      flashes:
+        success: Zwei-Faktor-Authentifizierung erfolgreich deaktiviert
+
+    login_status:
+      no_login: Kein Login
+      password_email_sent: Einladung wurde verschickt
+      login: Login ist aktiv
+      two_factors: Login mit 2FA ist aktiv
+      status_off: Nicht vorhanden
+      blocked: Blockiert
+      not_blocked: Nicht blockiert
+
+  people_filter:
+    description: "Personen in %{group}"
+
+  participations:
+    destroy:
+      flash:
+        success: Anmeldung wurde erfolgreich gelöscht.
+
+  qualification_decorator:
+    open_training_days_active:
+      Damit die Qualifikation am %{finish_at} nicht abläuft, bitten wir dich bis spätestens dahin %{days} Fortbildungstage zu absolvieren.
+    open_training_days_reactivatable:
+      Um deine Qualifikation zu reaktivieren, bitten wir dich %{days} Fortbildungstage bis spätestens %{reactivateable_until} zu absolvieren.
+    open_training_days_no_longer_reactivatable: Diese Qualifikation ist seit dem %{reactivateable_until} abgelaufen. Falls du davor Aus- oder Fortbildungen besucht hast und du für diese eine Kursbestätigung besitzt, kannst du diese mit deinem Tourenchef teilen. Allenfalls kann dies zu einer Reaktivierung deiner bereits abgelaufenen Qualifikation führen.
+
+  event_invitations:
+    create:
+      flash:
+        success: "Einladung für %{recipient_name} als %{participation_type} wurde erstellt."
+    invalid_existing_person: "wurde bereits zu diesem %{model_name} eingeladen."
+    decline:
+      flash:
+        success: Einladung wurde abgelehnt.
+    destroy:
+      flash:
+        success: "Einladung für %{recipient_name} wurde gelöscht."
+
+  people_filters:
+    form:
+      save_search: Suche speichern
+      save_filter: Filter speichern
+      save_filter_placeholder: Geben Sie einen Namen an, um diesen Filter zu speichern
+      range:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+      filters_qualification_validity:
+        active: Nur aktuell gültige Qualifikationen
+        reactivateable: Gültige und reaktivierbare Qualifikationen
+        not_active_but_reactivateable: Reaktivierbare, aber nicht gültige Qualifikationen
+        not_active: Keine gültigen Qualifikationen
+        all: Alle jemals erteilten Qualifikationen
+        none: Keine jemals erteilte Qualifikation
+        only_expired: Abgelaufene, aber nicht gültige oder reaktivierbare Qualifikationen
+      filters_role_kind:
+        active_today: Aktuell aktive Rollen
+        active: aktive Rollen
+        started: gestartete Rollen
+        started_help: Bezieht sich auf das "Von" Datum auf der Rolle
+        created: erstellte Rollen
+        deleted: gelöschte Rollen
+        inactive: inaktive oder nie vorhandene Rollen
+        inactive_but_existing: inaktive aber zu einer anderen Zeit vorhandene Rollen
+
+    attributes:
+      title: Felder
+
+    language:
+      title: Sprache
+      word_connector: " oder "
+      one_of: Sprache ist %{languages}
+
+    tag:
+      title: Tags
+      prompt_tag_selection: Personen einbeziehen, die mindestens einen der untenstehenden Tags enthalten
+      prompt_tag_placeholder: Gewünschte Tag-Namen eingeben
+
+    tag_absence:
+      prompt_tag_absence_selection: Personen ausschliessen, die mindestens einen der untenstehenden Tags enthalten
+      prompt_tag_absence_placeholder: Gewünschte Tag-Namen eingeben
+
+    new:
+      title: Personen filtern
+
+    range:
+      prompt_range: In welchem Bereich soll gesucht werden?
+
+    role:
+      title: Rollen
+      prompt_role_selection: Welche Rollen sollen angezeigt werden?
+      prompt_role_duration_from: oder im Zeitraum von
+      prompt_role_duration_selection: Welcher Zeitraum soll berücksichtigt werden?
+      prompt_role_duration_until: bis
+      or_duration: oder
+      include_archived: Archivierte Rollen miteinbeziehen
+
+    qualification:
+      title: Qualifikationen
+      prompt_qualification_selection: Welche Qualifikationen sollen angezeigt werden?
+      prompt_constraint: Welche Logik soll angewendet werden?
+      prompt_validity: Welche Gültigkeit sollen die angezeigten Qualifikationen haben?
+      prompt_year: Qualifikationsjahr einschränken
+      prompt_date: Stichdatum
+      prompt_kind: In welchem Bereich soll gesucht werden?
+      reference_date_help_inline: Leer lassen, um das aktuelle Datum zu verwenden.
+      start_at_year_label: Erhalten zwischen
+      start_at_year_infix: und
+      finish_at_year_label: Abgelaufen zwischen
+      finish_at_year_infix: und
+      not_enough_permissions: Du verfügst nicht über ausreichende Berechtigungen, um Personen mit diesem Filter zu suchen.
+
+    simple_radio:
+      match:
+        one: Person hat mindestens EINE dieser Qualifikationen
+        all: Person hat ALLE diese Qualifikationen
+      validity:
+        active: Nur aktuell gültige Qualifikationen
+        reactivateable: Gültige und reaktivierbare Qualifikationen
+        not_active_but_reactivateable: Keine gültige, aber reaktivierbare Qualifikationen
+        not_active: Keine gültigen Qualifikationen
+        all: Alle jemals erteilten Qualifikationen
+      kind:
+        deep: In der aktuellen Ebene und allen darunter liegenden Ebenen und Gruppen
+        layer: In der aktuellen Ebene und allen ihren Gruppen
+        group: Nur in der aktuellen Gruppe
+        group_deep: In der aktuellen Gruppe und allen darunter liegenden Gruppen
+
+  self_register:
+    create:
+      flash:
+        success: Du wurdest erfolgreich registriert
+
+  self_registration_reasons:
+    destroy:
+      foreign_key_error: Es gibt Personen, die diesen Eintrittsgrund verwenden, löschen ist daher nicht möglich.
+
+  role_decorator:
+    terminates_on: Austritt per %{date}
+
+  roles:
+    full_entry_label: "%{model_label} <i>%{role}</i> für <i>%{person}</i> in <i>%{group}</i>"
+    role_changed: "%{full_entry_label} zu <i>%{new_role}</i> geändert."
+    role_changed_to_group: "%{full_entry_label} zu <i>%{new_role}</i> in <i>%{new_group}</i> geändert."
+    role_primary_group_changed: "Hauptgruppe auf <i>%{new_group}</i> geändert."
+
+    create:
+      flash:
+        privacy_policy_not_accepted: Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.
+
+    form:
+      add_person: Person hinzufügen
+      add_role_for_person: Rolle für %{person} erstellen
+      edit_role_for_person: Rolle für %{person} bearbeiten
+      new_role_for_person: Neue Rolle erstellen
+
+    label:
+      help_optional_label: Optionale Bezeichnung der Rolle dieser Person
+
+    person_fields:
+      create_new_person: Neue Person erfassen
+      search_existing_person: Bestehende Person suchen
+      text_with_alternative_link_html: "%{text} <small>oder %{link}</small>"
+
+    info:
+      role_has_permissions: "Die Rolle %{role} in der Gruppe %{group} hat folgende Berechtigungen:"
+      role_only_public: >
+          Die Rolle %{role} in der Gruppe %{group} kann nur öffentliche Daten (Gruppen,
+          Anlässe und Abos; keine anderen Personen) sehen.
+      only_visible_from_above: Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.
+
+  roles/terminations:
+    global:
+      title: Austritt
+      submit: Austreten
+      warning: Dieser Vorgang kann nicht rückgängig gemacht werden.
+      role:
+        text: Bist du sicher, dass du aus dieser Gruppe austreten möchtest?
+        no_permission: ""
+      # Add translations for specific role types like this:
+      # leader:
+      #   text: Bist du sicher, dass du als Leiter/-in austreten möchtest?
+      # group/bottom_layer/member:
+      #   text: Bist du sicher, dass du als Mitglied austreten möchtest?
+    main_person_text: "Der Austritt erfolgt für: %{person}"
+    affected_people_text: "sowie für: %{affected_people}"
+    flash:
+      success: Du bist erfolgreich ausgetreten per %{date}.
+
+  role_lists:
+    available:
+      no_entries: Keine für Sie löschbare Rollen vorhanden
+    access_denied: Zugriff auf %{person} verweigert
+    destroy:
+      success:
+        zero: Es wurde keine Rolle entfernt
+        one: Eine Rolle wurde entfernt
+        other: "%{count} Rollen wurden entfernt"
+      failure:
+        zero: Es wurde keine Rolle entfernt
+        one: Eine Rolle konnte nicht entfernt werden
+        other: "%{count} Rollen konnten nicht entfernt werden"
+    create:
+      success:
+        zero: Es wurde keine Rolle erstellt
+        one: Eine Rolle wurde erstellt
+        other: "%{count} Rollen wurden erstellt"
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht erstellt werden
+        other: "%{count} Rollen konnten nicht erstellt werden"
+    update:
+      success:
+        zero: Es wurde keine Rolle verschoben
+        one: Eine Rolle wurde verschoben
+        other: "%{count} Rollen wurden verschoben"
+      failure:
+        zero: Bitte geben Sie eine valide Rolle an
+        one: Eine Rolle konnte nicht verschoben werden
+        other: "%{count} Rollen konnten nicht verschoben werden"
+    move:
+      title: Wohin sollen die Personen verschoben werden?
+      submit: Weiter
+    movable:
+      title: Welche Rollen sollen gelöscht werden?
+      submit: Rollen verschieben
+    deletable:
+      title: Welche Rollen sollen gelöscht werden?
+      submit: Entfernen
+    new:
+      title: Wo sollen die neuen Rollen erstellt werden?
+      submit:
+        one: "Eine Rolle erstellen"
+        other: "%{count} Rollen erstellen"
+  tags:
+    list:
+      confirm_delete: >
+          Wollen Sie diesen Eintrag wirklich löschen? Dies löscht das Tag aus allen
+          Personenprofilen, Abos und Personenfiltern in welchen es noch verwendet
+          wird.
+    multiselect_actions:
+      merge_tags: Zusammenführen
+    categories:
+      other: Andere
+      validation: Validierung
+
+  tag_lists:
+    destroy:
+      success:
+        zero: Es wurden keine Tags entfernt
+        one: Ein Tag wurde entfernt
+        other: "Tags auf %{count} Personen werden im Hintergrund entfernt"
+    create:
+      success:
+        zero: Es wurden keine Tags erstellt
+        one: Ein Tag wurde erstellt
+        other: "Tags auf %{count} Personen werden im Hintergrund erstellt"
+    deletable:
+      title: Welche Tags sollen gelöscht werden?
+      no_entries: Von keiner der ausgewählten Personen können Tags entfernt werden
+      submit: Entfernen
+    new:
+      title: Welche Tags sollen hinzugefügt werden?
+      no_entries: Auf keiner der ausgewählten Personen können Tags erstellt werden
+      separate_multiple_tags_with_comma: Mehrere Tags können mit Kommas abgetrennt werden
+      submit:
+        one: "Tags auf einer Person erstellen"
+        other: "Tags auf %{count} Personen erstellen"
+  service_tokens:
+    abilities:
+      read: Lesen
+
+    form:
+      help_cors_origins: Webseiten auf diesen Hosts dürfen die Daten aus der JSON-Schnittstelle vom Browser aus abrufen (CORS).
+
+    global:
+      link:
+        add: API-Key hinzufügen
+
+  steps_component:
+    next_link: Weiter
+    prev_link: Zurück
+    submit: Absenden
+
+  household_aside_component:
+    add: Erstellen
+    manage: Verwalten
+    destroy: Auflösen
+
+  subscriber:
+    group:
+      edit:
+        title: Abonnenten bearbeiten
+      form:
+        subgroups_selectable: "Es können nur Gruppen unterhalb der Abogruppe ausgewählt werden"
+        subgroups_and_siblings_selectable: "Es können nur Gruppen unterhalb der Abogruppe oder unterhalb der benachbarten Gruppen vom Typ %{type} ausgewählt werden"
+      roles:
+        please_choose_group: Bitte wähle eine Gruppe aus
+      tags:
+        only_add_persons_with_tags: "Nur Personen mit einem der folgenden Tags auswählen:"
+        exclude_persons_with_tags: "Ausschliessen von Personen mit folgenden Tags:"
+
+    exclude_person:
+      form:
+        exclude_subscriber: "Abonnent/-in ausschliessen"
+
+    filter:
+      show:
+        title: Globale Bedingungen
+
+    subscriber_lists:
+      new:
+        title: Personen zu Abo hinzufügen
+        mailing_list_search: Abo suchen
+        submit: Hinzufügen
+        mailing_lists_in_local_hierarchy_hint: "Abos von Über- und Untergruppen der aktuellen Gruppe können ausgewählt werden"
+
+  subscriber/base:
+    blank: "%{model_label} muss ausgewählt werden"
+    taken: "%{model_label} wurde bereits hinzugefügt"
+
+  subscriber/user:
+    success: "Du wurdest dem Abo erfolgreich hinzugefügt."
+    failure: "Du konntest dem Abo nicht hinzugefügt werden: %{errors}"
+    unsubscribed: "Du wurdest erfolgreich vom Abo entfernt."
+
+  subscriber/filter:
+    success: "Globale Bedingungen wurden erfolgreich aktualisiert"
+    failure: "Globale Bedingungen konnten nicht aktualisiert werden"
+
+  subscriber/exclude_person:
+    success: "%{subscriber} wurde erfolgreich ausgeschlossen"
+    failure: "%{subscriber} ist nicht Abonnent/-in"
+
+  sheet/person/csv_import:
+    title: "Personen über CSV importieren"
+
+  sheet/group:
+    belongs_to: "gehört zu"
+    deleted: "(gelöscht)"
+    layer_upwards: "< zu übergeordneter Ebene"
+
+  sheet/payment_process:
+    title: Zahlungen über XML importieren
+
+  subscriptions:
+    actions_index:
+      add_person: Person hinzufügen
+      add_group_roles: Gruppe/Rollen hinzufügen
+      add_event: Anlass hinzufügen
+      exclude_person: "Person ausschliessen"
+    list:
+      excluded_people: "Ausgeschlossene Personen"
+      export_not_allowed: "Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten."
+      subscribable_mode_opt_out_info: >
+          Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und
+          sind standardmässig an-gemeldet.
+      subscribable_mode_opt_in_info: >
+          Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und
+          sind standardmässig ab-gemeldet.
+    subscription:
+      only_persons_with: "Nur Personen mit:"
+      persons_excluded_with: "Personen ausschliessen mit:"
+    export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+
+  taggable:
+    add_tag: Tag hinzufügen
+    cannot_create: Bitte wähle einen bestehenden Tag aus
+    no_entry: (keine)
+
+  job_observations:
+    index:
+      title: Jobübersicht
+    job_observation:
+      no_progress_provided: Dieser Job hat keinen nachverfolgbaren Fortschritt
+    notification:
+      job_success: Job erfolgreich abgeschlossen
+      job_error: Fehler bei Jobausführung aufgetreten
+
+  version:
+    attribute_change:
+      from_to: "%{attr} wurde von <i>%{from}</i> auf <i>%{to}</i> geändert."
+      from: "%{attr} <i>%{from}</i> wurde gelöscht."
+      to: "%{attr} wurde auf <i>%{to}</i> gesetzt."
+
+    association_change:
+      create: "%{model} <i>%{label}</i> wurde hinzugefügt."
+      update: "%{model} <i>%{label}</i> wurde aktualisiert: %{changeset}"
+      destroy: "%{model} <i>%{label}</i> wurde gelöscht."
+      removed: "%{model} <i>%{label}</i> wurde entfernt."
+
+      person/add_request:
+        create: "Zugriffsanfrage für <i>%{label}</i> wurde gestellt."
+        update: "Zugriffsanfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
+        destroy: "Zugriffsanfrage für <i>%{label}</i> wurde beantwortet."
+
+      deleted_person: "Gelöschte Person"
+      people_manager:
+        create:
+          manager: "<i>%{label}</i> wurde als Verwalter*in hinzugefügt."
+          managed: "<i>%{label}</i> wurde als Kind hinzugefügt."
+        destroy:
+          manager: "<i>%{label}</i> wurde als Verwalter*in entfernt."
+          managed: "<i>%{label}</i> wurde als Kind entfernt."
+
+    impersonate: "Account wurde von %{user} übernommen."
+    impersonation_done: "Account wird nicht mehr von %{user} verwendet."
+    password_override: "Passwort wurde von %{user} auf null gesetzt und das Login verhindert, bis ein neues Passwort gesetzt wird."
+
+    household_created: "Haushalt (%{object_changes}) wurde neu erstellt."
+    household_person_appended: "%{object_name} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    household_person_removed: "%{object_name} wurde vom Haushalt (%{object_changes}) entfernt."
+    household_updated: "Haushalt (%{object_changes}) wurde aktualisiert."
+    remove_from_household: "%{item} wurde vom Haushalt (%{object_changes}) entfernt."
+    append_to_household: "%{item} wurde zum Haushalt (%{object_changes}) hinzugefügt."
+    household_destroyed: "Haushalt (%{object_changes}) wurde aufgelöst."
+    person_merge: "Zwei Personen wurden in diesen Eintrag zusammengeführt. Gelöschte Person:"
+    deleted_service_token: "Inzwischen gelöschtes %{model_name}"
+    deleted_user: "inzwischen gelöschte Person %{id}"
+
+  tags/merge:
+    success: Die Tags wurden erfolgreich zusammengeführt.
+
+  tags_merge:
+    tags: Tags
+    title: Sollen die gewählten Tags zusammengeführt werden?
+    name: Neuer Name
+    submit: Zusammenführen
+    category: Kategorie
+
+  calendars:
+    actions_show:
+      copy_url: Kalender-Feed URL kopieren
+    attrs:
+      included_groups: Eingeschlossene Gruppen
+      excluded_groups: Ausgeschlossene Gruppen
+      tags: Ein- und ausgeschlossene Tags
+    form:
+      include_subgroups: Auch Untergruppen einschliessen
+      exclude_subgroups: Auch Untergruppen ausschliessen
+      all_event_types: Alle
+    tags:
+      or: " oder "
+      explanation_included:
+        zero: ""
+        one: 922de2a15291aec392b0ed77e83667a4_tr
+        other: becd504621e4e94afe0da7cfce92cce5_tr
+      explanation_excluded:
+        zero: ""
+        one: 966a2a00d2a7da84418340a00f642483_tr
+        other: 43597c203a11c68bc02e912594f56bf6_tr
+
+  calendar_groups:
+    explanation_included_with_subgroups: "%{events} von %{group_name} und Untergruppen sind eingeschlossen."
+    explanation_included: "%{events} von %{group_name} sind eingeschlossen."
+    explanation_excluded_with_subgroups: "Alle %{events} von %{group_name} und Untergruppen sind ausgeschlossen."
+    explanation_excluded: "Alle %{events} von %{group_name} sind ausgeschlossen."
+
+  views:
+    pagination:
+      next: ">>"
+      previous: "<<"
+      first: Erste
+      last: Letzte
+      truncate: "..."
+  json_api: JSON:API
+
+  verify_membership:
+    title: Verifizierung Mitgliedschaft
+    not_found: Ungültiger Verifikationscode
+    status_valid: Mitgliedschaft gültig
+    status_invalid: Keine gültige Mitgliedschaft
+
+  passes:
+    verifications:
+      title: Pass-Verifizierung
+      status:
+        valid: Pass ist gültig
+        expired: Pass ist abgelaufen
+        invalid: Pass ist ungültig
+      failed: Dieser Pass konnte nicht verifiziert werden.
+
+  wizards:
+    steps:
+      new_user_form:
+        next_button: Registrieren
+      new_event_guest_contact_data_form:
+        next_button: Weiter
+      new_event_guest_participation_form:
+        next_button: Gast anmelden
+      new_event_guest_contact_data_form_title: Kontaktdaten des Gasts
+      new_event_guest_participation_form_title: Gast anmelden
+
+  people_managers:
+    section:
+      manageds_help: Du kannst nur Personen als Kinder hinzufügen, auf welche du Schreibzugriff hast.
+    common_heading: Kinder / Verwalter*innen
+    managers_heading: Verwalter*innen
+    manageds_heading: Kinder
+    create_managed_person_button: Kind erfassen
+    assign_managed_person_button: Kind zuweisen
+    assign_manager_person_button: Verwalter*in zuweisen
+
+  period_invoice_template:
+    role_count_item_fields:
+      choose_role_types: Rollentypen auswählen
+
+  wallets:
+    google:
+      generation_failed: Der Pass konnte nicht zu Google Wallet hinzugefügt werden.
+    apple:
+      member_name: Mitglied
+      generation_failed: Der Pass konnte nicht für Apple Wallet erstellt werden.
+    pass:
+      member_name: Name
+      member_number: Mitgliedernummer
+      valid_from: Gültig von
+      valid_until: Gültig bis
+      description: Beschreibung

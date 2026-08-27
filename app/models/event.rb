@@ -114,7 +114,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                                     globalize_attribute_names.map(&:to_s))
   end
 
-  translates :application_conditions, :description, :name, :signature_confirmation_text
+  translates :application_conditions, :name, :signature_confirmation_text
+
+  translates_rich_text :description
 
   translation_class.class_eval do
     has_paper_trail meta: {
@@ -231,6 +233,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
     length: {allow_nil: true, maximum: 2**16 - 1}
+  validates :description, no_attachments: true
   validates :guest_limit, numericality: {only_integer: true, greater_than_or_equal_to: 0}
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening

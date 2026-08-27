@@ -21,7 +21,7 @@ With the `has_paper_trail` expression we tell our application that it should tra
 The meta expression is used to add additional columns to the Papertrail entity. In this example we have a `main_id`
 column which takes the id of the person of the role and second a `main_type` which holds the `sti_name` of a person.
 
-The skip expression tells us which field of the models should not be stored in the versions entity of papertrail. Per default those skip options include updated_at. As soon as a model like Event::Participation add own skip options locally, updated_at must be included too because the defaults get overriden.
+The skip expression tells us which field of the models should not be stored in the versions entity of papertrail. Per default those skip options include updated_at. As soon as a model like Event::Participation add own skip options locally, updated_at must be included too because the defaults get overridden.
 
 ### Paper Trail Versions for Translations
 To maintain a clean version history, we prevent PaperTrail from creating versions on the base model when translated attributes change. Instead, we delegate versioning to the specific translation records. Let's take a look to the event model where translations are paper trailed:

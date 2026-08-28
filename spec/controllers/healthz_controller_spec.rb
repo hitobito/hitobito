@@ -17,7 +17,7 @@ describe HealthzController do
     stub_file_read("/sys/fs/cgroup/memory.stat", "inactive_file 100000")
   end
 
-  describe "GET show without token" do
+  describe "GET show" do
     let(:json) { JSON.parse(response.body) }
 
     context "when memory usage determinable" do

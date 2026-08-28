@@ -18,8 +18,6 @@ class HealthzController < ActionController::Base
   private
 
   def app_status
-    memory_usage_status = AppStatus::MemoryUsage.new
-
-    AppStatus::Composed.new(memory_usage_status)
+    AppStatus::MemoryUsage.new
   end
 end

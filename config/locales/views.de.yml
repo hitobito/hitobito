@@ -665,7 +665,7 @@ de:
     actions_show:
       copy_share_link: Direktlink kopieren
     application_fields:
-      caption_signature: Teilnehmer/-innen müssen die Anmeldung unterschreiben
+      caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     attachments:
@@ -685,13 +685,13 @@ de:
     form:
       caption_external_applications: "Externe können sich für diesen Anlass anmelden."
       caption_prioritization: "Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben."
-      caption_requires_approval: "Der/Die Gruppenleiter/-in wird informiert und muss die Anmeldung bestätigen."
+      caption_requires_approval: "Die Gruppenleitung wird informiert und muss die Anmeldung bestätigen."
       caption_participations_visible: "Teilnehmende können sich gegenseitig in der Teilnehmerliste sehen."
       times_are_optional: Uhrzeiten sind optional
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
       explain_choices: "Für Freitextantwort keine Antwortmöglichkeiten hinzufügen."
       explain_admin_questions:
-        Hier kannst du weitere Angaben pro Teilnehmer/-in definieren,
+        Hier kannst du weitere Angaben für Teilnehmende definieren,
         welche nur für die Anlassverwaltung verwendet werden.
       explain_contact_attrs:
         Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung
@@ -1578,7 +1578,7 @@ de:
         skip_consent_screen_explanation: Applikation ist verbandsintern und vertrauenswürdig, Consent Screen überspringen
       attrs:
         profile_endpoint_help:
-          Profile Informationen des Benutzers können über diesen Endpoint
+          Profile Informationen der angemeldeten Person können über diesen Endpoint
           bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden.
           Der gewünschte Scope kann als X-Scope Header übergeben werden.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
@@ -1918,7 +1918,7 @@ de:
     tabs:
       history: Verlauf
       security_tools: Sicherheit
-      colleagues: Mitarbeiter/-innen
+      colleagues: Mitarbeitende
       invoices: Rechnungen
       subscriptions: Abos
 
@@ -1954,7 +1954,7 @@ de:
       used_as_login: Wird als Login verwendet
       only_changeable_by_superior: >
         Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur
-        von einem über alle diese Rollen übergeordneten Benutzer geändert werden.
+        von einer über alle diese Rollen übergeordneten Person geändert werden.
 
     fields:
       format_birthday: (TT.MM.JJJJ)

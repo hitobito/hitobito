@@ -102,7 +102,7 @@ describe :messages, js: true do
     end
 
     it "creates new letter and assignment" do
-      people(:top_leader).update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
+      people(:top_leader).update!(zip_code: nil, town: nil)
 
       click_link("Brief erstellen")
 
@@ -132,7 +132,7 @@ describe :messages, js: true do
     end
 
     it "creates new letter with invoice and assignment" do
-      people(:top_leader).update!(street: nil, housenumber: nil, zip_code: nil, town: "Supertown")
+      people(:top_leader).update!(zip_code: nil, town: nil)
 
       click_link("Rechnungsbrief erstellen")
       is_expected.to have_selector("a", text: "Rechnungsbrief wird für 3 Personen erstellt.")

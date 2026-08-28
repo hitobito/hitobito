@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(cancel_url_new: (entry.parent_id? ? group_path(entry.parent_id) : nil), buttons_top: false) do |f|
+= entry_form(cancel_url_new: (entry.parent_id? ? group_path(entry.parent_id) : nil), buttons_top: false, html: { autocomplete: 'off' }) do |f|
   - if entry.new_record?
     = f.hidden_field :parent_id
     = f.hidden_field :type

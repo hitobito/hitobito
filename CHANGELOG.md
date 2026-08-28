@@ -6,6 +6,7 @@
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)
 - Rechungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (sww#296)
 - In der JSON:API können die gleichen Personendaten von Eventteilnehmern abgerufen werden wie im UI (pbs#466)
+- In der JSON:API kann neu mit dem Parameter `where_exists` nach Feldern in inkludierten Ressourcen gefiltert werden. Zum Beispiel können damit nur diejenigen Personen mit einer bestimmten Rolle oder in einer bestimmten Gruppe abgerufen werden (#2700)
 
 ## Version 2.10
 

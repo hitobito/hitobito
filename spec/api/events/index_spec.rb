@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -33,6 +33,38 @@ RSpec.describe "events#index", type: :request do
         expect(response.status).to eq(200), response.body
         expect(d.map(&:jsonapi_type).uniq).to match_array(%w[events courses])
         expect(d.map(&:id)).to match_array(Event.pluck(:id))
+      end
+    end
+
+    context "with nested where_exists" do
+      let(:params) do
+        {where_exists: "participations.roles",
+         filter: {"participations.roles.type" => "Event::Role::Leader"},
+         stats: {total: "count"}}
+      end
+
+      it "only fetches events having a participation with a matching role" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([events(:top_course).id])
+        expect(json.dig("meta", "stats", "total", "count")).to eq(1)
+      end
+
+      context "with the participations included" do
+        let(:params) { super().merge(include: "participations") }
+
+        it "narrows them down to the matching ones as well" do
+          roleless = Fabricate(:event_participation, event: events(:top_course),
+            participant: people(:top_leader), active: true)
+
+          make_request
+
+          expect(response.status).to eq(200), response.body
+          expect(d.map(&:id)).to eq([events(:top_course).id])
+          expect(json["included"].pluck("id"))
+            .to eq([event_participations(:top).id.to_s])
+          expect(json["included"].pluck("id")).not_to include(roleless.id.to_s)
+        end
       end
     end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -44,6 +44,75 @@ RSpec.describe "people#index", type: :request do
         expect(response.status).to eq(200), response.body
         expect(d.map(&:jsonapi_type).uniq).to match_array(["people"])
         expect(d.map(&:id)).to match_array([people(:top_leader).id])
+      end
+    end
+
+    describe "where_exists" do
+      let(:params) { {where_exists: "roles", filter: {roles: {type: "Group::BottomLayer::Member"}}} }
+
+      it "returns only the people having a matching role" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([people(:bottom_member).id])
+      end
+    end
+
+    describe "where_exists with several relationships" do
+      let(:params) { {where_exists: "roles,phone_numbers"} }
+
+      it "returns only the people matching all of them" do
+        Fabricate(:phone_number, contactable: people(:top_leader))
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([people(:top_leader).id])
+      end
+    end
+
+    describe "where_exists reaching deeper than include" do
+      let(:params) do
+        {include: "roles",
+         where_exists: "roles.group",
+         filter: {"roles.group.id" => groups(:bottom_layer_one).id}}
+      end
+
+      it "restricts the people and still includes the roles" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([people(:bottom_member).id])
+        expect(json["included"].pluck("type").uniq).to eq(["roles"])
+      end
+    end
+
+    describe "include reaching deeper than where_exists" do
+      let(:params) do
+        {include: "roles.group",
+         where_exists: "roles",
+         filter: {roles: {type: "Group::BottomLayer::Member"}}}
+      end
+
+      it "restricts the people and includes both levels" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([people(:bottom_member).id])
+        expect(json["included"].pluck("type").uniq).to match_array(%w[roles groups])
+      end
+    end
+
+    describe "where_exists with an unknown relationship" do
+      let(:params) { {where_exists: "bogus"} }
+
+      it "reports 400 instead of server error" do
+        make_request
+        expect(response.status).to eq(400), response.body
+      end
+    end
+
+    describe "where_exists on a relationship without database association" do
+      let(:params) { {where_exists: "layer_group"} }
+
+      it "reports 400 instead of server error" do
+        make_request
+        expect(response.status).to eq(400), response.body
       end
     end
 

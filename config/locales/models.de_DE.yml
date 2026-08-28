@@ -85,8 +85,8 @@ de_DE:
         type_not_allowed: kann hier nicht erstellt werden
         must_be_after_opening: muss nach dem Anmeldebeginn sein
         must_have_same_type: müssen von demselben Typ sein
-        greater_than: muss größer als %{count} sein
-        greater_than_or_equal_to: muss größer oder gleich %{count} sein
+        greater_than: muss grösser als %{count} sein
+        greater_than_or_equal_to: muss grösser oder gleich %{count} sein
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
         cannot_be_later_than_today: kann nicht später als heute sein
@@ -108,7 +108,7 @@ de_DE:
             base:
               contact_attr_mandatory: "'%{attribute}' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden"
               contact_attr_invalid: "'%{attribute}' ist kein gültiges Personen-Attribut"
-              contact_attr_hidden_required: "'%{attribute}' kann nicht als erforderlich und 'nicht anzeigen' gesetzt werden"
+              contact_attr_hidden_required: "'%{attribute}' kann nicht als obligatorisch und 'nicht anzeigen' gesetzt werden"
         event/date:
           attributes:
             finish_at:
@@ -135,7 +135,7 @@ de_DE:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
             additional_sender:
-              invalid: "muss Mailadressen vom Format abcd@ee.de oder *@ee.de enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
+              invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
         message/letter_with_invoice:
           attributes:
             base:
@@ -191,12 +191,12 @@ de_DE:
         qualification_kind:
           attributes:
             validity:
-              not_a_valid_number: 'muss größer oder gleich Null sein um %{model} reaktivierbar zu machen'
+              not_a_valid_number: 'muss grösser oder gleich Null sein um %{model} reaktivierbar zu machen'
         subscription:
           attributes:
             subscriber_id:
               group_not_allowed: 'Diese Gruppe kann hier nicht hinzugefügt werden'
-              event_not_allowed: 'Diese Veranstaltung kann hier nicht hinzugefügt werden'
+              event_not_allowed: 'Dieser Anlass kann hier nicht hinzugefügt werden'
         tag:
           attributes:
             name:
@@ -205,7 +205,7 @@ de_DE:
         invoice:
           recipient_address_or_email_required: 'Empfänger Adresse oder E-Mail muss ausgefüllt werden'
           recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
-          recipient_street_or_postbox_required: 'Straße oder Postfach muss ausgefüllt werden'
+          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
@@ -257,8 +257,8 @@ de_DE:
         one: Versand
         other: Versand
       event:
-        one: Veranstaltung
-        other: Veranstaltungen
+        one: Anlass
+        other: Anlässe
       event/course:
         one: Kurs
         other: Kurse
@@ -281,8 +281,8 @@ de_DE:
         one: Einladung
         other: Einladungen
       event/role:
-        one: Veranstaltung Rolle
-        other: Veranstaltung Rollen
+        one: Anlass Rolle
+        other: Anlass Rollen
       event/role/assistant_leader:
         one: Leitung
         other: Leitung
@@ -294,16 +294,16 @@ de_DE:
         other: Küche
       event/role/helper:
         one: Helfer/-in
-        other: Helfer/-innen
+        other: Helfende
       event/role/participant:
         one: Teilnehmer/-in
-        other: Teilnehmer/-innen
+        other: Teilnehmende
       event/role/treasurer:
         one: Kassier
         other: Kassiere
       event/role/speaker:
         one: Referent/-in
-        other: Referent/-innen
+        other: Referierende
       event/date:
         one: Datum
         other: Daten
@@ -311,8 +311,8 @@ de_DE:
         one: Anmeldeangabe
         other: Anmeldeangaben
       event/question_template:
-        one: Vorlage Anmeldeangabe Veranstaltungen
-        other: Vorlagen Anmeldeangaben Veranstaltungen
+        one: Vorlage Anmeldeangabe Anlässe
+        other: Vorlagen Anmeldeangaben Anlässe
       event/question_visibility:
         one: Sichtbare Rolle
         other: Sichtbare Rollen
@@ -495,8 +495,8 @@ de_DE:
 
       additional_address:
         translated_label: Bezeichnung
-        street_and_number: Straße, Hausnummer # can be removed with next release
-        street: Straße
+        street_and_number: Strasse/Nummer # can be removed with next release
+        street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -508,7 +508,7 @@ de_DE:
 
       additional_addresses:
         label: Bezeichnung
-        street: Straße
+        street: Strasse
         postbox: Postfach
         zip_code: PLZ
         town: Ort
@@ -566,7 +566,7 @@ de_DE:
         name: Name
         company_name: Firmenname
         company: Firma
-        nickname: Spitzname
+        nickname: Übername
         email: Haupt-E-Mail
         emails: E-Mails
         layer_group: Hauptebene
@@ -575,7 +575,7 @@ de_DE:
         current_password: Altes Passwort
         address_care_of: zusätzliche Adresszeile
         address: Adresse
-        street: Straße
+        street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -652,7 +652,7 @@ de_DE:
 
       person/add_request/event:
         label: "%{body} in %{group}"
-        deleted_event: Gelöschte Veranstaltung
+        deleted_event: Gelöschter Anlass
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
@@ -674,7 +674,7 @@ de_DE:
         email: Haupt-E-Mail
         address: Adresse
         address_care_of: zusätzliche Adresszeile
-        street: Straße
+        street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -766,18 +766,18 @@ de_DE:
         guest_limit: Maximale Anzahl Gäste pro Person
 
       event/contact_attrs:
-        required: Erforderlich
+        required: Obligatorisch
         optional: Optional
         hidden: Nicht anzeigen
 
       event/guest:
         first_name: Vorname
         last_name: Nachname
-        nickname: Spitzname
+        nickname: Übername
         company_name: Firmenname
         email: Haupt-E-Mail
         address_care_of: zusätzliche Adresszeile
-        street: Straße
+        street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -796,11 +796,11 @@ de_DE:
       participant:
         first_name: Vorname
         last_name: Nachname
-        nickname: Spitzname
+        nickname: Übername
         company_name: Firmenname
         email: Haupt-E-Mail
         address_care_of: zusätzliche Adresszeile
-        street: Straße
+        street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -911,34 +911,35 @@ de_DE:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        required: Erforderlich
+        required: Obligatorisch
         sensitive: Sensibel
         question_visibilities: Sichtbare Rollen
 
       event/question_template:
         question: Frage
         default: Default
-        event_type: Veranstaltungstyp
+        event_type: Anlasstyp
         inherit: Vererbung
+
 
       admin_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        required: Antwort erforderlich
+        required: Antwort obligatorisch
 
       application_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        required: Antwort erforderlich
+        required: Antwort obligatorisch
 
       event/role:
         label: Bezeichnung
         person: Person
         type: Rolle
         participation: Person
-        remove_participant_role: Etwaige Teilnehmer*innen-Rolle entfernen
+        remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
         string_long: "%{role} von %{participation}"
 
       family_member:
@@ -1063,20 +1064,20 @@ de_DE:
           permission:
             description:
               admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
-              layer_and_below_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Veranstaltungen und Abos auf dieser Ebene.
+              layer_and_below_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
               layer_and_below_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
-              layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Veranstaltungen und Abos auf dieser Ebene.
+              layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
               layer_read: Alles Lesen auf dieser Ebene.
-              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Veranstaltungen und Abos.
+              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
               group_and_below_read: Lesen auf der Gruppe und allen darunter liegendne Gruppen (ohne Ebenen).
-              group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Veranstaltungen und Abos auf der Gruppe.
+              group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
               group_read: Lesen auf der Gruppe.
               contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
               qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
               approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
               finance: Erstellen und Verwalten von Rechnungen.
               layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
-              impersonation: Hitobito als andere Person bedienen.
+              impersonation: "%{application_name} als andere Person bedienen."
               see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
               manual_deletion: Löschen von Personen ohne Rollen
           kind:
@@ -1246,9 +1247,9 @@ de_DE:
 
       label_format:
         name: Bezeichnung
-        page_size: Seitengröße
+        page_size: Seitengrösse
         landscape: Format
-        font_size: Schriftgröße
+        font_size: Schriftgrösse
         width: Etikettenbreite
         height: Etikettenhöhe
         count_horizontal: Anzahl nebeneinander
@@ -1256,7 +1257,7 @@ de_DE:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
-        nickname: Spitzname auf Etikett
+        nickname: Übername auf Etikett
         pp_post: PP-Zeile
 
       invoice:
@@ -1297,13 +1298,13 @@ de_DE:
         recipient_address_care_of: zusätz. Adresszeile
         recipient_postbox: Postfach
         recipient_country: Land
-        recipient_street: Straße
+        recipient_street: Strasse
         recipient_housenumber: Hausnummer
         recipient_zip_code: PLZ
         recipient_town: Ort
         recipient_address: Empfänger Adresse
         payee_name: Zahlungsempfänger Name
-        payee_street: Zahlungsempfänger Straße
+        payee_street: Zahlungsempfänger Strasse
         payee_housenumber: Zahlungsempfänger Hausnummer
         payee_zip_code: Zahlungsempfänger PLZ
         payee_town: Zahlungsempfänger Ort
@@ -1362,7 +1363,7 @@ de_DE:
         payee: Alter Zahlungsempfänger
         payee_address: Einzahlung für
         payee_name: Name
-        payee_street: Straße
+        payee_street: Strasse
         payee_housenumber: Hausnummer
         payee_zip_code: PLZ
         payee_town: Ort
@@ -1508,9 +1509,9 @@ de_DE:
         people: Personen
         register_people: Neue Personen registrieren (braucht Schreibrechte)
         groups: Gruppen
-        events: Veranstaltungen
+        events: Anlässe
         invoices: Rechnungen
-        event_participations: Teilnehmende von Veranstaltungen
+        event_participations: Teilnehmende von Anlässen
         mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: Hosts mit API-Zugriff
         qualifications: Qualifikationen
@@ -1534,8 +1535,8 @@ de_DE:
           error: Bei der Bearbeitung trat ein Fehler auf
 
   delayed_job:
-    export/event_participations_export_job: Veranstaltungs-Teilnahmen-Export
-    export/events_export_job: Veranstaltungs-Export
+    export/event_participations_export_job: Event-Teilnahmen-Export
+    export/events_export_job: Anlass-Export
     export/export_base_job: Basis-Export
     export/invitations_export_job: Einladungs-Export
     export/invoices_job: Rechnungs-Export
@@ -1612,15 +1613,15 @@ de_DE:
         other: "Konnte %{resource} nicht speichern: %{count} Fehler."
       # active_storage_validations
       content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
-      file_size_out_of_range: "darf nicht größer als %{max_size} sein"
-      limit_out_of_range: "Anzahl ist außerhalb des gültigen Bereichs (%{min} - %{max})"
+      file_size_out_of_range: "darf nicht grösser als %{max_size} sein"
+      limit_out_of_range: "Anzahl ist ausserhalb des gültigen Bereichs (%{min} - %{max})"
       image_metadata_missing: "ist kein gültiges Bild"
-      dimension_min_inclusion: "muss größer oder gleich %{width} x %{height} Pixel sein"
+      dimension_min_inclusion: "muss grösser oder gleich %{width} x %{height} Pixel sein"
       dimension_max_inclusion: "muss kleiner oder gleich %{width} x %{height} Pixel sein"
       dimension_width_inclusion: "Bildbreite muss zwischen %{min} und %{max} Pixel liegen"
       dimension_height_inclusion: "Bildhöhe muss zwischen %{min} und %{max} Pixel liegen"
-      dimension_width_greater_than_or_equal_to: "Bildbreite muss größer oder gleich %{length} Pixel sein"
-      dimension_height_greater_than_or_equal_to: "Bildhöhe muss größer oder gleich %{length} Pixel sein"
+      dimension_width_greater_than_or_equal_to: "Bildbreite muss grösser oder gleich %{length} Pixel sein"
+      dimension_height_greater_than_or_equal_to: "Bildhöhe muss grösser oder gleich %{length} Pixel sein"
       dimension_width_less_than_or_equal_to: "Breite muss kleiner oder gleich %{length} Pixel sein"
       dimension_height_less_than_or_equal_to: "Höhe muss kleiner oder gleich %{length} Pixel sein"
       dimension_width_equal_to: "Bildbreite muss genau %{length} Pixel sein"

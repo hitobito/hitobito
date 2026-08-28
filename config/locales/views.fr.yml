@@ -147,7 +147,7 @@ fr:
 
   changelog:
     index:
-      meta_description: Page du journal des modifications de Hitobito
+      meta_description: "%{application_name} Changelog Seite"
   contactable:
     address_or_email: "%{address} ou %{email}"
     fields:
@@ -311,7 +311,7 @@ fr:
       signed_out: "Tu es maintenant déconnecté(e)."
       new:
         sign_in: Inscription
-        meta_description: Page de connexion pour Hitobito
+        meta_description: "Anmeldeseite für %{application_name}"
       form:
         login_identity: Adresse e-mail principale
         sign_in: Inscription
@@ -327,7 +327,7 @@ fr:
       no_token: "Vous ne pouvez accéder à cette page qu'en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l'URL en entier."
       new:
         reset_password_button: "Réinitialiser le mot de passe"
-        meta_description: Page de réinitialisation du mot de passe Hitobito
+        meta_description: "%{application_name} Passwort zurücksetzen Seite"
     confirmations:
       new:
         resend_confirmation_instructions: "Confirmer l'adresse e-mail"
@@ -357,7 +357,7 @@ fr:
         old_password: "Ancien mot de passe"
         new_password: "Nouveau mot de passe"
         new_password_confirmation: "Confirmer le nouveau mot de passe"
-        meta_description: "Page de changement de mot de passe Hitobito"
+        meta_description: "%{application_name} Passwort ändern Seite"
       person:
         updated: "Ton mot de passe a été actualisé."
 
@@ -368,7 +368,7 @@ fr:
           greeting: "Salut %{name} !"
           information_html: "Tu peux confirmer ton adresse e-mail en cliquant sur le lien suivant :"
           link_text: "Confirmer %{email} "
-          footer: "Ce message a été envoyé par Hitobito"
+          footer: "Diese E-Mail wurde von %{application_name} gesendet"
       reset_password_instructions:
         subject: "Instructions pour initialiser ton mot de passe"
         body:
@@ -383,7 +383,7 @@ fr:
           greeting: "Bonjour %{name}!"
           information_html: "Ton compte a été bloqué en raison d’un nombre trop élevé de tentatives de connexion. <br> Appuie sur le lien suivant pour le débloquer:"
           link_text: "Débloquer mon compte"
-          footer: "Ce message a été envoyé par Hitobito"
+          footer: "Diese E-Mail wurde von %{application_name} gesendet"
 
   errors:
     link_to_main: "Page principale"
@@ -668,7 +668,7 @@ fr:
     actions_show:
       copy_share_link: Copier le lien direct
     application_fields:
-      caption_signature: Les participants doivent signer l'inscription.
+      caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
       signature_confirmation_text_default: Autorité parentale (pour les mineurs)
     attachments:
@@ -688,13 +688,13 @@ fr:
     form:
       caption_external_applications: "Les personnes externes peuvent s'inscrire à cet événement."
       caption_prioritization: "Les participants peuvent indiquer deux autres cours alternatifs lors de l'inscription."
-      caption_requires_approval: "Le responsable de troupe est informé et doit confirmer l'inscription."
+      caption_requires_approval: "Die Gruppenleitung wird informiert und muss die Anmeldung bestätigen."
       caption_participations_visible: "Les participants peuvent se voir les uns les autres dans la liste des participants."
       times_are_optional: L'heure est optionnelle.
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
       explain_choices: "N'ajoutez pas de choix pour une réponse en texte libre."
       explain_admin_questions:
-        Ici, vous pouvez définir d'autres informations par participant, qui ne sont utilisées que pour la gestion des événements.
+        Hier kannst du weitere Angaben für Teilnehmende definieren, welche nur für die Anlassverwaltung verwendet werden.
       explain_contact_attrs:
         Tu peux choisir les coordonnées requises pour l'inscription.
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
@@ -1006,7 +1006,7 @@ fr:
       alert:
         not_active: L'auto-inscription n'est pas possible dans ce groupe.
       show:
-        meta_description: Page d'auto-inscription pour Hitobito
+        meta_description: "Selbstregistrierungsseite für %{application_name}"
       form:
         privacy_policy_caption: "J'accepte les conditions suivantes:"
         submit: Créer un compte
@@ -1084,7 +1084,7 @@ fr:
     tabs:
       all: Tous
     index:
-      title: Hitobito Log
+      title: "Hitobito Log"
     list:
       from: De
       to: à
@@ -1379,7 +1379,7 @@ fr:
       end: "Terminer l'imitation"
 
   mailchimp_synchronizations:
-    wait_for_synchronization: "Vos données sont en cours d'envoi vers MailChimp. Cela peut prendre quelques instants. Une fois l'opération terminée, la liste sélectionnée sera mise à jour avec les contacts provenant de hitobito. Vous pouvez suivre l'état de la synchronisation dans l'aperçu des tâches : %{overview_link}"
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus %{application_name} aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1599,7 +1599,7 @@ fr:
         skip_consent_screen_explanation: L'application est interne à l'association et digne de confiance, passer l'écran de consentement
       attrs:
         profile_endpoint_help:
-          Les informations profil de l'utilisateur peuvent être prises au-delà ce Endpoint. Pour ce faire, il faut rendre le Access Token dans le Authorization Header. Le Scope souhaité peut être rendu en tant que X-Scope.
+          Profile Informationen der angemeldeten Person können über diesen Endpoint bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden. Der gewünschte Scope kann als X-Scope Header übergeben werden.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
     access_grants:
       list:
@@ -1654,7 +1654,7 @@ fr:
       xml_file: "Fichier XML"
   public_events:
     show:
-      meta_description: Page d'inscription aux cours publics pour Hitobito
+      meta_description: "Öffentliche Kursanmeldeseite für %{application_name}"
 
   qualifications:
     in_years: "%{years} ans"
@@ -1937,7 +1937,7 @@ fr:
     tabs:
       history: Historique
       security_tools: Sécurité
-      colleagues: Collaborateurs/collaboratrices
+      colleagues: Mitarbeitende
       invoices: Factures
       subscriptions: Abonnements
 
@@ -1948,7 +1948,7 @@ fr:
         reset: La personne possède déjà Login<br><br>. Cette action lui envoie un lien afin de créer un nouveau mot de passe.
 
       impersonate_user: Imiter
-      impersonate_user_tooltip: Tu peux utiliser utiliser hitobito comme si tu étais enregistré comme cette personne.
+      impersonate_user_tooltip: "Du kannst %{application_name} so bedienen, als wärst du als diese Person eingeloggt."
       impersonate_user_tooltip_disabled: Cette personne ne peut être imitée qu'une fois l'adresse électronique confirmée.
 
     actions_index:
@@ -1972,9 +1972,8 @@ fr:
     email_field:
       used_as_login: Utilisé en tant qu'identifiant.
       only_changeable_by_superior: >
-          L'adresse e-mail principale d'une personne ayant plusieurs rôles ne peut
-          être modifiée que par une personne hiérarchiquement supérieure à chacun
-          de ces rôles.
+          Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur von einer
+          über alle diese Rollen übergeordneten Person geändert werden.
     fields:
       format_birthday: (TT.MM.JJJJ)
       no_sensitive_information: ""

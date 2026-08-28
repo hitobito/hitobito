@@ -163,7 +163,7 @@ fr:
               max_one_additional_invoice_address: Une seule adresse peut être choisie comme adresse de facturation.
               additional_address_labels_must_be_unique: Les désignations des autres adresses doivent être uniques.
               cannot_have_managers_and_manageds: '%{name} ne peut pas avoir à la fois des administrateurs et des enfants.'
-              manager_already_managed: L'administrateur n'a pas pu être ajouté, car il est déjà géré.
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: L'enfant n'a pas pu être ajouté, car il est déjà administrateur.
             email:
               taken: >
@@ -317,21 +317,21 @@ fr:
         many: Cuisine
         other: Cuisine
       event/role/helper:
-        one: Assistant/e
-        many: Assistant(e)s
-        other: Assistant(e)s
+        one: Helfer/-in
+        many: Helfende
+        other: Helfende
       event/role/participant:
-        one: Participant/-e
-        many: Participant/-es
-        other: Participant/-es
+        one: Teilnehmer/-in
+        many: Teilnehmende
+        other: Teilnehmende
       event/role/treasurer:
         one: Trésorier
         many: Trésoriers
         other: Trésoriers
       event/role/speaker:
-        one: Conférencier
-        many: Conférenciers
-        other: Conférenciers
+        one: Referent/-in
+        many: Referierende
+        other: Referierende
       event/date:
         one: date
         many: Dates
@@ -815,8 +815,8 @@ fr:
         contact: 'Personne de contact '
         creator_id: Crée par
         notify_contact_on_participations: Notifier la personne de contact par e-mail de toute nouvelle inscription.
-        maximum_participants: Nombre maximal de participants
-        minimum_participants: Nombre minimal de participants
+        maximum_participants: Maximale Teilnehmendenzahl
+        minimum_participants: Minimale Teilnehmendenzahl
         contact_id: 'Personne de contact '
         description: Description
         location: Lieu / Adresse
@@ -1160,7 +1160,7 @@ fr:
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
               finance: Création et gestion de factures
               layer_and_below_finance: Création et gestion des factures à ce niveau et à tous les niveaux inférieurs.
-              impersonation: Se servir de hitobito comme autre personne.
+              impersonation: "%{application_name} als andere Person bedienen."
               see_invisible_from_above: Voit en plus les personnes qui ne peuvent normalement pas être vues par les niveaux supérieurs.
               manual_deletion: Suppression des personnes sans rôle
           kind:

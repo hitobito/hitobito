@@ -7,8 +7,6 @@
 
 class AppStatus::MemoryUsage
   def initialize
-    super
-
     @memory_usage_determinable = memory_usage_determinable?
     @memory_usage_limit_percentage = memory_usage_limit_percentage
     @memory_usage_exceeds_limit = memory_usage_exceeds_limit? if @memory_usage_determinable

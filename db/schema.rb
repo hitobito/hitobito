@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_08_160000) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -55,7 +55,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_08_160000) do
   create_table "additional_addresses", force: :cascade do |t|
     t.string "contactable_type"
     t.bigint "contactable_id"
-    t.string "name", null: false
     t.string "label", null: false
     t.string "street", null: false
     t.string "housenumber", limit: 20
@@ -67,6 +66,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_08_160000) do
     t.boolean "invoices", default: false, null: false
     t.boolean "uses_contactable_name", default: true, null: false
     t.boolean "public", default: false, null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.string "organization_name"
+    t.boolean "organization", default: false, null: false
     t.index ["contactable_id", "contactable_type", "label"], name: "idx_on_contactable_id_contactable_type_label_53043e4f10", unique: true
     t.index ["contactable_id", "contactable_type"], name: "index_additional_addresses_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
     t.index ["contactable_type", "contactable_id"], name: "index_additional_addresses_on_contactable"

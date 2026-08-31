@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,7 +26,7 @@ class Contactable::Address
 
   def for_pdf_label(name, nickname = false)
     names = if addressable.is_a?(AdditionalAddress)
-      [addressable.name]
+      [(company_name if company? && company_name?), full_name].uniq
     else
       [
         (company_name if print_company?(name)),
@@ -89,9 +89,13 @@ class Contactable::Address
 
   delegate :address, :address_care_of, :postbox, :street, :housenumber, :zip_code, :town, :country,
     :name, :country_label, :ignored_country?, to: :addressable
-  delegate :additional_addresses, :company_name, to: :contactable
+  delegate :additional_addresses, to: :contactable
 
-  def company? = contactable.try(:company?)
+  def company? = addressable.try(:company?)
+
+  def company_name = addressable.try(:company_name)
+
+  def company_name? = addressable.try(:company_name?)
 
   def full_name = addressable.respond_to?(:full_name) ? addressable.full_name : addressable.name
 
@@ -108,7 +112,7 @@ class Contactable::Address
   end
 
   def contactable_and_company_name
-    if !addressable.is_a?(AdditionalAddress) && company?
+    if company?
       [company_name.to_s.squish, full_name.to_s.squish].uniq.compact_blank
     else
       [full_name.to_s.squish].compact_blank
@@ -137,10 +141,8 @@ class Contactable::Address
     Settings.countries.prioritized.first
   end
 
-  def company_name? = contactable.try(:company_name?)
-
   def print_company?(name)
-    contactable.try(:company) && company_name? && company_name != name
+    company? && company_name? && company_name != name
   end
 
   def print_nickname?(nickname)

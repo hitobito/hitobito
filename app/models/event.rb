@@ -145,7 +145,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
-    :description, :location, :application_opening_at,
+    :description, :plain_description, :location, :application_opening_at,
     :application_closing_at, :application_conditions,
     :external_applications, :applications_cancelable,
     :signature, :signature_confirmation, :signature_confirmation_text,
@@ -545,6 +545,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # Event dates can have no finish_at date, if so, we want to return the latest start_at date
   def finish_at
     dates.flat_map { [_1.start_at, _1.finish_at] }.compact.max
+  end
+
+  def plain_description
+    description.to_plain_text
   end
 
   private

@@ -55,7 +55,6 @@ class EventListSerializer < ApplicationSerializer
     json_api_properties
 
     map_properties :name,
-      :description,
       :motto,
       :cost,
       :maximum_participants,
@@ -70,6 +69,9 @@ class EventListSerializer < ApplicationSerializer
     apply_extensions(:public)
 
     property :external_application_link, h.group_public_event_url(item.groups.first, item.id)
+
+    property :description, item.plain_description
+    property :html_description, item.description
 
     entity :kind, item.kind, EventKindSerializer if item.object.class.method_defined?(:kind)
 

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+#  https://github.com/hitobito/hitobito
 
 require "rails_helper"
 require_relative "../../db/migrate/20260817120000_add_name_fields_to_additional_addresses"

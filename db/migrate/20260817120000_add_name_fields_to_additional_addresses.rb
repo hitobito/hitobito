@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+#  https://github.com/hitobito/hitobito
 
 class AddNameFieldsToAdditionalAddresses < ActiveRecord::Migration[7.1]
   def up
-    add_column :additional_addresses, :first_name, :string
-    add_column :additional_addresses, :last_name, :string
-    add_column :additional_addresses, :organization_name, :string
-    add_column :additional_addresses, :organization, :boolean, null: false, default: false
+    change_table :additional_addresses, bulk: true do |t|
+      t.string :first_name
+      t.string :last_name
+      t.string :organization_name
+      t.boolean :organization, null: false, default: false
+    end
 
     migrate_group_addresses
     migrate_contactable_name_addresses
@@ -24,10 +26,12 @@ class AddNameFieldsToAdditionalAddresses < ActiveRecord::Migration[7.1]
 
     restore_name_from_name_fields
 
-    remove_column :additional_addresses, :first_name
-    remove_column :additional_addresses, :last_name
-    remove_column :additional_addresses, :organization_name
-    remove_column :additional_addresses, :organization
+    change_table :additional_addresses, bulk: true do |t|
+      t.remove :first_name
+      t.remove :last_name
+      t.remove :organization_name
+      t.remove :organization
+    end
   end
 
   private

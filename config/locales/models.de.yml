@@ -738,6 +738,7 @@ de:
         minimum_participants: Minimale Teilnehmendenzahl
         contact_id: Kontaktperson
         description: Beschreibung
+        plain_description: Beschreibung
         location: Ort / Adresse
         application_opening_at: Anmeldebeginn
         application_closing_at: Anmeldeschluss

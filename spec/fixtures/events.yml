@@ -14,3 +14,9 @@ top_course:
   priorization: true
   requires_approval: true
   external_applications: true
+
+template:
+  type:
+  groups: top_layer
+  template: true
+  groups: top_layer

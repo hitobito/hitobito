@@ -17,7 +17,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   self.permitted_attrs = [
     :signature, :signature_confirmation, :signature_confirmation_text,
     :display_booking_info, :participations_visible,
-    :notify_contact_on_participations,
+    :notify_contact_on_participations, :inherit,
     {
       group_ids: [],
       dates_attributes: [
@@ -52,6 +52,8 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
                          group_ids: "groups.name"}
 
   self.search_columns = ["event_translations.name"]
+
+  ACTIONS_FOR_TEMPLATES = %w[new create edit update destroy].freeze
 
   decorates :event, :events, :group
 
@@ -96,8 +98,8 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
 
   def new
     assign_attributes if model_params
-    entry.dates.build if entry.dates.empty? # allow wagons to use derived dates
-    entry.init_questions
+    entry.dates.build if entry.dates.empty? && !entry.template? # allow wagons to use derived dates
+    entry.init_questions if params[:source_id].blank?
     respond_with(entry)
   end
 
@@ -122,16 +124,38 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
     event_filter.entries
   end
 
+  def model_scope
+    ACTIONS_FOR_TEMPLATES.include?(action_name) ? super.with_templates : super
+  end
+
   def build_entry
-    if params[:source_id]
-      group.events.find(params[:source_id]).duplicate
-    else
-      type = model_params && model_params[:type].presence
-      type ||= Event.sti_name
-      event = Event.find_event_type!(type).new
-      event.groups << parent
-      event
+    event = params[:source_id] ? build_from_source : build_new_entry
+    apply_template_flag(event)
+    event
+  end
+
+  def build_from_source
+    source = Event.templates_in_hierarchy([group]).find_by(id: params[:source_id]) ||
+      group.events.find(params[:source_id])
+    source.duplicate.tap do |duplicate|
+      duplicate.groups = [group] if source.template?
     end
+  end
+
+  def build_new_entry
+    type = model_params && model_params[:type].presence
+    type ||= Event.sti_name
+    Event.find_event_type!(type).new.tap { |e| e.groups << parent }
+  end
+
+  # :template is deliberately not in permitted_attrs and applied here instead, since
+  # authorize_resource runs before assign_attributes and would otherwise authorize
+  # against the default value (always false).
+  def apply_template_flag(event)
+    return if model_params.nil? || !model_params.key?(:template)
+
+    event.template = ActiveModel::Type::Boolean.new.cast(model_params.delete(:template))
+    event.groups = [group] if event.template?
   end
 
   def permitted_params
@@ -156,13 +180,16 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def return_path
-    super.then do |r|
-      next r if r.present? || entry.id.nil?
-      group_event_path(
-        entry.groups.find { |g| can?(:create, g.events.build) } || entry.groups.first,
-        entry
-      )
-    end
+    return group_event_templates_path(group) if entry.template?
+
+    super.then { |r| r.presence || (entry.id && group_event_show_path) }
+  end
+
+  def group_event_show_path
+    group_event_path(
+      entry.groups.find { |g| can?(:create, g.events.build) } || entry.groups.first,
+      entry
+    )
   end
 
   def group
@@ -170,6 +197,8 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def index_path
+    return group_event_templates_path(group) if entry.template?
+
     typed_group_events_path(group, @event.class, returning: true)
   end
 

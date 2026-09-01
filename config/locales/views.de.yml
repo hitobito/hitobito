@@ -227,6 +227,7 @@ de:
     delete: Löschen
     edit_service_token: API-Keys
     edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
+    edit_event_template: Eventvorlagen
     edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
@@ -574,6 +575,10 @@ de:
         default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
         inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
 
+    templates:
+      index:
+        title: Eventvorlagen
+
     register:
       register:
         title:
@@ -664,6 +669,7 @@ de:
         select_layers: Gruppen suchen...
     actions_show:
       copy_share_link: Direktlink kopieren
+      save_as_template: Als Vorlage speichern
     application_fields:
       caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
@@ -721,10 +727,13 @@ de:
         social_account: Social Media anzeigen
         picture: Profilfoto anzeigen
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
+      inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
     global:
       link:
         add_event: Anlass erstellen
+        add_event_template: Anlass-Vorlage erstellen
         add_event/course: Kurs erstellen
+        add_event/course_template: Kurs-Vorlage erstellen
         duplicate: Duplizieren
     minimum_age_with_years: "%{minimum_age} Jahre (Jahrgang)"
     new:

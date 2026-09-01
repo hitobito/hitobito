@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -984,6 +984,86 @@ describe Event do
 
       duplicated = d.admin_questions.detect { |q| q.question == question.question }
       expect(duplicated.visible_role_types).to eq []
+    end
+
+    it "resets template and inherit even when duplicating a template" do
+      event.update!(template: true, inherit: true)
+
+      d = event.duplicate
+      expect(d.template).to eq false
+      expect(d.inherit).to eq false
+    end
+  end
+
+  context "templates" do
+    let(:top_layer) { groups(:top_layer) }
+    let(:template) { Fabricate.build(:event, groups: [top_layer], template: true) }
+
+    it "does not require dates" do
+      expect(template).to be_valid
+    end
+
+    it "is invalid on a non-layer group" do
+      template.groups = [groups(:top_group)]
+      expect(template).not_to be_valid
+      expect(template.errors[:groups]).to be_present
+    end
+
+    it "is valid on a layer group" do
+      expect(template.groups).to all(be_layer)
+      expect(template).to be_valid
+    end
+
+    it "is excluded from the default scope" do
+      template.save!
+      expect(Event.all).not_to include(template)
+    end
+
+    it "is included in templates scope" do
+      template.save!
+      expect(Event.templates).to include(template)
+    end
+
+    it "templates scope excludes non template events" do
+      expect(Event.templates).not_to include(event)
+    end
+
+    describe ".templates_in_hierarchy" do
+      let(:bottom_group_one_one) { groups(:bottom_group_one_one) }
+
+      it "includes a template defined directly on the given group" do
+        template.save!
+        expect(Event.templates_in_hierarchy([top_layer])).to include(template)
+      end
+
+      it "includes an inherited template from an ancestor layer" do
+        template.update!(inherit: true)
+
+        expect(Event.templates_in_hierarchy([bottom_group_one_one])).to include(template)
+      end
+
+      it "does not include non inheritable template from an ancestor layer" do
+        template.update!(inherit: false)
+
+        expect(Event.templates_in_hierarchy([bottom_group_one_one])).not_to include(template)
+      end
+
+      it "does not include inheritable template from another hierarchy tree" do
+        other = Fabricate(:event, groups: [groups(:bottom_layer_two)], template: true, inherit: true)
+        expect(Event.templates_in_hierarchy([bottom_group_one_one])).not_to include(other)
+      end
+    end
+
+    describe ".applicable_templates" do
+      it "filters by event type" do
+        template.update!(inherit: true)
+        course_template = Fabricate(:course, groups: [top_layer], template: true, inherit: true)
+
+        expect(Event.applicable_templates(top_layer, event_type: "Event"))
+          .to include(template)
+        expect(Event.applicable_templates(top_layer, event_type: "Event"))
+          .not_to include(course_template)
+      end
     end
   end
 

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,13 +8,7 @@ module EventsHelper
     event_type = find_event_type
     return unless event_type
 
-    event = event_type.new
-    event.groups << @group
-    if can?(:new, event)
-      action_button(t("events.global.link.add_#{event_type.name.underscore}"),
-        new_group_event_path(@group, event: {type: event_type.sti_name}),
-        :plus)
-    end
+    Dropdown::Event::New.new(self, @group, event_type).to_s
   end
 
   def export_events_ical_button
@@ -173,5 +167,10 @@ module EventsHelper
     # rubocop:todo Layout/LineLength
     event.participations.where(participant_type: person.class.sti_name).pluck(:participant_id).include?(person.id)
     # rubocop:enable Layout/LineLength
+  end
+
+  def new_event_template_title(event)
+    t("crud.new.title",
+      model: [model_class_label(event), Event.human_attribute_name(:template)].join(" "))
   end
 end

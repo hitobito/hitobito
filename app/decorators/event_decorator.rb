@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,6 +14,10 @@ class EventDecorator < ApplicationDecorator
   self.icons = {
     "Event::Course" => "book"
   }
+
+  def saveable_as_template?(group)
+    !template? && group.layer? && can?(:create, object.class.new(template: true, groups: [group]))
+  end
 
   def label
     safe_join([name, label_detail], h.tag(:br))

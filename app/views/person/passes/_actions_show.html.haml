@@ -5,6 +5,6 @@
 
 = action_button t('person.passes.index.download_pdf'), group_person_pass_path(*parents, entry, format: :pdf), "print"
 - if can_add_pass_to?(entry, :google)
-  = action_button t('person.passes.index.add_to_google_wallet'), google_add_to_wallet_group_person_pass_path(*parents, entry), "add"
+  = action_button t('person.passes.index.add_to_google_wallet'), google_add_to_wallet_group_person_pass_path(*parents, entry), "add", data: {controller: "spinner"}
 - if can_add_pass_to?(entry, :apple)
-  = action_button t('person.passes.index.add_to_apple_wallet'), apple_download_pkpass_group_person_pass_path(*parents, entry), "add"
+  = action_button t('person.passes.index.add_to_apple_wallet'), apple_download_pkpass_group_person_pass_path(*parents, entry), "add", data: {controller: "spinner", spinner_timeout_value: 1000}

@@ -244,4 +244,21 @@ describe EventDecorator, :draper_with_helpers do
       it { is_expected.to eq expected_image_html }
     end
   end
+
+  describe "#saveable_as_template?" do
+    subject { EventDecorator.new(event) }
+
+    it "is true for a layer group" do
+      expect(subject.saveable_as_template?(groups(:top_layer))).to eq true
+    end
+
+    it "is false for a non-layer group" do
+      expect(subject.saveable_as_template?(groups(:top_group))).to eq false
+    end
+
+    it "is false for an event that is already a template" do
+      event.template = true
+      expect(subject.saveable_as_template?(groups(:top_layer))).to eq false
+    end
+  end
 end

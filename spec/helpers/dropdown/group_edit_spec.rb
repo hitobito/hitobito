@@ -51,6 +51,18 @@ describe "Dropdown::GroupEdit" do
     is_expected.to have_no_selector "a", text: "Vorlagen Anmeldeangabe Anlässe"
   end
 
+  it "renders event template item with index_event_templates" do
+    allow(self).to receive(:can?).with(:index_event_templates, anything).and_return(true)
+
+    is_expected.to have_selector "a", text: "Eventvorlagen"
+  end
+
+  it "does not render event template item without index_event_templates" do
+    allow(self).to receive(:can?).with(:index_event_templates, anything).and_return(false)
+
+    is_expected.to have_no_selector "a", text: "Eventvorlagen"
+  end
+
   it "renders calendar item" do
     allow(self).to receive(:can?).with(:index_service_tokens, anything).and_return(true)
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -47,6 +47,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_full).may(:destroy).in_same_layer_except_permission_giving
     permission(:layer_full).may(:index_service_tokens).service_token_in_same_layer
     permission(:layer_full).may(:index_question_templates).in_same_layer
+    permission(:layer_full).may(:index_event_templates).in_same_layer_if_layer_group
     permission(:layer_full)
       .may(:index_person_add_requests, :index_notes, :index_deleted_people, :show_statistics,
         :index_calendars, :deleted_subgroups).in_same_layer
@@ -69,6 +70,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers_if_active
     permission(:layer_and_below_full).may(:index_service_tokens).service_token_in_same_layer
     permission(:layer_and_below_full).may(:index_question_templates).in_same_layer
+    permission(:layer_and_below_full).may(:index_event_templates).in_same_layer_if_layer_group
     permission(:layer_and_below_full).may(:index_calendars).in_same_layer
     permission(:layer_and_below_full)
       .may(:activate_person_add_requests, :deactivate_person_add_requests)
@@ -81,19 +83,19 @@ class GroupAbility < AbilityDsl::Base
     permission(:finance).may(:index_received_invoices).in_same_layer_or_below
     permission(:finance).may(:create_invoice).in_same_layer_or_below
 
-    permission(:admin).may(:manage_person_duplicates).if_layer_group_if_active
     permission(:layer_and_below_full).may(:manage_person_duplicates).if_permission_in_layer
 
     permission(:manual_deletion)
       .may(:manually_delete_people)
       .if_permission_in_layer
-    permission(:admin).may(:manually_delete_people).all
 
     permission(:layer_full).may(:log).in_same_layer_if_active
     permission(:layer_and_below_full).may(:log).in_same_layer_or_below_if_active
     permission(:group_full).may(:log).in_same_group_if_active
     permission(:group_and_below_full).may(:log).in_same_group_or_below_if_active
 
+    permission(:admin).may(:manage_person_duplicates).if_layer_group_if_active
+    permission(:admin).may(:manually_delete_people).all
     permission(:admin).may(:set_main_self_registration_group).in_active_group
     permission(:admin).may(:sync_addresses).on_root_group
 

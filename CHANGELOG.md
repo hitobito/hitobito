@@ -12,9 +12,7 @@
 - Zahlungsinformation, Rechnungsvorlagen und Rechnungsartikel sind übersetzbar. Rechnungen werden mit diesen Texten in der Sprache der Empfänger erstellt (sww#413)
 - Die Originalrechnung einer gemahnten Rechnung zeigt wieder das ursprüngliche Fälligkeitsdatum statt jenes der Mahnung (hitobito_sww#378)
 - Die Personennummer wird neu auf der Person angezeigt und ist im Export "Alle Angaben" enthalten (hitobito_zss#8)
-
-## Version 2.10
-
+- Eventvorlagen können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (#4259)
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)

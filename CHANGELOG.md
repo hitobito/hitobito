@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Eventvorlagen können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (#4259)
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)

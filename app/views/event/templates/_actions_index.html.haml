@@ -1,0 +1,11 @@
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- group.event_types.each do |type|
+  - new_template = type.new.tap { |e| e.groups << group }
+  - if can?(:new, new_template)
+    = action_button(new_event_template_title(new_template),
+                    new_group_event_path(group, event: {type: type.sti_name, template: true}),
+                    :plus)

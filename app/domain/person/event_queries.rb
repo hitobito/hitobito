@@ -37,7 +37,11 @@ class Person::EventQueries
   end
 
   def upcoming_events
-    Event.select("*").from(
+    # unscoped: the inner query (built from person.events) already excludes
+    # templates on its own; re-applying Event's default_scope out here would
+    # add a WHERE clause referencing "events", but the outer query's FROM is
+    # the aliased subquery, not that table.
+    Event.unscoped.select("*").from(
       unordered_upcoming_events
     ).order(:start_at)
   end

@@ -86,6 +86,7 @@ de:
         type_not_allowed: kann hier nicht erstellt werden
         must_be_after_opening: muss nach dem Anmeldebeginn sein
         must_have_same_type: müssen von demselben Typ sein
+        must_be_layer: können für Eventvorlagen nur eine Ebene sein
         greater_than: muss grösser als %{count} sein
         greater_than_or_equal_to: muss grösser oder gleich %{count} sein
         must_exist: müssen vorhanden sein
@@ -766,6 +767,8 @@ de:
         no_name: "[Kein Name]"
         visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
         guest_limit: Maximale Anzahl Gäste pro Person
+        template: Vorlage
+        inherit: Vererbung
 
       event/contact_attrs:
         required: Obligatorisch

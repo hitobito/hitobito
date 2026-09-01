@@ -280,6 +280,18 @@ describe EventsController do
           get :new, params: {group_id: group.id, source_id: events(:top_course).id}
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
+
+      it "does not duplicate default questions on top of an existing source's questions" do
+        Event::QuestionTemplate.update_all(default: false)
+        sign_in(people(:top_leader))
+        source = events(:top_course)
+        source.questions << Fabricate(:event_question)
+
+        get :new, params: {group_id: source.groups.first.id, source_id: source.id}
+
+        event = assigns(:event)
+        expect(event.application_questions.size).to eq(source.application_questions.size)
+      end
     end
 
     context "POST create" do
@@ -543,6 +555,120 @@ describe EventsController do
         expect(event).not_to be_valid
         expect(event.errors.messages[:contact]).to include("Zugriff verweigert")
         Auth.current_person = nil
+      end
+    end
+  end
+
+  context "templates" do
+    let(:top_leader) { people(:top_leader) }
+    let(:top_layer) { groups(:top_layer) }
+    let(:bottom_layer_one) { groups(:bottom_layer_one) }
+    let(:template) { events(:template) }
+
+    before { sign_in(top_leader) }
+
+    describe "GET#new" do
+      it "marks the new event as a template" do
+        get :new, params: {group_id: top_layer.id, event: {type: "Event", template: true}}
+
+        event = assigns(:event)
+        expect(event.template).to eq true
+        expect(event.groups).to eq [top_layer]
+      end
+
+      it "duplicates a template into a normal event" do
+        get :new, params: {group_id: top_layer.id, source_id: template.id}
+
+        event = assigns(:event)
+        expect(event.template).to eq false
+        expect(event.name).to eq(template.name)
+        expect(event.groups).to eq [top_layer]
+      end
+
+      it "duplicates an inherited template from an ancestor top_layer" do
+        template.update!(inherit: true)
+        Fabricate(Group::BottomLayer::Leader.sti_name, group: bottom_layer_one, person: people(:top_leader))
+
+        get :new, params: {group_id: bottom_layer_one.id, source_id: template.id}
+
+        event = assigns(:event)
+        expect(event.template).to eq false
+        expect(event.groups).to eq [bottom_layer_one]
+      end
+    end
+
+    describe "GET#show" do
+      it "raises 404 as not supported" do
+        expect do
+          get :show, params: {group_id: top_layer.id, id: template.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    describe "POST#create" do
+      it "creates a template without dates, and redirects to the templates index" do
+        post :create, params: {
+          group_id: top_layer.id,
+          event: {type: "Event", name: "Vorlage ohne Datum", template: "true", inherit: "1"}
+        }
+
+        event = assigns(:event)
+        expect(event).to be_persisted
+        expect(event.template).to eq true
+        expect(event.inherit).to eq true
+        expect(event.groups).to eq [top_layer]
+        expect(response).to redirect_to(group_event_templates_path(top_layer))
+      end
+
+      it "collapses a multi-group source event to a single group when saved as a template" do
+        Fabricate(Group::BottomLayer::Leader.sti_name, group: bottom_layer_one, person: top_leader)
+        source = Fabricate(:event, groups: [bottom_layer_one, groups(:bottom_layer_two)])
+
+        post :create, params: {
+          group_id: bottom_layer_one.id,
+          source_id: source.id,
+          event: {name: "Vorlage von Multi-Gruppen-Event", template: "true"}
+        }
+
+        event = assigns(:event)
+        expect(event).to be_persisted
+        expect(event.groups).to eq [bottom_layer_one]
+      end
+    end
+
+    describe "PUT#update" do
+      it "updates name and inherit flag, and redirects to the templates index" do
+        put :update, params: {
+          group_id: top_layer.id, id: template.id, event: {name: "Renamed", inherit: "1"}
+        }
+
+        expect(template.reload.name).to eq("Renamed")
+        expect(template.inherit).to eq true
+        expect(response).to redirect_to(group_event_templates_path(top_layer))
+      end
+    end
+
+    describe "DELETE#destroy" do
+      it "destroys  and redirects to the templates index" do
+        expect do
+          delete :destroy, params: {group_id: top_layer.id, id: template.id}
+        end.to change { Event.templates.count }.by(-1)
+
+        expect(response).to redirect_to(group_event_templates_path(top_layer))
+      end
+    end
+
+    describe "cancel link redirects back to templates" do
+      render_views
+
+      it "points to the templates index on both the new and edit template forms" do
+        get :new, params: {group_id: top_layer.id, event: {type: "Event", template: true}}
+        dom = Capybara::Node::Simple.new(response.body)
+        expect(dom).to have_css(%(a.link.cancel[href="#{group_event_templates_path(top_layer)}"]))
+
+        get :edit, params: {group_id: top_layer.id, id: template.id}
+        dom = Capybara::Node::Simple.new(response.body)
+        expect(dom).to have_css(%(a.link.cancel[href="#{group_event_templates_path(top_layer)}"]))
       end
     end
   end

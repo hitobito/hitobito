@@ -81,7 +81,7 @@ de_DE:
       placeholder: "Suchen..."
       placeholder_person: "Person suchen..."
       placeholder_group: "Gruppe suchen..."
-      placeholder_event: "Anlass suchen..."
+      placeholder_event: "Veranstaltung suchen..."
       placeholder_company_name: "Firmennamen suchen..."
 
     form:
@@ -137,7 +137,7 @@ de_DE:
     show:
       main: Allgemein
       info: Information
-      events: Anlässe und Kurse
+      events: Veranstaltungen und Kurse
       people: Mitgliederverwaltung
 
   blocked:
@@ -146,11 +146,11 @@ de_DE:
 
   changelog:
     index:
-      meta_description: "%{application_name} Changelog Seite"
+      meta_description: "Hitobito Changelog Seite"
   contactable:
     address_or_email: "%{address} oder %{email}"
     fields:
-      zip_town: PLZ/Ort
+      zip_town: PLZ, Ort
 
     contact_data:
       invoices_tooltip_title: Wird für Rechnungen verwendet
@@ -170,7 +170,7 @@ de_DE:
       placeholder_value: E-Mail
       placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Versände von Abos, Bestätigungen per E-Mail usw. werden zusätzlich an alle hier markierten Adressen verschickt.
-      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
+      tooltip_invoices: Wird anstelle der Haupt-E-Mail-Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
       placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
@@ -207,7 +207,7 @@ de_DE:
     register_new_managed: Neues Kind erfassen und anmelden
     disabled_messages:
       already_exists: "ist bereits angemeldet"
-      cannot_see_event: "darf den Anlass nicht sehen"
+      cannot_see_event: "darf die Veranstaltung nicht sehen"
 
   dropdown/event/participation/send_mail:
     title: E-Mail senden
@@ -223,7 +223,7 @@ de_DE:
     archive: "Archivieren"
     delete: Löschen
     edit_service_token: API-Keys
-    edit_event_question_template: Vorlagen Anmeldeangaben Anlässe
+    edit_event_question_template: Vorlagen Anmeldeangaben Veranstaltungen
     edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
@@ -310,7 +310,7 @@ de_DE:
       signed_out: "Du bist jetzt abgemeldet."
       new:
         sign_in: Anmelden
-        meta_description: "Anmeldeseite für %{application_name}"
+        meta_description: "Anmeldeseite für Hitobito"
       form:
         login_identity: Haupt-E-Mail
         sign_in: Anmelden
@@ -326,7 +326,7 @@ de_DE:
       no_token: "Du kannst diese Seite nicht aufrufen, wenn Du nicht von einem Passwort Zurücksetzen E-Mail kommst. Falls Du von einem solchen E-Mail kommst, bitte überprüfe, dass Du die vollständige URL verwendest."
       new:
         reset_password_button: "Passwort zurücksetzen"
-        meta_description: "%{application_name} Passwort zurücksetzen Seite"
+        meta_description: "Hitobito Passwort zurücksetzen Seite"
     confirmations:
       new:
         resend_confirmation_instructions: "E-Mail-Adresse bestätigen"
@@ -356,7 +356,7 @@ de_DE:
         old_password: "Altes Passwort"
         new_password: "Neues Passwort"
         new_password_confirmation: "Neues Passwort bestätigen"
-        meta_description: "%{application_name} Passwort ändern Seite"
+        meta_description: "Hitobito Passwort ändern Seite"
       person:
         updated: "Dein Passwort wurde aktualisiert."
 
@@ -367,7 +367,7 @@ de_DE:
           greeting: "Hallo %{name}!"
           information_html: "Du kannst deine E-Mail-Adresse mit dem folgenden Link bestätigen:"
           link_text: "%{email} bestätigen"
-          footer: "Diese E-Mail wurde von %{application_name} gesendet"
+          footer: "Diese E-Mail wurde von Hitobito gesendet"
       reset_password_instructions:
         subject: "Anleitung für das Setzen Deines Passworts"
         body:
@@ -382,7 +382,7 @@ de_DE:
           greeting: "Hallo %{name}!"
           information_html: "Dein Account wurde aufgrund von zu vielen Fehlversuchen beim Login gesperrt.<br>Klicke auf den folgenden Link um Deinen Account zu entsperren:"
           link_text: "Meinen Account entsperren"
-          footer: "Diese E-Mail wurde von %{application_name} gesendet"
+          footer: "Diese E-Mail wurde von Hitobito gesendet"
 
   errors:
     link_to_main: "Hauptseite"
@@ -405,8 +405,8 @@ de_DE:
       explanation: "Wir arbeiten gerade an dieser Seite, deshalb ist sie nicht verfügbar. Das sollte nicht all zu lange dauern."
       instruction: "Bitte versuchen Sie es später nochmals."
     unsupported_page_size:
-      title: "Seitengrösse ist nicht unterstützt"
-      explanation: "Die angefragte Seitengrösse page[size]=%{size} ist grösser als die maximale Seitengrösse %{max}. "
+      title: "Seitengröße ist nicht unterstützt"
+      explanation: "Die angefragte Seitengröße page[size]=%{size} ist größer als die maximale Seitengröße %{max}. "
 
   export/tabular/events/list:
     group_names: "Organisatoren"
@@ -430,8 +430,8 @@ de_DE:
         csv_export_button: "CSV Export"
         ical_export_button: "Kalender Export"
       events:
-        title: "Demnächst stattfindende Anlässe"
-        explanation: "Hier werden Anlässe von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Anlässe findest du bei der organisierenden Gruppe."
+        title: "Demnächst stattfindende Veranstaltungen"
+        explanation: "Hier werden Veranstaltungen von Gruppen, bei denen du Mitglied bist, sowie deren Übergruppen angezeigt. Andere Veranstaltungen findest du bei der organisierenden Gruppe."
       apply_until: "bis %{date}"
     application_market:
       application:
@@ -442,8 +442,8 @@ de_DE:
         modal_title: Wollen Sie diese Zuteilung entfernen?
         confirm_and_send_mail: Bestätigen und E-Mail senden
         confirm_and_send_no_mail: Bestätigen ohne E-Mail
-      already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei diesem Anlass angemeldet."
-      maximum_participations_reached: Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmerzahl erhöht werden.
+      already_assigned: "Diese Person ist bereits anderweitig zugeteilt oder bei dieser Veranstaltung angemeldet."
+      maximum_participations_reached: Die maximal erlaubte Teilnehmendenzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die maximale Teilnehmendenzahl erhöht werden.
       participation:
         registered_at: "Anmeldung am %{datetime}"
         town: Wohnort
@@ -469,7 +469,7 @@ de_DE:
 
     kinds:
       form:
-        help_minimum_age: "Jahre (Jahrgang am ersten Kursdatum massgebend)"
+        help_minimum_age: "Jahre (Jahrgang am ersten Kursdatum maßgebend)"
         qualifications:
           for_participants: "Qualifikationen für Teilnehmende"
           for_leaders: "Qualifikationen für Leitende"
@@ -489,7 +489,7 @@ de_DE:
         flash:
           privacy_policy_not_accepted: "Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
       flash:
-        application_not_possible: "Zur Zeit sind für diesen Anlass keine Anmeldungen möglich."
+        application_not_possible: "Zur Zeit sind für diese Veranstaltung keine Anmeldungen möglich."
     participation_contact_data:
       managed:
         update:
@@ -497,7 +497,7 @@ de_DE:
             privacy_policy_not_accepted: "Um die Anmeldung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden."
 
         edit:
-          title: Neues Kind registrieren und am Anlass anmelden
+          title: Neues Kind registrieren und an der Veranstaltung anmelden
           save: Weiter
 
     participations:
@@ -535,10 +535,10 @@ de_DE:
         signature: Unterschrift
         signature_confirmation: Vorname, Name, Unterschrift
         heading_event/course: Kursanmeldung %{year}
-        heading_event: Anmeldung Anlass
-        read_and_agreed_for_event: Ich erfülle die Voraussetzungen für den Anlass, habe die Anlassbeschreibung gelesen und bin damit einverstanden.
+        heading_event: Veranstaltungsanmeldung
+        read_and_agreed_for_event: Ich erfülle die Voraussetzungen für die Veranstaltung, habe die Veranstaltungsbeschreibung gelesen und bin damit einverstanden.
         read_and_agreed_for_event_course: Ich erfülle die Kursvoraussetzungen, habe die Kursbeschreibung und die Kursbestimmungen gelesen und bin damit einverstanden.
-        requirements_for_event: Voraussetzungen für den Anlass
+        requirements_for_event: Voraussetzungen für die Veranstaltung
         requirements_for_event_course: Voraussetzungen für den Kurs
         page_of_pages: "Seite <page> von <total>"
       priorities:
@@ -549,15 +549,15 @@ de_DE:
         with_main_applicant: "(Gast von %{main_applicant_name})"
         without_main_applicant: "(Gast von abgemeldeter Person)"
       cancel_application:
-        explanation: Du bist für diesen Anlass angemeldet.
-        pending: Du bist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden.
-        waiting_list: Du bist auf der Warteliste für diesen Anlass.
+        explanation: Du bist für diese Veranstaltung angemeldet.
+        pending: Du bist für diese Veranstaltung vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Veranstaltungsleitung bestätigt werden.
+        waiting_list: Du bist auf der Warteliste für diese Veranstaltung.
         caption: Abmelden
-        confirmation: "Bist Du sicher, dass Du dich von diesem Anlass abmelden möchtest?"
+        confirmation: "Bist Du sicher, dass Du dich von dieser Veranstaltung abmelden möchtest?"
         managed:
-          explanation: "%{person} ist für diesen Anlass angemeldet."
-          pending: "%{person} ist für diesen Anlass vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
-          waiting_list: "%{person} ist auf der Warteliste für diesen Anlass."
+          explanation: "%{person} ist für diese Veranstaltung angemeldet."
+          pending: "%{person} ist für diese Veranstaltung vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Veranstaltungsleitung bestätigt werden."
+          waiting_list: "%{person} ist auf der Warteliste für diese Veranstaltung."
 
     qualifications:
       index:
@@ -568,7 +568,7 @@ de_DE:
 
     question_templates:
       form:
-        default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
+        default_caption: Wird standardmässig bei neuen Veranstaltungen hinzugefügt
         inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
 
     register:
@@ -586,7 +586,7 @@ de_DE:
         no_login: Du hast noch kein Login?
       email_check:
         next: Weiter
-        enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für den Anlass anmelden kannst.
+        enter_email: Bitte gib deine E-Mailadresse ein, damit du dich für die Veranstaltung anmelden kannst.
         next_for_manager: Mein Kind anmelden
       manager_fields:
         manager_first_name: Vorname erziehungsberechtigte Person
@@ -594,13 +594,13 @@ de_DE:
 
     invitation_lists:
       create:
-        hint: "<br />Hinweis: Allfällig bestehende Einladungen wurden nicht aktualisiert."
+        hint: "<br />Hinweis: Etwaige bestehende Einladungen wurden nicht aktualisiert."
         success:
           one: "Eine Person wurde erfolgreich zum %{event_type} '%{event}' eingeladen"
           other: "%{count} Personen wurden erfolgreich zum %{event_type} '%{event}' eingeladen"
       new:
         title: Personen zu einem %{event_label} einladen
-        event_search: Anlass Suchen...
+        event_search: Veranstaltung suchen...
         submit: Einladen
 
     participation_lists:
@@ -613,12 +613,12 @@ de_DE:
           other: "%{count} Personen konnten nicht zum %{event_type} '%{event}' hinzugefügt werden"
       new:
         title: Personen einem %{event_label} zuweisen
-        event_search: Anlass Suchen...
+        event_search: Veranstaltung suchen...
         submit: Hinzufügen
 
     questions:
       add_choice: "Antwortmöglichkeit hinzufügen"
-      sensitive_caption: Antworten werden %{cutoff} Monate nach Ende des Anlasses gelöscht.
+      sensitive_caption: Antworten werden %{cutoff} Monate nach Ende der Veranstaltung gelöscht.
       required_caption: Diese Frage muss beim Anmelden beantworten werden.
       visibility_fields:
         caption: "Sichtbar für"
@@ -666,21 +666,21 @@ de_DE:
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
       signature_confirmation_text_default: Erziehungsberechtigte Person (bei Minderjährigen)
     attachments:
-      public_attachments_hint: Global sichtbare Anhänge sind öffentlich, da der Anlass externe Anmeldungen erlaubt
+      public_attachments_hint: Global sichtbare Anhänge sind öffentlich, da diese Veranstaltung externe Anmeldungen erlaubt
       add: "hinzufügen"
     banner_open_invitation:
-      explanation: Du wurdest zu diesem Anlass eingeladen.
+      explanation: Du wurdest zu dieser Veranstaltung eingeladen.
       managed:
-        explanation: "%{person} wurde zu diesem Anlass eingeladen."
+        explanation: "%{person} wurde zu dieser Veranstaltung eingeladen."
       buttons:
         accept: Anmelden
         decline: Abmelden
     banner_declined_invitation:
-      explanation: Du wurdest zu diesem Anlass eingeladen und hast dich abgemeldet.
+      explanation: Du wurdest zu dieser Veranstaltung eingeladen und hast dich abgemeldet.
       managed:
-        explanation: "%{person} wurde zu diesem Anlass eingeladen und wurde abgemeldet."
+        explanation: "%{person} wurde zu dieser Veranstaltung eingeladen und wurde abgemeldet."
     form:
-      caption_external_applications: "Externe können sich für diesen Anlass anmelden."
+      caption_external_applications: "Externe können sich für diese Veranstaltung anmelden."
       caption_prioritization: "Teilnehmende können bei der Anmeldung zwei weitere Kurse als Alternativen angeben."
       caption_requires_approval: "Die Gruppenleitung wird informiert und muss die Anmeldung bestätigen."
       caption_participations_visible: "Teilnehmende können sich gegenseitig in der Teilnehmerliste sehen."
@@ -688,7 +688,7 @@ de_DE:
       explain_application_questions: Hier kannst du weitere Angaben für die Anmeldung verlangen.
       explain_choices: "Für Freitextantwort keine Antwortmöglichkeiten hinzufügen."
       explain_admin_questions:
-        Hier kannst du weitere Angaben für Teilnehmende definieren, welche nur für die Anlassverwaltung verwendet werden.
+        Hier kannst du weitere Angaben für Teilnehmende definieren, welche nur für die Veranstaltungsverwaltung verwendet werden.
       explain_contact_attrs:
         Hier kannst du wählen, welche Kontaktangaben bei der Anmeldung abgefragt werden sollen.
       caption_applications_cancelable: Teilnehmende können sich selbst abmelden.
@@ -716,12 +716,12 @@ de_DE:
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
     global:
       link:
-        add_event: Anlass erstellen
+        add_event: Veranstaltung erstellen
         add_event/course: Kurs erstellen
         duplicate: Duplizieren
     minimum_age_with_years: "%{minimum_age} Jahre (Jahrgang)"
     new:
-      title_event: Anlass erstellen
+      title_event: Veranstaltung erstellen
       title_event/course: Kurs erstellen
     preconditions: "Erforderliche Qualifikationen"
     tabs:
@@ -741,7 +741,7 @@ de_DE:
 
   event/guests:
     guest_added_successfully: "%{guest} wurde erfolgreich als Gast hinzugefügt."
-    not_allowed_due_to_guest_limit: "Du kannst in diesem Anlass keine weiteren Gäste hinzufügen."
+    not_allowed_due_to_guest_limit: "Du kannst in dieser Veranstaltung keine weiteren Gäste hinzufügen."
 
   event/invitations:
     export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
@@ -761,7 +761,7 @@ de_DE:
     instructions: "Für die definitive Anmeldung musst du die Teilnahmebestätigung über <i>Drucken</i> ausdrucken, unterzeichnen und per Post an die entsprechende Adresse schicken."
     export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     waiting_list: "Es sind derzeit alle Plätze belegt, die Anmeldung ist auf der Warteliste."
-    pending: "Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Anlassverwaltung bestätigt werden."
+    pending: "Es wurde eine Voranmeldung für %{full_entry_label} erstellt. Die Teilnahme ist noch nicht definitiv und muss von der Veranstaltungsverwaltung bestätigt werden."
 
     show:
       link:
@@ -779,15 +779,15 @@ de_DE:
     some_qualifications_missing: "Erforderliche Qualifikationen fehlen."
 
   event/register:
-    not_logged_in: "Du musst dich einloggen um dich für den Anlass '%{event}' anzumelden."
+    not_logged_in: "Du musst dich einloggen um dich für die Veranstaltung '%{event}' anzumelden."
     person_found: "Wir haben dich in unserer Datenbank gefunden."
-    email_sent: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich direkt für den Anlass anmelden kannst."
+    email_sent: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich direkt für die Veranstaltung anmelden kannst."
     email_invalid: "Bitte gib eine gültige E-Mail ein"
-    form_data_missing: "Bitte fülle das folgende Formular aus, bevor du dich für den Anlass anmeldest."
+    form_data_missing: "Bitte fülle das folgende Formular aus, bevor du dich für die Veranstaltung anmeldest."
     registered: "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben für die Anmeldung."
-    application_window_closed: "Das Anmeldefenster für diesen Anlass ist geschlossen."
-    no_places_available: "Die maximale Teilnehmeranzahl für diesen Anlass ist bereits erreicht."
-    email_sent_manager: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für den Anlass anmelden kannst."
+    application_window_closed: "Das Anmeldefenster für diese Veranstaltung ist geschlossen."
+    no_places_available: "Die maximale Teilnehmendenzahl für diese Veranstaltung ist bereits erreicht."
+    email_sent_manager: "Wir haben dir ein E-Mail mit einem Link geschickt, wo du dich oder dein Kind direkt für die Veranstaltung anmelden kannst."
     registered_manager: 'Deine persönlichen Daten wurden aufgenommen. Du kannst nun deine Kinder via "Anmelden" Knopf anmelden'
 
   event/roles:
@@ -843,12 +843,12 @@ de_DE:
   event_feeds:
     integrate: In Kalender integrieren
     show:
-      title: Meine Anlässe in Kalender integrieren
+      title: Meine Veranstaltungen in Kalender integrieren
       url: "URL: %{url}"
       create_url: Adresse erstellen
-      url_description: "Mit dieser Adresse kannst du von anderen Anwendungen aus auf deine Anlässe zugreifen. Achtung: Gib diese Adresse nur an Personen weiter, die alle deine Termindetails sehen dürfen."
+      url_description: "Mit dieser Adresse kannst du von anderen Anwendungen aus auf deine Veranstaltungen zugreifen. Achtung: Gib diese Adresse nur an Personen weiter, die alle deine Termindetails sehen dürfen."
       reset_url: URL zurücksetzen
-      reset_url_description: "Wenn du Missbrauch vermutest, kannst du die Adresse zurücksetzen und dadurch die aktuelle ungültig machen. Alle Kalender die noch die alte Adresse kennen, können danach nicht mehr deine Anlässe sehen."
+      reset_url_description: "Wenn du Missbrauch vermutest, kannst du die Adresse zurücksetzen und dadurch die aktuelle ungültig machen. Alle Kalender die noch die alte Adresse kennen, können danach nicht mehr deine Veranstaltungen sehen."
     update:
       flash:
         create: Adresse wurde erstellt.
@@ -880,7 +880,7 @@ de_DE:
       match: enthält
       not_match: enthält nicht
       equal: ist genau
-      greater: grösser als
+      greater: größer als
       smaller: kleiner als
       before: vor dem
       after: nach dem
@@ -905,7 +905,7 @@ de_DE:
       select:
         title: "%{group} fusionieren"
         explanation: >
-            Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Anlässe
+            Beim Fusionieren zweier Gruppen werden sämtliche Untergruppen, Veranstaltungen
             und Personen samt Rollen beider Gruppen zusammengeführt.  Abos werden
             nicht übernommen. Die bisherigen Gruppen werden danach unter 'Gelöscht'
             weiterhin einsehbar sein.
@@ -930,8 +930,8 @@ de_DE:
         activated: Manuelle Freigabe ist aktiviert
         deactivated: Manuelle Freigabe ist nicht aktiviert
         explanation: >
-            Wenn aktiv, werden Personen dieser Ebene erst zu Gruppen, Anlässen und
-            Abos hinzugefügt, nachdem eine zugriffsberechtigte Person die Freigabe
+            Wenn aktiv, werden Personen dieser Ebene erst zu Gruppen, Veranstaltungen
+            und Abos hinzugefügt, nachdem eine zugriffsberechtigte Person die Freigabe
             erteilt.
       list:
         approve: Akzeptieren
@@ -996,7 +996,7 @@ de_DE:
       alert:
         not_active: Die Selbstregistrierung ist in dieser Gruppe nicht möglich.
       show:
-        meta_description: "Selbstregistrierungsseite für %{application_name}"
+        meta_description: "Selbstregistrierungsseite für Hitobito"
       form:
         privacy_policy_caption: "Ich erkläre mich mit den folgenden Bestimmungen einverstanden:"
         submit: Registrieren
@@ -1188,13 +1188,13 @@ de_DE:
       payee_help: "Erscheint auf dem Einzahlungsschein"
       beneficiary_help: "Erscheint auf dem Einzahlungsschein"
       account_number_example: "Beispiel: 01-162-5"
-      iban_example: "Beispiel: CH93 0076 2011 6238 5295 7"
+      iban_example: "Beispiel: DE89 3704 0044 0532 0130 00"
       variable_donation_appeal: "Variabler Spendenaufruf"
       donation_calculation_year_amount_explanation: Anzahl verganenen Jahre, die für die Spendenberechnung beachtet werden.
       donation_increase_percentage_explanation: Prozentsatz, für die Spendenberechnung
     email_fields:
       email_help:
-        Antworten auf Rechnungs-E-Mails sollen entweder an die Adresse des aktuellen Benutzers oder an die hier konfigurierte Adresse gesendet werden.
+        Antworten auf Rechnungs-E-Mails sollen entweder an die Adresse der aktuell angemeldeten Person oder an die hier konfigurierte Adresse gesendet werden.
       email_validation: Darf keine E-Mail-Adresse sein.
       sender_name_help: Rechnungs-E-Mails werden unter diesem Namen versendet.
       custom_content_help: Diese E-Mail Vorlage wird beim versenden von Rechnungen verwendet. Wenn keine E-Mail Vorlage hinterlegt wird, wird die globale E-Mail Vorlage verwendet.
@@ -1352,7 +1352,7 @@ de_DE:
       end: "Imitation beenden"
 
   mailchimp_synchronizations:
-    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus %{application_name} aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus hitobito aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1534,7 +1534,7 @@ de_DE:
   navigation:
     menu: "Menü"
     groups: "Gruppen"
-    events: "Anlässe"
+    events: "Veranstaltungen"
     courses: "Kurse"
     admin: "Einstellungen"
     admin/event_feed: "Kalender integrieren"
@@ -1616,7 +1616,7 @@ de_DE:
       xml_file: "XML Datei"
   public_events:
     show:
-      meta_description: "Öffentliche Kursanmeldeseite für %{application_name}"
+      meta_description: "Öffentliche Kursanmeldeseite für Hitobito"
 
   qualifications:
     in_years: "%{years} Jahre"
@@ -1899,7 +1899,7 @@ de_DE:
         reset: Person hat ein Login.<br><br>Diese Aktion sendet ihr einen Link, damit sie ihr Passwort neu setzen kann.
 
       impersonate_user: Imitieren
-      impersonate_user_tooltip: "Du kannst %{application_name} so bedienen, als wärst du als diese Person eingeloggt."
+      impersonate_user_tooltip: "Du kannst hitobito so bedienen, als wärst du als diese Person eingeloggt."
       impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
 
     actions_index:
@@ -1956,7 +1956,7 @@ de_DE:
       delete:
         success: "%{full_name} wurde erfolgreich gelöscht."
       errors:
-        participated_in_recent_event: "Person nahm kürzlich an einem Anlass teil"
+        participated_in_recent_event: "Person nahm kürzlich an einer Veranstaltung teil"
         already_minimized: "Person wurde bereits minimiert"
 
     pdf:
@@ -2173,7 +2173,7 @@ de_DE:
       role_has_permissions: "Die Rolle %{role} in der Gruppe %{group} hat folgende Berechtigungen:"
       role_only_public: >
           Die Rolle %{role} in der Gruppe %{group} kann nur öffentliche Daten (Gruppen,
-          Anlässe und Abos; keine anderen Personen) sehen.
+          Veranstaltungen und Abos; keine anderen Personen) sehen.
       only_visible_from_above: Diese Rolle ist nur von Personen in dieser Ebene sichtbar, nicht von Personen aus darüber liegenden Ebenen.
 
   roles/terminations:
@@ -2354,11 +2354,11 @@ de_DE:
     actions_index:
       add_person: Person hinzufügen
       add_group_roles: Gruppe/Rollen hinzufügen
-      add_event: Anlass hinzufügen
-      exclude_person: "Person ausschliessen"
+      add_event: Veranstaltung hinzufügen
+      exclude_person: "Person ausschließen"
     list:
       excluded_people: "Ausgeschlossene Personen"
-      export_not_allowed: "Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Anlässe ausserhalb deines Berechtigungsbereiches enthalten."
+      export_not_allowed: "Du darfst die Abonnenten dieses Abos nicht exportieren, da diese auch Rollen und/oder Veranstaltungen außerhalb deines Berechtigungsbereiches enthalten."
       subscribable_mode_opt_out_info: >
           Nur die hier konfigurierten Personen dürfen sich selbst an-/abmelden und
           sind standardmässig an-gemeldet.

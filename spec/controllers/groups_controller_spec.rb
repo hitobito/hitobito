@@ -316,6 +316,22 @@ describe GroupsController do
         end.to change(Delayed::Job, :count).by(1)
       end
     end
+
+    describe "GET edit" do
+      render_views
+
+      before { allow(Settings.additional_address).to receive(:enabled).and_return(true) }
+
+      it "shows a group-specific caption for the uses_contactable_name toggle" do
+        Fabricate(:additional_address, contactable: group, label: "Rechnung")
+
+        get :edit, params: {id: group.id}
+
+        expect(response).to have_http_status(:ok)
+        dom = Capybara::Node::Simple.new(response.body)
+        expect(dom).to have_content("Namen der Gruppe übernehmen")
+      end
+    end
   end
 
   describe "token authenticated" do

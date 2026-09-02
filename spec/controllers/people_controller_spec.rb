@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -650,7 +650,8 @@ describe PeopleController do
               id: person.id,
               person: {
                 additional_addresses_attributes: {
-                  a1.id.to_s => {id: a1.id, housenumber: 3, uses_contactable_name: false, name: "updated name"},
+                  a1.id.to_s => {id: a1.id, housenumber: 3, uses_contactable_name: false, first_name: "",
+                                 last_name: "updated name"},
                   a2.id.to_s => {id: a2.id, _destroy: true},
                   "998" => {
                     translated_label: "Andere",
@@ -669,6 +670,51 @@ describe PeopleController do
 
           expect(person.additional_addresses.where(label: "Andere")).to be_exist
           expect(person.additional_addresses.where(label: "Arbeit")).not_to be_exist
+        end
+
+        context "GET edit" do
+          render_views
+
+          it "renders first_name/last_name/organization/organization_name fields" do
+            Fabricate(:additional_address, contactable: person, label: "Rechnung")
+
+            get :edit, params: {group_id: group.id, id: person.id}
+
+            expect(response).to have_http_status(:ok)
+            dom = Capybara::Node::Simple.new(response.body)
+            base = "person_additional_addresses_attributes_0"
+            expect(dom).to have_field("#{base}_first_name")
+            expect(dom).to have_field("#{base}_last_name")
+            expect(dom).to have_field("#{base}_organization")
+            expect(dom).to have_field("#{base}_organization_name")
+            expect(dom).to have_content("Namen der Person übernehmen")
+          end
+        end
+
+        context "PUT update with blank additional address label" do
+          render_views
+
+          it "marks the label field as invalid" do
+            put :update, params: {
+              group_id: group.id,
+              id: person.id,
+              person: {
+                additional_addresses_attributes: {
+                  "998" => {
+                    street: "Langestrasse",
+                    housenumber: 37,
+                    zip_code: 8000,
+                    town: "Zürich",
+                    country: "CH"
+                  }
+                }
+              }
+            }
+
+            expect(person.additional_addresses.reload).to be_empty
+            dom = Capybara::Node::Simple.new(response.body)
+            expect(dom).to have_css("input.is-invalid[name$='[translated_label]']")
+          end
         end
       end
     end

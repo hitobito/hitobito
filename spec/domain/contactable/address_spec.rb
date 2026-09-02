@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2025, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -161,11 +161,34 @@ describe Contactable::Address do
           end
 
           if uses_additional_address_name
-            it "reads additional name if set" do
+            it "reads first and last name if set" do
               build_additional_address(label:, street: "Lagistrasse", housenumber: "12a",
-                zip_code: 1080, town: "Jamestown", name: "Foo Bar", uses_contactable_name: false)
+                zip_code: 1080, town: "Jamestown", first_name: "Foo", last_name: "Bar", uses_contactable_name: false)
               expect(text).to eq <<~TEXT
                 Foo Bar
+                Lagistrasse 12a
+                1080 Jamestown
+              TEXT
+            end
+
+            it "shows organization_name and full_name from additional address when flagged as organization" do
+              build_additional_address(label:, street: "Lagistrasse", housenumber: "12a",
+                zip_code: 1080, town: "Jamestown", organization: true, organization_name: "Acme Corp",
+                first_name: "Jane", last_name: "Doe", uses_contactable_name: false)
+              expect(text).to eq <<~TEXT
+                Acme Corp
+                Jane Doe
+                Lagistrasse 12a
+                1080 Jamestown
+              TEXT
+            end
+
+            it "shows only organization_name from additional address when full_name is blank" do
+              build_additional_address(label:, street: "Lagistrasse", housenumber: "12a",
+                zip_code: 1080, town: "Jamestown", organization: true, organization_name: "Acme Corp",
+                uses_contactable_name: false)
+              expect(text).to eq <<~TEXT
+                Acme Corp
                 Lagistrasse 12a
                 1080 Jamestown
               TEXT
@@ -232,7 +255,7 @@ describe Contactable::Address do
       end
 
       it "uses address_care_of from additional address" do
-        build_additional_address(attrs.merge(address_care_of: "c/o Finance", name: "Foo Bar",
+        build_additional_address(attrs.merge(address_care_of: "c/o Finance", last_name: "Foo Bar",
           uses_contactable_name: false))
         expect(text).to eq <<~TEXT
           Foo Bar
@@ -243,7 +266,7 @@ describe Contactable::Address do
       end
 
       it "does not print blank address_care_of line" do
-        build_additional_address(attrs.merge(address_care_of: "", name: "Foo Bar", uses_contactable_name: false))
+        build_additional_address(attrs.merge(address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false))
         expect(text).to eq <<~TEXT
           Foo Bar
           Lagistrasse 12a
@@ -276,7 +299,7 @@ describe Contactable::Address do
         build_additional_address(
           {
             label: nil,
-            name: "Foo Bar",
+            last_name: "Foo Bar",
             uses_contactable_name: false,
             address_care_of: "Office",
             street: "Lagistrasse",
@@ -338,7 +361,7 @@ describe Contactable::Address do
         build_additional_address(
           {
             label: nil,
-            name: "Office Address",
+            last_name: "Office Address",
             uses_contactable_name: false,
             street: "Officestrasse",
             housenumber: "99",
@@ -353,6 +376,36 @@ describe Contactable::Address do
           recipient_company_name: nil,
           recipient_first_name: "",
           recipient_last_name: "Office Address",
+          recipient_address_care_of: nil,
+          recipient_housenumber: "99",
+          recipient_street: "Officestrasse",
+          recipient_postbox: nil,
+          recipient_town: "Zurich",
+          recipient_zip_code: "8000",
+          recipient_country: "CH"
+        })
+      end
+
+      it "uses organization_name from additional address when flagged as organization" do
+        build_additional_address(
+          {
+            label: nil,
+            organization: true,
+            organization_name: "Acme Corp",
+            uses_contactable_name: false,
+            street: "Officestrasse",
+            housenumber: "99",
+            zip_code: 8000,
+            town: "Zurich",
+            invoices: true
+          }
+        )
+        person.country = "CH"
+
+        expect(attributes).to eq({
+          recipient_company_name: "Acme Corp",
+          recipient_first_name: "",
+          recipient_last_name: "",
           recipient_address_care_of: nil,
           recipient_housenumber: "99",
           recipient_street: "Officestrasse",
@@ -477,7 +530,7 @@ describe Contactable::Address do
           if uses_additional_address_name
             it "reads additional name if set" do
               build_additional_address(label:, street: "Lagistrasse", housenumber: "12a",
-                zip_code: 1080, town: "Jamestown", name: "Foo Bar", uses_contactable_name: false)
+                zip_code: 1080, town: "Jamestown", last_name: "Foo Bar", uses_contactable_name: false)
               expect(text).to eq <<~TEXT
                 Foo Bar
                 Lagistrasse 12a
@@ -519,7 +572,7 @@ describe Contactable::Address do
       end
 
       it "uses address_care_of from additional address" do
-        build_additional_address(attrs.merge(address_care_of: "c/o Finance", name: "Foo Bar",
+        build_additional_address(attrs.merge(address_care_of: "c/o Finance", last_name: "Foo Bar",
           uses_contactable_name: false))
         expect(text).to eq <<~TEXT
           Foo Bar
@@ -530,7 +583,7 @@ describe Contactable::Address do
       end
 
       it "does not print blank address_care_of line" do
-        build_additional_address(attrs.merge(address_care_of: "", name: "Foo Bar", uses_contactable_name: false))
+        build_additional_address(attrs.merge(address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false))
         expect(text).to eq <<~TEXT
           Foo Bar
           Lagistrasse 12a
@@ -563,7 +616,7 @@ describe Contactable::Address do
         build_additional_address(
           {
             label: nil,
-            name: "Foo Bar",
+            last_name: "Foo Bar",
             uses_contactable_name: false,
             address_care_of: "Office",
             street: "Lagistrasse",

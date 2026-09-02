@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -46,16 +46,15 @@ describe Export::Tabular::People::PeopleFull do
     context "additional_addresses" do
       before do
         allow(Settings.additional_address).to receive(:enabled).and_return(true)
-        person.additional_addresses << Fabricate.build(:additional_address, label: "Arbeit", name: "Foo Bar",
-          street: "def", uses_contactable_name: false)
+        person.additional_addresses << Fabricate.build(:additional_address, label: "Arbeit",
+          first_name: "Foo", last_name: "Bar", street: "def", uses_contactable_name: false)
       end
 
       its([:additional_address_arbeit]) { should eq "Weitere Adresse Arbeit" }
 
-      it "prefixes address values with names" do
-        # rubocop:todo Layout/LineLength
-        expect(people_list.data_rows.to_a.first[subject.keys.index(:additional_address_arbeit)]).to start_with("Foo Bar, def")
-        # rubocop:enable Layout/LineLength
+      it "prefixes address values with full name" do
+        additional_address_arbeit = people_list.data_rows.to_a.first[subject.keys.index(:additional_address_arbeit)]
+        expect(additional_address_arbeit).to start_with("Foo Bar, def")
       end
 
       it "exports non-predefined labels in the free text column" do

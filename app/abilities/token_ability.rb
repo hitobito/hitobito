@@ -30,6 +30,12 @@ class TokenAbility < Ability
     if acceptable?(:mailing_lists)
       can :show, MailingList, group_id: token.layer.groups_in_same_layer.pluck(:id)
     end
+
+    # In the legacy API, participations are also fetchable by service token whose
+    # dynamic user isn't participating in the event.
+    if acceptable?(:events) && acceptable?(:event_participations)
+      can :index_participations, Event, groups: { id: event_participant_readable_groups }
+    end
   end
 
   def identifier
@@ -66,5 +72,16 @@ class TokenAbility < Ability
     else
       Group.none
     end
+  end
+
+  def event_participant_readable_groups
+    case token.permission.to_sym
+    when :layer_and_below_full, :layer_and_below_read
+      token.layer.self_and_descendants
+    when :layer_full, :layer_read
+      token.layer.groups_in_same_layer
+    else
+      Group.none
+    end.pluck(:id)
   end
 end

@@ -171,7 +171,7 @@ fr:
       placeholder_value: Courriel
       placeholder_type: Type (privé, professionnel, …)
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
-      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
+      tooltip_invoices: Utilisée à la place de l'adresse e-mail principale lors de l'envoi de factures.
 
     additional_address_fields:
       placeholder_type: Type (facture, travail ..)
@@ -1119,9 +1119,9 @@ fr:
         one_week: une semaine
         one_month: un mois
       invoice_type:
-        standalone: Einzelrechnungen
+        standalone: Factures individuelles
         from_standalone_invoice_run: aus Rechnungsläufen
-        from_template_invoice_run: aus Sammelrechnungen
+        from_template_invoice_run: à partir de factures collectives
     add: Établir une facture externe
     add_payments: Saisir un paiement
     issued: Facture établie
@@ -1576,7 +1576,7 @@ fr:
     admin/oauth_authorizations: "Autoriser OAuth"
     imap_mails: "Mails et bounces"
     invoices: "Factures"
-    invoices/single: "Rechnungen"
+    invoices/single: "Factures"
     invoices/evaluations: "Pièce comptable"
     payments: "Reçus de paiement"
 

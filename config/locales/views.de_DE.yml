@@ -174,7 +174,8 @@ de_DE:
 
     additional_address_fields:
       placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
-      caption_uses_contactable_name: Namen der Person übernehmen
+      caption_uses_contactable_name_person: Namen der Person übernehmen
+      caption_uses_contactable_name_group: Namen der Gruppe übernehmen
       caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:

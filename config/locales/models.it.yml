@@ -96,6 +96,8 @@ it:
         year_must_be_four_digits: può contenere al massimo un anno di 4 cifre
         year_must_be_after_1900: deve contenere un'anno a partire dal 1900
       models:
+        additional_address:
+          name_missing: 'Bitte geben Sie einen Namen ein'
         cors_origin:
           attributes:
             origin:
@@ -577,6 +579,10 @@ it:
 
       additional_address:
         translated_label: Denominazione
+        first_name: Vorname
+        last_name: Nachname
+        organization_name: Firmenname
+        organization: Firma
         street_and_number: Strada/Numero civico # can be removed with next release
         street: Strada
         housenumber: Numero civico
@@ -589,6 +595,7 @@ it:
         public: Pubblico
 
       additional_addresses:
+        translated_label: Bezeichnung
         label: Denominazione
         street: Strada
         postbox: Postfach

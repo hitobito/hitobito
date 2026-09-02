@@ -96,6 +96,8 @@ fr:
         year_must_be_four_digits: ne doit pas comporter plus de quatre chiffres pour l'année
         year_must_be_after_1900: doit comporter une année à partir de 1900
       models:
+        additional_address:
+          name_missing: 'Bitte geben Sie einen Namen ein'
         cors_origin:
           attributes:
             origin:
@@ -578,6 +580,10 @@ fr:
 
       additional_address:
         translated_label: Désignation
+        first_name: Vorname
+        last_name: Nachname
+        organization_name: Firmenname
+        organization: Firma
         street_and_number: Rue/Numéro # can be removed with next release
         street: Rue
         housenumber: Numéro de la maison
@@ -590,6 +596,7 @@ fr:
         public: Public
 
       additional_addresses:
+        translated_label: Bezeichnung
         label: Désignation
         street: Rue
         postbox: Postfach

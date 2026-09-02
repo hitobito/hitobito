@@ -175,7 +175,8 @@ fr:
 
     additional_address_fields:
       placeholder_type: Type (facture, travail ..)
-      caption_uses_contactable_name: Reprendre le nom de la personne
+      caption_uses_contactable_name_person: Namen der Person übernehmen
+      caption_uses_contactable_name_group: Namen der Gruppe übernehmen
       caption_used_for_invoices: Utilisé pour les factures
 
     address_fields:

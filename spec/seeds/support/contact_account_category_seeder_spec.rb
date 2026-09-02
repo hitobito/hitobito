@@ -11,13 +11,47 @@ require Rails.root.join("db", "seeds", "support", "contact_account_category_seed
 describe ContactAccountCategorySeeder do
   subject(:seeder) { described_class.new }
 
-  # category_id is NOT NULL in the real schema -- loosened here so the
-  # "not yet categorized" row below can be nulled out at all, simulating a
-  # not-yet-migrated install. Rolled back automatically with everything else
-  # in the example (Postgres DDL is transactional, and spec_helper runs each
-  # example inside one transaction).
   before do
+    SeedFu.quiet = true
+
+    # category_id is NOT NULL in the real schema -- loosened here so the
+    # "not yet categorized" row below can be nulled out at all, simulating a
+    # not-yet-migrated install. Rolled back automatically with everything else
+    # in the example (Postgres DDL is transactional, and spec_helper runs each
+    # example inside one transaction).
     ActiveRecord::Base.connection.change_column_null(:additional_emails, :category_id, true)
+  end
+
+  describe ".insert_before" do
+    it "inserts entries before the given key and removes them again" do
+      list = ContactAccountCategorySeeder::CATEGORIES["PhoneNumber"]["Person"]
+      original_size = list.size
+      original_keys = list.map { |item| item[:key] }
+      other_index = original_keys.index("other")
+
+      ContactAccountCategorySeeder.insert_before("PhoneNumber", "Person", "other",
+                                                 {key: "test_a", name: {de: "Test A"}},
+                                                 {key: "test_b", name: {de: "Test B"}})
+
+      expect(list.map { |item| item[:key] })
+        .to eq original_keys.insert(other_index, "test_a", "test_b")
+
+      list.delete_if { |item| %w[test_a test_b].include?(item[:key]) }
+      expect(list.size).to eq original_size
+    end
+
+    it "appends entries when the given key is missing" do
+      list = ContactAccountCategorySeeder::CATEGORIES["PhoneNumber"]["Person"]
+      original_size = list.size
+
+      ContactAccountCategorySeeder.insert_before("PhoneNumber", "Person", "missing",
+                                                 {key: "test_c", name: {de: "Test C"}})
+
+      expect(list.last[:key]).to eq "test_c"
+
+      list.delete_if { |item| item[:key] == "test_c" }
+      expect(list.size).to eq original_size
+    end
   end
 
   describe "#seed" do

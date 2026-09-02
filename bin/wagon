@@ -196,7 +196,7 @@ configs)
   ;;
 
 gemfile)
-  bundle check || bundle install
+  bundle check || bundle
   $0 configs Gemfile.lock
 
   if [ -n "${BUNDLE_GEMFILE}" ]; then

@@ -107,6 +107,15 @@ class ContactAccountCategorySeeder
     }
   end
 
+  # Insert +entries+ before the existing entry with +key+ for the given
+  # +contact_account_type+ and +contactable_type+ combination. If +key+ is not
+  # present, entries are appended at the end.
+  def self.insert_before(contact_account_type, contactable_type, key, *entries)
+    list = CATEGORIES[contact_account_type][contactable_type]
+    index = list.index { |item| item[:key] == key } || list.size
+    list.insert(index, *entries)
+  end
+
   def seed
     first_time = ContactAccountCategory.none?
     ContactAccountCategory.seed_once(:contact_account_type, :contactable_type, :key, *seed_data)

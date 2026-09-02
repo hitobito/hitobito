@@ -43,7 +43,6 @@
                               application_person_fields,
                               :key,
                               :value,
-                              { include_blank: "", selected: guess(column_name) },
-                              { class: 'form-select form-select-sm mw-100 mw-md-60ch' })
+                              include_blank: "", selected: guess(column_name))
 
   = form_buttons(f, submit_label: t('.preview'), cancel_url: group_people_path(group))

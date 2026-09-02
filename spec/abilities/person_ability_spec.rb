@@ -59,6 +59,12 @@ describe PersonAbility do
       is_expected.to be_able_to(:security, other.person)
     end
 
+    it "may modify roles which are invisible from above in the same layer" do
+      other = Fabricate(Role::External.name.to_sym, group: groups(:top_group))
+      expect(other).not_to be_visible_from_above
+      is_expected.to be_able_to(:update, other)
+    end
+
     it "may not update root email if in same group" do
       root = people(:root)
       Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group), person: root)
@@ -336,6 +342,83 @@ describe PersonAbility do
 
     it "may query people" do
       is_expected.to be_able_to(:query, Person)
+    end
+  end
+
+  context :see_invisible_from_above do
+    let(:role) do
+      Fabricate(Group::TopGroup::InvisiblePeopleManager.name.to_sym, group: groups(:top_group))
+    end
+    let(:invisible) { Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_one)) }
+
+    it "does not grant write access on its own" do
+      expect(invisible).not_to be_visible_from_above
+      is_expected.to be_able_to(:show, invisible.person.reload)
+      is_expected.not_to be_able_to(:update, invisible.person.reload)
+    end
+
+    context "combined with layer_and_below_full" do
+      before do
+        Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group),
+          person: role.person)
+      end
+
+      it "may show invisible people below" do
+        is_expected.to be_able_to(:show, invisible.person.reload)
+      end
+
+      it "may update invisible people below" do
+        is_expected.to be_able_to(:update, invisible.person.reload)
+      end
+
+      it "may change managers of invisible people below" do
+        is_expected.to be_able_to(:change_managers, invisible.person.reload)
+      end
+
+      it "may not show or update invisible people outside the layer hierarchy" do
+        other = Fabricate(Role::External.name.to_sym, group: Fabricate(Group::TopLayer.name.to_sym))
+        is_expected.not_to be_able_to(:show, other.person.reload)
+        is_expected.not_to be_able_to(:update, other.person.reload)
+      end
+
+      it "may modify invisible roles below" do
+        is_expected.to be_able_to(:show, invisible)
+        is_expected.to be_able_to(:update, invisible)
+        is_expected.to be_able_to(:destroy, invisible)
+      end
+
+      it "may not modify invisible roles in an archived group" do
+        groups(:bottom_layer_one).archive!
+        is_expected.not_to be_able_to(:update, invisible.reload)
+        is_expected.not_to be_able_to(:destroy, invisible.reload)
+      end
+    end
+
+    context "combined with layer_and_below_full further down" do
+      let(:other) { Fabricate(Role::External.name.to_sym, group: groups(:bottom_layer_two)) }
+
+      before do
+        Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one),
+          person: role.person)
+      end
+
+      it "may update invisible people in the layer_and_below_full subtree" do
+        is_expected.to be_able_to(:update, invisible.person.reload)
+      end
+
+      it "may show but not update invisible people outside that subtree" do
+        is_expected.to be_able_to(:show, other.person.reload)
+        is_expected.not_to be_able_to(:update, other.person.reload)
+      end
+
+      it "may not change managers of invisible people outside that subtree" do
+        is_expected.not_to be_able_to(:change_managers, other.person.reload)
+      end
+
+      it "may not modify roles of invisible people outside that subtree" do
+        is_expected.not_to be_able_to(:update, other)
+        is_expected.not_to be_able_to(:destroy, other)
+      end
     end
   end
 

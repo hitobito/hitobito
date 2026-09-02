@@ -109,7 +109,7 @@ describe Export::Tabular::Events::List do
 
       it "should contain contain the additional course fields" do
         expect(row[28..]).to eq ["Motto", "Kosten", "Anmeldebeginn", "Anmeldeschluss",
-          "Maximale Teilnehmerzahl", "Externe Anmeldungen",
+          "Maximale Teilnehmendenzahl", "Externe Anmeldungen",
           "Priorisierung", "Anzahl Leitungsteam", "Anzahl Teilnehmende",
           "Anzahl Anmeldungen"]
       end

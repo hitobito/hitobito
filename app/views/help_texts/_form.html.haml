@@ -8,7 +8,7 @@
 
 = entry_form(buttons_bottom: false) do |f|
   - if entry.new_record?
-    = f.labeled_collection_select(:context, @contexts, :first, :second, {}, class: 'form-select form-select-sm')
+    = f.labeled_collection_select(:context, @contexts, :first, :second)
 
     - @keys.each do |context, group|
       %div.help_text_context_keys.d-none{ id: context }

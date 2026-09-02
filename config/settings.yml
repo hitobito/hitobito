@@ -42,6 +42,8 @@ application:
     # first entry is considered the default language
     de: Deutsch
 
+  german_variant: de_CH
+
 <% mail_domain = ENV['RAILS_MAIL_DOMAIN'].presence ||
                  ENV['RAILS_HOST_NAME'].presence ||
                  'localhost'

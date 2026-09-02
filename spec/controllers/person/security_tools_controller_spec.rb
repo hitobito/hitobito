@@ -54,8 +54,11 @@ describe Person::SecurityToolsController do
                                                          Group::BottomLayer::Member.label],
                                                        deleted: false}
         expected_groups_and_roles[top_group.id] = {name: top_group.name,
-                                                    roles: [Group::TopGroup::Leader.label,
-                                                      Group::TopGroup::Secretary.label],
+                                                    roles: [
+                                                      Group::TopGroup::Leader.label,
+                                                      Group::TopGroup::Secretary.label,
+                                                      Group::TopGroup::InvisiblePeopleManager.label
+                                                    ],
                                                     deleted: false}
 
         expect(assigns(:groups_and_roles_that_see_me)).to eq(expected_groups_and_roles)

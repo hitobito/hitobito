@@ -28,6 +28,12 @@ module Events::Filter
       leader_ids.blank?
     end
 
+    def leader_roles
+      event_types
+        .flat_map { |type| type.role_types.select { |role| role.kind == :leader } }
+        .uniq
+    end
+
     private
 
     def leader_ids
@@ -36,12 +42,6 @@ module Events::Filter
         ids << Auth.current_person.id
       end
       ids
-    end
-
-    def leader_roles
-      event_types
-        .flat_map { |type| type.role_types.select { |role| role.kind == :leader } }
-        .uniq
     end
   end
 end

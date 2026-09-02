@@ -146,7 +146,7 @@ en:
 
   changelog:
     index:
-      meta_description: Hitobito Changelog page
+      meta_description: "%{application_name} Changelog Seite"
   contactable:
     address_or_email: "%{address} or %{email}"
     fields:
@@ -170,7 +170,7 @@ en:
       placeholder_value: E-Mail
       placeholder_type: Designation (Home, Work, ...)
       tooltip_mailings: Shipments of subscriptions, confirmations via e-mail, etc. will be sent in addition to all addresses selected here.
-      tooltip_invoices: Wird anstelle der Haupt E-Mail Adresse beim verschicken von Rechnungen verwendet.
+      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
       placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
@@ -310,7 +310,7 @@ en:
       signed_out: "You are now logged out."
       new:
         sign_in: Sign in
-        meta_description: Login page for Hitobito
+        meta_description: "Anmeldeseite für %{application_name}"
       form:
         login_identity: Main email
         sign_in: Sign in
@@ -326,7 +326,7 @@ en:
       no_token: "You can only access this page by clicking the link provided in a password reset email. If you have copied the link from a password reset email, please make sure you copied the entire URL provided."
       new:
         reset_password_button: "Reset password"
-        meta_description: Hitobito password reset page
+        meta_description: "%{application_name} Passwort zurücksetzen Seite"
     confirmations:
       new:
         resend_confirmation_instructions: "Confirm email address"
@@ -356,7 +356,7 @@ en:
         old_password: "Old password"
         new_password: "New password"
         new_password_confirmation: "Confirm new password"
-        meta_description: "Hitobito password change page"
+        meta_description: "%{application_name} Passwort ändern Seite"
       person:
         updated: "Your password has been updated."
 
@@ -367,7 +367,7 @@ en:
           greeting: "Hello %{name}!"
           information_html: "You can confirm your email address using the following link:"
           link_text: "confirm %{email}"
-          footer: "This email was sent by Hitobito"
+          footer: "Diese E-Mail wurde von %{application_name} gesendet"
       reset_password_instructions:
         subject: "Instructions for setting your password"
         body:
@@ -382,7 +382,7 @@ en:
           greeting: "Hello %{name}!"
           information_html: "Your account has been locked due to too many failed login attempts.<br>Click on the following link to unlock your account:</br>"
           link_text: "Unlock my account"
-          footer: "This email was sent by Hitobito"
+          footer: "Diese E-Mail wurde von %{application_name} gesendet"
 
   errors:
     link_to_main: "Main page"
@@ -392,6 +392,8 @@ en:
     "403":
       title: "Access denied"
       explanation: "You are not authorized to access this resource."
+      update_email:
+        explanation: "Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern."
     "404":
       title: "Page not found (404)"
       explanation: "Maybe you typed the address incorrectly, or the page has been deleted."
@@ -660,7 +662,7 @@ en:
     actions_show:
       copy_share_link: Direktlink kopieren
     application_fields:
-      caption_signature: Participants must sign the application
+      caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Application must be confirmed with a second signature
       signature_confirmation_text_default: Legal guardian (for minors)
     attachments:
@@ -680,13 +682,13 @@ en:
     form:
       caption_external_applications: "Externals can sign up for this event"
       caption_prioritization: "Participants may set two additional courses as alternatives."
-      caption_requires_approval: "The group leader will be informed and has to confirm your registration."
+      caption_requires_approval: "Die Gruppenleitung wird informiert und muss die Anmeldung bestätigen."
       caption_participations_visible: "Participants can see each other in the participants list."
       times_are_optional: Times are optional
       explain_application_questions: Here you can request further information for the application.
       explain_choices: "Do not add choices for a free-text answer."
       explain_admin_questions:
-        Hier kannst du weitere Angaben pro Teilnehmer/-in definieren, welche nur für die Anlassverwaltung verwendet werden.
+        Hier kannst du weitere Angaben für Teilnehmende definieren, welche nur für die Anlassverwaltung verwendet werden.
       explain_contact_attrs:
         Here you can choose which contact details should be requested during registration.
       caption_applications_cancelable: Participants can cancel their registration.
@@ -743,7 +745,7 @@ en:
 
   event/invitations:
     export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
-    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Sie erhalten kein automatisches Mail."
+    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Die Personen erhalten keine automatische Einladungs-Mail."
 
   event/kinds:
     global:
@@ -992,7 +994,7 @@ en:
       alert:
         not_active: Self-registration is not possible in this group.
       show:
-        meta_description: Self-registration page for Hitobito
+        meta_description: "Selbstregistrierungsseite für %{application_name}"
       form:
         privacy_policy_caption: "I agree to the following provisions:"
         submit: Register
@@ -1069,7 +1071,7 @@ en:
     tabs:
       all: All
     index:
-      title: Hitobito Log
+      title: "Hitobito Log"
     list:
       from: From
       to: Until
@@ -1347,7 +1349,7 @@ en:
       end: "End imitation"
 
   mailchimp_synchronizations:
-    wait_for_synchronization: "Your data is currently being sent to MailChimp. This may take a moment. Once complete, the selected list will be updated with the contacts from hitobito. You can view the synchronization status on the job overview: %{overview_link}"
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus %{application_name} aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1559,7 +1561,7 @@ en:
         skip_consent_screen_explanation: Applikation ist verbandsintern und vertrauenswürdig, Consent Screen überspringen
       attrs:
         profile_endpoint_help:
-          Profile information of the user can be obtained via this endpoint. The access token must be passed in the authorization header. The desired scope can be passed as an X-Scope header.
+          Profile Informationen der angemeldeten Person können über diesen Endpoint bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden. Der gewünschte Scope kann als X-Scope Header übergeben werden.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
     access_grants:
       list:
@@ -1611,7 +1613,7 @@ en:
       xml_file: "XML file"
   public_events:
     show:
-      meta_description: Public course registration page for Hitobito
+      meta_description: "Öffentliche Kursanmeldeseite für %{application_name}"
 
   qualifications:
     in_years: "%{years} years"
@@ -1883,7 +1885,7 @@ en:
     tabs:
       history: History
       security_tools: Security
-      colleagues: Colleagues
+      colleagues: Mitarbeitende
       invoices: Invoices
       subscriptions: Subscriptions
 
@@ -1894,7 +1896,7 @@ en:
         reset: Person has a login.<br><br>This action sends a link to reset the password.
 
       impersonate_user: Imitate
-      impersonate_user_tooltip: Operate hitobito as this person.
+      impersonate_user_tooltip: "Du kannst %{application_name} so bedienen, als wärst du als diese Person eingeloggt."
       impersonate_user_tooltip_disabled: Diese Person kann erst imitiert werden, nachdem die E-Mail Adresse bestätigt wurde.
 
     actions_index:
@@ -1918,10 +1920,10 @@ en:
     email_field:
       used_as_login: Is used as login
       only_changeable_by_superior: >
-          The main e-mail address of a person with multiple roles can only be changed
-          by a superordinate user.
+          Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur von einer
+          über alle diese Rollen übergeordneten Person geändert werden.
     fields:
-      format_birthday: (dd.mm.yyy)
+      format_birthday: (TT.MM.JJJJ)
       no_sensitive_information: ""
 
     list:

@@ -46,9 +46,17 @@ class PersonLayerWritables < GroupBasedFetchables
     OrCondition.new.tap do |condition|
       append_group_conditions(condition)
       visible_from_above_condition(condition)
-      see_invisible_from_above_condition(condition)
+      write_invisible_from_above_condition(condition)
       condition.or(*manager_condition)
     end
+  end
+
+  def write_invisible_from_above_condition(condition)
+    see_invisible = Group.in_subtrees_of(layer_groups_see_invisible_from_above)
+    writable = Group.in_subtrees_of(layer_groups_above)
+    return if see_invisible.nil? || writable.nil?
+
+    condition.or("(#{see_invisible}) AND (#{writable})")
   end
 
   def manager_condition

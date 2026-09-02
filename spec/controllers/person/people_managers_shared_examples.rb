@@ -47,7 +47,7 @@ shared_examples "people_managers#destroy" do
 
   let(:attr) { (described_class.assoc == :people_managers) ? :managed_id : :manager_id }
   let(:attr_opposite) { (described_class.assoc != :people_managers) ? :managed_id : :manager_id }
-  let(:entry) do
+  let!(:entry) do
     PeopleManager.create!(
       attr => people(:top_leader).id,
       attr_opposite => people(:bottom_member).id
@@ -92,6 +92,17 @@ shared_examples "people_managers#destroy" do
       delete :destroy, params: params
 
       expect { entry.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "does not destroy entry without permission on the managed person" do
+      actor = Fabricate(Group::TopGroup::LocalSecretary.sti_name, group: groups(:top_group)).person
+      sign_in(actor)
+
+      expect { delete :destroy, params: params }
+        .to not_change { PeopleManager.count }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect { entry.reload }.not_to raise_error
     end
 
     it "does not destroy entry if household#remove raises error" do

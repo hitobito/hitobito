@@ -33,3 +33,10 @@ Entscheid: Deutsche Texte können in Transifex nach `de_XX` (z.B. `de_CH`) über
 ### di 2025-11-07
 
 Die 2. Variante benötigt keine Anpassungen der Applikation und ist somit weniger aufwendig umzusetzen.
+
+### cbe 2026-08-25
+
+Um sprachlich besser für Kunden ausserhalb der Schweiz kompatibel zu sein, gibt es neu neben `de_CH` im
+Core auch noch `de_DE`. Welche davon beim Build für `de` übernommen wird, kann pro Wagon über
+`application.german_variant` in settings.yml gewählt werden. Default im Core ist `de_CH`, somit
+rückwärtskompatibel.

@@ -19,7 +19,7 @@
       - delete_answers_after_months = Settings.event.participations.delete_answers_after_months
       = ff.labeled_input_field(:sensitive, caption: t('event.questions.sensitive_caption', cutoff: delete_answers_after_months))
 
-  = f.labeled_collection_select :event_type, Event.all_types.map { [_1.label, _1.sti_name] }, :last, :first, { include_blank: I18n.t('global.all') }, { class: 'form-select form-select-sm' }
+  = f.labeled_collection_select :event_type, Event.all_types.map { [_1.label, _1.sti_name] }, :last, :first, { include_blank: I18n.t('global.all') }
   = f.labeled_input_field(:default, caption: t(".default_caption"))
   = f.labeled_input_field(:inherit, caption: t(".inherit_caption"))
 

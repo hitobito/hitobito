@@ -147,7 +147,7 @@ it:
 
   changelog:
     index:
-      meta_description: Pagina del changelog di Hitobito
+      meta_description: "%{application_name} Changelog Seite"
   contactable:
     address_or_email: "%{address} o %{email}"
     fields:
@@ -171,7 +171,7 @@ it:
       placeholder_value: Email
       placeholder_type: Tipo (privato, lavoro, ...)
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
-      tooltip_invoices: Viene utilizzato al posto dell'indirizzo e-mail principale per l'invio delle fatture.
+      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
       placeholder_type: Denominazione (fattura, lavoro ...)
@@ -311,7 +311,7 @@ it:
       signed_out: "Ora sei registrato."
       new:
         sign_in: Login
-        meta_description: Pagina di registrazione per Hitobito
+        meta_description: "Anmeldeseite für %{application_name}"
       form:
         login_identity: Email principale
         sign_in: Login
@@ -327,7 +327,7 @@ it:
       no_token: "Non puoi accedere a questa pagina se non accedendovi direttamente dall'email per reinserire la password. Se vi stai accedendo da tale email, allora controlla per favore che tu stia utilizzando l'URL completo."
       new:
         reset_password_button: "reimpostare la password"
-        meta_description: Pagina di reset della password di Hitobito
+        meta_description: "%{application_name} Passwort zurücksetzen Seite"
     confirmations:
       new:
         resend_confirmation_instructions: "Confermare l'indirizzo e-mail"
@@ -357,7 +357,7 @@ it:
         old_password: "vecchia password"
         new_password: "Nuova password"
         new_password_confirmation: "Confermare la nuova password"
-        meta_description: "Pagina di modifica della password di Hitobito"
+        meta_description: "%{application_name} Passwort ändern Seite"
       person:
         updated: "la tua password è stata attualizzata."
 
@@ -368,7 +368,7 @@ it:
           greeting: "Ciao %{name}!"
           information_html: "Puoi confermare il tuo indirizzo email con il seguente link:"
           link_text: "Confermare %{email}"
-          footer: "Questa email è stata inviata da Hitobito"
+          footer: "Diese E-Mail wurde von %{application_name} gesendet"
       reset_password_instructions:
         subject: "istruzioni per impostare la tua password"
         body:
@@ -383,7 +383,7 @@ it:
           greeting: "Ciao %{name}!"
           information_html: "Iltuo account è stato bloccato a causa di troppi tentativi di login sbagliati.<br>Clicca sul link seguente per sbloccare il tuo account:"
           link_text: "Sbloccare il mio account"
-          footer: "Questa email è stata inviata da Hitobito"
+          footer: "Diese E-Mail wurde von %{application_name} gesendet"
 
   errors:
     link_to_main: "pagina principale"
@@ -393,6 +393,8 @@ it:
     "403":
       title: "Accesso negato"
       explanation: "Non hai il diritto di accedere a questa risorsa."
+      update_email:
+        explanation: "Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern."
     "404":
       title: "questa pagina purtroppo non esiste (404)"
       explanation: "forse ha inserito l'indirizzo in maniera errata oppure questa pagina è stata cancellata nel frattempo."
@@ -664,7 +666,7 @@ it:
     actions_show:
       copy_share_link: Copiare il link diretto
     application_fields:
-      caption_signature: I partecipanti devono firmare l'iscrizione
+      caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: L'iscrizione deve essere confermata da una seconda firma
       signature_confirmation_text_default: Rappresentante legale (per i minorenni)
     attachments:
@@ -684,13 +686,13 @@ it:
     form:
       caption_external_applications: "Esterni possono iscriversi a questo evento."
       caption_prioritization: "I partecipanti possono dare durante l'iscrizione due ulteriori corsi come alternative."
-      caption_requires_approval: "Il responsabile verrà informato e dovrà confermare l'iscrizione."
+      caption_requires_approval: "Die Gruppenleitung wird informiert und muss die Anmeldung bestätigen."
       caption_participations_visible: "I partecipanti possono vedersi a vicenda nella lista dei partecipanti."
       times_are_optional: Gli orari sono opzionali
       explain_application_questions: Qui potete richiedere ulteriori informazioni per la registrazione.
       explain_choices: "Non aggiungere opzioni per una risposta a testo libero."
       explain_admin_questions:
-        Qui è possibile definire ulteriori dettagli per ogni partecipante, utilizzati solo per la gestione dell'evento.
+        Hier kannst du weitere Angaben für Teilnehmende definieren, welche nur für die Anlassverwaltung verwendet werden.
       explain_contact_attrs:
         Qui puoi scegliere quali dati di contatto devono essere chiesti al momento dell'iscrizione.
       caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente.
@@ -747,7 +749,7 @@ it:
 
   event/invitations:
     export_enqueued: "L'esportazione viene avviata in background e, una volta completata, potrà essere scaricata dalla panoramica dei processi: %{overview_link}"
-    description: "Le persone invitate possono iscriversi o cancellarsi tramite %{model_name}. Non riceveranno un'e-mail automatica."
+    description: "Eingeladene Personen können sich via %{model_name}-Seite an- oder abmelden. Die Personen erhalten keine automatische Einladungs-Mail."
 
   event/kinds:
     global:
@@ -1002,7 +1004,7 @@ it:
       alert:
         not_active: In questo gruppo non è possibile effettuare l'autoregistrazione.
       show:
-        meta_description: Pagina di autoregistrazione per Hitobito
+        meta_description: "Selbstregistrierungsseite für %{application_name}"
       form:
         privacy_policy_caption: "Dichiaro di essere d'accordo con le seguenti disposizioni:"
         submit: Crea un account
@@ -1080,7 +1082,7 @@ it:
     tabs:
       all: Tutti
     index:
-      title: log hitobito
+      title: "log hitobito"
     list:
       from: Da
       to: A
@@ -1375,7 +1377,7 @@ it:
       end: "Finire l'imitazione"
 
   mailchimp_synchronizations:
-    wait_for_synchronization: "I tuoi dati vengono attualmente inviati a MailChimp. L'operazione potrebbe richiedere qualche istante. Al termine, l'elenco selezionato verrà aggiornato con i contatti provenienti da hitobito. Lo stato della sincronizzazione è visibile nella panoramica dei lavori: %{overview_link}"
+    wait_for_synchronization: "Ihre Daten werden aktuell an MailChimp gesendet. Dies kann einen Moment dauern. Danach wird die ausgewählte Liste mit den Kontakten aus %{application_name} aktualisiert sein. Der Status der Synchronisation ist auf der Jobübersicht zu sehen: %{overview_link}"
 
   mailing_lists:
     subscriber_lists:
@@ -1595,7 +1597,7 @@ it:
         skip_consent_screen_explanation: L'applicazione è interna all'associazione e degna di fiducia, saltare la schermata di consenso
       attrs:
         profile_endpoint_help:
-          Si può fare riferimento alle informazioni di profilo dell'utilizzatore  tramite questo endpoint. Nel far questo deve venir consegnato l'access token nell'authorization header. Lo scope desiderato può venir consegnato quale x-scope header.
+          Profile Informationen der angemeldeten Person können über diesen Endpoint bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden. Der gewünschte Scope kann als X-Scope Header übergeben werden.
         profile_endpoint_example: "curl -H 'Authorization: Bearer 057b491f0ea151782f1ab3ed67dba91eaf0d59e621f312afec4d3bf81e08777a' -H 'X-Scope: email' %{url}"
     access_grants:
       list:
@@ -1650,7 +1652,7 @@ it:
       xml_file: "File XML"
   public_events:
     show:
-      meta_description: Pagina pubblica di registrazione dei corsi per Hitobito
+      meta_description: "Öffentliche Kursanmeldeseite für %{application_name}"
 
   qualifications:
     in_years: "%{years} anni"
@@ -1935,7 +1937,7 @@ it:
     tabs:
       history: Azioni
       security_tools: Sicurezza
-      colleagues: Collaboratore
+      colleagues: Mitarbeitende
       invoices: Fatture
       subscriptions: Abbonamenti
 
@@ -1946,7 +1948,7 @@ it:
         reset: La persona ha un login. <br><br> Questa operazione vi invierà un link dove potrete impostare una nuova nuova password.
 
       impersonate_user: Imitare
-      impersonate_user_tooltip: Puoi utilizzare hitobito come se fossi la persona che ha effettuato il login
+      impersonate_user_tooltip: "Du kannst %{application_name} so bedienen, als wärst du als diese Person eingeloggt."
       impersonate_user_tooltip_disabled: Questa persona può essere imitata solo dopo che l'indirizzo e-mail è stato confermato.
 
     actions_index:
@@ -1970,10 +1972,10 @@ it:
     email_field:
       used_as_login: Sarà utilizzato come login
       only_changeable_by_superior: >
-          L'indirizzo email principale di una persona con più ruoli può essere cambiato
-          unicamente da un utente che è superiore a tutti questi ruoli.
+          Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur von einer
+          über alle diese Rollen übergeordneten Person geändert werden.
     fields:
-      format_birthday: (gg.mm.aaaa)
+      format_birthday: (TT.MM.JJJJ)
       no_sensitive_information: ""
 
     list:

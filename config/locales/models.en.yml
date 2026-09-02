@@ -161,7 +161,7 @@ en:
               max_one_additional_invoice_address: Only one address can be selected as the billing address.
               additional_address_labels_must_be_unique: The names of the other addresses must be unique.
               cannot_have_managers_and_manageds: '%{name} cannot have both administrator and children.'
-              manager_already_managed: The administrator could not be added because they are already an administrator.
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: The child could not be added as they are already an administrator.
             email:
               taken: >
@@ -293,17 +293,17 @@ en:
         one: Kitchen
         other: Kitchen
       event/role/helper:
-        one: Helper
-        other: Helpers
+        one: Helfer/-in
+        other: Helfende
       event/role/participant:
-        one: Participant
-        other: Participants
+        one: Teilnehmer/-in
+        other: Teilnehmende
       event/role/treasurer:
         one: Treasurer
         other: Treasurers
       event/role/speaker:
-        one: Speaker
-        other: Speakers
+        one: Referent/-in
+        other: Referierende
       event/date:
         one: Date
         other: Dates
@@ -503,7 +503,7 @@ en:
         town: Place
         country: Country
         postbox: P.O. Box
-        address_care_of: additional address line
+        address_care_of: zusätzl. Adresszeile
         public: Public
 
       additional_addresses:
@@ -732,8 +732,8 @@ en:
         contact: Contact Person
         creator_id: Ersteller
         notify_contact_on_participations: Notify contact person of new registration by e-mail
-        maximum_participants: Maximum number of participants
-        minimum_participants: Minimum number of participants
+        maximum_participants: Maximale Teilnehmendenzahl
+        minimum_participants: Minimale Teilnehmendenzahl
         contact_id: Contact Person
         description: Description
         location: Place/Address
@@ -1077,7 +1077,7 @@ en:
               approve_applications: Confirmation of course registrations for people at this level.
               finance: Create and manage invoices
               layer_and_below_finance: Create and manage invoices at this level and all levels below it.
-              impersonation: Use Hitobito as another person
+              impersonation: "%{application_name} als andere Person bedienen."
               see_invisible_from_above: Also sees people who are otherwise not allowed to be seen by higher levels.
               manual_deletion: Deleting persons without roles
           kind:
@@ -1473,6 +1473,7 @@ en:
           bcn: Neuenburger Kantonalbank
           bcv: Banque Cantonale Vaudoise
           bcvs: Walliser Kantonalbank
+          szkb: Schwyzer Kantonalbank
 
       period_invoice_template:
         name: Description

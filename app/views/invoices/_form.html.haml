@@ -26,7 +26,7 @@
     = f.labeled_input_field :recipient_first_name
     = f.labeled_input_field :recipient_last_name
     = f.labeled_input_field(:recipient_address_care_of, autocomplete: :off)
-    = f.labeled(:street, Person.human_attribute_name(:street), class: 'd-flex', mark_as_required: true) do
+    = f.labeled(:street, class: 'd-flex') do
       %div.col-9
         = f.input_field(:recipient_street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })
       %div.col-2.ms-sm-auto.d-flex

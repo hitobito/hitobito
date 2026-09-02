@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-de:
+de_DE:
   time:
     formats:
       time: "%H:%M"
@@ -13,20 +13,20 @@ de:
 
   date:
     formats:
-      default: ! '%d.%m.%Y'
-      long: ! '%e %B %Y'
-      short: ! '%e %b'
-      with_day: ! '%a %d.%m.%Y'
+      default: '%d.%m.%Y'
+      long: '%e %B %Y'
+      short: '%e %b'
+      with_day: '%a %d.%m.%Y'
 
   number:
     currency:
       format:
-        delimiter: ! ''''
-        format: ! '%u %n'
+        delimiter: ''''
+        format: '%u %n'
         separator: .
         precision: 2
     format:
-      delimiter: ! ''''
+      delimiter: ''''
       precision: 2
       separator: .
 
@@ -44,7 +44,6 @@ de:
       household:
         one: Haushalt
         other: Haushalte
-
     attributes:
       roles/termination:
         terminate_on: Austrittsdatum
@@ -86,8 +85,8 @@ de:
         type_not_allowed: kann hier nicht erstellt werden
         must_be_after_opening: muss nach dem Anmeldebeginn sein
         must_have_same_type: müssen von demselben Typ sein
-        greater_than: muss grösser als %{count} sein
-        greater_than_or_equal_to: muss grösser oder gleich %{count} sein
+        greater_than: muss größer als %{count} sein
+        greater_than_or_equal_to: muss größer oder gleich %{count} sein
         must_exist: müssen vorhanden sein
         readonly: darf nicht verändert werden
         cannot_be_later_than_today: kann nicht später als heute sein
@@ -109,7 +108,7 @@ de:
             base:
               contact_attr_mandatory: "'%{attribute}' ist ein Pflichtfeld und kann nicht als optional oder 'nicht anzeigen' gesetzt werden"
               contact_attr_invalid: "'%{attribute}' ist kein gültiges Personen-Attribut"
-              contact_attr_hidden_required: "'%{attribute}' kann nicht als obligatorisch und 'nicht anzeigen' gesetzt werden"
+              contact_attr_hidden_required: "'%{attribute}' kann nicht als erforderlich und 'nicht anzeigen' gesetzt werden"
         event/date:
           attributes:
             finish_at:
@@ -136,7 +135,7 @@ de:
               not_allowed: "'%{mail_name}' darf nicht verwendet werden"
             mail_name_not_allowed:
             additional_sender:
-              invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
+              invalid: "muss Mailadressen vom Format abcd@ee.de oder *@ee.de enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
         message/letter_with_invoice:
           attributes:
             base:
@@ -166,11 +165,10 @@ de:
               managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
             email:
               taken: >
-                        ist bereits vergeben. Diese Adresse muss für alle Personen
-                        eindeutig sein, da sie beim Login verwendet wird. Du kannst jedoch unter
-                        'Weitere E-Mails' Adressen eintragen, welche bei anderen Personen
-                        als Haupt-E-Mail vergeben sind (Die Haupt-E-Mail
-                        kann leer gelassen werden).
+                  ist bereits vergeben. Diese Adresse muss für alle Personen eindeutig
+                  sein, da sie beim Login verwendet wird. Du kannst jedoch unter 'Weitere
+                  E-Mails' Adressen eintragen, welche bei anderen Personen als Haupt-E-Mail
+                  vergeben sind (Die Haupt-E-Mail kann leer gelassen werden).
             self_registration_reason_custom_text:
               either_preset_or_custom: kann nicht gesetzt werden, wenn ein vordefinierter Eintrittsgrund ausgewählt wurde.
         person/add_request:
@@ -193,12 +191,12 @@ de:
         qualification_kind:
           attributes:
             validity:
-              not_a_valid_number: 'muss grösser oder gleich Null sein um %{model} reaktivierbar zu machen'
+              not_a_valid_number: 'muss größer oder gleich Null sein um %{model} reaktivierbar zu machen'
         subscription:
           attributes:
             subscriber_id:
               group_not_allowed: 'Diese Gruppe kann hier nicht hinzugefügt werden'
-              event_not_allowed: 'Dieser Anlass kann hier nicht hinzugefügt werden'
+              event_not_allowed: 'Diese Veranstaltung kann hier nicht hinzugefügt werden'
         tag:
           attributes:
             name:
@@ -207,7 +205,7 @@ de:
         invoice:
           recipient_address_or_email_required: 'Empfänger Adresse oder E-Mail muss ausgefüllt werden'
           recipient_name_or_company_name_required: 'Firmenname oder Name muss ausgefüllt werden'
-          recipient_street_or_postbox_required: 'Strasse oder Postfach muss ausgefüllt werden'
+          recipient_street_or_postbox_required: 'Straße oder Postfach muss ausgefüllt werden'
           attributes:
             invoice_config:
               invalid: 'ist nicht gültig; passen Sie die Einstellungen an, bevor sie eine Rechnung erstellen'
@@ -259,8 +257,8 @@ de:
         one: Versand
         other: Versand
       event:
-        one: Anlass
-        other: Anlässe
+        one: Veranstaltung
+        other: Veranstaltungen
       event/course:
         one: Kurs
         other: Kurse
@@ -271,7 +269,7 @@ de:
         one: Anmeldung
         other: Anmeldungen
       event/attachment:
-        one: Anhang
+        one: 'Anhang'
         other: 'Anhänge'
       event/kind:
         one: Kursart
@@ -283,8 +281,8 @@ de:
         one: Einladung
         other: Einladungen
       event/role:
-        one: Anlass Rolle
-        other: Anlass Rollen
+        one: Veranstaltung Rolle
+        other: Veranstaltung Rollen
       event/role/assistant_leader:
         one: Leitung
         other: Leitung
@@ -313,8 +311,8 @@ de:
         one: Anmeldeangabe
         other: Anmeldeangaben
       event/question_template:
-        one: Vorlage Anmeldeangabe Anlässe
-        other: Vorlagen Anmeldeangaben Anlässe
+        one: Vorlage Anmeldeangabe Veranstaltungen
+        other: Vorlagen Anmeldeangaben Veranstaltungen
       event/question_visibility:
         one: Sichtbare Rolle
         other: Sichtbare Rollen
@@ -497,8 +495,8 @@ de:
 
       additional_address:
         translated_label: Bezeichnung
-        street_and_number: Strasse/Nummer # can be removed with next release
-        street: Strasse
+        street_and_number: Straße, Hausnummer # can be removed with next release
+        street: Straße
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -510,7 +508,7 @@ de:
 
       additional_addresses:
         label: Bezeichnung
-        street: Strasse
+        street: Straße
         postbox: Postfach
         zip_code: PLZ
         town: Ort
@@ -568,7 +566,7 @@ de:
         name: Name
         company_name: Firmenname
         company: Firma
-        nickname: Übername
+        nickname: Spitzname
         email: Haupt-E-Mail
         emails: E-Mails
         layer_group: Hauptebene
@@ -577,7 +575,7 @@ de:
         current_password: Altes Passwort
         address_care_of: zusätzliche Adresszeile
         address: Adresse
-        street: Strasse
+        street: Straße
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -654,7 +652,7 @@ de:
 
       person/add_request/event:
         label: "%{body} in %{group}"
-        deleted_event: Gelöschter Anlass
+        deleted_event: Gelöschte Veranstaltung
 
       person/add_request/mailing_list:
         label: "%{body} in %{group}"
@@ -676,7 +674,7 @@ de:
         email: Haupt-E-Mail
         address: Adresse
         address_care_of: zusätzliche Adresszeile
-        street: Strasse
+        street: Straße
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -768,18 +766,18 @@ de:
         guest_limit: Maximale Anzahl Gäste pro Person
 
       event/contact_attrs:
-        required: Obligatorisch
+        required: Erforderlich
         optional: Optional
         hidden: Nicht anzeigen
 
       event/guest:
         first_name: Vorname
         last_name: Nachname
-        nickname: Übername
+        nickname: Spitzname
         company_name: Firmenname
         email: Haupt-E-Mail
         address_care_of: zusätzliche Adresszeile
-        street: Strasse
+        street: Straße
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -798,11 +796,11 @@ de:
       participant:
         first_name: Vorname
         last_name: Nachname
-        nickname: Übername
+        nickname: Spitzname
         company_name: Firmenname
         email: Haupt-E-Mail
         address_care_of: zusätzliche Adresszeile
-        street: Strasse
+        street: Straße
         housenumber: Hausnummer
         postbox: Postfach
         zip_code: PLZ
@@ -913,14 +911,14 @@ de:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        required: Obligatorisch
+        required: Erforderlich
         sensitive: Sensibel
         question_visibilities: Sichtbare Rollen
 
       event/question_template:
         question: Frage
         default: Default
-        event_type: Anlasstyp
+        event_type: Veranstaltungstyp
         inherit: Vererbung
 
 
@@ -928,20 +926,20 @@ de:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        required: Antwort obligatorisch
+        required: Antwort erforderlich
 
       application_questions:
         question: Frage
         choices: Mögliche Antworten
         multiple_choices: Mehrfachauswahl
-        required: Antwort obligatorisch
+        required: Antwort erforderlich
 
       event/role:
         label: Bezeichnung
         person: Person
         type: Rolle
         participation: Person
-        remove_participant_role: Allfällige Teilnehmer*Innen-Rolle entfernen
+        remove_participant_role: Etwaige Teilnehmer*innen-Rolle entfernen
         string_long: "%{role} von %{participation}"
 
       family_member:
@@ -1066,20 +1064,20 @@ de:
           permission:
             description:
               admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
-              layer_and_below_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Anlässen und Abos auf dieser Ebene.
+              layer_and_below_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Veranstaltungen und Abos auf dieser Ebene.
               layer_and_below_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
-              layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos auf dieser Ebene.
+              layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Veranstaltungen und Abos auf dieser Ebene.
               layer_read: Alles Lesen auf dieser Ebene.
-              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Anlässen und Abos.
+              group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Veranstaltungen und Abos.
               group_and_below_read: Lesen auf der Gruppe und allen darunter liegendne Gruppen (ohne Ebenen).
-              group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Anlässen und Abos auf der Gruppe.
+              group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Veranstaltungen und Abos auf der Gruppe.
               group_read: Lesen auf der Gruppe.
               contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
               qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
               approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
               finance: Erstellen und Verwalten von Rechnungen.
               layer_and_below_finance: Erstellen und Verwalten von Rechnungen auf dieser Ebene und allen darunter liegenden Ebenen.
-              impersonation: "%{application_name} als andere Person bedienen."
+              impersonation: "Hitobito als andere Person bedienen."
               see_invisible_from_above: Sieht zusätzlich Personen, welche sonst von höheren Ebenen nicht eingesehen werden dürfen.
               manual_deletion: Löschen von Personen ohne Rollen
           kind:
@@ -1095,7 +1093,6 @@ de:
             future:
               one: Zukünftig
               other: Zukünftige
-
       contact_account:
         custom_label: Freitext
         predefined_labels:
@@ -1238,11 +1235,9 @@ de:
         field:
           one: Feld
           other: Felder
-
         action:
           one: Seite
           other: Seiten
-
       hitobito_log_entry:
         created_at: Aufgezeichnet um
         level: Level
@@ -1252,9 +1247,9 @@ de:
 
       label_format:
         name: Bezeichnung
-        page_size: Seitengrösse
+        page_size: Seitengröße
         landscape: Format
-        font_size: Schriftgrösse
+        font_size: Schriftgröße
         width: Etikettenbreite
         height: Etikettenhöhe
         count_horizontal: Anzahl nebeneinander
@@ -1262,7 +1257,7 @@ de:
         padding_top: Rand oben
         padding_left: Rand links
         dimensions: Anzahl
-        nickname: Übername auf Etikett
+        nickname: Spitzname auf Etikett
         pp_post: PP-Zeile
 
       invoice:
@@ -1303,13 +1298,13 @@ de:
         recipient_address_care_of: zusätz. Adresszeile
         recipient_postbox: Postfach
         recipient_country: Land
-        recipient_street: Strasse
+        recipient_street: Straße
         recipient_housenumber: Hausnummer
         recipient_zip_code: PLZ
         recipient_town: Ort
         recipient_address: Empfänger Adresse
         payee_name: Zahlungsempfänger Name
-        payee_street: Zahlungsempfänger Strasse
+        payee_street: Zahlungsempfänger Straße
         payee_housenumber: Zahlungsempfänger Hausnummer
         payee_zip_code: Zahlungsempfänger PLZ
         payee_town: Zahlungsempfänger Ort
@@ -1368,7 +1363,7 @@ de:
         payee: Alter Zahlungsempfänger
         payee_address: Einzahlung für
         payee_name: Name
-        payee_street: Strasse
+        payee_street: Straße
         payee_housenumber: Hausnummer
         payee_zip_code: PLZ
         payee_town: Ort
@@ -1514,9 +1509,9 @@ de:
         people: Personen
         register_people: Neue Personen registrieren (braucht Schreibrechte)
         groups: Gruppen
-        events: Anlässe
+        events: Veranstaltungen
         invoices: Rechnungen
-        event_participations: Teilnehmende von Anlässen
+        event_participations: Teilnehmende von Veranstaltungen
         mailing_lists: Abonnent/-innen von Mailinglisten auf dieser Ebene
         cors_origins: Hosts mit API-Zugriff
         qualifications: Qualifikationen
@@ -1540,8 +1535,8 @@ de:
           error: Bei der Bearbeitung trat ein Fehler auf
 
   delayed_job:
-    export/event_participations_export_job: Event-Teilnahmen-Export
-    export/events_export_job: Anlass-Export
+    export/event_participations_export_job: Veranstaltungs-Teilnahmen-Export
+    export/events_export_job: Veranstaltungs-Export
     export/export_base_job: Basis-Export
     export/invitations_export_job: Einladungs-Export
     export/invoices_job: Rechnungs-Export
@@ -1618,15 +1613,15 @@ de:
         other: "Konnte %{resource} nicht speichern: %{count} Fehler."
       # active_storage_validations
       content_type_invalid: "akzeptiert nur die folgenden Dateitypen: %{authorized_human_content_types}"
-      file_size_out_of_range: "darf nicht grösser als %{max_size} sein"
-      limit_out_of_range: "Anzahl ist ausserhalb des gültigen Bereichs (%{min} - %{max})"
+      file_size_out_of_range: "darf nicht größer als %{max_size} sein"
+      limit_out_of_range: "Anzahl ist außerhalb des gültigen Bereichs (%{min} - %{max})"
       image_metadata_missing: "ist kein gültiges Bild"
-      dimension_min_inclusion: "muss grösser oder gleich %{width} x %{height} Pixel sein"
+      dimension_min_inclusion: "muss größer oder gleich %{width} x %{height} Pixel sein"
       dimension_max_inclusion: "muss kleiner oder gleich %{width} x %{height} Pixel sein"
       dimension_width_inclusion: "Bildbreite muss zwischen %{min} und %{max} Pixel liegen"
       dimension_height_inclusion: "Bildhöhe muss zwischen %{min} und %{max} Pixel liegen"
-      dimension_width_greater_than_or_equal_to: "Bildbreite muss grösser oder gleich %{length} Pixel sein"
-      dimension_height_greater_than_or_equal_to: "Bildhöhe muss grösser oder gleich %{length} Pixel sein"
+      dimension_width_greater_than_or_equal_to: "Bildbreite muss größer oder gleich %{length} Pixel sein"
+      dimension_height_greater_than_or_equal_to: "Bildhöhe muss größer oder gleich %{length} Pixel sein"
       dimension_width_less_than_or_equal_to: "Breite muss kleiner oder gleich %{length} Pixel sein"
       dimension_height_less_than_or_equal_to: "Höhe muss kleiner oder gleich %{length} Pixel sein"
       dimension_width_equal_to: "Bildbreite muss genau %{length} Pixel sein"

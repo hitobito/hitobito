@@ -38,11 +38,23 @@ describe "groups/_form.html.haml" do
     end
   end
 
+  it "disables autocomplete for the form" do
+    @rendered = render partial: "groups/form"
+
+    expect(dom.find("form")["autocomplete"]).to eq "off"
+  end
+
   it "disables autocomplete for name and short_name fields" do
     @rendered = render partial: "groups/form"
 
     expect(dom.find("input#group_name")["autocomplete"]).to eq "off"
     expect(dom.find("input#group_short_name")["autocomplete"]).to eq "off"
+  end
+
+  it "uses new-password autocomplete for text_message_password" do
+    @rendered = render partial: "groups/form"
+
+    expect(dom.find("input#group_text_message_password")["autocomplete"]).to eq "new-password"
   end
 
   it "disables name and short_name fields" do

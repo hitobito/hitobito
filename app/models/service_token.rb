@@ -64,14 +64,13 @@ class ServiceToken < ActiveRecord::Base
     end
   end
 
-  # Required as a substitute user for PeopleFilter and JSON Api
-  # with PersonFetchables and in other places
   def dynamic_user
     Person.new do |p|
       role = Role.new
       role.group = layer
       role.permissions = [permission.to_sym]
       role.permissions << :finance if invoices?
+      p.groups = [layer]
       p.roles = [role]
       p.service_token = self
     end

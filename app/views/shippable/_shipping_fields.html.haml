@@ -3,7 +3,7 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-= f.labeled_collection_select :shipping_method, entry.class.shipping_method_labels, :first, :last, {},  { class: 'form-select form-select-sm' }
+= f.labeled_collection_select :shipping_method, entry.class.shipping_method_labels, :first, :last
 = f.labeled(:pp_post) do
   .input-group.input-group-sm
     %span.input-group-text

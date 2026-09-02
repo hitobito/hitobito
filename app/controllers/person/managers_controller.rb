@@ -14,7 +14,7 @@ class Person::ManagersController < PeopleManagersController
     person_managers_path(person)
   end
 
-  def model_params
-    params.require(:people_manager).permit(:manager_id)
+  def permitted_params
+    model_params.permit(:manager_id)
   end
 end

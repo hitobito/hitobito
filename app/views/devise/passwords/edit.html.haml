@@ -5,7 +5,7 @@
 
 - prefix = 'devise.registrations.edit'
 - content_for(:head) do
-  %meta{name: "description", content: t("#{prefix}.meta_description")}
+  %meta{name: "description", content: t("#{prefix}.meta_description", application_name: Settings.application.name)}
 
 -title t("#{prefix}.change_password")
 

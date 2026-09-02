@@ -1239,6 +1239,29 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(person.birthday).not_to eq(Date.parse("1985-08-01"))
         end
 
+        it "returns 403 when updating email of dual-homed person without update permission in all groups" do
+          person = Fabricate(:person, email: "original@example.com")
+          Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one), person: person)
+          Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_two), person: person)
+
+          @person_id = person.id
+
+          payload[:data][:attributes][:email] = "hacked@example.com"
+
+          jsonapi_patch "/api/people/#{@person_id}", params
+
+          expect(response).to have_http_status(403)
+
+          errors = jsonapi_errors
+
+          expect(errors.first.status).to eq("403")
+          expect(errors.first.title).to eq("Zugriff verweigert")
+          expect(errors.first.detail).to eq("Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern.")
+
+          person.reload
+          expect(person.email).to eq("original@example.com")
+        end
+
         it "does not update person if wrong content type header" do
           person = Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person
           person.first_name

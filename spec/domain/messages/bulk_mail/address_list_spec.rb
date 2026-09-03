@@ -86,6 +86,42 @@ describe Messages::BulkMail::AddressList do
     )
   end
 
+  it "matches additional email by category key" do
+    e1 = Fabricate(:additional_email, contactable: top_leader,
+      category: contact_account_categories(:additional_email_person_work), label: nil)
+    expect(entries([top_leader], %w[work])).to match_array(
+      [address(top_leader.id, e1.email)]
+    )
+  end
+
+  it "matches additional email by any translated category name" do
+    e1 = Fabricate(:additional_email, contactable: top_leader,
+      category: contact_account_categories(:additional_email_person_work), label: nil)
+    expect(entries([top_leader], %w[arbeit])).to match_array(
+      [address(top_leader.id, e1.email)]
+    )
+    expect(entries([top_leader], %w[Professionnel])).to match_array(
+      [address(top_leader.id, e1.email)]
+    )
+  end
+
+  it "matches additional email by label for non-other category" do
+    e1 = Fabricate(:additional_email, contactable: top_leader,
+      category: contact_account_categories(:additional_email_person_work), label: "büro")
+    expect(entries([top_leader], %w[büro])).to match_array(
+      [address(top_leader.id, e1.email)]
+    )
+  end
+
+  it "does not match other category by category name" do
+    Fabricate(:additional_email, contactable: top_leader,
+      category: contact_account_categories(:additional_email_person_other),
+      label: "foo", mailings: false)
+    expect(entries([top_leader], %w[andere])).to match_array(
+      [address(top_leader.id, top_leader.email)]
+    )
+  end
+
   it "falls back to default behviour of no label matches" do
     e1 = Fabricate(:additional_email, contactable: top_leader, mailings: true)
     Fabricate(:additional_email, contactable: top_leader, label: "buz", mailings: false)

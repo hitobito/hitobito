@@ -29,7 +29,21 @@ describe ContactableHelper, type: :helper do
       result = helper.contact_method_category_field(form)
       expect(result).to have_selector("select#additional_email_category_id")
 
-      expect(available_options(result)).to match_array categories.map { |c| c.id.to_s }
+      expect(available_options(result)).to match_array categories.map { |c| c.id.to_s }.push("")
+    end
+
+    it "includes a blank option for a new record" do
+      result = helper.contact_method_category_field(form)
+
+      expect(result).to have_selector("option[value='']")
+    end
+
+    it "does not include a blank option for a persisted record" do
+      additional_email.category = categories.first
+      additional_email.save!
+      result = helper.contact_method_category_field(form)
+
+      expect(result).not_to have_selector("option[value='']")
     end
 
     it "the current value is selected" do

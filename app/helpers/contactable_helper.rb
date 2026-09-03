@@ -10,7 +10,8 @@ module ContactableHelper
       contact_method.contactable_type)
 
     form.collection_select(
-      :category_id, categories, :id, :to_s, {selected: contact_method.category_id}
+      :category_id, categories, :id, :to_s,
+      {selected: contact_method.category_id, include_blank: contact_method.new_record?}
     )
   end
 

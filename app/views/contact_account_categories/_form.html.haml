@@ -6,9 +6,9 @@
 = entry_form(buttons_bottom: false) do |f|
   - if entry.new_record?
     = f.labeled_collection_select :contact_account_type, ContactAccountCategory::CONTACT_ACCOUNT_TYPES,
-      :to_s, :to_s, {}, class: 'form-select form-select-sm'
+      :to_s, :to_s
     = f.labeled_collection_select :contactable_type, ContactAccountCategory::CONTACTABLE_TYPES,
-      :to_s, :to_s, {}, class: 'form-select form-select-sm'
+      :to_s, :to_s
     = f.labeled_input_field :key
 
   = f.labeled_input_fields :name

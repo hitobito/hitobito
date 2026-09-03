@@ -92,7 +92,7 @@ module Export::Tabular::People
       return unless category
 
       matches = accounts.select { |e| e.category_id == category.id }
-      return matches.map { |e| "#{e.label}:#{e.value}" }.join(";").presence if category.other?
+      return matches.map { |e| [e.label.presence, e.value].compact.join(":") }.join(";").presence if category.other?
 
       matches.map(&:value).join(";").presence
     end

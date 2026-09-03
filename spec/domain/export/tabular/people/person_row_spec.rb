@@ -67,6 +67,11 @@ describe Export::Tabular::People::PersonRow do
     it "exports each entry as a label:value pair" do
       expect(row.fetch(:additional_email_other)).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
     end
+
+    it "when the label is missing exports without colon" do
+      person.additional_emails.update_all(label: nil)
+      expect(row.fetch(:additional_email_other)).to eq "ferien@example.com;news@example.com"
+    end
   end
 
   context "additional_addresses" do

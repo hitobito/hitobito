@@ -8,8 +8,6 @@
 require "spec_helper"
 
 describe ContactAccountCategoriesController do
-  render_views
-
   let(:entry) { contact_account_categories(:phone_number_person_work) }
 
   describe "as root" do
@@ -63,7 +61,7 @@ describe ContactAccountCategoriesController do
   end
 
   describe "without root permissions" do
-    let(:person) { people(:bottom_member) }
+    let(:person) { people(:top_leader) }
 
     before { sign_in(person) }
 

@@ -90,7 +90,7 @@ Hitobito::Application.routes.draw do
         end
       end
       member do
-        get :deleted_subgroups
+        get "deleted" => "groups#deleted_subgroups"
         get :export_subgroups
         post :reactivate
 
@@ -245,7 +245,6 @@ Hitobito::Application.routes.draw do
       resources :people_filters, only: [:new, :create, :edit, :update, :destroy]
       get "people_filters" => "people_filters#new" # route required for language switch
 
-      get "deleted_people" => "group/deleted_people#index"
 
       get "person_add_requests" => "group/person_add_requests#index", as: :person_add_requests
       post "person_add_requests" => "group/person_add_requests#activate"

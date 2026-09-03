@@ -11,6 +11,7 @@
 - Die Länge von Mahnungstexten ist nicht mehr begrenzt (sww#414)
 - Für die Schwyzer Kantonalbank SZKB wurde eine Ebics Zahlungsschnittstelle hinzugefügt (#4400)
 - Zusätzliche Adressen erhalten dieselben Namensfelder (Vorname, Nachname, Firma/Firmenname) wie die Hauptadresse und sind neu auch im JSON:API verfügbar (#4411)
+- Der Tab "Gelöscht" einer Ebene wurde in "Archiv" umbenannt und zeigt neu zusätzlich inaktive Personen ohne Rollen an. Dies ersetzt auch den "Ohne Rollen" Navigationseintrag. (#4458)
 
 ## Version 2.10
 

@@ -905,10 +905,6 @@ de:
         success: Gruppe wurde erfolgreich archiviert.
         failure: "Gruppe konnte nicht archiviert werden: %{error}"
 
-    deleted_people:
-      list:
-        manual_deletion: Datenlöschung
-
     merge:
       select:
         title: "%{group} fusionieren"
@@ -968,8 +964,11 @@ de:
     attrs:
       contact_details: "Kontaktangaben"
       additional_information: "Weitere Angaben"
-    deleted_subgroups:
+    group_archive:
       no_deleted_sub_groups: "Keine gelöschten Gruppen vorhanden."
+    deleted_people:
+      title: "Inaktive Personen ohne Rollen"
+      manual_deletion: "Datenlöschung"
     form:
       help_contact: "Adresse und öffentliche Telefonnummern dieser Person verwenden."
       help_self_registration_require_adult_consent: Bei der Registrierung abfragen, ob die Person schon 18 Jahre ist bzw. das Einverständnis der Erziehungsberechtigten hat.
@@ -981,13 +980,12 @@ de:
     global:
       link:
         add: Gruppe erstellen
-        deleted_person: Ohne Rollen
     new:
       title: "%{model} erstellen"
     reactivated: "Gruppe <i>%{group}</i> wurde erfolgreich reaktiviert."
     subgroups: "Untergruppen"
     tabs:
-      deleted: "Gelöscht"
+      deleted: "Archiv"
       statistics: "Statistiken"
     export_enqueued: "Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
     statistics:

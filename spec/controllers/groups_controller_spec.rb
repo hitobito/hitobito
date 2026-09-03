@@ -288,6 +288,27 @@ describe GroupsController do
         get :deleted_subgroups, params: {id: group.id}
         expect(assigns(:sub_groups).size).to eq(1)
       end
+
+      it "assigns inactive people without roles if permitted and on a layer group" do
+        get :deleted_subgroups, params: {id: groups(:bottom_layer_one).id}
+        expect(assigns(:people)).not_to be_nil
+      end
+
+      it "does not assign inactive people without roles if permitted but not on a layer group" do
+        # inactive people without roles only exist per layer, not per arbitrary
+        # (sub-)group, so the section is only loaded on the layer group itself,
+        # even though the tab (deleted subgroups) is reachable here too
+        get :deleted_subgroups, params: {id: group.id}
+        expect(assigns(:people)).to be_nil
+      end
+
+      it "does not assign inactive people without roles if not permitted" do
+        # group_full grants access to the tab (deleted subgroups) but not to
+        # the inactive people section, which requires index_deleted_people
+        sign_in(Fabricate(Group::BottomGroup::Leader.name.to_sym, group: group).person)
+        get :deleted_subgroups, params: {id: group.id}
+        expect(assigns(:people)).to be_nil
+      end
     end
 
     describe "#reactivate" do

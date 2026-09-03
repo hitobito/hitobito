@@ -7,3 +7,6 @@
   = render 'child_groups'
 - else
   = t('.no_deleted_sub_groups')
+
+- if @people
+  = render 'deleted_people'

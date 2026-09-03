@@ -27,7 +27,7 @@ class People::ManualDeletionsController < ApplicationController
 
     People::Minimizer.new(entry).run
 
-    redirect_to group_deleted_people_path(group), notice: t(".success", full_name: entry.full_name)
+    redirect_to deleted_group_path(group), notice: t(".success", full_name: entry.full_name)
   end
 
   def delete
@@ -38,7 +38,7 @@ class People::ManualDeletionsController < ApplicationController
 
     People::Destroyer.new(entry).run
 
-    redirect_to group_deleted_people_path(group), notice: t(".success", full_name: entry.full_name)
+    redirect_to deleted_group_path(group), notice: t(".success", full_name: entry.full_name)
   end
 
   private

@@ -20,7 +20,7 @@ describe "Sheet::Group::NavLeft" do
     true
   end
 
-  it { is_expected.to have_selector("li", count: 4) }
+  it { is_expected.to have_selector("li", count: 3) }
 
   it { is_expected.to have_selector("ul", count: 2) }
 
@@ -118,10 +118,6 @@ describe "Sheet::Group::NavLeft" do
         is_expected.not_to have_link("Group 112")
         is_expected.not_to have_link("Group 121")
       end
-
-      it "displays deleted peoples" do
-        is_expected.to have_link(t("groups.global.link.deleted_person"))
-      end
     end
 
     context "Group 11" do
@@ -147,10 +143,6 @@ describe "Sheet::Group::NavLeft" do
       it "hides decendents of ancestor siblings" do
         is_expected.not_to have_link("Group 121")
       end
-
-      it "displays deleted peoples" do
-        is_expected.to have_link(t("groups.global.link.deleted_person"))
-      end
     end
 
     context "Group 111" do
@@ -173,10 +165,6 @@ describe "Sheet::Group::NavLeft" do
       it "hides decendents of ancestor siblings" do
         is_expected.not_to have_link("Group 121")
       end
-
-      it "displays deleted peoples" do
-        is_expected.to have_link(t("groups.global.link.deleted_person"))
-      end
     end
 
     context "Group 1111" do
@@ -191,10 +179,6 @@ describe "Sheet::Group::NavLeft" do
 
       it "hides decendents of ancestor siblings" do
         is_expected.not_to have_link("Group 121")
-      end
-
-      it "displays deleted peoples" do
-        is_expected.to have_link(t("groups.global.link.deleted_person"))
       end
     end
   end

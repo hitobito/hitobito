@@ -77,7 +77,7 @@ module Sheet
       end)
 
     tab "groups.tabs.deleted",
-      :deleted_subgroups_group_path,
+      :deleted_group_path,
       if: :deleted_subgroups
 
     delegate :group_path, to: :view

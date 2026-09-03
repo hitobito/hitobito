@@ -29,7 +29,7 @@ class GroupsController < CrudController
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]
 
-  decorates :group, :groups, :contact
+  decorates :group, :groups, :contact, :people
 
   before_render_show :active_sub_groups, if: -> { html_request? }
   before_render_form :load_contacts
@@ -64,6 +64,8 @@ class GroupsController < CrudController
 
   def deleted_subgroups
     load_sub_groups(entry.children.only_deleted)
+    load_inactive_people
+    render "group_archive"
   end
 
   def reactivate
@@ -142,5 +144,15 @@ class GroupsController < CrudController
 
   def sub_groups_label
     @sub_groups_label ||= translate(:subgroups)
+  end
+
+  def load_inactive_people
+    return unless entry.layer && can?(:index_deleted_people, entry)
+
+    @people = Group::DeletedPeople.deleted_for(entry)
+      .includes(:additional_emails, :phone_numbers, :picture_attachment)
+      .order_by_name
+      .select("*", :id)
+      .page(params[:page])
   end
 end

@@ -24,7 +24,20 @@ describe InvoiceResource, type: :resource do
         :payment_purpose,
         :hide_total,
         :group_id,
-        :recipient_id
+        :recipient_id,
+        :recipient_type,
+        :recipient_first_name,
+        :recipient_last_name,
+        :recipient_company_name,
+        :recipient_address_care_of,
+        :recipient_street,
+        :recipient_housenumber,
+        :recipient_postbox,
+        :recipient_zip_code,
+        :recipient_town,
+        :recipient_country,
+        :shipping_method,
+        :pp_post
       ]
     end
 

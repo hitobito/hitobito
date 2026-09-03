@@ -47,12 +47,17 @@ class AddContactAccountCategories < ActiveRecord::Migration[8.0]
       unique: true, name: "index_contact_account_categories_on_type_and_key"
 
     ContactAccountCategory.create_translation_table! name: {type: :string, null: false}
+
+    ContactAccountCategory.reset_column_information
+    ContactAccountCategory::Translation.reset_column_information
   end
 
   def add_category_references
     CONTACT_ACCOUNT_TABLES.each do |table|
       add_reference table, :category, index: true, foreign_key: false
     end
+
+    [AdditionalAddress, AdditionalEmail, PhoneNumber, SocialAccount].each(&:reset_column_information)
   end
 
   def make_additional_address_label_freetext

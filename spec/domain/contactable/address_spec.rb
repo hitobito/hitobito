@@ -12,8 +12,8 @@ describe Contactable::Address do
   let(:name) { nil }
   let(:address) { described_class.new(contactable, category_key:) }
 
-  def build_additional_address(attrs)
-    contactable.additional_addresses.build(attrs).tap(&:valid?)
+  def build_additional_address(category:, **attrs)
+    contactable.additional_addresses.build(category:, **attrs).tap(&:valid?)
   end
 
   context "for person" do
@@ -173,7 +173,7 @@ describe Contactable::Address do
             end
 
             it "shows organization_name and full_name from additional address when flagged as organization" do
-              build_additional_address(label:, street: "Lagistrasse", housenumber: "12a",
+              build_additional_address(category:, street: "Lagistrasse", housenumber: "12a",
                 zip_code: 1080, town: "Jamestown", organization: true, organization_name: "Acme Corp",
                 first_name: "Jane", last_name: "Doe", uses_contactable_name: false)
               expect(text).to eq <<~TEXT
@@ -185,7 +185,7 @@ describe Contactable::Address do
             end
 
             it "shows only organization_name from additional address when full_name is blank" do
-              build_additional_address(label:, street: "Lagistrasse", housenumber: "12a",
+              build_additional_address(category:, street: "Lagistrasse", housenumber: "12a",
                 zip_code: 1080, town: "Jamestown", organization: true, organization_name: "Acme Corp",
                 uses_contactable_name: false)
               expect(text).to eq <<~TEXT
@@ -238,7 +238,7 @@ describe Contactable::Address do
         label_handling: false
 
       it "uses invoice address if additional address with used_for_invoices category exists" do
-        build_additional_address(attrs)
+        build_additional_address(**attrs)
         expect(text).to eq <<~TEXT
           Top Leader
           Lagistrasse 12a
@@ -247,7 +247,7 @@ describe Contactable::Address do
       end
 
       it "uses address_care_of from additional address" do
-        build_additional_address(attrs.merge(address_care_of: "c/o Finance"))
+        build_additional_address(**attrs, address_care_of: "c/o Finance")
         expect(text).to eq <<~TEXT
           Top Leader
           c/o Finance
@@ -257,8 +257,8 @@ describe Contactable::Address do
       end
 
       it "uses address_care_of from additional address" do
-        build_additional_address(attrs.merge(address_care_of: "c/o Finance", last_name: "Foo Bar",
-          uses_contactable_name: false))
+        build_additional_address(**attrs, address_care_of: "c/o Finance", last_name: "Foo Bar",
+          uses_contactable_name: false)
         expect(text).to eq <<~TEXT
           Foo Bar
           c/o Finance
@@ -268,7 +268,7 @@ describe Contactable::Address do
       end
 
       it "does not print blank address_care_of line" do
-        build_additional_address(attrs.merge(address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false))
+        build_additional_address(**attrs, address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false)
         expect(text).to eq <<~TEXT
           Foo Bar
           Lagistrasse 12a
@@ -299,7 +299,6 @@ describe Contactable::Address do
 
       it "uses invoice address if additional address with used_for_invoices category exists" do
         build_additional_address(
-          {
             label: nil,
             last_name: "Foo Bar",
             uses_contactable_name: false,
@@ -310,7 +309,6 @@ describe Contactable::Address do
             zip_code: 1080,
             town: "Jamestown",
             category: contact_account_categories(:additional_address_person_invoices)
-          }
         )
 
         expect(attributes).to eq({
@@ -361,7 +359,6 @@ describe Contactable::Address do
 
       it "stores full name in last_name when addressable is AdditionalAddress" do
         build_additional_address(
-          {
             label: nil,
             last_name: "Office Address",
             uses_contactable_name: false,
@@ -370,7 +367,6 @@ describe Contactable::Address do
             zip_code: 8000,
             town: "Zurich",
             category: contact_account_categories(:additional_address_person_invoices)
-          }
         )
         person.country = "CH"
 
@@ -390,7 +386,6 @@ describe Contactable::Address do
 
       it "uses organization_name from additional address when flagged as organization" do
         build_additional_address(
-          {
             label: nil,
             organization: true,
             organization_name: "Acme Corp",
@@ -399,8 +394,7 @@ describe Contactable::Address do
             housenumber: "99",
             zip_code: 8000,
             town: "Zurich",
-            invoices: true
-          }
+            category: contact_account_categories(:additional_address_person_invoices)
         )
         person.country = "CH"
 
@@ -557,7 +551,7 @@ describe Contactable::Address do
         label_handling: false
 
       it "uses invoice address if additional address with used_for_invoices category exists" do
-        build_additional_address(attrs)
+        build_additional_address(**attrs)
         expect(text).to eq <<~TEXT
           TopGroup
           Lagistrasse 12a
@@ -566,7 +560,7 @@ describe Contactable::Address do
       end
 
       it "uses address_care_of from additional address" do
-        build_additional_address(attrs.merge(address_care_of: "c/o Finance"))
+        build_additional_address(**attrs, address_care_of: "c/o Finance")
         expect(text).to eq <<~TEXT
           TopGroup
           c/o Finance
@@ -576,8 +570,8 @@ describe Contactable::Address do
       end
 
       it "uses address_care_of from additional address" do
-        build_additional_address(attrs.merge(address_care_of: "c/o Finance", last_name: "Foo Bar",
-          uses_contactable_name: false))
+        build_additional_address(**attrs, address_care_of: "c/o Finance", last_name: "Foo Bar",
+          uses_contactable_name: false)
         expect(text).to eq <<~TEXT
           Foo Bar
           c/o Finance
@@ -587,7 +581,7 @@ describe Contactable::Address do
       end
 
       it "does not print blank address_care_of line" do
-        build_additional_address(attrs.merge(address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false))
+        build_additional_address(**attrs, address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false)
         expect(text).to eq <<~TEXT
           Foo Bar
           Lagistrasse 12a
@@ -618,7 +612,6 @@ describe Contactable::Address do
 
       it "uses invoice address if additional address with used_for_invoices category exists" do
         build_additional_address(
-          {
             label: nil,
             last_name: "Foo Bar",
             uses_contactable_name: false,
@@ -629,7 +622,6 @@ describe Contactable::Address do
             zip_code: 1080,
             town: "Jamestown",
             category: contact_account_categories(:additional_address_group_invoices)
-          }
         )
 
         expect(attributes).to eq({

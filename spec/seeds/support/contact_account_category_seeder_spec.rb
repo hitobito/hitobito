@@ -26,14 +26,14 @@ describe ContactAccountCategorySeeder do
     it "inserts entries before the given key and removes them again" do
       list = ContactAccountCategorySeeder::CATEGORIES["PhoneNumber"]["Person"]
       original_size = list.size
-      original_keys = list.map { |item| item[:key] }
+      original_keys = list.pluck(:key)
       other_index = original_keys.index("other")
 
       ContactAccountCategorySeeder.insert_before("PhoneNumber", "Person", "other",
-                                                 {key: "test_a", name: {de: "Test A"}},
-                                                 {key: "test_b", name: {de: "Test B"}})
+        {key: "test_a", name: {de: "Test A"}},
+        {key: "test_b", name: {de: "Test B"}})
 
-      expect(list.map { |item| item[:key] })
+      expect(list.pluck(:key))
         .to eq original_keys.insert(other_index, "test_a", "test_b")
 
       list.delete_if { |item| %w[test_a test_b].include?(item[:key]) }
@@ -45,7 +45,7 @@ describe ContactAccountCategorySeeder do
       original_size = list.size
 
       ContactAccountCategorySeeder.insert_before("PhoneNumber", "Person", "missing",
-                                                 {key: "test_c", name: {de: "Test C"}})
+        {key: "test_c", name: {de: "Test C"}})
 
       expect(list.last[:key]).to eq "test_c"
 

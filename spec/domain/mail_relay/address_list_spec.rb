@@ -70,27 +70,27 @@ describe MailRelay::AddressList do
 
   it "matches additional email by category key" do
     e1 = Fabricate(:additional_email, contactable: top_leader,
-                   category: contact_account_categories(:additional_email_person_work), label: nil)
+      category: contact_account_categories(:additional_email_person_work), label: nil)
     expect(entries([top_leader], %w[work])).to match_array([e1.email])
   end
 
   it "matches additional email by any translated category name" do
     e1 = Fabricate(:additional_email, contactable: top_leader,
-                   category: contact_account_categories(:additional_email_person_work), label: nil)
+      category: contact_account_categories(:additional_email_person_work), label: nil)
     expect(entries([top_leader], %w[arbeit])).to match_array([e1.email])
   end
 
   it "matches additional email by label for non-other category" do
     e1 = Fabricate(:additional_email, contactable: top_leader,
-                   category: contact_account_categories(:additional_email_person_work), label: "büro")
+      category: contact_account_categories(:additional_email_person_work), label: "büro")
     expect(entries([top_leader], %w[büro])).to match_array([e1.email])
     expect(entries([top_leader], %w[Professionnel])).to match_array([e1.email])
   end
 
   it "does not match other category by category name" do
     Fabricate(:additional_email, contactable: top_leader,
-              category: contact_account_categories(:additional_email_person_other),
-              label: "foo", mailings: false)
+      category: contact_account_categories(:additional_email_person_other),
+      label: "foo", mailings: false)
     expect(entries([top_leader], %w[andere])).to match_array([top_leader.email])
   end
 

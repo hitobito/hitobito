@@ -75,9 +75,11 @@ RSpec.describe AddContactAccountCategories, type: :migration do
     when :additional_emails
       columns.merge!(email: "test@example.com", public: true, mailings: true)
     when :phone_numbers
-      columns.merge!(number: "+41 79 000 00 00", public: true)
+      columns[:number] = "+41 79 000 00 00"
+      columns[:public] = true
     when :social_accounts
-      columns.merge!(name: "example", public: true)
+      columns[:name] = "example"
+      columns[:public] = true
     end
 
     values = columns.values.map { |v| ActiveRecord::Base.connection.quote(v) }.join(", ")

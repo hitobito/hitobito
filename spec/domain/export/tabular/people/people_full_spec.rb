@@ -43,7 +43,7 @@ describe Export::Tabular::People::PeopleFull do
       before do
         allow(Settings.additional_address).to receive(:enabled).and_return(true)
         person.additional_addresses << Fabricate.build(:additional_address,
-          category: contact_account_categories(:additional_address_person_work), 
+          category: contact_account_categories(:additional_address_person_work),
           first_name: "Foo", last_name: "Bar", street: "def", uses_contactable_name: false)
       end
 

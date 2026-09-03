@@ -13,7 +13,6 @@
 #  contact_account_type   :string           not null
 #  contactable_type       :string           not null
 #  key                    :string           not null
-#  name                   :string           not null
 #  position               :integer          default(0), not null
 #  unique_per_contactable :boolean          default(FALSE), not null
 #  used_for_invoices      :boolean          default(FALSE), not null

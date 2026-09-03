@@ -55,13 +55,12 @@ describe ContactAccountCategorySeeder do
   end
 
   describe "#seed" do
-    it "adds any categories still missing but does not enqueue the migration job again" do
+    it "does not seed or migrate categories when they already exist" do
       expect(ContactAccountCategory.count).to be_positive
-      expect(ContactAccountCategory.count).to be < ContactAccountCategorySeeder.category_count
 
+      expect(ContactAccountCategory).not_to receive(:seed_once)
       expect(ContactAccountCategoryMigrationJob).not_to receive(:new)
-      expect { seeder.seed }.to change { ContactAccountCategory.count }
-        .to(ContactAccountCategorySeeder.category_count)
+      expect { seeder.seed }.not_to(change { ContactAccountCategory.count })
     end
 
     it "seeds the core categories and backfills existing accounts synchronously when none exist yet" do

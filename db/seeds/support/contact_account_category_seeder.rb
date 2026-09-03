@@ -118,8 +118,10 @@ class ContactAccountCategorySeeder
 
   def seed
     first_time = ContactAccountCategory.none?
-    ContactAccountCategory.seed_once(:contact_account_type, :contactable_type, :key, *seed_data)
-    ContactAccountCategoryMigrationJob.new.perform if first_time
+    if first_time
+      ContactAccountCategory.seed_once(:contact_account_type, :contactable_type, :key, *seed_data)
+      ContactAccountCategoryMigrationJob.new.perform
+    end
   end
 
   private

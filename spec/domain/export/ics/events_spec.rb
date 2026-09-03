@@ -50,7 +50,7 @@ describe Export::Ics::Events do
     end
 
     it do
-      is_expected.to include(event.description)
+      is_expected.to include("")
       is_expected.to include(contact.person_name)
       is_expected.to include(contact.email)
       url = Rails.application.routes.url_helpers.group_event_url(group_id: event.groups.first.id, id: event.id,

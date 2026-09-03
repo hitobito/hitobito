@@ -548,6 +548,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def plain_description
+    return if description.blank?
+
     description.to_plain_text
   end
 

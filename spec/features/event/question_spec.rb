@@ -174,7 +174,7 @@ describe EventsController, js: true do
 
       # Fill in required event fields
       fill_in :event_name, with: "Test Event"
-      fill_in "Beschreibung", with: "Test Description"
+      find("trix-editor").click.set "Test Description"
       select "SLK", from: "Kursart"
 
       # Navigate to dates tab and add a date

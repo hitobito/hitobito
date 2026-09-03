@@ -24,6 +24,7 @@ describe EventResource, type: :resource do
         :application_opening_at,
         :application_conditions,
         :description,
+        :html_description,
         :name,
         :cost,
         :created_at,

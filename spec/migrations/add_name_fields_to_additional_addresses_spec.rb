@@ -37,6 +37,7 @@ RSpec.describe AddNameFieldsToAdditionalAddresses, type: :migration do
   end
 
   before do
+    SeedFu.quiet = true
     ActiveRecord::Migration.verbose = false
     migration_context.down(previous_version)
     ActiveRecord::Base.connection.schema_cache.clear!

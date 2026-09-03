@@ -104,8 +104,6 @@ class AddContactAccountCategories < ActiveRecord::Migration[8.0]
   end
 
   def seed_and_backfill_categories
-    return if Rails.env.test? # categories are provided via fixtures in tests
-
     require Rails.root.join("db", "seeds", "support", "contact_account_category_seeder")
     ContactAccountCategorySeeder.new.seed
   end

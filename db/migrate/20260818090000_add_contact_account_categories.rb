@@ -20,8 +20,10 @@ class AddContactAccountCategories < ActiveRecord::Migration[8.0]
   def down
     CONTACT_ACCOUNT_TABLES.each { |table| change_column_null table, :category_id, true }
 
+    backfill_contact_account_labels
+    backfill_additional_address_labels
     change_column_null :additional_addresses, :label, false
-    add_index :additional_addresses, [:contactable_id, :contactable_type, :label], unique: true
+    add_index :additional_addresses, [:contactable_id, :contactable_type, :label], unique: true, if_not_exists: true
 
     CONTACT_ACCOUNT_TABLES.each { |table| remove_reference table, :category, index: true }
 
@@ -61,8 +63,44 @@ class AddContactAccountCategories < ActiveRecord::Migration[8.0]
   end
 
   def make_additional_address_label_freetext
-    remove_index :additional_addresses, column: [:contactable_id, :contactable_type, :label]
+    remove_index :additional_addresses, column: [:contactable_id, :contactable_type, :label], if_exists: true
     change_column_null :additional_addresses, :label, true
+  end
+
+  def backfill_contact_account_labels
+    (CONTACT_ACCOUNT_TABLES - [:additional_addresses]).each do |table|
+      execute(<<~SQL)
+        UPDATE #{table}
+        SET label = COALESCE(
+          NULLIF(TRIM(#{table}.label), ''),
+          contact_account_category_translations.name,
+          contact_account_categories.key
+        )
+        FROM contact_account_categories
+        LEFT JOIN contact_account_category_translations
+          ON contact_account_category_translations.contact_account_category_id = contact_account_categories.id
+          AND contact_account_category_translations.locale = 'de'
+        WHERE #{table}.category_id = contact_account_categories.id
+      SQL
+    end
+  end
+
+  def backfill_additional_address_labels
+    execute(<<~SQL)
+      UPDATE additional_addresses
+      SET label = (
+        COALESCE(
+          NULLIF(TRIM(additional_addresses.label), ''),
+          contact_account_category_translations.name,
+          contact_account_categories.key
+        ) || '-' || additional_addresses.id
+      )
+      FROM contact_account_categories
+      LEFT JOIN contact_account_category_translations
+        ON contact_account_category_translations.contact_account_category_id = contact_account_categories.id
+        AND contact_account_category_translations.locale = 'de'
+      WHERE additional_addresses.category_id = contact_account_categories.id
+    SQL
   end
 
   def seed_and_backfill_categories

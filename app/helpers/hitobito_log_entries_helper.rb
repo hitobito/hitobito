@@ -21,4 +21,13 @@ module HitobitoLogEntriesHelper
       [:created_at, :level, :category, :subject, :message, :payload]
     end
   end
+
+  def hitobito_log_entry_safe_subject_link(entry)
+    fallback = link_to(HitobitoLogEntry.model_name.human(count: 2), hitobito_log_entries_path)
+    return fallback unless entry.subject
+
+    link_to(entry.subject.to_s, polymorphic_path(entry.subject))
+  rescue NoMethodError, ActionController::UrlGenerationError
+    fallback
+  end
 end

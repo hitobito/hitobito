@@ -6,10 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class Contactable::Address
-  def initialize(contactable, label: nil)
+  def initialize(contactable, category_key: nil)
     @contactable = contactable
-    @label = label
-    @addressable = additional_addresses.find { |a| a.label == label } || contactable
+    @addressable = additional_addresses.find { |a| a.category&.key == category_key } || contactable
   end
 
   def for_letter
@@ -108,7 +107,8 @@ class Contactable::Address
   end
 
   def invoice_addressable
-    @invoice_addressable ||= additional_addresses.find(&:invoices?) || contactable
+    @invoice_addressable ||= additional_addresses.find { |a| a.category&.used_for_invoices? } ||
+      contactable
   end
 
   def contactable_and_company_name

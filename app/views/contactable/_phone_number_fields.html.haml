@@ -7,5 +7,6 @@
   %div.col-11.col-md-11.col-lg-5.col-xl-5.col-xxl-4.me-3
     = f.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
   %div.col-11.col-md-11.col-lg-5.col-xl-5.col-xxl-3.d-flex.flex-row.me-3.mt-1
+    = contact_method_category_field(f)
     = contact_method_label_field(f)
   = render 'contactable/public_check_box', f: f

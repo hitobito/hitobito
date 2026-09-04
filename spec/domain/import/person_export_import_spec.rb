@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,10 +28,12 @@ describe "export import person" do
       birthday: Date.new(1980, 5, 1),
       additional_information: "bla bla bla\nbla bla")
 
-    Fabricate(:phone_number, contactable: exported, label: "Privat")
-    Fabricate(:phone_number, contactable: exported, label: "Mobil")
-    Fabricate(:additional_email, contactable: exported)
-    Fabricate(:social_account, contactable: exported, label: "Webseite")
+    Fabricate(:phone_number, contactable: exported, category: contact_account_categories(:phone_number_person_landline))
+    Fabricate(:phone_number, contactable: exported, category: contact_account_categories(:phone_number_person_mobile))
+    Fabricate(:additional_email, contactable: exported,
+      category: contact_account_categories(:additional_email_person_private))
+    Fabricate(:social_account, contactable: exported,
+      category: contact_account_categories(:social_account_person_facebook))
 
     csv = export(exported)
     csv_without_bom = csv.gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), "")
@@ -51,8 +53,9 @@ describe "export import person" do
     exported.reload
     %w[phone_numbers social_accounts additional_emails].each do |assoc|
       expect(imported.send(assoc).size).to eq(exported.send(assoc).to_a.size)
-      exported.send(assoc).each_with_index do |e, i|
-        expect_attrs_equal(imported.send(assoc)[i], e, %w[id contactable_id])
+      exported.send(assoc).each do |e|
+        imported_entry = imported.send(assoc).find { |a| a.category_id == e.category_id }
+        expect_attrs_equal(imported_entry, e, %w[id contactable_id])
       end
     end
   end

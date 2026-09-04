@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -57,13 +57,12 @@ module Dropdown
         format_item = Item.new(label_format.to_s, "#")
         parent.sub_items << format_item
 
-        types_with_labels = AdditionalAddress.predefined_labels.map { |l|
-          [l, AdditionalAddress.translate_label(l)]
-        }
+        categories = ContactAccountCategory.for("AdditionalAddress", "Person")
+        types_with_labels = categories.map { |category| [category.key, category.to_s] }
         types_with_labels.unshift([:main,
           I18n.t(".additional_address.main", scope: self.class.to_s.underscore)])
-        types_with_labels.each do |address_type, label|
-          format_item.sub_items << add_label_format_item(label_format, label:, address_type:)
+        types_with_labels.each do |category_key, label|
+          format_item.sub_items << add_label_format_item(label_format, label:, category_key:)
         end
       end
     end
@@ -86,10 +85,10 @@ module Dropdown
       end
     end
 
-    def export_label_format_path(label_format_id, address_type: nil)
+    def export_label_format_path(label_format_id, category_key: nil)
       households = ToggleHouseholdsLabelsItem::DEFAULT_STATE if @households
       params.merge(format: :pdf, label_format_id:, household: households,
-        address_type:).compact_blank
+        category_key:).compact_blank
     end
 
     class ToggleHouseholdsLabelsItem < Dropdown::Base

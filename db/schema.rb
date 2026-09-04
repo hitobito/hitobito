@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_18_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -55,7 +55,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
   create_table "additional_addresses", force: :cascade do |t|
     t.string "contactable_type"
     t.bigint "contactable_id"
-    t.string "label", null: false
+    t.bigint "category_id"
+    t.string "label"
     t.string "street", null: false
     t.string "housenumber", limit: 20
     t.string "zip_code", null: false
@@ -71,6 +72,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
     t.string "organization_name"
     t.boolean "organization", default: false, null: false
     t.index ["contactable_id", "contactable_type", "label"], name: "idx_on_contactable_id_contactable_type_label_53043e4f10", unique: true
+    t.index ["category_id"], name: "index_additional_addresses_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_additional_addresses_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
     t.index ["contactable_type", "contactable_id"], name: "index_additional_addresses_on_contactable"
   end
@@ -83,6 +85,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
     t.boolean "public", default: true, null: false
     t.boolean "mailings", default: true, null: false
     t.boolean "invoices", default: false
+    t.bigint "category_id", null: false
+    t.index ["category_id"], name: "index_additional_emails_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_id_and_contactable_type"
     t.index ["contactable_id", "contactable_type"], name: "index_additional_emails_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
   end
@@ -161,6 +165,28 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
     t.text "description"
     t.string "token", null: false
     t.index ["group_id"], name: "index_calendars_on_group_id"
+  end
+
+  create_table "contact_account_categories", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "contact_account_type", null: false
+    t.string "contactable_type", null: false
+    t.boolean "unique_per_contactable", default: false, null: false
+    t.boolean "used_for_invoices", default: false, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_account_type", "contactable_type", "key"], name: "index_contact_account_categories_on_type_and_key", unique: true
+  end
+
+  create_table "contact_account_category_translations", force: :cascade do |t|
+    t.bigint "contact_account_category_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name", null: false
+    t.index ["contact_account_category_id"], name: "index_68a41839a9311c4db8ffe03aaec9f6ab1009e82a"
+    t.index ["locale"], name: "index_contact_account_category_translations_on_locale"
   end
 
   create_table "cors_origins", force: :cascade do |t|
@@ -1259,6 +1285,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
     t.string "number", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
+    t.bigint "category_id", null: false
+    t.index ["category_id"], name: "index_phone_numbers_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_phone_numbers_on_contactable_id_and_contactable_type"
   end
 
@@ -1376,6 +1404,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_17_120000) do
     t.string "name", null: false
     t.string "label"
     t.boolean "public", default: true, null: false
+    t.bigint "category_id", null: false
+    t.index ["category_id"], name: "index_social_accounts_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_social_accounts_on_contactable_id_and_contactable_type"
   end
 

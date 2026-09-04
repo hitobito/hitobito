@@ -89,45 +89,10 @@ email:
 root_email: <%= ENV['RAILS_ROOT_USER_EMAIL'].presence || 'hitobito@puzzle.ch' %>
 
 phone_number:
-  custom_label:
-    enabled: false
-  predefined_labels:
-    - Privat
-    - Mobil
-    - Arbeit
-    - Vater
-    - Mutter
-    - Fax
-    - Andere
   default_country: CH
 
-social_account:
-  custom_label:
-    enabled: true
-  predefined_labels:
-    - Facebook
-    - MSN
-    - Skype
-    - Twitter
-    - Webseite
-    - Andere
-
-additional_email:
-  custom_label:
-    enabled: true
-  predefined_labels:
-    - Privat
-    - Arbeit
-    - Vater
-    - Mutter
-    - Andere
-
 additional_address:
-  custom_label:
-    enabled: true
   enabled: false
-  predefined_labels:
-    - Arbeit
 
 address_sync:
   enabled: false

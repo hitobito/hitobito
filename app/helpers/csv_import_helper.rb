@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -37,11 +37,14 @@ module CsvImportHelper
   end
 
   def csv_import_contact_account_value(p, key)
-    parts = key.split("_")
-    key = parts.last
-    assoc = parts[0..-2].join("_").pluralize
-    contact = p.send(assoc).find { |c| c.label.downcase == key }
-    contact && contact.value
+    [AdditionalEmail, PhoneNumber, SocialAccount].each do |model|
+      category = Import::ContactAccountFields.new(model).category_for(key)
+      next unless category
+
+      contact = p.send(model.table_name).find { |c| c.category_id == category.id }
+      return contact&.value
+    end
+    nil
   end
 
   def csv_import_tag_values(p)

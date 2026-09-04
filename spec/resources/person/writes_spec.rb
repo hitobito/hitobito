@@ -249,7 +249,8 @@ describe PersonResource, type: :resource do
                 "temp-id": "asdf",
                 attributes: {
                   label: "Ds Grosi",
-                  number: "0780000000"
+                  number: "0780000000",
+                  category_id: contact_account_categories(:phone_number_person_other).id
                 }
               }
             ]
@@ -343,7 +344,8 @@ describe PersonResource, type: :resource do
                 "temp-id": "asdf",
                 attributes: {
                   label: "Ds Grosi",
-                  name: "ds-grosi"
+                  name: "ds-grosi",
+                  category_id: contact_account_categories(:social_account_person_other).id
                 }
               }
             ]
@@ -437,7 +439,8 @@ describe PersonResource, type: :resource do
                 "temp-id": "asdf",
                 attributes: {
                   label: "Ds Grosi",
-                  email: "ds-grosi@example.com"
+                  email: "ds-grosi@example.com",
+                  category_id: contact_account_categories(:additional_email_person_other).id
                 }
               }
             ]

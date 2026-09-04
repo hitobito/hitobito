@@ -127,7 +127,8 @@ describe InvoiceMailer do
 
     context "with invoice email" do
       before do
-        manager.additional_emails.create!(email: "invoices@example.com", label: "Privat", invoices: true)
+        category = contact_account_categories(:additional_email_person_invoices)
+        manager.additional_emails.create!(email: "invoices@example.com", category: category)
       end
 
       its(:cc) { should == ["invoices@example.com"] }

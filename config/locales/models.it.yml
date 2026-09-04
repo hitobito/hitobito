@@ -98,6 +98,10 @@ it:
       models:
         additional_address:
           name_missing: 'Bitte geben Sie einen Namen ein'
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "deve essere attivato quando '%{attribute}' è attivato"
         cors_origin:
           attributes:
             origin:
@@ -162,8 +166,6 @@ it:
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             base:
-              max_one_additional_invoice_address: È possibile selezionare un solo indirizzo come indirizzo di fatturazione.
-              additional_address_labels_must_be_unique: Le denominazioni degli altri indirizzi devono essere univoche.
               cannot_have_managers_and_manageds: '%{name} non può avere sia amministratori che figli.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: Impossibile aggiungere il bambino perché è già amministratore.
@@ -261,6 +263,10 @@ it:
         one: Registrazione nel calendario
         many: Registrazioni nel calendario
         other: Registrazioni nel calendario
+      contact_account_category:
+        one: Categoria dati di contatto
+        many: Categorie dati di contatto
+        other: Categorie dati di contatto
       custom_content:
         one: testo
         many: Osservazioni
@@ -578,7 +584,8 @@ it:
         category: Categoria
 
       additional_address:
-        translated_label: Denominazione
+        category: Categoria
+        label: Denominazione
         first_name: Vorname
         last_name: Nachname
         organization_name: Firmenname
@@ -595,7 +602,7 @@ it:
         public: Pubblico
 
       additional_addresses:
-        translated_label: Bezeichnung
+        category: Categoria
         label: Denominazione
         street: Strada
         postbox: Postfach
@@ -1089,6 +1096,7 @@ it:
 
       phone_number:
         number: Numero
+        category: Categoria
         label: Tipo
         public: Pubblico
 
@@ -1118,6 +1126,7 @@ it:
       # used for nested phone_numbers
       phone_numbers:
         number: Numero di telefono
+        category: Categoria
         label: Tipo di numero di telefono
         public: Pubblico
 
@@ -1186,33 +1195,23 @@ it:
               one: In futuro
               many: Futuro
               other: Futuro
-      contact_account:
-        custom_label: Testo libero
-        predefined_labels:
-          privat: Privato
-          mobil: Cellulare
-          arbeit: Ufficio
-          vater: Padre
-          mutter: Madre
-          fax: Fax
-          andere: Altro
-          webseite: Sito web
-          rechnung: Fattura
-
       social_account:
         name: Nickname
+        category: Categoria
         label: Tipo
         public: Pubblico
 
       # used for nested social accounts
       social_accounts:
         name: Nome dei social media
+        category: Categoria
         label: Tipo di social media
         public: Pubblico
 
       additional_email:
         email: Email
         name: Altre email
+        category: Categoria
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1221,6 +1220,7 @@ it:
       additional_emails:
         email: E-mail
         name: Altre email
+        category: Categoria
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1339,6 +1339,15 @@ it:
         category: Categoria
         subject: Soggetto
         message: Rapporto
+
+      contact_account_category:
+        key: Chiave
+        contact_account_type: Tipo di contatto
+        contactable_type: Si applica a
+        unique_per_contactable: Unico per contatto
+        used_for_invoices: Utilizzo per le fatture
+        position: Posizione
+        name: Designazione
 
       label_format:
         name: Definizione
@@ -1682,6 +1691,9 @@ it:
       qualifications: Leggere, creare ed eliminare tutte le qualifiche a cui hai accesso
 
   errors:
+    attributes:
+      category:
+        already_assigned: "%{category} è già stato assegnato"
     messages:
       invalid_zipcode: non è valido
       attachments_not_allowed: "Non può contenere allegati"

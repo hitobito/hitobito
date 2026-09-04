@@ -5,37 +5,13 @@
 require "spec_helper"
 
 describe SocialAccount do
-  context ".normalize_label" do
-    it "reuses existing label" do
-      Fabricate(:social_account, label: "Foo")
-      a2 = Fabricate(:social_account, label: "fOO")
-      expect(a2.label).to eq("Foo")
-    end
-  end
-
-  context "#available_labels" do
-    subject { SocialAccount.available_labels }
-
-    it { is_expected.to include(Settings.social_account.predefined_labels.first) }
-
-    it "excludes labels from database" do
-      Fabricate(:social_account, label: "Foo")
-      is_expected.not_to include("Foo")
-    end
-
-    it "includes labels from database and predefined only once" do
-      predef = Settings.social_account.predefined_labels.first
-      Fabricate(:social_account, label: predef)
-      expect(subject.count(predef)).to eq(1)
-    end
-  end
-
   context "paper trails", versioning: true do
     let(:person) { people(:top_leader) }
+    let(:category) { contact_account_categories(:social_account_person_other) }
 
     it "sets main on create" do
       expect do
-        person.social_accounts.create!(label: "Foo", name: "Bar")
+        person.social_accounts.create!(label: "Foo", name: "Bar", category:)
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
@@ -44,7 +20,7 @@ describe SocialAccount do
     end
 
     it "sets main on update" do
-      account = person.social_accounts.create(label: "Foo", name: "Bar")
+      account = person.social_accounts.create(label: "Foo", name: "Bar", category:)
       expect do
         account.update!(name: "Bur")
       end.to change { PaperTrail::Version.count }.by(1)
@@ -55,7 +31,7 @@ describe SocialAccount do
     end
 
     it "sets main on destroy" do
-      account = person.social_accounts.create(label: "Foo", name: "Bar")
+      account = person.social_accounts.create(label: "Foo", name: "Bar", category:)
       expect do
         account.destroy!
       end.to change { PaperTrail::Version.count }.by(1)

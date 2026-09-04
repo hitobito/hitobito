@@ -9,36 +9,6 @@ describe AdditionalEmail do
     I18n.locale = I18n.default_locale
   end
 
-  context "label validation" do
-    it "should not contain a dot at the end of a label" do
-      a1 = Fabricate(:additional_email, label: "Foo")
-      expect(a1).to be_valid
-
-      a1.label = "Foo."
-      expect(a1).not_to be_valid
-    end
-  end
-
-  context "invoices validation" do
-    it "validates uniqueness of invoices for contactable" do
-      a1 = Fabricate(:additional_email, label: "Foo", invoices: true, contactable: people(:top_leader))
-      expect(a1).to be_valid
-
-      a2 = Fabricate.build(:additional_email, label: "Bar", invoices: true, contactable: people(:top_leader))
-      expect(a2).not_to be_valid
-      expect(a2).to have(1).error_on(:invoices)
-
-      a3 = Fabricate.build(:additional_email, label: "Buz", invoices: true, contactable: people(:bottom_member))
-      expect(a3).to be_valid
-
-      a4 = Fabricate(:additional_email, label: "Buz", invoices: false, contactable: people(:top_leader))
-      expect(a4).to be_valid
-
-      a5 = Fabricate(:additional_email, label: "Buzz", invoices: false, contactable: people(:top_leader))
-      expect(a5).to be_valid
-    end
-  end
-
   describe "e-mail validation" do
     let(:add_email) { Fabricate(:additional_email, label: "Foo") }
 
@@ -81,102 +51,14 @@ describe AdditionalEmail do
     end
   end
 
-  context "#translated_label" do
-    it "should return untranslated label as-is" do
-      I18n.locale = :fr
-
-      a1 = Fabricate(:additional_email, label: "Foo")
-      expect(a1.label).to eq "Foo"
-      expect(a1.translated_label).to eq "Foo"
-    end
-
-    it "should return translated label" do
-      I18n.locale = :fr
-
-      a2 = Fabricate(:additional_email, label: "Privat")
-      expect(a2.label).to eq "Privat"
-      expect(a2.translated_label).to eq "Privé"
-    end
-  end
-
-  context ".normalize_label" do
-    it "reuses existing label" do
-      Fabricate(:additional_email, label: "Foo")
-      a2 = Fabricate(:additional_email, label: "fOO")
-      expect(a2.label).to eq("Foo")
-    end
-
-    it "should preserve untranslated label as-is" do
-      I18n.locale = :fr
-
-      a1 = Fabricate(:additional_email, label: "Foo")
-      expect(a1.label).to eq "Foo"
-    end
-
-    it "should map label back to default language" do
-      I18n.locale = :fr
-
-      a2 = Fabricate(:additional_email, label: "privé")
-      expect(a2.label).to eq "Privat"
-    end
-  end
-
-  context "#available_labels" do
-    subject { AdditionalEmail.available_labels }
-
-    before do
-      @settings_langs = Settings.application.languages
-      Settings.application.languages = {de: "Deutsch", fr: "Français"}
-    end
-
-    after do
-      Settings.application.languages = @settings_langs
-    end
-
-    it { is_expected.to include(Settings.additional_email.predefined_labels.first) }
-
-    it "excludes labels from database" do
-      Fabricate(:additional_email, label: "Foo")
-      is_expected.not_to include("Foo")
-    end
-
-    it "translates labels where available" do
-      I18n.locale = :de
-      expect(AdditionalEmail.available_labels).not_to include("Privé")
-
-      I18n.locale = :fr
-      expect(AdditionalEmail.available_labels).to include("Privé")
-    end
-  end
-
-  context "#used_labels" do
-    subject { AdditionalEmail.used_labels }
-
-    it "is sweeped for all languages if new label is added" do
-      Rails.cache.clear
-
-      expect(I18n.locale).to eq :de
-      labels_de = AdditionalEmail.used_labels
-
-      I18n.locale = :fr
-      labels_fr = AdditionalEmail.used_labels
-
-      expect(labels_de).not_to eq labels_fr
-
-      Fabricate(:additional_email, label: "A new label")
-      expect(AdditionalEmail.used_labels).to eq labels_fr + ["A new label"]
-
-      I18n.locale = :de
-      expect(AdditionalEmail.used_labels).to eq labels_de + ["A new label"]
-    end
-  end
-
   context "paper trails", versioning: true do
     let(:person) { people(:top_leader) }
 
+    let(:category) { contact_account_categories(:additional_email_person_other) }
+
     it "sets main on create" do
       expect do
-        person.additional_emails.create!(label: "Foo", email: "bar@bar.com")
+        person.additional_emails.create!(label: "Foo", email: "bar@bar.com", category:)
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
@@ -185,7 +67,7 @@ describe AdditionalEmail do
     end
 
     it "sets main on update" do
-      account = person.additional_emails.create(label: "Foo", email: "bar@bar.com")
+      account = person.additional_emails.create(label: "Foo", email: "bar@bar.com", category:)
       expect do
         account.update!(email: "bur@bur.com")
       end.to change { PaperTrail::Version.count }.by(1)
@@ -196,7 +78,7 @@ describe AdditionalEmail do
     end
 
     it "sets main on destroy" do
-      account = person.additional_emails.create(label: "Foo", email: "bar@bar.com")
+      account = person.additional_emails.create(label: "Foo", email: "bar@bar.com", category:)
       expect do
         account.destroy!
       end.to change { PaperTrail::Version.count }.by(1)

@@ -746,7 +746,8 @@ describe Person do
     before do
       AdditionalEmail
         .new(contactable: person,
-          email: "no-email@no-domain")
+          email: "no-email@no-domain",
+          category: contact_account_categories(:additional_email_person_other))
         .save!(validate: false)
     end
 

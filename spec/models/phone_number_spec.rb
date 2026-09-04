@@ -6,13 +6,6 @@
 require "spec_helper"
 
 describe PhoneNumber do
-  context ".normalize_label" do
-    it "reuses existing label" do
-      a1 = Fabricate(:phone_number, label: "privat", number: "+41 44 123 45 67")
-      expect(a1.label).to eq("Privat")
-    end
-  end
-
   context ".valid" do
     it "number must be present" do
       a1 = Fabricate.build(:phone_number, label: "privat", number: nil)
@@ -41,29 +34,13 @@ describe PhoneNumber do
     end
   end
 
-  context "#available_labels" do
-    subject { PhoneNumber.available_labels }
-
-    it { is_expected.to include(Settings.phone_number.predefined_labels.first) }
-
-    it "excludes labels from database" do
-      Fabricate(:phone_number, label: "Foo", number: "+41 44 123 45 67")
-      is_expected.not_to include("Foo")
-    end
-
-    it "includes labels from database and predefined only once" do
-      predef = Settings.phone_number.predefined_labels.first
-      Fabricate(:phone_number, label: predef, number: "+41 44 123 45 67")
-      expect(subject.count(predef)).to eq(1)
-    end
-  end
-
   context "paper trails", versioning: true do
     let(:person) { people(:top_leader) }
+    let(:category) { contact_account_categories(:phone_number_person_other) }
 
     it "sets main on create" do
       expect do
-        person.phone_numbers.create!(label: "Foo", number: "+41 44 123 45 67")
+        person.phone_numbers.create!(label: "Foo", number: "+41 44 123 45 67", category:)
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
@@ -72,7 +49,7 @@ describe PhoneNumber do
     end
 
     it "sets main on update" do
-      account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67")
+      account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67", category:)
       expect do
         account.update!(number: "021 987 65 43")
       end.to change { PaperTrail::Version.count }.by(1)
@@ -83,7 +60,7 @@ describe PhoneNumber do
     end
 
     it "sets main on destroy" do
-      account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67")
+      account = person.phone_numbers.create(label: "Foo", number: "+41 44 123 45 67", category:)
       expect do
         account.destroy!
       end.to change { PaperTrail::Version.count }.by(1)

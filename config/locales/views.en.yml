@@ -159,24 +159,16 @@ en:
     public_check_box:
       tooltip: 'Private entries are visible only to your own group. If you are a group leader, entries marked as public are visible to leaders of other groups. '
 
-    phone_number_fields:
-      placeholder_type: Description (Personal, Work, etc.)
-
     social_account_fields:
-      placeholder_value: Website, Skype-name, other profiles...
-      placeholder_type: Type (Skype, Facebook, ...)
+      placeholder_value: Website, other profiles...
 
     additional_email_fields:
       placeholder_value: E-Mail
-      placeholder_type: Designation (Home, Work, ...)
       tooltip_mailings: Shipments of subscriptions, confirmations via e-mail, etc. will be sent in addition to all addresses selected here.
-      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
-      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
       caption_uses_contactable_name_person: Namen der Person übernehmen
       caption_uses_contactable_name_group: Namen der Gruppe übernehmen
-      caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
       housenumber: No.

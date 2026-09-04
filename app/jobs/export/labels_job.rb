@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, Hitobito AG. This file is part of
+#  Copyright (c) 2022-2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,11 +33,8 @@ class Export::LabelsJob < Export::ExportBaseJob
     when :pdf
       if @options[:label_format_id]
         household = @options[:household] == "true"
-        # rubocop:todo Layout/LineLength
-        Export::Pdf::Labels.new(find_and_remember_label_format, label: @options[:address_type]).generate(
-          # rubocop:enable Layout/LineLength
-          people, household
-        )
+        Export::Pdf::Labels.new(find_and_remember_label_format,
+          category_key: @options[:category_key]).generate(people, household)
       else
         Export::Pdf::List.render(people, group.name)
       end

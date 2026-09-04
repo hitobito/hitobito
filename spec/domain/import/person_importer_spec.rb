@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -65,8 +65,8 @@ describe Import::PersonImporter do
   context "creates associations" do
     let(:data) do
       [{first_name: "foo",
-        social_account_skype: "foobar",
-        phone_number_vater: "+41 44 123 45 67",
+        social_account_facebook: "foobar",
+        phone_number_work: "+41 44 123 45 67",
         tags: "foo"}]
     end
 
@@ -210,8 +210,8 @@ describe Import::PersonImporter do
     context "person loaded multiple times via doublette finder" do
       let(:attrs) { {email: "foo@bar.net", nickname: "", last_name: ""} }
       let(:data) do
-        [{email: "foo@bar.net", nickname: "nickname", town: "Bern", social_account_msn: "msn"},
-          {email: "foo@bar.net", last_name: "last_name", town: "Muri", social_account_skype: "skype"}]
+        [{email: "foo@bar.net", nickname: "nickname", town: "Bern", social_account_x_twitter: "msn"},
+          {email: "foo@bar.net", last_name: "last_name", town: "Muri", social_account_facebook: "skype"}]
       end
 
       before { importer.import }
@@ -339,30 +339,30 @@ describe Import::PersonImporter do
         subject { imported.phone_numbers }
 
         its(:size) { should eq 4 }
-        its("first.label") { should eq "Privat" }
-        its("first.number") { should eq "+49 3445 56783214" }
+        its("first.category") { should eq contact_account_categories(:phone_number_person_mobile) }
+        its("first.number") { should eq "+41 800 123 333" }
 
-        its("second.label") { should eq "Mobil" }
-        its("second.number") { should eq "+41 800 123 333" }
+        its("second.category") { should eq contact_account_categories(:phone_number_person_landline) }
+        its("second.number") { should eq "+49 3445 56783214" }
 
-        its("third.label") { should eq "Arbeit" }
+        its("third.category") { should eq contact_account_categories(:phone_number_person_work) }
         its("third.number") { should eq "+41 77 901 23 45" }
 
-        its("fourth.label") { should eq "Vater" }
+        its("fourth.category") { should eq contact_account_categories(:phone_number_person_other) }
         its("fourth.number") { should eq "+41 78 098 76 54" }
       end
 
       context "social accounts" do
-        subject { imported.social_accounts.order(:label) }
+        subject { imported.social_accounts.order(:id) }
 
         its(:size) { should eq 3 }
-        its("first.label") { should eq "MSN" }
-        its("first.name") { should eq "reyes_mckenzie" }
+        its("first.category") { should eq contact_account_categories(:social_account_person_facebook) }
+        its("first.name") { should eq "florida_armstrong" }
 
-        its("second.label") { should eq "Skype" }
-        its("second.name") { should eq "florida_armstrong" }
+        its("second.category") { should eq contact_account_categories(:social_account_person_x_twitter) }
+        its("second.name") { should eq "reyes_mckenzie" }
 
-        its("third.label") { should eq "Webseite" }
+        its("third.category") { should eq contact_account_categories(:social_account_person_other) }
         its("third.name") { should eq "colliäs.com" }
       end
 

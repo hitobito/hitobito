@@ -195,7 +195,7 @@ describe EventDecorator, :draper_with_helpers do
         additional_emails = contact.additional_emails.map do |email|
           "<i class=\"me-1 fas fa-envelope\"></i>" \
             "<span><a href=\"mailto:#{email.email}\">#{email.email}</a></span> " \
-            "<span class=\"muted\">#{email.label}</span>"
+            "<span class=\"muted\">#{email.category_label}</span>"
         end.join("<br />")
 
         is_expected.to eq \

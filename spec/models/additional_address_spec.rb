@@ -11,8 +11,6 @@ describe AdditionalAddress do
   let(:person) { people(:top_leader) }
   let(:labels) { %w[Foo Bar Buz] }
 
-  before { allow(Settings.additional_address).to receive(:predefined_labels).and_return(labels) }
-
   describe "::validations" do
     let(:attrs) { Fabricate.build(:additional_address).attributes }
 
@@ -23,7 +21,7 @@ describe AdditionalAddress do
       expect(address.save).to eq true
     end
 
-    %w[street zip_code town country label].each do |attr|
+    %w[street zip_code town country].each do |attr|
       it "validates presence of #{attr}" do
         address.send(:"#{attr}=", nil)
         expect(address).not_to be_valid
@@ -31,36 +29,26 @@ describe AdditionalAddress do
       end
     end
 
-    it "mirrors the label error onto translated_label, since the form field is bound to it" do
-      address.label = nil
-      expect(address).not_to be_valid
-      expect(address.errors[:translated_label]).to be_present
-    end
-
     it "may use multiple address with multiple labels" do
       person.additional_addresses.build(Fabricate.build(:additional_address, label: "Foobar").attributes)
       expect(person).to be_valid
     end
 
-    it "may not use same label twice" do
+    it "may use the same label twice, since label carries no business logic anymore" do
       person.additional_addresses.build(Fabricate.build(:additional_address, label: address.label).attributes)
-      expect(person).not_to be_valid
-      expect(person.errors.full_messages).to eq ["Die Bezeichnungen der weiteren Adressen müssen eindeutig sein."]
+      expect(person).to be_valid
     end
 
-    it "may not use invoices flag twice" do
-      address.update!(invoices: true)
-      person.additional_addresses.build(Fabricate.build(:additional_address, label: "Foobar",
-        invoices: true).attributes)
-      expect(person).not_to be_valid
-      expect(person.errors.full_messages).to eq ["Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden."]
-    end
+    it "may not use the same category twice when it is unique per contactable" do
+      category = contact_account_categories(:additional_address_person_work)
+      address.category = category
+      address.save!
 
-    it "allows false invoices flag multiple times" do
-      Fabricate(:additional_address, contactable: person, invoices: false, label: "foo")
-      address = Fabricate.build(:additional_address, contactable: person, invoices: false, label: "bar")
-      expect(address).to be_valid
-      expect(address.save).to eq true
+      duplicate = person.additional_addresses.build(
+        Fabricate.build(:additional_address, category: category).attributes
+      )
+      expect(person).not_to be_valid
+      expect(duplicate.errors[:category]).to be_present
     end
 
     it "requires a name" do

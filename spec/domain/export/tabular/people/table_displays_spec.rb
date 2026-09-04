@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Blasmusikverband. This file is part of
 #  hitobito_sbv and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -39,10 +39,8 @@ describe Export::Tabular::People::TableDisplays do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
         :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
         :layer_group, :roles,
-        :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
-        :additional_email_mutter, :additional_email_andere, :additional_email_custom_label,
-        :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
-        :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere]
+        :additional_email_private, :additional_email_work, :additional_email_invoices, :additional_email_other,
+        :phone_number_mobile, :phone_number_landline, :phone_number_work, :phone_number_other]
     end
 
     it "model class is actually person" do
@@ -52,7 +50,7 @@ describe Export::Tabular::People::TableDisplays do
     it "does not allow accessing unregistered columns" do
       table_display.selected = [:years]
       expect(people_list.labels.last).to eq "Telefonnummer Andere"
-      expect(people_list.attributes.last).to eq :phone_number_andere
+      expect(people_list.attributes.last).to eq :phone_number_other
       expect(people_list.attributes.grep(/years/).count).to eq 0
     end
 
@@ -76,15 +74,17 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.attributes.grep(/first_name/).count).to eq 1
     end
 
-    it "does include predefined phone number columns" do
-      person.phone_numbers.create!(label: "Privat", number: "0790000000")
-      expect(people_list.attribute_labels).to have_key(:phone_number_privat)
-      expect(people_list.attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
+    it "does include category-based phone number columns" do
+      person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+        number: "0790000000")
+      expect(people_list.attribute_labels).to have_key(:phone_number_landline)
+      expect(people_list.attribute_labels[:phone_number_landline]).to eq "Telefonnummer Festnetz"
     end
 
-    it "exports phone number value in predefined column" do
-      person.phone_numbers.create!(label: "Privat", number: "0790000000")
-      idx = people_list.attributes.index(:phone_number_privat)
+    it "exports phone number value in the category column" do
+      person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+        number: "0790000000")
+      idx = people_list.attributes.index(:phone_number_landline)
       expect(people_list.data_rows.first[idx]).to eq "+41 79 000 00 00"
     end
 
@@ -151,10 +151,8 @@ describe Export::Tabular::People::TableDisplays do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
         :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
         :layer_group, :roles,
-        :additional_email_privat, :additional_email_arbeit, :additional_email_vater,
-        :additional_email_mutter, :additional_email_andere, :additional_email_custom_label,
-        :phone_number_privat, :phone_number_mobil, :phone_number_arbeit,
-        :phone_number_vater, :phone_number_mutter, :phone_number_fax, :phone_number_andere]
+        :additional_email_private, :additional_email_work, :additional_email_invoices, :additional_email_other,
+        :phone_number_mobile, :phone_number_landline, :phone_number_work, :phone_number_other]
     end
 
     it "model class is actually participation" do
@@ -184,7 +182,8 @@ describe Export::Tabular::People::TableDisplays do
     end
 
     it "has assumptions" do
-      person.phone_numbers.create!(label: "foobar", number: "0790000000")
+      person.phone_numbers.create!(label: "foobar", number: "0790000000",
+        category: contact_account_categories(:phone_number_person_other))
 
       expect(subject.attributes).to include(:roles)
       expect(subject).to respond_to(:build_attribute_labels)
@@ -206,15 +205,17 @@ describe Export::Tabular::People::TableDisplays do
       expect(scope.count).to be 1
     end
 
-    it "does include predefined phone number columns" do
-      person.phone_numbers.create!(label: "Privat", number: "0790000000")
-      expect(people_list.attribute_labels).to have_key(:phone_number_privat)
-      expect(people_list.attribute_labels[:phone_number_privat]).to eq "Telefonnummer Privat"
+    it "does include category-based phone number columns" do
+      person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+        number: "0790000000")
+      expect(people_list.attribute_labels).to have_key(:phone_number_landline)
+      expect(people_list.attribute_labels[:phone_number_landline]).to eq "Telefonnummer Festnetz"
     end
 
-    it "exports phone number value in predefined column" do
-      person.phone_numbers.create!(label: "Privat", number: "0790000000")
-      idx = people_list.attributes.index(:phone_number_privat)
+    it "exports phone number value in the category column" do
+      person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+        number: "0790000000")
+      idx = people_list.attributes.index(:phone_number_landline)
       expect(people_list.data_rows.first[idx]).to eq "+41 79 000 00 00"
     end
 

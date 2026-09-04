@@ -41,7 +41,7 @@ describe Export::EventParticipationsExportJob do
 
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
-      expect(lines[0].split(";").count).to match(28)
+      expect(lines[0].split(";").count).to match(23)
     end
   end
 
@@ -57,7 +57,7 @@ describe Export::EventParticipationsExportJob do
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
 
-      expect(lines[0].split(";").count).to match(45)
+      expect(lines[0].split(";").count).to match(37)
     end
 
     it "shows the correct timestamps on the participation instances" do
@@ -91,9 +91,9 @@ describe Export::EventParticipationsExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/Hauptebene.*/)
-      expect(lines[0].split(";").count).to match(29)
+      expect(lines[0].split(";").count).to match(24)
       # rubocop:todo Layout/LineLength
-      expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;;;;;;;;;;;;;;Bottom One\n"
+      expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;;;;;;;;;Bottom One\n"
       # rubocop:enable Layout/LineLength
     end
   end

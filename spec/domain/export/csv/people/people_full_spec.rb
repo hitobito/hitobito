@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,10 +17,15 @@ describe Export::Tabular::People::PeopleFull do
 
   before do
     person.update_attribute(:gender, "m")
-    person.social_accounts << SocialAccount.new(label: "skype", name: "foobar")
-    person.phone_numbers << PhoneNumber.new(label: "vater", number: "0791234567", public: false)
-    person.additional_emails << AdditionalEmail.new(label: "vater", email: "vater@example.com",
-      public: false)
+    person.social_accounts << SocialAccount.new(
+      category: contact_account_categories(:social_account_person_facebook), name: "foobar"
+    )
+    person.phone_numbers << PhoneNumber.new(
+      category: contact_account_categories(:phone_number_person_work), number: "0791234567", public: false
+    )
+    person.additional_emails << AdditionalEmail.new(
+      category: contact_account_categories(:additional_email_person_work), email: "vater@example.com", public: false
+    )
     person.save!
     I18n.locale = lang
   end
@@ -38,13 +43,10 @@ describe Export::Tabular::People::PeopleFull do
         "zusätzliche Adresszeile", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
         "Hauptebene", "Rollen",
         "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Sprache", "Tags",
-        "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Vater",
-        "Weitere E-Mail Mutter", "Weitere E-Mail Andere", "Weitere E-Mails Freitext",
-        "Telefonnummer Privat", "Telefonnummer Mobil", "Telefonnummer Arbeit",
-        "Telefonnummer Vater", "Telefonnummer Mutter", "Telefonnummer Fax", "Telefonnummer Andere",
-        "Social Media Adresse Facebook", "Social Media Adresse MSN", "Social Media Adresse Skype",
-        "Social Media Adresse Twitter", "Social Media Adresse Webseite", "Social Media Adresse Andere",
-        "Social Media Adressen Freitext"
+        "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Rechnungsadresse", "Weitere E-Mail Andere",
+        "Telefonnummer Mobil", "Telefonnummer Festnetz", "Telefonnummer Arbeit", "Telefonnummer Andere",
+        "Social Media Adresse Facebook", "Social Media Adresse X (Twitter)", "Social Media Adresse Webseite",
+        "Social Media Adresse Andere"
       ]
 
       expect(csv.headers).to match_array expected
@@ -55,9 +57,9 @@ describe Export::Tabular::People::PeopleFull do
       subject { csv[0] }
 
       its(["Rollen"]) { should eq "Leader Top / TopGroup" }
-      its(["Telefonnummer Vater"]) { should eq "'+41 79 123 45 67" }
-      its(["Weitere E-Mail Vater"]) { should eq "vater@example.com" }
-      its(["Social Media Adresse Skype"]) { should eq "foobar" }
+      its(["Telefonnummer Arbeit"]) { should eq "'+41 79 123 45 67" }
+      its(["Weitere E-Mail Arbeit"]) { should eq "vater@example.com" }
+      its(["Social Media Adresse Facebook"]) { should eq "foobar" }
       its(["Geschlecht"]) { should eq "männlich" }
       its(["Hauptebene"]) { should eq "Top" }
     end
@@ -65,10 +67,6 @@ describe Export::Tabular::People::PeopleFull do
 
   context "french" do
     let(:lang) { :fr }
-
-    def t_custom_label
-      I18n.t("activerecord.attributes.contact_account.custom_label", locale: lang)
-    end
 
     it "has correct headers" do
       headers = [
@@ -94,24 +92,16 @@ describe Export::Tabular::People::PeopleFull do
         "Tags",
         "Adresse e-mail supplémentaire Privé",
         "Adresse e-mail supplémentaire Professionnel",
-        "Adresse e-mail supplémentaire Père",
-        "Adresse e-mail supplémentaire Mère",
+        "Adresse e-mail supplémentaire Adresse de facturation",
         "Adresse e-mail supplémentaire Autre",
-        "Adresses e-mail supplémentaires #{t_custom_label}",
-        "Numéro de téléphone Privé",
         "Numéro de téléphone Mobile",
+        "Numéro de téléphone Ligne fixe",
         "Numéro de téléphone Professionnel",
-        "Numéro de téléphone Père",
-        "Numéro de téléphone Mère",
-        "Numéro de téléphone Fax",
         "Numéro de téléphone Autre",
         "Adresse d'un média social Facebook",
-        "Adresse d'un média social MSN",
-        "Adresse d'un média social Skype",
-        "Adresse d'un média social Twitter",
+        "Adresse d'un média social X (Twitter)",
         "Adresse d'un média social Site web",
-        "Adresse d'un média social Autre",
-        "Adresses de réseaux sociaux #{t_custom_label}"
+        "Adresse d'un média social Autre"
       ]
       expect(csv.headers).to match_array headers
       expect(csv.headers).to eq headers
@@ -121,9 +111,9 @@ describe Export::Tabular::People::PeopleFull do
       subject { csv[0] }
 
       its(["Rôles"]) { should eq "Leadre Top / TopGroup" }
-      its(["Numéro de téléphone Père"]) { should eq "'+41 79 123 45 67" }
-      its(["Adresse e-mail supplémentaire Père"]) { should eq "vater@example.com" }
-      its(["Adresse d'un média social Skype"]) { should eq "foobar" }
+      its(["Numéro de téléphone Professionnel"]) { should eq "'+41 79 123 45 67" }
+      its(["Adresse e-mail supplémentaire Professionnel"]) { should eq "vater@example.com" }
+      its(["Adresse d'un média social Facebook"]) { should eq "foobar" }
       its(["Sexe"]) { should eq "masculin" }
     end
   end

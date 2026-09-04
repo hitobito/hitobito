@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -121,7 +121,7 @@ module Import
 
     def assign_accounts(accounts, association)
       accounts.each do |imported|
-        existing = association.detect { |a| a.label == imported[:label] }
+        existing = association.detect { |a| a.category_id == imported[:category_id] }
         if existing
           existing.attributes = imported if override
         else
@@ -141,12 +141,12 @@ module Import
     end
 
     def extract_contact_fields(model)
-      keys = ContactAccountFields.new(model).keys
-      accounts = keys.select { |key| attributes.key?(key) }
-      accounts.map do |key|
-        label = key.split("_").last.capitalize
+      fields = ContactAccountFields.new(model)
+      keys = fields.keys.select { |key| attributes.key?(key) }
+      keys.map do |key|
+        category = fields.category_for(key)
         value = attributes.delete(key)
-        {model.value_attr => value, :label => label} if value.present?
+        {model.value_attr => value, :category_id => category&.id} if value.present?
       end.compact
     end
 

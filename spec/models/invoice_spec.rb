@@ -146,8 +146,9 @@ describe Invoice do
     expect(invoice.recipient_country).to eq "CH"
   end
 
-  it "#save prefers additional email with invoice flag over recipient email" do
-    person.additional_emails.create!(email: "invoices@example.com", label: "Privat", invoices: true)
+  it "#save prefers additional email with used_for_invoices category over recipient email" do
+    category = contact_account_categories(:additional_email_person_invoices)
+    person.additional_emails.create!(email: "invoices@example.com", category: category)
     invoice = create_invoice
     expect(invoice.recipient_email).to eq "invoices@example.com"
   end

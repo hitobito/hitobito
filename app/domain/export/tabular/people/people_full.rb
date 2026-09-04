@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,16 +26,10 @@ module Export::Tabular::People
       contact_account_attributes.merge(qualification_kind_attributes)
     end
 
-    def contact_account_attributes
-      account_attribute_types.each_with_object({}) do |type, result|
-        result.merge!(label_attributes_for(type))
-      end
-    end
-
     def account_attribute_types
-      [AdditionalEmail, PhoneNumber, SocialAccount].tap do |types|
-        types << AdditionalAddress if FeatureGate.enabled?("additional_address")
-      end
+      types = super + [SocialAccount]
+      types << AdditionalAddress if FeatureGate.enabled?("additional_address")
+      types
     end
 
     def qualification_kind_attributes

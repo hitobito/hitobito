@@ -132,7 +132,6 @@ class PersonSeeder
       AdditionalEmail,
       {email: Faker::Internet.email,
        mailings: [true, false].sample},
-      Settings.additional_email.predefined_labels,
       shuffle)
   end
 
@@ -140,7 +139,6 @@ class PersonSeeder
     seed_account(person,
       PhoneNumber,
       {number: Faker::PhoneNumber.phone_number_with_country_code},
-      Settings.phone_number.predefined_labels,
       shuffle)
   end
 
@@ -148,16 +146,17 @@ class PersonSeeder
     seed_account(person,
       SocialAccount,
       {name: Faker::Internet.user_name},
-      Settings.social_account.predefined_labels,
       shuffle)
   end
 
-  def seed_account(person, klass, attrs, labels, shuffle)
+  def seed_account(person, klass, attrs, shuffle)
+    categories = ContactAccountCategory.for(klass.name, person.class.name)
+    category = shuffle ? categories.sample : categories.first
     attrs.merge!({contactable_id:   person.id,
                    contactable_type: person.class.name,
-                   label:            shuffle ? labels.sample : labels.first,
+                   category_id:      category&.id,
                    public:           shuffle ? [true, false].sample : true})
-    klass.seed(:contactable_id, :contactable_type, :label, attrs)
+    klass.seed(:contactable_id, :contactable_type, :category_id, attrs)
   end
 
   # opts is used in wagon to set additional attributes

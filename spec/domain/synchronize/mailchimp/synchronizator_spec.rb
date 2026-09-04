@@ -588,7 +588,8 @@ describe Synchronize::Mailchimp::Synchronizator do
       mailing_list.update!(mailchimp_include_additional_emails: true,
         mailchimp_forgotten_emails: %w[forgotten@example.com])
       mailing_list.subscriptions.create!(subscriber: top_leader)
-      top_leader.additional_emails.create!(email: "forgotten@example.com", mailings: true, label: "test")
+      Fabricate(:additional_email, contactable: top_leader, email: "forgotten@example.com", mailings: true,
+        label: "test")
       allow(client).to receive(:fetch_segments).and_return(segments([default_tag]))
       allow(client).to receive(:fetch_members).and_return([member(top_leader, segments([default_tag]))])
       sync.perform

@@ -106,13 +106,13 @@ module ContactableDecorator
     display, muted_extras = block_given? ? yield(record) : record.value
     item = h.value_with_muted(
       display,
-      safe_join([record.translated_label, *muted_extras].compact_blank, " ")
+      safe_join([record.category_label, *muted_extras].compact_blank, " ")
     )
     safe_join([prefix, item].compact_blank)
   end
 
   def invoice_icon(contact_account)
-    return unless contact_account.try(:invoices?)
+    return unless contact_account.category&.used_for_invoices?
 
     h.icon("money-bill-alt", class: "muted",
       title: h.t("contactable.contact_data.invoices_tooltip_title"))

@@ -4,8 +4,9 @@
 -#  https://github.com/hitobito/hitobito.
 
 .address-input-fields{data: { controller: 'additional-address' }}
-  = f.labeled(:translated_label) do
-    = contact_method_label_field(f)
+  = f.labeled(:category) do
+    = contact_method_category_field(f)
+  = f.labeled_input_field(:label)
   = f.indented do
     - caption_key = entry.is_a?(Person) ? '.caption_uses_contactable_name_person' : '.caption_uses_contactable_name_group'
     = f.input_field(:uses_contactable_name, data: { action: 'additional-address#toggle'}, caption: t(caption_key))
@@ -33,4 +34,3 @@
     = f.country_field(:country)
   = f.indented do
     = f.input_field(:public, caption: contactable_public_field_icon)
-    = f.input_field(:invoices, caption: t('.caption_used_for_invoices'))

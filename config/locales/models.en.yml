@@ -96,6 +96,10 @@ en:
       models:
         additional_address:
           name_missing: 'Bitte geben Sie einen Namen ein'
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "must be enabled when '%{attribute}' is enabled"
         cors_origin:
           attributes:
             origin:
@@ -160,8 +164,6 @@ en:
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
           attributes:
             base:
-              max_one_additional_invoice_address: Only one address can be selected as the billing address.
-              additional_address_labels_must_be_unique: The names of the other addresses must be unique.
               cannot_have_managers_and_manageds: '%{name} cannot have both administrator and children.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: The child could not be added as they are already an administrator.
@@ -252,6 +254,9 @@ en:
       calendar:
         one: Calendar feed
         other: Calendar feeds
+      contact_account_category:
+        one: Contact details category
+        other: Contact details categories
       custom_content:
         one: Text
         other: Texts
@@ -496,7 +501,8 @@ en:
         category: Category
 
       additional_address:
-        translated_label: Bezeichnung
+        category: Category
+        label: Bezeichnung
         first_name: Vorname
         last_name: Nachname
         organization_name: Firmenname
@@ -513,7 +519,7 @@ en:
         public: Public
 
       additional_addresses:
-        translated_label: Bezeichnung
+        category: Category
         label: Description
         street: Street
         postbox: Postfach
@@ -1007,6 +1013,7 @@ en:
 
       phone_number:
         number: Number
+        category: Category
         label: Type
         public: Public
 
@@ -1036,6 +1043,7 @@ en:
       # used for nested phone_numbers
       phone_numbers:
         number: Phone number
+        category: Category
         label: Phone number type
         public: Public
 
@@ -1100,33 +1108,23 @@ en:
             future:
               one: In the future
               other: Future
-      contact_account:
-        custom_label: Free text
-        predefined_labels:
-          privat: Private
-          mobil: Mobile
-          arbeit: Work
-          vater: Father
-          mutter: Mother
-          fax: Fax
-          andere: Other
-          webseite: Website
-          rechnung: Invoice
-
       social_account:
         name: Name
+        category: Category
         label: Type
         public: Public
 
       # used for nested social accounts
       social_accounts:
         name: Social Media Account
+        category: Category
         label: Social Media Type
         public: Public
 
       additional_email:
         email: E-Mail
         name: Further e-mail
+        category: Category
         label: Further e-mail type
         public: Public
         mailings: Mailing
@@ -1135,6 +1133,7 @@ en:
       additional_emails:
         email: E-Mail
         name: Further e-mail
+        category: Category
         label: Further e-mail type
         public: Public
         mailings: Versand
@@ -1251,6 +1250,15 @@ en:
         category: Category
         subject: Subject
         message: Message
+
+      contact_account_category:
+        key: Key
+        contact_account_type: Contact type
+        contactable_type: Applies to
+        unique_per_contactable: Unique per contactable
+        used_for_invoices: Used for invoices
+        position: Position
+        name: Description
 
       label_format:
         name: Description
@@ -1594,6 +1602,9 @@ en:
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:
+    attributes:
+      category:
+        already_assigned: "%{category} has already been assigned"
     messages:
       invalid_zipcode: is not valid
       attachments_not_allowed: "Attachments not allowed"

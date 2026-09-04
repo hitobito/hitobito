@@ -21,28 +21,28 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
   it "builds create text" do
     Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar")
 
-    is_expected.to eq("<div>Social Media Adresse <i>Bar (Foo)</i> wurde hinzugefügt.</div>")
+    is_expected.to eq("<div>Social Media Adresse <i>Bar (Andere, Foo)</i> wurde hinzugefügt.</div>")
   end
 
   it "builds create text for later deleted association" do
     account = Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar")
     SocialAccount.where(id: account.id).delete_all
 
-    is_expected.to eq("<div>Social Media Adresse <i>Bar (Foo)</i> wurde hinzugefügt.</div>")
+    is_expected.to eq("<div>Social Media Adresse <i>Bar (Andere, Foo)</i> wurde hinzugefügt.</div>")
   end
 
   it "sanitizes html" do
     Fabricate(:social_account, contactable: person, label: "Foo",
       name: '<script>alert("test")</script>')
 
-    is_expected.to eq('<div>Social Media Adresse <i>alert("test") (Foo)</i> wurde hinzugefügt.</div>')
+    is_expected.to eq('<div>Social Media Adresse <i>alert("test") (Andere, Foo)</i> wurde hinzugefügt.</div>')
   end
 
   it "builds update text" do
     account = Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar")
     account.update!(name: "Boo")
 
-    is_expected.to eq("<div>Social Media Adresse <i>Boo (Foo)</i> wurde aktualisiert: " \
+    is_expected.to eq("<div>Social Media Adresse <i>Boo (Andere, Foo)</i> wurde aktualisiert: " \
                       "Name wurde von <i>Bar</i> auf <i>Boo</i> geändert.</div>")
   end
 
@@ -57,7 +57,7 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     account = Fabricate(:social_account, contactable: person, label: "Foo", name: "Bar")
     account.destroy!
 
-    is_expected.to eq("<div>Social Media Adresse <i>Bar (Foo)</i> wurde gelöscht.</div>")
+    is_expected.to eq("<div>Social Media Adresse <i>Bar (Andere, Foo)</i> wurde gelöscht.</div>")
   end
 
   it "builds removed text" do

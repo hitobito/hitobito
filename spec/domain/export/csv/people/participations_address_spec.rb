@@ -28,10 +28,10 @@ describe Export::Tabular::People::ParticipationsAddress do
       ["Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
         "zusätzliche Adresszeile", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
         "Hauptebene", "Rollen",
-        "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Vater",
-        "Weitere E-Mail Mutter", "Weitere E-Mail Andere", "Weitere E-Mails Freitext",
-        "Telefonnummer Privat", "Telefonnummer Mobil", "Telefonnummer Arbeit",
-        "Telefonnummer Vater", "Telefonnummer Mutter", "Telefonnummer Fax", "Telefonnummer Andere"]
+        "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Rechnungsadresse",
+        "Weitere E-Mail Andere",
+        "Telefonnummer Mobil", "Telefonnummer Festnetz", "Telefonnummer Arbeit",
+        "Telefonnummer Andere"]
     end
 
     let(:data) { Export::Tabular::People::ParticipationsAddress.export(:csv, scope) }

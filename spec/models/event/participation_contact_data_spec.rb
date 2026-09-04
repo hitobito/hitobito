@@ -44,12 +44,13 @@ describe Event::ParticipationContactData do
 
     it "can handle deletion and mutation of phone-number" do
       event.update!(required_contact_attrs: ["phone_numbers"])
-      existing_number = person.phone_numbers.create(number: "044 112 00 00", translated_label: "Privat", public: true)
+      mobile = contact_account_categories(:phone_number_person_mobile)
+      existing_number = person.phone_numbers.create(number: "044 112 00 00", category: mobile, public: true)
       expect(person.phone_numbers.count).to be > 0
 
-      add_a_number = {"number" => "044 110 00 00", "translated_label" => "Privat", "public" => "1",
+      add_a_number = {"number" => "044 110 00 00", "category_id" => mobile.id, "public" => "1",
                       "_destroy" => "false"}
-      destroy_a_number = {"number" => "044 112 00 00", "translated_label" => "Privat", "public" => "1",
+      destroy_a_number = {"number" => "044 112 00 00", "category_id" => mobile.id, "public" => "1",
                           "_destroy" => "1", "id" => existing_number.id}
 
       contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: {0 => destroy_a_number}))
@@ -59,7 +60,11 @@ describe Event::ParticipationContactData do
                                                                                             1 => destroy_a_number}))
       expect(contact_data).to be_valid
 
-      contact_data = participation_contact_data(attributes.merge(phone_numbers_attributes: {0 => add_a_number}))
+      landline = contact_account_categories(:phone_number_person_landline)
+      add_a_different_number = add_a_number.merge("category_id" => landline.id)
+      contact_data = participation_contact_data(
+        attributes.merge(phone_numbers_attributes: {0 => add_a_different_number})
+      )
       expect(contact_data).to be_valid
     end
   end

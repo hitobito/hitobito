@@ -30,7 +30,7 @@ module Messages
 
     def preferred_addresses(person)
       emails = additional_emails_with_default(person).select do |email|
-        sanitized_labels.include?(email.label.strip.downcase)
+        (sanitized_labels & email_category_labels(email)).any?
       end.collect(&:email)
 
       emails.map do |email|
@@ -48,10 +48,21 @@ module Messages
       addresses
     end
 
+    def sanitize_labels(labels)
+      labels.map { _1.to_s.strip.downcase }.compact_blank.uniq
+    end
+
     def sanitized_labels
-      @sanitized_labels ||= labels.collect do |label|
-        label.strip.downcase
-      end.compact
+      @sanitized_labels ||= sanitize_labels(labels)
+    end
+
+    def email_category_labels(email)
+      labels = [email.label]
+
+      if email.category.present? && !email.category.other?
+        labels += [email.category.key, *email.category.translations.map(&:name)]
+      end
+      sanitize_labels(labels)
     end
 
     def additional_emails_with_default(person)
@@ -77,6 +88,7 @@ module Messages
     def additional_emails_scope
       AdditionalEmail.where(contactable_type: Person.sti_name,
         contactable_id: people.collect(&:id))
+        .includes(category: :translations)
     end
 
     def address(person_id, email)

@@ -5,5 +5,5 @@
 Fabricator(:social_account) do
   contactable { Fabricate(:person) }
   name { Faker::Internet.user_name }
-  label { "faceSpace" }
+  category_id { |attrs| attrs[:category]&.id || ActiveRecord::FixtureSet.identify(:social_account_person_other) }
 end

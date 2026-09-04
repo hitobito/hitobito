@@ -1,15 +1,22 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module Export::Tabular::People
   class PersonRow < Export::Tabular::Row
+    CONTACT_ACCOUNT_TYPES = [PhoneNumber, SocialAccount, AdditionalEmail, AdditionalAddress].freeze
+
     self.dynamic_attributes = {/^phone_number_/ => :phone_number_attribute,
                                 /^social_account_/ => :social_account_attribute,
                                 /^additional_email_/ => :additional_email_attribute,
                                 /^additional_address_/ => :additional_address_attribute,
                                 /^qualification_kind_/ => :qualification_kind}
+
+    # Set by Export::Tabular::People::PeopleAddress#row_for to share one lookup
+    # across all rows of an export; falls back to computing its own below if unset
+    # (e.g. when a row is built directly, as in specs).
+    attr_writer :contact_account_categories
 
     def country
       entry.country_label
@@ -42,19 +49,20 @@ module Export::Tabular::People
     private
 
     def phone_number_attribute(attr)
-      contact_account_attribute(filtered_accounts(entry.phone_numbers), attr)
+      contact_account_attribute(PhoneNumber, filtered_accounts(entry.phone_numbers), attr)
     end
 
     def social_account_attribute(attr)
-      contact_account_attribute(filtered_accounts(entry.social_accounts), attr)
+      contact_account_attribute(SocialAccount, filtered_accounts(entry.social_accounts), attr)
     end
 
     def additional_email_attribute(attr)
-      contact_account_attribute(filtered_accounts(entry.additional_emails), attr)
+      contact_account_attribute(AdditionalEmail, filtered_accounts(entry.additional_emails), attr)
     end
 
     def additional_address_attribute(attr)
-      contact_account_attribute(filtered_accounts(entry.additional_addresses), attr)
+      contact_account_attribute(AdditionalAddress, filtered_accounts(entry.additional_addresses),
+        attr)
     end
 
     # PublicPersonRow overrides this method to only include public accounts
@@ -79,30 +87,23 @@ module Export::Tabular::People
         (q.finish_at.blank? || q.finish_at >= Time.zone.today)
     end
 
-    def contact_account_attribute(accounts, attr)
-      return custom_label_account_values(accounts) if custom_label?(accounts, attr)
+    def contact_account_attribute(model, accounts, attr)
+      category = contact_account_categories.dig(model, attr)
+      return unless category
 
-      accounts.select do |e|
-        ContactAccounts.key(e.class, e.label) == attr
-      end.map(&:value).join(";").presence
+      matches = accounts.select { |e| e.category_id == category.id }
+      if category.other?
+        return matches.map { |e|
+          [e.label.presence, e.value].compact.join(":")
+        }.join(";").presence
+      end
+
+      matches.map(&:value).join(";").presence
     end
 
-    def custom_label?(accounts, attr)
-      return false if accounts.empty?
-
-      ContactAccounts.custom_label_key(accounts.first.class) == attr
-    end
-
-    def custom_label_account_values(accounts)
-      return if accounts.empty?
-
-      model = accounts.first.class
-      predefined = ContactAccounts.predefined_labels(model).map(&:downcase)
-      accounts
-        .reject { |e| predefined.include?(e.label&.downcase) }
-        .map { |e| "#{e.label}:#{e.value}" }
-        .join(";")
-        .presence
+    def contact_account_categories
+      @contact_account_categories ||=
+        ContactAccounts.categories_by_key(CONTACT_ACCOUNT_TYPES, Person.sti_name)
     end
   end
 end

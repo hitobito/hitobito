@@ -21,21 +21,27 @@ class GroupSeeder
       {contactable_id: group.id,
        contactable_type: "Group",
        name: "#{group.name.downcase.split(" ").last}@hitobito.example.com",
-       label: "E-Mail",
+       category_id: group_category_id(SocialAccount),
        public: true})
 
     PhoneNumber.seed(:contactable_id, :contactable_type, :number,
       {contactable_id: group.id,
        contactable_type: "Group",
        number: Faker::PhoneNumber.phone_number,
-       label: Settings.phone_number.predefined_labels.first,
+       category_id: group_category_id(PhoneNumber),
        public: true})
 
     AdditionalEmail.seed(:contactable_id, :contactable_type, :email,
       {contactable_id: group.id,
        contactable_type: "Group",
        email: Faker::Internet.email,
-       label: Settings.additional_email.predefined_labels.first,
+       category_id: group_category_id(AdditionalEmail),
        public: true})
+  end
+
+  private
+
+  def group_category_id(klass)
+    ContactAccountCategory.for(klass.name, "Group").first&.id
   end
 end

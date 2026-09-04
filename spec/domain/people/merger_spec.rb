@@ -460,9 +460,9 @@ describe People::Merger do
     end
 
     it "merges additional e-mails" do
-      duplicate.additional_emails.create!(email: "first@example.com", label: "Privat")
-      duplicate.additional_emails.create!(email: "myadditional@example.com", label: "Other")
-      person.additional_emails.create!(email: "myadditional@example.com", label: "Business")
+      Fabricate(:additional_email, contactable: duplicate, email: "first@example.com", label: "Privat")
+      Fabricate(:additional_email, contactable: duplicate, email: "myadditional@example.com", label: "Other")
+      Fabricate(:additional_email, contactable: person, email: "myadditional@example.com", label: "Business")
 
       expect do
         merger.merge!
@@ -479,13 +479,14 @@ describe People::Merger do
       5.times do
         Fabricate(:phone_number, contactable: duplicate)
       end
-      duplicate.phone_numbers.create!(number: "0900 42 42 42", label: "Other")
-      person.phone_numbers.create!(number: "0900 42 42 42", label: "Mobile")
+      Fabricate(:phone_number, contactable: duplicate, number: "0900 42 42 42", label: "Other")
+      Fabricate(:phone_number, contactable: person, number: "0900 42 42 42", label: "Mobile")
 
       # does not merge invalid contactable
       invalid_contactable = PhoneNumber.new(contactable: duplicate,
         number: "abc 123",
-        label: "Holiday")
+        label: "Holiday",
+        category: contact_account_categories(:phone_number_person_other))
       invalid_contactable.save!(validate: false)
 
       expect do
@@ -501,10 +502,10 @@ describe People::Merger do
 
     it "merges social accounts" do
       Fabricate(:social_account, contactable: duplicate)
-      duplicate.social_accounts.create!(name: "john.member", label: "Telegram")
+      Fabricate(:social_account, contactable: duplicate, name: "john.member", label: "Telegram")
 
-      duplicate.social_accounts.create!(name: "john.member", label: "Signal")
-      person.social_accounts.create!(name: "john.member", label: "Signal")
+      Fabricate(:social_account, contactable: duplicate, name: "john.member", label: "Signal")
+      Fabricate(:social_account, contactable: person, name: "john.member", label: "Signal")
 
       expect do
         merger.merge!

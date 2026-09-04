@@ -156,7 +156,7 @@ describe Person::CsvImportsController do
     end
 
     context "invalid phone number value" do
-      let(:mapping) { {Vorname: "first_name", Telefon: "phone_number_vater", role: role_type.sti_name} }
+      let(:mapping) { {Vorname: "first_name", Telefon: "phone_number_work", role: role_type.sti_name} }
       let(:data) { generate_csv(%w[Vorname Telefon], %w[foo]) }
 
       it "is ignored" do

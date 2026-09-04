@@ -171,7 +171,7 @@ describe PeopleController do
 
         context ".vcf" do
           it "exports vcf files" do
-            e1 = Fabricate(:additional_email, contactable: @tg_member, public: true)
+            e1 = Fabricate(:additional_email, contactable: @tg_member, label: "Privat", public: true)
             e2 = Fabricate(:additional_email, contactable: @tg_member, public: false)
             @tg_member.update(birthday: "09.10.1978")
 
@@ -440,6 +440,18 @@ describe PeopleController do
       context "as bottom leader" do
         before { sign_in(Fabricate(Group::BottomLayer::Leader.sti_name, group: group).person) }
 
+        let(:phone_number_mobile) { contact_account_categories(:phone_number_person_mobile) }
+        let(:phone_number_work) { contact_account_categories(:phone_number_person_work) }
+        let(:social_account_facebook) { contact_account_categories(:social_account_person_facebook) }
+        let(:social_account_x_twitter) { contact_account_categories(:social_account_person_x_twitter) }
+        let(:social_account_other) { contact_account_categories(:social_account_person_other) }
+        let(:additional_email_work) { contact_account_categories(:additional_email_person_work) }
+        let(:additional_email_private) { contact_account_categories(:additional_email_person_private) }
+        let(:additional_email_other) { contact_account_categories(:additional_email_person_other) }
+        let(:additional_address_invoices) { contact_account_categories(:additional_address_person_invoices) }
+        let(:additional_address_work) { contact_account_categories(:additional_address_person_work) }
+        let(:additional_address_other) { contact_account_categories(:additional_address_person_other) }
+
         it "updates email for person in one group" do
           person.update_column(:encrypted_password, nil)
           put :update, params: {group_id: group.id, id: person.id, person: {last_name: "Foo", email: "foo@example.com"}}
@@ -470,9 +482,9 @@ describe PeopleController do
               person: {town: "testtown",
                        phone_numbers_attributes: {
                          "111" =>
-                           {number: "031 111 1111", translated_label: "Privat", public: 1},
+                           {number: "031 111 1111", category_id: phone_number_mobile.id, public: 1},
                          "222" =>
-                           {number: "", translated_label: "Arbeit", public: 1}
+                           {number: "", category_id: phone_number_work.id, public: 1}
                        }}
             }
             expect(assigns(:person)).to be_valid
@@ -480,12 +492,12 @@ describe PeopleController do
           expect(person.reload.phone_numbers.size).to eq(1)
           number = person.phone_numbers.first
           expect(number.number).to eq "+41 31 111 11 11"
-          expect(number.label).to eq "Privat"
+          expect(number.category).to eq phone_number_mobile
           expect(number.public).to be_truthy
         end
 
         it "updates existing phone numbers" do
-          n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
+          n = person.phone_numbers.create!(number: "031 111 1111", category: phone_number_mobile, public: 1)
           expect do
             put :update, params: {
               group_id: group.id,
@@ -493,49 +505,18 @@ describe PeopleController do
               person: {
                 town: "testtown",
                 phone_numbers_attributes: {
-                  n.id.to_s => {number: "031 111 2222", translated_label: "Privat", public: 0, id: n.id}
+                  n.id.to_s => {number: "031 111 2222", category_id: phone_number_mobile.id, public: 0, id: n.id}
                 }
               }
             }
           end.not_to change { PhoneNumber.count }
           number = person.reload.phone_numbers.first
           expect(number.number).to eq "+41 31 111 22 22"
-          expect(number.public).to be_falsey
-        end
-
-        it "updates existing phone numbers in other language" do
-          @cached_locales = I18n.available_locales
-          @cached_languages = Settings.application.languages
-          Settings.application.languages = {de: "Deutsch", fr: "Français"}
-          I18n.available_locales = Settings.application.languages.keys
-
-          n = person.phone_numbers.create!(number: "031 111 1111", label: "Vater", public: 1)
-          expect do
-            put :update, params: {
-              group_id: group.id,
-              id: person.id,
-              locale: :fr,
-              person: {
-                town: "testtown",
-                phone_numbers_attributes: {
-                  n.id.to_s => {number: "031 111 2222", translated_label: "mère", public: 0, id: n.id}
-                }
-              }
-            }
-          end.not_to change { PhoneNumber.count }
-
-          I18n.available_locales = @cached_locales
-          Settings.application.languages = @cached_languages
-          I18n.locale = I18n.default_locale
-
-          number = person.reload.phone_numbers.first
-          expect(number.number).to eq "+41 31 111 22 22"
-          expect(number.label).to eq "Mutter"
           expect(number.public).to be_falsey
         end
 
         it "destroys existing phone numbers" do
-          n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
+          n = person.phone_numbers.create!(number: "031 111 1111", category: phone_number_mobile, public: 1)
           expect do
             put :update, params: {
               group_id: group.id,
@@ -543,7 +524,8 @@ describe PeopleController do
               person: {
                 town: "testtown",
                 phone_numbers_attributes: {
-                  n.id.to_s => {number: "031 111 1111", translated_label: "Privat", public: 0, id: n.id, _destroy: true}
+                  n.id.to_s => {number: "031 111 1111", category_id: phone_number_mobile.id, public: 0, id: n.id,
+                                _destroy: true}
                 }
               }
             }
@@ -552,7 +534,7 @@ describe PeopleController do
         end
 
         it "destroys existing phone numbers when number is empty" do
-          n = person.phone_numbers.create!(number: "031 111 1111", label: "Privat", public: 1)
+          n = person.phone_numbers.create!(number: "031 111 1111", category: phone_number_mobile, public: 1)
           expect do
             put :update, params: {
               group_id: group.id,
@@ -560,7 +542,7 @@ describe PeopleController do
               person: {
                 town: "testtown",
                 phone_numbers_attributes: {
-                  n.id.to_s => {number: "   ", translated_label: "Privat", public: 0, id: n.id}
+                  n.id.to_s => {number: "   ", category_id: phone_number_mobile.id, public: 0, id: n.id}
                 }
               }
             }
@@ -569,8 +551,8 @@ describe PeopleController do
         end
 
         it "create, update and destroys social accounts" do
-          a1 = person.social_accounts.create!(name: "Housi", label: "Facebook", public: 0)
-          a2 = person.social_accounts.create!(name: "Hans", label: "Skype", public: 1)
+          a1 = person.social_accounts.create!(name: "Housi", category: social_account_facebook, public: 0)
+          a2 = person.social_accounts.create!(name: "Hans", category: social_account_other, public: 1)
           expect do
             put :update, params: {
               group_id: group.id,
@@ -579,32 +561,32 @@ describe PeopleController do
                        social_accounts_attributes: {
                          a1.id.to_s => {id: a1.id,
                                         name: "Housi1",
-                                        translated_label: "Facebook",
+                                        category_id: social_account_facebook.id,
                                         public: 1},
                          a2.id.to_s => {id: a2.id, _destroy: true},
                          "999" => {name: "John",
-                                   translated_label: "Twitter",
+                                   category_id: social_account_x_twitter.id,
                                    public: 0}
                        }}
             }
             expect(assigns(:person)).to be_valid
           end.not_to change { SocialAccount.count }
 
-          accounts = person.reload.social_accounts.order(:label)
+          accounts = person.reload.social_accounts
           expect(accounts.size).to eq(2)
-          fb = accounts.first
-          expect(fb.label).to eq "Facebook"
+          fb = accounts.find { |a| a.category == social_account_facebook }
           expect(fb.name).to eq "Housi1"
           expect(fb.public).to be_truthy
-          tw = accounts.second
-          expect(tw.label).to eq "Twitter"
+          tw = accounts.find { |a| a.category == social_account_x_twitter }
           expect(tw.name).to eq "John"
           expect(tw.public).to be_falsey
         end
 
         it "create, update and destroys additional emails" do
-          a1 = person.additional_emails.create!(email: "Housi@example.com", translated_label: "Arbeit", public: 0)
-          a2 = person.additional_emails.create!(email: "Hans@example.com", translated_label: "Privat", public: 1)
+          a1 = person.additional_emails.create!(email: "Housi@example.com", category: additional_email_work,
+            public: 0)
+          a2 = person.additional_emails.create!(email: "Hans@example.com", category: additional_email_private,
+            public: 1)
           expect do
             put :update, params: {
               group_id: group.id,
@@ -613,37 +595,34 @@ describe PeopleController do
                        additional_emails_attributes: {
                          a1.id.to_s => {id: a1.id,
                                         email: "Housi1@example.com",
-                                        translated_label: "Arbeit",
-                                        invoices: 1,
+                                        category_id: additional_email_work.id,
                                         public: 1},
                          a2.id.to_s => {id: a2.id, _destroy: true},
                          "998" => {email: " ",
-                                   translated_label: "Vater",
+                                   category_id: additional_email_other.id,
                                    public: 1},
                          "999" => {email: "John@example.com",
-                                   translated_label: "Mutter",
+                                   category_id: additional_email_other.id,
                                    public: 0}
                        }}
             }
             expect(assigns(:person)).to be_valid
           end.not_to change { AdditionalEmail.count }
 
-          emails = person.reload.additional_emails.order(:label)
+          emails = person.reload.additional_emails
           expect(emails.size).to eq(2)
-          a = emails.first
-          expect(a.label).to eq "Arbeit"
+          a = emails.find { |e| e.category == additional_email_work }
           expect(a.email).to eq "housi1@example.com"
           expect(a.public).to be_truthy
-          expect(a.invoices).to be_truthy
-          tw = emails.second
-          expect(tw.label).to eq "Mutter"
+          tw = emails.find { |e| e.category == additional_email_other }
           expect(tw.email).to eq "john@example.com"
           expect(tw.public).to be_falsey
         end
 
         it "create, update and destroys additional_address" do
-          a1 = Fabricate(:additional_address, contactable: person, label: "Rechnung", housenumber: 1)
-          a2 = Fabricate(:additional_address, contactable: person, label: "Arbeit")
+          a1 = Fabricate(:additional_address, contactable: person, category: additional_address_invoices,
+            housenumber: 1)
+          a2 = Fabricate(:additional_address, contactable: person, category: additional_address_work)
           expect do
             put :update, params: {
               group_id: group.id,
@@ -654,7 +633,7 @@ describe PeopleController do
                                  last_name: "updated name"},
                   a2.id.to_s => {id: a2.id, _destroy: true},
                   "998" => {
-                    translated_label: "Andere",
+                    category_id: additional_address_other.id,
                     street: "Langestrasse",
                     housenumber: 37,
                     zip_code: 8000,
@@ -668,8 +647,8 @@ describe PeopleController do
             .and change { a1.name }.from(person.to_s).to("updated name")
             .and not_change { AdditionalAddress.count }
 
-          expect(person.additional_addresses.where(label: "Andere")).to be_exist
-          expect(person.additional_addresses.where(label: "Arbeit")).not_to be_exist
+          expect(person.additional_addresses.where(category: additional_address_other)).to be_exist
+          expect(person.additional_addresses.where(category: additional_address_work)).not_to be_exist
         end
 
         context "GET edit" do
@@ -691,7 +670,7 @@ describe PeopleController do
           end
         end
 
-        context "PUT update with blank additional address label" do
+        context "PUT update with blank additional address category id" do
           render_views
 
           it "marks the label field as invalid" do
@@ -713,7 +692,7 @@ describe PeopleController do
 
             expect(person.additional_addresses.reload).to be_empty
             dom = Capybara::Node::Simple.new(response.body)
-            expect(dom).to have_css("input.is-invalid[name$='[translated_label]']")
+            expect(dom).to have_css("select.is-invalid[name$='[category_id]']")
           end
         end
       end

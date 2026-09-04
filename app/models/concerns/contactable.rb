@@ -15,12 +15,13 @@ module Contactable
   # rubocop:disable Style/MutableConstant extension point
   ACCESSIBLE_ATTRS = [
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country, {
-      phone_numbers_attributes: [:id, :number, :translated_label, :public, :_destroy],
-      social_accounts_attributes: [:id, :name, :translated_label, :public, :_destroy],
-      additional_emails_attributes: [:id, :email, :translated_label, :public, :mailings, :invoices,
+      phone_numbers_attributes: [:id, :number, :category_id, :label, :public, :_destroy],
+      social_accounts_attributes: [:id, :name, :category_id, :label, :public, :_destroy],
+      additional_emails_attributes: [:id, :email, :category_id, :label, :public, :mailings,
         :_destroy],
       additional_addresses_attributes: [
         :id,
+        :category_id,
         :first_name,
         :last_name,
         :organization,
@@ -34,7 +35,6 @@ module Contactable
         :address_care_of,
         :postbox,
         :uses_contactable_name,
-        :invoices,
         :public,
         :_destroy
       ]
@@ -66,12 +66,10 @@ module Contactable
     class_attribute :validate_zip_code, default: true
     validates :zip_code, zipcode: {country_code_attribute: :zip_country}, allow_blank: true,
       if: :validate_zip_code
-    validate :assert_max_one_additional_invoice_address
-    validate :assert_additional_address_labels_are_unique, if: -> { additional_addresses.any? }
   end
 
   def invoice_email
-    additional_emails.find(&:invoices?)&.email || email
+    additional_emails.find { |e| e.category&.used_for_invoices? }&.email || email
   end
 
   private
@@ -83,18 +81,6 @@ module Contactable
         e.contactable = self
         e.mark_for_destruction if e.value.blank?
       end
-    end
-  end
-
-  def assert_max_one_additional_invoice_address
-    if additional_addresses.count(&:invoices) > 1
-      errors.add(:base, :max_one_additional_invoice_address)
-    end
-  end
-
-  def assert_additional_address_labels_are_unique
-    if additional_addresses.map(&:label).tally.values.max > 1
-      errors.add(:base, :additional_address_labels_must_be_unique)
     end
   end
 

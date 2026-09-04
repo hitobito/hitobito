@@ -11,8 +11,8 @@ describe Export::Pdf::Labels do
   let(:contactables) { [top_leader.tap { |u| u.update(nickname: "Funny Name") }] }
   let(:label_format) { label_formats(:standard) }
   let(:household) { false }
-  let(:label) { nil }
-  let(:pdf) { Export::Pdf::Labels.new(label_format, label:).generate(contactables, household) }
+  let(:category_key) { nil }
+  let(:pdf) { Export::Pdf::Labels.new(label_format, category_key:).generate(contactables, household) }
 
   subject { PDF::Inspector::Text.analyze(pdf) }
 
@@ -42,7 +42,7 @@ describe Export::Pdf::Labels do
   context "with additional address" do
     before { allow(Settings.additional_address).to receive(:enabled).and_return(true) }
 
-    let(:label) { "Rechnung" }
+    let(:category_key) { "invoices" }
 
     it "falls back to original address if undefined" do
       expect(subject.strings).to include("Top Leader")
@@ -51,8 +51,9 @@ describe Export::Pdf::Labels do
     end
 
     it "renders additional address if present" do
-      top_leader.additional_addresses.create!(label: "Rechnung", street: "Lagistrasse", housenumber: "12a",
-        zip_code: 1080, town: "Jamestown", country: "CH", invoices: true)
+      category = contact_account_categories(:additional_address_person_invoices)
+      top_leader.additional_addresses.create!(category:, street: "Lagistrasse", housenumber: "12a",
+        zip_code: 1080, town: "Jamestown", country: "CH")
       expect(subject.strings).to include("Top Leader")
       expect(subject.strings).to include("Lagistrasse 12a")
       expect(subject.strings).to include("1080 Jamestown")

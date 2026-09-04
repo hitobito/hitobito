@@ -11,5 +11,5 @@ Fabricator(:additional_address) do
   zip_code { Faker::Address.zip_code }
   town { Faker::Address.city }
   country { Faker::Address.country_code }
-  label { AdditionalAddress.predefined_labels.first }
+  category_id { |attrs| attrs[:category]&.id || ActiveRecord::FixtureSet.identify(:additional_address_person_other) }
 end

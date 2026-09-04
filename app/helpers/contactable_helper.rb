@@ -4,34 +4,19 @@
 #  https://github.com/hitobito/hitobito.
 
 module ContactableHelper
-  def contact_method_label_field(form)
-    feature_gate_key = "#{form.object.class.name.underscore}.custom_label"
-
-    if FeatureGate.enabled?(feature_gate_key)
-      contact_method_label_text_field(form)
-    else
-      contact_method_label_select(form)
-    end
-  end
-
-  def contact_method_label_text_field(form)
-    form.input_field(:translated_label,
-      placeholder: t(".placeholder_type"),
-      data: {provide: :typeahead, source: form.object.class.available_labels})
-  end
-
-  def contact_method_label_select(form)
+  def contact_method_category_field(form)
     contact_method = form.object
-    current_label = contact_method.label
+    categories = ContactAccountCategory.for(contact_method.class.name,
+      contact_method.contactable_type)
 
-    options = (contact_method.class.predefined_labels | [current_label].compact).map do |value|
-      translated = contact_method.class.translate_label(value)
-      OpenStruct.new(value: value, translated: translated)
-    end
-
-    form.collection_select(
-      :translated_label, options, :value, :translated, selected: current_label
+    form.belongs_to_field(
+      :category_id,
+      list: categories
     )
+  end
+
+  def contact_method_label_field(form)
+    form.input_field(:label, placeholder: t("contactable.label_placeholder"))
   end
 
   def contactable_public_field_icon

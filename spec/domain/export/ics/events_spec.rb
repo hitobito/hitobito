@@ -28,8 +28,11 @@ describe Export::Ics::Events do
     it "does not fail if contact is set" do
       event.update(contact: people(:top_leader))
 
-      people(:top_leader).phone_numbers.create!(label: "showme", number: "+41 44 123 45 67", public: true)
-      people(:top_leader).phone_numbers.create!(label: "notme", number: "+41 77 987 65 43", public: false)
+      category = contact_account_categories(:phone_number_person_other)
+      people(:top_leader).phone_numbers.create!(label: "showme", number: "+41 44 123 45 67", public: true,
+        category:)
+      people(:top_leader).phone_numbers.create!(label: "notme", number: "+41 77 987 65 43", public: false,
+        category:)
 
       is_expected.to all(be_a(Icalendar::Event))
       expect(subject.first.contact.first.value).to eq "Top Leader"

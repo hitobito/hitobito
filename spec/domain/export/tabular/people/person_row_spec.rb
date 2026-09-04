@@ -17,42 +17,60 @@ describe Export::Tabular::People::PersonRow do
   end
 
   context "phone numbers" do
-    before { person.phone_numbers << PhoneNumber.new(label: "Privat", number: "321") }
+    let(:category) { contact_account_categories(:phone_number_person_landline) }
 
-    it { expect(row.fetch(:phone_number_privat)).to eq "321" }
+    before { person.phone_numbers << PhoneNumber.new(category:, number: "321") }
 
-    it "joins multiple values with same label" do
-      person.phone_numbers << PhoneNumber.new(label: "Privat", number: "654")
-      expect(row.fetch(:phone_number_privat)).to eq "321;654"
-    end
+    it { expect(row.fetch(:phone_number_landline)).to eq "321" }
   end
 
   context "social accounts" do
-    before { person.social_accounts << SocialAccount.new(label: "Facebook", name: "farcebook") }
+    before do
+      person.social_accounts << SocialAccount.new(
+        category: contact_account_categories(:social_account_person_facebook), name: "farcebook"
+      )
+    end
 
     it { expect(row.fetch(:social_account_facebook)).to eq "farcebook" }
   end
 
-  context "social accounts with free text labels" do
+  context "social accounts with the other category" do
     before do
-      person.social_accounts << SocialAccount.new(label: "Mastodummy", name: "@user@mastodummy.example.com")
-      person.social_accounts << SocialAccount.new(label: "Bluescry", name: "@user.bluescry.example.com")
+      person.social_accounts << SocialAccount.new(
+        category: contact_account_categories(:social_account_person_other),
+        label: "Mastodummy", name: "@user@mastodummy.example.com"
+      )
+      person.social_accounts << SocialAccount.new(
+        category: contact_account_categories(:social_account_person_other),
+        label: "Bluescry", name: "@user.bluescry.example.com"
+      )
     end
 
-    it "exports non-predefined entries in the free text column" do
-      expect(row.fetch(:social_account_custom_label))
+    it "exports each entry as a label:value pair" do
+      expect(row.fetch(:social_account_other))
         .to eq "Mastodummy:@user@mastodummy.example.com;Bluescry:@user.bluescry.example.com"
     end
   end
 
-  context "additional emails with free text labels" do
+  context "additional emails with the other category" do
     before do
-      person.additional_emails << AdditionalEmail.new(label: "Ferien", email: "ferien@example.com")
-      person.additional_emails << AdditionalEmail.new(label: "Newsletter", email: "news@example.com")
+      person.additional_emails << AdditionalEmail.new(
+        category: contact_account_categories(:additional_email_person_other),
+        label: "Ferien", email: "ferien@example.com"
+      )
+      person.additional_emails << AdditionalEmail.new(
+        category: contact_account_categories(:additional_email_person_other),
+        label: "Newsletter", email: "news@example.com"
+      )
     end
 
-    it "exports non-predefined entries in the free text column" do
-      expect(row.fetch(:additional_email_custom_label)).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
+    it "exports each entry as a label:value pair" do
+      expect(row.fetch(:additional_email_other)).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
+    end
+
+    it "when the label is missing exports without colon" do
+      person.additional_emails.update_all(label: nil)
+      expect(row.fetch(:additional_email_other)).to eq "ferien@example.com;news@example.com"
     end
   end
 
@@ -60,15 +78,16 @@ describe Export::Tabular::People::PersonRow do
     let(:address_attrs) { {street: "Langestrasse", housenumber: 3, zip_code: 8000, town: "Zürich", country: "CH"} }
 
     before do
-      person.additional_addresses << Fabricate.build(:additional_address, address_attrs.merge(label: "Rechnung"))
       person.additional_addresses << Fabricate.build(:additional_address,
-        address_attrs.merge(label: "Weitere", housenumber: 4, first_name: "Tom", last_name: "Tester",
-          uses_contactable_name: false))
+        address_attrs.merge(category: contact_account_categories(:additional_address_person_work)))
+      person.additional_addresses << Fabricate.build(:additional_address,
+        address_attrs.merge(category: contact_account_categories(:additional_address_person_other),
+          label: "Weitere", housenumber: 4, last_name: "test", uses_contactable_name: false))
     end
 
-    it { expect(row.fetch(:additional_address_rechnung)).to eq "Top Leader, Langestrasse 3, 8000 Zürich" }
+    it { expect(row.fetch(:additional_address_work)).to eq "Top Leader, Langestrasse 3, 8000 Zürich" }
 
-    it { expect(row.fetch(:additional_address_weitere)).to eq "Tom Tester, Langestrasse 4, 8000 Zürich" }
+    it { expect(row.fetch(:additional_address_other)).to eq "Weitere:test, Langestrasse 4, 8000 Zürich" }
   end
 
   context "country" do

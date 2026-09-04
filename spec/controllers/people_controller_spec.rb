@@ -670,7 +670,7 @@ describe PeopleController do
           end
         end
 
-        context "PUT update with blank additional address label" do
+        context "PUT update with blank additional address category id" do
           render_views
 
           it "marks the label field as invalid" do
@@ -692,7 +692,7 @@ describe PeopleController do
 
             expect(person.additional_addresses.reload).to be_empty
             dom = Capybara::Node::Simple.new(response.body)
-            expect(dom).to have_css("input.is-invalid[name$='[translated_label]']")
+            expect(dom).to have_css("select.is-invalid[name$='[category_id]']")
           end
         end
       end

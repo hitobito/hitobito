@@ -11,8 +11,7 @@ module ContactableHelper
 
     form.belongs_to_field(
       :category_id,
-      list: categories,
-      include_blank: contact_method.new_record?
+      list: categories
     )
   end
 

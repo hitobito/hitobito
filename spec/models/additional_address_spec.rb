@@ -29,12 +29,6 @@ describe AdditionalAddress do
       end
     end
 
-    it "mirrors the label error onto translated_label, since the form field is bound to it" do
-      address.label = nil
-      expect(address).not_to be_valid
-      expect(address.errors[:translated_label]).to be_present
-    end
-
     it "may use multiple address with multiple labels" do
       person.additional_addresses.build(Fabricate.build(:additional_address, label: "Foobar").attributes)
       expect(person).to be_valid

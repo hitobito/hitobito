@@ -18,6 +18,7 @@ RSpec.describe AddContactAccountCategories, type: :migration do
   end
 
   before do
+    SeedFu.quiet = true
     ActiveRecord::Migration.verbose = false
     migration_context.down(previous_version)
     clear_contact_account_records!
@@ -97,11 +98,15 @@ RSpec.describe AddContactAccountCategories, type: :migration do
     SQL
   end
 
+  def category(contact_account_type:, key:, contactable_type: "Person")
+    ContactAccountCategory.find_by(contactable_type:, contact_account_type:, key:)
+  end
+
   it "backfills missing labels from the category name and appends id only to additional_addresses" do
     clear_contact_account_records!
     migration_context.up(migration_version)
 
-    other = create_category("AdditionalAddress", "Person", "other", "Andere")
+    other = category(contact_account_type: "AdditionalAddress", key: "other")
 
     address_id = insert_record(:additional_addresses, other, label: nil)
     email_id = insert_record(:additional_emails, other, label: nil)
@@ -110,6 +115,7 @@ RSpec.describe AddContactAccountCategories, type: :migration do
 
     migration_context.down(previous_version)
 
+    expect(label_for(:additional_addresses, address_id)).to match(/\AAndere-\d+\z/)
     expect(label_for(:additional_addresses, address_id)).to match(/\AAndere-\d+\z/)
     expect(label_for(:additional_emails, email_id)).to eq "Andere"
     expect(label_for(:phone_numbers, phone_id)).to eq "Andere"
@@ -120,7 +126,7 @@ RSpec.describe AddContactAccountCategories, type: :migration do
     clear_contact_account_records!
     migration_context.up(migration_version)
 
-    other = create_category("AdditionalEmail", "Person", "other", "Andere")
+    other = category(contact_account_type: "AdditionalEmail", key: "other")
     email_id = insert_record(:additional_emails, other, label: "Ferien")
 
     migration_context.down(previous_version)
@@ -132,7 +138,7 @@ RSpec.describe AddContactAccountCategories, type: :migration do
     clear_contact_account_records!
     migration_context.up(migration_version)
 
-    other = create_category("AdditionalAddress", "Person", "other", "Andere")
+    other = category(contact_account_type: "AdditionalAddress", key: "other")
     address_id = insert_record(:additional_addresses, other, label: "Ferien")
 
     migration_context.down(previous_version)

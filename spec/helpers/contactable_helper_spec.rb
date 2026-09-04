@@ -9,9 +9,12 @@ require "spec_helper"
 
 describe ContactableHelper, type: :helper do
   include FormatHelper
+  include I18nHelper
   include UtilityHelper
   include ColumnHelper
-  before { allow(helper).to receive(:t).with("contactable.label_placeholder").and_return("Type") }
+  before do
+    allow(helper).to receive(:t).with("contactable.label_placeholder").and_return("Type")
+  end
 
   let(:additional_email) {
     people(:top_leader).additional_emails.build(email: "other@example.com")

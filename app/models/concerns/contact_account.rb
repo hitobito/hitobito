@@ -13,6 +13,7 @@ module ContactAccount
 
     belongs_to :contactable, polymorphic: true
     belongs_to :category, class_name: "ContactAccountCategory"
+    validates :category, presence: true
 
     validate :assert_category_unique_per_contactable, if: -> { category&.unique_per_contactable? }
     after_commit :reset_contactable_association_cache, on: :create,

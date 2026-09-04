@@ -299,16 +299,16 @@ describe Contactable::Address do
 
       it "uses invoice address if additional address with used_for_invoices category exists" do
         build_additional_address(
-            label: nil,
-            last_name: "Foo Bar",
-            uses_contactable_name: false,
-            address_care_of: "Office",
-            street: "Lagistrasse",
-            housenumber: "12a",
-            postbox: "Postfach",
-            zip_code: 1080,
-            town: "Jamestown",
-            category: contact_account_categories(:additional_address_person_invoices)
+          label: nil,
+          last_name: "Foo Bar",
+          uses_contactable_name: false,
+          address_care_of: "Office",
+          street: "Lagistrasse",
+          housenumber: "12a",
+          postbox: "Postfach",
+          zip_code: 1080,
+          town: "Jamestown",
+          category: contact_account_categories(:additional_address_person_invoices)
         )
 
         expect(attributes).to eq({
@@ -359,14 +359,14 @@ describe Contactable::Address do
 
       it "stores full name in last_name when addressable is AdditionalAddress" do
         build_additional_address(
-            label: nil,
-            last_name: "Office Address",
-            uses_contactable_name: false,
-            street: "Officestrasse",
-            housenumber: "99",
-            zip_code: 8000,
-            town: "Zurich",
-            category: contact_account_categories(:additional_address_person_invoices)
+          label: nil,
+          last_name: "Office Address",
+          uses_contactable_name: false,
+          street: "Officestrasse",
+          housenumber: "99",
+          zip_code: 8000,
+          town: "Zurich",
+          category: contact_account_categories(:additional_address_person_invoices)
         )
         person.country = "CH"
 
@@ -386,15 +386,15 @@ describe Contactable::Address do
 
       it "uses organization_name from additional address when flagged as organization" do
         build_additional_address(
-            label: nil,
-            organization: true,
-            organization_name: "Acme Corp",
-            uses_contactable_name: false,
-            street: "Officestrasse",
-            housenumber: "99",
-            zip_code: 8000,
-            town: "Zurich",
-            category: contact_account_categories(:additional_address_person_invoices)
+          label: nil,
+          organization: true,
+          organization_name: "Acme Corp",
+          uses_contactable_name: false,
+          street: "Officestrasse",
+          housenumber: "99",
+          zip_code: 8000,
+          town: "Zurich",
+          category: contact_account_categories(:additional_address_person_invoices)
         )
         person.country = "CH"
 
@@ -612,16 +612,16 @@ describe Contactable::Address do
 
       it "uses invoice address if additional address with used_for_invoices category exists" do
         build_additional_address(
-            label: nil,
-            last_name: "Foo Bar",
-            uses_contactable_name: false,
-            address_care_of: "Office",
-            street: "Lagistrasse",
-            housenumber: "12a",
-            postbox: "Postfach",
-            zip_code: 1080,
-            town: "Jamestown",
-            category: contact_account_categories(:additional_address_group_invoices)
+          label: nil,
+          last_name: "Foo Bar",
+          uses_contactable_name: false,
+          address_care_of: "Office",
+          street: "Lagistrasse",
+          housenumber: "12a",
+          postbox: "Postfach",
+          zip_code: 1080,
+          town: "Jamestown",
+          category: contact_account_categories(:additional_address_group_invoices)
         )
 
         expect(attributes).to eq({

@@ -9,9 +9,10 @@ module ContactableHelper
     categories = ContactAccountCategory.for(contact_method.class.name,
       contact_method.contactable_type)
 
-    form.collection_select(
-      :category_id, categories, :id, :to_s,
-      {selected: contact_method.category_id, include_blank: contact_method.new_record?}
+    form.belongs_to_field(
+      :category_id,
+      list: categories,
+      include_blank: contact_method.new_record?
     )
   end
 

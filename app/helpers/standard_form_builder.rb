@@ -296,12 +296,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     end
   end
 
-  def collection_select(method, collection, value_method, text_method, options = {},
-    html_options = {})
-    html_options[:class] ||= FORM_CONTROL_SELECT_WITH_WIDTH
-    super
-  end
-
   # Render a multi select element for a :has_many or :has_and_belongs_to_many
   # association defined by attr.
   # Use additional html_options for the select element.

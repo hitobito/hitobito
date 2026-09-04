@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.10
 
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)

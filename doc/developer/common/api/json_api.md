@@ -26,11 +26,11 @@ Currently the following endpoints are provided:
 | GET    | /api/events/                       | List all accessible events                                                              |
 | GET    | /api/events/:id                    | Fetch a single event entry, replace :id with the event's primary key                    |
 | GET    | /api/event_participations/         | List all accessible event participations                                                |
-| GET    | /api/event_participations/:id      | Fetch a single event particiation entry, replace :id with the event's primary key       |
+| GET    | /api/event_participations/:id      | Fetch a single event participation entry, replace :id with the participation's primary key       |
 | GET    | /api/event_kinds/                  | List all accessible events kinds                                                        |
-| GET    | /api/event_kinds/:id               | Fetch a single event kind, replace :id with the event's primary key                     |
+| GET    | /api/event_kinds/:id               | Fetch a single event kind, replace :id with the event kind's primary key                |
 | GET    | /api/event_kind_categories/        | List all accessible events kind categories                                              |
-| GET    | /api/event_kind_categories/:id     | Fetch a single event kind category, replace :id with the event's primary key            |
+| GET    | /api/event_kind_categories/:id     | Fetch a single event kind category, replace :id with the category's primary key         |
 | GET    | /api/invoices/                     | List all accessible invoices                                                            |
 | GET    | /api/invoices/:id                  | Fetch a single invoice, replace :id with the invoice's primary key                      |
 | PUT    | /api/invoices/:id                  | Update an invoice, replace :id with the list's primary key                              |

@@ -160,8 +160,8 @@ fr:
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
           attributes:
             base:
-              max_one_additional_invoice_address: Une seule adresse peut être choisie comme adresse de facturation.
-              additional_address_labels_must_be_unique: Les désignations des autres adresses doivent être uniques.
+              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
+              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
               cannot_have_managers_and_manageds: '%{name} ne peut pas avoir à la fois des administrateurs et des enfants.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: L'enfant n'a pas pu être ajouté, car il est déjà administrateur.
@@ -577,7 +577,7 @@ fr:
         category: Catégorie
 
       additional_address:
-        translated_label: Désignation
+        translated_label: Bezeichnung
         street_and_number: Rue/Numéro # can be removed with next release
         street: Rue
         housenumber: Numéro de la maison
@@ -1181,17 +1181,17 @@ fr:
               many: Futur
               other: Futur
       contact_account:
-        custom_label: Texte libre
+        custom_label: Freitext
         predefined_labels:
-          privat: Privé
-          mobil: Mobile
-          arbeit: Professionnel
-          vater: Père
-          mutter: Mère
+          privat: Privat
+          mobil: Mobil
+          arbeit: Arbeit
+          vater: Vater
+          mutter: Mutter
           fax: Fax
-          andere: Autre
-          webseite: Site web
-          rechnung: Facture
+          andere: Andere
+          webseite: Webseite
+          rechnung: Rechnung
 
       social_account:
         name: Nom

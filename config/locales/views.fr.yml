@@ -164,19 +164,19 @@ fr:
       placeholder_type: Intitulé (Vie privée, Travail...)
 
     social_account_fields:
-      placeholder_value: Site internet, identifiant Skype, lien vers un profil...
-      placeholder_type: Type (Skype, Facebook...)
+      placeholder_value: Website, Skypename, Profillink...
+      placeholder_type: Art (Skype, Facebook...)
 
     additional_email_fields:
       placeholder_value: Courriel
-      placeholder_type: Type (privé, professionnel, …)
+      placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
       tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
-      placeholder_type: Type (facture, travail ..)
-      caption_uses_contactable_name: Reprendre le nom de la personne
-      caption_used_for_invoices: Utilisé pour les factures
+      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
+      caption_uses_contactable_name: Namen der Person übernehmen
+      caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
       housenumber: N°
@@ -1119,9 +1119,9 @@ fr:
         one_week: une semaine
         one_month: un mois
       invoice_type:
-        standalone: Einzelrechnungen
+        standalone: Factures individuelles
         from_standalone_invoice_run: aus Rechnungsläufen
-        from_template_invoice_run: aus Sammelrechnungen
+        from_template_invoice_run: à partir de factures collectives
     add: Établir une facture externe
     add_payments: Saisir un paiement
     issued: Facture établie
@@ -1576,7 +1576,7 @@ fr:
     admin/oauth_authorizations: "Autoriser OAuth"
     imap_mails: "Mails et bounces"
     invoices: "Factures"
-    invoices/single: "Rechnungen"
+    invoices/single: "Factures"
     invoices/evaluations: "Pièce comptable"
     payments: "Reçus de paiement"
 

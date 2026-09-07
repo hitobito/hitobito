@@ -158,8 +158,8 @@ en:
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
           attributes:
             base:
-              max_one_additional_invoice_address: Only one address can be selected as the billing address.
-              additional_address_labels_must_be_unique: The names of the other addresses must be unique.
+              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
+              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
               cannot_have_managers_and_manageds: '%{name} cannot have both administrator and children.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: The child could not be added as they are already an administrator.
@@ -1094,17 +1094,17 @@ en:
               one: In the future
               other: Future
       contact_account:
-        custom_label: Free text
+        custom_label: Freitext
         predefined_labels:
-          privat: Private
-          mobil: Mobile
-          arbeit: Work
-          vater: Father
-          mutter: Mother
+          privat: Privat
+          mobil: Mobil
+          arbeit: Arbeit
+          vater: Vater
+          mutter: Mutter
           fax: Fax
-          andere: Other
-          webseite: Website
-          rechnung: Invoice
+          andere: Andere
+          webseite: Webseite
+          rechnung: Rechnung
 
       social_account:
         name: Name

@@ -164,19 +164,19 @@ it:
       placeholder_type: Tipo (privato, lavoro, ...)
 
     social_account_fields:
-      placeholder_value: Sito internet, nome skype, profilo...
-      placeholder_type: Tipo (Skype, Facebook...)
+      placeholder_value: Website, Skypename, Profillink...
+      placeholder_type: Art (Skype, Facebook...)
 
     additional_email_fields:
       placeholder_value: Email
-      placeholder_type: Tipo (privato, lavoro, ...)
+      placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
       tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
-      placeholder_type: Denominazione (fattura, lavoro ...)
-      caption_uses_contactable_name: Assumere il nome della persona
-      caption_used_for_invoices: Utilizzo per le fatture
+      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
+      caption_uses_contactable_name: Namen der Person übernehmen
+      caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
       housenumber: N.

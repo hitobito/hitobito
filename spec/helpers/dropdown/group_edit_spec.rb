@@ -78,21 +78,22 @@ describe "Dropdown::GroupEdit" do
   end
 
   it "renders archive group item if group is archivable" do
-    allow(self).to receive(:ti).and_return("")
-    allow(group).to receive(:archivable?).and_return(true)
+    with_translations(de: {global: {confirm_archive: "Bist du sicher?"}}) do
+      allow(group).to receive(:archivable?).and_return(true)
 
-    is_expected.to have_selector "a", text: "Archivieren"
+      is_expected.to have_selector "a", text: "Archivieren"
+    end
   end
 
   it "does not render archive group item if group is not archivable" do
-    allow(self).to receive(:ti).and_return("")
-    allow(group).to receive(:archivable?).and_return(false)
+    with_translations(de: {global: {confirm_archive: "Bist du sicher?"}}) do
+      allow(group).to receive(:archivable?).and_return(false)
 
-    is_expected.to have_no_selector "a", text: "Archivieren"
+      is_expected.to have_no_selector "a", text: "Archivieren"
+    end
   end
 
-  it "renders delete group item" do
-    allow(self).to receive(:ti).and_return("")
+  it "renders delete group item when group is not protected and user has destroy permission" do
     allow(self).to receive(:can?).with(:destroy, anything).and_return(true)
     allow(group).to receive(:protected?).and_return(false)
 
@@ -100,18 +101,16 @@ describe "Dropdown::GroupEdit" do
   end
 
   it "does not render delete group item if group is protected" do
-    allow(self).to receive(:ti).and_return("")
     allow(self).to receive(:can?).with(:destroy, anything).and_return(true)
     allow(group).to receive(:protected?).and_return(true)
 
-    is_expected.to have_no_selector "a", text: "Archivieren"
+    is_expected.to have_no_link("Löschen", href: confirm_deletion_group_path(group))
   end
 
   it "does not render delete group item without destroy group permission" do
-    allow(self).to receive(:ti).and_return("")
     allow(self).to receive(:can?).with(:destroy, anything).and_return(false)
     allow(group).to receive(:protected?).and_return(false)
 
-    is_expected.to have_no_selector "a", text: "Archivieren"
+    is_expected.to have_no_link("Löschen", href: confirm_deletion_group_path(group))
   end
 end

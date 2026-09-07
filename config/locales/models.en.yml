@@ -99,7 +99,7 @@ en:
         contact_account_category:
           attributes:
             unique_per_contactable:
-              required_when_used_for_invoices: "must be enabled when '%{attribute}' is enabled"
+              required_when_used_for_invoices: "muss aktiviert sein, wenn '%{attribute}' aktiviert ist"
         cors_origin:
           attributes:
             origin:
@@ -255,8 +255,8 @@ en:
         one: Calendar feed
         other: Calendar feeds
       contact_account_category:
-        one: Contact details category
-        other: Contact details categories
+        one: Kontaktangaben-Kategorie
+        other: Kontaktangaben-Kategorien
       custom_content:
         one: Text
         other: Texts
@@ -501,7 +501,7 @@ en:
         category: Category
 
       additional_address:
-        category: Category
+        category: Kategorie
         label: Bezeichnung
         first_name: Vorname
         last_name: Nachname
@@ -519,7 +519,7 @@ en:
         public: Public
 
       additional_addresses:
-        category: Category
+        category: Kategorie
         label: Description
         street: Street
         postbox: Postfach
@@ -1013,7 +1013,7 @@ en:
 
       phone_number:
         number: Number
-        category: Category
+        category: Kategorie
         label: Type
         public: Public
 
@@ -1043,7 +1043,7 @@ en:
       # used for nested phone_numbers
       phone_numbers:
         number: Phone number
-        category: Category
+        category: Kategorie
         label: Phone number type
         public: Public
 
@@ -1110,21 +1110,21 @@ en:
               other: Future
       social_account:
         name: Name
-        category: Category
+        category: Kategorie
         label: Type
         public: Public
 
       # used for nested social accounts
       social_accounts:
         name: Social Media Account
-        category: Category
+        category: Kategorie
         label: Social Media Type
         public: Public
 
       additional_email:
         email: E-Mail
         name: Further e-mail
-        category: Category
+        category: Kategorie
         label: Further e-mail type
         public: Public
         mailings: Mailing
@@ -1133,7 +1133,7 @@ en:
       additional_emails:
         email: E-Mail
         name: Further e-mail
-        category: Category
+        category: Kategorie
         label: Further e-mail type
         public: Public
         mailings: Versand
@@ -1252,13 +1252,13 @@ en:
         message: Message
 
       contact_account_category:
-        key: Key
-        contact_account_type: Contact type
-        contactable_type: Applies to
-        unique_per_contactable: Unique per contactable
-        used_for_invoices: Used for invoices
-        position: Position
-        name: Description
+        key: Schlüssel
+        contact_account_type: Kontaktangaben-Typ
+        contactable_type: Gilt für
+        unique_per_contactable: Nur einmal pro Person/Gruppe
+        used_for_invoices: Für Rechnungen verwenden
+        position: Reihenfolge
+        name: Bezeichnung
 
       label_format:
         name: Description
@@ -1604,7 +1604,7 @@ en:
   errors:
     attributes:
       category:
-        already_assigned: "%{category} has already been assigned"
+        already_assigned: "%{category} ist bereits vergeben"
     messages:
       invalid_zipcode: is not valid
       attachments_not_allowed: "Attachments not allowed"

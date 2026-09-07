@@ -101,7 +101,7 @@ fr:
         contact_account_category:
           attributes:
             unique_per_contactable:
-              required_when_used_for_invoices: "doit être activé lorsque « %{attribute} » est activé"
+              required_when_used_for_invoices: "muss aktiviert sein, wenn '%{attribute}' aktiviert ist"
         cors_origin:
           attributes:
             origin:
@@ -265,9 +265,9 @@ fr:
         many: Feed du calendrier
         other: Feed du calendrier
       contact_account_category:
-        one: Catégorie de coordonnées
-        many: Catégories de coordonnées
-        other: Catégories de coordonnées
+        one: Kontaktangaben-Kategorie
+        many: Kontaktangaben-Kategorien
+        other: Kontaktangaben-Kategorien
       custom_content:
         one: Texte
         many: Textes
@@ -585,8 +585,8 @@ fr:
         category: Catégorie
 
       additional_address:
-        category: Catégorie
-        label: Désignation
+        category: Kategorie
+        label: Bezeichnung
         first_name: Vorname
         last_name: Nachname
         organization_name: Firmenname
@@ -603,7 +603,7 @@ fr:
         public: Public
 
       additional_addresses:
-        category: Catégorie
+        category: Kategorie
         label: Désignation
         street: Rue
         postbox: Postfach
@@ -1097,7 +1097,7 @@ fr:
 
       phone_number:
         number: Numéro
-        category: Catégorie
+        category: Kategorie
         label: Type
         public: Public
 
@@ -1127,7 +1127,7 @@ fr:
       # used for nested phone_numbers
       phone_numbers:
         number: Numéro de téléphone
-        category: Catégorie
+        category: Kategorie
         label: Type de numéro de téléphone
         public: Public
 
@@ -1198,21 +1198,21 @@ fr:
               other: Futur
       social_account:
         name: Nom
-        category: Catégorie
+        category: Kategorie
         label: Type
         public: Public
 
       # used for nested social accounts
       social_accounts:
         name: Nom du réseau social
-        category: Catégorie
+        category: Kategorie
         label: Type de réseau social
         public: Public
 
       additional_email:
         email: Adresse e-mail
         name: Adresse e-mail supplémentaire
-        category: Catégorie
+        category: Kategorie
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
@@ -1221,7 +1221,7 @@ fr:
       additional_emails:
         email: Courriel
         name: Adresse e-mail supplémentaire
-        category: Catégorie
+        category: Kategorie
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
@@ -1342,13 +1342,13 @@ fr:
         message: Message
 
       contact_account_category:
-        key: Clé
-        contact_account_type: Type de contact
-        contactable_type: S'applique à
-        unique_per_contactable: Unique par contact
-        used_for_invoices: Utilisé pour les factures
-        position: Position
-        name: Désignation
+        key: Schlüssel
+        contact_account_type: Kontaktangaben-Typ
+        contactable_type: Gilt für
+        unique_per_contactable: Nur einmal pro Person/Gruppe
+        used_for_invoices: Für Rechnungen verwenden
+        position: Reihenfolge
+        name: Bezeichnung
 
       label_format:
         name: Désignation
@@ -1694,7 +1694,7 @@ fr:
   errors:
     attributes:
       category:
-        already_assigned: "%{category} est déjà attribué"
+        already_assigned: "%{category} ist bereits vergeben"
     messages:
       invalid_zipcode: n'est pas valable
       attachments_not_allowed: "ne doit pas contenir d'annexe"

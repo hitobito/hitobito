@@ -156,11 +156,16 @@ en:
       invoices_tooltip_title: Wird für Rechnungen verwendet
       blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
+    label_placeholder: Ergänzungen
+
     public_check_box:
       tooltip: 'Private entries are visible only to your own group. If you are a group leader, entries marked as public are visible to leaders of other groups. '
 
+    phone_number_fields:
+      placeholder_type: Description (Personal, Work, etc.)
+
     social_account_fields:
-      placeholder_value: Website, other profiles...
+      placeholder_value: Website, Profillink...
 
     additional_email_fields:
       placeholder_value: E-Mail

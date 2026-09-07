@@ -157,22 +157,24 @@ it:
       invoices_tooltip_title: Utilizzato per le fatture
       blocked_mail_tooltip_title: L'e-mail è bloccata a causa dei rimbalzi
 
+    label_placeholder: Ergänzungen
+
     public_check_box:
       tooltip: Annotazioni private sono visibili solo al proprio gruppo. Se sei un capo nel tuo gruppo, le annotazioni marcate come pubbliche saranno visibili anche ai capi e responsabili di altri gruppi,.
 
+    phone_number_fields:
+      placeholder_type: Tipo (privato, lavoro, ...)
+
     social_account_fields:
-      placeholder_value: Sito internet, profilo...
+      placeholder_value: Website, Profillink...
 
     additional_email_fields:
       placeholder_value: Email
       tooltip_mailings: Invii di abbonamenti, conferme per email, ecc. verranno inoltre spediti agli indirizzi selezionati qui di seguito.
-      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
-      placeholder_type: Denominazione (fattura, lavoro ...)
       caption_uses_contactable_name_person: Namen der Person übernehmen
       caption_uses_contactable_name_group: Namen der Gruppe übernehmen
-      caption_used_for_invoices: Utilizzo per le fatture
 
     address_fields:
       housenumber: N.

@@ -101,7 +101,7 @@ it:
         contact_account_category:
           attributes:
             unique_per_contactable:
-              required_when_used_for_invoices: "deve essere attivato quando '%{attribute}' è attivato"
+              required_when_used_for_invoices: "muss aktiviert sein, wenn '%{attribute}' aktiviert ist"
         cors_origin:
           attributes:
             origin:
@@ -264,9 +264,9 @@ it:
         many: Registrazioni nel calendario
         other: Registrazioni nel calendario
       contact_account_category:
-        one: Categoria dati di contatto
-        many: Categorie dati di contatto
-        other: Categorie dati di contatto
+        one: Kontaktangaben-Kategorie
+        many: Kontaktangaben-Kategorien
+        other: Kontaktangaben-Kategorien
       custom_content:
         one: testo
         many: Osservazioni
@@ -584,8 +584,8 @@ it:
         category: Categoria
 
       additional_address:
-        category: Categoria
-        label: Denominazione
+        category: Kategorie
+        label: Bezeichnung
         first_name: Vorname
         last_name: Nachname
         organization_name: Firmenname
@@ -602,7 +602,7 @@ it:
         public: Pubblico
 
       additional_addresses:
-        category: Categoria
+        category: Kategorie
         label: Denominazione
         street: Strada
         postbox: Postfach
@@ -1096,7 +1096,7 @@ it:
 
       phone_number:
         number: Numero
-        category: Categoria
+        category: Kategorie
         label: Tipo
         public: Pubblico
 
@@ -1126,7 +1126,7 @@ it:
       # used for nested phone_numbers
       phone_numbers:
         number: Numero di telefono
-        category: Categoria
+        category: Kategorie
         label: Tipo di numero di telefono
         public: Pubblico
 
@@ -1197,21 +1197,21 @@ it:
               other: Futuro
       social_account:
         name: Nickname
-        category: Categoria
+        category: Kategorie
         label: Tipo
         public: Pubblico
 
       # used for nested social accounts
       social_accounts:
         name: Nome dei social media
-        category: Categoria
+        category: Kategorie
         label: Tipo di social media
         public: Pubblico
 
       additional_email:
         email: Email
         name: Altre email
-        category: Categoria
+        category: Kategorie
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1220,7 +1220,7 @@ it:
       additional_emails:
         email: E-mail
         name: Altre email
-        category: Categoria
+        category: Kategorie
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1341,13 +1341,13 @@ it:
         message: Rapporto
 
       contact_account_category:
-        key: Chiave
-        contact_account_type: Tipo di contatto
-        contactable_type: Si applica a
-        unique_per_contactable: Unico per contatto
-        used_for_invoices: Utilizzo per le fatture
-        position: Posizione
-        name: Designazione
+        key: Schlüssel
+        contact_account_type: Kontaktangaben-Typ
+        contactable_type: Gilt für
+        unique_per_contactable: Nur einmal pro Person/Gruppe
+        used_for_invoices: Für Rechnungen verwenden
+        position: Reihenfolge
+        name: Bezeichnung
 
       label_format:
         name: Definizione
@@ -1693,7 +1693,7 @@ it:
   errors:
     attributes:
       category:
-        already_assigned: "%{category} è già stato assegnato"
+        already_assigned: "%{category} ist bereits vergeben"
     messages:
       invalid_zipcode: non è valido
       attachments_not_allowed: "Non può contenere allegati"

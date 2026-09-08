@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,6 +13,14 @@ describe Group do
 
   it "is a valid nested set" do
     expect(Group).to be_valid
+  end
+
+  context "canton" do
+    it "derives canton from location, unlike Person" do
+      expect(Group.new.canton).to be_nil
+      Location.create!(zip_code: 3000, name: "Bern", canton: "be")
+      expect(Group.new(zip_code: 3000).canton).to eq "be"
+    end
   end
 
   it "fixtures should have correct layer_group_id values" do

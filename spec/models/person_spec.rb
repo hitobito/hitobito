@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -552,10 +552,10 @@ describe Person do
       expect(Person.new(zip_code: 3000).location).to be_present
     end
 
-    it "reads canton from location if present" do
-      expect(Person.new.canton).to be_nil
+    it "does not derive canton from location, unlike other contactables" do
       Location.create!(zip_code: 3000, name: "Bern", canton: "be")
-      expect(Person.new(zip_code: 3000).canton).to eq "be"
+      expect(Person.new(zip_code: 3000).canton).to be_nil
+      expect(Person.new(zip_code: 3000, canton: "zh").canton).to eq "zh"
     end
 
     it "may preload location for various zip_codes" do
@@ -587,8 +587,83 @@ describe Person do
     expect(attrs[:country]).to eq(label: "Land", type: :country_select)
     expect(attrs[:gender]).to eq(label: "Geschlecht", type: :gender_select)
     expect(attrs[:years]).to eq(label: "Alter", type: :integer)
+    expect(attrs[:canton]).to eq(label: "Kanton", type: :canton_select)
 
     expect(Person.filter_attrs.count).to eq(Person::FILTER_ATTRS.count)
+  end
+
+  context "canton" do
+    subject(:person) { Person.new(first_name: "Hans", last_name: "Muster", country: "CH") }
+
+    it "returns the stored value, not one derived from zip_code" do
+      expect(person.canton).to be_nil
+      person.canton = "be"
+      expect(person.canton).to eq "be"
+    end
+
+    it "accepts any of the 26 official cantons" do
+      person.canton = "zh"
+      expect(person).to be_valid
+    end
+
+    it "rejects a value that is not a valid canton" do
+      person.canton = "not-a-canton"
+      expect(person).not_to be_valid
+      expect(person.errors[:canton]).to be_present
+    end
+
+    it "is valid when blank, regardless of country" do
+      person.country = "DE"
+      expect(person.canton).to be_nil
+      expect(person).to be_valid
+    end
+
+    it "is valid when set on a Swiss address" do
+      person.country = "CH"
+      person.canton = "zh"
+      expect(person).to be_valid
+    end
+
+    describe "#canton_label" do
+      it "translates a valid canton" do
+        person.canton = "zh"
+        expect(person.canton_label).to eq "Zürich"
+      end
+
+      it "is blank for a nil canton" do
+        expect(person.canton_label).to be_blank
+      end
+    end
+
+    describe "#reset_canton_unless_swiss" do
+      it "leaves canton untouched on a Swiss address" do
+        person.country = "CH"
+        person.canton = "zh"
+        person.valid?
+        expect(person.canton).to eq "zh"
+      end
+
+      it "silently clears canton rather than failing validation on a non-Swiss address" do
+        person.country = "DE"
+        person.canton = "zh"
+        expect(person).to be_valid
+        expect(person.canton).to be_nil
+      end
+
+      it "leaves a blank canton untouched on a non-Swiss address" do
+        person.country = "DE"
+        person.valid?
+        expect(person.canton).to be_nil
+      end
+
+      it "does nothing when the canton feature is disabled" do
+        allow(Settings.people).to receive(:canton).and_return(false)
+        person.country = "DE"
+        person.canton = "zh"
+        person.valid?
+        expect(person.canton).to eq "zh"
+      end
+    end
   end
 
   it "#filter_attrs is controlled by attributes define in Person::FILTER_ATTRS" do

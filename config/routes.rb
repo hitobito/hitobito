@@ -381,6 +381,8 @@ Hitobito::Application.routes.draw do
         resources :bounces, only: [:index]
       end
 
+      resources :pass_definitions
+
       resources :calendars do
         get "feed" => "calendars/feeds#index"
       end

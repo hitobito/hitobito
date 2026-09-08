@@ -35,7 +35,7 @@ describe Export::Tabular::People::Households do
       expect(households.attribute_labels.values).to eq [
         "Anrede",
         "Name",
-        "zusätzliche Adresszeile",
+        "c/o-Adresse",
         "Strasse",
         "Hausnummer",
         "Postfach",

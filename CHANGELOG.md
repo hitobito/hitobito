@@ -120,7 +120,7 @@
 - Beim Anmelden zu einem Event wurde das Formular der Anmeldefragen überarbeitet, um längere Fragen auch auf kleineren Screens besser abzubilden (hitobito/hitobito_sac_cas#1278)
 - Für PDF-Generierung wird nun die Schriftart "Noto Sans (Latin, Cyrillic and Greek)" als Fallback Schriftart verwendet (#2372)
 - Für eine bessere Unterstützung von Sonderzeichen, wird in PDFs von QR-Code-Rechnungen jetzt die Schrift Liberation Sans verwendet (#3622)
-- Etiketten-Exporte beinhalten zusätzlich: Strasse, Hausnummer, zusätzliche Adresszeile und Postfach. (#2717)
+- Etiketten-Exporte beinhalten zusätzlich: Strasse, Hausnummer, c/o-Adresse und Postfach. (#2717)
 - Es wurde ein Fehler behoben, bei dem Personen nicht auf einem Aboverteiler waren, obwohl sie die Bedingungen erfüllt hatten. (#3046)
 
 ## Version 2.6

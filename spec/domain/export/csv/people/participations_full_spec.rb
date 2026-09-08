@@ -51,7 +51,7 @@ describe Export::Tabular::People::ParticipationsFull do
     let(:full_headers) do
       [
         "Vorname", "Nachname", "Firmenname", "Übername", "Firma", "Haupt-E-Mail",
-        "Strasse", "Hausnummer", "zusätzliche Adresszeile", "Postfach", "PLZ", "Ort", "Land",
+        "Strasse", "Hausnummer", "c/o-Adresse", "Postfach", "PLZ", "Ort", "Land",
         "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Rollen", "Anmeldedatum", "Hauptebene"
       ]
     end

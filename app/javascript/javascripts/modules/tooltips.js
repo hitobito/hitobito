@@ -8,7 +8,7 @@ function registerTooltips() {
     document.querySelectorAll('[data-bs-toggle="tooltip"]')
   );
   tooltipTriggerList.forEach((el) => {
-    new Tooltip(el, {
+    Tooltip.getOrCreateInstance(el, {
       placement: el.dataset.bsPlacement || "right",
     });
   });

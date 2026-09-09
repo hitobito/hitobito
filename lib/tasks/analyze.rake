@@ -15,7 +15,7 @@ task :brakeman do
   end
 end
 
-desc "Run rubocop-must.yml and fail if there are issues"
+desc "Run rubocop and fail if there are issues"
 task :rubocop do
   sh "rubocop --except Wagons/PatchedMethod"
 rescue
@@ -25,6 +25,6 @@ end
 namespace :rubocop do
   desc "Run .rubocop.yml on changed files"
   task :changed do
-    sh "git ls-files -m -o -x spec -x test | grep '\\.rb$' | xargs rubocop"
+    sh "git ls-files -m -o --exclude-standard -x spec -x test | grep '\\.rb$' | xargs -r rubocop"
   end
 end

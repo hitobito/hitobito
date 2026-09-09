@@ -22,6 +22,7 @@ Default workflow for feature work or behavior changes. For resolving a defect, u
 5. Confirm the spec now passes.
 6. Run the specs for all touched classes to catch regressions.
 7. Update the copyright notice at the top of touched files to cover the current year.
-8. Run `brakeman` — no new security findings.
-9. Run `rubocop` — code style must be clean.
+8. Run `bundle exec rake brakeman` — no new security findings.
+9. Run `bundle exec rake rubocop` — code style must be clean. `bundle exec rake rubocop:changed` checks only the
+   files you touched.
 10. Write a commit message summarizing the need for the change.

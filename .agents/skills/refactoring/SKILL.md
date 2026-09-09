@@ -9,7 +9,7 @@ description: Use when restructuring internal code in hitobito without changing e
 
 Improves internal structure without changing functionality. The goal is future extension, performance gains, or better maintenance.
 
-**REQUIRED BACKGROUND:** Use the `development` skill for the base process (spec-first, `rubocop`, `brakeman`, copyright notice, commit message) — it applies here too.
+**REQUIRED BACKGROUND:** Use the `development` skill for the base process (spec-first, `bundle exec rake rubocop`, `bundle exec rake brakeman`, copyright notice, commit message) — it applies here too.
 
 ## When to Use
 

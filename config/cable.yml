@@ -1,6 +1,7 @@
 development:
   adapter: redis
   url: <%= ENV.fetch("RAILS_ACTIONCABLE_REDIS_URL", "redis://localhost:6379/1") %>
+  channel_prefix: <%= ENV.fetch("RAILS_ACTIONCABLE_CHANNEL_PREFIX", "hitobito_development") %>
 
 test:
   adapter: test

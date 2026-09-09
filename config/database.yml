@@ -30,7 +30,12 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *generic
-  database: <%= ENV["RAILS_TEST_DB_NAME"] || ENV["RAILS_DB_NAME"] || "hitobito_test" %>
+  # Isolates the test DB per checkout, so worktrees and several hitobito instances can run
+  # specs in parallel.
+  database: <%=
+    ENV["RAILS_TEST_DB_NAME"] ||
+      "hitobito_test_#{Dir.pwd.split("/").last(2).join("_")}".gsub(/[^a-zA-Z0-9_]/, "_")[0, 63]
+  %>
 
 production:
   <<: *generic

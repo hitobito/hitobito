@@ -392,6 +392,15 @@ create)
   git commit -m "Insert License Headers"
   popd
 
+  pushd "$new_wagon_dir"
+  ln -s ../hitobito/AGENTS_WAGON.md AGENTS.md
+  ln -s AGENTS.md CLAUDE.md
+  ln -s ../hitobito/.claude .claude
+  ln -s ../hitobito/.opencode .opencode
+  git add .
+  git commit -m "Link AI agent instructions to the core"
+  popd
+
   echo "Wagon has been created in ${new_wagon_dir}. The License has been inserted."
   echo "Next Steps would be to add the structure, adapt the design and such..."
   ;;

@@ -104,13 +104,13 @@ describe "Dropdown::GroupEdit" do
     allow(self).to receive(:can?).with(:destroy, anything).and_return(true)
     allow(group).to receive(:protected?).and_return(true)
 
-    is_expected.to have_no_link("Löschen", href: confirm_deletion_group_path(group))
+    is_expected.to have_no_link("Löschen", href: groups_path(group))
   end
 
   it "does not render delete group item without destroy group permission" do
     allow(self).to receive(:can?).with(:destroy, anything).and_return(false)
     allow(group).to receive(:protected?).and_return(false)
 
-    is_expected.to have_no_link("Löschen", href: confirm_deletion_group_path(group))
+    is_expected.to have_no_link("Löschen", href: groups_path(group))
   end
 end

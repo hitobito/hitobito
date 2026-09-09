@@ -598,7 +598,7 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: zusätzl. Adresszeile
+        address_care_of: Indirizzo c/o
         public: Pubblico
 
       additional_addresses:
@@ -669,7 +669,7 @@ it:
         password: Password
         password_confirmation: Confermare la password
         current_password: Vecchia password
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: Indirizzo c/o
         address: Indirizzo
         street: Strada
         housenumber: Numero civico
@@ -769,7 +769,7 @@ it:
         short_name: Abbreviazione
         email: Email principale
         address: Indirizzo
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: Indirizzo c/o
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -872,7 +872,7 @@ it:
         nickname: Soprannome
         company_name: Nome della ditta
         email: Email principale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: Indirizzo c/o
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -895,7 +895,7 @@ it:
         nickname: Soprannome
         company_name: Nome della ditta
         email: Email principale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: Indirizzo c/o
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -1399,7 +1399,7 @@ it:
         recipient_name: Nome
         recipient_first_name: Nome
         recipient_last_name: Cognome
-        recipient_address_care_of: Riga dell'indirizzo aggiuntiva
+        recipient_address_care_of: Indirizzo c/o
         recipient_postbox: Casella postale
         recipient_country: Nazione
         recipient_street: Strada

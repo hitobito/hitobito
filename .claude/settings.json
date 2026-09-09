@@ -1,3 +1,8 @@
 {
-  "plansDirectory": "./.claude/plans"
+  "plansDirectory": "./.claude/plans",
+  "permissions": {
+    "additionalDirectories": [
+      ".."
+    ]
+  }
 }

@@ -8,33 +8,102 @@ This project is a web-application with the following stack:
 - Delayed::Job
 - Redis
 
-Hitobito is a web application to manage organisation and communities with complex group hierarchies with people, events, courses and mail-sending features
-A brief overview of the application is in the README.md.
+Hitobito is a web application to manage organizations and communities with complex group hierarchies
+with people, events, courses and mail-sending features. A brief overview of the application is in
+the README.md.
 
 The HTML is mostly generated server-side with HAML.
 The Testing Framework is rspec, with capybara.
 Static analysis is done with rubocop and brakeman.
-CSS and JS are processed with webpacker
+CSS and JS are processed with webpacker.
 Translations are handled externally, the german (de) locales are the source and under our control.
 
-# Core Models
+# Repository Layout
 
-- People belong to a Group through the persons Roles.
-- Groups are organized hierarchically and have different layers.
+hitobito is split across several git repositories, checked out next to each other in one directory:
+
+- `hitobito` — the core. This file lives there.
+- `hitobito_*` — the wagons: customer-specific extensions. Not necessarily the ones in use: the
+  docker dev setup checks out only the wagons of its instance, while a native setup often has every
+  existing hitobito wagon there.
+- the directory containing them — in the docker dev setup a `hitobito/development` checkout that
+  ties them together; in a native setup just a directory.
+
+When investigating behaviour, read the core first and then every **active** wagon that is present:
+wagons regularly reopen and monkeypatch core classes instead of subclassing them, or activate or
+deactivate feature toggles.
+
+# Core Domain Models
+
+- People belong to a Group through the person's Roles.
+- Groups are organized hierarchically and have different layers. A layer is a group whose
+  `layer_group_id` points at itself; for every other group it points at the owning layer's group,
+  which may be several levels up the tree.
 - Roles define permissions which use CanCanCan and a custom AbilityDsl.
+- Roles are considered active for a time range (`start_on`/`end_on`) and are generally
+  soft-deleted by setting `end_on`.
 
-## additional concepts and folders
+## Additional concepts and folders
 
-- app/abilities for RBAC with CanCanCan
+- `../hitobito/app/abilities` for RBAC with CanCanCan. The AbilityDsl declaratively expresses
+  conditions like "people with roles with permission `layer_full` may update people in
+  `group.layer_group_id`".
+- `../hitobito/app/domain` for business logic and query objects that do not belong to a single model
+  (cross-model search, reporting, lifecycle rules).
 
 # Architecture
 
-hitobito consists of a core and one or more wagons. Wagons are mostly Rails' engines, just with a different loading order. See the [wagon integration doc](./doc/architecture/wagons/README.md) if information is needed. In the dev-setup, the needed wagons are located next to the core, so the core (this repo) is at `../hitobito/` while the wagons are in `../hitobito_*`. In some setups, only the currently needed ones are there, in others, all wagons are there, and the needed ones are selected by the ENV-Var `WAGONS`. In ruby, this is defined in the `Wagonfile`, which is included into the `Gemfile`.
+hitobito consists of a core and one or more wagons (plugins), each a different git repository.
+Wagons are mostly Rails' engines, just with a different loading order. See the
+[wagon integration doc](../hitobito/doc/architecture/wagons/README.md) if information is needed.
 
-When asked to research anything, also consider the currently used wagons.
+The group structure of the final application is always defined in a wagon, along with all
+modifications needed by that final application (also called the instance).
 
-The wagon always contains the group-structure of the final application and all modifications needed by that final application. The final application is also called the instance or the client-application (because our customer/client wants and needs that application).
+# Environment & Execution Rules
+
+Determine your environment before running anything:
+
+**1. `IS_DOCKER_DEV_ENV` is set — you are inside the docker dev setup's container.**
+- Read `../AGENTS_DOCKER_SETUP.md` before running any command.
+- The PostgreSQL host is `postgres`.
+- Only the currently needed wagons are present, in `../hitobito_*`.
+
+**2. `IS_DOCKER_DEV_ENV` is not set, but `../docker-compose.yml` exists — the docker dev setup is in
+use and you are running on the host, outside the containers.**
+- There is no Ruby, no PostgreSQL and no Redis available to you here. Do not try to install any.
+- Stop and tell the user to restart you inside the container, from this directory:
+  `../bin/agent claude` (or `../bin/agent opencode`).
+
+**3. Neither — native setup, with Ruby, PostgreSQL and Redis installed on the host.**
+- Run commands normally using `bin/rails` and `bundle exec rspec`.
+- Ensure PostgreSQL is running locally.
+- Potentially all existing wagons are checked out next to the core, and the needed ones are
+  selected by the ENV var `WAGONS`. This is defined in the `Wagonfile`, which is included into the
+  `Gemfile`.
+
+# Running Specs
+
+1. **`cd` to the directory whose specs you want first** — the core for core specs, the wagon
+   directory for that wagon's specs.
+2. `bin/rails db:test:prepare` there, once per directory, before the first spec run. It builds the
+   whole schema — for a wagon that is the core schema plus that wagon's own migrations.
+3. `bundle exec rspec spec/...` for the specs themselves.
+
+# Dependencies
+
+Both dev setups configure the locally checked out wagons in `Wagonfile`, which bundler would then
+write into `Gemfile.lock` as `path:` entries pointing at `../hitobito_*`. To keep that out of the
+committed lockfile, they run bundler against a `Gemfile.local` / `Gemfile.local.lock` copy.
+
+So when you add, remove or update a gem, the change has to be made in `Gemfile` and picked back
+over into the committed `Gemfile.lock` — the `Gemfile.local` pair is local scaffolding and is
+gitignored. Read
+[Avoid changes in Gemfile.lock due to local wagon configuration](../hitobito/doc/developer/local_setup.md#avoid-changes-in-gemfilelock-due-to-local-wagon-configuration)
+before touching either file, and never commit a `Gemfile.lock` containing `../hitobito_*` paths.
 
 # Contribution Guidelines
 
-If your contribution has been created with AI, please add the emoji "🤖" (:robot-face:) to commit-messages and pull-request titles and descriptions. This helps us categorize and fast-track the relevant contributions.
+If your contribution has been created with AI, please add the emoji "🤖" (:robot-face:) to
+commit messages and pull-request titles and descriptions. This helps us categorize and fast-track
+the relevant contributions.

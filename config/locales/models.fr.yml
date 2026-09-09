@@ -586,7 +586,7 @@ fr:
         town: Lieu
         country: Pays
         postbox: Case postale
-        address_care_of: zusätzl. Adresszeile
+        address_care_of: Adresse c/o
         public: Public
 
       additional_addresses:
@@ -656,7 +656,7 @@ fr:
         password: Mot de passe
         password_confirmation: Confirmation du mot de passe
         current_password: Ancien mot de passe
-        address_care_of: ligne d'adresse supplémentaire
+        address_care_of: Adresse c/o
         address: Adresse
         street: Rue
         housenumber: Numéro de la maison
@@ -756,7 +756,7 @@ fr:
         short_name: Abréviation
         email: Adresse e-mail principale
         address: Adresse
-        address_care_of: ligne d'adresse supplémentaire
+        address_care_of: Adresse c/o
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -859,7 +859,7 @@ fr:
         nickname: Surnom
         company_name: Nom de l'entreprise
         email: Adresse e-mail principale
-        address_care_of: ligne d'adresse supplémentaire
+        address_care_of: Adresse c/o
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -882,7 +882,7 @@ fr:
         nickname: Surnom
         company_name: Nom de l'entreprise
         email: Adresse e-mail principale
-        address_care_of: ligne d'adresse supplémentaire
+        address_care_of: Adresse c/o
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -1384,7 +1384,7 @@ fr:
         recipient_name: Nom
         recipient_first_name: Prénom
         recipient_last_name: Nom
-        recipient_address_care_of: ligne d'adresse supplémentaire
+        recipient_address_care_of: Adresse c/o
         recipient_postbox: Case postale
         recipient_country: Pays
         recipient_street: Rue

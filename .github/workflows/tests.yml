@@ -80,7 +80,7 @@ jobs:
       - name: 'Main Specs without features'
         run: |
           git fetch --tags
-          bundle exec rake ci:setup:env spec:without_features
+          bundle exec rake spec:without_features
 
   feature-specs:
     runs-on: 'ubuntu-24.04'
@@ -125,7 +125,7 @@ jobs:
 
       - name: 'Features'
         run: |
-          bundle exec rake ci:setup:env spec:features:lenient
+          bundle exec rake spec:features:lenient
 
       - name: 'Make capybara output downloadable'
         uses: actions/upload-artifact@v7

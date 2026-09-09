@@ -82,7 +82,8 @@ TAGS
 .github/prompts
 .claude/settings.local.json
 .claude/plans
-.opencode/
+.opencode/*
+!.opencode/skill
 .superpowers*
 
 # for experiments with webpack

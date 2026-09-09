@@ -110,7 +110,7 @@ describe Export::EventParticipationsExportJob do
 
       lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(2)
-      expect(lines[0]).to match(/Anrede;Name;zusätzliche Adresszeile;Strasse;Hausnummer;Postfach;PLZ;.*/)
+      expect(lines[0]).to match(/Anrede;Name;c\/o-Adresse;Strasse;Hausnummer;Postfach;PLZ;.*/)
       expect(lines[1]).to match(/Bottom und Other Member.*/).or match(/Other und Bottom Member.*/)
     end
   end

@@ -35,7 +35,7 @@ describe Export::Tabular::Groups::List do
       "Link zu Nextcloud",
       "Strasse",
       "Hausnummer",
-      "zusätzliche Adresszeile",
+      "c/o-Adresse",
       "Postfach",
       "Sprache",
       "Telefonnummern",

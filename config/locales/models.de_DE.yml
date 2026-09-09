@@ -515,7 +515,7 @@ de_DE:
         town: Ort
         country: Land
         postbox: Postfach
-        address_care_of: zusätzl. Adresszeile
+        address_care_of: c/o-Adresse
         public: Öffentlich
 
       additional_addresses:
@@ -586,7 +586,7 @@ de_DE:
         password: Passwort
         password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         address: Adresse
         street: Straße
         housenumber: Hausnummer
@@ -686,7 +686,7 @@ de_DE:
         short_name: Kurzname
         email: Haupt-E-Mail
         address: Adresse
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach
@@ -789,7 +789,7 @@ de_DE:
         nickname: Spitzname
         company_name: Firmenname
         email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach
@@ -812,7 +812,7 @@ de_DE:
         nickname: Spitzname
         company_name: Firmenname
         email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach

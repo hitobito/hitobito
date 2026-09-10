@@ -15,6 +15,7 @@ describe "popover_handler.js", js: true do
   def render_page_with(&block) # rubocop:disable Metrics/MethodLength
     stub_const("PopoverTestController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       helper_method :popover_title, :popover_content
 

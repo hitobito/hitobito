@@ -13,6 +13,7 @@ describe "FieldVisibility Stimulus Controller", js: true do
   def stub_form_with
     stub_const("FieldVisibilityController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       define_method :new do
         render inline: <<~HTML

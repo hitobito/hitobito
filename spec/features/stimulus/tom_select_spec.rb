@@ -11,6 +11,7 @@ describe "TomSelect Stimulus Controller", js: true do
   before do
     stub_const("TomSelectController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       helper_method :tom_select_tag
 

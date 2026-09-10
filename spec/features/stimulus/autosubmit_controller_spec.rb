@@ -13,6 +13,7 @@ describe "Autosubmit Stimulus Controller", js: true do
   def stub_page_with
     stub_const("AutosubmitTestController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       define_method :new do
         render inline: <<~HTML

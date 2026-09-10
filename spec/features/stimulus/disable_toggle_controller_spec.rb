@@ -13,6 +13,7 @@ describe "DisableToggle Stimulus Controller", js: true do
   def stub_form_with
     stub_const("DisableToggleController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       helper_method :disable_toggle_tag
 

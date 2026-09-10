@@ -50,6 +50,6 @@ describe "version" do
   end
 
   def version(args)
-    `version #{args}`.chomp
+    `#{File.expand_path("../../bin/version", __dir__)} #{args}`.chomp
   end
 end

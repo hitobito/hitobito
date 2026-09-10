@@ -585,7 +585,7 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: Indirizzo c/o
+        address_care_of: zusätzl. Adresszeile
         public: Pubblico
 
       additional_addresses:
@@ -655,7 +655,7 @@ it:
         password: Password
         password_confirmation: Confermare la password
         current_password: Vecchia password
-        address_care_of: Indirizzo c/o
+        address_care_of: zusätzliche Adresszeile
         address: Indirizzo
         street: Strada
         housenumber: Numero civico
@@ -755,7 +755,7 @@ it:
         short_name: Abbreviazione
         email: Email principale
         address: Indirizzo
-        address_care_of: Indirizzo c/o
+        address_care_of: zusätzliche Adresszeile
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -858,7 +858,7 @@ it:
         nickname: Soprannome
         company_name: Nome della ditta
         email: Email principale
-        address_care_of: Indirizzo c/o
+        address_care_of: zusätzliche Adresszeile
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -881,7 +881,7 @@ it:
         nickname: Soprannome
         company_name: Nome della ditta
         email: Email principale
-        address_care_of: Indirizzo c/o
+        address_care_of: zusätzliche Adresszeile
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale

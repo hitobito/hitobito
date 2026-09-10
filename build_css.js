@@ -10,13 +10,14 @@
 // mirroring how the wagon-owned `@import`s (emitted as absolute file
 // paths by WebpackHelper#absolute_wagon_file_paths) already resolve.
 
-const { execFileSync } = require("child_process");
+const { spawn } = require("child_process");
 const { sync: globSync } = require("glob");
 const fs = require("fs");
 const path = require("path");
 
 const GENERATED_SCSS_DIR = "app/assets/stylesheets_generated";
 const OUTPUT_DIR = "app/assets/builds";
+const watch = process.argv.includes("--watch");
 
 const entries = globSync(`${GENERATED_SCSS_DIR}/*.scss`);
 
@@ -36,8 +37,6 @@ const args = [
   ...process.argv.slice(2), // e.g. --watch, forwarded from `yarn build:css --watch`
 ];
 
-execFileSync("npx", ["sass", ...args], { stdio: "inherit" });
-
 // @fortawesome/fontawesome-free's own CSS assumes it's served one directory
 // below its webfonts/ (as it is within the npm package itself: css/all.css
 // next to ../webfonts/), so it hardcodes `url(../webfonts/...)`. Our
@@ -47,9 +46,35 @@ execFileSync("npx", ["sass", ...args], { stdio: "inherit" });
 // filename for Propshaft::Compiler::CssAssetUrls to resolve it, matching
 // the flat node_modules/@fortawesome/fontawesome-free/webfonts path
 // registered in config/initializers/assets.rb.
-for (const output of outputs) {
-  if (!fs.existsSync(output)) continue;
-  const content = fs.readFileSync(output, "utf8");
-  const fixed = content.replace(/url\((['"]?)\.\.\/webfonts\//g, "url($1");
-  if (fixed !== content) fs.writeFileSync(output, fixed);
+function fixFontAwesomeUrls() {
+  for (const output of outputs) {
+    if (!fs.existsSync(output)) continue;
+    const content = fs.readFileSync(output, "utf8");
+    const fixed = content.replace(/url\((['"]?)\.\.\/webfonts\//g, "url($1");
+    if (fixed !== content) fs.writeFileSync(output, fixed);
+  }
+}
+
+const sass = spawn("npx", ["sass", ...args], { stdio: watch ? ["inherit", "pipe", "inherit"] : "inherit" });
+
+if (watch) {
+  // In one-shot mode we can just wait for `sass` to exit before running the
+  // fix-up once. In --watch mode `sass` never exits (it's a long-running
+  // process, see Procfile), so the fix-up must run after *every*
+  // recompilation instead - triggered by watching its own stdout, since
+  // that's the only signal dart-sass's CLI gives for "a compile just
+  // finished".
+  let buffer = "";
+  sass.stdout.on("data", (chunk) => {
+    process.stdout.write(chunk);
+    buffer += chunk.toString();
+    const lines = buffer.split("\n");
+    buffer = lines.pop();
+    if (lines.some((line) => line.startsWith("Compiled "))) fixFontAwesomeUrls();
+  });
+} else {
+  sass.on("exit", (code) => {
+    if (code !== 0) process.exit(code);
+    fixFontAwesomeUrls();
+  });
 }

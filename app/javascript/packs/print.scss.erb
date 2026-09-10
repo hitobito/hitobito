@@ -5,14 +5,10 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
 
-<% include ActionView::Helpers %>
-<% include Webpacker::Helper %>
-<% include WebpackHelper %>
-
 // Import the wagons' specific variables or fall back to core variables
 <% absolute_wagon_file_paths(
   File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss'),
-  File.join('..', 'stylesheets', 'hitobito', 'customizable', '_variables.scss')
+  File.join('app', 'javascript', 'stylesheets', 'hitobito', 'customizable', '_variables.scss')
   ) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>
@@ -20,7 +16,7 @@
 // Import the wagons' fonts or fall back to core fonts
 <% absolute_wagon_file_paths(
   File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss'),
-  File.join('..', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss')
+  File.join('app', 'javascript', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss')
   ) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>

@@ -16,11 +16,11 @@ Run tests:
 
 Run feature tests:
 
-    bin/webpack-test-compile
+    RAILS_ENV=test bundle exec rake assets:precompile
     rails spec:features
     bin/rspec --tag type:feature spec/features/role_lists_controller_spec.rb
 
-If you experience problems with asset requests, make sure that the Webpack Dev Server is not running and clean up the existing assets with `rm -rf public/packs*`, then run `bin/webpack-test-compile` again.
+If you experience problems with asset requests, clean up the existing assets with `rm -rf public/assets`, then run `RAILS_ENV=test bundle exec rake assets:precompile` again.
 
 For performance reasons, logging is disabled in test env. If you need logging for debugging, activate it by:
 

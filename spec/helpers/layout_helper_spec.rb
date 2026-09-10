@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe LayoutHelper do
-  include Webpacker::Helper
   include UploadDisplayHelper
 
   describe "#meta_tags_from_settings" do
@@ -49,7 +48,7 @@ describe LayoutHelper do
       let(:group) { groups(:bottom_group_one_one_one) }
       let(:parent) { groups(:bottom_group_one_one) }
       let(:grandparent) { groups(:bottom_layer_one) }
-      let(:app_logo) { "/packs(-test)?/media/images/logo-[0-9a-f]+.png" }
+      let(:app_logo) { "/assets/logo-[0-9a-f]+\\.png" }
 
       before { assign(:group, group) }
 

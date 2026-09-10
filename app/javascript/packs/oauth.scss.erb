@@ -11,10 +11,6 @@
 * compiled file, but it's generally better to create a new file per style scope.
 */
 
-<% include ActionView::Helpers %>
-<% include Webpacker::Helper %>
-<% include WebpackHelper %>
-
 /**
 * Variables
 */
@@ -30,7 +26,7 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 // Import the wagons' specific variables or fall back to core variables
 <% absolute_wagon_file_paths(
   File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss'),
-  File.join('..', 'stylesheets', 'hitobito', 'customizable', '_variables.scss')
+  File.join('app', 'javascript', 'stylesheets', 'hitobito', 'customizable', '_variables.scss')
   ) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>
@@ -38,7 +34,7 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 /**
 * SASS Mixins
 */
-@import "../stylesheets/hitobito/media-queries";
+@import "app/javascript/stylesheets/hitobito/media-queries";
 
 /**
 * Bootstrap utilities customization
@@ -47,23 +43,23 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/utilities";
-@import "../stylesheets/hitobito/utilities";
-@import "../stylesheets/hitobito/customizable/utilities";
+@import "app/javascript/stylesheets/hitobito/utilities";
+@import "app/javascript/stylesheets/hitobito/customizable/utilities";
 
 /**
 * Dependencies
 */
-@import "~@fortawesome/fontawesome-free/css/all";
+@import "@fortawesome/fontawesome-free/css/all";
 @import "bootstrap/scss/bootstrap";
 
 /**
  * Core styles
  */
-@import "../stylesheets/hitobito/main";
-@import "../stylesheets/hitobito/modal";
-@import "../stylesheets/hitobito/help-texts";
+@import "app/javascript/stylesheets/hitobito/main";
+@import "app/javascript/stylesheets/hitobito/modal";
+@import "app/javascript/stylesheets/hitobito/help-texts";
 
-@import "../stylesheets/hitobito/oauth-dialog";
+@import "app/javascript/stylesheets/hitobito/oauth-dialog";
 
 /**
  * Wagon styles
@@ -71,7 +67,7 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 // Import the wagons' fonts or fall back to core fonts
 <% absolute_wagon_file_paths(
      File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss'),
-     File.join('..', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss')
+     File.join('app', 'javascript', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss')
 ) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>

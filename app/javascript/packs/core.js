@@ -13,16 +13,26 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
+// Must run first: jquery-ujs/jquery-ui/coffeescript modules expect global jQuery/moment.
+import '../javascripts/expose_globals';
+
 // Dependencies
-import 'jquery';
 import Rails from 'jquery-ujs';
-import 'moment'; // used by events/date_period_validator.js.coffee
 
 // jQuery UI
+//
+// jquery-ui's UMD files declare internal deps (e.g. datepicker needs
+// keycode.js) via an AMD define([...]) array, which esbuild - unlike
+// webpack - doesn't resolve automatically; so they're imported explicitly
+// here, in dependency order.
+import 'jquery-ui/ui/version';
+import 'jquery-ui/ui/keycode';
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui/ui/i18n/datepicker-de';
 import 'jquery-ui/ui/i18n/datepicker-fr-CH';
 import 'jquery-ui/ui/i18n/datepicker-it-CH';
+import 'jquery-ui/ui/vendor/jquery-color/jquery.color';
+import 'jquery-ui/ui/effect';
 import 'jquery-ui/ui/effects/effect-highlight';
 
 // Bootstrap
@@ -43,7 +53,11 @@ window.Tooltip = Tooltip
 window.Toast = Toast
 
 // UI Components
-import 'tom-select'
+//
+// tom-select only sets window.TomSelect in its UMD "browser globals"
+// branch, which esbuild's CJS resolution skips - so expose it explicitly.
+import TomSelect from 'tom-select'
+window.TomSelect = TomSelect
 
 // Turbo
 import '@hotwired/turbo-rails';
@@ -53,8 +67,7 @@ import { Application } from "@hotwired/stimulus"
 
 const application = Application.start()
 window.Stimulus = application
-import "controllers";
+import "../controllers";
 
 // Custom scripts from core
-function requireAll(r) { r.keys().forEach(r); }
-requireAll(require.context('../javascripts/modules', true, /\.(js|coffee)$/));
+import "../generated/core_modules";

@@ -58,7 +58,14 @@ window.Tooltip = Tooltip
 window.Toast = Toast
 
 // UI Components
-import 'tom-select'
+//
+// tom-select's own build only attaches itself to `window.TomSelect` in its
+// UMD "browser globals" branch, which never runs once bundled (esbuild,
+// like webpack, provides `module`/`exports`, so its CJS branch runs
+// instead and the export is simply discarded by this bare import) - so it
+// must be imported and exposed explicitly, same as jQuery/moment above.
+import TomSelect from 'tom-select'
+window.TomSelect = TomSelect
 
 // Turbo
 import '@hotwired/turbo-rails';

@@ -515,7 +515,7 @@ en:
         town: Place
         country: Country
         postbox: P.O. Box
-        address_care_of: c/o address
+        address_care_of: c/o-Adresse
         public: Public
 
       additional_addresses:
@@ -586,7 +586,7 @@ en:
         password: Password
         password_confirmation: Password confirmation
         current_password: Old password
-        address_care_of: c/o address
+        address_care_of: c/o-Adresse
         address: Address
         street: Street
         housenumber: House number
@@ -686,7 +686,7 @@ en:
         short_name: Nickname
         email: Main e-mail
         address: Address
-        address_care_of: c/o address
+        address_care_of: c/o-Adresse
         street: Street
         housenumber: House number
         postbox: P.O. Box
@@ -789,7 +789,7 @@ en:
         nickname: Nickname
         company_name: Company name
         email: Main e-mail
-        address_care_of: c/o address
+        address_care_of: c/o-Adresse
         street: Street
         housenumber: House number
         postbox: P.O. Box
@@ -812,7 +812,7 @@ en:
         nickname: Nickname
         company_name: Company name
         email: Main e-mail
-        address_care_of: c/o address
+        address_care_of: c/o-Adresse
         street: Street
         housenumber: House number
         postbox: P.O. Box

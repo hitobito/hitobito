@@ -9,6 +9,6 @@
     font-style: normal;
     font-weight: 400;
     src: local('Noto Sans'), local("Noto-Sans-Regular"),
-         url('../../../fonts/NotoSans-Regular.woff2') format('woff2'), /* Modern Browsers */
-         url('../../../fonts/NotoSans-Regular.ttf') format('truetype') /* Fallback */
+         url('NotoSans-Regular.woff2') format('woff2'), /* Modern Browsers */
+         url('NotoSans-Regular.ttf') format('truetype') /* Fallback */
   }

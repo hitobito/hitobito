@@ -228,10 +228,10 @@ runs:
       working-directory: hitobito
       shell: bash
 
-    - name: "Run Webpacker"
+    - name: "Build assets"
       if: inputs.assets == 'true'
       run: |
-        bundle exec rake webpacker:compile
+        bundle exec rake assets:precompile
       working-directory: hitobito
       shell: bash
 

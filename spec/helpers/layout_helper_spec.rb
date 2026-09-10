@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe LayoutHelper do
-  include Webpacker::Helper
   include UploadDisplayHelper
 
   describe "#meta_tags_from_settings" do

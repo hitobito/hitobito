@@ -77,7 +77,7 @@ class PersonDecorator < ApplicationDecorator
     pic_url = if picture.attached?
       h.url_for(picture)
     else
-      h.asset_pack_path("media/images/#{picture_default}")
+      h.image_path(picture_default)
     end
 
     if pic_url.respond_to?(:url)

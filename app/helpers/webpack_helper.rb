@@ -4,21 +4,18 @@
 #  https://github.com/hitobito/hitobito.
 
 module WebpackHelper
-  # Returns the path of a given image as provided by Webpack
-  # (e.g. `/packs/images/myimage.png`). Prioritizes wagon images, if
-  # available. This makes it possible for wagons to "override" core
-  # assets with the same file name.
+  # Returns the path of a given image (e.g. `/assets/myimage-abcd1234.png`).
+  # Prioritizes wagon images, if available - config/initializers/assets.rb
+  # registers every active wagon's app/assets/images directory *before*
+  # core's own, so Propshaft's asset lookup naturally resolves a wagon's
+  # file first when it shares a name with a core file. This makes it
+  # possible for wagons to "override" core assets with the same file name.
   def wagon_image_pack_path(name)
-    wagon_path = Webpacker.instance.manifest.lookup(wagon_media_image_path(name))
-    if wagon_path
-      path_to_asset(wagon_path)
-    else
-      resolve_path_to_image(name)
-    end
+    image_path(name)
   end
 
-  # Similar to Webpacker's `image_pack_tag` helper, but renders image
-  # from wagons if available
+  # Renders an image tag, preferring a wagon's image over core's for the
+  # same file name (see wagon_image_pack_path).
   def wagon_image_pack_tag(name, **options)
     if options[:srcset] && !options[:srcset].is_a?(String)
       options[:srcset] = options[:srcset].map do |src_name, size|
@@ -29,8 +26,8 @@ module WebpackHelper
     image_tag(wagon_image_pack_path(name), options)
   end
 
-  # Similar to Webpacker's `favicon_pack_tag` helper, but renders
-  # favicon from wagons if available
+  # Renders a favicon tag, preferring a wagon's favicon over core's for the
+  # same file name (see wagon_image_pack_path).
   def wagon_favicon_pack_tag(name, **options)
     favicon_link_tag(wagon_image_pack_path(name), options)
   end
@@ -70,11 +67,5 @@ module WebpackHelper
     if fallback_file_path && file_paths.blank?
       yield(fallback_file_path)
     end
-  end
-
-  private
-
-  def wagon_media_image_path(file_name)
-    File.join("wagon-media", "images", file_name)
   end
 end

@@ -57,7 +57,7 @@ module UploadDisplayHelper
       "#{png_name}.png"
     end
 
-    ActionController::Base.helpers.asset_pack_path("media/images/#{filename}")
+    ActionController::Base.helpers.image_path(filename)
   end
 
   private

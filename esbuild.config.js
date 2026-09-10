@@ -90,8 +90,18 @@ fs.writeFileSync(
 // wagon controllers in both the sibling-dev and vendor/wagons layouts -
 // Wagons.all/wagon.paths.path already resolves correctly in either case,
 // so there's no need to distinguish the two here).
-function controllerIdentifier(filePath, wagonName) {
-  const base = path.basename(filePath).replace(/_controller\.js$/, "").replace(/_/g, "-");
+// Stimulus's own naming convention (see stimulus/webpack-helpers'
+// definitionsFromContext, which used to do this for us via
+// require.context): a controller's identifier is its path *relative to its
+// controllers root*, with the _controller.js suffix stripped, each path
+// segment's underscores turned to dashes, and segments joined with "--" -
+// so app/javascript/controllers/events/question_template_nested_form_controller.js
+// becomes "events--question-template-nested-form", not just
+// "question-template-nested-form" (which silently drops the "events--"
+// namespace and breaks any data-controller="events--..." in the DOM).
+function controllerIdentifier(controllersRoot, filePath, wagonName) {
+  const relative = path.relative(controllersRoot, filePath).replace(/_controller\.js$/, "");
+  const base = relative.split(path.sep).map((segment) => segment.replace(/_/g, "-")).join("--");
   if (!wagonName) return base;
   return `${wagonName.replace(/^hitobito_/, "").replace(/_/g, "-")}--${base}`;
 }
@@ -99,16 +109,16 @@ function controllerIdentifier(filePath, wagonName) {
 const controllerEntries = [
   ...globSync("app/javascript/controllers/**/*_controller.js").map((file) => ({
     file: path.resolve(file),
-    identifier: controllerIdentifier(file),
+    identifier: controllerIdentifier(path.resolve("app/javascript/controllers"), path.resolve(file)),
   })),
   ...globSync("app/components/**/*_controller.js").map((file) => ({
     file: path.resolve(file),
-    identifier: controllerIdentifier(file),
+    identifier: controllerIdentifier(path.resolve("app/components"), path.resolve(file)),
   })),
   ...wagons.flatMap((wagon) =>
     wagon.controllers.map((file) => ({
       file,
-      identifier: controllerIdentifier(file, wagon.name),
+      identifier: controllerIdentifier(wagon.controllersRoot, file, wagon.name),
     }))
   ),
 ];

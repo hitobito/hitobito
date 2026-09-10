@@ -80,6 +80,7 @@ namespace :assets do
 
       {
         name: wagon.wagon_name,
+        controllersRoot: wagon_root.join("app", "javascript", "controllers").to_s,
         packs: Dir[wagon_root.join("app", "javascript", "packs", "*.js")],
         controllers: Dir[wagon_root.join("app", "javascript", "controllers", "**", "*_controller.js")],
         wagonScript: wagon_script.exist? ? wagon_script.to_s : nil

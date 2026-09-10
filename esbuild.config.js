@@ -134,6 +134,13 @@ const buildOptions = {
   entryPoints: [...coreEntries, ...wagonEntries],
   bundle: true,
   outdir: OUTPUT_DIR,
+  // Wagons have no node_modules of their own (see hitobito_*/app/javascript
+  // - they rely entirely on core's) and, being siblings of core rather than
+  // nested under it, esbuild's normal upward node_modules search from a
+  // wagon file never reaches core's node_modules at all. `nodePaths` adds
+  // it as an extra lookup root, mirroring the old webpack config's
+  // `environment.resolvedModules.append("core_node_modules", ...)`.
+  nodePaths: [path.resolve("node_modules")],
   plugins: [coffeePlugin, controllersAliasPlugin],
   loader: { ".woff": "file", ".woff2": "file", ".ttf": "file", ".eot": "file", ".svg": "file" },
   sourcemap: true,

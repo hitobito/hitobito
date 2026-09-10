@@ -37,6 +37,15 @@ if (entries.length === 0) {
 
 const outputs = entries.map((entry) => path.join(OUTPUT_DIR, `${path.basename(entry, ".scss")}.css`));
 
+// Prune stale CSS outputs left over from a *different* wagon (e.g. a
+// previous wagon's agenda.css, when the newly active one has no such pack)
+// - only touches *.css (we compile with --no-source-map), so this can't
+// clobber the JS build's own outputs.
+const outputBasenames = new Set(outputs.map((o) => path.basename(o)));
+for (const existing of globSync(`${OUTPUT_DIR}/*.css`)) {
+  if (!outputBasenames.has(path.basename(existing))) fs.unlinkSync(existing);
+}
+
 const args = [
   ...entries.map((entry, i) => `${entry}:${outputs[i]}`),
   "--load-path=node_modules",

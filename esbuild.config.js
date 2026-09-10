@@ -140,6 +140,20 @@ ${controllerLines.map(([, identifier, i]) => `  application.register(${JSON.stri
 const coreEntries = ["application", "core", "pass_verify"].map((name) => `app/javascript/packs/${name}.js`);
 const wagonEntries = wagons.flatMap((wagon) => wagon.packs);
 
+// Prune stale JS outputs left over from a *different* wagon (e.g. a
+// previous wagon's agenda.js, when the newly active one has no such pack)
+// - only touches *.js/*.js.map, so this can't clobber the CSS build's own
+// outputs (which are plain *.css, --no-source-map).
+const expectedBasenames = new Set(
+  [...coreEntries, ...wagonEntries].flatMap((entry) => {
+    const base = path.basename(entry, ".js");
+    return [`${base}.js`, `${base}.js.map`];
+  })
+);
+for (const existing of [...globSync(`${OUTPUT_DIR}/*.js`), ...globSync(`${OUTPUT_DIR}/*.js.map`)]) {
+  if (!expectedBasenames.has(path.basename(existing))) fs.unlinkSync(existing);
+}
+
 const buildOptions = {
   entryPoints: [...coreEntries, ...wagonEntries],
   bundle: true,

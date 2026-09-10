@@ -40,6 +40,15 @@ namespace :assets do
       entries += Dir[wagon.paths.path.join("app", "javascript", "packs", "*.scss.erb")]
     end
 
+    target_names = entries.map { |source_path| File.basename(source_path, ".erb") }
+
+    # Prune entries left over from a *different* wagon (switching WAGONS and
+    # recompiling would otherwise keep e.g. a previous wagon's agenda.scss
+    # around forever, since we only ever write/overwrite here, never clean up).
+    (Dir[File.join(GENERATED_SCSS_DIR, "*.scss")].map { |f| File.basename(f) } - target_names).each do |stale|
+      File.delete(File.join(GENERATED_SCSS_DIR, stale))
+    end
+
     entries.each do |source_path|
       target_name = File.basename(source_path, ".erb")
       target_path = File.join(GENERATED_SCSS_DIR, target_name)

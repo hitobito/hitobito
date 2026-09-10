@@ -11,6 +11,7 @@
 // assets:wagon_js_manifest`, which is scoped to *active* wagons only, i.e.
 // Wagons.all - not every hitobito_* directory that happens to be checked out).
 
+const { execFileSync } = require("child_process");
 const esbuild = require("esbuild");
 const { sync: globSync } = require("glob");
 const coffeescript = require("coffeescript");
@@ -20,6 +21,15 @@ const path = require("path");
 const WAGON_MANIFEST_PATH = "tmp/wagon_assets_manifest.json";
 const GENERATED_JS_DIR = "app/javascript/generated";
 const OUTPUT_DIR = "app/assets/builds";
+
+// `rake assets:render_js_entries assets:wagon_js_manifest` (which renders
+// gem-provided ERB entries and lists the *active* wagons' JS-relevant
+// files) are wired as Rake prerequisites of `javascript:build`, but this
+// script also runs directly via `yarn build` (e.g. the Procfile's `js`
+// process in normal dev mode) - a plain `yarn`/`node` invocation never goes
+// through Rake at all, so those steps need to run here too, or switching
+// WAGONS would silently keep bundling whichever wagon was last rendered.
+execFileSync("bundle", ["exec", "rake", "assets:render_js_entries", "assets:wagon_js_manifest"], { stdio: "inherit" });
 
 fs.mkdirSync(GENERATED_JS_DIR, { recursive: true });
 

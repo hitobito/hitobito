@@ -10,7 +10,7 @@
 // mirroring how the wagon-owned `@import`s (emitted as absolute file
 // paths by WebpackHelper#absolute_wagon_file_paths) already resolve.
 
-const { spawn } = require("child_process");
+const { execFileSync, spawn } = require("child_process");
 const { sync: globSync } = require("glob");
 const fs = require("fs");
 const path = require("path");
@@ -18,6 +18,15 @@ const path = require("path");
 const GENERATED_SCSS_DIR = "app/assets/stylesheets_generated";
 const OUTPUT_DIR = "app/assets/builds";
 const watch = process.argv.includes("--watch");
+
+// `rake assets:render_scss_entries` (which pulls in the *active* wagon's
+// _variables.scss/_fonts.scss/_wagon.scss via WebpackHelper) is wired as a
+// prerequisite of the Rake task `css:build`, but this script also runs
+// directly via `yarn build:css` (e.g. the Procfile's `css` process in
+// normal dev mode) - a plain `yarn`/`node` invocation never goes through
+// Rake at all, so that render step needs to run here too, or switching
+// WAGONS would silently keep serving whichever wagon was last rendered.
+execFileSync("bundle", ["exec", "rake", "assets:render_scss_entries"], { stdio: "inherit" });
 
 const entries = globSync(`${GENERATED_SCSS_DIR}/*.scss`);
 

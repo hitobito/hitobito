@@ -243,6 +243,22 @@ bearbeiten?_
 (`at_least_one_group_not_deleted_and_not_closed_or_admin`), kann dieser Benutzer den Anlass
 bearbeiten. (Das `not_closed_..` trifft nur auf Kurse zu).
 
+#### Berechtigungen auf Listen
+
+`can?` beantwortet die Frage jeweils für eine einzelne Instanz. Listen dürfen deshalb nicht in Ruby
+pro Datensatz gefiltert werden, sondern werden über eigene Ability Klassen aufgelöst, welche die
+Rollen des Benutzers in einen SQL Scope übersetzen: `GroupBasedFetchables` bzw.
+`GroupBasedReadables` und deren Subklassen wie `PersonReadables`, `PersonWritables` oder
+`EventReadables`. Diese deklarieren, welche Permissions in derselben Gruppe, in Gruppen darunter,
+in derselben Ebene oder in Ebenen darüber zählen, und werden über `accessible_by` verwendet:
+
+    Event.accessible_by(EventReadables.new(user))
+
+Für die Suche und das JSON API sind sie als `readables_ability` (`app/domain/search_strategies`)
+bzw. `readable_class` (`app/resources`) konfiguriert. Neue Listen, Exports oder API Endpunkte
+verwenden die bestehende Readables Klasse des Modells; ein neues, auflistbares Modell braucht eine
+eigene.
+
 #### Implizite Berechtigungen
 
 Hitobito kennt das Konzept von impliziten Berechtigungen. So impliziert z.B. die Permission

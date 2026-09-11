@@ -47,9 +47,17 @@ deactivate feature toggles.
 
 - `../hitobito/app/abilities` for RBAC with CanCanCan. The AbilityDsl declaratively expresses
   conditions like "people with roles with permission `layer_full` may update people in
-  `group.layer_group_id`".
+  `group.layer_group_id`", and lists are scoped in SQL rather than filtered per record — read
+  [Berechtigungen](doc/architecture/08_konzepte.md#berechtigungen) before touching permissions or a
+  list query.
 - `../hitobito/app/domain` for business logic and query objects that do not belong to a single model
   (cross-model search, reporting, lifecycle rules).
+- Wagons are Rails engines that reopen core classes instead of subclassing them, so a core change
+  can break them — read [Wagons](doc/developer/common/wagons.md).
+- German is the only locale under our control, everything else comes from Transifex — read
+  [Internationalization](doc/developer/common/i18n.md) before editing any locale file.
+- Preventing N+1 queries is mandatory, not an optimization for later — read
+  [Performance](doc/developer/common/performance.md) before writing a query, a list or an export.
 
 # Architecture
 

@@ -45,7 +45,7 @@ Consequences to keep in mind:
   [Adding attributes](../../architecture/wagons/README.md#instructions-adding-attributes).
 * Abilities are extended the same way and constraints may be overridden, see
   [Berechtigungen](../../architecture/08_konzepte.md#berechtigungen).
-* A wagon's `Gemfile.lock` is never checked into git.
+* A wagon's `Gemfile.lock` is never checked into git.  If a wagon requires an additional Gem library, it must be declared as a dependency in the `gemspec` file of the wagon.
 
 **Core changes must keep the wagons working.** When you change a core class that wagons are likely
 to reopen (`Person`, `Group`, `Role`, `Event`, the abilities, the controllers), check the active

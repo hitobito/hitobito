@@ -56,7 +56,7 @@ deactivate feature toggles.
   can break them — read [Wagons](doc/developer/common/wagons.md).
 - German is the only locale under our control, everything else comes from Transifex — read
   [Internationalization](doc/developer/common/i18n.md) before editing any locale file.
-- Freedom from N+1 queries is mandatory, not an optimization for later — read
+- Preventing N+1 queries is mandatory, not an optimization for later — read
   [Performance](doc/developer/common/performance.md) before writing a query, a list or an export.
 
 # Architecture

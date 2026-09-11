@@ -76,7 +76,7 @@ describe Export::Tabular::People::PeopleFull do
         "Nom de l'entreprise",
         "Entreprise",
         "Adresse e-mail principale",
-        "Adresse c/o",
+        "c/o-Adresse",
         "Rue",
         "Numéro de la maison",
         "Case postale",

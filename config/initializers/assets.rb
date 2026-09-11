@@ -24,20 +24,18 @@ Rails.application.config.assets.paths << Rails.root.join("node_modules", "@forta
   "fontawesome-free", "webfonts").to_s
 
 # Compiled assets (app/assets/builds) are split into a subdirectory per
-# "wagon signature" - Wagons.all's sorted wagon names, or "core" when none -
-# see lib/tasks/assets.rake, build_css.js and esbuild.config.js, which all
-# write there using the exact same computation. This is what lets switching
-# which wagon(s) are active - or running specs from a wagon's own directory
-# via bin/wagon spec, which always builds from core's own directory first
-# (Wagons.current_wagon is *not* usable here: it would only reflect "inside
-# a wagon" for the later rspec process itself, not the build step that
-# precedes it) - avoid clobbering a previous, still-valid build. The bare
-# app/assets/builds directory itself never holds files directly (only
-# per-signature subdirectories), so it's excluded below in favor of
-# registering only the current signature's own subdirectory.
-wagon_signature = Wagons.all.map(&:wagon_name).sort.join("-")
-wagon_signature = "core" if wagon_signature.empty?
-signature_build_path = Rails.root.join("app", "assets", "builds", wagon_signature).to_s
+# "wagon signature" (see WebpackHelper.wagon_signature, referenced only
+# inside after_initialize below - it's an autoloaded app/helpers constant,
+# not yet resolvable this early while config/initializers themselves are
+# still loading) - this is what lets switching which wagon(s) are active -
+# or running specs from a wagon's own directory via bin/wagon spec, which
+# always builds from core's own directory first (Wagons.current_wagon is
+# *not* usable here: it would only reflect "inside a wagon" for the later
+# rspec process itself, not the build step that precedes it) - avoid
+# clobbering a previous, still-valid build. The bare app/assets/builds
+# directory itself never holds files directly (only per-signature
+# subdirectories), so it's excluded below in favor of registering only the
+# current signature's own subdirectory.
 bare_build_path = Rails.root.join("app", "assets", "builds").to_s
 
 # app/assets/stylesheets_generated is dart-sass's *input*, never served -
@@ -62,6 +60,10 @@ bare_stylesheets_generated_path = Rails.root.join("app", "assets", "stylesheets_
 # auto-discovery, has already run and applied excluded_paths as it stood at
 # that point by the time this app-level initializer gets to run).
 Rails.application.config.after_initialize do |app|
+  signature_build_path = Rails.root.join(
+    "app", "assets", "builds", WebpackHelper.wagon_signature
+  ).to_s
+
   wagon_paths_set = (wagon_image_paths + wagon_font_paths).to_set
   wagon_paths, other_paths = app.config.assets.paths.partition { |path|
     wagon_paths_set.include?(path.to_s)

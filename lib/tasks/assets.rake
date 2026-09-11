@@ -17,8 +17,8 @@
 #
 # Compiled output (app/assets/builds) and the SCSS rendered here
 # (app/assets/stylesheets_generated) are both split into a subdirectory per
-# "wagon signature" - Wagons.all's sorted wagon names, or "core" when none -
-# see config/initializers/assets.rb for why (and why current_wagon-based
+# "wagon signature" (see WebpackHelper.wagon_signature) - see
+# config/initializers/assets.rb for why (and why current_wagon-based
 # anchoring, which would have been simpler, doesn't work: bin/wagon spec
 # always runs the build itself from core's own directory, only the final
 # rspec process actually runs from inside the wagon).
@@ -42,8 +42,7 @@ namespace :assets do
     end
     renderer = renderer_class.new
 
-    signature = Wagons.all.map(&:wagon_name).sort.join("-")
-    signature = "core" if signature.empty?
+    signature = WebpackHelper.wagon_signature
     scoped_dir = File.join(generated_scss_dir, signature)
     FileUtils.mkdir_p(scoped_dir)
 
@@ -82,8 +81,7 @@ namespace :assets do
   task wagon_scss_load_paths: :environment do
     FileUtils.mkdir_p(File.dirname(wagon_scss_load_paths_path))
 
-    signature = Wagons.all.map(&:wagon_name).sort.join("-")
-    signature = "core" if signature.empty?
+    signature = WebpackHelper.wagon_signature
 
     # The rendered entries @import a wagon's customizable _variables.scss/
     # _fonts.scss/_wagon.scss via an absolute path (see WebpackHelper's
@@ -132,8 +130,7 @@ namespace :assets do
   task wagon_js_manifest: :environment do
     FileUtils.mkdir_p(File.dirname(wagon_manifest_path))
 
-    signature = Wagons.all.map(&:wagon_name).sort.join("-")
-    signature = "core" if signature.empty?
+    signature = WebpackHelper.wagon_signature
 
     wagons = Wagons.all.map do |wagon|
       wagon_root = wagon.paths.path

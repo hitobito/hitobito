@@ -4,6 +4,29 @@
 #  https://github.com/hitobito/hitobito.
 
 module WebpackHelper
+  # Not a wagon-specific ".youth is shared" ignore list, just this one
+  # name: hitobito_youth has no assets of its own (no _variables.scss, no
+  # wagon.js.coffee, no packs) and is paired alongside a "real" customer
+  # wagon in every composition that uses it (hitobito_sac_cas+youth,
+  # hitobito_pbs+youth, hitobito_jubla+youth, ...) - so it never changes
+  # what gets compiled. Without excluding it, sac_cas+youth and a
+  # hypothetical sac_cas-alone setup would get two different signatures
+  # (see #wagon_signature) for a build that's otherwise identical.
+  SIGNATURE_IGNORED_WAGONS = %w[youth].freeze
+
+  # The "wagon signature" used to key compiled asset output
+  # (app/assets/builds/<signature>, app/assets/stylesheets_generated/
+  # <signature>) - see lib/tasks/assets.rake and
+  # config/initializers/assets.rb. A single source of truth so the Ruby
+  # rake tasks and the app initializer can't drift apart on how it's
+  # computed - the two build scripts (build_css.js, esbuild.config.js) read
+  # the already-computed value from the manifest JSONs those tasks write,
+  # rather than recomputing it themselves.
+  def self.wagon_signature
+    names = Wagons.all.map(&:wagon_name) - SIGNATURE_IGNORED_WAGONS
+    names.sort.join("-").presence || "core"
+  end
+
   # Returns the path of a given image (e.g. `/assets/myimage-abcd1234.png`).
   # Prioritizes wagon images, if available - config/initializers/assets.rb
   # registers every active wagon's app/assets/images directory *before*

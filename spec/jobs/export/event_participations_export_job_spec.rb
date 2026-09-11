@@ -57,7 +57,7 @@ describe Export::EventParticipationsExportJob do
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
 
-      expect(lines[0].split(";").count).to match(37)
+      expect(lines[0].split(";").count).to match(38)
     end
 
     it "shows the correct timestamps on the participation instances" do

@@ -169,6 +169,7 @@ people:
       enabled: false
   search_by_id:
     enabled: true
+  canton: true
 
 event:
   attachments:

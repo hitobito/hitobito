@@ -25,3 +25,6 @@
   = f.labeled(:country) do
     .shown.ms-0
       = f.country_field
+
+  - if Settings.people.canton && f.object.is_a?(Person)
+    = render "contactable/country_canton_fields", f:

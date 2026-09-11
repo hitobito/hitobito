@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2014, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz, Pfadibewegung Schweiz.
 #  This file is part of hitobito and licensed under the Affero General Public
 #  License version 3 or later. See the COPYING file at the top-level
 #  directory or at https://github.com/hitobito/hitobito.
@@ -192,6 +192,11 @@ describe PeopleController, js: true do
     it "has gender field for gender attrs" do
       find("#attribute_filter option", text: "Geschlecht").click
       expect(page).to have_css ".gender_select_field"
+    end
+
+    it "has canton select dropdown for canton attrs" do
+      find("#attribute_filter option", text: "Kanton").click
+      expect(page).to have_css ".canton_select_field"
     end
   end
 

@@ -140,5 +140,24 @@ describe Event::ParticipationContactDatasController do
       expect(entry).to have(0).errors
       expect(top_leader.reload.last_name).to eq "NewName"
     end
+
+    it "stores canton on person if valid" do
+      patch :update, params: {
+        group_id: group.id,
+        event_id: course.id,
+        event_participation_contact_data: {
+          email: top_leader.email,
+          first_name: top_leader.first_name,
+          last_name: top_leader.last_name,
+          country: "CH",
+          canton: "be"
+        },
+        event_role: {
+          type: "Event::Role::Participant"
+        }
+      }
+      expect(entry).to have(0).errors
+      expect(top_leader.reload.canton).to eq "be"
+    end
   end
 end

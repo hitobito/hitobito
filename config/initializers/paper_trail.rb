@@ -41,7 +41,7 @@ ActiveSupport.on_load(:active_record) do
     options[:meta][:item_label] = lambda do |item|
       return nil if item.blank?
 
-      if item.method(:to_s).arity != 0
+      if item.method(:to_s).arity > 0
         item.to_s(:long)
       else
         item.to_s

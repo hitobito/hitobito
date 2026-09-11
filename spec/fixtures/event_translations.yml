@@ -18,4 +18,3 @@ top_course_de:
   updated_at: <%= Time.zone.now %>
 
   name: Top Course
-  description: Some kind of course, it seems

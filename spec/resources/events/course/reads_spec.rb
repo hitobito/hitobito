@@ -24,6 +24,7 @@ describe Event::CourseResource, type: :resource do
         :application_opening_at,
         :application_conditions,
         :description,
+        :html_description,
         :kind_id,
         :name,
         :cost,

@@ -177,7 +177,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   self.uses_form_tabs = true
 
-  self.filterable_attrs = [:name, :description, :location,
+  self.filterable_attrs = [:name, :plain_description, :location,
     :application_opening_at, :application_closing_at]
 
   model_stamper
@@ -422,7 +422,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     def filter_attrs
       filterable_attrs.map do |key, type|
         type = :string if translated_attribute_names.include?(key.to_sym)
-        type ||= columns_hash.fetch(key.to_s).type
+        type ||= columns_hash[key.to_s]&.type || :string
         [key.to_sym, {label: human_attribute_name(key), type: type}]
       end.to_h
     end

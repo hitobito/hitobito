@@ -13,6 +13,12 @@ end
 
 ActiveSupport.on_load :action_text_rich_text do
   attr :plain_text_body
+  ActionText::RichText.class_eval do
+    has_paper_trail if: -> (action_text) { true }, meta: {
+      main_id: ->(t) { t.record.event_id },
+      main_type:  ActionText::RichText.sti_name,
+    }, only: [:body]
+  end
   before_save { self.plain_text_body = body.to_plain_text unless body.nil? }
 end
 

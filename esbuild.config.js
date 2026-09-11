@@ -19,25 +19,17 @@ const fs = require("fs");
 const path = require("path");
 
 const WAGON_MANIFEST_PATH = "tmp/wagon_assets_manifest.json";
-const PRIMARY_WAGON_PATH = "tmp/primary_wagon.txt";
 const GENERATED_JS_DIR = "app/javascript/generated";
+const OUTPUT_DIR = "app/assets/builds";
 
-// `rake assets:render_js_entries assets:wagon_js_manifest assets:primary_wagon`
-// (which renders gem-provided ERB entries, lists the *active* wagons'
-// JS-relevant files, and names this boot's primary wagon) are wired as Rake
-// prerequisites of `javascript:build`, but this script also runs directly via
-// `yarn build` (e.g. the Procfile's `js` process in normal dev mode) - a
-// plain `yarn`/`node` invocation never goes through Rake at all, so those
-// steps need to run here too, or switching WAGONS would silently keep
-// bundling whichever wagon was last rendered.
-execFileSync("bundle", ["exec", "rake", "assets:render_js_entries", "assets:wagon_js_manifest", "assets:primary_wagon"], { stdio: "inherit" });
-
-// Each wagon builds into its own directory (blank/production falls back to
-// the plain, shared app/assets/builds) so switching which wagon you're
-// running specs or the dev server for never clobbers another wagon's
-// already-built output - see config/initializers/assets.rb.
-const primaryWagon = fs.existsSync(PRIMARY_WAGON_PATH) ? fs.readFileSync(PRIMARY_WAGON_PATH, "utf8").trim() : "";
-const OUTPUT_DIR = primaryWagon ? `app/assets/builds-${primaryWagon}` : "app/assets/builds";
+// `rake assets:render_js_entries assets:wagon_js_manifest` (which renders
+// gem-provided ERB entries and lists the *active* wagons' JS-relevant
+// files) are wired as Rake prerequisites of `javascript:build`, but this
+// script also runs directly via `yarn build` (e.g. the Procfile's `js`
+// process in normal dev mode) - a plain `yarn`/`node` invocation never goes
+// through Rake at all, so those steps need to run here too, or switching
+// WAGONS would silently keep bundling whichever wagon was last rendered.
+execFileSync("bundle", ["exec", "rake", "assets:render_js_entries", "assets:wagon_js_manifest"], { stdio: "inherit" });
 
 fs.mkdirSync(GENERATED_JS_DIR, { recursive: true });
 
@@ -147,6 +139,20 @@ ${controllerLines.map(([, identifier, i]) => `  application.register(${JSON.stri
 // --- Bundle ---
 const coreEntries = ["application", "core", "pass_verify"].map((name) => `app/javascript/packs/${name}.js`);
 const wagonEntries = wagons.flatMap((wagon) => wagon.packs);
+
+// Prune stale JS outputs left over from a *different* wagon (e.g. a
+// previous wagon's agenda.js, when the newly active one has no such pack)
+// - only touches *.js/*.js.map, so this can't clobber the CSS build's own
+// outputs (which are plain *.css, --no-source-map).
+const expectedBasenames = new Set(
+  [...coreEntries, ...wagonEntries].flatMap((entry) => {
+    const base = path.basename(entry, ".js");
+    return [`${base}.js`, `${base}.js.map`];
+  })
+);
+for (const existing of [...globSync(`${OUTPUT_DIR}/*.js`), ...globSync(`${OUTPUT_DIR}/*.js.map`)]) {
+  if (!expectedBasenames.has(path.basename(existing))) fs.unlinkSync(existing);
+}
 
 const buildOptions = {
   entryPoints: [...coreEntries, ...wagonEntries],

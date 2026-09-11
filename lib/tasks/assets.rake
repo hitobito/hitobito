@@ -15,26 +15,9 @@
 # `javascript:build`, which are themselves wired into `assets:precompile` and
 # `test:prepare`.
 
-require_relative "../wagon_asset_naming"
-
 namespace :assets do
   GENERATED_SCSS_DIR = "app/assets/stylesheets_generated" # rubocop:disable Lint/ConstantDefinitionInBlock
   WAGON_MANIFEST_PATH = "tmp/wagon_assets_manifest.json" # rubocop:disable Lint/ConstantDefinitionInBlock
-  PRIMARY_WAGON_PATH = "tmp/primary_wagon.txt" # rubocop:disable Lint/ConstantDefinitionInBlock
-
-  desc "Write this boot's primary wagon name, so esbuild.config.js/build_css.js" \
-  " can build into a wagon-specific output directory (blank in production," \
-  " which always builds into the plain, shared app/assets/builds)"
-  task primary_wagon: :environment do
-    FileUtils.mkdir_p(File.dirname(PRIMARY_WAGON_PATH))
-    File.write(PRIMARY_WAGON_PATH, Rails.env.production? ? "" : WagonAssetNaming.primary_wagon_name)
-  end
-  if Rake::Task.task_defined?("javascript:build")
-    Rake::Task["javascript:build"].enhance(["assets:primary_wagon"])
-  end
-  if Rake::Task.task_defined?("css:build")
-    Rake::Task["css:build"].enhance(["assets:primary_wagon"])
-  end
 
   desc "Render ERB-based SCSS entrypoints (core + wagon-owned) into plain .scss files"
   task render_scss_entries: :environment do

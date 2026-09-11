@@ -10,9 +10,9 @@
           %b= t('.title', group_name: entry.name)
       .modal-body
         %p
-          = t('.warning')
+          = t('.warning_html')
         %p
-          = t('.confirmation', group_name: entry.name)
+          = t('.confirmation_html', group_name: entry.name)
         = text_field_tag 'group-name', nil,
           aria_label: ti("text_field_label"),
           class: 'form-control form-control-sm',

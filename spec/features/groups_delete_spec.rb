@@ -39,20 +39,30 @@ describe :groups_delete, type: :feature, js: true do
     it "toggles delete button only for an exact group-name match" do
       open_delete_modal
       delete_button = find("#confirm-group-deletion button.btn-danger")
+      group_name = group.name
 
       expect(delete_button).to be_disabled
 
       fill_in "group-name", with: "Wrong Group Name"
       expect(delete_button).to be_disabled
 
-      fill_in "group-name", with: group.name[0..5]
+      fill_in "group-name", with: group_name[0..5]
       expect(delete_button).to be_disabled
 
       fill_in "group-name", with: ""
       expect(delete_button).to be_disabled
 
-      fill_in "group-name", with: group.name
+      fill_in "group-name", with: group_name
       expect(delete_button).not_to be_disabled
+
+      fill_in "group-name", with: " #{group_name} "
+      expect(delete_button).not_to be_disabled
+
+      group.update(name: " #{group_name} ")
+      open_delete_modal
+      fill_in "group-name", with: group_name.to_s
+      expect(delete_button).not_to be_disabled
+
       within("#confirm-group-deletion") do
         click_button delete_label
       end

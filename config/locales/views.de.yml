@@ -1026,8 +1026,8 @@ de:
     confirm_deletion:
       title: Willst du die Gruppe "%{group_name}" wirklich löschen?
       text_field_label: "Gruppenname Eingabefeld"
-      warning: "Achtung: Dabei werden unwiderruflich alle Rollen aller Personen in dieser Gruppe gelöscht. Diese Operation kann nicht rückgängig gemacht werden."
-      confirmation: Bitte tippe zur Bestätigung "%{group_name}" ein
+      warning_html: "<strong>Achtung!</strong> Dabei werden unwiderruflich alle Rollen aller Personen in dieser Gruppe gelöscht. <strong>Diese Operation kann nicht rückgängig gemacht werden.</strong>"
+      confirmation_html: Bitte tippe zur Bestätigung <strong>"%{group_name}"</strong> ein
       delete: "Gruppen und Rollen definitiv löschen"
 
   groups_filter:

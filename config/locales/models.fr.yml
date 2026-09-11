@@ -325,21 +325,21 @@ fr:
         many: Cuisine
         other: Cuisine
       event/role/helper:
-        one: Helfer/-in
-        many: Helfende
-        other: Helfende
+        one: Assistant/e
+        many: Assistant/es
+        other: Assistant/e
       event/role/participant:
-        one: Teilnehmer/-in
-        many: Teilnehmende
-        other: Teilnehmende
+        one: Participant/-e
+        many: Participants
+        other: Participants
       event/role/treasurer:
         one: Trésorier
         many: Trésoriers
         other: Trésoriers
       event/role/speaker:
-        one: Referent/-in
-        many: Referierende
-        other: Referierende
+        one: Conférencier
+        many: Conférencieres
+        other: Conférencier
       event/date:
         one: date
         many: Dates

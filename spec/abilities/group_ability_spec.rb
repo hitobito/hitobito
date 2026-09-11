@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -802,6 +802,36 @@ describe GroupAbility do
     it "may not register_people in group with self registration inactive" do
       allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
       is_expected.not_to be_able_to(:register_people, groups(:bottom_layer_one))
+    end
+  end
+
+  describe :index_event_templates do
+    let(:ability) { Ability.new(people(:top_leader).reload) }
+
+    context "with layer_and_below_full permission" do
+      before do
+        allow(Group::TopGroup::Leader).to receive(:permissions)
+          .and_return([:layer_and_below_full])
+      end
+
+      it "may index event templates on a layer group" do
+        is_expected.to be_able_to(:index_event_templates, groups(:top_layer))
+      end
+
+      it "may not index event templates on a non-layer group" do
+        is_expected.not_to be_able_to(:index_event_templates, groups(:top_group))
+      end
+    end
+
+    context "without any relevant permission" do
+      before do
+        allow(Group::TopGroup::Leader).to receive(:permissions)
+          .and_return([:contact_data])
+      end
+
+      it "may not index event templates" do
+        is_expected.not_to be_able_to(:index_event_templates, groups(:top_layer))
+      end
     end
   end
 end

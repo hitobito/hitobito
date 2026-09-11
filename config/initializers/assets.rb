@@ -3,15 +3,15 @@
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = "1.0"
 
-wagon_image_paths = Wagons.all.filter_map do |wagon|
-  wagon_images_path = wagon.paths.path.join("app", "assets", "images")
-  wagon_images_path.to_s if wagon_images_path.exist?
+wagon_asset_paths = lambda do |subdir|
+  Wagons.all.filter_map do |wagon|
+    path = wagon.paths.path.join("app", "assets", subdir)
+    path.to_s if path.exist?
+  end
 end
 
-wagon_font_paths = Wagons.all.filter_map do |wagon|
-  wagon_fonts_path = wagon.paths.path.join("app", "assets", "fonts")
-  wagon_fonts_path.to_s if wagon_fonts_path.exist?
-end
+wagon_image_paths = wagon_asset_paths.call("images")
+wagon_font_paths = wagon_asset_paths.call("fonts")
 
 Rails.application.config.assets.paths += wagon_image_paths
 Rails.application.config.assets.paths += wagon_font_paths
@@ -20,21 +20,42 @@ Rails.application.config.assets.paths << Rails.root.join("app", "javascript", "f
 
 # @fortawesome/fontawesome-free's webfonts, referenced (as bare filenames,
 # see build_css.js) from its own CSS's @font-face rules.
-Rails.application.config.assets.paths << Rails.root.join("node_modules", "@fortawesome", "fontawesome-free", "webfonts").to_s
+Rails.application.config.assets.paths << Rails.root.join("node_modules", "@fortawesome",
+  "fontawesome-free", "webfonts").to_s
 
-# Propshaft's own `config.after_initialize` (registered before this
-# initializer runs) prioritizes any path under Rails.root over paths outside
-# of it - which, in local/sibling-wagon development, would always rank core's
-# app/javascript/images *above* every wagon's app/assets/images (and fonts),
-# since only in the vendor/wagons production layout do wagon paths live
-# under Rails.root. We want the opposite: a wagon's file should win over a
-# core file of the same name (e.g. favicon.ico, logo.png) in every layout -
-# mirrors the previous wagon-media/media priority in
-# config/webpack/loaders/wagon-file.js. Reordering again in our own
-# after_initialize (registered later, so it runs after Propshaft's) lets us
-# override that default.
+# Compiled assets are split into a subdirectory per "wagon signature" (see
+# WebpackHelper.wagon_signature, only resolvable inside after_initialize -
+# autoloading isn't ready this early). Wagons.current_wagon doesn't work
+# for this: it can differ between the process that builds the assets and
+# the process that serves them, so build- and serve-time would disagree.
+# The bare app/assets/builds directory never holds files itself, so it's
+# excluded below in favor of the current signature's own subdirectory.
+bare_build_path = Rails.root.join("app", "assets", "builds").to_s
+
+# app/assets/stylesheets_generated is dart-sass's *input*, never served -
+# excluded for the same reason and the same way as bare_build_path below.
+bare_stylesheets_generated_path = Rails.root.join("app", "assets", "stylesheets_generated").to_s
+
+# Propshaft's own after_initialize (registered earlier) ranks paths under
+# Rails.root above outside ones - which would rank core's images above a
+# wagon's in local dev (only production's vendor/wagons layout puts wagon
+# paths under Rails.root). We want the opposite: a wagon's file should win
+# over core's for the same name. Reordering again here (registered later)
+# overrides that - and, since Propshaft's own asset-path auto-discovery has
+# already run by now, this is also the right place to swap in the
+# per-signature build path (setting excluded_paths any earlier is too late).
 Rails.application.config.after_initialize do |app|
+  signature_build_path = Rails.root.join(
+    "app", "assets", "builds", WebpackHelper.wagon_signature
+  ).to_s
+  excluded_paths = [bare_build_path, bare_stylesheets_generated_path]
   wagon_paths_set = (wagon_image_paths + wagon_font_paths).to_set
-  wagon_paths, other_paths = app.config.assets.paths.partition { |path| wagon_paths_set.include?(path.to_s) }
-  app.config.assets.paths = wagon_paths + other_paths
+
+  prioritize_wagon_paths = lambda do |paths|
+    priority, others = paths.partition { |path| wagon_paths_set.include?(path.to_s) }
+    others = others.reject { |path| excluded_paths.include?(path.to_s) }
+    priority + [signature_build_path] + others
+  end
+
+  app.config.assets.paths = prioritize_wagon_paths.call(app.config.assets.paths)
 end

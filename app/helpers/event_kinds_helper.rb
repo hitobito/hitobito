@@ -29,7 +29,7 @@ module EventKindsHelper
     kinds = kind.qualification_kinds(category, role).group_by(&:id)
     grouped_ids = kind.grouped_qualification_kind_ids(category, role)
     or_separator = [
-      " ",
+      tag(:br),
       content_tag(:span, t("event.kinds.qualifications.or"), class: "muted"),
       " "
     ]

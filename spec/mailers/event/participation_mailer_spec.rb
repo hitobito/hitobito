@@ -239,7 +239,7 @@ describe Event::ParticipationMailer do
 
     it "does not allow xss injection in event description" do
       event.update(description: "Description:<script>alert('xss');</script>")
-      expect(subject).to include("Description:&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;")
+      expect(subject).to include("Description:alert(&#39;xss&#39;);")
     end
 
     it "does not allow xss injection in event location" do

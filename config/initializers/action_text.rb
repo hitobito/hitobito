@@ -11,6 +11,11 @@ ActiveSupport.on_load(:action_view) do
   include ActionText::TagHelper
 end
 
+ActiveSupport.on_load :action_text_rich_text do
+  attr :plain_text_body
+  before_save { self.plain_text_body = body.to_plain_text unless body.nil? }
+end
+
 Rails.application.config.after_initialize do
 
   # Only allow tags that are supported in Trix.

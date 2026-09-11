@@ -38,3 +38,27 @@ Rails.application.config.after_initialize do |app|
   wagon_paths, other_paths = app.config.assets.paths.partition { |path| wagon_paths_set.include?(path.to_s) }
   app.config.assets.paths = wagon_paths + other_paths
 end
+
+unless Rails.env.production?
+  require_relative "../../lib/wagon_asset_naming"
+  wagon = WagonAssetNaming.primary_wagon_name
+  Rails.application.config.assets.prefix = "/assets-#{wagon.dasherize}"
+
+  # Each wagon gets its own JS/CSS build output directory (see
+  # lib/tasks/assets.rake's assets:primary_wagon task and esbuild.config.js/
+  # build_css.js) so switching which wagon you're running specs/dev-server
+  # for never clobbers another wagon's already-built assets. This has to
+  # happen in after_initialize, same as the wagon_paths reordering above:
+  # the main app's own "propshaft.append_assets_path" (which auto-registers
+  # every app/assets/builds* directory that exists on disk, including the
+  # plain, pre-per-wagon-split app/assets/builds) runs *after* this
+  # initializer file, not before, so filtering here directly would silently
+  # miss everything it adds.
+  Rails.application.config.after_initialize do |app|
+    builds_path = Rails.root.join("app", "assets", "builds-#{wagon}").to_s
+    stale_builds_paths = Dir[Rails.root.join("app", "assets", "builds*")] - [builds_path]
+
+    app.config.assets.paths.reject! { |path| stale_builds_paths.include?(path.to_s) }
+    app.config.assets.paths << builds_path unless app.config.assets.paths.map(&:to_s).include?(builds_path)
+  end
+end

@@ -16,17 +16,26 @@ const fs = require("fs");
 const path = require("path");
 
 const GENERATED_SCSS_DIR = "app/assets/stylesheets_generated";
-const OUTPUT_DIR = "app/assets/builds";
+const PRIMARY_WAGON_PATH = "tmp/primary_wagon.txt";
 const watch = process.argv.includes("--watch");
 
-// `rake assets:render_scss_entries` (which pulls in the *active* wagon's
-// _variables.scss/_fonts.scss/_wagon.scss via WebpackHelper) is wired as a
-// prerequisite of the Rake task `css:build`, but this script also runs
-// directly via `yarn build:css` (e.g. the Procfile's `css` process in
-// normal dev mode) - a plain `yarn`/`node` invocation never goes through
-// Rake at all, so that render step needs to run here too, or switching
-// WAGONS would silently keep serving whichever wagon was last rendered.
-execFileSync("bundle", ["exec", "rake", "assets:render_scss_entries"], { stdio: "inherit" });
+// `rake assets:render_scss_entries assets:primary_wagon` (which pulls in the
+// *active* wagon's _variables.scss/_fonts.scss/_wagon.scss via WebpackHelper,
+// and names this boot's primary wagon) is wired as a prerequisite of the Rake
+// task `css:build`, but this script also runs directly via `yarn build:css`
+// (e.g. the Procfile's `css` process in normal dev mode) - a plain
+// `yarn`/`node` invocation never goes through Rake at all, so those steps
+// need to run here too, or switching WAGONS would silently keep serving
+// whichever wagon was last rendered.
+execFileSync("bundle", ["exec", "rake", "assets:render_scss_entries", "assets:primary_wagon"], { stdio: "inherit" });
+
+// Each wagon builds into its own directory (blank/production falls back to
+// the plain, shared app/assets/builds) so switching which wagon you're
+// running specs or the dev server for never clobbers another wagon's
+// already-built output - see config/initializers/assets.rb.
+const primaryWagon = fs.existsSync(PRIMARY_WAGON_PATH) ? fs.readFileSync(PRIMARY_WAGON_PATH, "utf8").trim() : "";
+const OUTPUT_DIR = primaryWagon ? `app/assets/builds-${primaryWagon}` : "app/assets/builds";
+fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
 const entries = globSync(`${GENERATED_SCSS_DIR}/*.scss`);
 
@@ -36,15 +45,6 @@ if (entries.length === 0) {
 }
 
 const outputs = entries.map((entry) => path.join(OUTPUT_DIR, `${path.basename(entry, ".scss")}.css`));
-
-// Prune stale CSS outputs left over from a *different* wagon (e.g. a
-// previous wagon's agenda.css, when the newly active one has no such pack)
-// - only touches *.css (we compile with --no-source-map), so this can't
-// clobber the JS build's own outputs.
-const outputBasenames = new Set(outputs.map((o) => path.basename(o)));
-for (const existing of globSync(`${OUTPUT_DIR}/*.css`)) {
-  if (!outputBasenames.has(path.basename(existing))) fs.unlinkSync(existing);
-}
 
 const args = [
   ...entries.map((entry, i) => `${entry}:${outputs[i]}`),

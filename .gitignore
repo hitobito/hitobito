@@ -48,6 +48,9 @@ app/assets/stylesheets_generated/*
 !app/assets/stylesheets_generated/.keep
 app/assets/builds/*
 !app/assets/builds/.keep
+# Per-wagon dev output directories (config/initializers/assets.rb) - created
+# on demand by the build scripts, so no .keep needed here.
+app/assets/builds-*
 app/javascript/generated
 app/javascript/controllers/generated_index.js
 tmp/wagon_assets_manifest.json

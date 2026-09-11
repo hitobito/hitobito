@@ -18,6 +18,7 @@
 namespace :assets do
   GENERATED_SCSS_DIR = "app/assets/stylesheets_generated" # rubocop:disable Lint/ConstantDefinitionInBlock
   WAGON_MANIFEST_PATH = "tmp/wagon_assets_manifest.json" # rubocop:disable Lint/ConstantDefinitionInBlock
+  WAGON_SCSS_LOAD_PATHS_PATH = "tmp/wagon_scss_load_paths.json" # rubocop:disable Lint/ConstantDefinitionInBlock
 
   desc "Render ERB-based SCSS entrypoints (core + wagon-owned) into plain .scss files"
   task render_scss_entries: :environment do
@@ -59,6 +60,26 @@ namespace :assets do
   end
   if Rake::Task.task_defined?("css:build")
     Rake::Task["css:build"].enhance(["assets:render_scss_entries"])
+  end
+
+  desc "Write each active wagon's root directory, so build_css.js can pass it to dart-sass" \
+  " as an extra --load-path"
+  task wagon_scss_load_paths: :environment do
+    FileUtils.mkdir_p(File.dirname(WAGON_SCSS_LOAD_PATHS_PATH))
+
+    # The rendered entries @import a wagon's customizable _variables.scss/
+    # _fonts.scss/_wagon.scss via an absolute path (see WebpackHelper's
+    # absolute_wagon_file_paths), which dart-sass resolves and compiles fine
+    # on its own - but in --watch mode it only watches directories reachable
+    # through one of its --load-path roots, never an arbitrary absolute
+    # @import target outside of them. Passing each wagon's own root as an
+    # extra --load-path (build_css.js) fixes that, without changing import
+    # resolution itself since the imports are already absolute.
+    wagon_roots = Wagons.all.map { |wagon| wagon.paths.path.to_s }
+    File.write(WAGON_SCSS_LOAD_PATHS_PATH, JSON.pretty_generate(wagon_roots))
+  end
+  if Rake::Task.task_defined?("css:build")
+    Rake::Task["css:build"].enhance(["assets:wagon_scss_load_paths"])
   end
 
   desc "Render ERB-based JS entrypoints (e.g. gem-provided assets without an npm package)" \

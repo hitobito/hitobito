@@ -16,17 +16,23 @@ const fs = require("fs");
 const path = require("path");
 
 const GENERATED_SCSS_DIR = "app/assets/stylesheets_generated";
+const WAGON_LOAD_PATHS_PATH = "tmp/wagon_scss_load_paths.json";
 const OUTPUT_DIR = "app/assets/builds";
 const watch = process.argv.includes("--watch");
 
-// `rake assets:render_scss_entries` (which pulls in the *active* wagon's
-// _variables.scss/_fonts.scss/_wagon.scss via WebpackHelper) is wired as a
+// `rake assets:render_scss_entries assets:wagon_scss_load_paths` (which pulls
+// in the *active* wagon's _variables.scss/_fonts.scss/_wagon.scss via
+// WebpackHelper, and lists each active wagon's root directory) is wired as a
 // prerequisite of the Rake task `css:build`, but this script also runs
 // directly via `yarn build:css` (e.g. the Procfile's `css` process in
 // normal dev mode) - a plain `yarn`/`node` invocation never goes through
-// Rake at all, so that render step needs to run here too, or switching
-// WAGONS would silently keep serving whichever wagon was last rendered.
-execFileSync("bundle", ["exec", "rake", "assets:render_scss_entries"], { stdio: "inherit" });
+// Rake at all, so those steps need to run here too, or switching WAGONS
+// would silently keep serving whichever wagon was last rendered.
+execFileSync("bundle", ["exec", "rake", "assets:render_scss_entries", "assets:wagon_scss_load_paths"], { stdio: "inherit" });
+
+const wagonLoadPaths = fs.existsSync(WAGON_LOAD_PATHS_PATH)
+  ? JSON.parse(fs.readFileSync(WAGON_LOAD_PATHS_PATH, "utf8"))
+  : [];
 
 const entries = globSync(`${GENERATED_SCSS_DIR}/*.scss`);
 
@@ -50,6 +56,11 @@ const args = [
   ...entries.map((entry, i) => `${entry}:${outputs[i]}`),
   "--load-path=node_modules",
   "--load-path=.",
+  // Purely for dart-sass's own --watch to also monitor these directories -
+  // the entries' wagon @imports are already absolute paths, resolved fine
+  // without this, but --watch never notices a change to a file outside of
+  // its --load-path roots (see assets:wagon_scss_load_paths).
+  ...wagonLoadPaths.map((wagonRoot) => `--load-path=${wagonRoot}`),
   "--no-source-map",
   "--style=compressed",
   ...process.argv.slice(2), // e.g. --watch, forwarded from `yarn build:css --watch`

@@ -13,18 +13,27 @@ const { sync: globSync } = require("glob");
 const fs = require("fs");
 const path = require("path");
 
-const GENERATED_SCSS_DIR = "app/assets/stylesheets_generated";
-const OUTPUT_DIR = "app/assets/builds";
+const WAGON_LOAD_PATHS_PATH = "tmp/wagon_scss_load_paths.json";
 const watch = process.argv.includes("--watch");
 
-// `rake assets:render_scss_entries` (which pulls in the *active* wagon's
-// _variables.scss/_fonts.scss/_wagon.scss via WebpackHelper) is wired as a
+// `rake assets:render_scss_entries assets:wagon_scss_load_paths` (which pulls
+// in the *active* wagon's _variables.scss/_fonts.scss/_wagon.scss via
+// WebpackHelper, and lists each active wagon's root directory) is wired as a
 // prerequisite of the Rake task `css:build`, but this script also runs
 // directly via `yarn build:css` (e.g. the Procfile's `css` process in
 // normal dev mode) - a plain `yarn`/`node` invocation never goes through
-// Rake at all, so that render step needs to run here too, or switching
-// WAGONS would silently keep serving whichever wagon was last rendered.
-execFileSync("bundle", ["exec", "rake", "assets:render_scss_entries"], { stdio: "inherit" });
+// Rake at all, so those steps need to run here too, or switching WAGONS
+// would silently keep serving whichever wagon was last rendered.
+execFileSync("bundle", ["exec", "rake", "assets:render_scss_entries", "assets:wagon_scss_load_paths"], { stdio: "inherit" });
+
+const { signature, wagonRoots } = JSON.parse(fs.readFileSync(WAGON_LOAD_PATHS_PATH, "utf8"));
+
+// Output (and the rendered SCSS) is split into a subdirectory per "wagon
+// signature" (see config/initializers/assets.rb) so switching wagons, or
+// running specs from a wagon's own directory, doesn't clobber a valid build.
+const GENERATED_SCSS_DIR = path.join("app/assets/stylesheets_generated", signature);
+const OUTPUT_DIR = path.join("app/assets/builds", signature);
+fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
 const entries = globSync(`${GENERATED_SCSS_DIR}/*.scss`);
 
@@ -35,10 +44,8 @@ if (entries.length === 0) {
 
 const outputs = entries.map((entry) => path.join(OUTPUT_DIR, `${path.basename(entry, ".scss")}.css`));
 
-// Prune stale CSS outputs left over from a *different* wagon (e.g. a
-// previous wagon's agenda.css, when the newly active one has no such pack)
-// - only touches *.css (we compile with --no-source-map), so this can't
-// clobber the JS build's own outputs.
+// Prune stale CSS from a previous build under this signature - only
+// touches *.css, so this can't clobber the JS build's own outputs.
 const outputBasenames = new Set(outputs.map((o) => path.basename(o)));
 for (const existing of globSync(`${OUTPUT_DIR}/*.css`)) {
   if (!outputBasenames.has(path.basename(existing))) fs.unlinkSync(existing);
@@ -48,6 +55,9 @@ const args = [
   ...entries.map((entry, i) => `${entry}:${outputs[i]}`),
   "--load-path=node_modules",
   "--load-path=.",
+  // For dart-sass's own --watch to monitor these too - the @imports
+  // themselves are absolute paths and already resolve fine without this.
+  ...wagonRoots.map((wagonRoot) => `--load-path=${wagonRoot}`),
   "--no-source-map",
   "--style=compressed",
   ...process.argv.slice(2), // e.g. --watch, forwarded from `yarn build:css --watch`

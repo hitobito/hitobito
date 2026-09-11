@@ -22,6 +22,13 @@ Lokal:
 
 (im [Hitobito Development](https://github.com/hitobito/development/) Docker-Setup automatisch über den `Procfile`-Eintrag `assets`).
 
+Ohne Dev-Server (z.B. nach einem `WAGONS`-Wechsel via `bin/active_wagon`): `rake assets:build`
+(entspricht `yarn build` + `yarn build:css`).
+
+`app/assets/builds` und `app/assets/stylesheets_generated` liegen pro Wagon-Zusammenstellung
+("Wagon-Signatur", siehe `WebpackHelper.wagon_signature`) in einem eigenen Unterverzeichnis, damit
+sich Builds verschiedener Zusammenstellungen nicht gegenseitig überschreiben.
+
 ### Eigenheiten bezüglich Wagons
 
 Wagons können:

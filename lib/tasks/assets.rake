@@ -139,4 +139,9 @@ namespace :assets do
   if Rake::Task.task_defined?("javascript:build")
     Rake::Task["javascript:build"].enhance(["assets:wagon_js_manifest"])
   end
+
+  desc "Build CSS and JS for the currently active wagon composition (equivalent to running" \
+    " `yarn build:css` and `yarn build`, just from core via Rake, e.g. after `bin/active_wagon`" \
+    " switched WAGONS)"
+  task build: ["css:build", "javascript:build"]
 end

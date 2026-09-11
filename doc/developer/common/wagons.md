@@ -1,6 +1,6 @@
 # Wagons
 
-Wagons are the association-specific extensions of the generic core. Each one is its own git
+Wagons are the organisation-specific extensions of the generic core. Each one is its own git
 repository next to the core, and the group structure of a concrete instance is always defined in a
 wagon. How to create one, define a group structure and add attributes is described in the
 [wagon architecture doc](../../architecture/wagons/README.md).

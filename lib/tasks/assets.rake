@@ -16,8 +16,8 @@
 # `test:prepare`.
 
 namespace :assets do
-  GENERATED_SCSS_DIR = "app/assets/stylesheets_generated"
-  WAGON_MANIFEST_PATH = "tmp/wagon_assets_manifest.json"
+  GENERATED_SCSS_DIR = "app/assets/stylesheets_generated" # rubocop:disable Lint/ConstantDefinitionInBlock
+  WAGON_MANIFEST_PATH = "tmp/wagon_assets_manifest.json" # rubocop:disable Lint/ConstantDefinitionInBlock
 
   desc "Render ERB-based SCSS entrypoints (core + wagon-owned) into plain .scss files"
   task render_scss_entries: :environment do
@@ -36,7 +36,7 @@ namespace :assets do
     FileUtils.mkdir_p(GENERATED_SCSS_DIR)
 
     entries = Dir[Rails.root.join("app", "javascript", "packs", "*.scss.erb")]
-    Wagons.all.each do |wagon|
+    Wagons.all.each do |wagon| # rubocop:disable Rails/FindEach
       entries += Dir[wagon.paths.path.join("app", "javascript", "packs", "*.scss.erb")]
     end
 
@@ -45,7 +45,9 @@ namespace :assets do
     # Prune entries left over from a *different* wagon (switching WAGONS and
     # recompiling would otherwise keep e.g. a previous wagon's agenda.scss
     # around forever, since we only ever write/overwrite here, never clean up).
-    (Dir[File.join(GENERATED_SCSS_DIR, "*.scss")].map { |f| File.basename(f) } - target_names).each do |stale|
+    (Dir[File.join(GENERATED_SCSS_DIR, "*.scss")].map { |f|
+      File.basename(f)
+    } - target_names).each do |stale|
       File.delete(File.join(GENERATED_SCSS_DIR, stale))
     end
 
@@ -55,9 +57,12 @@ namespace :assets do
       File.write(target_path, renderer.render(source_path))
     end
   end
-  Rake::Task["css:build"].enhance(["assets:render_scss_entries"]) if Rake::Task.task_defined?("css:build")
+  if Rake::Task.task_defined?("css:build")
+    Rake::Task["css:build"].enhance(["assets:render_scss_entries"])
+  end
 
-  desc "Render ERB-based JS entrypoints (e.g. gem-provided assets without an npm package) into plain .js files"
+  desc "Render ERB-based JS entrypoints (e.g. gem-provided assets without an npm package)" \
+  " into plain .js files"
   task render_js_entries: :environment do
     renderer_class = Class.new do
       include ActionView::Helpers
@@ -72,12 +77,15 @@ namespace :assets do
     generated_dir = "app/javascript/generated"
     FileUtils.mkdir_p(generated_dir)
 
-    Dir[Rails.root.join("app", "javascript", "javascripts", "vendor", "*.js.erb")].each do |source_path|
+    Dir[Rails.root.join("app", "javascript", "javascripts", "vendor",
+      "*.js.erb")].each do |source_path|
       target_name = File.basename(source_path, ".erb")
       File.write(File.join(generated_dir, target_name), renderer.render(source_path))
     end
   end
-  Rake::Task["javascript:build"].enhance(["assets:render_js_entries"]) if Rake::Task.task_defined?("javascript:build")
+  if Rake::Task.task_defined?("javascript:build")
+    Rake::Task["javascript:build"].enhance(["assets:render_js_entries"])
+  end
 
   desc "Write a manifest of active wagons' JS-relevant asset files for the esbuild build script"
   task wagon_js_manifest: :environment do
@@ -91,12 +99,16 @@ namespace :assets do
         name: wagon.wagon_name,
         controllersRoot: wagon_root.join("app", "javascript", "controllers").to_s,
         packs: Dir[wagon_root.join("app", "javascript", "packs", "*.js")],
-        controllers: Dir[wagon_root.join("app", "javascript", "controllers", "**", "*_controller.js")],
+        controllers: Dir[wagon_root.join("app", "javascript", "controllers", "**",
+          "*_controller.js")],
         wagonScript: wagon_script.exist? ? wagon_script.to_s : nil
       }
     end
 
     File.write(WAGON_MANIFEST_PATH, JSON.pretty_generate(wagons))
   end
-  Rake::Task["javascript:build"].enhance(["assets:wagon_js_manifest"]) if Rake::Task.task_defined?("javascript:build")
+
+  if Rake::Task.task_defined?("javascript:build")
+    Rake::Task["javascript:build"].enhance(["assets:wagon_js_manifest"])
+  end
 end

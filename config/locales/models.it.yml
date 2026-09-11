@@ -96,12 +96,6 @@ it:
         year_must_be_four_digits: può contenere al massimo un anno di 4 cifre
         year_must_be_after_1900: deve contenere un'anno a partire dal 1900
       models:
-        additional_address:
-          name_missing: 'Bitte geben Sie einen Namen ein'
-        contact_account_category:
-          attributes:
-            unique_per_contactable:
-              required_when_used_for_invoices: "muss aktiviert sein, wenn '%{attribute}' aktiviert ist"
         cors_origin:
           attributes:
             origin:
@@ -166,6 +160,8 @@ it:
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             base:
+              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
+              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
               cannot_have_managers_and_manageds: '%{name} non può avere sia amministratori che figli.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: Impossibile aggiungere il bambino perché è già amministratore.
@@ -263,10 +259,6 @@ it:
         one: Registrazione nel calendario
         many: Registrazioni nel calendario
         other: Registrazioni nel calendario
-      contact_account_category:
-        one: Kontaktangaben-Kategorie
-        many: Kontaktangaben-Kategorien
-        other: Kontaktangaben-Kategorien
       custom_content:
         one: testo
         many: Osservazioni
@@ -584,12 +576,7 @@ it:
         category: Categoria
 
       additional_address:
-        category: Kategorie
-        label: Bezeichnung
-        first_name: Vorname
-        last_name: Nachname
-        organization_name: Firmenname
-        organization: Firma
+        translated_label: Bezeichnung
         street_and_number: Strada/Numero civico # can be removed with next release
         street: Strada
         housenumber: Numero civico
@@ -598,11 +585,10 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: c/o-Adresse
+        address_care_of: zusätzl. Adresszeile
         public: Pubblico
 
       additional_addresses:
-        category: Kategorie
         label: Denominazione
         street: Strada
         postbox: Postfach
@@ -669,7 +655,7 @@ it:
         password: Password
         password_confirmation: Confermare la password
         current_password: Vecchia password
-        address_care_of: c/o-Adresse
+        address_care_of: zusätzliche Adresszeile
         address: Indirizzo
         street: Strada
         housenumber: Numero civico
@@ -769,7 +755,7 @@ it:
         short_name: Abbreviazione
         email: Email principale
         address: Indirizzo
-        address_care_of: c/o-Adresse
+        address_care_of: zusätzliche Adresszeile
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -872,7 +858,7 @@ it:
         nickname: Soprannome
         company_name: Nome della ditta
         email: Email principale
-        address_care_of: c/o-Adresse
+        address_care_of: zusätzliche Adresszeile
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -895,7 +881,7 @@ it:
         nickname: Soprannome
         company_name: Nome della ditta
         email: Email principale
-        address_care_of: c/o-Adresse
+        address_care_of: zusätzliche Adresszeile
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -1096,7 +1082,6 @@ it:
 
       phone_number:
         number: Numero
-        category: Kategorie
         label: Tipo
         public: Pubblico
 
@@ -1126,7 +1111,6 @@ it:
       # used for nested phone_numbers
       phone_numbers:
         number: Numero di telefono
-        category: Kategorie
         label: Tipo di numero di telefono
         public: Pubblico
 
@@ -1195,23 +1179,33 @@ it:
               one: In futuro
               many: Futuro
               other: Futuro
+      contact_account:
+        custom_label: Freitext
+        predefined_labels:
+          privat: Privat
+          mobil: Mobil
+          arbeit: Arbeit
+          vater: Vater
+          mutter: Mutter
+          fax: Fax
+          andere: Andere
+          webseite: Webseite
+          rechnung: Rechnung
+
       social_account:
         name: Nickname
-        category: Kategorie
         label: Tipo
         public: Pubblico
 
       # used for nested social accounts
       social_accounts:
         name: Nome dei social media
-        category: Kategorie
         label: Tipo di social media
         public: Pubblico
 
       additional_email:
         email: Email
         name: Altre email
-        category: Kategorie
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1220,7 +1214,6 @@ it:
       additional_emails:
         email: E-mail
         name: Altre email
-        category: Kategorie
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1339,15 +1332,6 @@ it:
         category: Categoria
         subject: Soggetto
         message: Rapporto
-
-      contact_account_category:
-        key: Schlüssel
-        contact_account_type: Kontaktangaben-Typ
-        contactable_type: Gilt für
-        unique_per_contactable: Nur einmal pro Person/Gruppe
-        used_for_invoices: Für Rechnungen verwenden
-        position: Reihenfolge
-        name: Bezeichnung
 
       label_format:
         name: Definizione
@@ -1691,9 +1675,6 @@ it:
       qualifications: Leggere, creare ed eliminare tutte le qualifiche a cui hai accesso
 
   errors:
-    attributes:
-      category:
-        already_assigned: "%{category} ist bereits vergeben"
     messages:
       invalid_zipcode: non è valido
       attachments_not_allowed: "Non può contenere allegati"

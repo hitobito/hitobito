@@ -156,8 +156,6 @@ en:
       invoices_tooltip_title: Wird für Rechnungen verwendet
       blocked_mail_tooltip_title: E-Mail ist aufgrund von Bounces blockiert
 
-    label_placeholder: Ergänzungen
-
     public_check_box:
       tooltip: 'Private entries are visible only to your own group. If you are a group leader, entries marked as public are visible to leaders of other groups. '
 
@@ -165,15 +163,19 @@ en:
       placeholder_type: Description (Personal, Work, etc.)
 
     social_account_fields:
-      placeholder_value: Website, Profillink...
+      placeholder_value: Website, Skypename, Profillink...
+      placeholder_type: Art (Skype, Facebook...)
 
     additional_email_fields:
       placeholder_value: E-Mail
+      placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Shipments of subscriptions, confirmations via e-mail, etc. will be sent in addition to all addresses selected here.
+      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
-      caption_uses_contactable_name_person: Namen der Person übernehmen
-      caption_uses_contactable_name_group: Namen der Gruppe übernehmen
+      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
+      caption_uses_contactable_name: Namen der Person übernehmen
+      caption_used_for_invoices: Für Rechnungen verwenden
 
     address_fields:
       housenumber: No.

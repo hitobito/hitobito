@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Dialog erstellt, um das Löschen von Gruppen schwieriger zu machen (#1976)
+
 ## Version 2.10
 
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)

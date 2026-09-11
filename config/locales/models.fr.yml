@@ -96,6 +96,12 @@ fr:
         year_must_be_four_digits: ne doit pas comporter plus de quatre chiffres pour l'année
         year_must_be_after_1900: doit comporter une année à partir de 1900
       models:
+        additional_address:
+          name_missing: 'Bitte geben Sie einen Namen ein'
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "muss aktiviert sein, wenn '%{attribute}' aktiviert ist"
         cors_origin:
           attributes:
             origin:
@@ -160,8 +166,6 @@ fr:
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
           attributes:
             base:
-              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
-              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
               cannot_have_managers_and_manageds: '%{name} ne peut pas avoir à la fois des administrateurs et des enfants.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: L'enfant n'a pas pu être ajouté, car il est déjà administrateur.
@@ -260,6 +264,10 @@ fr:
         one: Feed du calendrier
         many: Feed du calendrier
         other: Feed du calendrier
+      contact_account_category:
+        one: Kontaktangaben-Kategorie
+        many: Kontaktangaben-Kategorien
+        other: Kontaktangaben-Kategorien
       custom_content:
         one: Texte
         many: Textes
@@ -317,21 +325,21 @@ fr:
         many: Cuisine
         other: Cuisine
       event/role/helper:
-        one: Helfer/-in
-        many: Helfende
-        other: Helfende
+        one: Assistant/e
+        many: Assistant/es
+        other: Assistant/e
       event/role/participant:
-        one: Teilnehmer/-in
-        many: Teilnehmende
-        other: Teilnehmende
+        one: Participant/-e
+        many: Participants
+        other: Participants
       event/role/treasurer:
         one: Trésorier
         many: Trésoriers
         other: Trésoriers
       event/role/speaker:
-        one: Referent/-in
-        many: Referierende
-        other: Referierende
+        one: Conférencier
+        many: Conférencieres
+        other: Conférencier
       event/date:
         one: date
         many: Dates
@@ -577,7 +585,12 @@ fr:
         category: Catégorie
 
       additional_address:
-        translated_label: Bezeichnung
+        category: Kategorie
+        label: Bezeichnung
+        first_name: Vorname
+        last_name: Nachname
+        organization_name: Firmenname
+        organization: Firma
         street_and_number: Rue/Numéro # can be removed with next release
         street: Rue
         housenumber: Numéro de la maison
@@ -586,10 +599,11 @@ fr:
         town: Lieu
         country: Pays
         postbox: Case postale
-        address_care_of: zusätzl. Adresszeile
+        address_care_of: c/o-Adresse
         public: Public
 
       additional_addresses:
+        category: Kategorie
         label: Désignation
         street: Rue
         postbox: Postfach
@@ -656,7 +670,7 @@ fr:
         password: Mot de passe
         password_confirmation: Confirmation du mot de passe
         current_password: Ancien mot de passe
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         address: Adresse
         street: Rue
         housenumber: Numéro de la maison
@@ -756,7 +770,7 @@ fr:
         short_name: Abréviation
         email: Adresse e-mail principale
         address: Adresse
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -859,7 +873,7 @@ fr:
         nickname: Surnom
         company_name: Nom de l'entreprise
         email: Adresse e-mail principale
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -882,7 +896,7 @@ fr:
         nickname: Surnom
         company_name: Nom de l'entreprise
         email: Adresse e-mail principale
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -1083,6 +1097,7 @@ fr:
 
       phone_number:
         number: Numéro
+        category: Kategorie
         label: Type
         public: Public
 
@@ -1112,6 +1127,7 @@ fr:
       # used for nested phone_numbers
       phone_numbers:
         number: Numéro de téléphone
+        category: Kategorie
         label: Type de numéro de téléphone
         public: Public
 
@@ -1180,33 +1196,23 @@ fr:
               one: Futur
               many: Futur
               other: Futur
-      contact_account:
-        custom_label: Freitext
-        predefined_labels:
-          privat: Privat
-          mobil: Mobil
-          arbeit: Arbeit
-          vater: Vater
-          mutter: Mutter
-          fax: Fax
-          andere: Andere
-          webseite: Webseite
-          rechnung: Rechnung
-
       social_account:
         name: Nom
+        category: Kategorie
         label: Type
         public: Public
 
       # used for nested social accounts
       social_accounts:
         name: Nom du réseau social
+        category: Kategorie
         label: Type de réseau social
         public: Public
 
       additional_email:
         email: Adresse e-mail
         name: Adresse e-mail supplémentaire
+        category: Kategorie
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
@@ -1215,6 +1221,7 @@ fr:
       additional_emails:
         email: Courriel
         name: Adresse e-mail supplémentaire
+        category: Kategorie
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
@@ -1333,6 +1340,15 @@ fr:
         category: Catégorie
         subject: Sujet
         message: Message
+
+      contact_account_category:
+        key: Schlüssel
+        contact_account_type: Kontaktangaben-Typ
+        contactable_type: Gilt für
+        unique_per_contactable: Nur einmal pro Person/Gruppe
+        used_for_invoices: Für Rechnungen verwenden
+        position: Reihenfolge
+        name: Bezeichnung
 
       label_format:
         name: Désignation
@@ -1676,6 +1692,9 @@ fr:
       qualifications: Consulter, créer et supprimer toutes les qualifications auxquelles tu as accès
 
   errors:
+    attributes:
+      category:
+        already_assigned: "%{category} ist bereits vergeben"
     messages:
       invalid_zipcode: n'est pas valable
       attachments_not_allowed: "ne doit pas contenir d'annexe"

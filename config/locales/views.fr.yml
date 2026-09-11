@@ -157,6 +157,8 @@ fr:
       invoices_tooltip_title: Utilisé pour les factures
       blocked_mail_tooltip_title: E-mail bloqué à cause de bounces
 
+    label_placeholder: Ergänzungen
+
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
 
@@ -164,19 +166,15 @@ fr:
       placeholder_type: Intitulé (Vie privée, Travail...)
 
     social_account_fields:
-      placeholder_value: Website, Skypename, Profillink...
-      placeholder_type: Art (Skype, Facebook...)
+      placeholder_value: Website, Profillink...
 
     additional_email_fields:
       placeholder_value: Courriel
-      placeholder_type: Bezeichnung (Privat, Arbeit ..)
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
-      tooltip_invoices: Wird anstelle der Haupt-E-Mail Adresse beim Verschicken von Rechnungen verwendet.
 
     additional_address_fields:
-      placeholder_type: Bezeichnung (Rechnung, Arbeit ..)
-      caption_uses_contactable_name: Namen der Person übernehmen
-      caption_used_for_invoices: Für Rechnungen verwenden
+      caption_uses_contactable_name_person: Namen der Person übernehmen
+      caption_uses_contactable_name_group: Namen der Gruppe übernehmen
 
     address_fields:
       housenumber: N°

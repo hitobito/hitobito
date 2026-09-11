@@ -94,6 +94,12 @@ de_DE:
         year_must_be_four_digits: darf höchstens eine 4-stellige Jahreszahl enthalten
         year_must_be_after_1900: muss eine Jahreszahl ab 1900 enthalten
       models:
+        additional_address:
+          name_missing: 'Bitte geben Sie einen Namen ein'
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "muss aktiviert sein, wenn '%{attribute}' aktiviert ist"
         cors_origin:
           attributes:
             origin:
@@ -158,8 +164,6 @@ de_DE:
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
           attributes:
             base:
-              max_one_additional_invoice_address: Es kann nur eine Adresse als Rechnungsadresse ausgewählt werden.
-              additional_address_labels_must_be_unique: Die Bezeichnungen der weiteren Adressen müssen eindeutig sein.
               cannot_have_managers_and_manageds: '%{name} kann nicht sowohl Verwalter*innen als auch Kinder haben.'
               manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: Kind konnte nicht hinzugefügt werden, da es bereits Verwalter*in ist.
@@ -250,6 +254,9 @@ de_DE:
       calendar:
         one: Kalender-Feed
         other: Kalender-Feeds
+      contact_account_category:
+        one: Kontaktangaben-Kategorie
+        other: Kontaktangaben-Kategorien
       custom_content:
         one: Text
         other: Texte
@@ -494,7 +501,12 @@ de_DE:
         category: Kategorie
 
       additional_address:
-        translated_label: Bezeichnung
+        category: Kategorie
+        label: Bezeichnung
+        first_name: Vorname
+        last_name: Nachname
+        organization_name: Firmenname
+        organization: Firma
         street_and_number: Straße, Hausnummer # can be removed with next release
         street: Straße
         housenumber: Hausnummer
@@ -503,10 +515,11 @@ de_DE:
         town: Ort
         country: Land
         postbox: Postfach
-        address_care_of: zusätzl. Adresszeile
+        address_care_of: c/o-Adresse
         public: Öffentlich
 
       additional_addresses:
+        category: Kategorie
         label: Bezeichnung
         street: Straße
         postbox: Postfach
@@ -573,7 +586,7 @@ de_DE:
         password: Passwort
         password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         address: Adresse
         street: Straße
         housenumber: Hausnummer
@@ -673,7 +686,7 @@ de_DE:
         short_name: Kurzname
         email: Haupt-E-Mail
         address: Adresse
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach
@@ -776,7 +789,7 @@ de_DE:
         nickname: Spitzname
         company_name: Firmenname
         email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach
@@ -799,7 +812,7 @@ de_DE:
         nickname: Spitzname
         company_name: Firmenname
         email: Haupt-E-Mail
-        address_care_of: zusätzliche Adresszeile
+        address_care_of: c/o-Adresse
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach
@@ -1000,6 +1013,7 @@ de_DE:
 
       phone_number:
         number: Nummer
+        category: Kategorie
         label: Typ
         public: Öffentlich
 
@@ -1029,6 +1043,7 @@ de_DE:
       # used for nested phone_numbers
       phone_numbers:
         number: Telefonnummer
+        category: Kategorie
         label: Telefonnummer Typ
         public: Öffentlich
 
@@ -1093,33 +1108,23 @@ de_DE:
             future:
               one: Zukünftig
               other: Zukünftige
-      contact_account:
-        custom_label: Freitext
-        predefined_labels:
-          privat: Privat
-          mobil: Mobil
-          arbeit: Arbeit
-          vater: Vater
-          mutter: Mutter
-          fax: Fax
-          andere: Andere
-          webseite: Webseite
-          rechnung: Rechnung
-
       social_account:
         name: Name
+        category: Kategorie
         label: Typ
         public: Öffentlich
 
       # used for nested social accounts
       social_accounts:
         name: Social Media Name
+        category: Kategorie
         label: Social Media Typ
         public: Öffentlich
 
       additional_email:
         email: E-Mail
         name: Weitere E-Mail
+        category: Kategorie
         label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
@@ -1128,6 +1133,7 @@ de_DE:
       additional_emails:
         email: E-Mail
         name: Weitere E-Mail
+        category: Kategorie
         label: Weitere E-Mail Typ
         public: Öffentlich
         mailings: Versand
@@ -1244,6 +1250,15 @@ de_DE:
         category: Kategorie
         subject: Subjekt
         message: Meldung
+
+      contact_account_category:
+        key: Schlüssel
+        contact_account_type: Kontaktangaben-Typ
+        contactable_type: Gilt für
+        unique_per_contactable: Nur einmal pro Person/Gruppe
+        used_for_invoices: Für Rechnungen verwenden
+        position: Reihenfolge
+        name: Bezeichnung
 
       label_format:
         name: Bezeichnung
@@ -1587,6 +1602,9 @@ de_DE:
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:
+    attributes:
+      category:
+        already_assigned: "%{category} ist bereits vergeben"
     messages:
       invalid_zipcode: ist nicht gültig
       attachments_not_allowed: "darf keine Anhänge enthalten"

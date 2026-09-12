@@ -3869,6 +3869,63 @@
       }
     },
     {
+      "name": "RoleTypeResource",
+      "type": "role_types",
+      "graphql_entrypoint": "roleTypes",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "kind": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "permissions": {
+          "type": "array_of_strings",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "visible_from_above": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "group_types": {
+          "type": "array_of_strings",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {},
+        "label": {}
+      },
+      "filters": {},
+      "relationships": {},
+      "stats": {
+        "total": [
+          "count"
+        ]
+      },
+      "default_page_size": 1000
+    },
+    {
       "name": "SelfRegistrationResource",
       "type": "self_registrations",
       "graphql_entrypoint": "selfRegistrations",
@@ -4226,6 +4283,13 @@
         },
         "destroy": {
           "resource": "RoleResource"
+        }
+      }
+    },
+    "/api/role_types": {
+      "actions": {
+        "index": {
+          "resource": "RoleTypeResource"
         }
       }
     },

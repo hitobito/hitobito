@@ -37,7 +37,10 @@ Currently the following endpoints are provided:
 | GET    | /api/mailing_lists/                | List all accessible mailing lists                                                       |
 | GET    | /api/mailing_lists/:id             | Fetch a single mailing_list, replace :id with the list's primary key                    |
 | GET    | /api/groups/:id/self_registrations | Create a new person in a group that allows it, replace :id with the group's primary key |
+| GET    | /api/role_types/                   | List all role types of this hitobito instance                                           |
 
+
+`/api/role_types` describes the structure of this hitobito instance rather than its data and is therefore the only endpoint that does not require authentication. It is not filterable and has no `show` action, as a role type is identified by its class name (e.g. `Group::TopGroup::Leader`).
 
 All successful responses do have HTTP Status `2xx`.
 
@@ -71,7 +74,7 @@ the error's field detail is translated by provided locale. all other fields are 
 
 ### Authentication
 
-To use the API you need a valid authentication token, this can be one of the following
+Except for `/api/role_types`, using the API requires a valid authentication token, this can be one of the following
 
 - Service tokens
 - Personal OAuth access tokens

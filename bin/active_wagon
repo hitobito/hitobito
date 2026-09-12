@@ -77,9 +77,16 @@ class Setup
 
       # vim:ft=ruby
 
-      ENV.fetch('WAGONS', '').split.each do |wagon|
-        Dir[File.expand_path("../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __dir__)].each do |spec|
-          gem File.basename(spec, '.gemspec'), path: File.expand_path('..', spec)
+      # Running core's own specs should only ever reflect core's state - loading a
+      # wagon's gem here would pull in its code, migrations/DB schema and
+      # models/monkeypatches too. Wagons are still loaded for RAILS_ENV=test when
+      # running *from a wagon's own directory* (bin/wagon spec <name>), since that
+      # goes through the wagon's own Gemfile instead of this one.
+      unless ENV["RAILS_ENV"] == "test"
+        ENV.fetch('WAGONS', '').split.each do |wagon|
+          Dir[File.expand_path("../hitobito_\#{wagon}/hitobito_\#{wagon}.gemspec", __dir__)].each do |spec|
+            gem File.basename(spec, '.gemspec'), path: File.expand_path('..', spec)
+          end
         end
       end
     GEMFILE

@@ -12,14 +12,14 @@ describe "Autosubmit Stimulus Controller", js: true do
 
   def stub_page_with
     stub_const("AutosubmitTestController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
-      include Webpacker::Helper
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       define_method :new do
         render inline: <<~HTML
           <head>
-            #{stylesheet_pack_tag "application", media: "screen", "data-turbo-track": true}
-            #{javascript_pack_tag "core", "data-turbo-track": true}
+            #{stylesheet_link_tag "application", media: "screen", "data-turbo-track": true}
+            #{javascript_include_tag "core", "data-turbo-track": true}
             <link rel="icon" href="data:image/x-icon;," type="image/x-icon">
           </head>
           <body>
@@ -32,8 +32,8 @@ describe "Autosubmit Stimulus Controller", js: true do
       define_method :create do
         render inline: <<~HTML
           <head>
-            #{stylesheet_pack_tag "application", media: "screen", "data-turbo-track": true}
-            #{javascript_pack_tag "core", "data-turbo-track": true}
+            #{stylesheet_link_tag "application", media: "screen", "data-turbo-track": true}
+            #{javascript_include_tag "core", "data-turbo-track": true}
             <link rel="icon" href="data:image/x-icon;," type="image/x-icon">
           </head>
           <body>

@@ -12,8 +12,8 @@ describe "DisableToggle Stimulus Controller", js: true do
 
   def stub_form_with
     stub_const("DisableToggleController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
-      include Webpacker::Helper
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       helper_method :disable_toggle_tag
 
@@ -21,8 +21,8 @@ describe "DisableToggle Stimulus Controller", js: true do
         # The HTML for your form element
         render inline: <<~HTML
           <head>
-            #{stylesheet_pack_tag "application", media: "screen", "data-turbo-track": true}
-            #{javascript_pack_tag "core", "data-turbo-track": true}
+            #{stylesheet_link_tag "application", media: "screen", "data-turbo-track": true}
+            #{javascript_include_tag "core", "data-turbo-track": true}
             <!-- add fake inline favicon to avoid 404 error -->
             <link rel="icon" href="data:image/x-icon;," type="image/x-icon">
           </head>

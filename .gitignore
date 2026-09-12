@@ -39,7 +39,18 @@ bin/bisect-check
 
 # precompiled assets
 .sass-cache
-app/assets/stylesheets_generated
+# app/assets/stylesheets_generated and app/assets/builds must exist on disk
+# *before* Rails boots (Propshaft's own "propshaft.append_assets_path"
+# initializer only registers app/assets/* subdirectories that already exist
+# at boot time, and never rescans afterwards) - so keep the directories via
+# .keep, ignore only their generated contents.
+app/assets/stylesheets_generated/*
+!app/assets/stylesheets_generated/.keep
+app/assets/builds/*
+!app/assets/builds/.keep
+app/javascript/generated
+app/javascript/controllers/generated_index.js
+tmp/wagon_assets_manifest.json
 public/assets
 public/404.html
 public/500.html

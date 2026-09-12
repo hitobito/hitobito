@@ -12,14 +12,14 @@ describe "FieldVisibility Stimulus Controller", js: true do
 
   def stub_form_with
     stub_const("FieldVisibilityController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
-      include Webpacker::Helper
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       define_method :new do
         render inline: <<~HTML
           <head>
-            #{stylesheet_pack_tag "application", media: "screen", "data-turbo-track": true}
-            #{javascript_pack_tag "core", "data-turbo-track": true}
+            #{stylesheet_link_tag "application", media: "screen", "data-turbo-track": true}
+            #{javascript_include_tag "core", "data-turbo-track": true}
             <link rel="icon" href="data:image/x-icon;," type="image/x-icon">
           </head>
           <body>

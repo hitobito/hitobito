@@ -118,7 +118,7 @@ describe Passes::VerificationsController do
 
     describe "logo" do
       def logo_path(image)
-        controller.view_context.image_pack_tag(image)[/src="(.*?)"/, 1]
+        controller.view_context.image_path(image)
       end
 
       it "has application logo" do

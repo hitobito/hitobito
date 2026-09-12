@@ -10,8 +10,8 @@ require "spec_helper"
 describe "TomSelect Stimulus Controller", js: true do
   before do
     stub_const("TomSelectController", Class.new(ActionController::Base) { # rubocop:disable Rails/ApplicationController
-      include Webpacker::Helper
       include ActionView::Helpers::AssetTagHelper
+      include Propshaft::Helper
 
       helper_method :tom_select_tag
 
@@ -19,8 +19,8 @@ describe "TomSelect Stimulus Controller", js: true do
         # The HTML for your form element
         render inline: <<~HTML
           <head>
-            #{stylesheet_pack_tag "application", media: "screen", "data-turbo-track": true}
-            #{javascript_pack_tag "core", "data-turbo-track": true}
+            #{stylesheet_link_tag "application", media: "screen", "data-turbo-track": true}
+            #{javascript_include_tag "core", "data-turbo-track": true}
             <!-- add fake inline favicon to avoid 404 error -->
             <link rel="icon" href="data:image/x-icon;," type="image/x-icon">
           </head>

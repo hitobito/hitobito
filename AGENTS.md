@@ -15,7 +15,7 @@ the README.md.
 The HTML is mostly generated server-side with HAML.
 The Testing Framework is rspec, with capybara.
 Static analysis is done with rubocop and brakeman.
-CSS and JS are processed with webpacker.
+CSS and JS are processed with esbuild/dart-sass (jsbundling-rails/cssbundling-rails) and served via Propshaft
 Translations are handled externally, the german (de) locales are the source and under our control.
 
 # Repository Layout

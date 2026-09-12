@@ -73,14 +73,20 @@ runs:
         yarn install --frozen-lockfile
       shell: bash
 
-    - name: 'Run Webpacker'
+    - name: 'Build assets'
       if: inputs.assets == 'true'
       run: |
-        bundle exec rake webpacker:compile
+        bundle exec rake assets:precompile
       shell: bash
 
     - name: 'Prepare the Database'
       if: inputs.database == 'true'
       run: |
+        # cssbundling-rails/jsbundling-rails hook css:build/javascript:build into
+        # db:test:prepare automatically; skip them when node_modules weren't
+        # installed above (inputs.assets == 'false').
+        if [ "${{ inputs.assets }}" != "true" ]; then
+          export SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1
+        fi
         bundle exec rake db:test:prepare
       shell: bash

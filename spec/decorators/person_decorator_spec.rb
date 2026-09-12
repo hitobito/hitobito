@@ -192,7 +192,8 @@ describe PersonDecorator, :draper_with_helpers do
     let(:logo) { Rails.root.join("spec", "fixtures", "files", "images", "logo.png") }
 
     it "has fallback picture" do
-      expect(decorator.picture_full_url).to eq "http://test.host/packs-test/media/images/profile-c150952c7e2ec2cf298980d55b2bcde3.svg"
+      expected_path = ActionController::Base.helpers.image_path(person.picture_default)
+      expect(decorator.picture_full_url).to eq "http://test.host#{expected_path}"
     end
 
     it "has redirect url to store image" do

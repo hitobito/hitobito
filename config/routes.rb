@@ -43,21 +43,6 @@ Hitobito::Application.routes.draw do
       action: :log_message, controller: "web_service", as: :log
   end
 
-  match "/.well-known/carddav", to: redirect("/carddav/", status: 301),
-    via: [:get, :head, :options, :propfind]
-  scope path: "carddav", module: "carddav", as: "carddav" do
-    match "/", to: "principals#root", via: [:options, :propfind], as: :root
-    match "/principal", to: "principals#show", via: [:options, :propfind], as: :principal
-    match "/addressbooks", to: "address_books#index", via: [:options, :propfind], as: :home
-    match "/addressbooks/people", to: "address_books#show",
-      via: [:options, :propfind], as: :address_book
-    match "/addressbooks/people", to: "address_books#report", via: :report, as: nil
-    match "/addressbooks/people/:id.vcf", to: "contacts#show", via: [:options, :get, :head],
-      as: :contact, format: false, constraints: {id: /\d+/}
-    match "/addressbooks/people/:id.vcf", to: "contacts#propfind",
-      via: :propfind, format: false, as: nil, constraints: {id: /\d+/}
-  end
-
   language_scope do
     resource :admin, only: :show
 
@@ -456,7 +441,6 @@ Hitobito::Application.routes.draw do
     get "custom_contents/:id" => "custom_contents#edit"
 
     resource :event_feed, only: [:show, :update]
-    resource :carddav_feed, only: [:show, :update]
     resources :help_texts, except: [:show]
 
     devise_for :service_tokens, only: [:sessions]

@@ -12,6 +12,7 @@
 - Für die Schwyzer Kantonalbank SZKB wurde eine Ebics Zahlungsschnittstelle hinzugefügt (#4400)
 - Zusätzliche Adressen erhalten dieselben Namensfelder (Vorname, Nachname, Firma/Firmenname) wie die Hauptadresse und sind neu auch im JSON:API verfügbar (#4411)
 - Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
+- Alle Personen, die man sehen darf, können über einen CardDAV-Endpunkt in einer Adressbuch-Anwendung abonniert werden. Das dafür nötige Passwort wird unter Einstellungen > Adressbuch integrieren erstellt
 
 
 ## Version 2.10

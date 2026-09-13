@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -125,6 +125,10 @@ module PeopleHelper
 
   def person_event_feed_url
     event_feed_url(token: current_user.event_feed_token, format: :ics)
+  end
+
+  def person_carddav_url
+    "#{carddav_root_url(locale: nil)}/"
   end
 
   def oneline_address(message)

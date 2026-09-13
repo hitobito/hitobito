@@ -19,13 +19,14 @@
                       url: group_event_attachments_path(@group, entry),
                       html: { multipart: true,
                               class: 'mb-0',
-                              data: { remote: true, spin: true } }) do |f|
+                              data: { spin: true,
+                                      controller: 'events--attachment-upload' } }) do |f|
             %span.custom-file
               = link_to(icon(:plus) + ' ' + t('.add'), '#')
               = f.file_field(:files,
                               accept: Settings.event.attachments.content_types.join(','),
                               multiple: true,
-                              data: { submit: true })
+                              data: { action: 'change->events--attachment-upload#upload' })
 
         - if entry.external_applications?
           .muted= t('.public_attachments_hint')

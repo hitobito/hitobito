@@ -28,7 +28,7 @@
 - Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
 - Berechtigungen der API-Keys werden nun richtig angezeigt, das Token nur noch auf der Detail Seite (#3029)
 - Bei der Vergabe von Kurs-Qualifikationen kann pro Person zwischen «Bestanden», «Nicht bestanden» und «Nicht beurteilt» gewählt und ein Kommentar erfasst werden. Der Kommentar ist in der Personen-Historie als Tooltip sichtbar (hitobito_sac_cas#2646)
-- Die JSON:API stellt die Rollentypen der Instanz zur Verfügung, ohne Authentisierung
+- Die JSON:API stellt die verfügbaren Rollen- und Gruppentypen der Instanz zur Verfügung, ohne Authentisierung
 
 ## Version 2.10
 

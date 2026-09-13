@@ -13,15 +13,11 @@ class RoleTypeResource < ApplicationResource
 
     def initialize(role_type)
       @role_type = role_type
+      @group_types = []
     end
 
     def id
       @role_type.sti_name
-    end
-
-    def group_types
-      Group.all_types.select { |group_type| group_type.role_types.include?(@role_type) }
-        .collect(&:sti_name)
     end
   end
 

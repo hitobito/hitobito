@@ -23,7 +23,6 @@ describe RoleTypeResource, type: :resource do
         expect(data.permissions).to match_array(%w[admin layer_and_below_full finance
           contact_data impersonation])
         expect(data.visible_from_above).to eq(true)
-        expect(data.group_types).to eq([Group::TopGroup.sti_name])
       end
     end
 
@@ -36,7 +35,6 @@ describe RoleTypeResource, type: :resource do
         expect(data.kind).to eq("external")
         expect(data.visible_from_above).to eq(false)
         expect(data.permissions).to eq([])
-        expect(data.group_types).to match_array(Group.all_types.collect(&:sti_name))
       end
     end
 
@@ -107,6 +105,34 @@ describe RoleTypeResource, type: :resource do
       params[:sort] = "kind"
 
       expect { render }.to raise_error(Graphiti::Errors::InvalidAttributeAccess)
+    end
+  end
+
+  describe "sideloading" do
+    let(:data) { jsonapi_data.find { |entry| entry.id == role_type.sti_name } }
+
+    before { params[:include] = "group_types" }
+
+    context "of a role type belonging to a single group type" do
+      let(:role_type) { Group::TopGroup::Leader }
+
+      it "includes that group type" do
+        render
+
+        expect(data.sideload(:group_types).collect(&:id)).to eq([Group::TopGroup.sti_name])
+        expect(data.sideload(:group_types).first.jsonapi_type).to eq("group_types")
+      end
+    end
+
+    context "of a global role type" do
+      let(:role_type) { Role::External }
+
+      it "includes all group types" do
+        render
+
+        expect(data.sideload(:group_types).collect(&:id))
+          .to match_array(Group.all_types.collect(&:sti_name))
+      end
     end
   end
 end

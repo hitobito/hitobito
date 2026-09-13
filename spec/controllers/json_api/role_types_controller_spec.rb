@@ -23,9 +23,20 @@ describe JsonApi::RoleTypesController, type: [:request] do
         "label" => Group::TopGroup::Leader.label,
         "kind" => "member",
         "permissions" => %w[admin finance layer_and_below_full contact_data impersonation],
-        "visible_from_above" => true,
-        "group_types" => [Group::TopGroup.sti_name]
+        "visible_from_above" => true
       )
+    end
+
+    it "includes the group types a role type belongs to" do
+      jsonapi_get "/api/role_types", params: {include: "group_types"}
+
+      expect(response).to have_http_status(200)
+
+      json = JSON.parse(response.body)
+      leader = json["data"].find { |entry| entry["id"] == Group::TopGroup::Leader.sti_name }
+      expect(leader["relationships"]["group_types"]["data"].pluck("id"))
+        .to eq([Group::TopGroup.sti_name])
+      expect(json["included"].pluck("type").uniq).to eq(["group_types"])
     end
 
     it "returns localized labels" do

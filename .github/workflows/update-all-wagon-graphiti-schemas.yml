@@ -36,13 +36,22 @@ jobs:
       - name: 'List wagon repositories with API customizations'
         id: list-wagon-repositories
         run: |
+          if [ -z "$API_WAGONS" ]; then
+            echo "::error::No wagons configured. Set the repository or organization variable API_CUSTOMIZATION_WAGONS to a space-separated list of wagon names without the hitobito_ prefix, e.g. 'pbs sac_cas sww swb pfadi_de'."
+            exit 1
+          fi
           WAGONS=$(gh repo list hitobito -L 100 --no-archived --json owner,name | \
-            jq 'map(select(.name | test("^hitobito_"))) | map({ owner: .owner.login, repo: .name, name: .name | match("^hitobito_(pbs|sac_cas|sww|swb|pfadi_de)$").captures[0].string })')
-          echo $WAGONS
-          echo "wagons=$WAGONS" | tr -d "\n" >> $GITHUB_OUTPUT
+            jq -c --arg api "$API_WAGONS" '($api | split(" ")) as $customized |
+              map(select(.name | startswith("hitobito_")) |
+                { owner: .owner.login, repo: .name, name: .name | ltrimstr("hitobito_") } |
+                select(.name | IN($customized[])))')
+          echo "$WAGONS"
+          echo "wagons=$WAGONS" >> $GITHUB_OUTPUT
         env:
           # This PAT needs access to all repos, Read access to metadata and Read and Write access to actions, code, and pull requests
           GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
+          # Space-separated names of the wagons with API customizations, without the hitobito_ prefix
+          API_WAGONS: ${{ vars.API_CUSTOMIZATION_WAGONS }}
 
   update-wagon-graphiti-schemas:
     name: 'Update ${{ matrix.wagon.name }} wagon graphiti schema'
@@ -55,49 +64,41 @@ jobs:
       max-parallel: 5
     env:
       RAILS_DB_ADAPTER: nulldb
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      WAGON_OWNER: ${{ matrix.wagon.owner }}
+      WAGON_REPO: ${{ matrix.wagon.repo }}
+      SCHEMA_FILE: spec/support/graphiti/schema.json
+      GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
     steps:
-      - name: "Determine common branch and set branch name for wagon"
-        env:
-          INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
+      - name: Refuse to run for a default branch
         run: |
-          COMMON_BRANCH_NAME="${{github.head_ref || github.ref_name}}"
-          if [ -z "$INPUT_WAGON_REF" ]; then
-            WAGON_REF=$(git ls-remote --heads https://github.com/${{matrix.wagon.owner}}/${{matrix.wagon.repo}} | cut -d/ -f3- | grep -x "$COMMON_BRANCH_NAME" || echo 'master')
-          else
-            WAGON_REF=$INPUT_WAGON_REF
+          if [ "$BRANCH_NAME" = 'master' ]; then
+            echo "::error::This workflow pushes to the wagon branch named after the core branch, which would be master here. Run it from a feature branch instead."
+            exit 1
           fi
 
-          echo "WAGON_REF=$WAGON_REF" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Get PR Number
-        id: get-pr
-        env:
-          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
-          BRANCH: ${{ github.head_ref || github.ref_name }}
+      - name: Determine the core pull request this run belongs to
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
 
           # If empty (manual trigger), ask GitHub CLI for a PR matching this branch
           if [ -z "$PR_NUMBER" ]; then
-            PR_NUMBER=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --json number --jq '.[0].number')
+            PR_NUMBER=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH_NAME" --json number --jq '.[0].number')
           fi
 
           if [ -n "$PR_NUMBER" ]; then
             echo "Found PR #$PR_NUMBER"
-            echo "pr=$PR_NUMBER" >> $GITHUB_OUTPUT
-            echo "PR=$PR_NUMBER" >> $GITHUB_ENV
+            echo "CORE_REFERENCE=hitobito/hitobito#$PR_NUMBER" >> $GITHUB_ENV
           else
-            echo "No PR found for $BRANCH, using branch name as fallback"
-            echo "pr=$BRANCH" >> $GITHUB_OUTPUT
-            echo "PR=$BRANCH" >> $GITHUB_ENV
+            echo "No PR found for $BRANCH_NAME, referencing the branch instead"
+            echo "CORE_REFERENCE=hitobito/hitobito branch $BRANCH_NAME" >> $GITHUB_ENV
           fi
 
       - name: Check out core with shared setup action
         uses: actions/checkout@v6
         with:
           repository: hitobito/hitobito
-          ref: ${{ github.ref || inputs.core_ref }}
+          ref: ${{ inputs.core_ref || github.ref }}
           path: .hitobito_core_repo
           fetch-depth: 1
 
@@ -109,63 +110,71 @@ jobs:
           assets: false
           wagon_repository: ${{ matrix.wagon.repo }}
           wagon_dependency_repository: hitobito_youth
-          core_ref: ${{ github.ref || inputs.core_ref }}
+          core_ref: ${{ inputs.core_ref || github.ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref || 'master' }}
+          wagon_ref: ${{ inputs.wagon_ref }}
 
       - name: Update graphiti schema
         working-directory: ${{ matrix.wagon.repo }}
         run: |
+          # Check the new schema against the wagon master, not against the wagon PR branch,
+          # so that modifications can be made freely without graphiti reporting breaking changes
+          # as long as the wagon PR hasn't been merged yet.
+          git fetch --depth=1 origin refs/heads/master
+          git checkout FETCH_HEAD -- "$SCHEMA_FILE"
+
           bundle exec rake app:graphiti:schema:generate
 
-      - name: Commit updated schema
+      - name: Commit and push the updated schema
         id: commit-schema
         working-directory: ${{ matrix.wagon.repo }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/$WAGON_OWNER/$WAGON_REPO.git"
 
-          # Check if there are actually changes to the schema
-          if [[ -n "$(git status --porcelain spec/support/graphiti/schema.json)" ]]; then
-            git diff spec/support/graphiti/schema.json
-            git add spec/support/graphiti/schema.json
-            git commit -m "Update Graphiti schema (hitobito/hitobito#$PR)"
-            echo "changed=true" >> $GITHUB_OUTPUT
+          cp "$SCHEMA_FILE" "$RUNNER_TEMP/schema.json"
+
+          if git fetch --depth=1 origin "refs/heads/$BRANCH_NAME"; then
+            echo "Updating the existing branch $BRANCH_NAME of $WAGON_REPO"
+            git checkout -f -B "$BRANCH_NAME" FETCH_HEAD
           else
-            echo "No changes detected"
+            echo "Creating the branch $BRANCH_NAME of $WAGON_REPO from $(git rev-parse --abbrev-ref HEAD)"
+            git checkout -f -B "$BRANCH_NAME"
+          fi
+
+          cp "$RUNNER_TEMP/schema.json" "$SCHEMA_FILE"
+
+          if [ -z "$(git status --porcelain -- "$SCHEMA_FILE")" ]; then
+            echo "The schema on $BRANCH_NAME of $WAGON_REPO is already up to date"
             echo "changed=false" >> $GITHUB_OUTPUT
+            exit 0
           fi
 
-      - name: Push commit
-        if: steps.commit-schema.outputs.changed == 'true'
-        working-directory: ${{ matrix.wagon.repo }}
-        env:
-          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
-        run: |
-          BRANCH_NAME="${{ github.head_ref || github.ref_name }}"
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/hitobito/${{ matrix.wagon.repo }}.git"
+          git diff -- "$SCHEMA_FILE"
+          git add -- "$SCHEMA_FILE"
+          git commit -m "Update Graphiti schema ($CORE_REFERENCE)"
 
-          # Check if the branch exists on the remote wagon repo
-          REMOTE_EXISTS=$(git ls-remote --heads origin "$BRANCH_NAME")
-
-          if [ -n "$REMOTE_EXISTS" ]; then
-            git fetch origin "$BRANCH_NAME"
-            git checkout "$BRANCH_NAME"
-            git pull --rebase origin "$BRANCH_NAME"
-          else
-            git checkout -b "$BRANCH_NAME" || git checkout "$BRANCH_NAME"
+          if ! git -c "http.https://github.com/.extraheader=" push origin "HEAD:refs/heads/$BRANCH_NAME"; then
+            echo "::error::Could not push to $WAGON_OWNER/$WAGON_REPO. Make sure the WAGON_TESTS_GITHUB_TOKEN secret grants Read and Write access to the code of this repository, and that the hitobito organization has approved it."
+            exit 1
           fi
 
-          git push origin "$BRANCH_NAME"
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "changed=true" >> $GITHUB_OUTPUT
 
       - name: Open a pull request with the changes
         if: steps.commit-schema.outputs.changed == 'true'
-        working-directory: ${{ matrix.wagon.repo }}
-        env:
-          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
         run: |
+          EXISTING=$(gh pr list --repo "$WAGON_OWNER/$WAGON_REPO" --head "$BRANCH_NAME" --state open --json url --jq '.[0].url')
+
+          if [ -n "$EXISTING" ]; then
+            echo "Pushed to the pull request which already exists: $EXISTING"
+            exit 0
+          fi
+
           gh pr create \
-            --title "Update schema" \
-            --body "Automated schema update triggered by GitHub Action." \
+            --repo "$WAGON_OWNER/$WAGON_REPO" \
             --base "master" \
-            --head "$BRANCH_NAME" || echo "PR already exists or failed to create"
+            --head "$BRANCH_NAME" \
+            --title "Update Graphiti schema ($CORE_REFERENCE)" \
+            --body "Automated schema update triggered by the 'Update Wagon Graphiti Schemas' workflow of $CORE_REFERENCE."

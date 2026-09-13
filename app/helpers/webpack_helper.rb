@@ -41,20 +41,6 @@ module WebpackHelper
     favicon_link_tag(wagon_image_pack_path(name), options)
   end
 
-  # Absolute path of a file within a gem - for JS/CSS gem assets with no npm
-  # package equivalent (see lib/tasks/assets.rake's render_js_entries).
-  #
-  # Example:
-  #   gem_file_path(
-  #     'remotipart',
-  #     File.join('vendor', 'assets', 'javascripts', 'jquery.iframe-transport.js')
-  #   )
-  def gem_file_path(gem_name, relative_file_path)
-    raise "Gem '#{gem_name}' not present" unless Gem.loaded_specs[gem_name]
-
-    File.join(Gem.loaded_specs[gem_name].full_gem_path, relative_file_path)
-  end
-
   # Yields the path of every wagon's file at relative_wagon_file_path, or
   # fallback_file_path if no wagon has one.
   #

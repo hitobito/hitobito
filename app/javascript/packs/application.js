@@ -11,9 +11,6 @@
 // To reference this file, add "= javascript_pack_tag 'application', 'data-turbo-track': true"
 // to the appropriate layout file, like app/views/layouts/application.html.erb
 
-// Gems without NPM package
-import '../generated/gems';
-
 // Custom scripts from all wagons
 import '../generated/wagon_scripts';
 

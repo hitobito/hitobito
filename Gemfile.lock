@@ -635,7 +635,6 @@ GEM
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
-    remotipart (1.4.4)
     request_profiler (0.0.4)
       ruby-prof
     request_store (1.7.0)
@@ -957,7 +956,6 @@ DEPENDENCIES
   rails_sql_prettifier
   redcarpet
   redis
-  remotipart
   request_profiler
   rest-client
   rexml

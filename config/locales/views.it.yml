@@ -846,6 +846,25 @@ it:
       other: "prolunga le qualifiche esistenti %{prolonged} fino al  %{until} (ultima data del corso)."
     issue_and_prolong: "assegna %{model} %{issued} e prolunga le qualifiche esistenti %{prolonged} al %{until} (ultima data del corso)."
 
+  carddav:
+    address_book:
+      name: "%{application_name} Kontakte"
+      description: "Alle Personen, die %{name} in %{application_name} sehen darf."
+
+  carddav_feeds:
+    show:
+      title: Meine Kontakte in Adressbuch integrieren
+      url: "Adresse: %{url}"
+      password: "Passwort: %{password}"
+      create_url: Zugang erstellen
+      url_description: "Mit dieser Adresse kannst du von einer Adressbuch-Anwendung (CardDAV) aus auf alle Personen zugreifen, die du in %{application_name} sehen darfst. Als Benutzername kann ein beliebiger Wert angegeben werden, als Passwort das oben stehende. Achtung: Gib diese Angaben niemandem weiter."
+      reset_url: Passwort zurücksetzen
+      reset_url_description: "Wenn du Missbrauch vermutest, kannst du das Passwort zurücksetzen und dadurch das aktuelle ungültig machen. Alle Adressbücher, die noch das alte Passwort kennen, können danach nicht mehr auf deine Kontakte zugreifen."
+    update:
+      flash:
+        create: Adressbuch-Passwort wurde erstellt.
+        reset: Adressbuch-Passwort wurde aktualisiert.
+
   event_feeds:
     integrate: Integrare nel calendario
     show:
@@ -1568,6 +1587,7 @@ it:
     events: "Eventi"
     courses: "Corsi"
     admin: "Admin"
+    admin/carddav_feed: "Adressbuch integrieren"
     admin/event_feed: "Integrare il calendario."
     admin/oauth_authorizations: "Autorizzazioni OAuth"
     imap_mails: "Mail e rimbalzi"

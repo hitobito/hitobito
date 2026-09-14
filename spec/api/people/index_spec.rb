@@ -62,15 +62,17 @@ RSpec.describe "people#index", type: :request do
           expect(d.map(&:id)).to match_array([people(:bottom_member).id])
         end
       end
+    end
 
-      context "with an empty value and the not_eq operator" do
-        let(:params) { {filter: {nickname: {not_eq: ""}}} }
+    describe "unsupported filter operator" do
+      let(:params) { {filter: {nickname: {ne: ""}}} }
 
-        it "returns the people with a value" do
-          make_request
-          expect(response.status).to eq(200), response.body
-          expect(d.map(&:id)).to match_array([people(:top_leader).id])
-        end
+      it "reports 400 instead of server error" do
+        make_request
+        expect(response.status).to eq(400), response.body
+        expect(errors[0].title).to eq "Unsupported operator"
+        expect(errors[0].detail).to start_with "The operator is not supported: " \
+          "Message: PersonResource: Tried to filter :nickname on operator :ne"
       end
     end
 

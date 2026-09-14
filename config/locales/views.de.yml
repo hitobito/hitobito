@@ -1023,6 +1023,12 @@ de:
       form:
         inscribe: Einschreiben
         description: Hier kannst du dich für die Gruppe einschreiben.
+    confirm_deletion:
+      title: Willst du die Gruppe "%{group_name}" wirklich löschen?
+      text_field_label: "Gruppenname Eingabefeld"
+      warning_html: "<strong>Achtung!</strong> Dabei werden unwiderruflich alle Rollen aller Personen in dieser Gruppe gelöscht. <strong>Diese Operation kann nicht rückgängig gemacht werden.</strong>"
+      confirmation_html: Bitte tippe zur Bestätigung <strong>"%{group_name}"</strong> ein
+      delete: "Gruppen und Rollen definitiv löschen"
 
   groups_filter:
     description: "Alle %{group_type_plural} in %{parent}"

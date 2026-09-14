@@ -44,6 +44,11 @@ class JsonApiController < ActionController::API
     title: "Unsupported attribute parameter",
     message: ->(error) { "The attribute parameter is not supported." }
 
+  register_exception Graphiti::Errors::UnsupportedOperator,
+    status: 400,
+    title: "Unsupported operator",
+    message: ->(error) { "The operator is not supported: Message: #{error.message}" }
+
   register_exception Graphiti::Errors::InvalidInclude,
     status: 400,
     title: "Unsupported include parameter",

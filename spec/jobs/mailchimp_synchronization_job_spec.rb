@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018-2023, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -58,7 +58,18 @@ describe MailchimpSynchronizationJob do
     freeze_time
 
     partial_result = Synchronize::Mailchimp::Result.new
-    allow(partial_result).to receive(:state).and_return(:partial)
+    partial_result.track(:unsubscribe_members, %w[ok@example.com bounced@example.com], {
+      total_operations: 2,
+      finished_operations: 2,
+      errored_operations: 1,
+      operation_results: [
+        {title: nil, detail: nil, status: 204, operation_id: "ok@example.com"},
+        {title: "Method Not Allowed",
+         detail: "Can not archive a contact that is bounced, pending or archived.",
+         status: 405,
+         operation_id: "bounced@example.com"}
+      ]
+    })
     allow_any_instance_of(Synchronize::Mailchimp::Synchronizator).to receive(:perform)
     allow_any_instance_of(Synchronize::Mailchimp::Synchronizator).to receive(:result).and_return(partial_result)
 
@@ -69,6 +80,14 @@ describe MailchimpSynchronizationJob do
     mailing_list.reload
 
     check_mailing_list_status_and_partial_logging
+
+    log = HitobitoLogEntry.last
+
+    operation_results = JSON.parse(log.payload).deep_symbolize_keys
+      .dig(:data, :unsubscribe_members, :partial, 3)
+    expect(operation_results).to include(
+      hash_including(operation_id: "bounced@example.com", status: 405)
+    )
   end
 
   it "noops if not a mailchimp list" do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -139,7 +139,8 @@ module Synchronize
       def unsubscribe_member_operation(email)
         {
           method: "DELETE",
-          path: "lists/#{list_id}/members/#{subscriber_id(email)}"
+          path: "lists/#{list_id}/members/#{subscriber_id(email)}",
+          operation_id: email
         }
       end
 
@@ -245,6 +246,7 @@ module Synchronize
         extract_tgz(body).flat_map do |operations|
           operations.map do |operation|
             operation["response"].slice("title", "detail", "status", "errors")
+              .merge("operation_id" => operation["operation_id"])
           end
         end
       rescue RestClient::BadRequest

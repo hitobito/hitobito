@@ -16,14 +16,9 @@ const path = require("path");
 const WAGON_LOAD_PATHS_PATH = "tmp/wagon_scss_load_paths.json";
 const watch = process.argv.includes("--watch");
 
-// `rake assets:render_scss_entries assets:wagon_scss_load_paths` (which pulls
-// in the *active* wagon's _variables.scss/_fonts.scss/_wagon.scss via
-// WebpackHelper, and lists each active wagon's root directory) is wired as a
-// prerequisite of the Rake task `css:build`, but this script also runs
-// directly via `yarn build:css` (e.g. the Procfile's `css` process in
-// normal dev mode) - a plain `yarn`/`node` invocation never goes through
-// Rake at all, so those steps need to run here too, or switching WAGONS
-// would silently keep serving whichever wagon was last rendered.
+// Also runs the Rake prerequisites directly: `yarn build:css` (e.g. the
+// Procfile's dev-mode `css` process) never goes through Rake, so without
+// this, switching WAGONS would silently keep serving a stale build.
 execFileSync("bundle", ["exec", "rake", "assets:render_scss_entries", "assets:wagon_scss_load_paths"], { stdio: "inherit" });
 
 const { signature, wagonRoots } = JSON.parse(fs.readFileSync(WAGON_LOAD_PATHS_PATH, "utf8"));

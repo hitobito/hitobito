@@ -3,14 +3,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# Renders ERB-based SCSS entrypoints (see WebpackHelper) into plain
+# Renders ERB-based SCSS entrypoints (see WagonAssetsHelper) into plain
 # .scss files dart-sass can compile, and writes a JSON manifest of every
 # *active* wagon's (Wagons.all) JS-relevant files for the esbuild build
 # script - both are prerequisites of css:build/javascript:build, wired
 # into assets:precompile and test:prepare.
 #
 # Compiled output and the SCSS rendered here are both split into a
-# subdirectory per "wagon signature" (see WebpackHelper.wagon_signature
+# subdirectory per "wagon signature" (see WagonAssetsHelper.wagon_signature
 # and config/initializers/assets.rb) - current_wagon-based anchoring would
 # have been simpler but doesn't work: it can differ between the process
 # that builds the assets and the one that serves them.
@@ -22,11 +22,11 @@ namespace :assets do
 
   desc "Render ERB-based SCSS entrypoints (core + wagon-owned) into plain .scss files"
   task render_scss_entries: :environment do
-    # WebpackHelper is an autoloaded app/helpers constant, only resolvable
+    # WagonAssetsHelper is an autoloaded app/helpers constant, only resolvable
     # once :environment has booted the app - defined here, not at file load.
     renderer_class = Class.new do
       include ActionView::Helpers
-      include WebpackHelper
+      include WagonAssetsHelper
 
       def render(source_path)
         ERB.new(File.read(source_path)).result(binding)
@@ -34,7 +34,7 @@ namespace :assets do
     end
     renderer = renderer_class.new
 
-    signature = WebpackHelper.wagon_signature
+    signature = WagonAssetsHelper.wagon_signature
     scoped_dir = File.join(generated_scss_dir, signature)
     FileUtils.mkdir_p(scoped_dir)
 
@@ -71,7 +71,7 @@ namespace :assets do
   task wagon_scss_load_paths: :environment do
     FileUtils.mkdir_p(File.dirname(wagon_scss_load_paths_path))
 
-    signature = WebpackHelper.wagon_signature
+    signature = WagonAssetsHelper.wagon_signature
 
     # dart-sass resolves the entries' absolute-path wagon @imports fine on
     # its own, but --watch only monitors directories reachable via a
@@ -90,7 +90,7 @@ namespace :assets do
   task render_js_entries: :environment do
     renderer_class = Class.new do
       include ActionView::Helpers
-      include WebpackHelper
+      include WagonAssetsHelper
 
       def render(source_path)
         ERB.new(File.read(source_path)).result(binding)
@@ -116,7 +116,7 @@ namespace :assets do
   task wagon_js_manifest: :environment do
     FileUtils.mkdir_p(File.dirname(wagon_manifest_path))
 
-    signature = WebpackHelper.wagon_signature
+    signature = WagonAssetsHelper.wagon_signature
 
     wagons = Wagons.all.map do |wagon|
       wagon_root = wagon.paths.path

@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-module WebpackHelper
+module WagonAssetsHelper
   # hitobito_youth has no assets of its own and is always paired with a
   # "real" wagon (sac_cas+youth, pbs+youth, ...), so it must not affect the
   # signature - otherwise sac_cas+youth and sac_cas-alone would get

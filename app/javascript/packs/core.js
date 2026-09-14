@@ -3,11 +3,9 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito.
 
-// General Javascript dependencies used in all/multiple layouts
-// besides application e.g "oauth" or "agenda" in sac wagon
-
-// To reference this file, add "= javascript_pack_tag 'core', 'data-turbo-track': true"
-// to the appropriate layout file, like app/views/layouts/application.html.erb
+// General Javascript dependencies used in all/multiple layouts besides
+// application, e.g. "oauth" or "agenda" in the sac wagon. Referenced via
+// "= javascript_include_tag 'core', 'data-turbo-track': true".
 
 // Polyfills
 import 'core-js/stable';

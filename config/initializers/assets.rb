@@ -24,7 +24,7 @@ Rails.application.config.assets.paths << Rails.root.join("node_modules", "@forta
   "fontawesome-free", "webfonts").to_s
 
 # Compiled assets are split into a subdirectory per "wagon signature" (see
-# WebpackHelper.wagon_signature, only resolvable inside after_initialize -
+# WagonAssetsHelper.wagon_signature, only resolvable inside after_initialize -
 # autoloading isn't ready this early). Wagons.current_wagon doesn't work
 # for this: it can differ between the process that builds the assets and
 # the process that serves them, so build- and serve-time would disagree.
@@ -46,7 +46,7 @@ bare_stylesheets_generated_path = Rails.root.join("app", "assets", "stylesheets_
 # per-signature build path (setting excluded_paths any earlier is too late).
 Rails.application.config.after_initialize do |app|
   signature_build_path = Rails.root.join(
-    "app", "assets", "builds", WebpackHelper.wagon_signature
+    "app", "assets", "builds", WagonAssetsHelper.wagon_signature
   ).to_s
   excluded_paths = [bare_build_path, bare_stylesheets_generated_path]
   wagon_paths_set = (wagon_image_paths + wagon_font_paths).to_set

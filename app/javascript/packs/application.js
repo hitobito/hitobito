@@ -3,23 +3,11 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito.
 
-// This file is automatically compiled by Webpack, along with any other files
-// present in this directory. You're encouraged to place your actual application logic in
-// a relevant structure within app/javascript and only use these pack files to reference
-// that code so it'll be compiled.
-
-// To reference this file, add "= javascript_pack_tag 'application', 'data-turbo-track': true"
-// to the appropriate layout file, like app/views/layouts/application.html.erb
-
-// Gems without NPM package
-import '../javascripts/vendor/gems';
+// Referenced via "= javascript_include_tag 'application', 'data-turbo-track': true"
+// in app/views/layouts/application.html.haml.
 
 // Custom scripts from all wagons
-import '../javascripts/wagons';
-
-// Images
-const images = require.context('../images', true);
-const imagePath = (name) => images(name, true);
+import '../generated/wagon_scripts';
 
 // Action Text
 require("trix")

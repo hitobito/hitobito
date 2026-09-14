@@ -10,7 +10,7 @@ class ApplicationMailer < ActionMailer::Base
 
   HEADERS_TO_SANITIZE = [:to, :cc, :bcc, :from, :sender, :return_path, :reply_to].freeze
 
-  helper :webpack, :utility
+  helper :wagon_assets, :utility
 
   after_deliver :record_system_mail_message
 

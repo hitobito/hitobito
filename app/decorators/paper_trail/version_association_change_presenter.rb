@@ -117,7 +117,13 @@ module PaperTrail
 
     def item_class = @item_class ||= version.item_type.constantize
 
-    def translation_change? = item_type.include?("Translation") && main_type
+    def translation_change?
+      item_type.include?("Translation") || child_of_translation? && main_type
+    end
+
+    def child_of_translation?
+      reifyed_item.has_attribute?("record_type") && reifyed_item.record_type.include?("Translation")
+    end
 
     def label_with_fallback(item)
       return I18n.t("global.unknown") unless item

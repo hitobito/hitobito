@@ -46,7 +46,7 @@ describe Export::Tabular::Events::Row do
     it { expect(row.fetch(:state)).to eq "some state" }
     it { expect(row.fetch(:number)).to eq "123" }
     it { expect(row.fetch(:location)).to eq "somewhere" }
-    it { expect(row.fetch(:description)).to eq "some description" }
+    it { expect(row.fetch(:plain_description)).to eq "some description" }
     it { expect(row.fetch(:group_names)).to eq "TopGroup" }
   end
 

@@ -39,7 +39,7 @@ class Event::Answer < ActiveRecord::Base
   validates_by_schema
   validates :question_id, uniqueness: {scope: :participation_id}
   validates :answer, presence: {if: lambda do
-    question && question.required? && participation.enforce_required_answers
+    question && question.required? && !question.admin? && participation.enforce_required_answers
   end}
   validate :validate_with_question
 

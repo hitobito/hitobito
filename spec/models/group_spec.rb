@@ -457,6 +457,18 @@ describe Group do
       parent = groups(:bottom_group_one_two)
       expect(parent.children.order_by_type).to be_empty
     end
+
+    it "orders siblings of the same type alphabetically, independent of their lft position" do
+      bottom_layer_one = groups(:bottom_layer_one)
+      bottom_layer_two = groups(:bottom_layer_two)
+
+      # simulate data whose lft does not reflect alphabetical order,
+      # e.g. groups created out of order or imported from elsewhere
+      bottom_layer_two.update_column(:lft, bottom_layer_one.lft - 1)
+
+      expect(Group.where(type: "Group::BottomLayer").order_by_type)
+        .to eq([bottom_layer_one, bottom_layer_two])
+    end
   end
 
   context "#set_layer_group_id" do

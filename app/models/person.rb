@@ -15,6 +15,7 @@
 #  authentication_token                 :string
 #  birthday                             :date
 #  blocked_at                           :datetime
+#  canton                               :string
 #  company                              :boolean          default(FALSE), not null
 #  company_name                         :string
 #  confirmation_sent_at                 :datetime
@@ -117,6 +118,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
     [:country, :country_select], [:gender, :gender_select], [:years, :integer], :birthday
   ]
+  FILTER_ATTRS << [:canton, :canton_select] if Settings.people.canton
 
   SEARCHABLE_ATTRS = [
     # rubocop:todo Layout/LineLength
@@ -189,6 +191,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
   i18n_enum :language, Person::LANGUAGES.keys.map(&:to_s)
+  # Lambda, not a snapshot: insieme extends Cantons::SHORT_NAMES at wagon boot, so this
+  # must re-read the list on every check.
+  i18n_enum :canton, ->(_record) { Cantons.short_name_strings },
+    i18n_prefix: "activerecord.attributes.cantons"
 
   has_one_attached :picture do |attachable|
     attachable.variant :thumb, resize_to_fill: [32, 32]
@@ -318,6 +324,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :birthday,
     timeliness: {type: :date, allow_blank: true, before: Date.new(10_000, 1, 1)}
   validates :additional_information, length: {allow_nil: true, maximum: (2**16) - 1}
+  validates :canton, absence: true, unless: :swiss?
   validate :assert_has_any_name
 
   validates :picture, dimension: {width: {max: 8_000}, height: {max: 8_000}},
@@ -331,6 +338,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### CALLBACKS
 
   before_validation :override_blank_email
+  before_validation :reset_canton_unless_swiss, if: -> { Settings.people.canton }
   after_update :schedule_duplicate_locator
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates
@@ -415,6 +423,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   ### ATTRIBUTE INSTANCE METHODS
+
+  # Overrides the derived, Location-based canton from PostalAddress (via Contactable):
+  # Person's canton is a real, independently editable column, not computed on every read.
+  def canton
+    read_attribute(:canton)
+  end
 
   # Used to enable login with any of the attributes configured in `devise_login_id_attrs`
   def login_identity
@@ -608,6 +622,10 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def override_blank_email
     self.email = nil if email.blank?
+  end
+
+  def reset_canton_unless_swiss
+    self.canton = nil unless swiss?
   end
 
   def assert_has_any_name

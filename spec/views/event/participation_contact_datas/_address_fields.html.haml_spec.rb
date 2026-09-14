@@ -58,4 +58,44 @@ describe "event/participation_contact_datas/_address_fields.html.haml" do
     expect(rendered).to have_no_text("Strasse")
     expect(rendered).to have_no_text("Nr.")
   end
+
+  describe "canton" do
+    it "renders canton select inside a hidden container when country is not Switzerland" do
+      render locals: {entry: participation_contact_data, event:, group:}
+      expect(rendered).to have_selector(
+        "[data-field-visibility-target='container'].hidden select#entry_canton"
+      )
+    end
+
+    it "renders canton select inside a visible container when country is Switzerland" do
+      people(:top_leader).country = "CH"
+      render locals: {entry: participation_contact_data, event:, group:}
+      expect(rendered).to have_selector(
+        "[data-field-visibility-target='container'] select#entry_canton"
+      )
+      expect(rendered).not_to have_selector(
+        "[data-field-visibility-target='container'].hidden select#entry_canton"
+      )
+    end
+
+    it "does not render canton select when country is hidden for the event" do
+      event.update!(hidden_contact_attrs: [:country])
+      render locals: {entry: participation_contact_data, event:, group:}
+      expect(rendered).not_to have_selector("select#entry_canton")
+    end
+
+    it "does not render canton select when canton setting is disabled" do
+      allow(Settings.people).to receive(:canton).and_return(false)
+      render locals: {entry: participation_contact_data, event:, group:}
+      expect(rendered).not_to have_selector("select#entry_canton")
+    end
+
+    it "does not raise when rendered for an Event::Guest" do
+      guest = Event::Guest.new(first_name: "Guest", last_name: "Person", country: "CH")
+      allow(view).to receive(:f).and_return(StandardFormBuilder.new(:entry, guest, view, {}))
+
+      expect { render locals: {entry: guest, event:, group:} }.not_to raise_error
+      expect(rendered).not_to have_selector("select#entry_canton")
+    end
+  end
 end

@@ -13,11 +13,9 @@ class Person::Filter::AttributeControl < Filter::AttributeControl
   private
 
   def all_field_types
-    safe_join([
-      super,
-      country_select_field,
-      gender_select_field
-    ])
+    fields = [super, country_select_field, gender_select_field]
+    fields << canton_select_field if Settings.people.canton
+    safe_join(fields)
   end
 
   def country_select_field
@@ -35,6 +33,15 @@ class Person::Filter::AttributeControl < Filter::AttributeControl
       "#{filter_name_prefix}[value]",
       options_from_collection_for_select(gender_options, :first, :last, value),
       control_html_options(control_classes: SELECT_CLASSES, class: "gender_select_field")
+    )
+  end
+
+  def canton_select_field
+    canton_options = Person.canton_labels.to_a
+    select_tag(
+      "#{filter_name_prefix}[value]",
+      options_from_collection_for_select(canton_options, :first, :last, value),
+      control_html_options(control_classes: SELECT_CLASSES, class: "canton_select_field")
     )
   end
 end

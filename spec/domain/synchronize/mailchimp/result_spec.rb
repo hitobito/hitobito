@@ -1,4 +1,4 @@
-#  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -114,5 +114,19 @@ describe Synchronize::Mailchimp::Result do
     subject.track(:add_members, payload, response(total: 1, finished: 1, failed: 1, results:))
     expect(subject.state).to eq :failed
     expect(subject.data.dig(:add_members, :failed).last[0][:operation]).to eq payload[0]
+  end
+
+  it "preserves operation_id for correlating a failed operation without an errors key" do
+    results = [
+      {title: "Method Not Allowed",
+       detail: "Can not archive a contact that is bounced, pending or archived.",
+       status: 405,
+       operation_id: "bounced@example.com"}
+    ]
+    subject.track(:unsubscribe_members, payload, response(total: 1, finished: 1, failed: 1, results:))
+    expect(subject.state).to eq :failed
+    result = subject.data.dig(:unsubscribe_members, :failed).last[0]
+    expect(result).not_to have_key(:operation)
+    expect(result[:operation_id]).to eq "bounced@example.com"
   end
 end

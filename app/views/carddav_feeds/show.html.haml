@@ -1,0 +1,23 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+- title t('.title')
+
+#main
+
+  - if current_user.carddav_token
+    %p
+      = t('.url', url: link_to(person_carddav_url, person_carddav_url)).html_safe
+      = action_button(t('global.button.copy'), '#', :copy, class: 'btn-outline-primary ms-3', data: { copy_to_clipboard: person_carddav_url }, in_button_group: true)
+    %p
+      = t('.password', password: content_tag(:code, current_user.carddav_token)).html_safe
+      = action_button(t('global.button.copy'), '#', :copy, class: 'btn-outline-primary ms-3', data: { copy_to_clipboard: current_user.carddav_token }, in_button_group: true)
+    %br
+    %p= t('.url_description', application_name: Settings.application.name)
+    %p= t('.reset_url_description')
+    = action_button t('.reset_url'), { action: :update }, :'redo-alt', method: :patch
+  - else
+    = action_button t('.create_url'), { action: :update }, :'address-book', method: :patch
+    %p= t('.url_description', application_name: Settings.application.name)

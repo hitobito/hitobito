@@ -1,4 +1,4 @@
-#  Copyright (c) 2018-2022, Grünliberale Partei Schweiz. This file is part o
+#  Copyright (c) 2018-2026, Grünliberale Partei Schweiz. This file is part o
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -512,6 +512,35 @@ body: create_tgz([response: {title: :subscriber, detail: "okay", status: 200}.to
     it "has different has for differnt email" do
       @email = "top_leader1@example.com"
       expect(subject[:path]).to eq "lists/2/members/d36e5c76dc67d95e935265cc451fc878"
+    end
+
+    it "sets operation_id to the plain email for correlating batch results back to it" do
+      @email = "top_leader@example.com"
+      expect(subject[:operation_id]).to eq "top_leader@example.com"
+    end
+  end
+
+  context "#unsubscribe_members executes batch" do
+    it "carries the operation_id back on each operation result, even without an errors key" do
+      stub_request(:post, "https://us12.api.mailchimp.com/3.0/batches")
+        .to_return(status: 200, body: {id: 1}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1")
+        .to_return(status: 200, body: {id: 1, status: "finished", response_body_url: "https://us12.api.mailchimp.com/3.0/batches/1/result"}.to_json)
+
+      stub_request(:get, "https://us12.api.mailchimp.com/3.0/batches/1/result")
+        .to_return(status: 200, body: create_tgz([operation_id: "bounced@example.com", response: {
+          title: "Method Not Allowed",
+          detail: "Can not archive a contact that is bounced, pending or archived.",
+          status: 405
+        }.to_json]))
+
+      _payload, response = client.unsubscribe_members(%w[bounced@example.com])
+      result = response[:operation_results][0]
+
+      expect(result[:operation_id]).to eq "bounced@example.com"
+      expect(result[:status]).to eq 405
+      expect(result).not_to have_key(:errors)
     end
   end
 end

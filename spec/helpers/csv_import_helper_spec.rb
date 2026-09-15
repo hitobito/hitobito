@@ -5,6 +5,8 @@ describe CsvImportHelper do
   include ERB::Util
 
   context "#csv_field_documentation" do
+    before { allow(self).to receive(:csv_field_optional?).and_return(false) }
+
     it "renders string directly" do
       expect(csv_field_documentation(:first_name, "Only nice names")).to(
         eq "<dt>Vorname</dt><dd>Only nice names</dd>"
@@ -12,9 +14,27 @@ describe CsvImportHelper do
     end
 
     it "renders hashes as options" do
-      expect(csv_field_documentation(:gender, "w" => "Girls", "m" => "Gents")).to(
+      expect(csv_field_documentation(:gender, {"w" => "Girls", "m" => "Gents"})).to(
         eq "<dt>Geschlecht</dt><dd><em>w</em> - Girls<br><em>m</em> - Gents</dd>"
       )
+    end
+
+    it "appends a note when the field is optional" do
+      allow(self).to receive(:csv_field_optional?).and_return(true)
+
+      expect(csv_field_documentation(:gender, {"m" => "Gents"})).to(
+        eq "<dt>Geschlecht</dt><dd><em>m</em> - Gents<br>Feld ist optional und kann auch leer gelassen werden.</dd>"
+      )
+    end
+  end
+
+  context "#csv_field_optional?" do
+    it "is true for a field without a presence validator, e.g. an i18n_enum with allow_blank" do
+      expect(csv_field_optional?(:gender)).to eq true
+    end
+
+    it "is false for a field with a presence validator" do
+      expect(csv_field_optional?(:company_name)).to eq false
     end
   end
 

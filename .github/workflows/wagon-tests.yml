@@ -7,12 +7,16 @@ on:
         description: "Wagon repository, e.g. hitobito_pbs"
         type: string
       wagon_dependency_repository:
-        description: A wagon this wagon depends on, e.g. hitobito_youth
+        description: Deprecated and ignored parameter. The wagon dependency is now automatically detected from the gemspec.
         required: false
         default: ""
         type: string
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to master.
+        type: string
+        default: ""
+      wagon_ref:
+        description: Use a specific version of the wagon for the workflow run. Defaults to the branch of the triggering ref, or master.
         type: string
         default: ""
       wagon_dependency_ref:
@@ -41,11 +45,46 @@ defaults:
     working-directory: hitobito
 
 jobs:
+  detect_wagon_dependency:
+    name: detect wagon dependency
+    runs-on: ubuntu-latest
+
+    outputs:
+      wagon_dependency_repository: ${{ steps.determine.outputs.dependency_repo }}
+
+    steps:
+      - name: Determine dependency-repo
+        id: determine
+        env:
+          REPO: ${{ inputs.wagon_repository }}
+        working-directory: "."
+        run: |
+          set -euo pipefail
+
+          gemspec_source="https://raw.githubusercontent.com/hitobito/${REPO}/master/${REPO}.gemspec"
+          gemspec=$(curl --silent --show-error --fail --location "$gemspec_source")
+
+          # take the first uncommented add_dependency line mentioning another wagon, if any
+          dependency_repo=$(printf '%s\n' "$gemspec" |
+            grep -m1 -E '^[^#]*add_dependency.*hitobito_' |
+            sed 's/.*\(hitobito_[a-z0-9_]*\).*/\1/' || true)
+
+          if [ -n "$dependency_repo" ]; then
+            echo "Detected wagon dependency of ${REPO}: ${dependency_repo}"
+          else
+            echo "${REPO} does not depend on another wagon"
+          fi
+
+          echo "dependency_repo=${dependency_repo}" >> "$GITHUB_OUTPUT"
+
   wagon_rubocop:
     name: rubocop
     runs-on: "ubuntu-24.04"
     env:
       RAILS_DB_ADAPTER: nulldb
+
+    needs:
+      - detect_wagon_dependency
 
     steps:
       - name: echo distinct ID ${{ inputs.distinct_id }}
@@ -66,8 +105,9 @@ jobs:
           migrations: false
           assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
+          wagon_ref: ${{ inputs.wagon_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
       - name: ${{ inputs.wagon_repository }} rubocop
@@ -89,6 +129,10 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
+
+    needs:
+      - detect_wagon_dependency
+
     services:
       postgres:
         image: postgres:16
@@ -121,8 +165,9 @@ jobs:
         with:
           assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
+          wagon_ref: ${{ inputs.wagon_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
       - name: ${{ inputs.wagon_repository }} Check pending specs
@@ -143,6 +188,9 @@ jobs:
       RAILS_DB_NAME: hitobito_development
       RAILS_ENV: development
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
+
+    needs:
+      - detect_wagon_dependency
 
     # only run seeds on master
     if: ${{ github.ref_name == 'master' }}
@@ -174,8 +222,9 @@ jobs:
         with:
           assets: false
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
+          wagon_ref: ${{ inputs.wagon_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
       - name: Run ${{ inputs.wagon_repository }} seeds
@@ -196,6 +245,9 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
+
+    needs:
+      - detect_wagon_dependency
 
     services:
       postgres:
@@ -228,8 +280,9 @@ jobs:
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
+          wagon_ref: ${{ inputs.wagon_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
       - name: Run ${{ inputs.wagon_repository }} specs
@@ -251,6 +304,9 @@ jobs:
       RAILS_TEST_DB_NAME: hitobito_test
       RAILS_ENV: test
       DISABLE_TEST_SCHEMA_MAINTENANCE: true
+
+    needs:
+      - detect_wagon_dependency
 
     services:
       postgres:
@@ -283,8 +339,9 @@ jobs:
         uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
         with:
           wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ inputs.wagon_dependency_repository }}
+          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
           core_ref: ${{ inputs.core_ref }}
+          wagon_ref: ${{ inputs.wagon_ref }}
           wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
 
       - name: Check if there are any feature specs in ${{ inputs.wagon_repository }}
@@ -311,7 +368,7 @@ jobs:
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds, wagon_pending_specs]
+    needs: [detect_wagon_dependency, wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds, wagon_pending_specs]
     if: >-
       ( success() || failure() ) &&
       ( github.ref_name == 'master' || github.ref_name == 'stable' ) &&
@@ -319,7 +376,7 @@ jobs:
       ( contains((inputs.wagon_dependency_ref || inputs.main_branch), inputs.main_branch) )
     with:
       repository: ${{ inputs.wagon_repository }}
-      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' && needs.wagon_pending_specs.result == 'success'}}
+      test_result: ${{ needs.detect_wagon_dependency.result == 'success' && needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' && needs.wagon_pending_specs.result == 'success'}}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

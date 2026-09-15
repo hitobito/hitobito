@@ -1759,7 +1759,8 @@ de:
           Allen Personen einer Datei wird die gleiche Rolle vergeben,
           welche ebenfalls im nächsten Schritt ausgewählt werden kann.
         special_fields: Spezielle Feldwerte
-        explain_special_fields_html: Die folgenden Felder müssen einen der <em>kursiven</em> Werte beinhalten.
+        explain_special_fields_html: Die folgenden Felder müssen einen der folgenden Werte beinhalten.
+        optional_field_note: Feld ist optional und kann auch leer gelassen werden.
 
       preview_table:
         icon_tooltip_invalid: "Ungültige Werte"

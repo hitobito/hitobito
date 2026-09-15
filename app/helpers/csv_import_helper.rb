@@ -15,8 +15,17 @@ module CsvImportHelper
       end
     end
 
+    if csv_field_optional?(field)
+      note = t("person.csv_imports.description.optional_field_note")
+      values = safe_join([values, note], tag.br)
+    end
+
     content_tag(:dt, t("activerecord.attributes.person.#{field}")) +
       content_tag(:dd, values)
+  end
+
+  def csv_field_optional?(field)
+    ::Person.validators_on(field).none? { |v| v.kind == :presence }
   end
 
   def csv_import_attrs

@@ -7,14 +7,14 @@
   - @participations_by_event_type.each do |kind, participations|
     %h2.mt-2=kind
     = table(participations, class: 'table table-striped table-fixed') do |t|
-      - t.col(t('.event_label')) do |p|
+      - t.col(t('.event_label'), style: 'width: 35%') do |p|
         = p.event.labeled_link
-      - t.col(Role.model_name.human) do |p|
+      - t.col(Role.model_name.human, style: 'width: 20%') do |p|
         = p.labeled_link(p.list_roles)
-      - t.col(Event::Date.model_name.human(count: 2)) do |p|
+      - t.col(Event::Date.model_name.human(count: 2), style: 'width: 25%') do |p|
         = p.event.dates_full
       - if participations.first.event.is_a?(Event::Course)
-        - t.col(Qualification.model_name.human) do |p|
+        - t.col(Qualification.model_name.human, style: 'width: 20%') do |p|
           = render 'course_qualification', p: p
       - else
-        - t.col('') {}
+        - t.col('', style: 'width: 20%') {}

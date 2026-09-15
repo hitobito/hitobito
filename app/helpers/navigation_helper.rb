@@ -50,6 +50,7 @@ module NavigationHelper
   ADMIN_GROUPS = {
     main: {
       heading: "admins.show.main",
+      position: 10,
       items: [
         Item.new(model: LabelFormat, path: :label_formats_path),
         Item.new(model: CustomContent, path: :custom_contents_path),
@@ -64,8 +65,26 @@ module NavigationHelper
         end
       ].compact_blank
     },
+    events: {
+      heading: "admins.show.events",
+      position: 20,
+      items: [
+        Item.new(model: Event::Kind, path: :event_kinds_path),
+        Item.new(model: Event::KindCategory, path: :event_kind_categories_path),
+        Item.new(model: QualificationKind, path: :qualification_kinds_path)
+      ]
+    },
+    people: {
+      heading: "admins.show.people",
+      position: 30,
+      items: [
+        Item.new(model: SelfRegistrationReason, path: :self_registration_reasons_path),
+        Item.new(model: ContactAccountCategory, path: :contact_account_categories_path)
+      ]
+    },
     info: {
       heading: "admins.show.info",
+      position: 80,
       items: [
         Item.new(label: "json_api", path: :api_path),
         Item.new(label: "navigation.imap_mails",
@@ -78,21 +97,6 @@ module NavigationHelper
         Item.new(label: "hitobito_log_entries.index.title",
           path: :hitobito_log_entries_path,
           if: ->(_) { can?(:index, HitobitoLogEntry) })
-      ]
-    },
-    events: {
-      heading: "admins.show.events",
-      items: [
-        Item.new(model: Event::Kind, path: :event_kinds_path),
-        Item.new(model: Event::KindCategory, path: :event_kind_categories_path),
-        Item.new(model: QualificationKind, path: :qualification_kinds_path)
-      ]
-    },
-    people: {
-      heading: "admins.show.people",
-      items: [
-        Item.new(model: SelfRegistrationReason, path: :self_registration_reasons_path),
-        Item.new(model: ContactAccountCategory, path: :contact_account_categories_path)
       ]
     }
   }
@@ -109,8 +113,8 @@ module NavigationHelper
     end&.first
   end
 
-  def admin_groups_by_heading
-    ADMIN_GROUPS.sort_by { |_key, group| t(group[:heading]) }
+  def ordered_admin_groups
+    ADMIN_GROUPS.sort_by { |_key, group| group[:position] || 9999 }
   end
 
   # A group's visible items, sorted by their translated label.

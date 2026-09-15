@@ -5,11 +5,11 @@
 
 %ul.nav-left-list
   - current_group_key = admin_current_group_key
-  - admin_groups_by_heading.each do |key, group|
+  - ordered_admin_groups.each do |key, group|
     - items = admin_group_items(group)
     - next if items.empty?
     - dom_id = "admin-nav-group-#{key}"
-    %li.divider
+    %li.nav-left-group
       %a.inline{href: "##{dom_id}", data: {bs_toggle: :collapse}}
         = t(group[:heading])
     %li.collapse{id: dom_id, class: (key == current_group_key ? "show" : nil)}

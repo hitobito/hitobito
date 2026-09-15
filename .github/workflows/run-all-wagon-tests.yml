@@ -50,9 +50,7 @@ jobs:
           echo "$WAGONS"
           echo "wagons=$WAGONS" >> $GITHUB_OUTPUT
         env:
-          # This PAT needs access to all repos, Read access to metadata and Read and Write access to actions, code, and pull requests
-          GH_TOKEN: ${{ secrets.WAGON_TESTS_GITHUB_TOKEN }}
-          # Space-separated wagon names to exclude
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SKIP_WAGONS: ${{ vars.WAGON_TESTS_SKIP_WAGONS }}
 
   run-wagon-tests:
@@ -63,12 +61,13 @@ jobs:
       fail-fast: false
       matrix:
         wagon: ${{ fromJSON(needs.find-wagons.outputs.wagons) }}
-      max-parallel: 5 # needed so we don't occupy all the runners with core waiting jobs and the wagon tests can never start
+      max-parallel: 5 # needed so the wagon matrix does not occupy all the runners at once
 
-    uses: hitobito/hitobito/.github/workflows/wagon-tests.yml@master
+    uses: ./.github/workflows/wagon-tests.yml
     with:
-      wagon_repository: ${{ github.event.repository.name }}
-      core_ref: ${{ github.ref || inputs.core_ref || '' }}
+      wagon_repository: ${{ matrix.wagon.repo }}
+      core_ref: ${{ inputs.core_ref || github.ref }}
+      wagon_ref: ${{ inputs.wagon_ref || '' }}
       wagon_dependency_ref: ${{ inputs.wagon_dependency_ref || '' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}

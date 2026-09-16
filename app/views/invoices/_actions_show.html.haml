@@ -3,11 +3,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= invoice_sending_dropdown unless entry.payed?
+= invoice_sending_dropdown unless entry.payed? || entry.cancelled?
 = button_action_edit
 = invoices_export_dropdown
 = invoices_print_dropdown
-= action_button(t('invoices.cancel'), path_args(entry), :'trash-alt', method: :delete, data: { confirm: t('.confirm_cancel') })
+- unless entry.cancelled?
+  = action_button(t('invoices.cancel'), path_args(entry), :'trash-alt', method: :delete, data: { confirm: t('.confirm_cancel') })
 
 - if entry.payable?
   = action_button(t('crud.new.title', model: Payment.model_name.human),

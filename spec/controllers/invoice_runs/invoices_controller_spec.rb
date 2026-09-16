@@ -161,8 +161,21 @@ describe InvoiceRuns::InvoicesController do
     end
   end
 
+  context "invoice type filter" do
+    it "still shows the run's invoices when a stray invoice type param deselects every type" do
+      invoice.update!(issued_at: Time.zone.today)
+
+      get :index, params: {
+        group_id: group.id, invoice_run_id: invoice_run.id,
+        standalone: "0", from_standalone_invoice_run: "0", from_template_invoice_run: "0"
+      }
+
+      expect(assigns(:invoices)).to include invoice
+    end
+  end
+
   context "DELETE#destroy" do
-    it "updates and redirects to invoice_run" do
+    it "updates and redirects to the invoice" do
       run = InvoiceRun.create(title: "List", group: group, invoices: [invoice, invoices(:sent)],
         recipient_source: PeopleFilter.new)
 
@@ -175,7 +188,7 @@ describe InvoiceRuns::InvoicesController do
       expect do
         delete :destroy, params: {group_id: group.id, invoice_run_id: run.id, id: invoice.id}
       end.not_to change { group.issued_invoices.count }
-      expect(response).to redirect_to(group_invoice_run_invoices_path(group, run, returning: true))
+      expect(response).to redirect_to(group_invoice_run_invoice_path(group, run, invoice))
       expect(invoice.reload.state).to eq "cancelled"
 
       run.reload

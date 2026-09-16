@@ -67,7 +67,7 @@ module Export::Pdf
       def customize(pdf)
         pdf.font_size 9
         pdf.font_families.update("ocrb" => {
-          normal: Rails.root.join("app", "javascript", "fonts", "OCRB.ttf")
+          normal: Rails.root.join("app", "assets", "fonts", "OCRB.ttf")
         })
         pdf
       end

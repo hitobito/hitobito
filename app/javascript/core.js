@@ -12,7 +12,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 // Must run first: jquery-ujs/jquery-ui/coffeescript modules expect global jQuery/moment.
-import '../javascripts/expose_globals';
+import './lib/expose_globals';
 
 // Dependencies
 import Rails from 'jquery-ujs';
@@ -20,9 +20,9 @@ import Rails from 'jquery-ujs';
 // jQuery UI
 //
 // jquery-ui's UMD files declare internal deps (e.g. datepicker needs
-// keycode.js) via an AMD define([...]) array, which esbuild - unlike
-// webpack - doesn't resolve automatically; so they're imported explicitly
-// here, in dependency order.
+// keycode.js) via an AMD define([...]) array, which esbuild does not
+// resolve automatically; so they're imported explicitly here, in
+// dependency order.
 import 'jquery-ui/ui/version';
 import 'jquery-ui/ui/keycode';
 import 'jquery-ui/ui/widgets/datepicker';
@@ -65,7 +65,7 @@ import { Application } from "@hotwired/stimulus"
 
 const application = Application.start()
 window.Stimulus = application
-import "../controllers";
+import "./controllers";
 
 // Custom scripts from core
-import "../generated/core_modules";
+import "./generated/core_modules";

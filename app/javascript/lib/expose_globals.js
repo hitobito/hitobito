@@ -5,7 +5,7 @@
 
 // A lot of legacy CoffeeScript modules (core and wagons) reference jQuery
 // and moment as globals rather than importing them. This must be the
-// first import in packs/core.js so these globals exist before anything
+// first import in core.js so these globals exist before anything
 // else (jquery-ujs, jquery-ui, core/wagon modules) is evaluated.
 import jQuery from 'jquery';
 import moment from 'moment'; // used by events/date_period_validator.js.coffee

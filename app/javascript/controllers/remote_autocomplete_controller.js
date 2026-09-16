@@ -3,7 +3,7 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
 //
-// This has been extracted from app/javascript/javascripts/modules/remote_autocomplete.js
+// This has been extracted from app/javascript/modules/remote_autocomplete.js
 // and wrapped as a stimulus controller to cater for 422 responses not triggering load events
 // see https://github.com/hitobito/hitobito/issues/2565
 

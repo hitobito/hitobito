@@ -3,12 +3,8 @@
 #
 # E.g `WAGONS="pbs youth" bundle exec rails c`
 group :development do
-  # Loading the application wagons when we are testing a single wagon
-  # leads to tets failing with
-  #
-  #   ActionView::Template::Error:                                                                         #     Webpacker can't find
-  #
-  # and `log/test.log` saying
+  # Loading the application wagons while testing a single wagon makes the specs
+  # fail, with `log/test.log` saying
   #
   #   You specified that hitobito_pbs (>= 0) should come from source at `.` and source at `/usr/src/app/hitobito_pbs`  
   next if ENV["RAILS_ENV"] == 'test'

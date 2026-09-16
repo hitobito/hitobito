@@ -269,7 +269,7 @@ addresses:
 messages:
   enable_writing: false
   pdf:
-    preview: <%= Rails.root.join("app/javascript/images/preview.png") %>
+    preview: <%= Rails.root.join("app/assets/images/preview.png") %>
   body_font_size: 9
 
 groups:

@@ -111,7 +111,7 @@ describe LayoutHelper do
         [:fr, :it, :de].each do |locale|
           I18n.with_locale(locale) do
             logo = "#{locale}_logo.png"
-            allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+            allow(helper).to receive(:wagon_image_tag).with(logo,
               alt: Settings.application.name).and_return logo
 
             expect(helper.header_logo).to eql(logo)
@@ -120,7 +120,7 @@ describe LayoutHelper do
 
         I18n.with_locale(:en) do
           logo = "logo.png"
-          allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+          allow(helper).to receive(:wagon_image_tag).with(logo,
             alt: Settings.application.name).and_return logo
 
           expect(helper.header_logo).to eql(logo)
@@ -134,7 +134,7 @@ describe LayoutHelper do
       it "should return the same logo" do
         [:fr, :it, :de].each do |locale|
           I18n.with_locale(locale) do
-            allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+            allow(helper).to receive(:wagon_image_tag).with(logo,
               alt: Settings.application.name).and_return logo
 
             expect(helper.header_logo).to eql(logo)

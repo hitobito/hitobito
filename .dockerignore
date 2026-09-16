@@ -75,9 +75,6 @@ TAGS
 .nvimrc
 .byebug_history
 
-# for experiments with webpack
-/public/packs
-/public/packs-test
 /node_modules
 yarn-debug.log*
 .yarn-integrity

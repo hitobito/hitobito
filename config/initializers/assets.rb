@@ -1,61 +1,54 @@
 # Be sure to restart your server when you modify this file.
 
+require Rails.root.join("lib", "hitobito", "relative_asset_urls")
+
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = "1.0"
 
-wagon_asset_paths = lambda do |subdir|
-  Wagons.all.filter_map do |wagon|
-    path = wagon.paths.path.join("app", "assets", subdir)
-    path.to_s if path.exist?
-  end
+wagon_asset_paths = lambda do |*subdirs|
+  Wagons.all.flat_map do |wagon|
+    subdirs.map { |subdir| wagon.paths.path.join("app", "assets", subdir) }
+  end.select(&:exist?).map(&:to_s)
 end
 
-wagon_image_paths = wagon_asset_paths.call("images")
-wagon_font_paths = wagon_asset_paths.call("fonts")
+# Propshaft registers every app/assets/* subdirectory of the core and of each
+# wagon (wagons are engines) by itself. Some of those hold sources rather than
+# servable assets:
+#   - app/assets/stylesheets is dart-sass' input (core's and the wagons')
+#   - app/assets/stylesheets_generated is the ERB-rendered input (see
+#     lib/tasks/assets.rake)
+#   - app/assets/javascripts is esbuild's input (wagons only)
+#   - the bare app/assets/builds never holds files itself, and leaving it
+#     registered would make Propshaft::LoadPath#dedup drop the per-instance
+#     subdirectory nested inside it, which is the one we actually serve
+Rails.application.config.assets.excluded_paths += [
+  Rails.root.join("app", "assets", "stylesheets").to_s,
+  Rails.root.join("app", "assets", "stylesheets_generated").to_s,
+  Rails.root.join("app", "assets", "builds").to_s,
+  *wagon_asset_paths.call("stylesheets", "javascripts")
+]
 
-Rails.application.config.assets.paths += wagon_image_paths
-Rails.application.config.assets.paths += wagon_font_paths
-Rails.application.config.assets.paths << Rails.root.join("app", "javascript", "images").to_s
-Rails.application.config.assets.paths << Rails.root.join("app", "javascript", "fonts").to_s
-
-# @fortawesome/fontawesome-free's webfonts, referenced (as bare filenames,
-# see build_css.js) from its own CSS's @font-face rules.
+# @fortawesome/fontawesome-free's webfonts, referenced from its own CSS's
+# @font-face rules (as ../webfonts/..., normalized by RelativeAssetUrls below).
 Rails.application.config.assets.paths << Rails.root.join("node_modules", "@fortawesome",
   "fontawesome-free", "webfonts").to_s
 
-# Compiled assets are split into a subdirectory per "wagon signature" (see
-# WagonAssetsHelper.wagon_signature, only resolvable inside after_initialize -
-# autoloading isn't ready this early). Wagons.current_wagon doesn't work
-# for this: it can differ between the process that builds the assets and
-# the process that serves them, so build- and serve-time would disagree.
-# The bare app/assets/builds directory never holds files itself, so it's
-# excluded below in favor of the current signature's own subdirectory.
-bare_build_path = Rails.root.join("app", "assets", "builds").to_s
+# Must run before propshaft's own CssAssetUrls, which resolves what we normalize.
+Rails.application.config.assets.compilers.unshift(["text/css", Hitobito::RelativeAssetUrls])
 
-# app/assets/stylesheets_generated is dart-sass's *input*, never served -
-# excluded for the same reason and the same way as bare_build_path below.
-bare_stylesheets_generated_path = Rails.root.join("app", "assets", "stylesheets_generated").to_s
-
-# Propshaft's own after_initialize (registered earlier) ranks paths under
-# Rails.root above outside ones - which would rank core's images above a
-# wagon's in local dev (only production's vendor/wagons layout puts wagon
-# paths under Rails.root). We want the opposite: a wagon's file should win
-# over core's for the same name. Reordering again here (registered later)
-# overrides that - and, since Propshaft's own asset-path auto-discovery has
-# already run by now, this is also the right place to swap in the
-# per-signature build path (setting excluded_paths any earlier is too late).
+# Compiled assets live in a subdirectory per instance (see
+# WagonAssetsHelper.instance_name, only resolvable inside after_initialize -
+# autoloading isn't ready this early). Wagons.current_wagon doesn't work for
+# this: running specs from a wagon's directory sets a different BUNDLE_GEMFILE
+# and therefore a different current_wagon for the very same composition.
 Rails.application.config.after_initialize do |app|
-  signature_build_path = Rails.root.join(
-    "app", "assets", "builds", WagonAssetsHelper.wagon_signature
-  ).to_s
-  excluded_paths = [bare_build_path, bare_stylesheets_generated_path]
-  wagon_paths_set = (wagon_image_paths + wagon_font_paths).to_set
+  # Override propshaft's asset load order so our wagons can override the core's
+  # assets. The first registered path wins (Propshaft::LoadPath#assets_by_path
+  # maps with ||=), so with several wagons the first one in Wagons.all order does.
+  wagon_paths = wagon_asset_paths.call("images", "fonts").to_set
+  build_path = Rails.root.join("app", "assets", "builds",
+    WagonAssetsHelper.instance_name).to_s
 
-  prioritize_wagon_paths = lambda do |paths|
-    priority, others = paths.partition { |path| wagon_paths_set.include?(path.to_s) }
-    others = others.reject { |path| excluded_paths.include?(path.to_s) }
-    priority + [signature_build_path] + others
-  end
-
-  app.config.assets.paths = prioritize_wagon_paths.call(app.config.assets.paths)
+  priority, others = app.config.assets.paths.partition { |path| wagon_paths.include?(path.to_s) }
+  app.config.assets.paths = priority + [build_path] + others
 end

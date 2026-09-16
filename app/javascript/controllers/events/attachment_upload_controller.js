@@ -5,9 +5,8 @@
 
 import { Controller } from "@hotwired/stimulus"
 
-// Replaces the remotipart gem: jquery-ujs's `data-remote` can't submit real
-// multipart/form-data over XHR, so remotipart used a hidden-iframe workaround.
-// fetch()+FormData needs none - the response is still evaluated as JS, like
+// Uploads the form over fetch()+FormData, because jquery-ujs' `data-remote`
+// cannot submit real multipart/form-data. The response is evaluated as JS, like
 // jquery-ujs does for any .js-responding `data-remote` form.
 export default class extends Controller {
   upload() {

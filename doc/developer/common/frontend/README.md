@@ -4,7 +4,7 @@ Dokumentation rund um Assets und Wagon Extensions befindet sich [hier](assets.md
 
 ## Custom JS Code
 
-ist aktuell unter **[app/javascript/modules](https://github.com/hitobito/hitobito/tree/master/app/javascript/javascripts/modules)** in Modules organisiert. Diese Modules sind mit https://coffeescript.org/ geschrieben.
+ist aktuell unter **[app/javascript/modules](https://github.com/hitobito/hitobito/tree/master/app/javascript/modules)** in Modules organisiert. Diese Modules sind mit https://coffeescript.org/ geschrieben.
 
 Längerfristig wollen wir aber auf Vanilla JS (Default Javascript) setzen und Coffeescript Code aus Hitobito entfernen.
 
@@ -14,7 +14,7 @@ Aktuell verwenden wir einige Komponenten aus Bootstrap:
 
 [package.json](https://github.com/hitobito/hitobito/blob/master/package.json)
 
-[javascript componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/packs/application.js)
+[javascript componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/application.js)
 
 ```
 bootstrap-alert
@@ -28,7 +28,7 @@ bootstrap-tab
 bootstrap-modal
 ```
 
-[css componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/packs/application.scss.erb)
+[css componenten](https://github.com/hitobito/hitobito/blob/master/app/assets/stylesheets/application.scss.erb)
 
 ```
 @import "bootstrap/scss/functions";
@@ -47,7 +47,7 @@ https://tom-select.js.org/
 
 `tom-select` wird in diversen Formularen verwendet. z.B. Personen Filter -> Tags
 
-Eine Konfiguration zu tom-select ist hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/javascripts/modules/tom_select.js
+Eine Konfiguration zu tom-select ist hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/modules/tom_select.js
 Eine weitere (für remote fetch und multiselect) befindet sich hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/controllers/tom_select_controller.js
 
 ### autocomplete.js
@@ -58,7 +58,7 @@ https://tarekraafat.github.io/autoComplete.js/#/
 
 `autocomplete.js` wird z.B. bei der oberen Suchleiste verwendet.
 
-Die Konfigurationzu autocomplete.js ist hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/javascripts/modules/remote_autocomplete.js
+Die Konfigurationzu autocomplete.js ist hier: https://github.com/hitobito/hitobito/blob/master/app/javascript/modules/remote_autocomplete.js
 
 ### Stimulus Rails Nested Form
 
@@ -84,11 +84,11 @@ Der Katalog der verfügbaren Icons gibt's hier: https://fontawesome.com/search?i
 
 ## Fonts
 
-Hitobito verwendet den Font [Noto Sans Latin-Greek-Cyrillic](https://github.com/notofonts/latin-greek-cyrillic) für das Frontend und für die PDF-Generierung. Die font Dateien befinden sich unter `app/javascript/fonts`.
+Hitobito verwendet den Font [Noto Sans Latin-Greek-Cyrillic](https://github.com/notofonts/latin-greek-cyrillic) für das Frontend und für die PDF-Generierung. Die font Dateien befinden sich unter `app/assets/fonts`.
 
 Aktualisieren der Noto Sans Font-Dateien:
 
 1. Aktuelles Release herunterladen von https://github.com/notofonts/latin-greek-cyrillic/releases
-2. Zip-Datei entpacken und die alten Dateien in `app/javascript/fonts` durch die neuen ersetzen
+2. Zip-Datei entpacken und die alten Dateien in `app/assets/fonts` durch die neuen ersetzen
 3. `woff2_compress NotoSans-Regular.ttf` ausführen, um die `woff2` Datei zu generieren  
    (das `woff2_compress` Binary wird durch das `woff2` Paket bereitgestellt)

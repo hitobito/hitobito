@@ -24,17 +24,15 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 <% end %>
 
 // Import the wagons' specific variables or fall back to core variables
-<% absolute_wagon_file_paths(
-  File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss'),
-  File.join('app', 'javascript', 'stylesheets', 'hitobito', 'customizable', '_variables.scss')
-  ) do |file_path| %>
+<% variables = File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss') %>
+<% absolute_wagon_file_paths(variables, Rails.root.join(variables)) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>
 
 /**
 * SASS Mixins
 */
-@import "app/javascript/stylesheets/hitobito/media-queries";
+@import "hitobito/media-queries";
 
 /**
 * Bootstrap utilities customization
@@ -43,8 +41,8 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/utilities";
-@import "app/javascript/stylesheets/hitobito/utilities";
-@import "app/javascript/stylesheets/hitobito/customizable/utilities";
+@import "hitobito/utilities";
+@import "hitobito/customizable/utilities";
 
 /**
 * Dependencies
@@ -56,10 +54,10 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 /**
  * Core styles
  */
-@import "app/javascript/stylesheets/hitobito/main";
-@import "app/javascript/stylesheets/hitobito/modal";
-@import "app/javascript/stylesheets/hitobito/help-texts";
-@import "app/javascript/stylesheets/actiontext";
+@import "hitobito/main";
+@import "hitobito/modal";
+@import "hitobito/help-texts";
+@import "hitobito/actiontext";
 
 /**
  * Components
@@ -70,16 +68,12 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
  * Wagon styles
  */
 // Import the wagons' fonts or fall back to core fonts
-<% absolute_wagon_file_paths(
-     File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss'),
-     File.join('app', 'javascript', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss')
-) do |file_path| %>
+<% fonts = File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss') %>
+<% absolute_wagon_file_paths(fonts, Rails.root.join(fonts)) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>
 
 // Import the wagons' styles
-<% absolute_wagon_file_paths(
-     File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_wagon.scss')
-  ) do |file_path| %>
+<% absolute_wagon_file_paths(File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_wagon.scss')) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>

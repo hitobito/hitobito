@@ -4,41 +4,36 @@
 #  https://github.com/hitobito/hitobito.
 
 module WagonAssetsHelper
-  # hitobito_youth has no assets of its own and is always paired with a
-  # "real" wagon (sac_cas+youth, pbs+youth, ...), so it must not affect the
-  # signature - otherwise sac_cas+youth and sac_cas-alone would get
-  # different signatures for an asset-identical build.
-  SIGNATURE_IGNORED_WAGONS = %w[youth].freeze
-
-  # Keys compiled asset output (app/assets/builds/<signature>, see
-  # lib/tasks/assets.rake and config/initializers/assets.rb) - a single
-  # source of truth so Ruby and the JS build scripts can't drift apart.
-  def self.wagon_signature
-    names = Wagons.all.map(&:wagon_name) - SIGNATURE_IGNORED_WAGONS
-    names.sort.join("-").presence || "core"
+  # The wagon composition this application is running as, e.g. "sac_cas-youth"
+  # for WAGONS="sac_cas youth", or "core" without any wagon. Keys the compiled
+  # asset output (app/assets/builds/<instance>, see lib/tasks/assets.rake and
+  # config/initializers/assets.rb) - a single source of truth so Ruby and the
+  # JS build scripts can't drift apart.
+  def self.instance_name
+    Wagons.all.map(&:wagon_name).sort.join("-").presence || "core"
   end
 
   # Prioritizes wagon images: config/initializers/assets.rb registers active
   # wagons' app/assets/images before core's, so a wagon can override a core
   # asset using the same file name.
-  def wagon_image_pack_path(name)
+  def wagon_image_path(name)
     image_path(name)
   end
 
-  # Renders an image tag, preferring a wagon's image (see wagon_image_pack_path).
-  def wagon_image_pack_tag(name, **options)
+  # Renders an image tag, preferring a wagon's image (see wagon_image_path).
+  def wagon_image_tag(name, **options)
     if options[:srcset] && !options[:srcset].is_a?(String)
       options[:srcset] = options[:srcset].map do |src_name, size|
-        "#{wagon_image_pack_path(src_name)} #{size}"
+        "#{wagon_image_path(src_name)} #{size}"
       end.join(", ")
     end
 
-    image_tag(wagon_image_pack_path(name), options)
+    image_tag(wagon_image_path(name), options)
   end
 
-  # Renders a favicon tag, preferring a wagon's favicon (see wagon_image_pack_path).
-  def wagon_favicon_pack_tag(name, **options)
-    favicon_link_tag(wagon_image_pack_path(name), options)
+  # Renders a favicon tag, preferring a wagon's favicon (see wagon_image_path).
+  def wagon_favicon_tag(name, **options)
+    favicon_link_tag(wagon_image_path(name), options)
   end
 
   # Yields the path of every wagon's file at relative_wagon_file_path, or
@@ -47,7 +42,7 @@ module WagonAssetsHelper
   # Example:
   #   absolute_wagon_file_paths(
   #     File.join('app', 'assets', 'stylesheets', 'customizable', '_fonts.scss'),
-  #     File.join('app', 'assets', 'stylesheets', 'customizable', '_fonts.scss')
+  #     Rails.root.join('app', 'assets', 'stylesheets', 'customizable', '_fonts.scss')
   #   ) do |file_path|
   #     # Do something...
   #   end

@@ -9,43 +9,56 @@ liegt.
 
 ### Funktionsweise
 
-Die Quell-Dateien liegen in `app/javascript` (Entry Points unter `app/javascript/packs`). `bin/rails
-assets:precompile` (bzw. im Hintergrund `yarn build` / `yarn build:css`) kompiliert diese nach `app/assets/builds`,
-von wo sie Propshaft wie jede andere Datei unter `app/assets/*` fingerprinted ausliefert.
+Die Entrypoints liegen direkt in `app/javascript/*.js` (JavaScript) bzw. `app/assets/stylesheets/*.scss.erb`
+(SCSS), der restliche Quellcode in den Unterverzeichnissen davon. `bin/rails assets:precompile` (bzw. im
+Hintergrund `yarn build` / `yarn build:css`) kompiliert diese nach `app/assets/builds`, von wo sie Propshaft wie
+jede andere Datei unter `app/assets/*` fingerprinted ausliefert.
 
-Zwei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
+Drei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
 
-* `assets:render_scss_entries` rendert die ERB-Anteile der SCSS-Entry-Points
-  (`app/javascript/packs/*.scss.erb`, inkl. wagon-eigener Packs) nach
-  `app/assets/stylesheets_generated/*.scss`, bevor dart-sass sie kompiliert -
-  dart-sass selbst kann kein ERB.
+* `assets:render_scss_entries` rendert die ERB-Anteile der SCSS-Entrypoints
+  (`app/assets/stylesheets/*.scss.erb`, inkl. wagon-eigener Entrypoints) nach
+  `app/assets/stylesheets_generated/`, bevor dart-sass sie kompiliert - dart-sass
+  selbst kann kein ERB.
+* `assets:wagon_scss_load_paths` schreibt `tmp/wagon_scss_load_paths.json` mit den
+  Wurzelverzeichnissen der aktiven Wagons, damit `config/build_css.mjs` diese
+  dart-sass als zusätzliche `--load-path` mitgeben kann (nötig, damit `--watch`
+  auch Wagon-Dateien überwacht).
 * `assets:wagon_js_manifest` schreibt `tmp/wagon_assets_manifest.json`: eine
   Liste der JS-relevanten Dateien jedes *aktiven* Wagons (`Wagons.all`, nicht
   einfach jedes `hitobito_*`-Verzeichnis das gerade ausgecheckt ist).
-  `esbuild.config.js` liest dieses Manifest und generiert daraus (bei jedem
-  Build neu) explizite Import-Listen, da esbuild keine dynamische,
-  Verzeichnis-basierte Import-Auflösung zur Build-Zeit unterstützt.
+  `config/esbuild.mjs` liest dieses Manifest und generiert daraus (bei jedem
+  Build neu) explizite Import-Listen nach `app/javascript/generated/`, da esbuild
+  keine dynamische, Verzeichnis-basierte Import-Auflösung unterstützt.
 
-Beide Tasks sind über `Rake::Task[...].enhance([...])` an `css:build` / `javascript:build` gehängt, welche
-cssbundling-rails/jsbundling-rails wiederum automatisch in `assets:precompile` und `test:prepare`/`db:test:prepare`
-einhängen.
+Alle drei sind über `Rake::Task[...].enhance([...])` an `css:build` / `javascript:build` gehängt, welche
+cssbundling-rails/jsbundling-rails wiederum automatisch in `assets:precompile` und `spec:prepare` einhängen;
+`db:test:prepare` hängt `lib/tasks/assets.rake` selbst noch dazu.
+
+`app/assets/stylesheets` (dart-sass-Quellen) und `app/assets/stylesheets_generated` werden in
+`config/initializers/assets.rb` via `config.assets.excluded_paths` von Propshaft ausgenommen, damit die Quellen
+nicht selbst ausgeliefert werden - dasselbe gilt für `app/assets/stylesheets` und `app/assets/javascripts` der
+Wagons.
 
 ### Entwicklung
 
 Lokal:
 
-    yarn build --watch
-    yarn build:css --watch
+    rake assets:watch_js
+    rake assets:watch_css
 
-(im [Hitobito Development](https://github.com/hitobito/development/) Docker-Setup automatisch über den
-`Procfile`-Eintrag `assets`).
+(im [Hitobito Development](https://github.com/hitobito/development/) Docker-Setup automatisch über die beiden
+`assets_js`- und `assets_css`-Container).
 
-Ohne Dev-Server (z.B. nach einem `WAGONS`-Wechsel via `bin/active_wagon`): `rake assets:build`
-(entspricht `yarn build` + `yarn build:css`).
+Einmalig, ohne Watcher (z.B. nach einem `WAGONS`-Wechsel via `bin/active_wagon`): `rake assets:build`.
+`bin/rails db:test:prepare` und `rake spec:*` bauen die Assets ebenfalls mit.
 
-`app/assets/builds` und `app/assets/stylesheets_generated` liegen pro Wagon-Zusammenstellung
-("Wagon-Signatur", siehe `WagonAssetsHelper.wagon_signature`) in einem eigenen Unterverzeichnis, damit
-sich Builds verschiedener Zusammenstellungen nicht gegenseitig überschreiben.
+Alle diese Tasks führen die oben genannten Prerequisite-Tasks selbst aus; die `yarn`-Scripts direkt aufzurufen
+tut das nicht.
+
+`app/assets/builds` und `app/assets/stylesheets_generated` liegen in einem Unterverzeichnis pro Instanz, also
+pro Wagon-Zusammenstellung (siehe `WagonAssetsHelper.instance_name`), damit sich Builds verschiedener
+Zusammenstellungen nicht gegenseitig überschreiben.
 
 ### Eigenheiten bezüglich Wagons
 
@@ -55,33 +68,42 @@ Wagons können:
 * zusätzliche Stylesheets haben
 * eigene Header-/Footer-Logos haben
 * eigene Bilder einbinden
-* eigene, komplett separate Packs haben (JS + SCSS), siehe `hitobito_sac_cas`'s `agenda`-Pack
+* eigene, komplett separate Entrypoints haben (JS + SCSS), siehe `hitobito_sac_cas`'s `agenda`-Entrypoint
 
 #### JavaScripts und Bilder
 
 Ein Wagon kann `app/assets/javascripts/wagon.js.coffee` bereitstellen - dieses wird (sofern der Wagon aktiv ist)
 automatisch importiert. Bilder aus `app/assets/images` eines Wagons werden von Propshaft direkt ausgeliefert;
-`config/initializers/assets.rb` registriert die Bild-Verzeichnisse aller aktiven Wagons *vor* den Core-eigenen,
-sodass eine gleichnamige Datei im Wagon Vorrang hat.
+`config/initializers/assets.rb` registriert die Bild- und Font-Verzeichnisse aller aktiven Wagons *vor* den
+Core-eigenen, sodass eine gleichnamige Datei im Wagon Vorrang hat. Überschreiben mehrere Wagons dieselbe Datei,
+gewinnt der erste in der Reihenfolge von `Wagons.all`.
 
-Mit den `wagon_image_pack_tag`, `wagon_favicon_pack_tag` und `wagon_image_pack_path` Helpers
+Mit den `wagon_image_tag`, `wagon_favicon_tag` und `wagon_image_path` Helpers
 (`app/helpers/wagon_assets_helper.rb`) können diese Bilder referenziert werden - bei gleichem Dateinamen wird
 automatisch das Bild im Wagon bevorzugt (siehe oben).
 
-Ein Wagon kann zusätzlich eigene `app/javascript/packs/*.js`-Dateien (eigene Entry Points, wie z.B. `agenda.js` in
-`hitobito_sac_cas`) und eigene Stimulus-Controller unter `app/javascript/controllers/*_controller.js` bereitstellen;
-diese werden automatisch erkannt und unter `<wagonname>--<controllername>` registriert.
+Ein Wagon kann zusätzlich eigene `app/javascript/*.js`-Dateien (eigene Entrypoints) und eigene Stimulus-Controller
+unter `app/javascript/controllers/*_controller.js` bereitstellen; diese werden automatisch erkannt und unter
+`<wagonname>--<controllername>` registriert.
 
 #### Stylesheets
 
-Im File `app/javascript/packs/application.scss.erb` (analog `oauth.scss.erb`, `print.scss.erb`) werden
-`app/assets/stylesheets/hitobito/customizable/_variables.scss`, `_fonts.scss` und `_wagon.scss` des jeweils aktiven
-Wagons eingebunden (`WagonAssetsHelper#absolute_wagon_file_paths`) - dies passiert weiterhin im Entry-File, weil in
-SCSS importierte Files nicht durch ERB verarbeitet werden.
+Im File `app/assets/stylesheets/application.scss.erb` (analog `oauth.scss.erb`, `print.scss.erb`) werden
+`app/assets/stylesheets/hitobito/customizable/_variables.scss`, `_fonts.scss` und `_wagon.scss` des jeweils
+aktiven Wagons eingebunden (`WagonAssetsHelper#absolute_wagon_file_paths`) - dies passiert weiterhin im
+Entry-File, weil in SCSS importierte Files nicht durch ERB verarbeitet werden.
 
-Ein Wagon kann zudem einen eigenen SCSS-Entry-Point mitbringen (`app/javascript/packs/<name>.scss.erb`, z.B.
+Ein Wagon kann zudem einen eigenen SCSS-Entrypoint mitbringen (`app/assets/stylesheets/<name>.scss.erb`, z.B.
 `agenda.scss.erb`) - dieser wird automatisch mitkompiliert und über `stylesheet_link_tag "<name>"` eingebunden.
+Core-Partials sind darin als `@import "hitobito/..."` erreichbar, eigene Files des Wagons über den absoluten
+Pfad `<%= wagon_path.join(...) %>`.
+
+Relative `url()`-Referenzen in Stylesheets (z.B. `url('../../../fonts/x.woff2')` in einem
+`hitobito/customizable/_fonts.scss` eines Wagons) funktionieren weiterhin: dart-sass übernimmt `url()`
+unverändert in den Output, darum normalisiert `Hitobito::RelativeAssetUrls`
+(`lib/hitobito/relative_asset_urls.rb`) sie als Propshaft-Compiler, bevor Propshaft sie auflöst.
 
 #### Logo
 
-Im File `app/javascript/packs/application.scss.erb` wird Pfad und Grösse vom Logo von den `Settings` übernommen.
+Im File `app/assets/stylesheets/application.scss.erb` wird Pfad und Grösse vom Logo von den `Settings`
+übernommen.

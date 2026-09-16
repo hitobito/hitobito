@@ -3,18 +3,14 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
 
-import { Application } from "stimulus"
-import { definitionsFromContext } from "stimulus/webpack-helpers"
-import { Controller } from "@hotwired/stimulus"
-import { registerGeneratedControllers } from "./generated_index"
+import { Application, Controller } from "@hotwired/stimulus"
+import { registerGeneratedControllers } from "../generated/controllers"
 
 const stimulus = Application.start()
 
-// Core controllers (this directory) and wagon controllers (from *every
-// active* wagon, per tmp/wagon_assets_manifest.json - see
-// lib/tasks/assets.rake) are registered explicitly by generated_index.js,
-// which esbuild.config.js (re)writes on every build. This replaces the
-// dynamic require.context sweep webpack used to do here.
+// Core controllers (this directory), component controllers and the controllers
+// of every active wagon are registered explicitly by generated/controllers.js,
+// which config/esbuild.mjs (re)writes on every build.
 registerGeneratedControllers(stimulus)
 
-export { Application, Controller, stimulus, definitionsFromContext }
+export { Application, Controller, stimulus }

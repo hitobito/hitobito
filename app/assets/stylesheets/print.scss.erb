@@ -6,18 +6,14 @@
 //  https://github.com/hitobito/hitobito.
 
 // Import the wagons' specific variables or fall back to core variables
-<% absolute_wagon_file_paths(
-  File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss'),
-  File.join('app', 'javascript', 'stylesheets', 'hitobito', 'customizable', '_variables.scss')
-  ) do |file_path| %>
+<% variables = File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss') %>
+<% absolute_wagon_file_paths(variables, Rails.root.join(variables)) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>
 
 // Import the wagons' fonts or fall back to core fonts
-<% absolute_wagon_file_paths(
-  File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss'),
-  File.join('app', 'javascript', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss')
-  ) do |file_path| %>
+<% fonts = File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss') %>
+<% absolute_wagon_file_paths(fonts, Rails.root.join(fonts)) do |file_path| %>
   @import "<%= file_path %>";
 <% end %>
 

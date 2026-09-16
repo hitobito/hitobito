@@ -93,21 +93,10 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       InvoiceRun::ProcessedSubject.where(item_id: entry.invoice_item_ids).delete_all
     end
     set_failure_notice unless cancelled
-    respond_with(entry, success: cancelled, location: invoices_return_path)
+    respond_with(entry, success: cancelled, location: path_args(entry))
   end
 
   private
-
-  def invoices_return_path
-    if period_invoice_template
-      group_period_invoice_template_invoice_run_invoices_path(group, period_invoice_template,
-        invoice_run, returning: true)
-    elsif invoice_run
-      group_invoice_run_invoices_path(group, invoice_run, returning: true)
-    else
-      group_invoices_path(group, returning: true)
-    end
-  end
 
   def render_entries_json(entries)
     paged_entries = entries.page(params[:page])

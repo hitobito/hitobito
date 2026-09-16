@@ -769,6 +769,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_15_080000) do
     t.string "account_number"
     t.text "address"
     t.date "issued_at"
+    t.date "cancelled_at"
     t.string "iban"
     t.text "payment_purpose"
     t.text "payment_information"

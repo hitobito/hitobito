@@ -89,7 +89,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
 
   def destroy
     cancelled = run_callbacks(:destroy) do
-      entry.update(state: :cancelled)
+      entry.update(state: :cancelled, cancelled_at: Time.zone.today)
       InvoiceRun::ProcessedSubject.where(item_id: entry.invoice_item_ids).delete_all
     end
     set_failure_notice unless cancelled

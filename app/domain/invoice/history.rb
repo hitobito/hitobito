@@ -31,6 +31,7 @@ class Invoice::History
     [
       invoice_issued_entry,
       invoice_sent_entry,
+      invoice_cancelled_entry,
       *reminder_sent_entries,
       *payment_entries
     ].select(&:valid?)
@@ -84,6 +85,10 @@ class Invoice::History
 
   def invoice_sent_entry
     HistoryEntryData.new(invoice.sent_at, t("invoices.sent"), "blue")
+  end
+
+  def invoice_cancelled_entry
+    HistoryEntryData.new(invoice.cancelled_at, t("invoices.cancelled"), "red")
   end
 
   def reminder_sent_entry(reminder, count)

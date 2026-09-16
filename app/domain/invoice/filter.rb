@@ -20,8 +20,11 @@ class Invoice::Filter
     scope = apply_scope(scope, params[:state], Invoice::STATES)
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
     scope = filter_by_ids(scope)
-    scope = filter_by_invoice_run_id(scope)
-    scope = filter_by_invoice_type(scope)
+    scope = if invoice_run_id?
+      filter_by_invoice_run_id(scope)
+    else
+      filter_by_invoice_type(scope)
+    end
     scope = filter_by_daterange(scope)
 
     cancelled? ? scope : scope.visible
@@ -60,9 +63,11 @@ class Invoice::Filter
     params[:state] == "cancelled"
   end
 
-  def filter_by_invoice_run_id(relation)
-    return relation if params[:invoice_run_id].blank?
+  def invoice_run_id?
+    params[:invoice_run_id].present?
+  end
 
+  def filter_by_invoice_run_id(relation)
     relation.where(invoice_run_id: params[:invoice_run_id])
   end
 

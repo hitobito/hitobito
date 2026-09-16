@@ -28,14 +28,20 @@ class Invoice::Filter
   end
 
   def apply_or_none(scope)
-    if no_params_set?
-      scope.none
-    else
+    # Used by mutating bulk actions (cancel, batch update): unlike #apply, an absent or blank
+    # `ids` must mean "nothing selected", not "no filter -> match everything in scope".
+    if ids_selected?
       apply(scope)
+    else
+      scope.none
     end
   end
 
   private
+
+  def ids_selected?
+    params[:ids].present?
+  end
 
   def no_params_set?
     possible_keys = %w[state due_since ids invoice_run_id from to] +

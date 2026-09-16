@@ -398,8 +398,9 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     )
   end
 
-  def set_dates # rubocop:disable Metrics/CyclomaticComplexity
+  def set_dates # rubocop:disable Metrics/CyclomaticComplexity,Metrics/AbcSize
     self.sent_at ||= Time.zone.today if sent?
+    self.cancelled_at ||= Time.zone.today if cancelled?
     if sent? || issued?
       self.issued_at ||= Time.zone.today
       self.due_at ||= issued_at + invoice_config.due_days.days

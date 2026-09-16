@@ -472,6 +472,7 @@ describe InvoiceRunsController do
         expect(response).to redirect_to group_invoices_path(group, returning: true)
         expect(flash[:notice]).to include "Rechnung wurde storniert."
         expect(invoice.reload.state).to eq "cancelled"
+        expect(invoice.cancelled_at).to eq 1.day.from_now.to_date
       end
 
       it "may move multiple invoices to cancelled state" do

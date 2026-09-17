@@ -132,6 +132,30 @@ module LayoutHelper
     end
   end
 
+  # The logo dimensions are configured per instance in config/settings.yml, but
+  # are needed by the stylesheets - which are compiled once, without knowledge of
+  # the Settings. So they are handed over as CSS custom properties, see
+  # app/assets/stylesheets/hitobito/_layout.scss.
+  def logo_custom_properties_tag
+    logo = Settings.application.logo
+    boxed = logo.background_color.to_s != "none"
+
+    width = logo.width.to_i
+
+    properties = {
+      "--logo-width": "#{width}px",
+      "--logo-height": "#{logo.height.to_i}px",
+      "--logo-background-color": boxed ? logo.background_color : "transparent",
+      "--logo-padding": boxed ? "10px" : "0.5rem",
+      # A narrow logo still needs a readable navigation, a wide one needs room
+      # for itself. Computed here rather than in CSS because the step is not
+      # expressible with min()/max().
+      "--nav-left-min-width": "#{(width < 200) ? 280 : width + 40}px"
+    }
+
+    tag.style(safe_join([":root { ", properties.map { |name, value| "#{name}: #{value};" }.join(" "), " }"]))
+  end
+
   def header_logo(locale = I18n.locale)
     logo_group = closest_group_with_logo
     return image_tag(upload_url(logo_group, :logo)) if logo_group

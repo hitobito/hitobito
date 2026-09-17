@@ -15,19 +15,10 @@
 * Variables
 */
 
-// Can be configured in config/settings.yml
-$logo-width: <%= Settings.application.logo.width %>px !default;
-$logo-height: <%= Settings.application.logo.height %>px !default;
-$logo-background-color: <%= Settings.application.logo.background_color %> !default;
-<% if Settings.application.page_background.try(ENV['RAILS_HOST_NAME'] || "dev") %>
-  $page-background: <%= Settings.application.page_background.send(ENV['RAILS_HOST_NAME']  || "dev") %>;
-<% end %>
-
-// Import the wagons' specific variables or fall back to core variables
-<% variables = File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss') %>
-<% absolute_wagon_file_paths(variables, Rails.root.join(variables)) do |file_path| %>
-  @import "<%= file_path %>";
-<% end %>
+// The active wagon's stylesheet directory precedes the core's in dart-sass'
+// load path (see config/build_css.mjs), so each of these customizable imports
+// resolves to the wagon's file if it has one, and to the core's otherwise.
+@import "hitobito/customizable/variables";
 
 /**
 * SASS Mixins
@@ -67,13 +58,6 @@ $logo-background-color: <%= Settings.application.logo.background_color %> !defau
 /**
  * Wagon styles
  */
-// Import the wagons' fonts or fall back to core fonts
-<% fonts = File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss') %>
-<% absolute_wagon_file_paths(fonts, Rails.root.join(fonts)) do |file_path| %>
-  @import "<%= file_path %>";
-<% end %>
+@import "hitobito/customizable/fonts";
 
-// Import the wagons' styles
-<% absolute_wagon_file_paths(File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_wagon.scss')) do |file_path| %>
-  @import "<%= file_path %>";
-<% end %>
+@import "hitobito/customizable/wagon";

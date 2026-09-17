@@ -3,9 +3,9 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito.
 
-// Compiles every entrypoint rendered by `rake assets:render_scss_entries`
-// (core's application/oauth/print/disable_animations plus the wagon-owned ones,
-// e.g. hitobito_sac_cas's agenda.scss) with dart-sass.
+// Compiles every SCSS entrypoint - the core's, plus the ones the active wagons
+// bring along (tmp/wagon_scss_load_paths.json, written by
+// `rake assets:wagon_scss_load_paths`) - with dart-sass.
 
 import { spawn } from "child_process";
 import { globSync } from "glob";
@@ -13,37 +13,41 @@ import fs from "fs";
 import path from "path";
 
 const WAGON_LOAD_PATHS_PATH = "tmp/wagon_scss_load_paths.json";
+const CORE_STYLESHEETS = "app/assets/stylesheets";
+const ENTRYPOINT_DIR = "entrypoints";
 
-const { buildDir, wagonRoots } = JSON.parse(fs.readFileSync(WAGON_LOAD_PATHS_PATH, "utf8"));
+const { buildDir, wagonStylesheetPaths } = JSON.parse(fs.readFileSync(WAGON_LOAD_PATHS_PATH, "utf8"));
 
-// Both the rendered SCSS and the output go to a subdirectory per instance, i.e.
-// per wagon composition (see config/initializers/assets.rb), so switching wagons,
-// or running specs from a wagon's own directory, doesn't clobber a valid build.
-const GENERATED_SCSS_DIR = path.join("app/assets/stylesheets_generated", buildDir);
+// Output goes to a subdirectory per instance, i.e. per wagon composition (see
+// config/initializers/assets.rb), so switching wagons, or running specs from a
+// wagon's own directory, doesn't clobber a valid build.
 const OUTPUT_DIR = path.join("app/assets/builds", buildDir);
 fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
-const entries = globSync(`${GENERATED_SCSS_DIR}/*.scss`);
+// Entrypoints live in their own directory, and deliberately not next to the
+// partials: sass resolves an @import relative to the importing file before it
+// consults any load path, so an entrypoint sitting beside the core's hitobito/
+// would always find the core's customizable partials and never a wagon's.
+const entries = [CORE_STYLESHEETS, ...wagonStylesheetPaths].flatMap((root) =>
+  globSync(`${root}/${ENTRYPOINT_DIR}/*.scss`).filter((file) => !path.basename(file).startsWith("_"))
+);
 
 if (entries.length === 0) {
-  console.error(`No .scss entries found in ${GENERATED_SCSS_DIR} - did "rake assets:render_scss_entries" run?`);
+  console.error(`No .scss entrypoints found in ${CORE_STYLESHEETS}/${ENTRYPOINT_DIR}`);
   process.exit(1);
 }
 
 const args = [
   ...entries.map((entry) => `${entry}:${path.join(OUTPUT_DIR, `${path.basename(entry, ".scss")}.css`)}`),
+  // The wagons come first, so that a wagon's hitobito/customizable/_variables.scss
+  // (and _fonts/_wagon) shadows the core's - this is what makes those files
+  // customizable. It also means a wagon could shadow any other core partial by
+  // reproducing its path, which no wagon currently does.
+  ...wagonStylesheetPaths.map((wagonPath) => `--load-path=${wagonPath}`),
+  `--load-path=${CORE_STYLESHEETS}`,
   "--load-path=node_modules",
-  // Lets any entrypoint, core's and a wagon's alike, @import a core partial as
-  // "hitobito/...". Deliberately not adding the wagons' own stylesheet
-  // directories: they have the same internal layout as the core's, so bare
-  // imports would become order-dependent. Wagons import their own files by
-  // absolute path.
-  "--load-path=app/assets/stylesheets",
   // For "app/components/steps_component".
   "--load-path=.",
-  // For dart-sass's own --watch to monitor these too - the @imports themselves
-  // are absolute paths and already resolve fine without this.
-  ...wagonRoots.map((wagonRoot) => `--load-path=${wagonRoot}`),
   "--no-source-map",
   ...(process.env.NODE_ENV === "production" ? ["--style=compressed"] : []),
   ...process.argv.slice(2), // e.g. --watch, forwarded from `yarn build:css --watch`

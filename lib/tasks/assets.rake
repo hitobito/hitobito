@@ -3,75 +3,32 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# Renders the ERB-based SCSS entrypoints (see WagonAssetsHelper) into plain
-# .scss files dart-sass can compile, and writes JSON manifests describing every
-# *active* wagon (Wagons.all) for the two Node build scripts - all of them are
-# prerequisites of css:build/javascript:build, which cssbundling-rails and
-# jsbundling-rails in turn hook into assets:precompile and test:prepare.
+# Writes JSON manifests describing every *active* wagon (Wagons.all) for the two
+# Node build scripts - both are prerequisites of css:build/javascript:build,
+# which cssbundling-rails and jsbundling-rails in turn hook into
+# assets:precompile and spec:prepare.
 #
-# The compiled output and the SCSS rendered here both live in a subdirectory per
-# instance, i.e. per wagon composition (see WagonAssetsHelper.instance_name and
+# The compiled output lives in a subdirectory per instance, i.e. per wagon
+# composition (see WagonAssetsHelper.instance_name and
 # config/initializers/assets.rb).
 
 namespace :assets do
-  generated_scss_dir = "app/assets/stylesheets_generated"
   wagon_manifest_path = "tmp/wagon_assets_manifest.json"
   wagon_scss_load_paths_path = "tmp/wagon_scss_load_paths.json"
 
-  # WagonAssetsHelper is an autoloaded app/helpers constant, only resolvable
-  # once :environment has booted the app - hence a lambda, not a constant.
-  scss_renderer = lambda do
-    Class.new do
-      include ActionView::Helpers
-      include WagonAssetsHelper
-
-      # wagon_path is what an entrypoint refers its own files to: the wagon it
-      # belongs to, or Rails.root for the core's own entrypoints.
-      attr_accessor :wagon_path
-
-      def render(source_path)
-        ERB.new(File.read(source_path)).result(binding)
-      end
-    end.new
-  end
-
-  desc "Render the ERB-based SCSS entrypoints (core + wagon-owned) into plain .scss files"
-  task render_scss_entries: :environment do
-    renderer = scss_renderer.call
-
-    scoped_dir = File.join(generated_scss_dir, WagonAssetsHelper.instance_name)
-    FileUtils.mkdir_p(scoped_dir)
-
-    entries = Dir[Rails.root.join("app", "assets", "stylesheets", "*.scss.erb")]
-      .to_h { |source_path| [source_path, Rails.root] }
-    # Wagons.all is a plain Array, not an ActiveRecord::Relation - find_each doesn't apply.
-    # rubocop:disable Rails/FindEach
-    Wagons.all.each do |wagon|
-      Dir[wagon.paths.path.join("app", "assets", "stylesheets", "*.scss.erb")].each do |source_path|
-        entries[source_path] = wagon.paths.path
-      end
-    end
-    # rubocop:enable Rails/FindEach
-
-    entries.each do |source_path, wagon_path|
-      renderer.wagon_path = wagon_path
-      target_name = File.basename(source_path, ".erb")
-      File.write(File.join(scoped_dir, target_name), renderer.render(source_path))
-    end
-  end
-
-  desc "Write each active wagon's root directory, so build_css.mjs can pass it to dart-sass" \
-    " as an extra --load-path"
+  desc "Write each active wagon's stylesheet directory for build_css.mjs, which passes them" \
+    " to dart-sass as --load-paths and scans them for the wagons' own entrypoints"
   task wagon_scss_load_paths: :environment do
     FileUtils.mkdir_p(File.dirname(wagon_scss_load_paths_path))
 
-    # dart-sass resolves the entries' absolute-path wagon @imports fine on its
-    # own, but --watch only monitors directories reachable via a --load-path
-    # root - passing each wagon's root as an extra one (in build_css.mjs) fixes
-    # that without changing import resolution itself.
+    stylesheet_paths = Wagons.all.filter_map do |wagon|
+      path = wagon.paths.path.join("app", "assets", "stylesheets")
+      path.to_s if path.exist?
+    end
+
     payload = {
       buildDir: WagonAssetsHelper.instance_name,
-      wagonRoots: Wagons.all.map { |wagon| wagon.paths.path.to_s }
+      wagonStylesheetPaths: stylesheet_paths
     }
     File.write(wagon_scss_load_paths_path, JSON.pretty_generate(payload))
   end
@@ -99,7 +56,7 @@ namespace :assets do
   end
 
   if Rake::Task.task_defined?("css:build")
-    Rake::Task["css:build"].enhance(["assets:render_scss_entries", "assets:wagon_scss_load_paths"])
+    Rake::Task["css:build"].enhance(["assets:wagon_scss_load_paths"])
   end
 
   if Rake::Task.task_defined?("javascript:build")
@@ -137,7 +94,7 @@ namespace :assets do
   end
 
   desc "Rebuild the CSS on every change (used by the Procfile and the docker dev setup)"
-  task watch_css: ["assets:render_scss_entries", "assets:wagon_scss_load_paths"] do
+  task watch_css: ["assets:wagon_scss_load_paths"] do
     sh "yarn build:css --watch"
   end
 end

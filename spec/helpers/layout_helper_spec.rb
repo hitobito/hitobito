@@ -200,4 +200,42 @@ describe LayoutHelper do
       expect(node).to have_css "span[title='the <i>title</i>']"
     end
   end
+  describe "#logo_custom_properties_tag" do
+    def properties
+      helper.logo_custom_properties_tag.scan(/--([\w-]+): ([^;]+);/).to_h
+    end
+
+    it "renders the configured logo dimensions" do
+      allow(Settings.application.logo).to receive_messages(width: 230, height: 40,
+        background_color: "none")
+
+      expect(properties).to include("logo-width" => "230px", "logo-height" => "40px")
+    end
+
+    it "is a no-op box without a background color" do
+      allow(Settings.application.logo).to receive(:background_color).and_return("none")
+
+      expect(properties).to include("logo-background-color" => "transparent",
+        "logo-padding" => "0.5rem")
+    end
+
+    it "boxes the logo when a background color is configured" do
+      allow(Settings.application.logo).to receive(:background_color).and_return("#ffffff")
+
+      expect(properties).to include("logo-background-color" => "#ffffff",
+        "logo-padding" => "10px")
+    end
+
+    it "keeps the navigation readable for a narrow logo" do
+      allow(Settings.application.logo).to receive(:width).and_return(128)
+
+      expect(properties).to include("nav-left-min-width" => "280px")
+    end
+
+    it "makes room for a wide logo" do
+      allow(Settings.application.logo).to receive(:width).and_return(300)
+
+      expect(properties).to include("nav-left-min-width" => "340px")
+    end
+  end
 end

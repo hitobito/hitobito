@@ -9,21 +9,16 @@ liegt.
 
 ### Funktionsweise
 
-Die Entrypoints liegen direkt in `app/javascript/*.js` (JavaScript) bzw. `app/assets/stylesheets/*.scss.erb`
-(SCSS), der restliche Quellcode in den Unterverzeichnissen davon. `bin/rails assets:precompile` (bzw. im
+Die Entrypoints liegen in `app/javascript/*.js` (JavaScript) bzw. `app/assets/stylesheets/entrypoints/*.scss`
+(SCSS), der restliche Quellcode in `app/javascript/**` bzw. `app/assets/stylesheets/hitobito/**`. `bin/rails assets:precompile` (bzw. im
 Hintergrund `yarn build` / `yarn build:css`) kompiliert diese nach `app/assets/builds`, von wo sie Propshaft wie
 jede andere Datei unter `app/assets/*` fingerprinted ausliefert.
 
-Drei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
+Zwei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
 
-* `assets:render_scss_entries` rendert die ERB-Anteile der SCSS-Entrypoints
-  (`app/assets/stylesheets/*.scss.erb`, inkl. wagon-eigener Entrypoints) nach
-  `app/assets/stylesheets_generated/`, bevor dart-sass sie kompiliert - dart-sass
-  selbst kann kein ERB.
 * `assets:wagon_scss_load_paths` schreibt `tmp/wagon_scss_load_paths.json` mit den
-  Wurzelverzeichnissen der aktiven Wagons, damit `config/build_css.mjs` diese
-  dart-sass als zusätzliche `--load-path` mitgeben kann (nötig, damit `--watch`
-  auch Wagon-Dateien überwacht).
+  Stylesheet-Verzeichnissen der aktiven Wagons. `config/build_css.mjs` gibt diese
+  dart-sass als `--load-path` mit und sucht darin nach wagon-eigenen Entrypoints.
 * `assets:wagon_js_manifest` schreibt `tmp/wagon_assets_manifest.json`: eine
   Liste der JS-relevanten Dateien jedes *aktiven* Wagons (`Wagons.all`, nicht
   einfach jedes `hitobito_*`-Verzeichnis das gerade ausgecheckt ist).
@@ -31,14 +26,13 @@ Drei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
   Build neu) explizite Import-Listen nach `app/javascript/generated/`, da esbuild
   keine dynamische, Verzeichnis-basierte Import-Auflösung unterstützt.
 
-Alle drei sind über `Rake::Task[...].enhance([...])` an `css:build` / `javascript:build` gehängt, welche
+Beide sind über `Rake::Task[...].enhance([...])` an `css:build` / `javascript:build` gehängt, welche
 cssbundling-rails/jsbundling-rails wiederum automatisch in `assets:precompile` und `spec:prepare` einhängen;
 `db:test:prepare` hängt `lib/tasks/assets.rake` selbst noch dazu.
 
-`app/assets/stylesheets` (dart-sass-Quellen) und `app/assets/stylesheets_generated` werden in
-`config/initializers/assets.rb` via `config.assets.excluded_paths` von Propshaft ausgenommen, damit die Quellen
-nicht selbst ausgeliefert werden - dasselbe gilt für `app/assets/stylesheets` und `app/assets/javascripts` der
-Wagons.
+`app/assets/stylesheets` (dart-sass-Quellen) wird in `config/initializers/assets.rb` via
+`config.assets.excluded_paths` von Propshaft ausgenommen, damit die Quellen nicht selbst ausgeliefert werden -
+dasselbe gilt für `app/assets/stylesheets` und `app/assets/javascripts` der Wagons.
 
 ### Entwicklung
 
@@ -56,9 +50,9 @@ Einmalig, ohne Watcher (z.B. nach einem `WAGONS`-Wechsel via `bin/active_wagon`)
 Alle diese Tasks führen die oben genannten Prerequisite-Tasks selbst aus; die `yarn`-Scripts direkt aufzurufen
 tut das nicht.
 
-`app/assets/builds` und `app/assets/stylesheets_generated` liegen in einem Unterverzeichnis pro Instanz, also
-pro Wagon-Zusammenstellung (siehe `WagonAssetsHelper.instance_name`), damit sich Builds verschiedener
-Zusammenstellungen nicht gegenseitig überschreiben.
+`app/assets/builds` liegt in einem Unterverzeichnis pro Instanz, also pro Wagon-Zusammenstellung (siehe
+`WagonAssetsHelper.instance_name`), damit sich Builds verschiedener Zusammenstellungen nicht gegenseitig
+überschreiben.
 
 ### Eigenheiten bezüglich Wagons
 
@@ -88,15 +82,19 @@ unter `app/javascript/controllers/*_controller.js` bereitstellen; diese werden a
 
 #### Stylesheets
 
-Im File `app/assets/stylesheets/application.scss.erb` (analog `oauth.scss.erb`, `print.scss.erb`) werden
-`app/assets/stylesheets/hitobito/customizable/_variables.scss`, `_fonts.scss` und `_wagon.scss` des jeweils
-aktiven Wagons eingebunden (`WagonAssetsHelper#absolute_wagon_file_paths`) - dies passiert weiterhin im
-Entry-File, weil in SCSS importierte Files nicht durch ERB verarbeitet werden.
+Im File `app/assets/stylesheets/entrypoints/application.scss` (analog `oauth.scss`, `print.scss`) werden
+`hitobito/customizable/_variables.scss`, `_fonts.scss` und `_wagon.scss` eingebunden. Das Stylesheet-Verzeichnis
+des aktiven Wagons steht in dart-sass' Load-Path *vor* dem des Cores, daher wird jeweils die Datei des Wagons
+genommen, falls er eine hat, und sonst die des Cores. Genau deshalb liegen die Entrypoints in einem eigenen
+Verzeichnis: dart-sass löst ein `@import` zuerst relativ zum importierenden File auf, ein Entrypoint neben
+`hitobito/` würde also immer die Core-Datei finden. (Ein Wagon kann damit auch jedes andere Core-Partial
+überschreiben, indem er dessen Pfad nachbaut - aktuell tut das keiner.)
 
-Ein Wagon kann zudem einen eigenen SCSS-Entrypoint mitbringen (`app/assets/stylesheets/<name>.scss.erb`, z.B.
-`agenda.scss.erb`) - dieser wird automatisch mitkompiliert und über `stylesheet_link_tag "<name>"` eingebunden.
-Core-Partials sind darin als `@import "hitobito/..."` erreichbar, eigene Files des Wagons über den absoluten
-Pfad `<%= wagon_path.join(...) %>`.
+Ein Wagon kann zudem einen eigenen SCSS-Entrypoint mitbringen
+(`app/assets/stylesheets/entrypoints/<name>.scss`, z.B. `agenda.scss` in `hitobito_sac_cas`) - dieser wird
+automatisch mitkompiliert und über `stylesheet_link_tag "<name>"` eingebunden. Core-Partials sind darin als
+`@import "hitobito/..."` erreichbar, eigene Partials des Wagons über einen eigenen Namespace
+(`@import "sac_cas/..."`).
 
 Relative `url()`-Referenzen in Stylesheets (z.B. `url('../../../fonts/x.woff2')` in einem
 `hitobito/customizable/_fonts.scss` eines Wagons) funktionieren weiterhin: dart-sass übernimmt `url()`
@@ -105,5 +103,7 @@ unverändert in den Output, darum normalisiert `Hitobito::RelativeAssetUrls`
 
 #### Logo
 
-Im File `app/assets/stylesheets/application.scss.erb` wird Pfad und Grösse vom Logo von den `Settings`
-übernommen.
+Der Logo-Pfad kommt aus den `Settings` (`LayoutHelper#header_logo`). Die Grössen stehen ebenfalls in den
+`Settings`, werden aber als CSS Custom Properties ins Layout gerendert
+(`LayoutHelper#logo_custom_properties_tag`) und nicht in die Stylesheets kompiliert - diese kennen die
+`Settings` einer Instanz nicht.

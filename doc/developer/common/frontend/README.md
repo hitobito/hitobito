@@ -28,7 +28,7 @@ bootstrap-tab
 bootstrap-modal
 ```
 
-[css componenten](https://github.com/hitobito/hitobito/blob/master/app/assets/stylesheets/application.scss.erb)
+[css componenten](https://github.com/hitobito/hitobito/blob/master/app/assets/stylesheets/entrypoints/application.scss)
 
 ```
 @import "bootstrap/scss/functions";

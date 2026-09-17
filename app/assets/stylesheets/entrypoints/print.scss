@@ -5,17 +5,12 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito.
 
-// Import the wagons' specific variables or fall back to core variables
-<% variables = File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_variables.scss') %>
-<% absolute_wagon_file_paths(variables, Rails.root.join(variables)) do |file_path| %>
-  @import "<%= file_path %>";
-<% end %>
+// The active wagon's stylesheet directory precedes the core's in dart-sass'
+// load path (see config/build_css.mjs), so each of these customizable imports
+// resolves to the wagon's file if it has one, and to the core's otherwise.
+@import "hitobito/customizable/variables";
 
-// Import the wagons' fonts or fall back to core fonts
-<% fonts = File.join('app', 'assets', 'stylesheets', 'hitobito', 'customizable', '_fonts.scss') %>
-<% absolute_wagon_file_paths(fonts, Rails.root.join(fonts)) do |file_path| %>
-  @import "<%= file_path %>";
-<% end %>
+@import "hitobito/customizable/fonts";
 
 /*
 Version     :  0.1

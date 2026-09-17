@@ -35,27 +35,4 @@ module WagonAssetsHelper
   def wagon_favicon_tag(name, **options)
     favicon_link_tag(wagon_image_path(name), options)
   end
-
-  # Yields the path of every wagon's file at relative_wagon_file_path, or
-  # fallback_file_path if no wagon has one.
-  #
-  # Example:
-  #   absolute_wagon_file_paths(
-  #     File.join('app', 'assets', 'stylesheets', 'customizable', '_fonts.scss'),
-  #     Rails.root.join('app', 'assets', 'stylesheets', 'customizable', '_fonts.scss')
-  #   ) do |file_path|
-  #     # Do something...
-  #   end
-  def absolute_wagon_file_paths(relative_wagon_file_path, fallback_file_path = nil)
-    file_paths =
-      Wagons
-        .all
-        .collect { |wagon| File.join(wagon.paths.path.to_s, relative_wagon_file_path) }
-        .select { |file_path| File.exist?(file_path) }
-        .each { |file_path| yield(file_path) }
-
-    if fallback_file_path && file_paths.blank?
-      yield(fallback_file_path)
-    end
-  end
 end

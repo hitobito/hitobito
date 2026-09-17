@@ -15,15 +15,12 @@ end
 # wagon (wagons are engines) by itself. Some of those hold sources rather than
 # servable assets:
 #   - app/assets/stylesheets is dart-sass' input (core's and the wagons')
-#   - app/assets/stylesheets_generated is the ERB-rendered input (see
-#     lib/tasks/assets.rake)
 #   - app/assets/javascripts is esbuild's input (wagons only)
 #   - the bare app/assets/builds never holds files itself, and leaving it
 #     registered would make Propshaft::LoadPath#dedup drop the per-instance
 #     subdirectory nested inside it, which is the one we actually serve
 Rails.application.config.assets.excluded_paths += [
   Rails.root.join("app", "assets", "stylesheets").to_s,
-  Rails.root.join("app", "assets", "stylesheets_generated").to_s,
   Rails.root.join("app", "assets", "builds").to_s,
   *wagon_asset_paths.call("stylesheets", "javascripts")
 ]

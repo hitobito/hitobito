@@ -4,9 +4,9 @@
 #  https://github.com/hitobito/hitobito.
 
 # Writes JSON manifests describing every active wagon for the two
-# Node build scripts. These are prerequisites of css:build/javascript:build,
-# which cssbundling-rails and jsbundling-rails in turn hook into
-# assets:precompile and spec:prepare.
+# Node build scripts. These are prerequisites of css:build/javascript:build and
+# therefore of assets:precompile (prod build), assets:build (dev build) and
+# db:test:prepare (spec setup).
 #
 # The compiled output is written to a subdirectory per instance, i.e. per wagon
 # composition.

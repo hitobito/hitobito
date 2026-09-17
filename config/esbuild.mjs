@@ -51,8 +51,13 @@ function writeGenerated(name, contents) {
 }
 
 // esbuild resolves imports statically, so everything that used to be collected
-// at runtime is written out as explicit import lists first - on every build, so
-// a new controller or wagon is picked up by `--watch` too.
+// at runtime is written out as explicit import lists first, on every build.
+//
+// `--watch` rebuilds when a file already in the bundle changes, so an edited
+// controller is picked up, but a newly added one is not: it is in no bundle
+// yet, and so in nothing esbuild watches. Adding, removing or renaming a
+// controller, an entrypoint or a module needs a restart of the watcher - as
+// does switching WAGONS, which additionally needs the manifest rewritten.
 const generateImportListsPlugin = {
   name: "generate-import-lists",
   setup(build) {

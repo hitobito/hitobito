@@ -45,6 +45,9 @@ Lokal:
 `assets_js`- und `assets_css`-Container).
 
 Einmalig, ohne Watcher (z.B. nach einem `WAGONS`-Wechsel via `bin/active_wagon`): `rake assets:build`.
+
+Die Watcher bauen neu, wenn eine Datei ändert, die bereits im Bundle ist. Kommt ein Controller, ein Entrypoint
+oder ein Modul *neu dazu* (oder fällt weg), muss der Watcher neu gestartet werden.
 `bin/rails db:test:prepare` und `rake spec:*` bauen die Assets ebenfalls mit.
 
 Alle diese Tasks führen die oben genannten Prerequisite-Tasks selbst aus; die `yarn`-Scripts direkt aufzurufen

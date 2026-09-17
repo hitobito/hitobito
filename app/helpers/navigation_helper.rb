@@ -94,6 +94,9 @@ module NavigationHelper
         Item.new(label: "navigation.admin/event_feed",
           path: :event_feed_path,
           if: ->(_) { can?(:update, current_user) }),
+        Item.new(label: "navigation.admin/carddav_feed",
+          path: :carddav_feed_path,
+          if: ->(_) { can?(:update, current_user) }),
         Item.new(label: "hitobito_log_entries.index.title",
           path: :hitobito_log_entries_path,
           if: ->(_) { can?(:index, HitobitoLogEntry) })

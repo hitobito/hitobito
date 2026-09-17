@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_18_090000) do
+ActiveRecord::Schema[8.0].define(version: 2026_09_12_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1168,7 +1168,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_18_090000) do
     t.string "address_care_of"
     t.string "postbox"
     t.integer "unfinished_job_observations_count", default: 0, null: false
+    t.string "carddav_token"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
+    t.index ["carddav_token"], name: "index_people_on_carddav_token", unique: true
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true
     t.index ["event_feed_token"], name: "index_people_on_event_feed_token", unique: true

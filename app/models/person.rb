@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,6 +15,7 @@
 #  authentication_token                 :string
 #  birthday                             :date
 #  blocked_at                           :datetime
+#  carddav_token                        :string
 #  company                              :boolean          default(FALSE), not null
 #  company_name                         :string
 #  confirmation_sent_at                 :datetime
@@ -70,6 +71,7 @@
 # Indexes
 #
 #  index_people_on_authentication_token         (authentication_token)
+#  index_people_on_carddav_token                (carddav_token) UNIQUE
 #  index_people_on_confirmation_token           (confirmation_token) UNIQUE
 #  index_people_on_email                        (email) UNIQUE
 #  index_people_on_event_feed_token             (event_feed_token) UNIQUE
@@ -97,7 +99,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :last_label_format_id, :failed_attempts, :last_sign_in_at, :last_sign_in_ip,
     :locked_at, :remember_created_at, :reset_password_token, :unlock_token,
     :reset_password_sent_at, :reset_password_sent_to, :sign_in_count, :updated_at, :updater_id,
-    :show_global_label_formats, :household_key, :event_feed_token, :family_key,
+    :show_global_label_formats, :household_key, :event_feed_token, :carddav_token, :family_key,
     :two_factor_authentication, :encrypted_two_fa_secret,
     :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email,
     :self_registration_reason_custom_text,

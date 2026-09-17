@@ -8,9 +8,6 @@ import { registerGeneratedControllers } from "../generated/controllers"
 
 const stimulus = Application.start()
 
-// Core controllers (this directory), component controllers and the controllers
-// of every active wagon are registered explicitly by generated/controllers.js,
-// which config/esbuild.mjs (re)writes on every build.
 registerGeneratedControllers(stimulus)
 
 export { Application, Controller, stimulus }

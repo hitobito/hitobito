@@ -23,10 +23,6 @@ body {
   margin: 1rem 0 0 1rem;
   z-index: 90; // higher than main header so link remains clickable
 
-  // A box around the logo, for when it cannot sit directly on the page
-  // background. Both custom properties come from Settings.application.logo, see
-  // LayoutHelper#logo_custom_properties_tag; with background_color "none" they
-  // are transparent and the plain 0.5rem padding, so this stays a no-op.
   padding: var(--logo-padding, 0.5rem);
   background-color: var(--logo-background-color, transparent);
   border-radius: 6px;
@@ -87,8 +83,6 @@ body {
   align-content: space-around;
 
   .nav-left {
-    // Always 40px wider than the logo, but never narrower than a readable
-    // navigation.
     min-width: max(240px, calc(var(--logo-width) + 40px));
 
     width: 30%;

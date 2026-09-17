@@ -40,14 +40,10 @@ if (entries.length === 0) {
 const args = [
   ...entries.map((entry) => `${entry}:${path.join(OUTPUT_DIR, `${path.basename(entry, ".scss")}.css`)}`),
   // The wagons come first, so that a wagon's hitobito/customizable/_variables.scss
-  // (and _fonts/_wagon) shadows the core's - this is what makes those files
-  // customizable. It also means a wagon could shadow any other core partial by
-  // reproducing its path, which no wagon currently does.
+  // (and any other core partial) shadows the core's.
   ...wagonStylesheetPaths.map((wagonPath) => `--load-path=${wagonPath}`),
   `--load-path=${CORE_STYLESHEETS}`,
   "--load-path=node_modules",
-  // For "app/components/steps_component".
-  "--load-path=.",
   "--no-source-map",
   ...(process.env.NODE_ENV === "production" ? ["--style=compressed"] : []),
   ...process.argv.slice(2), // e.g. --watch, forwarded from `yarn build:css --watch`

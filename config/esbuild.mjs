@@ -37,8 +37,7 @@ const coffeePlugin = {
 // Stimulus identifier convention: path relative to the controllers root,
 // `_controller.js` stripped, underscores->dashes per segment, joined with "--"
 // - e.g. events/question_template_nested_form_controller.js becomes
-// "events--question-template-nested-form" (dropping the "events--" prefix would
-// break any data-controller="events--..." in the DOM).
+// "events--question-template-nested-form".
 function controllerIdentifier(controllersRoot, filePath, wagonName) {
   const relative = path.relative(controllersRoot, filePath).replace(/_controller\.js$/, "");
   const base = relative.split(path.sep).map((segment) => segment.replace(/_/g, "-")).join("--");
@@ -52,12 +51,6 @@ function writeGenerated(name, contents) {
 
 // esbuild resolves imports statically, so everything that used to be collected
 // at runtime is written out as explicit import lists first, on every build.
-//
-// `--watch` rebuilds when a file already in the bundle changes, so an edited
-// controller is picked up, but a newly added one is not: it is in no bundle
-// yet, and so in nothing esbuild watches. Adding, removing or renaming a
-// controller, an entrypoint or a module needs a restart of the watcher - as
-// does switching WAGONS, which additionally needs the manifest rewritten.
 const generateImportListsPlugin = {
   name: "generate-import-lists",
   setup(build) {
@@ -79,9 +72,6 @@ const generateImportListsPlugin = {
           .join("\n")
       );
 
-      // Core, component and wagon controllers. Wagons.all/wagon.paths.path
-      // resolves correctly in both the sibling-dev and the vendor/wagons
-      // layout, so there is no need to distinguish them here.
       const controllers = [
         ...globSync("app/javascript/controllers/**/*_controller.js").map((file) => ({
           file: path.resolve(file),

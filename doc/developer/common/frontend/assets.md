@@ -11,8 +11,8 @@ liegt.
 
 Die Entrypoints liegen in `app/javascript/entrypoints/*.js` bzw. `app/assets/stylesheets/entrypoints/*.scss`,
 der restliche Quellcode in `app/javascript/**` bzw. `app/assets/stylesheets/hitobito/**`. `bin/rails assets:precompile` (bzw. im
-Hintergrund `yarn build` / `yarn build:css`) kompiliert diese nach `app/assets/builds`, von wo sie Propshaft wie
-jede andere Datei unter `app/assets/*` fingerprinted ausliefert.
+Hintergrund `yarn build` / `yarn build:css`) kompiliert diese nach `app/assets/builds/<wagon-combination>`, von wo sie Propshaft
+wie jede andere Datei unter `app/assets/*` fingerprinted ausliefert.
 
 Zwei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
 
@@ -20,19 +20,14 @@ Zwei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
   Stylesheet-Verzeichnissen der aktiven Wagons. `config/build_css.mjs` gibt diese
   dart-sass als `--load-path` mit und sucht darin nach wagon-eigenen Entrypoints.
 * `assets:wagon_js_manifest` schreibt `tmp/wagon_js_manifest.json`: eine
-  Liste der JS-relevanten Dateien jedes *aktiven* Wagons (`Wagons.all`, nicht
-  einfach jedes `hitobito_*`-Verzeichnis das gerade ausgecheckt ist).
-  `config/esbuild.mjs` liest dieses Manifest und generiert daraus (bei jedem
-  Build neu) explizite Import-Listen nach `app/javascript/generated/`, da esbuild
-  keine dynamische, Verzeichnis-basierte Import-Auflösung unterstützt.
+  Liste der JS-relevanten Dateien jedes aktiven Wagons. `config/esbuild.mjs`
+  liest dieses Manifest und generiert daraus (bei jedem Build neu) explizite
+  Import-Listen nach `app/javascript/generated/`, da esbuild keine dynamische,
+  Verzeichnis-basierte Import-Auflösung unterstützt.
 
 Beide sind über `Rake::Task[...].enhance([...])` an `css:build` / `javascript:build` gehängt, welche
 cssbundling-rails/jsbundling-rails wiederum automatisch in `assets:precompile` und `spec:prepare` einhängen;
 `db:test:prepare` hängt `lib/tasks/assets.rake` selbst noch dazu.
-
-`app/assets/stylesheets` (dart-sass-Quellen) wird in `config/initializers/assets.rb` via
-`config.assets.excluded_paths` von Propshaft ausgenommen, damit die Quellen nicht selbst ausgeliefert werden -
-dasselbe gilt für `app/assets/stylesheets` und `app/assets/javascripts` der Wagons.
 
 ### Entwicklung
 
@@ -44,31 +39,18 @@ Lokal:
 (im [Hitobito Development](https://github.com/hitobito/development/) Docker-Setup automatisch über die beiden
 `assets_js`- und `assets_css`-Container).
 
-Einmalig, ohne Watcher (z.B. nach einem `WAGONS`-Wechsel via `bin/active_wagon`): `rake assets:build`.
+Die Watcher bauen neu, wenn eine Datei ändert, die bereits im Bundle ist. Wird `WAGONS` via `bin/active_wagon`
+gewechselt oder kommt ein Controller, ein Entrypoint oder ein Modul *neu dazu* (oder fällt weg), müssen die
+Watcher neu gestartet werden.
 
-Die Watcher bauen neu, wenn eine Datei ändert, die bereits im Bundle ist. Kommt ein Controller, ein Entrypoint
-oder ein Modul *neu dazu* (oder fällt weg), muss der Watcher neu gestartet werden.
+Einmalig bauen, ohne Watcher: `rake assets:build`.
 
 Der Browser lädt automatisch neu, sobald ein Build fertig ist: `hotwire-livereload` (nur in Development, und nur
-im Server-Prozess) beobachtet u.a. `app/assets/builds` und schickt das Reload über ActionCable. Es erkennt
-jsbundling-rails/cssbundling-rails selbst und beobachtet deshalb die Build-Outputs statt der Quellen, sonst
-würde es reloaden, bevor der Build geschrieben ist. Eingebunden wird es über eine Middleware, es braucht also
-keine Änderung an den Layouts.
+im Server-Prozess) beobachtet u.a. `app/assets/builds` und schickt das Reload über ActionCable.
 
-Die Bundles tragen `data-turbo-track="reload"` nur in Production (`LayoutHelper#turbo_track`): Turbo erzwingt
+Die Bundles tragen in Production `data-turbo-track="reload"`: Turbo erzwingt
 damit einen vollen Reload, wenn sich nach einem Deploy der Fingerprint eines Bundles geändert hat, ein offener
-Tab also nicht mit altem JavaScript weiterläuft. In Development würde genau das den Stylesheet-Austausch von
-hotwire-livereload bei jedem Build zunichtemachen; die Integrations-Umgebungen laufen weiterhin ohne Tracking.
-
-Auf Docker-Setups ohne natives inotify (Docker Desktop auf macOS/Windows) werden die Änderungen der
-Asset-Container unter Umständen nicht erkannt; dann hilft
-`config.hotwire_livereload.listen_options[:force_polling] = true` in
-`config/environments/development.rb`. Kommen mehrere Reloads pro Build, gibt es
-`config.hotwire_livereload.debounce_delay_ms`.
-`bin/rails db:test:prepare` und `rake spec:*` bauen die Assets ebenfalls mit.
-
-Alle diese Tasks führen die oben genannten Prerequisite-Tasks selbst aus; die `yarn`-Scripts direkt aufzurufen
-tut das nicht.
+Tab also nicht mit altem JavaScript weiterläuft.
 
 `app/assets/builds` liegt in einem Unterverzeichnis pro Instanz, also pro Wagon-Zusammenstellung (siehe
 `WagonAssetsHelper.instance_name`), damit sich Builds verschiedener Zusammenstellungen nicht gegenseitig
@@ -84,17 +66,10 @@ Wagons können:
 * eigene Bilder einbinden
 * eigene, komplett separate Entrypoints haben (JS + SCSS), siehe `hitobito_sac_cas`'s `agenda`-Entrypoint
 
-#### JavaScripts und Bilder
+#### JavaScripts
 
 Ein Wagon kann `app/assets/javascripts/wagon.js.coffee` bereitstellen - dieses wird (sofern der Wagon aktiv ist)
-automatisch importiert. Bilder aus `app/assets/images` eines Wagons werden von Propshaft direkt ausgeliefert;
-`config/initializers/assets.rb` registriert die Bild- und Font-Verzeichnisse aller aktiven Wagons *vor* den
-Core-eigenen, sodass eine gleichnamige Datei im Wagon Vorrang hat. Überschreiben mehrere Wagons dieselbe Datei,
-gewinnt der erste in der Reihenfolge von `Wagons.all`.
-
-Mit den `wagon_image_tag`, `wagon_favicon_tag` und `wagon_image_path` Helpers
-(`app/helpers/wagon_assets_helper.rb`) können diese Bilder referenziert werden - bei gleichem Dateinamen wird
-automatisch das Bild im Wagon bevorzugt (siehe oben).
+automatisch importiert.
 
 Ein Wagon kann zusätzlich eigene `app/javascript/entrypoints/*.js`-Dateien (eigene Entrypoints) und eigene
 Stimulus-Controller unter `app/javascript/controllers/*_controller.js` bereitstellen; diese werden automatisch erkannt und unter
@@ -121,9 +96,19 @@ Relative `url()`-Referenzen in Stylesheets (z.B. `url('../../../fonts/x.woff2')`
 unverändert in den Output, darum normalisiert `Hitobito::RelativeAssetUrls`
 (`lib/hitobito/relative_asset_urls.rb`) sie als Propshaft-Compiler, bevor Propshaft sie auflöst.
 
+#### Bilder und Fonts
+
+Bilder und Fonts aus `app/assets/images` bzw. `app/assets/fonts` eines Wagons werden von Propshaft direkt ausgeliefert;
+`config/initializers/assets.rb` registriert die Bild- und Font-Verzeichnisse aller aktiven Wagons *vor* den
+Core-eigenen, sodass eine gleichnamige Datei im Wagon Vorrang hat. Überschreiben mehrere Wagons dieselbe Datei,
+gewinnt der erste in der Reihenfolge von `Wagons.all`.
+
+Mit den `wagon_image_tag`, `wagon_favicon_tag` und `wagon_image_path` Helpers
+(`app/helpers/wagon_assets_helper.rb`) können diese Bilder referenziert werden - bei gleichem Dateinamen wird
+automatisch das Bild im Wagon bevorzugt (siehe oben).
+
 #### Logo
 
 Der Logo-Pfad kommt aus den `Settings` (`LayoutHelper#header_logo`). Die Grössen stehen ebenfalls in den
-`Settings`, werden aber als CSS Custom Properties ins Layout gerendert
-(`LayoutHelper#logo_custom_properties_tag`) und nicht in die Stylesheets kompiliert - diese kennen die
-`Settings` einer Instanz nicht.
+`Settings`, werden aber als CSS Custom Properties ins Layout gerendert, damit das Layout sich der
+Grösse des Instanz-Logos anpassen kann.

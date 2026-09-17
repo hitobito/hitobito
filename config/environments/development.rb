@@ -102,15 +102,8 @@ Rails.application.configure do
 
   config.hosts.clear
 
-  # hotwire-livereload injects its script by substituting "</head>" in the
-  # response body, and inserts itself right after ActionDispatch::Executor -
-  # which leaves it outside Rack::Deflater (see config/application.rb). It would
-  # therefore only ever see an already gzipped body and silently inject nothing
-  # for any client that accepts gzip, which is every browser. Move it inside, so
-  # it rewrites the response before it is compressed.
-  #
-  # Guarded, because the gem only adds the middleware in a server process - rake
-  # tasks, the console and the runner would fail to boot on a missing one.
+  # Move the live reload middleware after the GZip deflater, so it can still insert tags
+  # into the HTML head.
   if defined?(Hotwire::Livereload) && Hotwire::Livereload.enabled?
     config.middleware.move_after Rack::Deflater, Hotwire::Livereload::Middleware
   end

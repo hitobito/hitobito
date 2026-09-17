@@ -9,15 +9,9 @@ require "propshaft/compiler"
 
 # Sass copies url() into its output verbatim, so a stylesheet's own
 # url('../../../fonts/x.woff2') is meaningless once dart-sass has bundled it
-# into one file at a completely different depth - Propshaft would resolve it
-# relative to app/assets/builds/<instance>/application.css and find nothing.
-# Webpacker's css-loader used to resolve these against the *source* file, which
-# is why every wagon writes them this way.
-#
-# All of our asset directories are registered flat (see
-# config/initializers/assets.rb), so strip the escaping prefix together with
-# the directory segment and let Propshaft's own CssAssetUrls compiler resolve
-# what remains. Registered before it, so it sees the normalized urls.
+# into one file at a completely different depth. But relative url() calls work
+# well in IDEs and are the historically established pattern in hitobito wagons.
+# This propshaft compiler adds support for such relative urls.
 class Hitobito::RelativeAssetUrls < Propshaft::Compiler
   # Only directories we actually register as flat asset roots, so this can
   # never touch an unrelated relative url.

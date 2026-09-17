@@ -7,8 +7,7 @@ module WagonAssetsHelper
   # The wagon composition this application is running as, e.g. "sac_cas-youth"
   # for WAGONS="sac_cas youth", or "core" without any wagon. Keys the compiled
   # asset output (app/assets/builds/<instance>, see lib/tasks/assets.rake and
-  # config/initializers/assets.rb) - a single source of truth so Ruby and the
-  # JS build scripts can't drift apart.
+  # config/initializers/assets.rb).
   def self.instance_name
     Wagons.all.map(&:wagon_name).sort.join("-").presence || "core"
   end

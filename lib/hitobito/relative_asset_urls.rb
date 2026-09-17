@@ -23,7 +23,10 @@ class Hitobito::RelativeAssetUrls < Propshaft::Compiler
   # never touch an unrelated relative url.
   ASSET_DIRS = %w[fonts images webfonts].freeze
 
-  ASSET_URL_PATTERN = %r{url\(\s*(['"]?)(?:\.\./)+(?:#{Regexp.union(ASSET_DIRS)})/}
+  # Wagons spell the way up to their own app/assets either as
+  # "../../../fonts/x.woff2" or as "../../../../assets/images/x.png", so the
+  # "assets/" segment is optional.
+  ASSET_URL_PATTERN = %r{url\(\s*(['"]?)(?:\.\./)+(?:assets/)?(?:#{Regexp.union(ASSET_DIRS)})/}
 
   def compile(asset, input)
     input.gsub(ASSET_URL_PATTERN) { "url(#{$1}" }

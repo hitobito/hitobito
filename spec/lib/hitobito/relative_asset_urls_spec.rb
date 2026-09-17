@@ -24,6 +24,12 @@ describe Hitobito::RelativeAssetUrls do
       .to eq "src: url(fa-solid-900.woff2);"
   end
 
+  it "normalizes a reference spelled via the wagon's app/assets" do
+    # hitobito_bienenschweiz spells it this way in hitobito/customizable/_wagon.scss
+    expect(compile("background: url('../../../../assets/images/background.png') no-repeat;"))
+      .to eq "background: url('background.png') no-repeat;"
+  end
+
   it "keeps the path below the asset directory" do
     expect(compile("background: url('../../../images/pdf/scissors.png');"))
       .to eq "background: url('pdf/scissors.png');"

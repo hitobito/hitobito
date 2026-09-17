@@ -1122,6 +1122,7 @@ de:
     add_payments: Zahlungen erfassen
     issued: Rechnung gestellt
     sent: Rechnung per Mail versendet
+    cancelled: Rechnung storniert
     reminder_sent: Mahnung gestellt, fällig am %{date} (%{title})
     payed: bezahlt
     cancel: Stornieren

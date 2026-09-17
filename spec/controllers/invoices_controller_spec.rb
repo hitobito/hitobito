@@ -451,7 +451,7 @@ describe InvoicesController do
         delete :destroy, params: {group_id: group.id, id: invoice.id}
       end.not_to change { group.issued_invoices.count }
       expect(invoice.reload.state).to eq "cancelled"
-      expect(response).to redirect_to group_invoices_path(group, returning: true)
+      expect(response).to redirect_to group_invoice_path(group, invoice)
       expect(flash[:notice]).to eq "Rechnung wurde storniert."
     end
   end

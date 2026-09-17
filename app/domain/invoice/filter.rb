@@ -20,22 +20,31 @@ class Invoice::Filter
     scope = apply_scope(scope, params[:state], Invoice::STATES)
     scope = apply_scope(scope, params[:due_since], Invoice::DUE_SINCE)
     scope = filter_by_ids(scope)
-    scope = filter_by_invoice_run_id(scope)
-    scope = filter_by_invoice_type(scope)
+    scope = if invoice_run_id?
+      filter_by_invoice_run_id(scope)
+    else
+      filter_by_invoice_type(scope)
+    end
     scope = filter_by_daterange(scope)
 
     cancelled? ? scope : scope.visible
   end
 
   def apply_or_none(scope)
-    if no_params_set?
-      scope.none
-    else
+    # Used by mutating bulk actions (cancel, batch update): unlike #apply, an absent or blank
+    # `ids` must mean "nothing selected", not "no filter -> match everything in scope".
+    if ids_selected?
       apply(scope)
+    else
+      scope.none
     end
   end
 
   private
+
+  def ids_selected?
+    params[:ids].present?
+  end
 
   def no_params_set?
     possible_keys = %w[state due_since ids invoice_run_id from to] +
@@ -54,9 +63,11 @@ class Invoice::Filter
     params[:state] == "cancelled"
   end
 
-  def filter_by_invoice_run_id(relation)
-    return relation if params[:invoice_run_id].blank?
+  def invoice_run_id?
+    params[:invoice_run_id].present?
+  end
 
+  def filter_by_invoice_run_id(relation)
     relation.where(invoice_run_id: params[:invoice_run_id])
   end
 

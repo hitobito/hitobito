@@ -283,6 +283,19 @@ describe InvoiceRunsController do
       expect(flash[:alert]).to include "Es muss mindestens eine Rechnung ausgewählt werden."
     end
 
+    it "PUT#update does not touch any invoice when ids param is blank, even though other " \
+      "invoices exist in the default filter range" do
+      invoice = Invoice.create!(group: group, title: "test", recipient: person,
+        invoice_items_attributes:
+          {"1" => {name: "item1", unit_cost: 1, count: 1}})
+      expect do
+        post :update, params: {group_id: group.id}
+      end.not_to change { invoice.reload.state }
+      expect(response).to redirect_to group_invoices_path(group, returning: true)
+      expect(flash[:alert]).to include "Es muss mindestens eine Rechnung ausgewählt werden."
+      expect(invoice.reload.state).to eq "draft"
+    end
+
     it "PUT#update moves invoice to sent state" do
       invoice = Invoice.create!(group: group, title: "test", recipient: person,
         invoice_items_attributes:
@@ -392,6 +405,17 @@ describe InvoiceRunsController do
         delete :destroy, params: {group_id: group.id, from: 1.year.from_now, to: 2.years.from_now}
         expect(response).to redirect_to group_invoices_path(group, returning: true)
         expect(flash[:alert]).to include "Zuerst muss eine Rechnung ausgewählt werden."
+      end
+
+      it "does not cancel any invoice when ids param is blank, even though other invoices " \
+        "exist in the default filter range" do
+        invoice = Invoice.create!(group: group, title: "test", recipient: person)
+        expect do
+          delete :destroy, params: {group_id: group.id}
+        end.not_to change { invoice.reload.state }
+        expect(response).to redirect_to group_invoices_path(group, returning: true)
+        expect(flash[:alert]).to include "Zuerst muss eine Rechnung ausgewählt werden."
+        expect(invoice.reload.state).not_to eq "cancelled"
       end
 
       it "moves invoice to cancelled state" do

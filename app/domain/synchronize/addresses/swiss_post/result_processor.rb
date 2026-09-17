@@ -43,6 +43,7 @@ module Synchronize::Addresses::SwissPost
         end
       end
       destroy_obsolete_taggings
+      create_log_entry(nil, :info, "Post Addressenabgleich ist abgeschlossen")
     end
 
     private

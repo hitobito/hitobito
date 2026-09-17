@@ -11,9 +11,13 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
   let(:result) { Rails.root.join("spec", "support", "synchronize", "addresses", "swiss_post", "result.txt").read }
   let(:top_leader) { people(:top_leader) }
   let(:options) { {col_sep: "\t", row_sep: "\r\n", headers: true} }
-  let(:log_entry) { HitobitoLogEntry.last }
-  let(:log_entry_attrs) { {category: "cleanup", subject: top_leader, level: "info"} }
   let(:invalid_tag) { PersonTags::Validation.post_address_check_invalid }
+  let(:completion_log_entry) { HitobitoLogEntry.last }
+  let(:completion_log_entry_attrs) {
+    {category: "cleanup", subject: nil, level: "info", message: "Post Addressenabgleich ist abgeschlossen"}
+  }
+  let(:runtime_log_entry) { HitobitoLogEntry.where.not(completion_log_entry_attrs).last }
+  let(:runtime_log_entry_attrs) { {category: "cleanup", subject: top_leader, level: "info"} }
 
   def process_with
     data = CSV.parse(result, **options)
@@ -30,11 +34,13 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
       end.to change { top_leader.reload.housenumber.to_i }.from(345).to(123)
     end
 
-    it "creates version and no log entry", versioning: true do
+    it "creates version and only the completion log entry", versioning: true do
       expect do
         processor.process
       end.to change { top_leader.versions.count }.by(1)
-        .and not_change { HitobitoLogEntry.count }
+        .and change { HitobitoLogEntry.count }.by(1)
+
+      expect(completion_log_entry).to have_attributes(completion_log_entry_attrs)
     end
 
     it "updates multiple fields" do
@@ -158,11 +164,11 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
         process_with do |data|
           data.entries.last["ZIPCode"] = "invalid"
         end
-      end.to change { HitobitoLogEntry.count }.by(1)
+      end.to change { HitobitoLogEntry.count }.by(2)
         .and change { top_leader.tags.count }.by(1)
         .and not_change { top_leader.reload.attributes }
 
-      expect(log_entry).to have_attributes(log_entry_attrs.merge(
+      expect(runtime_log_entry).to have_attributes(runtime_log_entry_attrs.merge(
         message: "Die Personendaten der Post konnten für Top Leader (572407901) nicht übernommen werden",
         level: "error"
       ))
@@ -179,7 +185,7 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
         process_with do |data|
           data.entries.last["ZIPCode"] = "invalid"
         end
-      end.to change { HitobitoLogEntry.count }.by(1)
+      end.to change { HitobitoLogEntry.count }.by(2)
         .and not_change { top_leader.reload.tags.count }
     end
 
@@ -204,9 +210,9 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
           process_with do |data|
             data.entries.last["QSTAT"] = qstat
           end
-        end.to change { HitobitoLogEntry.count }
+        end.to change { HitobitoLogEntry.count }.by(2)
           .and not_change { top_leader.reload.attributes }
-        expect(log_entry).to have_attributes(log_entry_attrs.merge(message:, level:))
+        expect(runtime_log_entry).to have_attributes(runtime_log_entry_attrs.merge(message:, level:))
       end
 
       it "creates tag with qstat #{qstat} and timestamp" do
@@ -219,6 +225,37 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
           expect(top_leader.tags.last.name).to eq "Post_Adressenabgleich_QSTAT_#{qstat}_20210524"
         end
       end
+    end
+  end
+
+  describe "completion log entry" do
+    it "is created when updates succeed" do
+      expect { processor.process }.to change { HitobitoLogEntry.count }.by(1)
+      expect(completion_log_entry).to have_attributes(completion_log_entry_attrs)
+    end
+
+    it "is created in addition to the error log entry when a person update fails" do
+      process_with do |data|
+        data.entries.last["ZIPCode"] = "invalid"
+      end
+      expect(completion_log_entry).to have_attributes(completion_log_entry_attrs)
+    end
+
+    it "is created in addition to the ignored-update log entry" do
+      process_with do |data|
+        data.entries.last["QSTAT"] = "50"
+      end
+      expect(completion_log_entry).to have_attributes(completion_log_entry_attrs)
+    end
+
+    it "is created even when no row matches a known person" do
+      data = CSV.parse(result, **options)
+      data.delete_if { true }
+
+      expect do
+        described_class.new(data.to_csv(**options), invalid_tag).process
+      end.to change { HitobitoLogEntry.count }.by(1)
+      expect(completion_log_entry).to have_attributes(completion_log_entry_attrs)
     end
   end
 end

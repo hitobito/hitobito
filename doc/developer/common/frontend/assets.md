@@ -48,6 +48,23 @@ Einmalig, ohne Watcher (z.B. nach einem `WAGONS`-Wechsel via `bin/active_wagon`)
 
 Die Watcher bauen neu, wenn eine Datei ändert, die bereits im Bundle ist. Kommt ein Controller, ein Entrypoint
 oder ein Modul *neu dazu* (oder fällt weg), muss der Watcher neu gestartet werden.
+
+Der Browser lädt automatisch neu, sobald ein Build fertig ist: `hotwire-livereload` (nur in Development, und nur
+im Server-Prozess) beobachtet u.a. `app/assets/builds` und schickt das Reload über ActionCable. Es erkennt
+jsbundling-rails/cssbundling-rails selbst und beobachtet deshalb die Build-Outputs statt der Quellen, sonst
+würde es reloaden, bevor der Build geschrieben ist. Eingebunden wird es über eine Middleware, es braucht also
+keine Änderung an den Layouts.
+
+Die Bundles tragen `data-turbo-track="reload"` nur in Production (`LayoutHelper#turbo_track`): Turbo erzwingt
+damit einen vollen Reload, wenn sich nach einem Deploy der Fingerprint eines Bundles geändert hat, ein offener
+Tab also nicht mit altem JavaScript weiterläuft. In Development würde genau das den Stylesheet-Austausch von
+hotwire-livereload bei jedem Build zunichtemachen; die Integrations-Umgebungen laufen weiterhin ohne Tracking.
+
+Auf Docker-Setups ohne natives inotify (Docker Desktop auf macOS/Windows) werden die Änderungen der
+Asset-Container unter Umständen nicht erkannt; dann hilft
+`config.hotwire_livereload.listen_options[:force_polling] = true` in
+`config/environments/development.rb`. Kommen mehrere Reloads pro Build, gibt es
+`config.hotwire_livereload.debounce_delay_ms`.
 `bin/rails db:test:prepare` und `rake spec:*` bauen die Assets ebenfalls mit.
 
 Alle diese Tasks führen die oben genannten Prerequisite-Tasks selbst aus; die `yarn`-Scripts direkt aufzurufen

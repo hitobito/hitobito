@@ -11,10 +11,10 @@
     = wagon_favicon_tag 'favicon.ico'
     = logo_custom_properties_tag
 
-    = stylesheet_link_tag 'oauth', media: 'screen', 'data-turbo-track': true
+    = stylesheet_link_tag 'oauth', media: 'screen', 'data-turbo-track': turbo_track
     - if Rails.env.test?
       = stylesheet_link_tag 'disable_animations'
-    = javascript_include_tag 'core', 'data-turbo-track': true
+    = javascript_include_tag 'core', 'data-turbo-track': turbo_track
 
     = yield(:head)
 

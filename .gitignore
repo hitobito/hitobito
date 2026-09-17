@@ -39,7 +39,11 @@ bin/bisect-check
 
 # precompiled assets
 .sass-cache
-app/assets/builds
+# The asset watchers write here. The directory itself is kept, because
+# hotwire-livereload drops listen paths that do not exist when Rails boots -
+# without it, asset changes would silently stop triggering a live reload.
+app/assets/builds/*
+!app/assets/builds/.keep
 app/javascript/generated
 public/assets
 public/404.html

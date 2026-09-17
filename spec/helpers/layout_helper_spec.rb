@@ -200,6 +200,21 @@ describe LayoutHelper do
       expect(node).to have_css "span[title='the <i>title</i>']"
     end
   end
+
+  describe "#turbo_track" do
+    it "tracks the bundles in production" do
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
+
+      expect(helper.turbo_track).to eq "reload"
+    end
+
+    it "does not track them elsewhere, so livereload can swap the stylesheet" do
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
+
+      expect(helper.turbo_track).to be_nil
+    end
+  end
+
   describe "#logo_custom_properties_tag" do
     def properties
       helper.logo_custom_properties_tag.scan(/--([\w-]+): ([^;]+);/).to_h

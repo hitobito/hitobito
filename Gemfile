@@ -128,6 +128,7 @@ group :development do
   gem "better_errors"
   gem "binding_of_caller"
   gem "bullet"
+  gem "hotwire-livereload"
   gem "listen"
   gem "request_profiler"
   gem "rubocop", "1.70.0", require: false # pinned for gem upgrade

@@ -132,10 +132,12 @@ module LayoutHelper
     end
   end
 
-  # The logo dimensions are configured per instance in config/settings.yml, but
-  # are needed by the stylesheets - which are compiled once, without knowledge of
-  # the Settings. So they are handed over as CSS custom properties, see
-  # app/assets/stylesheets/hitobito/_layout.scss.
+  # In development, we let hotwire_livereload handle the reloading.
+  # In production, we want turbo tracking to handle reloading stale assets.
+  def turbo_track
+    "reload" if Rails.env.production?
+  end
+
   def logo_custom_properties_tag
     logo = Settings.application.logo
     boxed = logo.background_color.to_s != "none"
@@ -147,7 +149,9 @@ module LayoutHelper
       "--logo-padding": boxed ? "10px" : "0.5rem"
     }
 
-    tag.style(safe_join([":root { ", properties.map { |name, value| "#{name}: #{value};" }.join(" "), " }"]))
+    tag.style(safe_join([":root { ", properties.map { |name, value|
+      "#{name}: #{value};"
+    }.join(" "), " }"]))
   end
 
   def header_logo(locale = I18n.locale)

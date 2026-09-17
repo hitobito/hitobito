@@ -366,6 +366,10 @@ GEM
     hashery (2.1.2)
     headless (3.0.0)
     hirb (0.7.3)
+    hotwire-livereload (2.1.1)
+      actioncable (>= 7.0.0)
+      listen (>= 3.0.0)
+      railties (>= 7.0.0)
     htmlentities (4.4.2)
     http-accept (1.7.0)
     http-cookie (1.1.0)
@@ -905,6 +909,7 @@ DEPENDENCIES
   haml
   headless
   hirb
+  hotwire-livereload
   http_accept_language
   icalendar
   image_processing

@@ -21,11 +21,11 @@ class AddCantonToPeople < ActiveRecord::Migration[8.0]
   end
 
   def down
-    # Not exactly right for cevi/insieme/jubla/sac_cas, whose own historical migrations
-    # added this column independently of this one - but better than raising
-    # ActiveRecord::IrreversibleMigration.
-    remove_column :people, :canton
-    Person.reset_column_information
+    # No-op: on cevi/insieme/jubla/sac_cas the column was created by the wagon's own
+    # historical migration, so removing it here would leave those databases in an
+    # inconsistent state (column gone although the wagon migration still counts as
+    # run). Keeping a nullable string column on rollback is harmless: old code keeps
+    # working, new code ignores it.
   end
 
   private

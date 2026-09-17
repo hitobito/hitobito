@@ -20,7 +20,7 @@ class PeopleController < CrudController # rubocop:todo Metrics/ClassLength
     :gender, :birthday, :language, :additional_information, :picture, :remove_picture] +
     Contactable::ACCESSIBLE_ATTRS +
     [family_members_attributes: [:id, :kind, :other_id, :_destroy]]
-  self.permitted_attrs += [:canton] if Settings.people.canton
+  self.permitted_attrs += [:canton] if FeatureGate.enabled?("people.canton")
 
   # required to allow api calls
   protect_from_forgery with: :null_session, only: [:index, :show]

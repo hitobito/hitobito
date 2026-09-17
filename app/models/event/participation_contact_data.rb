@@ -15,7 +15,8 @@ class Event::ParticipationContactData
     :has_attribute?, to: :person
 
   # Excluded from Event.possible_contact_attrs: also rendered for Event::Guest, which has
-  # no canton column. Gated by Settings.people.canton instead, like contactable/_address_fields.
+  # no canton column. Gated by the people.canton feature gate instead, like
+  # contactable/_address_fields.
   delegate :canton, to: :person
 
   delegate :layer_group, to: :event

@@ -22,5 +22,5 @@
       = f.country_field
 
   - # Check is required as partial is also rendered for guests which do not have a canton field
-  - if Settings.people.canton && f.object.is_a?(Event::ParticipationContactData)
+  - if FeatureGate.enabled?("people.canton") && f.object.is_a?(Event::ParticipationContactData)
     = render "contactable/country_canton_fields", f:

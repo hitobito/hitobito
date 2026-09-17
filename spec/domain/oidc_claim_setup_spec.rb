@@ -55,6 +55,7 @@ describe OidcClaimSetup do
         zip_code
         town
         country
+        canton
         gender
         birthday
         primary_group_id

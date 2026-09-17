@@ -84,8 +84,8 @@ describe "event/participation_contact_datas/_address_fields.html.haml" do
       expect(rendered).not_to have_selector("select#entry_canton")
     end
 
-    it "does not render canton select when canton setting is disabled" do
-      allow(Settings.people).to receive(:canton).and_return(false)
+    it "does not render canton select when canton feature is disabled" do
+      allow(FeatureGate).to receive(:enabled?).with("people.canton").and_return(false)
       render locals: {entry: participation_contact_data, event:, group:}
       expect(rendered).not_to have_selector("select#entry_canton")
     end

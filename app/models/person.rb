@@ -89,7 +89,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
-    :gender, :birthday, :language, :primary_group_id
+    :canton, :gender, :birthday, :language, :primary_group_id
   ]
 
   INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -118,7 +118,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
     [:country, :country_select], [:gender, :gender_select], [:years, :integer], :birthday
   ]
-  FILTER_ATTRS << [:canton, :canton_select] if Settings.people.canton
+  FILTER_ATTRS << [:canton, :canton_select] if FeatureGate.enabled?("people.canton")
 
   SEARCHABLE_ATTRS = [
     # rubocop:todo Layout/LineLength
@@ -191,7 +191,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   i18n_setter :gender, (GENDERS + [nil])
   i18n_boolean_setter :company
   i18n_enum :language, Person::LANGUAGES.keys.map(&:to_s)
-  # Lambda, not a snapshot: insieme extends Cantons::SHORT_NAMES at wagon boot, so this
+  # Lambda, not a snapshot: a wagon may extend Cantons::SHORT_NAMES at boot, so this
   # must re-read the list on every check.
   i18n_enum :canton, ->(_record) { Cantons.short_name_strings },
     i18n_prefix: "activerecord.attributes.cantons"
@@ -338,7 +338,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   ### CALLBACKS
 
   before_validation :override_blank_email
-  before_validation :reset_canton_unless_swiss, if: -> { Settings.people.canton }
+  before_validation :reset_canton_unless_swiss
   after_update :schedule_duplicate_locator
   before_destroy :destroy_roles
   before_destroy :destroy_person_duplicates

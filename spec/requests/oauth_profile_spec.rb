@@ -140,6 +140,7 @@ RSpec.describe "GET oauth/profile", type: :request do
           zip_code: user.zip_code,
           town: user.town,
           country: user.country,
+          canton: user.canton,
           gender: user.gender,
           birthday: user.birthday.to_s.presence,
           primary_group_id: user.primary_group_id,

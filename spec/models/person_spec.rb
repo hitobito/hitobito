@@ -656,12 +656,13 @@ describe Person do
         expect(person.canton).to be_nil
       end
 
-      it "does nothing when the canton feature is disabled" do
-        allow(Settings.people).to receive(:canton).and_return(false)
+      it "clears canton even when the canton feature is disabled" do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
+        allow(FeatureGate).to receive(:enabled?).with("people.canton").and_return(false)
         person.country = "DE"
         person.canton = "zh"
         person.valid?
-        expect(person.canton).to eq "zh"
+        expect(person.canton).to be_nil
       end
     end
   end

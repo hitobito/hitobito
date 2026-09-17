@@ -75,6 +75,7 @@ RSpec.describe "GET oauth/userinfo", type: :request do
         zip_code: "3456",
         town: "Greattown",
         country: "CH",
+        canton: nil,
         gender: nil,
         birthday: nil,
         primary_group_id: 376803389,

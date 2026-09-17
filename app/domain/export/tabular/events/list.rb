@@ -7,6 +7,10 @@ module Export::Tabular::Events
   class List < Export::Tabular::Base
     include Translatable
 
+    self.styled_attrs = {
+      date: [:application_opening_at, :application_closing_at]
+    }
+
     MAX_DATES = 3
 
     self.row_class = Export::Tabular::Events::Row

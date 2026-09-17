@@ -9,9 +9,8 @@ module ApplicationCable
     private
 
     def set_current_person
-      if (authenticated_person = env["warden"].user(:person))
-        self.current_person = authenticated_person
-      end
+      authenticated_person = catch(:warden) { env["warden"].user(:person) }
+      self.current_person = authenticated_person if authenticated_person.is_a?(Person)
     end
   end
 end

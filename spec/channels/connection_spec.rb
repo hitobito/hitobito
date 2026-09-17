@@ -22,4 +22,11 @@ describe ApplicationCable::Connection, type: :channel do
 
     expect { connect env: {"warden" => warden} }.to have_rejected_connection
   end
+
+  it "should reject connection when warden throws on timed out session" do
+    warden = double("Warden")
+    allow(warden).to receive(:user).with(:person) { throw :warden, scope: :person, message: :timeout }
+
+    expect { connect env: {"warden" => warden} }.to have_rejected_connection
+  end
 end

@@ -36,6 +36,6 @@ class Export::Pdf::Document
   private
 
   def font_path(name)
-    Rails.root.join("app", "javascript", "fonts", name)
+    Rails.root.join("app", "assets", "fonts", name)
   end
 end

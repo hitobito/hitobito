@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe LayoutHelper do
-  include Webpacker::Helper
   include UploadDisplayHelper
 
   describe "#meta_tags_from_settings" do
@@ -49,7 +48,7 @@ describe LayoutHelper do
       let(:group) { groups(:bottom_group_one_one_one) }
       let(:parent) { groups(:bottom_group_one_one) }
       let(:grandparent) { groups(:bottom_layer_one) }
-      let(:app_logo) { "/packs(-test)?/media/images/logo-[0-9a-f]+.png" }
+      let(:app_logo) { "/assets/logo-[0-9a-f]+\\.png" }
 
       before { assign(:group, group) }
 
@@ -112,7 +111,7 @@ describe LayoutHelper do
         [:fr, :it, :de].each do |locale|
           I18n.with_locale(locale) do
             logo = "#{locale}_logo.png"
-            allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+            allow(helper).to receive(:wagon_image_tag).with(logo,
               alt: Settings.application.name).and_return logo
 
             expect(helper.header_logo).to eql(logo)
@@ -121,7 +120,7 @@ describe LayoutHelper do
 
         I18n.with_locale(:en) do
           logo = "logo.png"
-          allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+          allow(helper).to receive(:wagon_image_tag).with(logo,
             alt: Settings.application.name).and_return logo
 
           expect(helper.header_logo).to eql(logo)
@@ -135,7 +134,7 @@ describe LayoutHelper do
       it "should return the same logo" do
         [:fr, :it, :de].each do |locale|
           I18n.with_locale(locale) do
-            allow(helper).to receive(:wagon_image_pack_tag).with(logo,
+            allow(helper).to receive(:wagon_image_tag).with(logo,
               alt: Settings.application.name).and_return logo
 
             expect(helper.header_logo).to eql(logo)
@@ -199,6 +198,47 @@ describe LayoutHelper do
       expect(node).to have_css "span[data-bs-toggle=tooltip]"
       expect(node).to have_css "span[data-bs-html=true]"
       expect(node).to have_css "span[title='the <i>title</i>']"
+    end
+  end
+
+  describe "#turbo_track" do
+    it "tracks the bundles in production" do
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
+
+      expect(helper.turbo_track).to eq "reload"
+    end
+
+    it "does not track them elsewhere, so livereload can swap the stylesheet" do
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
+
+      expect(helper.turbo_track).to be_nil
+    end
+  end
+
+  describe "#logo_custom_properties_tag" do
+    def properties
+      helper.logo_custom_properties_tag.scan(/--([\w-]+): ([^;]+);/).to_h
+    end
+
+    it "renders the configured logo dimensions" do
+      allow(Settings.application.logo).to receive_messages(width: 230, height: 40,
+        background_color: "none")
+
+      expect(properties).to include("logo-width" => "230px", "logo-height" => "40px")
+    end
+
+    it "is a no-op box without a background color" do
+      allow(Settings.application.logo).to receive(:background_color).and_return("none")
+
+      expect(properties).to include("logo-background-color" => "transparent",
+        "logo-padding" => "0.5rem")
+    end
+
+    it "boxes the logo when a background color is configured" do
+      allow(Settings.application.logo).to receive(:background_color).and_return("#ffffff")
+
+      expect(properties).to include("logo-background-color" => "#ffffff",
+        "logo-padding" => "10px")
     end
   end
 end

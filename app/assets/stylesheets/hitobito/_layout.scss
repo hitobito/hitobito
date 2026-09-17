@@ -1,0 +1,477 @@
+//  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+//  hitobito and licensed under the Affero General Public License version 3
+//  or later. See the COPYING file at the top-level directory or at
+//  https://github.com/hitobito/hitobito.
+
+/* Layout */
+// -------------------------
+
+body {
+  padding: 0;
+  background: $body-background;
+}
+
+/* Header */
+.main-header {
+  width: 100%;
+  display: flex;
+  z-index: 80;
+}
+
+.logo {
+  position: absolute;
+  margin: 1rem 0 0 1rem;
+  z-index: 90; // higher than main header so link remains clickable
+
+  padding: var(--logo-padding, 0.5rem);
+  background-color: var(--logo-background-color, transparent);
+  border-radius: 6px;
+}
+
+.logo-image {
+  display: block;
+  position: relative;
+
+  width: var(--logo-width);
+  height: var(--logo-height);
+  object-fit: contain;
+  object-position: center center;
+  text-align: center;
+
+  img {
+    max-width: var(--logo-width);
+    max-height: var(--logo-height);
+  }
+}
+
+.dropdown-menu {
+  a {
+    text-decoration: none;
+  }
+
+  .active {
+
+    a,
+    a:hover {
+      color: $white;
+    }
+  }
+}
+
+.environment-header {
+  z-index: 90;
+  background-color: $danger;
+}
+
+/* Content */
+#page {
+  padding: 3px 0 60px;
+
+  @include responsive(mediaTablet) {
+    padding: 5px 1rem 90px;
+  }
+
+  margin: 0;
+  width: 100%;
+  background: $page-background;
+  overflow-y: visible;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: space-around;
+
+  .nav-left {
+    min-width: max(240px, calc(var(--logo-width) + 40px));
+
+    width: 30%;
+    max-width: 25rem;
+    height: 100%;
+    margin-top: calc(var(--logo-height) + 2px - 1rem);
+    margin-right: -1.5rem;
+  }
+
+  .container-fluid {
+    min-width: 70%;
+    max-width: 100%;
+    overflow-x: visible;
+    overflow-y: visible;
+    padding: 0 5px;
+
+    @include responsive(mediaTablet) {
+      padding-bottom: 60px; // needs these paddings to accomodate further sheets
+      padding-right: 20px; // needs these paddings to accomodate further sheets
+      padding-left: 15px;
+    }
+  }
+
+  .main-header {
+    .container-fluid {
+      padding-bottom: 0;
+    }
+
+    .nav-left {
+      visibility: hidden;
+      margin-top: 0;
+    }
+  }
+
+  .is-logged-out &,
+  &.is-nav-not-rendered {
+    padding-top: 7rem;
+  }
+}
+
+#page-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+
+  @include responsive(mediaTablet) {
+    margin-bottom: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .toggle-nav {
+    margin: -0.5rem 1rem -0.5rem 0rem;
+    padding: 0.5rem;
+    text-transform: uppercase;
+
+    i {
+      margin-top: 0.2rem;
+      margin-right: 0.5rem;
+    }
+
+    a:hover i {
+      text-decoration: none;
+    }
+  }
+
+  .form-inline {
+    flex: 1 0 auto;
+    margin: 0;
+  }
+
+  &>a {
+    flex: 0 0 auto;
+    color: $white;
+    margin-left: 1rem;
+  }
+
+  .is-logged-out & {
+    justify-content: flex-end;
+
+    a {
+      color: $white;
+    }
+  }
+
+  .lang {
+    font-size: 1rem;
+
+    a {
+      text-align: center;
+    }
+  }
+}
+
+.lang a {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.sheet,
+#content {
+  @include border-radius($border-radius);
+  color: $black;
+}
+
+.sheet.parent {
+  padding-bottom: 1px;
+  display: flow-root;
+  background: lighten($content-background, 3%);
+  box-shadow: 0 2px 8px $shadow-color;
+
+  .sheet {
+    margin: 0 3px 3px;
+
+    @include responsive(mediaTablet) {
+      margin: 0 -10px -30px 10px;
+    }
+
+    &.parent {
+      background: lighten($content-background, 6%);
+    }
+  }
+
+  .level {
+    color: $gray;
+  }
+}
+
+#content {
+  box-shadow: 0 2px 8px $shadow-color;
+  background: $white;
+  padding: 12px 10px 12px;
+
+  @include responsive(mediaTablet) {
+    padding: 8px 10px 16px;
+  }
+
+  @include responsive(mediaDesktop) {
+    padding: 12px 14px 20px;
+  }
+
+  aside {
+    @include responsive(phone, $media-desktop) {
+      margin-top: $v-space;
+    }
+
+    margin-bottom: $v-space;
+  }
+
+  section {
+    @include clearfix;
+    clear: both;
+    margin-top: $v-space;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .breadcrumb {
+    margin: 0;
+    padding: 5px 0 5px 15px;
+  }
+}
+
+.contactable {
+  @include clearfix;
+
+  .profil-big {
+    margin: 0 0 0 10px;
+  }
+}
+
+#main {
+  clear: both;
+}
+
+
+/* Footer */
+#page-footer {
+  padding-top: 0;
+  color: $footer-color;
+  background-color: $footer-background;
+
+  a[data-toggle="collapse"] {
+    margin-top: -1px;
+    margin-left: -14px;
+  }
+
+  a[data-toggle="collapse"]:focus,
+  a[data-toggle="collapse"]:hover,
+  a[data-toggle="collapse"]:active {
+    text-decoration: none;
+    outline-style: none;
+  }
+
+  .margin-left-col {
+    width: 2rem;
+  }
+
+  #detail-info.collapse {
+    height: unset;
+  }
+
+  .footer-content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    a {
+      color: $footer-color;
+
+      &:hover {
+        color: $footer-color-hover;
+      }
+    }
+  }
+}
+
+.input-group.quicksearch {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+  .quicksearch-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex: 1 0 auto;
+    -webkit-appearance: none;
+  }
+
+  .quicksearch-button {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+  }
+}
+
+
+// Adaptions for phone size / Responsiveness
+
+
+@include responsive(phone, $media-tablet) {
+  .logo {
+    display: none;
+
+    .is-logged-out & {
+      display: block;
+    }
+  }
+
+  #page {
+    .nav-left {
+      z-index: 100;
+      margin-top: 0;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      border-radius: 0;
+      left: -100%;
+      overflow-x: visible;
+      overflow-y: scroll;
+      transition: all 300ms ease-in-out;
+
+      &.is-visible {
+        left: 0;
+        width: 90%;
+      }
+    }
+
+    .nav-left-overlay {
+      position: fixed;
+      content: '';
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      z-index: -999999;
+      transition: opacity 700ms ease-in-out;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .nav-left>nav {
+      z-index: 1;
+      background-color: $gray-lighter;
+      width: 100%;
+      height: 100%;
+    }
+
+    .nav-left.is-visible .nav-left-overlay {
+      opacity: 1;
+      width: 1000rem;
+      z-index: -1;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+
+    .container-fluid {
+      margin: 0rem;
+    }
+
+    .sheet.parent {
+      a.level {
+        margin-bottom: 0.5rem;
+      }
+
+      &>ul.nav.nav-sub {
+        display: none;
+      }
+    }
+  }
+
+}
+
+/* Shared */
+// -------------------------
+
+// Highlight
+.highlight {
+  background-color: #FFD;
+}
+
+// Flash
+#flash .alert {
+  clear: both;
+}
+
+.tooltip-inner {
+  text-align: left;
+}
+
+
+#content section.roles {
+  overflow: visible;
+}
+
+.contactable.well .contact {
+  address {
+    margin-left: 1em;
+  }
+
+  .social {
+    margin-left: 1em;
+  }
+}
+
+.profiler-results {
+  opacity: 0.2;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+td.column-with-min-width {
+  min-width: 28px;
+}
+
+strong.bigger-title div.trix-content {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.changelog ul {
+  padding-left: 2rem;
+}
+
+.h-200-px {
+  height: 200px;
+}
+
+#jump-to-content {
+  opacity: 0;
+  position: absolute;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  font-size: medium;
+  text-decoration: underline;
+  z-index: 100;
+  width: 130px;
+  min-height: 50px;
+  height: fit-content;
+  pointer-events: none;
+  cursor: default;
+}
+
+#jump-to-content:focus {
+  opacity: 100;
+  pointer-events: auto;
+  cursor: pointer;
+}

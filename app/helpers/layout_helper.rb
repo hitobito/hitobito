@@ -132,13 +132,35 @@ module LayoutHelper
     end
   end
 
+  # In development, we let hotwire_livereload handle the reloading.
+  # In production, we want turbo tracking to handle reloading stale assets.
+  def turbo_track
+    "reload" if Rails.env.production?
+  end
+
+  def logo_custom_properties_tag
+    logo = Settings.application.logo
+    boxed = logo.background_color.to_s != "none"
+
+    properties = {
+      "--logo-width": "#{logo.width.to_i}px",
+      "--logo-height": "#{logo.height.to_i}px",
+      "--logo-background-color": boxed ? logo.background_color : "transparent",
+      "--logo-padding": boxed ? "10px" : "0.5rem"
+    }
+
+    tag.style(safe_join([":root { ", properties.map { |name, value|
+      "#{name}: #{value};"
+    }.join(" "), " }"]))
+  end
+
   def header_logo(locale = I18n.locale)
     logo_group = closest_group_with_logo
     return image_tag(upload_url(logo_group, :logo)) if logo_group
 
     logo = Settings.application.logo
     logo_path = logo&.dig(:multilanguage_image, locale) || logo&.image
-    wagon_image_pack_tag(logo_path, alt: Settings.application.name)
+    wagon_image_tag(logo_path, alt: Settings.application.name)
   end
 
   private

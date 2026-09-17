@@ -102,6 +102,12 @@ Rails.application.configure do
 
   config.hosts.clear
 
+  # Move the live reload middleware after the GZip deflater, so it can still insert tags
+  # into the HTML head.
+  if defined?(Hotwire::Livereload) && Hotwire::Livereload.enabled?
+    config.middleware.move_after Rack::Deflater, Hotwire::Livereload::Middleware
+  end
+
   config.after_initialize do
     ActiveRecord::Base.logger = nil if ENV["RAILS_SILENCE_ACTIVE_RECORD"] == "1"
   end

@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "coffeescript": "1.12.7",
-    "esbuild": "0.21.5",
+    "esbuild": "0.28.1",
     "glob": "^10.4.5",
     "sass": "^1.49.7"
   },

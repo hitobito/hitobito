@@ -14,7 +14,7 @@ Aktuell verwenden wir einige Komponenten aus Bootstrap:
 
 [package.json](https://github.com/hitobito/hitobito/blob/master/package.json)
 
-[javascript componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/application.js)
+[javascript componenten](https://github.com/hitobito/hitobito/blob/master/app/javascript/entrypoints/application.js)
 
 ```
 bootstrap-alert

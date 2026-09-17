@@ -13,13 +13,13 @@
 # config/initializers/assets.rb).
 
 namespace :assets do
-  wagon_manifest_path = "tmp/wagon_assets_manifest.json"
-  wagon_scss_load_paths_path = "tmp/wagon_scss_load_paths.json"
+  wagon_css_manifest_path = "tmp/wagon_css_manifest.json"
+  wagon_js_manifest_path = "tmp/wagon_js_manifest.json"
 
-  desc "Write each active wagon's stylesheet directory for build_css.mjs, which passes them" \
-    " to dart-sass as --load-paths and scans them for the wagons' own entrypoints"
-  task wagon_scss_load_paths: :environment do
-    FileUtils.mkdir_p(File.dirname(wagon_scss_load_paths_path))
+  desc "Write the active wagons' stylesheet directories for build_css.mjs, which passes them to" \
+    " dart-sass as --load-paths and scans them for the wagons' own entrypoints"
+  task wagon_css_manifest: :environment do
+    FileUtils.mkdir_p(File.dirname(wagon_css_manifest_path))
 
     stylesheet_paths = Wagons.all.filter_map do |wagon|
       path = wagon.paths.path.join("app", "assets", "stylesheets")
@@ -30,12 +30,12 @@ namespace :assets do
       buildDir: WagonAssetsHelper.instance_name,
       wagonStylesheetPaths: stylesheet_paths
     }
-    File.write(wagon_scss_load_paths_path, JSON.pretty_generate(payload))
+    File.write(wagon_css_manifest_path, JSON.pretty_generate(payload))
   end
 
-  desc "Write a manifest of the active wagons' JS-relevant asset files for the esbuild build script"
+  desc "Write the active wagons' JS-relevant asset files for esbuild.mjs"
   task wagon_js_manifest: :environment do
-    FileUtils.mkdir_p(File.dirname(wagon_manifest_path))
+    FileUtils.mkdir_p(File.dirname(wagon_js_manifest_path))
 
     wagons = Wagons.all.map do |wagon|
       wagon_root = wagon.paths.path
@@ -45,18 +45,18 @@ namespace :assets do
       {
         name: wagon.wagon_name,
         controllersRoot: controllers_dir.to_s,
-        entrypoints: Dir[wagon_root.join("app", "javascript", "*.js")],
+        entrypoints: Dir[wagon_root.join("app", "javascript", "entrypoints", "*.js")],
         controllers: Dir[controllers_dir.join("**", "*_controller.js")],
         wagonScript: wagon_script.exist? ? wagon_script.to_s : nil
       }
     end
 
     payload = {buildDir: WagonAssetsHelper.instance_name, wagons: wagons}
-    File.write(wagon_manifest_path, JSON.pretty_generate(payload))
+    File.write(wagon_js_manifest_path, JSON.pretty_generate(payload))
   end
 
   if Rake::Task.task_defined?("css:build")
-    Rake::Task["css:build"].enhance(["assets:wagon_scss_load_paths"])
+    Rake::Task["css:build"].enhance(["assets:wagon_css_manifest"])
   end
 
   if Rake::Task.task_defined?("javascript:build")
@@ -94,7 +94,7 @@ namespace :assets do
   end
 
   desc "Rebuild the CSS on every change (used by the Procfile and the docker dev setup)"
-  task watch_css: ["assets:wagon_scss_load_paths"] do
+  task watch_css: ["assets:wagon_css_manifest"] do
     sh "yarn build:css --watch"
   end
 end

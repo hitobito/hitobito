@@ -87,7 +87,9 @@ body {
   align-content: space-around;
 
   .nav-left {
-    min-width: var(--nav-left-min-width);
+    // Always 40px wider than the logo, but never narrower than a readable
+    // navigation.
+    min-width: max(240px, calc(var(--logo-width) + 40px));
 
     width: 30%;
     max-width: 25rem;

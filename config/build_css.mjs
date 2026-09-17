@@ -4,19 +4,19 @@
 // https://github.com/hitobito/hitobito.
 
 // Compiles every SCSS entrypoint - the core's, plus the ones the active wagons
-// bring along (tmp/wagon_scss_load_paths.json, written by
-// `rake assets:wagon_scss_load_paths`) - with dart-sass.
+// bring along (tmp/wagon_css_manifest.json, written by
+// `rake assets:wagon_css_manifest`) - with dart-sass.
 
 import { spawn } from "child_process";
 import { globSync } from "glob";
 import fs from "fs";
 import path from "path";
 
-const WAGON_LOAD_PATHS_PATH = "tmp/wagon_scss_load_paths.json";
+const WAGON_MANIFEST_PATH = "tmp/wagon_css_manifest.json";
 const CORE_STYLESHEETS = "app/assets/stylesheets";
 const ENTRYPOINT_DIR = "entrypoints";
 
-const { buildDir, wagonStylesheetPaths } = JSON.parse(fs.readFileSync(WAGON_LOAD_PATHS_PATH, "utf8"));
+const { buildDir, wagonStylesheetPaths } = JSON.parse(fs.readFileSync(WAGON_MANIFEST_PATH, "utf8"));
 
 // Output goes to a subdirectory per instance, i.e. per wagon composition (see
 // config/initializers/assets.rb), so switching wagons, or running specs from a

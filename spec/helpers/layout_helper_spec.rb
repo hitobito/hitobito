@@ -225,17 +225,5 @@ describe LayoutHelper do
       expect(properties).to include("logo-background-color" => "#ffffff",
         "logo-padding" => "10px")
     end
-
-    it "keeps the navigation readable for a narrow logo" do
-      allow(Settings.application.logo).to receive(:width).and_return(128)
-
-      expect(properties).to include("nav-left-min-width" => "280px")
-    end
-
-    it "makes room for a wide logo" do
-      allow(Settings.application.logo).to receive(:width).and_return(300)
-
-      expect(properties).to include("nav-left-min-width" => "340px")
-    end
   end
 end

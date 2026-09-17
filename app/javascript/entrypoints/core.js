@@ -12,7 +12,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 // Must run first: jquery-ujs/jquery-ui/coffeescript modules expect global jQuery/moment.
-import './lib/expose_globals';
+import '../expose_globals';
 
 // Dependencies
 import Rails from 'jquery-ujs';
@@ -65,7 +65,7 @@ import { Application } from "@hotwired/stimulus"
 
 const application = Application.start()
 window.Stimulus = application
-import "./controllers";
+import "../controllers";
 
 // Custom scripts from core
-import "./generated/core_modules";
+import "../generated/core_modules";

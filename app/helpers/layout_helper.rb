@@ -140,17 +140,11 @@ module LayoutHelper
     logo = Settings.application.logo
     boxed = logo.background_color.to_s != "none"
 
-    width = logo.width.to_i
-
     properties = {
-      "--logo-width": "#{width}px",
+      "--logo-width": "#{logo.width.to_i}px",
       "--logo-height": "#{logo.height.to_i}px",
       "--logo-background-color": boxed ? logo.background_color : "transparent",
-      "--logo-padding": boxed ? "10px" : "0.5rem",
-      # A narrow logo still needs a readable navigation, a wide one needs room
-      # for itself. Computed here rather than in CSS because the step is not
-      # expressible with min()/max().
-      "--nav-left-min-width": "#{(width < 200) ? 280 : width + 40}px"
+      "--logo-padding": boxed ? "10px" : "0.5rem"
     }
 
     tag.style(safe_join([":root { ", properties.map { |name, value| "#{name}: #{value};" }.join(" "), " }"]))

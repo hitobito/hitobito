@@ -9,17 +9,17 @@ liegt.
 
 ### Funktionsweise
 
-Die Entrypoints liegen in `app/javascript/*.js` (JavaScript) bzw. `app/assets/stylesheets/entrypoints/*.scss`
-(SCSS), der restliche Quellcode in `app/javascript/**` bzw. `app/assets/stylesheets/hitobito/**`. `bin/rails assets:precompile` (bzw. im
+Die Entrypoints liegen in `app/javascript/entrypoints/*.js` bzw. `app/assets/stylesheets/entrypoints/*.scss`,
+der restliche Quellcode in `app/javascript/**` bzw. `app/assets/stylesheets/hitobito/**`. `bin/rails assets:precompile` (bzw. im
 Hintergrund `yarn build` / `yarn build:css`) kompiliert diese nach `app/assets/builds`, von wo sie Propshaft wie
 jede andere Datei unter `app/assets/*` fingerprinted ausliefert.
 
 Zwei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
 
-* `assets:wagon_scss_load_paths` schreibt `tmp/wagon_scss_load_paths.json` mit den
+* `assets:wagon_css_manifest` schreibt `tmp/wagon_css_manifest.json` mit den
   Stylesheet-Verzeichnissen der aktiven Wagons. `config/build_css.mjs` gibt diese
   dart-sass als `--load-path` mit und sucht darin nach wagon-eigenen Entrypoints.
-* `assets:wagon_js_manifest` schreibt `tmp/wagon_assets_manifest.json`: eine
+* `assets:wagon_js_manifest` schreibt `tmp/wagon_js_manifest.json`: eine
   Liste der JS-relevanten Dateien jedes *aktiven* Wagons (`Wagons.all`, nicht
   einfach jedes `hitobito_*`-Verzeichnis das gerade ausgecheckt ist).
   `config/esbuild.mjs` liest dieses Manifest und generiert daraus (bei jedem
@@ -76,8 +76,8 @@ Mit den `wagon_image_tag`, `wagon_favicon_tag` und `wagon_image_path` Helpers
 (`app/helpers/wagon_assets_helper.rb`) können diese Bilder referenziert werden - bei gleichem Dateinamen wird
 automatisch das Bild im Wagon bevorzugt (siehe oben).
 
-Ein Wagon kann zusätzlich eigene `app/javascript/*.js`-Dateien (eigene Entrypoints) und eigene Stimulus-Controller
-unter `app/javascript/controllers/*_controller.js` bereitstellen; diese werden automatisch erkannt und unter
+Ein Wagon kann zusätzlich eigene `app/javascript/entrypoints/*.js`-Dateien (eigene Entrypoints) und eigene
+Stimulus-Controller unter `app/javascript/controllers/*_controller.js` bereitstellen; diese werden automatisch erkannt und unter
 `<wagonname>--<controllername>` registriert.
 
 #### Stylesheets

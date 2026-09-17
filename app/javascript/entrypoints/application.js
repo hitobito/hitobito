@@ -7,7 +7,7 @@
 // in app/views/layouts/application.html.haml.
 
 // Custom scripts from all wagons
-import './generated/wagon_scripts';
+import '../generated/wagon_scripts';
 
 // Action Text
 require("trix")

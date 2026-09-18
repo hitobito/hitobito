@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -33,6 +33,17 @@ describe ContactableDecorator do
       expect(event.contact.complete_contact).to eq "<strong>Top Leader</strong>" \
         "<p>Greatstreet 345<br />3456 Greattown</p>" \
         "<p><a href=\"mailto:top_leader@example.com\">top_leader@example.com</a></p>"
+    end
+
+    it "renders additional addresses after the main address and before emails" do
+      event.contact.additional_addresses.build(
+        street: "Langestrasse", housenumber: "37", zip_code: "8000",
+        town: "Zürich", country: "CH", public: true
+      )
+
+      expect(event.contact.complete_contact).to match(
+        /Greatstreet.*Langestrasse.*top_leader@example\.com/m
+      )
     end
   end
 

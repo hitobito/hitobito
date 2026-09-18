@@ -86,7 +86,6 @@ class ContactAccountCategorySeeder
     },
     "AdditionalAddress" => {
       "Person" => [
-        {key: "work", name: {de: "Arbeit", fr: "Professionnel", it: "Ufficio", en: "Work"}},
         {key: "invoices", used_for_invoices: true,
          name: {de: "Rechnungsadresse", fr: "Adresse de facturation",
                 it: "Indirizzo di fatturazione", en: "Invoice"}},

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,10 +38,10 @@ module ContactableDecorator
   def complete_contact
     contact_name +
       complete_address +
+      all_additional_addresses(true) +
       primary_email +
       all_additional_emails(true) +
       all_phone_numbers(true) +
-      all_additional_addresses(true) +
       all_social_accounts(true)
   end
 

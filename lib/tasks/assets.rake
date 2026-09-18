@@ -67,7 +67,11 @@ namespace :assets do
     # so its test instance - and with it the build directory - is a different one
     # than in development. db:test:prepare itself runs in the development
     # environment, hence the subprocess.
-    if ENV["RAILS_ENV"] == "test"
+    if Wagons.current_wagon
+      Bundler.with_unbundled_env do
+        sh({"RAILS_ENV" => "test"}, "cd #{Rails.root} && bundle exec rake assets:build")
+      end
+    elsif ENV["RAILS_ENV"] == "test"
       Rake::Task["assets:build"].invoke
     else
       sh({"RAILS_ENV" => "test"}, "bundle exec rake assets:build")

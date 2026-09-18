@@ -678,6 +678,7 @@ fr:
         zip_code: NPA
         town: Lieu
         country: Pays
+        canton: Kanton
         gender: Sexe
         genders:
           m: masculin

@@ -594,6 +594,7 @@ en:
         zip_code: Postal Code
         town: Place
         country: Country
+        canton: Kanton
         gender: Gender
         genders:
           m: male

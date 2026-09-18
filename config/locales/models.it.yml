@@ -677,6 +677,7 @@ it:
         zip_code: NAP
         town: Luogo
         country: Nazione
+        canton: Kanton
         gender: Sesso
         genders:
           m: uomo

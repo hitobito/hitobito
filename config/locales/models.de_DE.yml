@@ -594,6 +594,7 @@ de_DE:
         zip_code: PLZ
         town: Ort
         country: Land
+        canton: Kanton
         gender: Geschlecht
         genders:
           m: männlich

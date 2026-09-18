@@ -12,17 +12,15 @@ class EventDescriptionAsRichText < ActiveRecord::Migration[8.0]
   end
 
   def down
-    begin
-      ActionText::RichText
-        .where(record_type: "Event::Translation", name: "description").find_each do |action_text|
-        translation = action_text.record
+    ActionText::RichText
+      .where(record_type: "Event::Translation", name: "description").find_each do |action_text|
+      translation = action_text.record
+      if action_text.body.present? && translation.present?
         translation.update_column(
           :description, action_text.body.to_plain_text
-      ) unless action_text.body.nil?
-        action_text.destroy!
+        )
       end
-    rescue StandardError => e
-      # ToDo
+      action_text.destroy!
     end
   end
 end

@@ -17,7 +17,8 @@ class PeopleController < CrudController # rubocop:todo Metrics/ClassLength
   self.remember_params += [:name, :range, :filters, :filter_id]
 
   self.permitted_attrs = [:first_name, :last_name, :company_name, :nickname, :company,
-    :gender, :birthday, :language, :additional_information, :picture, :remove_picture] +
+    :gender, :birthday, :language, :additional_information, :picture, :remove_picture,
+    :canton] +
     Contactable::ACCESSIBLE_ATTRS +
     [family_members_attributes: [:id, :kind, :other_id, :_destroy]]
 

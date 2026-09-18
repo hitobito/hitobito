@@ -14,6 +14,10 @@ class Event::ParticipationContactData
   delegate :gender_label, :column_for_attribute, :timeliness_cache_attribute,
     :has_attribute?, to: :person
 
+  # Excluded from Event.possible_contact_attrs: also rendered for Event::Guest, which has
+  # no canton column. Rendered conditionally in the address fields partials instead.
+  delegate :canton, to: :person
+
   delegate :layer_group, to: :event
 
   include ActiveModel::Validations

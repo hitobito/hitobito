@@ -1,4 +1,4 @@
-#  Copyright (c) 2020, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2020-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito_pbs and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
@@ -380,6 +380,34 @@ describe Synchronize::Mailchimp::Synchronizator do
         result = sync.perform
 
         expect(result.data[:exception]).to include "invalid api key"
+      end
+    end
+
+    context "fetching segments fails with a mailchimp api error" do
+      before do
+        allow(client).to receive(:fetch_segments)
+          .and_raise(Gibbon::MailChimpError, "the server responded with status 404")
+      end
+
+      it "does not raise and returns a failed result with the exception" do
+        result = sync.perform
+
+        expect(result.state).to eq :failed
+        expect(result.data[:exception]).to include "404"
+      end
+    end
+
+    context "a batch never finishes processing" do
+      before do
+        allow(client).to receive(:subscribe_members)
+          .and_raise(Synchronize::Mailchimp::Client::Error, "Batch nbs4yj8qzb exeeded max_attempts, status: finalizing")
+      end
+
+      it "does not raise and returns a failed result with the exception" do
+        result = sync.perform
+
+        expect(result.state).to eq :failed
+        expect(result.data[:exception]).to include "exeeded max_attempts"
       end
     end
 

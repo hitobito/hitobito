@@ -11,6 +11,8 @@ require "rubygems/package"
 module Synchronize
   module Mailchimp
     class Client # rubocop:todo Metrics/ClassLength
+      Error = Class.new(StandardError)
+
       MAX_RETRIES = 5
       attr_reader :list_id, :count, :api, :merge_fields, :member_fields
 
@@ -197,7 +199,7 @@ module Synchronize
       rescue Gibbon::MailChimpError => e
         fail e unless [0, 400].include?(e.status_code.to_i)
         retries += 1
-        (retries < MAX_RETRIES) ? retry : fail("Max retries exceeded")
+        (retries < MAX_RETRIES) ? retry : fail(Error, "Max retries exceeded")
       end
       # rubocop:enable Metrics/CyclomaticComplexity
       # rubocop:enable Metrics/AbcSize
@@ -225,7 +227,9 @@ module Synchronize
         attempt = 0 if status != prev_status
 
         log "batch #{batch_id}, status: #{status}, attempt: #{attempt}"
-        raise "Batch #{batch_id} exeeded max_attempts, status: #{status}" if attempt > @max_attempts
+        if attempt > @max_attempts
+          raise Error, "Batch #{batch_id} exeeded max_attempts, status: #{status}"
+        end
 
         if status != "finished"
           wait_for_finish(batch_id, status, attempt + 1)
@@ -251,7 +255,7 @@ module Synchronize
         end
       rescue RestClient::BadRequest
         retries += 1
-        (retries < MAX_RETRIES) ? retry : fail("Max retries exceeded")
+        (retries < MAX_RETRIES) ? retry : fail(Error, "Max retries exceeded")
       end
 
       def merge_field_values(person)

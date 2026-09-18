@@ -90,6 +90,26 @@ describe MailchimpSynchronizationJob do
     )
   end
 
+  it "creates log entry when sync result is failed without raising" do
+    freeze_time
+
+    failed_result = Synchronize::Mailchimp::Result.new
+    failed_result.exception =
+      Synchronize::Mailchimp::Client::Error.new("Batch nbs4yj8qzb exeeded max_attempts, status: finalizing")
+    allow_any_instance_of(Synchronize::Mailchimp::Synchronizator).to receive(:perform)
+    allow_any_instance_of(Synchronize::Mailchimp::Synchronizator).to receive(:result).and_return(failed_result)
+
+    expect do
+      enqueue_and_run_job(subject)
+    end.to change { HitobitoLogEntry.count }.by(1)
+
+    mailing_list.reload
+
+    check_mailing_list_status_and_error_logging_on_failure(
+      exception: "Synchronize::Mailchimp::Client::Error - Batch nbs4yj8qzb exeeded max_attempts, status: finalizing"
+    )
+  end
+
   it "noops if not a mailchimp list" do
     subject.enqueue!
 
@@ -187,7 +207,9 @@ describe MailchimpSynchronizationJob do
     })
   end
 
-  def check_mailing_list_status_and_error_logging_on_failure
+  def check_mailing_list_status_and_error_logging_on_failure(
+    exception: "UncaughtThrowError - uncaught throw Exception"
+  )
     log = HitobitoLogEntry.last
 
     expect(log).to have_attributes({
@@ -196,9 +218,7 @@ describe MailchimpSynchronizationJob do
       message: "Mailchimp Abgleich war nicht erfolgreich"
     })
 
-    expect(JSON.parse(log.payload).deep_symbolize_keys).to eq({
-      data: {exception: "UncaughtThrowError - uncaught throw Exception"}
-    })
+    expect(JSON.parse(log.payload).deep_symbolize_keys).to eq({data: {exception: exception}})
 
     expect(mailing_list).to have_attributes({
       mailchimp_syncing: false,

@@ -19,7 +19,7 @@ describe "additional address form toggles", js: true do
     allow(Settings.additional_address).to receive(:enabled).and_return(true)
   end
 
-  describe "organization toggle" do
+  describe "organization_name field" do
     before do
       Fabricate(:additional_address, contactable: person, label: "Rechnung", uses_contactable_name: false,
         first_name: "Jane", last_name: "Doe")
@@ -28,8 +28,8 @@ describe "additional address form toggles", js: true do
       visit edit_group_person_path(group_id: group.id, id: person.id)
     end
 
-    it "only reveals organization_name once organization is checked, and hides it again when unchecked" do
-      expect(page).to have_selector("##{organization_name_field_id}", visible: :hidden)
+    it "is always visible when uses_contactable_name is unchecked, regardless of the organization checkbox" do
+      expect(page).to have_selector("##{organization_name_field_id}", visible: :visible)
 
       find("##{organization_checkbox_id}").click
       expect(page).to have_selector("##{organization_name_field_id}", visible: :visible)
@@ -38,7 +38,7 @@ describe "additional address form toggles", js: true do
       expect(find("##{organization_name_field_id}", visible: :visible).value).to eq "Acme Corp"
 
       find("##{organization_checkbox_id}").click
-      expect(page).to have_selector("##{organization_name_field_id}", visible: :hidden)
+      expect(page).to have_selector("##{organization_name_field_id}", visible: :visible)
     end
   end
 
@@ -50,13 +50,15 @@ describe "additional address form toggles", js: true do
       visit edit_group_person_path(group_id: group.id, id: person.id)
     end
 
-    it "reveals first_name/last_name/organization once unchecked, and hides them again when checked" do
+    it "reveals name fields once unchecked, and hides them again when checked" do
       expect(page).to have_selector("##{first_name_field_id}", visible: :hidden)
       expect(page).to have_selector("##{organization_checkbox_id}", visible: :hidden)
+      expect(page).to have_selector("##{organization_name_field_id}", visible: :hidden)
 
       find("##{uses_contactable_name_checkbox_id}").click
       expect(page).to have_selector("##{first_name_field_id}", visible: :visible)
       expect(page).to have_selector("##{organization_checkbox_id}", visible: :visible)
+      expect(page).to have_selector("##{organization_name_field_id}", visible: :visible)
 
       find("##{first_name_field_id}").set("Jane")
       expect(find("##{first_name_field_id}", visible: :visible).value).to eq "Jane"
@@ -64,6 +66,7 @@ describe "additional address form toggles", js: true do
       find("##{uses_contactable_name_checkbox_id}").click
       expect(page).to have_selector("##{first_name_field_id}", visible: :hidden)
       expect(page).to have_selector("##{organization_checkbox_id}", visible: :hidden)
+      expect(page).to have_selector("##{organization_name_field_id}", visible: :hidden)
     end
   end
 end

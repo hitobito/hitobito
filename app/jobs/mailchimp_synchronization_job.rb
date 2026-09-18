@@ -26,13 +26,12 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def success(_job)
-    mailing_list.update(
-      mailchimp_syncing: false,
-      mailchimp_result: sync.result,
-      mailchimp_last_synced_at: Time.zone.now
-    )
-    if sync.result.state == :partial
+    mailing_list.update(completion_attrs)
+    case sync.result.state
+    when :partial
       create_log_entry("Mailchimp Abgleich war teilweise nicht erfolgreich")
+    when :failed
+      create_log_entry("Mailchimp Abgleich war nicht erfolgreich")
     end
   end
 
@@ -44,6 +43,12 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   private
+
+  def completion_attrs
+    attrs = {mailchimp_syncing: false, mailchimp_result: sync.result}
+    attrs[:mailchimp_last_synced_at] = Time.zone.now unless sync.result.state == :failed
+    attrs
+  end
 
   def create_log_entry(message)
     HitobitoLogEntry.create!(

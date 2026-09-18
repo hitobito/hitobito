@@ -144,6 +144,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   class_attribute :used_attributes
   self.used_attributes = PUBLIC_ATTRS + INTERNAL_ATTRS
+  self.used_attributes -= [:company, :company_name] if FeatureGate.disabled?("address.company")
 
   # Configure which Person attributes can be used to identify a person for login.
   class_attribute :devise_login_id_attrs, default: [:email]

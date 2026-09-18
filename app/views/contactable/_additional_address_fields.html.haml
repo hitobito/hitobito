@@ -16,8 +16,9 @@
   %div{data: { 'additional-address-target' => 'toggle'}, class: ("hidden" if f.object.uses_contactable_name)}
     = f.labeled_input_field(:first_name)
     = f.labeled_input_field(:last_name)
-    = f.labeled_boolean_field(:organization)
-    = f.labeled_input_field(:organization_name)
+    - FeatureGate.if('address.company') do
+      = f.labeled_boolean_field(:organization)
+      = f.labeled_input_field(:organization_name)
   = f.labeled_input_field(:address_care_of)
   = f.labeled(:street, label_class: "#{StandardFormBuilder::LABEL_CLASSES} required", class: 'd-flex') do
     %div.col-9

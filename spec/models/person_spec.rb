@@ -11,6 +11,18 @@ describe Person do
 
   subject { person }
 
+  describe "address.company feature gate" do
+    # The attribute lists are built once at class-load time, so the disabled
+    # state cannot be tested here. It is covered by a spec in the pfadi_de
+    # wagon, which boots with the feature disabled.
+    it "includes company attributes when the feature is enabled" do
+      expect(Person::PUBLIC_ATTRS).to include(:company, :company_name)
+      expect(Person::FILTER_ATTRS).to include(:company_name)
+      expect(Person::SEARCHABLE_ATTRS).to include(:company_name)
+      expect(Person.used_attributes).to include(:company, :company_name)
+    end
+  end
+
   context "scopes" do
     describe "preload_roles_unscoped" do
       it "preloads roles on #find" do

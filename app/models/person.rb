@@ -114,7 +114,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   MERGABLE_ATTRS = PUBLIC_ATTRS - [:id, :primary_group_id, :picture]
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
-    [:id, :integer], :first_name, :last_name, :nickname, :company_name,
+    [:id, :integer], :first_name, :last_name, :nickname,
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
     [:country, :country_select], [:canton, :canton_select], [:gender, :gender_select],
     [:years, :integer], :birthday
@@ -122,12 +122,17 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   SEARCHABLE_ATTRS = [
     # rubocop:todo Layout/LineLength
-    :first_name, :last_name, :company_name, :nickname, :email, :street, :housenumber, :zip_code, :town,
+    :first_name, :last_name, :nickname, :email, :street, :housenumber, :zip_code, :town,
     # rubocop:enable Layout/LineLength
     :country, :birthday, :additional_information, {phone_numbers: [:number],
                                                    social_accounts: [:name],
                                                    additional_emails: [:email]}
   ]
+
+  FeatureGate.if("address.company") do
+    FILTER_ATTRS.push(:company_name)
+    SEARCHABLE_ATTRS.push(:company_name)
+  end
 
   # rubocop:disable Style/MutableConstant meant to be extended in wagons
   GENDERS = %w[m w]
@@ -144,6 +149,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   class_attribute :used_attributes
   self.used_attributes = PUBLIC_ATTRS + INTERNAL_ATTRS
+  self.used_attributes -= [:company, :company_name] if FeatureGate.disabled?("address.company")
 
   # Configure which Person attributes can be used to identify a person for login.
   class_attribute :devise_login_id_attrs, default: [:email]

@@ -920,6 +920,13 @@ describe Event do
 
       expect(event.reload.hidden_contact_attrs).to include("additional_emails")
     end
+
+    # The disabled state cannot be tested here: possible_contact_attrs is built
+    # once at class-load time. It is covered by a spec in the pfadi_de wagon,
+    # which boots with the feature disabled.
+    it "includes company_name when address.company is enabled" do
+      expect(Event.possible_contact_attrs).to include(:company_name)
+    end
   end
 
   context "#duplicate" do

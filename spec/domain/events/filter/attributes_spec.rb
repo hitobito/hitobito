@@ -8,7 +8,7 @@ require "spec_helper"
 describe Events::Filter::Attributes do
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_group) }
-  let(:key) { "description" }
+  let(:key) { "plain_description" }
   let(:constraint) { "match" }
   let(:value) { "" }
   let(:range) { "deep" }

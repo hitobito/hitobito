@@ -84,12 +84,6 @@ describe "event/participation_contact_datas/_address_fields.html.haml" do
       expect(rendered).not_to have_selector("select#entry_canton")
     end
 
-    it "does not render canton select when canton feature is disabled" do
-      allow(FeatureGate).to receive(:enabled?).with("people.canton").and_return(false)
-      render locals: {entry: participation_contact_data, event:, group:}
-      expect(rendered).not_to have_selector("select#entry_canton")
-    end
-
     it "does not raise when rendered for an Event::Guest" do
       guest = Event::Guest.new(first_name: "Guest", last_name: "Person", country: "CH")
       allow(view).to receive(:f).and_return(StandardFormBuilder.new(:entry, guest, view, {}))

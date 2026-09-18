@@ -13,8 +13,7 @@ class Person::Filter::AttributeControl < Filter::AttributeControl
   private
 
   def all_field_types
-    fields = [super, country_select_field, gender_select_field]
-    fields << canton_select_field if FeatureGate.enabled?("people.canton")
+    fields = [super, country_select_field, gender_select_field, canton_select_field]
     safe_join(fields)
   end
 

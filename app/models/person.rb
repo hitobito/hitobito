@@ -116,9 +116,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     [:id, :integer], :first_name, :last_name, :nickname, :company_name,
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
-    [:country, :country_select], [:gender, :gender_select], [:years, :integer], :birthday
+    [:country, :country_select], [:canton, :canton_select], [:gender, :gender_select],
+    [:years, :integer], :birthday
   ]
-  FILTER_ATTRS << [:canton, :canton_select] if FeatureGate.enabled?("people.canton")
 
   SEARCHABLE_ATTRS = [
     # rubocop:todo Layout/LineLength

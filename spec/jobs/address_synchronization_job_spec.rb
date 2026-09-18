@@ -36,6 +36,12 @@ describe AddressSynchronizationJob do
       .to_return(status:, body: response)
   end
 
+  def stub_result_download(text)
+    stub_api_request(:get, "/checkbatchstatus/batch",
+      response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
+    stub_api_request(:get, "/downloadfile/out", response: text.encode("Windows-1252"))
+  end
+
   context "empty scope" do
     let(:role_types) { [] }
 
@@ -231,9 +237,7 @@ describe AddressSynchronizationJob do
     describe "finished batch" do
       it "triggers download result processing" do
         job.perform
-        stub_api_request(:get, "/checkbatchstatus/batch",
-          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
-        stub_api_request(:get, "/downloadfile/out", response: result.encode("Windows-1252"))
+        stub_result_download(result)
         expect do
           Delayed::Job.last.payload_object.perform
         end.to change { top_leader.reload.housenumber.to_i }.to(123)
@@ -243,11 +247,42 @@ describe AddressSynchronizationJob do
         expect(HitobitoLogEntry.last.message).to eq "Post Adressabgleich: Fortschritt 100% (2/2)"
       end
 
+      it "creates a completion log entry when result processing succeeds" do
+        job.perform
+        stub_result_download(result)
+
+        Delayed::Job.last.payload_object.perform
+
+        expect(HitobitoLogEntry.pluck(:message)).to include("Post Addressenabgleich ist abgeschlossen")
+      end
+
+      it "creates a completion log entry even if a person update fails" do
+        job.perform
+        data = CSV.parse(result, headers: true, row_sep: "\r\n", col_sep: "\t")
+        data.entries.last["ZIPCode"] = "invalid"
+        stub_result_download(data.to_csv(headers: true, row_sep: "\r\n", col_sep: "\t"))
+
+        Delayed::Job.last.payload_object.perform
+
+        expect(HitobitoLogEntry.pluck(:level)).to include("error")
+        expect(HitobitoLogEntry.pluck(:message)).to include("Post Addressenabgleich ist abgeschlossen")
+      end
+
+      it "creates a completion log entry even if no row matches a known person" do
+        job.perform
+        data = CSV.parse(result, headers: true, row_sep: "\r\n", col_sep: "\t")
+        data.delete_if { true }
+        stub_result_download(data.to_csv(headers: true, row_sep: "\r\n", col_sep: "\t"))
+
+        expect do
+          Delayed::Job.last.payload_object.perform
+        end.to change { HitobitoLogEntry.count }
+        expect(HitobitoLogEntry.pluck(:message)).to include("Post Addressenabgleich ist abgeschlossen")
+      end
+
       it "persists result as attachment via dj callback" do
         job.perform
-        stub_api_request(:get, "/checkbatchstatus/batch",
-          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
-        stub_api_request(:get, "/downloadfile/out", response: result.encode("Windows-1252"))
+        stub_result_download(result)
         expect do
           travel_to(1.minute.from_now) do
             Delayed::Worker.new.work_off
@@ -316,9 +351,7 @@ describe AddressSynchronizationJob do
         end.not_to change { HitobitoLogEntry.count }
         expect(Delayed::Job.last.payload_object.cursor).to eq people(:bottom_member).id
 
-        stub_api_request(:get, "/checkbatchstatus/batch",
-          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
-        stub_api_request(:get, "/downloadfile/out", response: result.lines.take(2).join("\r\n").encode("Windows-1252"))
+        stub_result_download(result.lines.take(2).join("\r\n"))
 
         expect do
           run_next_job
@@ -334,11 +367,7 @@ describe AddressSynchronizationJob do
         end.to not_change { HitobitoLogEntry.count }
           .and not_change { top_leader.reload.housenumber }
 
-        stub_api_request(:get, "/checkbatchstatus/batch",
-          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
-        stub_api_request(:get, "/downloadfile/out", response: result.lines.tap { |l|
-          l.delete_at(1)
-        }.join("\r\n").encode("Windows-1252"))
+        stub_result_download(result.lines.tap { |l| l.delete_at(1) }.join("\r\n"))
 
         expect do
           run_next_job
@@ -363,9 +392,7 @@ describe AddressSynchronizationJob do
         expect(followup_job.processed_count).to eq 0
         expect(followup_job.processing_count).to eq 1
 
-        stub_api_request(:get, "/checkbatchstatus/batch",
-          response: {CheckBatchStatusResult: {BatchStatus: {TokenStatus: 4}}}.to_json)
-        stub_api_request(:get, "/downloadfile/out", response: result.encode("Windows-1252"))
+        stub_result_download(result)
         expect do
           followup_job.perform
         end.to change { top_leader.reload.housenumber.to_i }.to(123)

@@ -75,8 +75,8 @@ module Dropdown
       add_divider unless group.archived?
       add_item(
         translate(:delete),
-        template.group_path(group),
-        data: {confirm: template.ti(:confirm_delete), method: :delete}
+        template.confirm_deletion_group_path(group),
+        remote: true
       )
     end
   end

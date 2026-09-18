@@ -503,6 +503,8 @@ Hitobito::Application.routes.draw do
     resources :roles, except: [:edit, :new]
     resources :mailing_lists, only: [:index, :show]
     resources :qualifications, only: [:index, :show, :create, :destroy]
+    resources :role_types, only: [:index]
+    resources :group_types, only: [:index]
   end
 
   # The priority is based upon order of creation:

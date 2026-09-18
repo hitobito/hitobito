@@ -13,7 +13,7 @@
 - Für die Schwyzer Kantonalbank SZKB wurde eine Ebics Zahlungsschnittstelle hinzugefügt (#4400)
 - Zusätzliche Adressen erhalten dieselben Namensfelder (Vorname, Nachname, Firma/Firmenname) wie die Hauptadresse und sind neu auch im JSON:API verfügbar (#4411)
 - Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
-
+- Die JSON:API stellt die verfügbaren Rollen- und Gruppentypen der Instanz zur Verfügung, ohne Authentisierung
 
 ## Version 2.10
 

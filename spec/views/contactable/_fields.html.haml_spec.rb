@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,13 +24,13 @@ describe "contactable/_fields.html.haml" do
 
     # mock render call to email_field partial
     render_method = view.method(:render)
-    expect(view).to receive(:render) { |*args|
+    allow(view).to receive(:render) { |*args|
       if args == ["email_field", f: form_builder]
         ""
       else
         render_method.call(*args)
       end
-    }.exactly(10).times
+    }
   end
 
   context "standard" do

@@ -272,12 +272,16 @@ describe PersonResource, type: :resource do
     end
 
     describe "additional_addresses" do
-      before do
-        params[:include] = "additional_addresses"
-      end
+      let!(:additional_address1) { Fabricate(:additional_address, contactable: person) }
+      let!(:additional_address2) { Fabricate(:additional_address, contactable: person) }
 
-      it "is not available in the API as feature toggled" do
-        expect { render }.to raise_error Graphiti::Errors::InvalidInclude
+      before { params[:include] = "additional_addresses" }
+
+      it "it works" do
+        render
+        additional_addresses = d[0].sideload(:additional_addresses)
+        expect(additional_addresses).to have(2).items
+        expect(additional_addresses.map(&:id)).to match_array [additional_address1.id, additional_address2.id]
       end
     end
 

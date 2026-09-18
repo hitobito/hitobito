@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018, Grünliberale Partei Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Grünliberale Partei Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -27,7 +27,7 @@ module Synchronize
         @default_tag = format(DEFAULT_TAG, @list.id) if with_default_tag
       end
 
-      def perform
+      def perform # rubocop:todo Metrics/AbcSize
         return result unless ping_successful?
 
         execute(:create_segments, missing_segments)
@@ -43,6 +43,11 @@ module Synchronize
 
         tag_cleaned_members
         update_forgotten_emails
+
+        result
+      rescue Gibbon::MailChimpError, Client::Error => e
+        result.exception = e
+        result
       end
 
       private

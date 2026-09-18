@@ -136,13 +136,13 @@ describe EventsController, js: true do
 
     it "fills default description if empty" do
       select "SLK (Scharleiterkurs)", from: "event_kind_id"
-      expect(find("#event_description").value).to eq event.kind.general_information
+      expect(find("#event_description").value).to have_content event.kind.general_information
     end
 
     it "does not fill textarea" do
-      fill_in "event_description", with: prefill_description
+      find("trix-editor").click.set prefill_description
       select "SLK (Scharleiterkurs)", from: "event_kind_id"
-      expect(find("#event_description").value).to eq prefill_description
+      expect(find("#event_description").value).to have_content prefill_description
     end
   end
 

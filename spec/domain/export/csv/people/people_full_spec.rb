@@ -46,7 +46,8 @@ describe Export::Tabular::People::PeopleFull do
         "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Rechnungsadresse", "Weitere E-Mail Andere",
         "Telefonnummer Mobil", "Telefonnummer Festnetz", "Telefonnummer Arbeit", "Telefonnummer Andere",
         "Social Media Adresse Facebook", "Social Media Adresse X (Twitter)", "Social Media Adresse Webseite",
-        "Social Media Adresse Andere"
+        "Social Media Adresse Andere",
+        "Weitere Adresse Arbeit", "Weitere Adresse Rechnungsadresse", "Weitere Adresse Andere"
       ]
 
       expect(csv.headers).to match_array expected
@@ -102,7 +103,10 @@ describe Export::Tabular::People::PeopleFull do
         "Adresse d'un média social Facebook",
         "Adresse d'un média social X (Twitter)",
         "Adresse d'un média social Site web",
-        "Adresse d'un média social Autre"
+        "Adresse d'un média social Autre",
+        "Adresse supplémentaire Professionnel",
+        "Adresse supplémentaire Adresse de facturation",
+        "Adresse supplémentaire Autre"
       ]
       expect(csv.headers).to match_array headers
       expect(csv.headers).to eq headers

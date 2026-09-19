@@ -34,8 +34,5 @@ groups:
   nextcloud:
     enabled: true
 
-additional_address:
-  enabled: false
-
 personal_documents:
   enabled: true

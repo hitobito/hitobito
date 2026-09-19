@@ -2138,6 +2138,11 @@
           "description": null,
           "resource": "AdditionalEmailResource"
         },
+        "additional_addresses": {
+          "type": "has_many",
+          "description": null,
+          "resource": "AdditionalAddressResource"
+        },
         "mailing_lists": {
           "type": "has_many",
           "description": null,
@@ -3295,6 +3300,11 @@
           "type": "has_many",
           "description": null,
           "resource": "AdditionalEmailResource"
+        },
+        "additional_addresses": {
+          "type": "has_many",
+          "description": null,
+          "resource": "AdditionalAddressResource"
         },
         "event_participations": {
           "type": "has_many",

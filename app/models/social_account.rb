@@ -11,7 +11,7 @@
 #  contactable_type :string           not null
 #  label            :string
 #  name             :string           not null
-#  public           :boolean          default(TRUE), not null
+#  public           :boolean          default(FALSE), not null
 #  category_id      :bigint           not null
 #  contactable_id   :integer          not null
 #

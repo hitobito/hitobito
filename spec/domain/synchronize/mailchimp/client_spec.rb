@@ -252,7 +252,7 @@ describe Synchronize::Mailchimp::Client do
             {status: 400},
             {status: 400}
           )
-        expect { client.fetch_members }.to raise_error(RuntimeError, /Max retries exceeded/)
+        expect { client.fetch_members }.to raise_error(Synchronize::Mailchimp::Client::Error, /Max retries exceeded/)
       end
 
       it "fails for other than 400 status codes" do
@@ -263,6 +263,18 @@ describe Synchronize::Mailchimp::Client do
             {status: 401}
           )
         expect { client.fetch_members }.to raise_error(Gibbon::MailChimpError)
+      end
+
+      it "fails immediately for a 404 status code without retrying" do
+        stub_members(%w[a@example.com], %w[b@example.com], total_items: 5)
+        stub_members(%w[c@example.com], %w[d@example.com], total_items: 5, offset: 2)
+        stub_request(:get, "https://us12.api.mailchimp.com/3.0/lists/2/members?count=2&offset=4")
+          .and_return(
+            {status: 404}
+          )
+        expect { client.fetch_members }.to raise_error(Gibbon::MailChimpError) { |error|
+          expect(error.status_code).to eq 404
+        }
       end
     end
   end
@@ -329,7 +341,7 @@ describe Synchronize::Mailchimp::Client do
       expect(client).to receive(:sleep).exactly(5).times
       expect do
         client.create_segments(%w[a])
-      end.to raise_error RuntimeError, "Batch 1 exeeded max_attempts, status: pending"
+      end.to raise_error Synchronize::Mailchimp::Client::Error, "Batch 1 exeeded max_attempts, status: pending"
     end
 
     it "succeeds if status changes to finished and fetches batch result tgz" do

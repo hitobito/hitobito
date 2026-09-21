@@ -139,7 +139,7 @@ describe Person::CsvImportsController do
 
         before do
           people(:top_leader).update!(birthday: "1.4.1970", tag_list: "secret-tag")
-          people(:top_leader).phone_numbers.create!(number: "+41 79 123 45 67",
+          people(:top_leader).phone_numbers.create!(number: "+41 79 123 45 67", public: true,
             category: contact_account_categories(:phone_number_person_work))
           people(:top_leader).phone_numbers.create!(number: "+41 79 765 43 21", public: false,
             category: contact_account_categories(:phone_number_person_mobile))

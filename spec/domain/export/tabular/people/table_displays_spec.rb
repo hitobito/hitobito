@@ -183,7 +183,7 @@ describe Export::Tabular::People::TableDisplays do
 
     it "has assumptions" do
       person.phone_numbers.create!(label: "foobar", number: "0790000000",
-        category: contact_account_categories(:phone_number_person_other))
+        category: contact_account_categories(:phone_number_person_other), public: true)
 
       expect(subject.attributes).to include(:roles)
       expect(subject).to respond_to(:build_attribute_labels)

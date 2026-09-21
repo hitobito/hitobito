@@ -35,7 +35,7 @@
     #modal-placeholder
     #job-observation-notifications-container.toast-container.position-fixed.bottom-0.start-0.p-3
     %main
-      - if origin_user
+      - if origin_user && current_user
         = render 'layouts/user_impersonation'
 
     - if render_header_logo?

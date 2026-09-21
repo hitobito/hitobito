@@ -22,7 +22,7 @@ class GroupResource < ApplicationResource
     attribute :type, :string
     attribute :email, :string
     attribute :address, :string
-    attribute :zip_code, :integer
+    attribute :zip_code, :string
     attribute :town, :string
     attribute :country, :string
 

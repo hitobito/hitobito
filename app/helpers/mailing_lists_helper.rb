@@ -26,7 +26,9 @@ module MailingListsHelper
   end
 
   def format_mailing_list_preferred_labels(mailing_list)
-    safe_join mailing_list.preferred_labels.sort, ", "
+    names = MailingList.preferred_label_categories.index_by(&:key)
+    labels = mailing_list.preferred_labels.sort.map { |key| names[key]&.to_s || key }
+    safe_join(labels, ", ")
   end
 
   def button_toggle_subscription

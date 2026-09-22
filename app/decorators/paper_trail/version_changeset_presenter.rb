@@ -60,11 +60,17 @@ module PaperTrail
       # globalized_model knows the sti model class to be able to load sti translations
       # as well as being able to load translations for translated attributes even if
       # the main_type is not the globalized_model.
-      attribute_label = item.globalized_model.class.human_attribute_name(attr)
-      if item.globalized_model.is_a?(main_type.safe_constantize)
+      # It is nil if the record it translates has since been deleted, in which case we
+      # fall back to the base translated class, losing sti-subtype-specific translations.
+      globalized_model = item.globalized_model
+      klass = globalized_model&.class ||
+        item.class.reflect_on_association(:globalized_model).klass
+      attribute_label = klass.human_attribute_name(attr)
+
+      if globalized_model.nil? || globalized_model.is_a?(main_type.safe_constantize)
         "#{attribute_label} (#{item})"
       else
-        "#{attribute_label} (#{item}) #{I18n.t("global.from")} #{item.globalized_model}"
+        "#{attribute_label} (#{item}) #{I18n.t("global.from")} #{globalized_model}"
       end
     end
 

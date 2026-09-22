@@ -129,4 +129,16 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
 
     expect(string).to eq("Rolle wurde von <i>Hauptleitung</i> auf <i>Teilnehmer/-in</i> geändert.")
   end
+
+  it "does not raise if the record of a translated attribute was deleted" do
+    event = events(:top_course)
+    translation = event.translations.first
+    version.update!(item: translation)
+    event.delete
+    version.reload
+
+    string = presenter.attribute_change(:name, "Alter Name", "Neuer Name")
+
+    expect(string).to eq("Name (de) wurde von <i>Alter Name</i> auf <i>Neuer Name</i> geändert.")
+  end
 end

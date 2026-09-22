@@ -10,11 +10,19 @@ module Events::Filter
     self.permitted_args = [:types]
 
     def apply(scope)
-      scope.where(type: requested_types)
+      scope.where(type: persisted_types)
     end
 
     def requested_types
       args[:types].to_a.map(&:to_s)
+    end
+
+    private
+
+    def persisted_types
+      requested_types.map do |type|
+        type unless type == "Event" # regular events set type=nil
+      end
     end
   end
 end

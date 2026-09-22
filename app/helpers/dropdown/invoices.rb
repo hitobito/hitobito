@@ -7,8 +7,9 @@ module Dropdown
   class Invoices < Base
     delegate :params, to: :template
 
-    def initialize(template, type)
+    def initialize(template, type, invoice: nil)
       super(template, translate(type), type)
+      @invoice = invoice
     end
 
     def print
@@ -28,10 +29,28 @@ module Dropdown
     private
 
     def pdf_links
-      add_item(translate(:full), export_path(:pdf), **item_options)
-      add_item(translate(:articles_only), export_path(:pdf, payment_slip: false), **item_options)
-      add_item(translate(:esr_only), export_path(:pdf, articles: false), **item_options)
-      add_item(translate(:original_invoice), export_path(:pdf, reminders: false), **item_options)
+      add_item(translate(full_label), export_path(:pdf), **item_options)
+      if payment_slip_relevant?
+        add_item(translate(:articles_only), export_path(:pdf, payment_slip: false), **item_options)
+        add_item(translate(:esr_only), export_path(:pdf, articles: false), **item_options)
+      end
+      add_item(translate(original_invoice_label), export_path(:pdf, reminders: false),
+        **item_options)
+    end
+
+    def full_label
+      payment_slip_relevant? ? :full : :full_without_payment_slip
+    end
+
+    def original_invoice_label
+      payment_slip_relevant? ? :original_invoice : :original_invoice_without_payment_slip
+    end
+
+    # Whether printing with/without the payment slip separately is a meaningful choice.
+    # Without a specific invoice to check (e.g. the bulk print dropdown covering several
+    # invoices at once) we cannot know, so the options are shown.
+    def payment_slip_relevant?
+      @invoice.nil? || !@invoice.no_ps?
     end
 
     def label_links

@@ -28,8 +28,9 @@
     = f.country_field(:payee_country)
 
 = f.labeled_input_field :iban, help: t('.iban_example')
-= f.labeled(:payment_slip) do
-  = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second)
+- if entry.class.payment_slips.many?
+  = f.labeled(:payment_slip) do
+    = f.collection_select(:payment_slip, InvoiceConfig.payment_slip_labels.to_a, :first, :second)
 = f.labeled_input_field :reference_prefix
 
 .row

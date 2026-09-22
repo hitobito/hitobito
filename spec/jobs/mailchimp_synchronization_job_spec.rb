@@ -110,6 +110,46 @@ describe MailchimpSynchronizationJob do
     )
   end
 
+  context "with an invalid mailing list" do
+    before do
+      mailing_list.update_column(:mailchimp_api_key, "invalid_key_format")
+      expect(mailing_list.reload).not_to be_valid
+    end
+
+    it "still sets mailing_list state to syncing when enqueuing" do
+      expect { subject.enqueue! }.not_to raise_error
+
+      mailing_list.reload
+
+      expect(mailing_list.mailchimp_syncing).to be true
+    end
+
+    it "still sets syncing to false after success" do
+      freeze_time
+
+      expect(subject).to receive(:perform)
+
+      expect { enqueue_and_run_job(subject) }.not_to raise_error
+      mailing_list.reload
+
+      check_mailing_list_status_on_success
+    end
+
+    it "still sets syncing to false and creates log entry when job throws" do
+      freeze_time
+
+      expect(subject).to receive(:perform).and_throw(Exception)
+
+      expect do
+        enqueue_and_run_job(subject)
+      end.to change { HitobitoLogEntry.count }.by(1)
+
+      mailing_list.reload
+
+      check_mailing_list_status_and_error_logging_on_failure
+    end
+  end
+
   it "noops if not a mailchimp list" do
     subject.enqueue!
 

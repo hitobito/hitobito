@@ -16,7 +16,7 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def enqueue(_job)
-    mailing_list.update!(mailchimp_syncing: true)
+    mailing_list.update_columns(mailchimp_syncing: true)
   end
 
   def perform
@@ -26,7 +26,7 @@ class MailchimpSynchronizationJob < BaseJob
   end
 
   def success(_job)
-    mailing_list.update(completion_attrs)
+    mailing_list.update_columns(completion_attrs)
     case sync.result.state
     when :partial
       create_log_entry("Mailchimp Abgleich war teilweise nicht erfolgreich")
@@ -37,7 +37,7 @@ class MailchimpSynchronizationJob < BaseJob
 
   def error(_job, exception, payload = parameters)
     sync.result.exception = exception
-    mailing_list.update(mailchimp_syncing: false, mailchimp_result: sync.result)
+    mailing_list.update_columns(mailchimp_syncing: false, mailchimp_result: sync.result)
     create_log_entry("Mailchimp Abgleich war nicht erfolgreich")
     super
   end

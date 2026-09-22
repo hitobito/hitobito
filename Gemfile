@@ -38,7 +38,7 @@ gem "doorkeeper-openid_connect"
 gem "draper", "4.0.2" # pinned because of https://github.com/drapergem/draper/pull/933
 gem "draper-cancancan"
 gem "dry-validation"
-gem "epics" # client for EBICS-connections to banks
+gem "epics", ">= 3.0.0.rc1" # client for EBICS-connections to banks
 gem "faker"
 gem "faraday"
 gem "gibbon"

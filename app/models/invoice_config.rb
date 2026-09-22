@@ -125,6 +125,12 @@ class InvoiceConfig < ActiveRecord::Base
     %w[left right].include?(logo_position.presence)
   end
 
+  # payment_provider_configs get initialized for the form
+  # but are not persisted at that point so we can't use ActiveRecord's order
+  def sorted_payment_provider_configs
+    payment_provider_configs.sort_by { |c| [c.payment_provider.to_s, c.legacy_25_ebics ? 1 : 0] }
+  end
+
   private
 
   def correct_check_digit

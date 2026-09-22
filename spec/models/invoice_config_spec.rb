@@ -117,6 +117,42 @@ describe InvoiceConfig do
     end
   end
 
+  describe "#sorted_payment_provider_configs" do
+    let(:provider_invoice_config) { invoice_configs(:bottom_layer_one) }
+    let(:ubs_config) { payment_provider_configs(:ubs) }
+    let(:postfinance_config) { payment_provider_configs(:postfinance) }
+
+    it "orders persisted configs by payment_provider name, EBICS 3.0 before 2.5" do
+      ubs_config.update!(legacy_25_ebics: false)
+      postfinance_config.update!(legacy_25_ebics: false)
+      postfinance_legacy = provider_invoice_config.payment_provider_configs.create!(
+        payment_provider: "postfinance", legacy_25_ebics: true
+      )
+
+      expect(provider_invoice_config.sorted_payment_provider_configs)
+        .to eq([postfinance_config, postfinance_legacy, ubs_config])
+    end
+
+    it "orders unpersisted configs the same way" do
+      provider_invoice_config.payment_provider_configs.destroy_all
+
+      provider_invoice_config.payment_provider_configs.build(payment_provider: "ubs",
+        legacy_25_ebics: true)
+      provider_invoice_config.payment_provider_configs.build(payment_provider: "postfinance",
+        legacy_25_ebics: false)
+      provider_invoice_config.payment_provider_configs.build(payment_provider: "postfinance",
+        legacy_25_ebics: true)
+
+      expect(provider_invoice_config.sorted_payment_provider_configs.map do |config|
+        [config.payment_provider, config.legacy_25_ebics]
+      end).to eq([
+        ["postfinance", false],
+        ["postfinance", true],
+        ["ubs", true]
+      ])
+    end
+  end
+
   context "#logo_enabled?" do
     context "with logo attached" do
       before { invoice_config.logo.attach(fixture_file_upload("images/logo.png")) }

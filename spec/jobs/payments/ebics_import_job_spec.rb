@@ -21,7 +21,7 @@ describe Payments::EbicsImportJob do
   let(:epics_client) { double(:epics_client) }
   let(:payment_provider) { PaymentProvider.new(config) }
 
-  subject { Payments::EbicsImportJob.new(config.id) }
+  subject { Payments::EbicsImportJob.new(config.invoice_config_id, config.payment_provider) }
 
   it "initializes payments and logs" do
     config.update(status: :registered)
@@ -129,6 +129,100 @@ describe Payments::EbicsImportJob do
     expect(error_log.subject).to eq(config)
     expect(error_log.payload["error"]).to include("REXML::ParseException")
     expect(error_log.attachment).to be_attached
+  end
+
+  context "fallback from EBICS 3.0 to 2.5" do
+    let(:legacy_config) do
+      config.invoice_config.payment_provider_configs.create!(
+        payment_provider: "postfinance", legacy_25_ebics: true, status: :registered
+      )
+    end
+    let(:legacy_provider) { PaymentProvider.new(legacy_config) }
+    let(:legacy_epics_client) { double(:legacy_epics_client) }
+
+    before do
+      config.update!(status: :registered, legacy_25_ebics: false)
+      legacy_config
+
+      # Evaluate before stubbing PaymentProvider.new, or building these doubles would
+      # itself hit the stub with an argument it doesn't recognize.
+      payment_provider
+      legacy_provider
+
+      allow(PaymentProvider).to receive(:new).with(config).and_return(payment_provider)
+      allow(PaymentProvider).to receive(:new).with(legacy_config).and_return(legacy_provider)
+    end
+
+    it "falls back to the 2.5 config when the 3.0 attempt raises any error" do
+      expect(payment_provider).to receive(:HPB).and_raise(Epics::Error::TechnicalError.new("091010"))
+
+      allow(legacy_provider).to receive(:client).and_return(legacy_epics_client)
+      expect(legacy_epics_client).to receive(:HPB)
+      expect(legacy_provider).to receive(:check_bank_public_keys!).and_return(true)
+      expect(legacy_provider).to receive(:Z54).and_return(invoice_files)
+
+      invoice = Fabricate(:invoice, due_at: 10.days.from_now, creator: people(:top_leader),
+        recipient: people(:bottom_member), group: groups(:bottom_layer_one))
+      InvoiceRun.create(title: "membership fee", invoices: [invoice])
+      invoice.update!(reference: "000000000000100000000000800")
+
+      expect do
+        subject.perform
+      end.to change { HitobitoLogEntry.count }.by(2)
+
+      start_log, success_log = HitobitoLogEntry.last(2)
+      expect(start_log.subject).to eq(config)
+      expect(success_log.message).to eq("Successfully imported 5 payments")
+      expect(success_log.subject).to eq(legacy_config)
+    end
+
+    it "does not fall back when the 3.0 config succeeds" do
+      allow(payment_provider).to receive(:client).and_return(epics_client)
+      expect(epics_client).to receive(:HPB)
+      expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
+      expect(payment_provider).to receive(:Z54).and_return(invoice_files)
+
+      expect(legacy_provider).to_not receive(:HPB)
+
+      subject.perform
+
+      _, success_log = HitobitoLogEntry.last(2)
+      expect(success_log.subject).to eq(config)
+    end
+
+    it "reports the error normally when both the 3.0 and 2.5 attempts fail" do
+      expect(payment_provider).to receive(:HPB).and_raise(Epics::Error::TechnicalError.new("091010"))
+      legacy_error = Epics::Error::TechnicalError.new("091010")
+      expect(legacy_provider).to receive(:HPB).and_raise(legacy_error)
+
+      expect(Airbrake).to receive(:notify)
+        .exactly(:once)
+        .with(legacy_error, hash_including(parameters: {payment_provider_config: legacy_config}))
+
+      expect do
+        subject.perform
+      end.to change { HitobitoLogEntry.count }.by(2)
+
+      _, error_log = HitobitoLogEntry.last(2)
+      expect(error_log.subject).to eq(legacy_config)
+    end
+
+    it "does not fall back on a payment xml processing error" do
+      allow(payment_provider).to receive(:client).and_return(epics_client)
+      expect(epics_client).to receive(:HPB)
+      expect(payment_provider).to receive(:check_bank_public_keys!).and_return(true)
+      expect(payment_provider).to receive(:Z54).and_return(invalid_invoice_files)
+
+      expect(legacy_provider).to_not receive(:HPB)
+
+      expect do
+        subject.perform
+      end.to change { HitobitoLogEntry.count }.by(2)
+
+      _, error_log = HitobitoLogEntry.last(2)
+      expect(error_log.subject).to eq(config)
+      expect(error_log.payload["error"]).to include("REXML::ParseException")
+    end
   end
 
   describe "#log_result" do

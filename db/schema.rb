@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_09_08_151830) do
+ActiveRecord::Schema[8.0].define(version: 2026_09_22_113307) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -71,8 +71,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_08_151830) do
     t.string "last_name"
     t.string "organization_name"
     t.boolean "organization", default: false, null: false
-    t.index ["contactable_id", "contactable_type", "label"], name: "idx_on_contactable_id_contactable_type_label_53043e4f10", unique: true
     t.index ["category_id"], name: "index_additional_addresses_on_category_id"
+    t.index ["contactable_id", "contactable_type", "label"], name: "idx_on_contactable_id_contactable_type_label_53043e4f10", unique: true
     t.index ["contactable_id", "contactable_type"], name: "index_additional_addresses_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
     t.index ["contactable_type", "contactable_id"], name: "index_additional_addresses_on_contactable"
   end
@@ -1065,6 +1065,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_08_151830) do
     t.datetime "synced_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "legacy_25_ebics", default: true, null: false
+    t.index ["invoice_config_id", "payment_provider", "legacy_25_ebics"], name: "index_payment_provider_configs_on_config_provider_and_legacy", unique: true
     t.index ["invoice_config_id"], name: "index_payment_provider_configs_on_invoice_config_id"
   end
 

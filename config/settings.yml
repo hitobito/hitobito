@@ -292,6 +292,18 @@ invoices:
     # to only show invoices from finance layers the current user has access to.
     # When disabled, the pre-#4277 behavior is used and all invoices are shown.
     enabled: true
+  ebics:
+    legacy_ebics_25:
+      # When enabled, a legacy EBICS 2.5 payment provider config is kept alongside
+      # the EBICS 3.0 one for each bank, for the transition period until banks drop
+      # EBICS 2.5 support (#1516). When disabled, only EBICS 3.0 configs are used.
+      enabled: true
+    ebics_30:
+      # When enabled, an EBICS 3.0 payment provider config is created for each bank
+      # (#1516). When disabled, only EBICS 2.5 configs are used, allowing EBICS 3.0
+      # support to be turned off again per instance while it is still being rolled out.
+      enabled: true
+    import_payments_from: <%= 3.days.ago %>
 
 wallets:
   sync_interval: <%= ENV['HITOBITO_WALLETS_SYNC_SECONDS'].presence || 3.minutes %>

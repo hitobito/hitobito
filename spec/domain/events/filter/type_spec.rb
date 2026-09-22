@@ -48,6 +48,16 @@ describe Events::Filter::Type do
     end
   end
 
+  context "with base event type" do
+    let(:params) { {types: ["Event"]} }
+
+    it "includes only events with specified type" do
+      result = filter.apply(base_scope)
+      expect(result.count).to eq(1)
+      expect(result).to include(event)
+    end
+  end
+
   context "with multiple types" do
     let(:params) { {types: ["Event::Course", "Event::UnknownEvent"]} }
 

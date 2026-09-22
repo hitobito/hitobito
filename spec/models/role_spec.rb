@@ -667,64 +667,16 @@ describe Role do
   end
 
   context "#destroy" do
-    context "on young role" do
+    context "role starting in the past" do
       let(:role) do
         Fabricate(Group::BottomLayer::Leader.name.to_s, group: groups(:bottom_layer_one), start_on: 1.year.ago)
       end
 
-      it "gets deleted from database" do
-        role.destroy
-        expect(described_class.unscoped.where(id: role.id)).not_to be_exists
-      end
-
-      it "triggers destroy but not update callback" do
-        track_callbacks(role) do |callback_types|
-          role.destroy
-          expect(callback_types).to include(:destroy)
-          expect(callback_types).not_to include(:update)
-        end
-      end
-
-      it "with always_soft_destroy: true ends role per yesterday" do
-        expect { role.destroy(always_soft_destroy: true) }
-          .to change { role.reload.end_on }.to(Date.current.yesterday)
-      end
-
-      it "with always_soft_destroy: true triggers destroy and update callback" do
-        track_callbacks(role) do |callback_types|
-          role.destroy(always_soft_destroy: true)
-          expect(callback_types).to include(:destroy, :update)
-        end
-      end
-    end
-
-    context "on role ended in the past" do
-      let(:role) do
-        Fabricate(Group::BottomLayer::Leader.name.to_s,
-          start_on: 1.year.ago,
-          end_on: Date.current.last_year,
-          group: groups(:bottom_layer_one))
-      end
-
-      it "does not change end_on" do
-        expect { role.destroy(always_soft_destroy: true) }
-          .not_to change { role.reload.end_on }
-      end
-    end
-
-    context "on old role" do
-      let(:role) do
-        Fabricate(Group::BottomLayer::Leader.name.to_s,
-          created_at: Time.zone.now - Settings.role.minimum_days_to_archive.days - 1.day,
-          group: groups(:bottom_layer_one),
-          start_on: 1.year.ago)
-      end
-
-      it "ends role per yesterday" do
+      it "ends role per yesterday instead of deleting it" do
         expect { role.destroy }.to change { role.reload.end_on }.to(Date.current.yesterday)
       end
 
-      it "triggers destroy and update callbacks" do
+      it "triggers destroy and save callbacks" do
         # Soft destroy calls run_callbacks :destroy, which triggers after_destroy
         # Inside the block, it calls update!, which triggers after_update
         track_callbacks(role) do |callback_types|
@@ -732,6 +684,11 @@ describe Role do
           expect(callback_types).to include(:destroy, :save)
           expect(callback_types.index(:destroy)).to be < callback_types.index(:save)
         end
+      end
+
+      it "always_soft_destroy: true does not change the outcome" do
+        expect { role.destroy(always_soft_destroy: true) }
+          .to change { role.reload.end_on }.to(Date.current.yesterday)
       end
 
       it "can delete if role starts tomorrow" do
@@ -749,15 +706,110 @@ describe Role do
         expect(role.destroy).to be_truthy
       end
     end
+
+    context "role starting today" do
+      let(:role) do
+        Fabricate(Group::BottomLayer::Leader.name.to_s, group: groups(:bottom_layer_one), start_on: Time.zone.today)
+      end
+
+      it "gets deleted from database" do
+        role.destroy
+        expect(described_class.unscoped.where(id: role.id)).not_to be_exists
+      end
+
+      it "triggers destroy but not update callback" do
+        track_callbacks(role) do |callback_types|
+          role.destroy
+          expect(callback_types).to include(:destroy)
+          expect(callback_types).not_to include(:update)
+        end
+      end
+
+      it "always_soft_destroy: true does not change the outcome" do
+        role.destroy(always_soft_destroy: true)
+        expect(described_class.unscoped.where(id: role.id)).not_to be_exists
+      end
+    end
+
+    context "role starting in the future" do
+      let(:role) do
+        Fabricate(Group::BottomLayer::Leader.name.to_s,
+          group: groups(:bottom_layer_one), start_on: Time.zone.tomorrow)
+      end
+
+      it "gets deleted from database" do
+        role.destroy
+        expect(described_class.unscoped.where(id: role.id)).not_to be_exists
+      end
+    end
+
+    context "role without start_on" do
+      let(:role) do
+        Fabricate(Group::BottomLayer::Leader.name.to_s, group: groups(:bottom_layer_one), start_on: nil)
+      end
+
+      it "gets deleted from database" do
+        role.destroy
+        expect(described_class.unscoped.where(id: role.id)).not_to be_exists
+      end
+    end
+
+    context "on role ended in the past" do
+      let(:role) do
+        Fabricate(Group::BottomLayer::Leader.name.to_s,
+          start_on: 1.year.ago,
+          end_on: Date.current.last_year,
+          group: groups(:bottom_layer_one))
+      end
+
+      it "does not change end_on" do
+        expect { role.destroy(always_soft_destroy: true) }
+          .not_to change { role.reload.end_on }
+      end
+    end
+  end
+
+  context "#ends_on_destroy?" do
+    it "is true for role starting in the past" do
+      role = Fabricate(Group::BottomLayer::Leader.name.to_s,
+        group: groups(:bottom_layer_one), start_on: 1.year.ago)
+      expect(role.ends_on_destroy?).to eq true
+    end
+
+    it "is false for role starting today" do
+      role = Fabricate(Group::BottomLayer::Leader.name.to_s,
+        group: groups(:bottom_layer_one), start_on: Time.zone.today)
+      expect(role.ends_on_destroy?).to eq false
+    end
+
+    it "is false for role starting in the future" do
+      role = Fabricate(Group::BottomLayer::Leader.name.to_s,
+        group: groups(:bottom_layer_one), start_on: Time.zone.tomorrow)
+      expect(role.ends_on_destroy?).to eq false
+    end
+
+    it "is false for role without start_on" do
+      role = Fabricate(Group::BottomLayer::Leader.name.to_s,
+        group: groups(:bottom_layer_one), start_on: nil)
+      expect(role.ends_on_destroy?).to eq false
+    end
   end
 
   context "#destroy!" do
-    it "soft deletes young roles with always_soft_destroy: true" do
+    it "soft deletes roles starting in the past" do
       a = Fabricate(Group::BottomLayer::Leader.name, label: "foo",
         group: groups(:bottom_layer_one), start_on: 1.year.ago)
 
-      expect { a.destroy!(always_soft_destroy: true) }
+      expect { a.destroy! }
         .to change { a.reload.end_on }.to(Date.current.yesterday)
+    end
+
+    it "hard deletes roles starting today" do
+      a = Fabricate(Group::BottomLayer::Leader.name, label: "foo",
+        group: groups(:bottom_layer_one), start_on: Time.zone.today)
+
+      a.destroy!
+      expect(described_class.unscoped.where(id: a.id)).not_to be_exists
     end
   end
 
@@ -901,18 +953,22 @@ describe Role do
     end
 
     context "on destroy" do
-      it "with role too young to archive" do
+      it "with role without start_on creates a destroy version" do
         role = person.roles.first
-        expect(role.created_at).to be > Settings.role.minimum_days_to_archive.days.ago
+        expect(role.start_on).to be_nil
 
         expect do
           role.destroy!
-        end.not_to change { PaperTrail::Version.count }
+        end.to change { PaperTrail::Version.count }.by(1)
+
+        version = PaperTrail::Version.order(:created_at, :id).last
+        expect(version.event).to eq("destroy")
+        expect(version.main).to eq(person)
       end
 
-      it "with role old enough to archive" do
+      it "with role starting in the past creates an update version" do
         role = person.roles.first
-        role.created_at = Settings.role.minimum_days_to_archive.days.ago - 1.second
+        role.update_column(:start_on, 1.year.ago)
 
         expect do
           role.destroy!
@@ -926,17 +982,11 @@ describe Role do
   end
 
   context "archived:" do
-    around do |spec|
-      previous = Settings.role.minimum_days_to_archive
-      Settings.role.minimum_days_to_archive = 0
-
-      spec.run
-
-      Settings.role.minimum_days_to_archive = previous || 7
-    end
-
     subject(:archived_role) do
-      roles(:bottom_member).tap { |r| r.update(archived_at: 1.day.ago) }
+      roles(:bottom_member).tap do |r|
+        r.update_columns(start_on: 1.year.ago)
+        r.update(archived_at: 1.day.ago)
+      end
     end
 
     context "archived? is" do

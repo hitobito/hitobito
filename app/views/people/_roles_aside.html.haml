@@ -29,7 +29,10 @@
                         = role.decorate.for_aside
                       = render_extensions :roles_aside_row, locals: { role:, index: }
                       %td= link_action_edit(edit_group_role_path(role.group, role)) if can?(:edit, role)
-                      %td= link_action_destroy(group_role_path(role.group, role)) if can?(:destroy, role)
+                      %td
+                        - if can?(:destroy, role)
+                          - destroy_icon = role.ends_on_destroy? ? icon(:"right-to-bracket", filled: true) : icon(:"trash-alt", filled: false)
+                          = link_action_destroy(group_role_path(role.group, role), destroy_icon)
 
             %td
               - if can?(:new, group.roles.new)

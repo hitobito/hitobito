@@ -1,4 +1,4 @@
-name: 'Wagon tests'
+name: 'Run all wagon tests on core changes'
 
 on:
   workflow_dispatch:

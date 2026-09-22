@@ -39,6 +39,8 @@
 - Pro Frage kann neu festgelegt werden, welche Rollen des Anlass/Kurses die Antworten sehen dürfen, auch auf Vorlagen für Anmeldeangaben. Die Hauptleitung sieht immer alle Antworten, für weitere Rollen sind neue Fragen standardmässig nicht einsehbar. Die Mails an die Kontaktperson und die Anmelde-Freigabe enthalten keine Antworten mehr, und Helfer*innen sehen keine Anmeldeangaben anderer Teilnehmender mehr (#4046)
 - Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)
 - E-Mail-Adressen mit aufeinanderfolgenden Punkten oder einem Punkt vor dem @ sind ungültig
+- Bevorzugte E-Mail-Kategorien einer Mailing-Liste werden über ein Mehrfachauswahlfeld statt Freitext gepflegt (#4482)
+
 
 ## Version 2.10
 

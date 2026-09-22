@@ -940,6 +940,12 @@ describe Export::Pdf::Invoice do
     )
   end
 
+  it "renders no payment slip section for an invoice without one" do
+    expect_any_instance_of(Export::Pdf::Invoice::PaymentSlip).not_to receive(:render)
+    expect_any_instance_of(Export::Pdf::Invoice::PaymentSlipQr).not_to receive(:render)
+    described_class.render(build_invoice(payment_slip: "no_ps"), payment_slip: true)
+  end
+
   context "currency" do
     subject do
       PDF::Inspector::Text.analyze(pdf).show_text.compact.join(" ")

@@ -527,17 +527,17 @@ describe Group do
         expect { top_group.destroy }.to change { Group.deleted.count }.by(1)
       end
 
-      it "soft destroys role if role is old enough to archive" do
-        top_leader.update_columns(created_at: 1.year.ago, start_on: 1.year.ago)
+      it "soft destroys role if role started in the past" do
+        top_leader.update_columns(start_on: 1.year.ago)
         expect { top_group.destroy }.to change { Role.ended.count }.by(1)
       end
     end
 
     context "role assignments" do
       it "terminates own roles" do
-        _role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
+        _role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group, start_on: Time.zone.today)
         _deleted_ids = bottom_group.roles.collect(&:id)
-        # role is deleted permanantly as it is less than Settings.role.minimum_days_to_archive old
+        # role is deleted permanently as it starts today, not in the past
         expect { bottom_group.destroy }.to change { Role.with_inactive.count }.by(-1)
       end
     end

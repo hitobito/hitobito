@@ -45,18 +45,35 @@ describe InvoiceConfigsController do
       end
     end
 
-    it "initializes payment provider config if none is present" do
+    it "initializes 2.5 and 3.0 payment provider configs per provider if none is present" do
       configured_payment_providers = Settings.payment_providers
       expect(configured_payment_providers.size).to be_positive
 
       get :edit, params: {group_id: group.id, id: entry.id}
 
-      expect(assigns(:invoice_config).payment_provider_configs.size)
-        .to eq(configured_payment_providers.size)
+      configs = assigns(:invoice_config).payment_provider_configs
+      expect(configs.size).to eq(configured_payment_providers.size * 2)
+      expect(configs.map(&:payment_provider).uniq.sort)
+        .to eq(configured_payment_providers.map(&:name).sort)
 
-      assigns(:invoice_config).payment_provider_configs.each do |config|
-        expect(config).to be_valid
+      configs.each { |config| expect(config).to be_valid }
+
+      configured_payment_providers.each do |provider|
+        provider_configs = configs.select { |config| config.payment_provider == provider.name }
+        expect(provider_configs.map(&:legacy_25_ebics)).to contain_exactly(false, true)
       end
+    end
+
+    it "initializes only the 3.0 payment provider config if legacy_ebics_25 is disabled" do
+      allow(Settings.invoices.legacy_ebics_25).to receive(:enabled).and_return(false)
+
+      get :edit, params: {group_id: group.id, id: entry.id}
+
+      raiffeisen_configs = assigns(:invoice_config).payment_provider_configs
+        .select { |config| config.payment_provider == "raiffeisen" }
+
+      expect(raiffeisen_configs.size).to eq(1)
+      expect(raiffeisen_configs.first.legacy_25_ebics).to eq(false)
     end
   end
 
@@ -74,7 +91,7 @@ describe InvoiceConfigsController do
     end
 
     it "creates a payment provider config but does not setup ebics if required values are not present" do
-      attrs = {0 => {payment_provider: "postfinance"}}
+      attrs = {0 => {payment_provider: "raiffeisen"}}
 
       expect(PaymentProvider).to_not receive(:new)
 
@@ -86,7 +103,7 @@ describe InvoiceConfigsController do
     end
 
     it "creates a payment provider config and sets up ebics if required values are present" do
-      attrs = {0 => {payment_provider: "postfinance",
+      attrs = {0 => {payment_provider: "raiffeisen",
                      password: "password",
                      partner_identifier: "EPF0002",
                      user_identifier: "ACE2004"}}
@@ -106,7 +123,7 @@ describe InvoiceConfigsController do
     end
 
     it "sets flash message on ebics initialization error" do
-      attrs = {0 => {payment_provider: "postfinance",
+      attrs = {0 => {payment_provider: "raiffeisen",
                      password: "password",
                      partner_identifier: "EPF0002",
                      user_identifier: "ACE2004"}}
@@ -123,7 +140,7 @@ describe InvoiceConfigsController do
           payment_provider_configs_attributes: attrs
         }}
       end.to change { entry.reload.payment_provider_configs.size }.by(1)
-      expect(flash[:alert]).to match(/Einrichten der Zahlungsschnittstelle Postfinance ist fehlgeschlagen/)
+      expect(flash[:alert]).to match(/Einrichten der Zahlungsschnittstelle Raiffeisen Schweiz ist fehlgeschlagen/)
     end
 
     it "updates reference_prefix" do

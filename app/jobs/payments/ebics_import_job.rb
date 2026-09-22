@@ -1,37 +1,35 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021-2024, Die Mitte. This file is part of
+#  Copyright (c) 2021-2026, Die Mitte. This file is part of
 #  hitobito_die_mitte and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
 
 class Payments::EbicsImportJob < BaseJob
-  self.parameters = [:payment_provider_config_id]
+  self.parameters = [:invoice_config_id, :payment_provider]
   self.use_background_job_logging = true
 
-  def initialize(payment_provider_config_id)
+  def initialize(invoice_config_id, payment_provider)
     super()
-    @payment_provider_config_id = payment_provider_config_id
+    @invoice_config_id = invoice_config_id
+    @payment_provider = payment_provider
   end
 
   def perform # rubocop:todo Metrics/AbcSize
+    @used_config = primary_config
     create_start_log
-    Payments::EbicsImport.new(payment_provider_config).run.each do |status, status_payments|
+    import_with_fallback.each do |status, status_payments|
       payments[status] += status_payments
     end
     create_success_log
   rescue Invoice::PaymentProcessor::ProcessError => process_error
     errors << process_error.error
     create_error_log(process_error.error, process_error.xml)
-    error(self, process_error.error, payment_provider_config: payment_provider_config)
+    error(self, process_error.error, payment_provider_config: @used_config)
   rescue StandardError => error
     errors << error
     create_error_log(error)
-    error(self, error, payment_provider_config: payment_provider_config)
-  end
-
-  def payment_provider_configs
-    PaymentProviderConfig.initialized
+    error(self, error, payment_provider_config: @used_config)
   end
 
   def log_results
@@ -67,7 +65,7 @@ class Payments::EbicsImportJob < BaseJob
   def create_log_entry(level: "", message: "", payload: nil, xml: nil)
     log = HitobitoLogEntry.create!(
       level: level,
-      subject: payment_provider_config,
+      subject: @used_config,
       category: "ebics",
       message: message,
       payload: payload
@@ -82,8 +80,33 @@ class Payments::EbicsImportJob < BaseJob
     log
   end
 
-  def payment_provider_config
-    @payment_provider_config ||= PaymentProviderConfig.find(@payment_provider_config_id)
+  # Tries the primary (preferably EBICS 3.0) config first; on any EBICS-level error, if a
+  # second config exists for this invoice_config/payment_provider pair, retries with that
+  # one. Errors unrelated to EBICS itself (e.g. payment xml processing) are not retried.
+  def import_with_fallback
+    Payments::EbicsImport.new(primary_config).run
+  rescue Epics::Error, PaymentProviders::EbicsError => e
+    raise e unless fallback_config
+
+    @used_config = fallback_config
+    Payments::EbicsImport.new(fallback_config).run
+  end
+
+  def primary_config
+    payment_provider_configs.first
+  end
+
+  def fallback_config
+    payment_provider_configs.second
+  end
+
+  # Ordered by legacy_25_ebics ascending, so EBICS 3.0 (false) comes before 2.5 (true) when
+  # both exist. When only one config exists (either version), it is always primary_config,
+  # with no fallback_config to retry with.
+  def payment_provider_configs
+    @payment_provider_configs ||= PaymentProviderConfig.initialized
+      .where(invoice_config_id: @invoice_config_id, payment_provider: @payment_provider)
+      .list.to_a
   end
 
   def payments

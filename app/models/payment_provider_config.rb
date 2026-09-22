@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2021-2026, Die Mitte Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,6 +12,7 @@
 #  id                 :bigint           not null, primary key
 #  encrypted_keys     :text
 #  encrypted_password :string
+#  legacy_25_ebics    :boolean          default(TRUE), not null
 #  partner_identifier :string
 #  payment_provider   :string
 #  status             :integer          default("draft"), not null
@@ -23,7 +24,8 @@
 #
 # Indexes
 #
-#  index_payment_provider_configs_on_invoice_config_id  (invoice_config_id)
+#  index_payment_provider_configs_on_config_provider_and_legacy  (invoice_config_id,payment_provider,legacy_25_ebics) UNIQUE
+#  index_payment_provider_configs_on_invoice_config_id           (invoice_config_id)
 #
 class PaymentProviderConfig < ActiveRecord::Base
   include Encryptable
@@ -38,8 +40,7 @@ class PaymentProviderConfig < ActiveRecord::Base
   serialize :encrypted_password, coder: YAML
 
   scope :initialized, -> { where(status: [:pending, :registered]) }
-
-  after_destroy :clear_scheduled_ebics_import_jobs
+  scope :list, -> { order(:payment_provider, :legacy_25_ebics) }
 
   attr_encrypted :keys, :password
 
@@ -51,17 +52,18 @@ class PaymentProviderConfig < ActiveRecord::Base
     self.payment_provider = provider
   end
 
+  def ebics_version
+    legacy_25_ebics? ? Epics::Keyring::VERSION_25 : Epics::Keyring::VERSION_30
+  end
+
+  def ebics_version_label
+    legacy_25_ebics? ? "EBICS 2.5" : "EBICS 3.0"
+  end
+
   def ebics_required_fields_present?
     payment_provider.present? &&
       user_identifier.present? &&
       partner_identifier.present? &&
       password.present?
-  end
-
-  def clear_scheduled_ebics_import_jobs
-    Delayed::Job.where(
-      "handler LIKE ?",
-      "%Payments::EbicsImportJob%payment_provider_config_id: #{id}%"
-    ).delete_all
   end
 end

@@ -21,9 +21,9 @@ describe PaymentProvider do
   context "initial_setup" do
     let(:bank_keys) do
       {
-        A006: Epics::Key.new(OpenSSL::PKey::RSA.generate(1024)),
-        X002: Epics::Key.new(OpenSSL::PKey::RSA.generate(1024)),
-        E002: Epics::Key.new(OpenSSL::PKey::RSA.generate(1024))
+        A006: "signature-key",
+        X002: "authentication-key",
+        E002: "encryption-key"
       }
     end
 
@@ -34,9 +34,62 @@ describe PaymentProvider do
 
       subject.initial_setup
 
-      expect(payment_provider_config.keys).to include(bank_keys[:A006].to_s)
-      expect(payment_provider_config.keys).to include(bank_keys[:X002].to_s)
-      expect(payment_provider_config.keys).to include(bank_keys[:E002].to_s)
+      expect(payment_provider_config.keys).to include(bank_keys[:A006])
+      expect(payment_provider_config.keys).to include(bank_keys[:X002])
+      expect(payment_provider_config.keys).to include(bank_keys[:E002])
+    end
+
+    it "sets up an EBICS 2.5 client with the A005 signature version for a legacy config" do
+      payment_provider_config.update!(password: "password", legacy_25_ebics: true)
+      allow(epics_client).to receive(:dump_keys).and_return(JSON.generate(bank_keys))
+
+      expect(Epics::Client).to receive(:setup).with(
+        "password",
+        payment_provider_setting.url,
+        payment_provider_setting.host_id,
+        payment_provider_config.user_identifier,
+        payment_provider_config.partner_identifier,
+        Epics::Client::DEFAULT_KEY_SIZE,
+        {version: Epics::Keyring::VERSION_25, signature_version: Epics::Signature::A_VERSION_5}
+      ).and_return(epics_client)
+
+      subject.initial_setup
+    end
+
+    it "sets up an EBICS 3.0 client without overriding the signature version" do
+      payment_provider_config.update!(password: "password", legacy_25_ebics: false)
+      allow(epics_client).to receive(:dump_keys).and_return(JSON.generate(bank_keys))
+
+      expect(Epics::Client).to receive(:setup).with(
+        "password",
+        payment_provider_setting.url,
+        payment_provider_setting.host_id,
+        payment_provider_config.user_identifier,
+        payment_provider_config.partner_identifier,
+        Epics::Client::DEFAULT_KEY_SIZE,
+        {version: Epics::Keyring::VERSION_30}
+      ).and_return(epics_client)
+
+      subject.initial_setup
+    end
+  end
+
+  context "#client" do
+    before do
+      allow(subject).to receive(:client).and_call_original
+      payment_provider_config.keys = "{}"
+    end
+
+    it "builds a client with the config's ebics version" do
+      payment_provider_config.legacy_25_ebics = false
+
+      expect(subject.send(:client).version).to eq(Epics::Keyring::VERSION_30)
+    end
+
+    it "builds a legacy client with EBICS 2.5" do
+      payment_provider_config.legacy_25_ebics = true
+
+      expect(subject.send(:client).version).to eq(Epics::Keyring::VERSION_25)
     end
   end
 
@@ -156,8 +209,8 @@ describe PaymentProvider do
     end
   end
 
-  context "Z54" do
-    it "sends Z54 order" do
+  context "Z54 for a legacy EBICS 2.5 config" do
+    it "sends Z54 order via download_and_unzip" do
       response = ['<?xml version=\"1.0\" encoding=\"UTF-8\"?>']
 
       expect(epics_client).to receive(:download_and_unzip).with(PaymentProviders::Z54, nil,
@@ -174,6 +227,41 @@ describe PaymentProvider do
         subject.Z54
       end.to raise_error(Epics::Error::BusinessError,
         "EBICS_NO_DOWNLOAD_DATA_AVAILABLE - No data are available at present for the selected download order type")
+    end
+  end
+
+  context "Z54 for an EBICS 3.0 config" do
+    before { payment_provider_config.legacy_25_ebics = false }
+
+    it "sends a C54 order via the client's built-in C54 method with the CH scope" do
+      response = ['<?xml version=\"1.0\" encoding=\"UTF-8\"?>']
+
+      expect(epics_client).to receive(:C54).with(nil, nil, scope: "CH", msg_name_version: "08")
+        .exactly(:once).and_return(response)
+
+      expect(subject.Z54).to eq(response)
+    end
+
+    it "raises if no download data available" do
+      expect(epics_client).to receive(:C54).with(nil, nil, scope: "CH", msg_name_version: "08").exactly(:once)
+        .and_raise(Epics::Error::BusinessError.new("090005"))
+
+      expect do
+        subject.Z54
+      end.to raise_error(Epics::Error::BusinessError,
+        "EBICS_NO_DOWNLOAD_DATA_AVAILABLE - No data are available at present for the selected download order type")
+    end
+  end
+
+  context "#ebics_scope" do
+    it "defaults to CH" do
+      expect(subject.send(:ebics_scope)).to eq("CH")
+    end
+
+    it "uses the configured scope of the payment provider setting when present" do
+      allow(payment_provider_setting).to receive(:scope).and_return("GLB")
+
+      expect(subject.send(:ebics_scope)).to eq("GLB")
     end
   end
 

@@ -41,6 +41,14 @@ describe MailingList do
     end
   end
 
+  describe ".preferred_label_categories" do
+    it "returns the AdditionalEmail categories available for Person" do
+      expect(MailingList.preferred_label_categories.map(&:key)).to match_array(
+        %w[private work invoices other]
+      )
+    end
+  end
+
   describe "validations" do
     it "succeed with mail_name" do
       list.mail_name = "aa-b"

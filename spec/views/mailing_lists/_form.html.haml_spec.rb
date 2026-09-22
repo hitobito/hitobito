@@ -19,10 +19,33 @@ describe "mailing_lists/_form.html.haml" do
       path_args: [entry.group, entry]
     })
     allow(view.controller).to receive(:current_ability).and_return(ability)
-    assign(:preferred_labels, [])
+    assign(:preferred_label_categories, MailingList.preferred_label_categories)
+    assign(:preferred_labels, entry.preferred_labels)
+    assign(:legacy_preferred_labels, [])
+    assign(:preferred_label_options, MailingList.preferred_label_categories.map { |c| [c.to_s, c.key] })
   end
 
   subject { Capybara::Node::Simple.new(render) }
+
+  context "preferred_labels field" do
+    it "renders a tom-select multi-select over the available categories" do
+      expect(subject).to have_selector(
+        'select[multiple][data-controller="tom-select"][name="mailing_list[preferred_labels][]"] ' \
+        "option", text: "Andere"
+      )
+    end
+
+    it "keeps unresolved legacy labels selectable" do
+      assign(:legacy_preferred_labels, ["legacy-label"])
+      assign(:preferred_labels, entry.preferred_labels + ["legacy-label"])
+      assign(:preferred_label_options,
+        MailingList.preferred_label_categories.map { |c| [c.to_s, c.key] } + [["legacy-label", "legacy-label"]])
+
+      expect(subject).to have_selector(
+        'select[name="mailing_list[preferred_labels][]"] option[selected]', text: "legacy-label"
+      )
+    end
+  end
 
   context "subscribable_for fields" do
     it "are rendered if user can update attribute" do

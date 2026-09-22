@@ -54,8 +54,11 @@ class MailingListsController < CrudController
   end
 
   def load_labels
-    @labels = AdditionalEmail.distinct.pluck(:label)
-    @preferred_labels = entry.preferred_labels.sort
+    @preferred_label_categories = MailingList.preferred_label_categories
+    @preferred_labels = entry.preferred_labels
+    @legacy_preferred_labels = @preferred_labels - @preferred_label_categories.map(&:key)
+    @preferred_label_options = @preferred_label_categories.map { |c| [c.to_s, c.key] } +
+      @legacy_preferred_labels.map { |label| [label, label] }
   end
 
   def render_entries_json(entries)

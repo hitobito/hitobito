@@ -97,8 +97,16 @@ class MailingList < ActiveRecord::Base
 
   DEFAULT_LABEL = "_main".freeze
 
+  PREFERRED_LABEL_CONTACT_ACCOUNT_TYPE = "AdditionalEmail"
+  PREFERRED_LABEL_CONTACTABLE_TYPE = "Person"
+
   i18n_enum :subscribable_for, SUBSCRIBABLE_FORS, scopes: true
   i18n_enum :subscribable_mode, SUBSCRIBABLE_MODES, scopes: true
+
+  def self.preferred_label_categories
+    ContactAccountCategory.for(PREFERRED_LABEL_CONTACT_ACCOUNT_TYPE,
+      PREFERRED_LABEL_CONTACTABLE_TYPE)
+  end
 
   def to_s(_format = :default)
     name

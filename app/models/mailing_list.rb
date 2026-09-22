@@ -100,6 +100,10 @@ class MailingList < ActiveRecord::Base
   i18n_enum :subscribable_for, SUBSCRIBABLE_FORS, scopes: true
   i18n_enum :subscribable_mode, SUBSCRIBABLE_MODES, scopes: true
 
+  def self.preferred_label_categories
+    ContactAccountCategory.for("AdditionalEmail", "Person")
+  end
+
   def to_s(_format = :default)
     name
   end

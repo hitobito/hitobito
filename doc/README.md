@@ -6,3 +6,4 @@
 * [User](https://hitobito.readthedocs.io/de/latest/) (manage your organisation 🚀)
 * [Developer](developer/README.md) (dive 🤿 into coding)
 * [Operator](operator/README.md) (everything you need to know to run hitobito 🏃)
+* [Features](features.md) (optional features and how to enable them 🚩)

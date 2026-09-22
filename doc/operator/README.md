@@ -5,3 +5,4 @@
 - Überwachen der Applikation [Health Check](03_health_checks.md)
 - Release-Ablauf: [Releases](04_releases.md)
 - Restore von gelöschten Daten: [Restore](05_restore.md)
+- Optionale Features konfigurieren: [Feature Gates](../features.md)

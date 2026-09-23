@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Firmenfelder (Firma/Firmenname) auf Personen, zusätzlichen Adressen und im Anmeldeformular von Anlässen können per Feature Gate `address.company` ausgeblendet werden (#4471)
+
 ## Version 2.10
 
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)

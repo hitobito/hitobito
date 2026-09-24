@@ -24,3 +24,8 @@ payment_providers:
     encryption_hash: F6 D1 D2 3E B7 1A 49 19 69 CF 13 09 76 00 C2 4C D8 95 E1 BC 26 33 77 FA E4 5A 04 E1 E5 B3 FA 16
     authentication_hash: F6 D1 D2 3E B7 1A 49 19 69 CF 13 09 76 00 C2 4C D8 95 E1 BC 26 33 77 FA E4 5A 04 E1 E5 B3 FA 16
 
+  - name: zkb-test
+    url: https://testplattform.zkb.ch/ebicsweb/ebicsweb
+    host_id: ZKBISOTB
+    encryption_hash: 18 72 B2 39 FF 1C 68 5E 68 D8 DE D8 08 19 C0 4F 52 D8 70 E8 73 E7 56 89 99 99 4E 8C 23 45 32 1C
+    authentication_hash: 18 72 B2 39 FF 1C 68 5E 68 D8 DE D8 08 19 C0 4F 52 D8 70 E8 73 E7 56 89 99 99 4E 8C 23 45 32 1C

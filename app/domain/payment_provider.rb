@@ -71,7 +71,7 @@ class PaymentProvider
 
   def Z54(since_date = nil, until_date = nil)
     xml_files = if @config.legacy_25_ebics?
-      client.send(:download_and_unzip, PaymentProviders::Z54, since_date, until_date)
+      client.Z54(since_date, until_date)
     else
       client.C54(since_date, until_date, scope: ebics_scope,
         msg_name_version: CAMT_054_MSG_NAME_VERSION)

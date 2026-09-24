@@ -17,10 +17,10 @@ describe ContactableDecorator do
     group.phone_numbers.new(number: "031 12345", label: "Home", public: true)
     group.phone_numbers.new(number: "041 12345", label: "Work", public: true)
     group.phone_numbers.new(number: "079 12345", label: "Mobile", public: false)
-    group.social_accounts.new(name: "www.puzzle.ch", label: "link1")
-    group.social_accounts.new(name: "http://puzzle.ch", label: "link2")
-    group.social_accounts.new(name: "bad.website.link", label: "bad link1")
-    group.social_accounts.new(name: "www.", label: "bad link2")
+    group.social_accounts.new(name: "www.puzzle.ch", label: "link1", public: true)
+    group.social_accounts.new(name: "http://puzzle.ch", label: "link2", public: true)
+    group.social_accounts.new(name: "bad.website.link", label: "bad link1", public: true)
+    group.social_accounts.new(name: "www.", label: "bad link2", public: true)
     group.additional_emails.new(email: "additional@foobar.com", label: "Work", public: true, mailings: true)
     group.additional_emails.new(email: "private@foobar.com", label: "Mobile", public: false)
     @group = GroupDecorator.decorate(group)
@@ -63,13 +63,13 @@ describe ContactableDecorator do
       let(:person) { people(:top_leader) }
 
       it "contains muted translated label" do
-        Fabricate(:additional_email, contactable: person, label: "Private", email: "invoices@example.com")
+        Fabricate(:additional_email, contactable: person, label: "Private", email: "invoices@example.com", public: true)
         expect(person.decorate.all_additional_emails).to end_with "<span class=\"muted\">Andere, Private</span></p>"
       end
 
       it "contains muted translated label with invoices suffix for invoices email" do
         category = contact_account_categories(:additional_email_person_invoices)
-        person.additional_emails.create!(email: "invoices@example.com", category: category)
+        person.additional_emails.create!(email: "invoices@example.com", category: category, public: true)
         expect(person.decorate.all_additional_emails).to end_with(
           "<span class=\"muted\">Rechnungsadresse " \
           "<i class=\"muted fas fa-money-bill-alt\" title=\"Wird für Rechnungen verwendet\"></i></span></p>"

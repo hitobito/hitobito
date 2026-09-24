@@ -1101,6 +1101,8 @@ de:
 
   import/person_importer:
     row_with_error: "Zeile %{row}: %{errors}"
+    missing_ids: "Keine ID in Zeile(n): %{rows}"
+    duplicate_ids: "ID mehrmals vergeben: %{ids}"
 
   import/person_duplicate_finder:
     duplicates: "%{count} Treffer in Duplikatserkennung."
@@ -1865,6 +1867,7 @@ de:
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
+    id_mapping_not_allowed: Die Zuordnung einer Spalte auf die Personennummer erfordert Admin-Berechtigung.
 
     duplicate_keys:
       one: "%{list} wurde mehrfach zugewiesen."

@@ -45,7 +45,7 @@ class Event::Guest < ActiveRecord::Base
   include I18nSettable
 
   i18n_enum :gender, Person::GENDERS
-  i18n_setter :gender, (Person::GENDERS + [nil])
+  i18n_setter :gender, -> { Person::GENDERS + [nil] }
   i18n_enum :language, Person::LANGUAGES.keys.map(&:to_s)
 
   def additional_emails

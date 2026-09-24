@@ -188,7 +188,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   include FullTextSearchable
 
   i18n_enum :gender, GENDERS
-  i18n_setter :gender, (GENDERS + [nil])
+  i18n_setter :gender, -> { GENDERS + [nil] }
   i18n_boolean_setter :company
   i18n_enum :language, Person::LANGUAGES.keys.map(&:to_s)
   # Lambda, not a snapshot: a wagon may extend Cantons::SHORT_NAMES at boot, so this

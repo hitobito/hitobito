@@ -72,3 +72,72 @@ jobs:
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
+
+  all-wagon-tests-green:
+    name: 'All wagon tests are green'
+    needs:
+      - find-wagons
+      - run-wagon-tests
+    # This job must run in every run of this workflow, including the ones where
+    # the matrix was never built, because a job skipped by a condition reports
+    # as successful to the branch protection. Skipping it would turn a pull
+    # request that never ran the wagon tests into a mergeable one.
+    if: ${{ !cancelled() }}
+    runs-on: 'ubuntu-latest'
+    permissions:
+      checks: read
+
+    steps:
+      - name: 'Check the result of the wagon test matrix'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIND_WAGONS_RESULT: ${{ needs.find-wagons.result }}
+          WAGON_TESTS_RESULT: ${{ needs.run-wagon-tests.result }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          # This workflow is also triggered when a pull request receives an
+          # unrelated label, which leaves the matrix unbuilt. Report again what
+          # this commit achieved earlier instead of discarding that verdict,
+          # which would force a full matrix run for every edited label.
+          if [ "$FIND_WAGONS_RESULT" = 'skipped' ]; then
+            # Take the latest verdict this job reached for the same commit, in order to
+            # support re-running a failed wagon test.
+            previous=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${HEAD_SHA}/check-runs" \
+              -X GET -f check_name='All wagon tests are green' -f status=completed -f per_page=100 \
+              --jq '[.check_runs[] | select(.conclusion == "success" or .conclusion == "failure")] |
+                    sort_by(.completed_at) | last | .conclusion // "none"')
+
+            case "$previous" in
+              success)
+                echo "The wagon tests already passed for ${HEAD_SHA}"
+                exit 0
+                ;;
+              failure)
+                echo "::error::The wagon tests failed for ${HEAD_SHA}. Re-run the failed jobs of that run."
+                exit 1
+                ;;
+              *)
+                echo "::error::The wagon tests did not run. Add the 'run-wagon-tests!' label to this pull request."
+                exit 1
+                ;;
+            esac
+          fi
+
+          if [ "$FIND_WAGONS_RESULT" != 'success' ]; then
+            echo "::error::Could not determine the wagons to test: $FIND_WAGONS_RESULT"
+            exit 1
+          fi
+
+          # An empty wagon list leaves the matrix without a single job, which
+          # reports as skipped rather than as a failure.
+          if [ "$WAGON_TESTS_RESULT" = 'skipped' ]; then
+            echo '::error::No wagon was tested, the list of wagons was empty'
+            exit 1
+          fi
+
+          if [ "$WAGON_TESTS_RESULT" != 'success' ]; then
+            echo "::error::At least one wagon did not pass its tests: $WAGON_TESTS_RESULT"
+            exit 1
+          fi
+
+          echo 'All wagons passed their tests'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -83,6 +83,8 @@ class GroupAbility < AbilityDsl::Base
 
     permission(:admin).may(:manage_person_duplicates).if_layer_group_if_active
     permission(:layer_and_below_full).may(:manage_person_duplicates).if_permission_in_layer
+
+    permission(:admin).may(:import_people_with_id).all
 
     permission(:manual_deletion)
       .may(:manually_delete_people)

@@ -7,6 +7,7 @@
 - Rechnungen können als CSV oder Excel mit einer Zeile pro Rechnungsposten exportiert werden (hitobito_florist#7)
 - Zusätzliche Adressen sind neu in allen Wagons aktiviert (#4471)
 - Firmenfelder (Firma/Firmenname) auf Personen, zusätzlichen Adressen und im Anmeldeformular von Anlässen können per Feature Gate `address.company` ausgeblendet werden (#4471)
+- Beim CSV-Import von Personen kann neu eine Spalte auf die Personen-ID gemappt werden (nur mit Admin-Berechtigung). Bestehende Personen werden anhand der ID aktualisiert bzw. neue Personen mit vorgegebener ID erstellt (#4517)
 
 ## Version 2.10
 

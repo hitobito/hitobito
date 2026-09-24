@@ -44,7 +44,8 @@ module Import
       def relevant_attributes
         ::Person.column_names -
           ::Person::INTERNAL_ATTRS.map(&:to_s) -
-          %w[picture primary_group_id tags]
+          %w[picture primary_group_id tags] +
+          %w[id]
       end
     end
 

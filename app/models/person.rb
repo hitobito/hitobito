@@ -137,17 +137,15 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # rubocop:disable Style/MutableConstant meant to be extended in wagons
   GENDERS = %w[m w]
 
-  # rubocop:disable Style/MutableConstant meant to be extended in wagons
   LANGUAGES = Settings.application
     .languages
     .to_hash
     .merge(Settings.application.additional_languages&.to_hash || {})
 
   ADDRESS_ATTRS = %w[address_care_of street housenumber postbox zip_code town country]
-
   # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
-  class_attribute :used_attributes
+  include UsedAttributes
   self.used_attributes = PUBLIC_ATTRS + INTERNAL_ATTRS
   self.used_attributes -= [:company, :company_name] if FeatureGate.disabled?("address.company")
 

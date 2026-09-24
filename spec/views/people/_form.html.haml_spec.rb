@@ -22,4 +22,23 @@ describe "people/_form.html.haml" do
 
     expect(dom.find("form")["autocomplete"]).to eq "off"
   end
+
+  describe "company fields" do
+    it "renders company_name and company when address.company is enabled" do
+      @rendered = render partial: "people/form"
+
+      expect(dom).to have_field("person_company_name")
+      expect(dom).to have_field("person_company")
+    end
+
+    it "does not render company_name and company when address.company is disabled" do
+      allow(Person).to receive(:used_attributes)
+        .and_return(Person.used_attributes - [:company, :company_name])
+
+      @rendered = render partial: "people/form"
+
+      expect(dom).to have_no_field("person_company_name")
+      expect(dom).to have_no_field("person_company")
+    end
+  end
 end

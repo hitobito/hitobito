@@ -11,6 +11,15 @@ module Export::Pdf::Messages
       super(*args, Invoice.model_name.human.downcase)
     end
 
+    def render_preview
+      ActiveRecord::Base.transaction do
+        ::Messages::LetterWithInvoiceDispatch.new(@letter, recipient_limit: PREVIEW_LIMIT).run
+        build_pdf
+        raise ActiveRecord::Rollback
+      end
+      pdf.render
+    end
+
     def render_sections(recipient)
       super
       render_payment_slip(pdf, recipient.person)

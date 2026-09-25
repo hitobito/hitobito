@@ -15,6 +15,10 @@ class PaymentProviders::Xtc < Epics::GenericUploadRequest
     document.gsub(/\n|\r/, "")
   end
 
+  def document=(value)
+    @document = value
+  end
+
   def to_xml
     # builder = request_factory.create_btu(transaction_key, document_digest, 1, **{ service_name: 'OTH', scope: 'BIL', service_option: "CH004TPS", msg_name: 'csv', filename: 'ccs.csv.xxx.csv' }) # zkb
     builder = request_factory.create_btu(transaction_key, document_digest, 1, **{ service_name: "OTH", scope: "BIL", service_option: "CH002LMF", msg_name: "csv", filename: "ccs.csv.xxx.csv" }) # postfinance

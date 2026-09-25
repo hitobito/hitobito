@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+#  https://github.com/hitobito/hitobito
 
 module Import
   class PersonImporter
@@ -27,12 +27,19 @@ module Import
     end
 
     def import
+      return false if id_mapped? && !ids_valid?
+
       save_results = people.each_with_index.map { |p, i| valid?(p) && save_person(p, i) }
+      ::Person.connection.reset_pk_sequence!("people") if id_mapped?
       !save_results.include?(false)
     end
 
     def people
       @people ||= populate_people
+    end
+
+    def id_mapped?
+      data.first&.key?(:id) || false
     end
 
     def human_name(args = {})
@@ -44,7 +51,7 @@ module Import
     end
 
     def update_count
-      duplicate_finder.unique_count - request_people.size
+      existing_count - request_people.size
     end
 
     private
@@ -60,6 +67,8 @@ module Import
     end
 
     def populate_people
+      return [] unless ids_valid?
+
       data.each_with_index.map do |attributes, index|
         person_attrs = attributes.except(*Import::Person::ROLE_ATTRIBUTES)
         role_attrs = attributes.slice(*Import::Person::ROLE_ATTRIBUTES)
@@ -69,7 +78,7 @@ module Import
     end
 
     def populate_person(index, person_attrs, role_attrs)
-      person = duplicate_finder.find(person_attrs) || ::Person.new
+      person = find_person(person_attrs) || ::Person.new
       person_attrs.delete(:email) if illegal_email_update?(person)
 
       import_person = Import::Person.new(person, person_attrs, options)
@@ -111,8 +120,66 @@ module Import
         ::Person::AddRequest::Creator::Group.new(import_person.role, user_ability)
     end
 
+    def find_person(attrs)
+      return duplicate_finder.find(attrs) unless id_mapped?
+
+      ::Person.find_by(id: attrs[:id]).tap do |person|
+        existing_ids[person.id] = person if person
+      end
+    end
+
+    def existing_ids
+      @existing_ids ||= {}
+    end
+
+    def existing_count
+      id_mapped? ? existing_ids.size : duplicate_finder.unique_count
+    end
+
+    # Pre-validation when id is mapped: every row needs an id value and all
+    # ids must be unique. Violations abort the whole import.
+    def ids_valid?
+      return true unless id_mapped?
+
+      @errors |= id_errors
+      id_errors.empty?
+    end
+
+    def id_errors
+      @id_errors ||= validate_ids
+    end
+
+    def validate_ids
+      [missing_ids_error, duplicate_ids_error].compact
+    end
+
+    def missing_ids_error
+      rows = data.each_with_index.filter_map { |row, index| index + 1 if row[:id].blank? }
+      translate(:missing_ids, rows: rows.join(", ")) if rows.any?
+    end
+
+    def duplicate_ids_error
+      ids = data.filter_map { |row| row[:id].presence }
+        .tally
+        .filter_map { |id, count| id if count > 1 }
+      translate(:duplicate_ids, ids: ids.join(", ")) if ids.any?
+    end
+
     def duplicate_finder
       @duplicate_finder ||= PersonDuplicateFinder.new
+    end
+
+    # After importing people with explicit ids, the pk sequence must be
+    # ahead of max(id), so subsequent inserts get free ids.
+    def reset_pk_sequence
+      connection = ::Person.connection
+      sequence = connection.select_value(
+        "SELECT pg_get_serial_sequence('people', 'id')"
+      )
+      return unless sequence
+
+      last_value = connection.select_value("SELECT last_value FROM #{sequence}").to_i
+      connection.reset_pk_sequence!("people") if last_value < ::Person.maximum(:id).to_i
     end
   end
 end

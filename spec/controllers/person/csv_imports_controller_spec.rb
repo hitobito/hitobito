@@ -1,7 +1,9 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+#  https://github.com/hitobito/hitobito
 
 require "spec_helper"
 require "csv"
@@ -79,6 +81,33 @@ describe Person::CsvImportsController do
         post :preview, params: required_params.merge(field_mappings: {Vorname: "first_name", Email: "email"})
         expect(flash[:alert]).to eq ["1 Person (Leader) wird nicht importiert.",
           "Zeile 1: 2 Treffer in Duplikatserkennung."]
+      end
+    end
+
+    context "id mapping" do
+      let(:data) { generate_csv(%w[ID Vorname], [Person.maximum(:id) + 1000, "foo"]) }
+      let(:field_mappings) { {ID: "id", Vorname: "first_name"} }
+
+      context "as admin" do
+        it "renders the preview" do
+          post :preview, params: required_params.merge(field_mappings: field_mappings)
+          expect(flash[:notice]).to eq ["1 Person (Leader) wird neu importiert."]
+          is_expected.to render_template(:preview)
+        end
+      end
+
+      context "as non-admin" do
+        let(:role_type) { "Group::BottomLayer::Member" }
+        let(:group) { groups(:bottom_layer_one) }
+        let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
+
+        before { sign_in(user) }
+
+        it "rejects the id mapping" do
+          post :preview, params: required_params.merge(field_mappings: field_mappings)
+          expect(flash[:alert]).to eq "Die Zuordnung einer Spalte auf die Personennummer erfordert Admin-Berechtigung."
+          is_expected.to render_template(:define_mapping)
+        end
       end
     end
   end
@@ -256,6 +285,33 @@ describe Person::CsvImportsController do
           expect(person.reload.roles.count).to eq(1)
           expect(person.add_requests.count).to eq(1)
           expect(flash[:alert].join).to match(/Zugriffsanfrage .*erhalten/)
+        end
+      end
+    end
+
+    context "id mapping" do
+      let(:new_id) { Person.maximum(:id) + 1000 }
+      let(:data) { generate_csv(%w[ID Vorname], [new_id, "foo"]) }
+      let(:mapping) { {ID: "id", Vorname: "first_name"} }
+
+      context "as admin" do
+        it "imports person with the given id" do
+          expect { post :create, params: required_params }.to change(Person, :count).by(1)
+          expect(Person.find(new_id).first_name).to eq "foo"
+        end
+      end
+
+      context "as non-admin" do
+        let(:role_type) { Group::BottomLayer::Member }
+        let(:group) { groups(:bottom_layer_one) }
+        let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: groups(:bottom_layer_one)).person }
+
+        before { sign_in(user) }
+
+        it "rejects the id mapping" do
+          expect { post :create, params: required_params }.not_to change(Person, :count)
+          expect(flash[:alert]).to eq "Die Zuordnung einer Spalte auf die Personennummer erfordert Admin-Berechtigung."
+          is_expected.to render_template(:define_mapping)
         end
       end
     end

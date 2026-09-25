@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,6 +12,7 @@ class Person::CsvImportsController < ApplicationController
   before_action :load_group
   before_action :custom_authorization
   before_action :load_can_manage_tags
+  before_action :load_can_import_with_id
 
   decorates :group
 
@@ -91,10 +92,18 @@ class Person::CsvImportsController < ApplicationController
   end
 
   def valid_for_import?
-    if parse_or_redirect && sane_mapping? && valid_role?
+    if parse_or_redirect && sane_mapping? && id_mapping_permitted? && valid_role?
       map_headers_and_import
       yield
     end
+  end
+
+  def id_mapping_permitted?
+    return true if @can_import_with_id || !field_mappings.value?("id")
+
+    flash.now[:alert] = translate(:id_mapping_not_allowed)
+    render :define_mapping, status: :unprocessable_content
+    false
   end
 
   def valid_role?
@@ -126,6 +135,10 @@ class Person::CsvImportsController < ApplicationController
 
   def load_can_manage_tags
     @can_manage_tags = current_ability.can?(:manage_person_tags, group)
+  end
+
+  def load_can_import_with_id
+    @can_import_with_id = current_ability.can?(:import_people_with_id, group)
   end
 
   def valid_file?(io)

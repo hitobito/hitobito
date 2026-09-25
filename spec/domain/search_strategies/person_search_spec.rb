@@ -154,8 +154,8 @@ describe SearchStrategies::PersonSearch do
 
   describe "feature toggle people.search_by_id" do
     before do
+      allow(FeatureGate).to receive(:enabled?).and_call_original
       allow(FeatureGate).to receive(:enabled?).with("people.search_by_id").and_return(false)
-      expect(described_class).to receive(:searchable_identifiers).and_return({})
     end
 
     context "as leader" do

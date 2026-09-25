@@ -19,6 +19,11 @@ describe I18nEnums do
     expect(person.gender_label).to eq "unbekannt"
   end
 
+  it "returns quoted raw value as label for values without translation" do
+    person.language = "1"
+    expect(person.language_label).to eq '"1"'
+  end
+
   it "returns translated label in french" do
     I18n.locale = :fr
     person.gender = "m"

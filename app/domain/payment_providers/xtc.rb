@@ -7,33 +7,22 @@
 
 # rubocop:disable Metrics/MethodLength, Layout/LineLength, Metrics/AbcSize
 class PaymentProviders::Xtc < Epics::GenericUploadRequest
-  def header
-    Nokogiri::XML::Builder.new do |xml|
-      xml.header(authenticate: true) {
-        xml.static {
-          xml.HostID host_id
-          xml.Nonce nonce
-          xml.Timestamp timestamp
-          xml.PartnerID partner_id
-          xml.UserID user_id
-          xml.Product("EPICS - a ruby ebics kernel", "Language" => "de")
-          xml.OrderDetails {
-            xml.OrderType "XTC"
-            xml.OrderAttribute "OZHNN"
-            xml.StandardOrderParams
-          }
-          xml.BankPubKeyDigests {
-            xml.Authentication(client.bank_x.public_digest, Version: "X002", Algorithm: "http://www.w3.org/2001/04/xmlenc#sha256")
-            xml.Encryption(client.bank_e.public_digest, Version: "E002", Algorithm: "http://www.w3.org/2001/04/xmlenc#sha256")
-          }
-          xml.SecurityMedium "0000"
-          xml.NumSegments 1
-        }
-        xml.mutable {
-          xml.TransactionPhase "Initialisation"
-        }
-      }
-    end.doc.root
+  def document_digest
+    @crypt_service.hash(normalized_document)
+  end
+
+  def normalized_document
+    document.gsub(/\n|\r/, "")
+  end
+
+  def document=(value)
+    @document = value
+  end
+
+  def to_xml
+    # builder = request_factory.create_btu(transaction_key, document_digest, 1, **{ service_name: 'OTH', scope: 'BIL', service_option: "CH004TPS", msg_name: 'csv', filename: 'ccs.csv.xxx.csv' }) # zkb
+    builder = request_factory.create_btu(transaction_key, document_digest, 1, **{ service_name: "OTH", scope: "BIL", service_option: "CH002LMF", msg_name: "csv", filename: "ccs.csv.xxx.csv" }) # postfinance
+    builder.to_xml
   end
 end
 # rubocop:enable Metrics/MethodLength, Layout/LineLength, Metrics/AbcSize

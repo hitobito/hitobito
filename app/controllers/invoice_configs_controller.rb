@@ -1,4 +1,4 @@
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,7 +15,7 @@ class InvoiceConfigsController < CrudController
       :id, :title, :text, :level, :due_days, :show_invoice_description
     ],
     payment_provider_configs_attributes: [
-      :id, :payment_provider, :user_identifier, :partner_identifier, :password
+      :id, :payment_provider, :user_identifier, :partner_identifier, :password, :legacy_25_ebics
     ],
     custom_content_attributes: [
       :id, :body, :subject, :_destroy
@@ -53,8 +53,8 @@ class InvoiceConfigsController < CrudController
   end
 
   def build_payment_provider_configs
-    missing_payment_providers.each do |provider|
-      entry.payment_provider_configs.build.with_payment_provider(provider)
+    missing_payment_provider_configs.each do |payment_provider, legacy_25_ebics|
+      entry.payment_provider_configs.build(payment_provider:, legacy_25_ebics:)
     end
   end
 
@@ -82,8 +82,24 @@ class InvoiceConfigsController < CrudController
     PaymentReminderConfig::LEVELS.to_a - entry.payment_reminder_configs.collect(&:level)
   end
 
-  def missing_payment_providers
-    Settings.payment_providers.map(&:name) - entry.payment_provider_configs.map(&:payment_provider)
+  def missing_payment_provider_configs
+    Settings.payment_providers.map(&:name).flat_map do |provider|
+      missing_per_legacy_flag = needed_legacy_25_ebics_flags.reject do |legacy_25_ebics|
+        payment_provider_config_present?(provider, legacy_25_ebics)
+      end
+
+      missing_per_legacy_flag.map { |legacy_25_ebics| [provider, legacy_25_ebics] }
+    end
+  end
+
+  def payment_provider_config_present?(provider, legacy_25_ebics)
+    entry.payment_provider_configs.any? do |config|
+      config.payment_provider == provider && config.legacy_25_ebics == legacy_25_ebics
+    end
+  end
+
+  def needed_legacy_25_ebics_flags
+    Settings.invoices.legacy_ebics_25.enabled ? [false, true] : [false]
   end
 
   def define_changed_payment_provider_configs

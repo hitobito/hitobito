@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Hitobito AG. This file is part of
+#  Copyright (c) 2024-2026, Hitobito AG. This file is part of
 #  hitobito_die_mitte and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Payments::EbicsImportScheduleJob < RecurringJob
   def perform_internal
-    payment_provider_configs.find_each do |provider_config|
-      Payments::EbicsImportJob.new(provider_config.id).enqueue!
+    payment_provider_pairs.each do |invoice_config_id, payment_provider|
+      Payments::EbicsImportJob.new(invoice_config_id, payment_provider).enqueue!
     end
   end
 
@@ -19,7 +19,7 @@ class Payments::EbicsImportScheduleJob < RecurringJob
 
   private
 
-  def payment_provider_configs
-    PaymentProviderConfig.initialized
+  def payment_provider_pairs
+    PaymentProviderConfig.initialized.distinct.pluck(:invoice_config_id, :payment_provider)
   end
 end

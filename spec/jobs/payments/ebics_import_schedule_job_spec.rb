@@ -21,10 +21,24 @@ describe Payments::EbicsImportScheduleJob do
                                                        .in_time_zone)
   end
 
-  it "schedules import job per initialized payment provider config" do
+  it "schedules one import job per initialized invoice_config/payment_provider pair" do
     initialized = payment_provider_configs(:postfinance).tap { _1.update(status: :registered) }
 
-    expect(Payments::EbicsImportJob).to receive(:new).exactly(:once).with(initialized.id).and_call_original
+    expect(Payments::EbicsImportJob).to receive(:new).exactly(:once)
+      .with(initialized.invoice_config_id, initialized.payment_provider).and_call_original
+
+    subject.perform
+  end
+
+  it "schedules only one job when both EBICS versions are initialized for the same pair" do
+    postfinance = payment_provider_configs(:postfinance)
+    postfinance.update!(status: :registered, legacy_25_ebics: false)
+    postfinance.invoice_config.payment_provider_configs.create!(
+      payment_provider: "postfinance", legacy_25_ebics: true, status: :registered
+    )
+
+    expect(Payments::EbicsImportJob).to receive(:new)
+      .with(postfinance.invoice_config_id, "postfinance").exactly(:once).and_call_original
 
     subject.perform
   end

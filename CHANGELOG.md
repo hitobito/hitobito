@@ -3,6 +3,7 @@
 ## unreleased
 
 - Beim CSV-Import von Personen kann neu eine Spalte auf die Personen-ID gemappt werden (nur mit Admin-Berechtigung). Bestehende Personen werden anhand der ID aktualisiert bzw. neue Personen mit vorgegebener ID erstellt (#4517)
+- Beim CSV-Import von Personen wird das manuell gesetzte Spalten-Mapping im Browser gespeichert und beim nächsten Import wieder angewendet (#4517)
 
 ## Version 2.10
 

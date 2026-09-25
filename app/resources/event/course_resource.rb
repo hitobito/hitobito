@@ -11,9 +11,10 @@ class Event::CourseResource < EventResource
     attribute :training_days, :float
     attribute :applicant_count, :integer
     attribute :participant_count, :integer
+    attribute :teamer_count, :integer
+    attribute :display_booking_info, :boolean
     attribute :minimum_participants, :integer
     attribute :number, :string, filterable: true
-    attribute :teamer_count, :integer
   end
 
   belongs_to :kind, resource: Event::KindResource

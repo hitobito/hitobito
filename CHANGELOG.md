@@ -3,6 +3,7 @@
 ## Version 2.10
 
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)
+- Geschwistergruppen von Ebenen-Typen werden in der Navigation neu alphabetisch sortiert (hitobito_pfadi_de#125)
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)

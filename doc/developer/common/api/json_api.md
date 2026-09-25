@@ -419,7 +419,7 @@ Checklist for creating/extending JSON:API endpoints:
   - ability must only use [hash syntax](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/fetching_records.md) so that it can be used for database querying with `Model.accessible_by`
   - ability must work even when `user.id == nil` (in the case of service tokens; simply don't grant access to things that require a user id)
   - on the resource, declare the ability class in `self.readable_class`, and configure which token scopes are required for accessing the resource in `self.acceptable_scopes`
-  - see `JsonApi::EventParticipationAbility` and `Event::ParticipationResource` for an example
+  - see `JsonApi::EventParticipationReadables` and `Event::ParticipationResource` for an example
 - Run `rake graphiti:schema:generate` where you did the changes (core/wagon) to update the schema file and add it to git
 - Update list of endpoints in this document
 

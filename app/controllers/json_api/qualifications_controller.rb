@@ -6,29 +6,4 @@
 #  https://github.com/hitobito/hitobito
 
 class JsonApi::QualificationsController < JsonApiController
-  def index
-    authorize!(:index, Qualification)
-    super
-  end
-
-  def create
-    authorize!(:create, Qualification)
-    super
-  end
-
-  def show
-    authorize!(:show, entry)
-    super
-  end
-
-  def destroy
-    authorize!(:destroy, entry)
-    super
-  end
-
-  private
-
-  def entry
-    @entry ||= Qualification.find(params[:id])
-  end
 end

@@ -6,22 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::PeopleController < JsonApiController
-  def index
-    authorize!(:index, Person)
-    super
-  end
-
-  def show
-    authorize!(:show, entry)
-    super
-  end
-
-  def update
-    authorize!(:update, entry)
-    super
-  end
-
-  def entry
-    @entry ||= Person.find(params[:id])
-  end
 end

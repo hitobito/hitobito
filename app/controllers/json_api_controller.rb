@@ -30,6 +30,9 @@ class JsonApiController < ActionController::API
   before_action :assert_media_type_json_api, only: [:update, :create]
   before_action :ensure_id_param_consistency, except: [:index, :create]
   before_action :ensure_no_id_param, only: [:create]
+  before_action :authorize_index, only: :index
+  before_action :authorize_create, only: :create
+  before_action :authorize_entry, only: [:show, :update, :destroy]
 
   class JsonApiUnauthorized < StandardError; end
 
@@ -174,11 +177,16 @@ class JsonApiController < ActionController::API
   end
 
   def resource_class
-    [
-      self.class.name.delete_prefix("JsonApi::")
-        .delete_suffix("Controller")
-        .underscore.singularize.camelize, "Resource"
-    ].join.constantize
+    @resource_class ||= [resource_name, "Resource"].join.constantize
+  end
+
+  def resource_name
+    self.class.name
+      .delete_prefix("JsonApi::")
+      .delete_suffix("Controller")
+      .underscore
+      .singularize
+      .camelize
   end
 
   def params
@@ -211,5 +219,21 @@ class JsonApiController < ActionController::API
     end
 
     raise Graphiti::Errors::InvalidRequest, errors if errors.count > 0
+  end
+
+  def authorize_index
+    authorize!(:index, resource_class.model)
+  end
+
+  def authorize_create
+    authorize!(:create, resource_class.model)
+  end
+
+  def authorize_entry
+    authorize!(action_name.to_sym, entry)
+  end
+
+  def entry
+    @entry ||= resource_class.model.find(params[:id])
   end
 end

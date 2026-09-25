@@ -44,6 +44,9 @@ class ApplicationResource < Graphiti::Resource
   before_save :authorize_update, only: [:update]
   before_destroy :authorize_destroy
 
+  delegate :current_ability, :current_scopes, to: :context
+  delegate :can?, :authorize!, to: :current_ability
+
   # Limits accessible resources, specify readable_class or override
   def base_scope
     fail "No readable_class defined for #{self.class.name}" unless readable_class
@@ -57,19 +60,19 @@ class ApplicationResource < Graphiti::Resource
   end
 
   def authorize_create(model)
-    create_ability.authorize!(:create, model)
+    authorize!(:create, model)
   end
 
   # As the cancan abilities are implemented on the basis of instance attributes,
   # we must authorize with initial instance attributes
   def authorize_update(model)
     model_from_db = model.class.find(model.id)
-    update_ability.authorize!(:update, model_from_db)
-    yield update_ability, model_from_db if block_given?
+    authorize!(:update, model_from_db)
+    yield current_ability, model_from_db if block_given?
   end
 
   def authorize_destroy(model)
-    destroy_ability.authorize! :destroy, model
+    authorize!(:destroy, model)
   end
 
   def invalid_request!(*attributes, message)
@@ -91,22 +94,5 @@ class ApplicationResource < Graphiti::Resource
     raise Graphiti::Errors::ValidationError.new(
       Graphiti::Util::ValidationResponse.new(model, nil)
     )
-  end
-
-  delegate :can?, to: :current_ability
-  delegate :current_ability, :current_scopes, to: :context
-  # Meant to be extended in specific resources
-  def create_ability
-    current_ability
-  end
-
-  # Meant to be extended in specific resources
-  def update_ability
-    current_ability
-  end
-
-  # Meant to be extended in specific resources
-  def destroy_ability
-    current_ability
   end
 end

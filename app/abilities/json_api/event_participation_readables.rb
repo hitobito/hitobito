@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito
 
 module JsonApi
-  class EventParticipationAbility
+  class EventParticipationReadables
     include CanCan::Ability
 
     class_attribute :event_role_permissions, default: [:participations_read,

@@ -6,34 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::RolesController < JsonApiController
-  def index
-    authorize!(:index, Role)
-    super
-  end
-
-  def create
-    authorize!(:create, Role)
-    super
-  end
-
-  def show
-    authorize!(:show, entry)
-    super
-  end
-
-  def update
-    authorize!(:update, entry)
-    super
-  end
-
-  def destroy
-    authorize!(:destroy, entry)
-    super
-  end
-
-  private
-
-  def entry
-    @entry ||= Role.find(params[:id])
-  end
 end

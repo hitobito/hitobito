@@ -9,7 +9,7 @@ class QualificationResource < ApplicationResource
   primary_endpoint "qualifications", [:index, :show, :create, :destroy]
 
   self.acceptable_scopes += %w[qualifications]
-  self.readable_class = JsonApi::QualificationAbility
+  self.readable_class = JsonApi::QualificationReadables
 
   with_options filterable: false, sortable: false do
     attribute :person_id, :integer, filterable: true

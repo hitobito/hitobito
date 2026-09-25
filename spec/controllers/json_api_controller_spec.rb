@@ -13,6 +13,8 @@ describe JsonApiController do
   context "with unhandled exception" do
     controller(JsonApiController) do
       def index = fail "ouch"
+
+      def authorize_index = true
     end
 
     after do
@@ -32,6 +34,8 @@ describe JsonApiController do
   context "with handled exception" do
     controller(JsonApiController) do
       def index = raise ActionController::BadRequest.new
+
+      def authorize_index = true
     end
 
     after do

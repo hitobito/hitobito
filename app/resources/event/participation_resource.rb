@@ -8,7 +8,7 @@
 class Event::ParticipationResource < ApplicationResource
   primary_endpoint "event_participations", [:index, :show]
 
-  self.readable_class = JsonApi::EventParticipationAbility
+  self.readable_class = JsonApi::EventParticipationReadables
   self.acceptable_scopes += %w[event_participations]
 
   self.type = :event_participations

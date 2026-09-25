@@ -8,7 +8,7 @@
 class InvoiceResource < ApplicationResource
   primary_endpoint "invoices", [:index, :show, :update]
 
-  self.readable_class = JsonApi::InvoiceAbility
+  self.readable_class = JsonApi::InvoiceReadables
   self.acceptable_scopes += %w[invoices]
 
   with_options filterable: false, sortable: false do

@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form(data: { mailing_list_labels: true }, html: { class: 'form-striped'}, buttons_top: false) do |f|
+= entry_form(html: { class: 'form-striped'}, buttons_top: false) do |f|
   = render 'form_tabs'
 
   .tab-content
@@ -31,21 +31,9 @@
 
       %fieldset
         = f.labeled(:preferred_labels) do
-          %div
-            = link_to '#', class: 'chip chip-add' do
-              = ti('associations.add')
-              = icon(:plus)
-            = text_field_tag(:label, nil, style: 'display: none', class: 'form-control form-control-sm mw-100 mw-md-60ch mb-1', data: { provide: :typeahead, source: @labels })
-
-          = hidden_field_tag('mailing_list[preferred_labels][]')
-
-          %div
-            - @preferred_labels.each do |label|
-              %span.chip
-                = label
-                = link_to(icon(:times), '#')
-                = hidden_field_tag('mailing_list[preferred_labels][]', label)
-
+          = f.select(:preferred_labels, @preferred_label_options, {selected: @preferred_labels}, multiple: true,
+            class: 'form-control form-control-sm multiselect',
+            data: { controller: 'tom-select', tom_select_no_results_value: t('global.no_list_entries') })
           %span.form-text= t('.help_preferred_labels')
 
         = f.indented do

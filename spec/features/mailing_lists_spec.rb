@@ -13,6 +13,14 @@ describe MailingListsController, js: true do
 
   before { sign_in(user) }
 
+  def select_preferred_label(name)
+    10.times do
+      find("#mailing_list_preferred_labels-ts-control").click
+      break if page.has_css?(".ts-dropdown-content .option", text: name, wait: 0.5)
+    end
+    find(".ts-dropdown-content .option", text: name).click
+  end
+
   context "index" do
     before { visit group_mailing_lists_path(list.group) }
 
@@ -27,56 +35,50 @@ describe MailingListsController, js: true do
     end
   end
 
-  it "removes two labels from existing mailing" do
-    list.update(preferred_labels: %w[Mutter Vater])
+  it "removes a preferred_labels category from existing mailing list" do
+    list.update(preferred_labels: %w[private work])
     visit edit_group_mailing_list_path(list.group, list)
     click_link("Mailing-Liste (E-Mail)")
-    all("span.chip a")[0].click
     expect(page).to have_link "Mailing-Liste (E-Mail)", class: "active"
-    expect(page).not_to have_content "Mutter"
+
+    find(".item", text: "Privat").find(".remove").click
+    expect(page).to have_no_selector(".item", text: "Privat")
+
     click_button "Speichern"
+    expect(page).to have_content "erfolgreich aktualisiert"
 
-    expect(page).not_to have_content "Mutter"
-    expect(page).to have_content "Vater"
-
-    visit edit_group_mailing_list_path(list.group, list)
-    click_link("Mailing-Liste (E-Mail)")
-    all("span.chip a")[0].click
-    click_button "Speichern"
-
-    expect(page).not_to have_content "Vater"
+    expect(list.reload.preferred_labels).to eq %w[work]
   end
 
-  it "adds single label to new mailing list" do
+  it "adds a preferred_labels category to a new mailing list" do
     visit new_group_mailing_list_path(list.group)
     fill_in "Name", with: "test"
     click_link("Mailing-Liste (E-Mail)")
     fill_in "Mailinglisten Adresse", with: "test"
-    find(".chip-add").click
-    fill_in id: "label", with: "Vater"
-    page.find("label[for='mailing_list_preferred_labels']").click # blur
-    expect(page).to have_content "Vater"
+
+    select_preferred_label("Privat")
+    expect(page).to have_selector ".item", text: "Privat"
 
     click_button "Speichern"
-    expect(page).to have_content "Vater"
+    expect(page).to have_content "erfolgreich erstellt"
+
+    expect(MailingList.find_by(name: "test").preferred_labels).to eq %w[private]
   end
 
-  it "adds two preferred_labels to existing mailing list" do
+  it "adds two preferred_labels categories to existing mailing list" do
     visit edit_group_mailing_list_path(list.group, list)
     click_link("Mailing-Liste (E-Mail)")
-    find(".chip-add").click
-    fill_in id: "label", with: "Vater"
-    page.find("body").click # blur
-    expect(page).to have_content "Vater"
 
-    find(".chip-add").click
-    fill_in id: "label", with: "Mutter"
-    page.find("body").click # blur
-    expect(page).to have_content "Mutter"
+    select_preferred_label("Privat")
+    expect(page).to have_selector ".item", text: "Privat"
+
+    select_preferred_label("Arbeit")
+    expect(page).to have_selector ".item", text: "Arbeit"
 
     click_button "Speichern"
+    expect(page).to have_content "erfolgreich aktualisiert"
 
-    expect(page).to have_content "Mutter, Vater"
+    expect(list.reload.preferred_labels).to eq %w[private work]
   end
 
   describe "configurable list", :js do

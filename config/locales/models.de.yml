@@ -1162,7 +1162,7 @@ de:
         mail_address_link: Mailingliste
         subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
         additional_sender: Zusätzlicher Absender
-        preferred_labels: Bevorzugte E-Mail-Labels
+        preferred_labels: Bevorzugte E-Mail-Kategorien
         main_email: Versand an Haupt E-Mail
         mailchimp_api_key: 'MailChimp API-Schlüssel'
         mailchimp_list_id: 'MailChimp Listen-ID'

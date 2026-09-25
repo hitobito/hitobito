@@ -6,10 +6,13 @@
 - title = t('activerecord.models.service_token.other')
 
 = crud_table do |t|
-  - t.col(ServiceToken.human_attribute_name(:key)) do |service_token|
-    - service_token.full_title
-  - t.col(ServiceToken.human_attribute_name(:abilities)) do |service_token|
-    - service_token.abilities
+  - t.attr(:key) do |service_token|
+    %strong= link_to(service_token.name, group_service_token_path(service_token.layer, service_token))
+    - if service_token.description?
+      %br
+      = service_token.description.truncate_words(10)
+  - t.attr(:scopes)
+  - t.attr(:permission)
   - t.attr(:last_access)
 
   - unless @group.archived?

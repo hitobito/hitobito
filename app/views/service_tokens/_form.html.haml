@@ -8,13 +8,11 @@
     = f.labeled_input_fields :name, :description
 
   %fieldset
-    = f.labeled(model_class.human_attribute_name(:range), nil, nil, class: 'd-flex flex-column') do
-      = f.inline_radio_button(:permission, :layer_read, model_class.human_attribute_name(:layer_read))
-      = f.inline_radio_button(:permission, :layer_and_below_read, model_class.human_attribute_name(:layer_and_below_read))
-      = f.inline_radio_button(:permission, :layer_full, model_class.human_attribute_name(:layer_full))
-      = f.inline_radio_button(:permission, :layer_and_below_full, model_class.human_attribute_name(:layer_and_below_full))
+    = f.labeled(:permission, nil, nil, class: 'd-flex flex-column') do
+      - ServiceToken::PERMISSIONS.each do |permission|
+        = f.inline_radio_button(:permission, permission, model_class.permission_labels.fetch(permission.to_sym))
 
-    = f.labeled(model_class.human_attribute_name(:abilities), nil, nil, class: 'd-flex flex-column') do
+    = f.labeled(:scopes, nil, nil, class: 'd-flex flex-column') do
       = render "scope_fields", f: f
 
   = f.labeled_inline_fields_for :cors_origins do |nested_f|

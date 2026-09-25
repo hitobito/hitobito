@@ -37,12 +37,16 @@
     = f.labeled(nil, content_tag(:i, t('.column_from_csv'))) do
       %i.lh-lg= t('.field_in_database')
     %br/
-    - parser.headers.each do |column_name|
-      = f.labeled(column_name, column_name) do
-        = f.collection_select(column_name,
-                              application_person_fields,
-                              :key,
-                              :value,
-                              include_blank: "", selected: guess(column_name))
+    %div{data: { controller: 'csv-import-mapping', action: 'change->csv-import-mapping#save' }}
+      - parser.headers.each do |column_name|
+        = f.labeled(column_name, column_name) do
+          = f.collection_select(column_name,
+                                application_person_fields,
+                                :key,
+                                :value,
+                                {include_blank: "", selected: guess(column_name)},
+                                {data: {csv_import_mapping_target: 'select',
+                                        header: column_name,
+                                        from_params: field_mappings[column_name].present?}})
 
   = form_buttons(f, submit_label: t('.preview'), cancel_url: group_people_path(group))

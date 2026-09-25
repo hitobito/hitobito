@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -30,5 +30,28 @@ describe "Person::CsvImport", js: true do
     click_button "Vorschau"
     click_button "Personen jetzt importieren"
     expect(page).to have_css ".alert-success", text: "1 Person (Leader) wurde erfolgreich importiert."
+  end
+
+  it "persists manual mapping in localStorage for subsequent imports" do
+    visit group_people_path(group_id: group.id)
+    click_link "Liste importieren"
+    attach_file("CSV Datei", file)
+    # localStorage is not cleared between examples, clear it for a deterministic starting state
+    page.evaluate_script("localStorage.clear()")
+
+    click_button "Hochladen"
+    # the guesser suggested "Vorname"
+    expect(page).to have_select("field_mappings[Vorname]", selected: "Vorname")
+    # but we want to map it to "Übername"
+    select "Übername", from: "Vorname"
+    click_button "Vorschau"
+    expect(page).to have_text "Folgende Personen werden"
+
+    visit group_people_path(group_id: group.id)
+    click_link "Liste importieren"
+    attach_file("CSV Datei", file)
+    click_button "Hochladen"
+    # on revisiting the page, the manual mapping is still there
+    expect(page).to have_select("field_mappings[Vorname]", selected: "Übername")
   end
 end

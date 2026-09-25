@@ -92,7 +92,7 @@ phone_number:
   default_country: CH
 
 additional_address:
-  enabled: false
+  enabled: true
 
 address_sync:
   enabled: false
@@ -115,6 +115,8 @@ address:
     - suisse
     - switzerland
     - svizzera
+  company:
+    enabled: true
 
 countries:
   prioritized:

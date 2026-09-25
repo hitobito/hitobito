@@ -13,9 +13,14 @@ module Event::ContactAttrs
 
     self.mandatory_contact_attrs = [:email, :first_name, :last_name]
 
-    self.possible_contact_attrs = [:first_name, :last_name, :nickname, :company_name, :email,
+    self.possible_contact_attrs = [:first_name, :last_name, :nickname, :email,
       :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
       :gender, :birthday, :phone_numbers, :language]
+
+    FeatureGate.if("address.company") do
+      # if company feature is enabled, insert company_name after email
+      possible_contact_attrs.insert(possible_contact_attrs.index(:email), :company_name)
+    end
 
     self.possible_contact_associations = [:additional_emails, :social_accounts]
   end

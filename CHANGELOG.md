@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Firmenfelder (Firma/Firmenname) auf Personen, zusätzlichen Adressen und im Anmeldeformular von Anlässen können per Feature Gate `address.company` ausgeblendet werden (#4471)
+
 ## Version 2.10
 
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)
@@ -13,6 +17,7 @@
 - Für die Schwyzer Kantonalbank SZKB wurde eine Ebics Zahlungsschnittstelle hinzugefügt (#4400)
 - Zusätzliche Adressen erhalten dieselben Namensfelder (Vorname, Nachname, Firma/Firmenname) wie die Hauptadresse und sind neu auch im JSON:API verfügbar (#4411)
 - Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
+- Zusätzliche Adressen sind neu in allen Wagons aktiviert (#4471)
 
 
 ## Version 2.10

@@ -85,3 +85,31 @@ Both these tasks have optional arguments for the start and end date of the expor
 E.g `rake payment:export_without_invoice[2022.01.01,2022.12.01]`
 
 **Default**: from: `1.month.ago` to: `Time.zone.today`
+
+## Development and Testing via Test Platforms
+
+For development we use certain test platforms. These are configured payment_providers under settings/development.yml.
+
+### Hooking up your local Hitobito to a Test Platform
+
+1. Log in to the bank test platforms website on the url found in the payment_provider yml
+2. Navigate to the EBICS Settings and reset the EBICS client ( EBICS-Teilnehmer zurücksetzen )
+3. Go into your Hitobito and fill out the PaymentProviderConfig in the form with the given Kunden-ID, Teilnehmer-ID and a random password
+4. When saving the form, Hitobito should show a success flash message to indicate that both the INI and HIA requests worked.
+5. In the bank test platform on the same page as before, unlock your EBICS client ( EBICS-Teilnehmer freischalten )
+6. Now you can either manually trigger the `EbicsImportScheduleJob` or use the rails console to grab a `PaymentProvider` instance of that PaymentProviderConfig. Either way once you ran the `PaymentProvider#HPB` method (and it returns `true`) the client is successfully connected
+
+### Up & Downloading payment data to the Test Platform
+
+**IN ORDER TO DOWNLOAD camt.054 DATA USING THE EBICS CLIENT ON TEST PLATFORMS YOU HAVE TO UPLOAD THEM VIA THE EBICS CLIENT**
+
+1. Open your rails console
+2. Get your config: `config = PaymentProviderConfig.find(my_config_for_testing)`
+3. Create a provider: `provider = PaymentProvider.new(config)`
+4. Get a valid CSV for QRR payments, there is one for postfinance in the spec fixtures: `csv = File.read(Rails.root.join("spec", "fixtures", "invoices", "postfinance_payment_upload.csv"))`
+5. Authorize your client: `provider.HPB`
+6. Upload the CSV: `provider.XTC(csv)`
+7. Download the resulting camt.054: `provider.Z54(3.days.ago, 1.day.from_now)`
+
+The same CSV should be uploadable multiple times. When successful you should also find it on the Platforms Web UI and the Platforms often provide `Best-Practice-Dateien` found in the upper right corner of the Web UI
+

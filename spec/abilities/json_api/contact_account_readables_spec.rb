@@ -7,8 +7,8 @@
 
 require "spec_helper"
 
-describe JsonApi::ContactAccountAbility do
-  subject(:ability) { JsonApi::ContactAccountAbility.new(main_ability.user) }
+describe JsonApi::ContactAccountReadables do
+  subject(:ability) { described_class.new(main_ability.user) }
 
   let(:user) { Fabricate(:person) }
   let(:group) { groups(:bottom_layer_one) }

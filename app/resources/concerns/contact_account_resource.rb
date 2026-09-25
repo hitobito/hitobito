@@ -13,7 +13,7 @@ module ContactAccountResource
   extend ActiveSupport::Concern
 
   included do
-    self.readable_class = JsonApi::ContactAccountAbility
+    self.readable_class = JsonApi::ContactAccountReadables
     self.acceptable_scopes += %w[people]
 
     attribute :label, :string
@@ -27,8 +27,8 @@ module ContactAccountResource
   def authorize_create(model)
     raise CanCan::AccessDenied unless model.contactable.is_a? Person
     # Creating a contact counts as updating the contactable
-    destroy_ability.authorize!(:update, model.contactable)
-    destroy_ability.authorize!(:show_details, model.contactable)
+    authorize!(:update, model.contactable)
+    authorize!(:show_details, model.contactable)
   end
 
   def authorize_update(model)
@@ -41,7 +41,7 @@ module ContactAccountResource
   def authorize_destroy(model)
     raise CanCan::AccessDenied unless model.contactable.is_a? Person
     # Destroying a contact counts as updating the contactable
-    destroy_ability.authorize!(:update, model.contactable)
-    destroy_ability.authorize!(:show_details, model.contactable)
+    authorize!(:update, model.contactable)
+    authorize!(:show_details, model.contactable)
   end
 end

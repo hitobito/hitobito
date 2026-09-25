@@ -6,12 +6,12 @@
 #  https://github.com/hitobito/hitobito.
 
 module JsonApi
-  class RoleAbility
+  class QualificationReadables
     include CanCan::Ability
     include FullReadablePeople
 
     def initialize(user)
-      can :read, Role, person: full_readable_people(user)
+      can :read, Qualification, person: full_readable_people(user)
     end
   end
 end

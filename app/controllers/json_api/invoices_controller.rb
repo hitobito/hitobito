@@ -6,24 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::InvoicesController < JsonApiController
-  def index
-    authorize!(:index, Invoice)
-    super
-  end
-
-  def update
-    authorize!(:update, entry)
-    super
-  end
-
-  def show
-    authorize!(:show, entry)
-    super
-  end
-
-  private
-
-  def entry
-    @entry ||= Invoice.joins(:group).find(params[:id])
-  end
 end

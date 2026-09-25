@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe JsonApi::EventParticipationDetailsAbility do
+describe JsonApi::EventParticipationDetailsReadables do
   let(:participation) { event_participations(:top) } # bottom_member in top_course
   let(:event) { participation.event } # in top_layer
 

@@ -8,7 +8,7 @@
 class RoleResource < ApplicationResource
   primary_endpoint "roles", [:index, :create, :show, :update, :destroy]
 
-  self.readable_class = JsonApi::RoleAbility
+  self.readable_class = JsonApi::RoleReadables
   self.acceptable_scopes += %w[people groups]
 
   with_options writable: false do

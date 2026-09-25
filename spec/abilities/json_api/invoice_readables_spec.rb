@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe JsonApi::InvoiceAbility do
+describe JsonApi::InvoiceReadables do
   let(:top_group) { groups(:top_group) }
   let(:bottom_member) { people(:bottom_member) }
 

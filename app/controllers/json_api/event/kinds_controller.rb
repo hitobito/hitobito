@@ -6,14 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::Event::KindsController < JsonApiController
-  def index
-    authorize!(:index, Event::Kind)
-    super
-  end
-
-  def show
-    kind = Event::Kind.find(params[:id])
-    authorize!(:show, kind)
-    super
-  end
 end

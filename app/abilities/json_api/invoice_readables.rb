@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module JsonApi
-  class InvoiceAbility
+  class InvoiceReadables
     include CanCan::Ability
 
     def initialize(user)

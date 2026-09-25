@@ -6,14 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::Event::ParticipationsController < JsonApiController
-  def index
-    authorize!(:index, Event::Participation)
-    super
-  end
-
-  def show
-    participation = Event::Participation.find(params[:id])
-    authorize!(:show, participation)
-    super
-  end
 end

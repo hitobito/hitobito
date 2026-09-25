@@ -163,7 +163,7 @@ module AbilityDsl
 
     def participation_details_participations
       ::Event::Participation
-        .accessible_by(JsonApi::EventParticipationDetailsAbility.new(user))
+        .accessible_by(JsonApi::EventParticipationDetailsReadables.new(user))
         .where(participant_type: ::Person.sti_name)
     end
   end

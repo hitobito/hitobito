@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceItemResource < ApplicationResource
-  self.readable_class = JsonApi::InvoiceAbility
+  self.readable_class = JsonApi::InvoiceReadables
   self.acceptable_scopes += %w[invoices]
 
   with_options filterable: false, sortable: false do

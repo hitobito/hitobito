@@ -82,9 +82,6 @@ module ApiScopeAbility
       acceptable?(:invoices)
     when ["Group", :index_mailing_lists]
       acceptable?(:mailing_lists)
-    when ["Event", :index_participations], ["Event::Course", :index_participations]
-      # Only in the legacy API, participations are also fetchable with the events scope
-      acceptable?(:events)
     end
   end
 

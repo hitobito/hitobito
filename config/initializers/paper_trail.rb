@@ -42,7 +42,11 @@ ActiveSupport.on_load(:active_record) do
       return nil if item.blank?
 
       if item.method(:to_s).arity != 0
-        item.to_s(:long)
+        begin
+          item.to_s(:long)
+        rescue ArgumentError
+          item.to_s
+        end
       else
         item.to_s
       end

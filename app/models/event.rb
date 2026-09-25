@@ -114,7 +114,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                                     globalize_attribute_names.map(&:to_s))
   end
 
-  translates :application_conditions, :description, :name, :signature_confirmation_text
+  translates :application_conditions, :name, :signature_confirmation_text
+
+  translates_rich_text :description
 
   translation_class.class_eval do
     has_paper_trail meta: {
@@ -143,7 +145,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
-    :description, :location, :application_opening_at,
+    :description, :plain_description, :location, :application_opening_at,
     :application_closing_at, :application_conditions,
     :external_applications, :applications_cancelable,
     :signature, :signature_confirmation, :signature_confirmation_text,
@@ -175,7 +177,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   self.uses_form_tabs = true
 
-  self.filterable_attrs = [:name, :description, :location,
+  self.filterable_attrs = [:name, :plain_description, :location,
     :application_opening_at, :application_closing_at]
 
   model_stamper
@@ -231,6 +233,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
     length: {allow_nil: true, maximum: 2**16 - 1}
+  validates :description, no_attachments: true
   validates :guest_limit, numericality: {only_integer: true, greater_than_or_equal_to: 0}
   validate :assert_type_is_allowed_for_groups
   validate :assert_application_closing_is_after_opening
@@ -419,7 +422,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     def filter_attrs
       filterable_attrs.map do |key, type|
         type = :string if translated_attribute_names.include?(key.to_sym)
-        type ||= columns_hash.fetch(key.to_s).type
+        type ||= columns_hash[key.to_s]&.type || :string
         [key.to_sym, {label: human_attribute_name(key), type: type}]
       end.to_h
     end
@@ -542,6 +545,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # Event dates can have no finish_at date, if so, we want to return the latest start_at date
   def finish_at
     dates.flat_map { [_1.start_at, _1.finish_at] }.compact.max
+  end
+
+  def plain_description
+    return if description.blank?
+
+    description.to_plain_text
   end
 
   private

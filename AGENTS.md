@@ -32,6 +32,7 @@ hitobito is split across several git repositories, checked out next to each othe
 When investigating behaviour, read the core first and then every **active** wagon that is present:
 wagons regularly reopen and monkeypatch core classes instead of subclassing them, or activate or
 deactivate feature toggles.
+When researching something across all existing wagons, always ignore the archived, unmaintained dav and kljb wagons.
 
 # Core Domain Models
 

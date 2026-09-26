@@ -686,21 +686,6 @@ describe Role do
         end
       end
 
-      it "always_soft_destroy: true does not change the outcome" do
-        expect { role.destroy(always_soft_destroy: true) }
-          .to change { role.reload.end_on }.to(Date.current.yesterday)
-      end
-
-      it "can delete if role starts tomorrow" do
-        role.update!(start_on: Time.zone.tomorrow)
-        expect(role.destroy).to be_truthy
-      end
-
-      it "can delete if role starts today" do
-        role.update!(start_on: Time.zone.today)
-        expect(role.destroy).to be_truthy
-      end
-
       it "can delete if role starts yesterday" do
         role.update!(start_on: Time.zone.yesterday)
         expect(role.destroy).to be_truthy
@@ -725,9 +710,8 @@ describe Role do
         end
       end
 
-      it "always_soft_destroy: true does not change the outcome" do
-        role.destroy(always_soft_destroy: true)
-        expect(described_class.unscoped.where(id: role.id)).not_to be_exists
+      it "can delete if role starts today" do
+        expect(role.destroy).to be_truthy
       end
     end
 
@@ -741,6 +725,10 @@ describe Role do
         role.destroy
         expect(described_class.unscoped.where(id: role.id)).not_to be_exists
       end
+
+      it "can delete if role starts tomorrow" do
+        expect(role.destroy).to be_truthy
+      end
     end
 
     context "role without start_on" do
@@ -748,9 +736,8 @@ describe Role do
         Fabricate(Group::BottomLayer::Leader.name.to_s, group: groups(:bottom_layer_one), start_on: nil)
       end
 
-      it "gets deleted from database" do
-        role.destroy
-        expect(described_class.unscoped.where(id: role.id)).not_to be_exists
+      it "ends role per yesterday instead of deleting it" do
+        expect { role.destroy }.to change { role.reload.end_on }.to(Date.current.yesterday)
       end
     end
 
@@ -763,8 +750,7 @@ describe Role do
       end
 
       it "does not change end_on" do
-        expect { role.destroy(always_soft_destroy: true) }
-          .not_to change { role.reload.end_on }
+        expect { role.destroy }.not_to change { role.reload.end_on }
       end
     end
   end
@@ -788,10 +774,10 @@ describe Role do
       expect(role.ends_on_destroy?).to eq false
     end
 
-    it "is false for role without start_on" do
+    it "is true for role without start_on" do
       role = Fabricate(Group::BottomLayer::Leader.name.to_s,
         group: groups(:bottom_layer_one), start_on: nil)
-      expect(role.ends_on_destroy?).to eq false
+      expect(role.ends_on_destroy?).to eq true
     end
   end
 
@@ -953,7 +939,7 @@ describe Role do
     end
 
     context "on destroy" do
-      it "with role without start_on creates a destroy version" do
+      it "with role without start_on creates an update version" do
         role = person.roles.first
         expect(role.start_on).to be_nil
 
@@ -962,7 +948,7 @@ describe Role do
         end.to change { PaperTrail::Version.count }.by(1)
 
         version = PaperTrail::Version.order(:created_at, :id).last
-        expect(version.event).to eq("destroy")
+        expect(version.event).to eq("update")
         expect(version.main).to eq(person)
       end
 

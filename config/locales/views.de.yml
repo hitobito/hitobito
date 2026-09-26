@@ -2441,6 +2441,9 @@ de:
         update: "Zugriffsanfrage für <i>%{label}</i> wurde aktualisiert: %{changeset}"
         destroy: "Zugriffsanfrage für <i>%{label}</i> wurde beantwortet."
 
+      role:
+        create: "%{model} <i>%{label}</i> wurde hinzugefügt: %{changeset}"
+
       deleted_person: "Gelöschte Person"
       people_manager:
         create:

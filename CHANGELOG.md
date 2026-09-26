@@ -13,6 +13,7 @@
 - Für die Schwyzer Kantonalbank SZKB wurde eine Ebics Zahlungsschnittstelle hinzugefügt (#4400)
 - Zusätzliche Adressen erhalten dieselben Namensfelder (Vorname, Nachname, Firma/Firmenname) wie die Hauptadresse und sind neu auch im JSON:API verfügbar (#4411)
 - Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
+- Das Löschen einer Rolle hängt neu ausschliesslich vom Startdatum ab und wird auch bei Hard-Delete im Verlauf protokolliert (#4260)
 
 
 ## Version 2.10

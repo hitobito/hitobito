@@ -71,6 +71,16 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     is_expected.to eq("<div>Gruppe <i>Top</i> wurde entfernt.</div>")
   end
 
+  context "for a role" do
+    it "builds create text including start_on" do
+      role = Fabricate(Group::BottomLayer::Leader.name.to_s,
+        group: groups(:bottom_layer_one), person:, start_on: Date.new(2026, 3, 1))
+
+      is_expected.to include("<div>Rolle <i>#{role.to_s(:long)}</i> wurde hinzugefügt: ")
+      is_expected.to include("Von wurde auf <i>01.03.2026</i> gesetzt.")
+    end
+  end
+
   context "for role type that does not exist anymore" do
     it "builds update text" do
       PaperTrail::Version.create!(
@@ -92,7 +102,8 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
         main: person, event: :create
       )
 
-      is_expected.to eq("<div>Rolle <i>Group::SacCasKurskader::NonExistentRoleType</i> wurde hinzugefügt.</div>")
+      is_expected.to eq("<div>Rolle <i>Group::SacCasKurskader::NonExistentRoleType</i> wurde hinzugefügt: " \
+                        "Rolle wurde auf <i></i> gesetzt.</div>")
     end
 
     it "builds removed text" do

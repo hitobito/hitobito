@@ -129,6 +129,7 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   after_destroy :set_contact_data_visible
   after_destroy :set_first_primary_group
   after_destroy :update_passes
+  after_destroy :create_paper_trail_version_for_destroy
   after_save :set_first_primary_group
   after_save :set_contact_data_visible
   after_save :update_passes
@@ -198,28 +199,24 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   # without the customizations.
   alias_method :vanilla_destroy, :destroy
 
-  # If the role is younger than the minimum days to archive, or is a future role, it gets destroyed.
-  # If it has "archival age", we update the end_on attribute to yesterday instead of destroying it.
-  # If `always_soft_destroy` is set to true, the role is always ended instead of destroyed.
-  # rubocop:todo Metrics/CyclomaticComplexity
-  def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride
-    return vanilla_destroy unless always_soft_destroy || old_enough_to_soft_destroy?
-    return vanilla_destroy if future? || starting_today?
+  def destroy # rubocop:disable Rails/ActiveRecordOverride
+    return vanilla_destroy unless ends_on_destroy?
 
     run_callbacks :destroy do
       end_on&.past? ? true : update!(end_on: Date.current.yesterday)
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
 
-  # Soft destroy if older than certain amount of days, hard if younger.
-  # Set always_soft_destroy to true if you want to soft destroy even if the role is not old enough.
-  def destroy!(always_soft_destroy: false)
-    destroy(always_soft_destroy: always_soft_destroy) || _raise_record_not_destroyed
+  def destroy!
+    destroy || _raise_record_not_destroyed
   end
 
   def really_destroy!
     vanilla_destroy
+  end
+
+  def ends_on_destroy?
+    start_on.nil? || start_on < Date.current
   end
 
   def terminatable?
@@ -272,10 +269,6 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     start_on&.future?
   end
 
-  def starting_today?
-    start_on == Time.zone.today
-  end
-
   def active?(reference_time = Time.current)
     active_period.cover?(reference_time)
   end
@@ -315,8 +308,10 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     end
   end
 
-  def old_enough_to_soft_destroy?
-    created_at < Settings.role.minimum_days_to_archive.days.ago
+  def create_paper_trail_version_for_destroy
+    return unless destroyed? && paper_trail.save_version?
+
+    paper_trail.record_destroy("after")
   end
 
   # rubocop:todo Metrics/AbcSize

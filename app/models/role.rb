@@ -199,7 +199,7 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   # without the customizations.
   alias_method :vanilla_destroy, :destroy
 
-  def destroy(always_soft_destroy: false) # rubocop:disable Rails/ActiveRecordOverride, Lint/UnusedMethodArgument
+  def destroy # rubocop:disable Rails/ActiveRecordOverride
     return vanilla_destroy unless ends_on_destroy?
 
     run_callbacks :destroy do
@@ -207,8 +207,8 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     end
   end
 
-  def destroy!(always_soft_destroy: false)
-    destroy(always_soft_destroy: always_soft_destroy) || _raise_record_not_destroyed
+  def destroy!
+    destroy || _raise_record_not_destroyed
   end
 
   def really_destroy!
@@ -216,7 +216,7 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   def ends_on_destroy?
-    start_on.present? && start_on < Date.current
+    start_on.nil? || start_on < Date.current
   end
 
   def terminatable?

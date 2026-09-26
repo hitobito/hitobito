@@ -84,6 +84,18 @@ module RolesHelper
     Roles::TerminateRoleLink.new(role, self).render
   end
 
+  def link_action_end_or_destroy(role)
+    path = group_role_path(role.group, role)
+    return link_action_destroy(path) unless role.ends_on_destroy?
+
+    link_to icon(:"right-to-bracket", filled: true),
+      path,
+      class: "action",
+      title: t("roles.end.title"),
+      alt: t("roles.end.title"),
+      data: {confirm: t("roles.end.confirm"), method: :delete}
+  end
+
   private
 
   def standard_role(group)

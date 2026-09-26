@@ -15,9 +15,9 @@
       = labeled(Invoice.human_attribute_name(:payee), invoice_payee_address(entry))
       = labeled_attr(entry, :beneficiary) if entry.bank?
       = labeled_attr(entry, :address)
-      = labeled_attr(entry, :shipping_method) if entry.shipping_method?
-      = labeled_attr(entry, :pp_post) if entry.pp_post?
-      = labeled_attr(entry, :account_number) if entry.account_number?
+      = labeled_attr(entry, :shipping_method) if entry.shippable?(:shipping_method) && entry.shipping_method?
+      = labeled_attr(entry, :pp_post) if entry.shippable?(:pp_post) && entry.pp_post?
+      = labeled_attr(entry, :account_number) if entry.account_number? && !entry.no_ps?
       = labeled_attr(entry, :participant_number) if entry.with_reference?
       = labeled_attr(entry, :iban) if entry.iban.present?
       = labeled_attr(entry, :esr_number) if entry.with_reference?

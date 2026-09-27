@@ -46,11 +46,10 @@ module Dropdown
       end
 
       def to_s
-        case items.size
-        when 0 then nil
-        when 1 then simple_button(items.first.url)
-        else super
-        end
+        return nil if items.empty?
+        return simple_button(items.first.url) if items.one? && !items.first.sub_items?
+
+        super
       end
 
       def disabled_button
@@ -116,6 +115,14 @@ module Dropdown
           translate(:"disabled_messages.already_exists")
         elsif ::Ability.new(participant).cannot?(:show, event)
           translate(:"disabled_messages.cannot_see_event")
+        end
+      end
+
+      def participant_types_sub_items(opts)
+        event.participant_types.map do |type|
+          opts = opts.merge(event_role: {type: type.sti_name})
+          link = participate_link(opts)
+          ::Dropdown::Item.new(translate(:as, role: type.label), link)
         end
       end
 

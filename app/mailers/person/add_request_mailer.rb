@@ -57,7 +57,7 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def placeholder_requester_name
-    requester.full_name
+    requester.person_name
   end
 
   def placeholder_requester_roles
@@ -73,15 +73,15 @@ class Person::AddRequestMailer < ApplicationMailer
   end
 
   def placeholder_person_name
-    person.full_name
+    person.person_name
   end
 
   def placeholder_approver_name
-    @user.full_name
+    @user.person_name
   end
 
   def placeholder_rejecter_name
-    @user.full_name
+    @user.person_name
   end
 
   def placeholder_approver_roles

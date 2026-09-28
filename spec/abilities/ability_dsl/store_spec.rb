@@ -6,7 +6,7 @@
 require "spec_helper"
 
 describe AbilityDsl::Store do
-  subject { AbilityDsl::Store.new }
+  subject(:store) { AbilityDsl::Store.new }
 
   before { subject.load }
 
@@ -49,6 +49,43 @@ describe AbilityDsl::Store do
       subject.add(c1)
       subject.add(c2)
       expect(subject.general_constraints(:subj, :action)).to match_array([c1])
+    end
+  end
+
+  context "#attribute_config_for" do
+    it "finds attribute_config_for matching key" do
+      config = AbilityDsl::AttributeConfig.new(
+        :any, Person, :update, PersonAbility, :herself, [:first_name], :except
+      )
+      store.add_attribute_config(config)
+
+      found = store.attribute_config(:any, Person, :update)
+      expect(found).to eq config
+    end
+
+    it "returns nil for non-matching key" do
+      config = AbilityDsl::AttributeConfig.new(
+        :any, Person, :update, PersonAbility, :herself, [:first_name], :except
+      )
+      store.add_attribute_config(config)
+
+      expect(store.attribute_config(:group_full, Person, :update)).to be_nil
+    end
+
+    it "overwrites attribute configs with same key (wagon override)" do
+      config1 = AbilityDsl::AttributeConfig.new(
+        :any, Person, :update, PersonAbility, :herself, [:first_name], :except
+      )
+      config2 = AbilityDsl::AttributeConfig.new(
+        :any, Person, :update, PersonAbility, :herself, [:first_name, :last_name], :except
+      )
+
+      store.add_attribute_config(config1)
+      store.add_attribute_config(config2)
+
+      configs = store.instance_variable_get(:@attribute_configs).values
+      expect(configs.size).to eq 1
+      expect(configs.first.attrs).to eq [:first_name, :last_name]
     end
   end
 end

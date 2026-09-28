@@ -298,6 +298,87 @@ describe Import::PersonImporter do
     end
   end
 
+  context "with id mapped" do
+    let(:new_id) { Person.maximum(:id) + 1000 }
+
+    context "existing person" do
+      let!(:existing) { Fabricate(:person, first_name: "Existing", town: nil) }
+      let(:data) { [{id: existing.id, first_name: "Changed", town: "Zürich"}] }
+
+      it "updates person found by id, filling only blank attributes" do
+        expect { subject.import }.not_to change(Person, :count)
+        expect(existing.reload.first_name).to eq "Existing"
+        expect(existing.town).to eq "Zürich"
+      end
+
+      it "counts as update" do
+        subject.import
+        expect(importer.update_count).to eq 1
+        expect(importer.new_count).to eq 0
+      end
+
+      context "with override behaviour" do
+        let(:importer) do
+          importer = Import::PersonImporter.new(data, group, role_type,
+            can_manage_tags: can_manage_tags, override: true)
+          importer.user_ability = Ability.new(people(:top_leader))
+          importer
+        end
+
+        it "overwrites existing attributes" do
+          subject.import
+          expect(existing.reload.first_name).to eq "Changed"
+        end
+      end
+    end
+
+    context "new person" do
+      let(:data) { [{id: new_id, first_name: "Newbie"}] }
+
+      it "creates person with the given id" do
+        expect { subject.import }.to change(Person, :count).by(1)
+        expect(Person.find(new_id).first_name).to eq "Newbie"
+      end
+
+      it "resets the pk sequence so subsequent people get free ids" do
+        subject.import
+        expect { Fabricate(:person) }.not_to raise_error
+      end
+    end
+
+    context "duplicate detection" do
+      let!(:dup1) { Fabricate(:person, first_name: "Foo", last_name: "Bar") }
+      let!(:dup2) { Fabricate(:person, first_name: "Foo", last_name: "Bar") }
+      let(:data) { [{id: dup2.id, first_name: "Foo", last_name: "Bar", town: "Zürich"}] }
+
+      it "is disabled, id is the only match criterion" do
+        expect { subject.import }.not_to change(Person, :count)
+        expect(importer.errors).to be_empty
+        expect(dup2.reload.town).to eq "Zürich"
+      end
+    end
+
+    context "row without id" do
+      let(:data) { [{id: new_id, first_name: "A"}, {id: nil, first_name: "B"}] }
+
+      it "aborts the whole import" do
+        expect { subject.import }.not_to change(Person, :count)
+        expect(subject.import).to eq false
+        expect(importer.errors).to eq ["Keine ID in Zeile(n): 2"]
+      end
+    end
+
+    context "duplicate ids" do
+      let(:data) { [{id: new_id, first_name: "A"}, {id: new_id, first_name: "B"}] }
+
+      it "aborts the whole import" do
+        expect { subject.import }.not_to change(Person, :count)
+        expect(subject.import).to eq false
+        expect(importer.errors).to eq ["ID mehrmals vergeben: #{new_id}"]
+      end
+    end
+  end
+
   context "list file" do
     let(:parser) { Import::CsvParser.new(File.read(path(:list))) }
     let(:mapping) { headers_mapping(parser) }

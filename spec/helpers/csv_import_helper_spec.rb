@@ -4,6 +4,18 @@ describe CsvImportHelper do
   include UtilityHelper
   include ERB::Util
 
+  context "#application_person_fields" do
+    it "includes id for admins" do
+      @can_import_with_id = true
+      expect(application_person_fields.map(&:key)).to include("id")
+    end
+
+    it "excludes id for non-admins" do
+      @can_import_with_id = false
+      expect(application_person_fields.map(&:key)).not_to include("id")
+    end
+  end
+
   context "#csv_field_documentation" do
     it "renders string directly" do
       expect(csv_field_documentation(:first_name, "Only nice names")).to(

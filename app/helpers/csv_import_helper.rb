@@ -5,7 +5,9 @@
 
 module CsvImportHelper
   def application_person_fields
-    Import::Person.fields.map { |field| OpenStruct.new(field) }
+    fields = Import::Person.fields
+    fields = fields.reject { |field| field[:key] == "id" } unless @can_import_with_id
+    fields.map { |field| OpenStruct.new(field) }
   end
 
   def csv_field_documentation(field, values)

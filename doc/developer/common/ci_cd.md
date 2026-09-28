@@ -44,15 +44,18 @@ die Tests aller Wagons gegen den geänderten Core laufen.
 Manche Wagons bauen auf einem anderen Wagon auf (`hitobito_bdp` und `hitobito_dpsg` auf
 `hitobito_pfadi_de`, `hitobito_pbs` und weitere auf `hitobito_youth`). Eine Änderung an so einem
 Dependency-Wagon kann die abhängigen Wagons genauso brechen wie eine Änderung am Core. Dafür gibt es
-mit [run-dependent-wagon-tests.yml](https://github.com/hitobito/hitobito/blob/master/.github/workflows/run-dependent-wagon-tests.yml)
-dasselbe eine Stufe weiter unten.
+dasselbe eine Stufe weiter unten: `run-dependent-wagon-tests.yml` im Dependency-Wagon.
 
-* Der Workflow liegt im Core, wird aber ausschliesslich von den Dependency-Wagons aufgerufen.
-  Im Core selbst hat er keinen Trigger, damit Core-Änderungen nicht dieselben Wagon-Tests ein
+* Der Workflow selber liegt im Dependency-Wagon, die Bestandteile im Core:
+  [find-dependent-wagons.yml](https://github.com/hitobito/hitobito/blob/master/.github/workflows/find-dependent-wagons.yml)
+  liefert die Matrix, `wagon-tests.yml` testet jeden Wagon darin, und
+  [dependent-wagon-tests-green.yml](https://github.com/hitobito/hitobito/blob/master/.github/workflows/dependent-wagon-tests-green.yml)
+  fasst das Resultat zusammen.
+* Im Core wird dabei nichts getriggert, damit Core-Änderungen nicht dieselben Wagon-Tests ein
   zweites Mal auslösen.
-* Auch hier werden die abhängigen Wagons ermittelt statt konfiguriert: Es sind alle Wagons, deren
-  Gemspec ein `add_dependency` auf den Dependency-Wagon enthält. Ein neuer abhängiger Wagon wird
-  also ohne Anpassung am Workflow getestet.
+* Welche Wagons abhängig sind, wird wiederum ermittelt statt konfiguriert: Es sind alle Wagons,
+  deren Gemspec ein `add_dependency` auf den Dependency-Wagon enthält. Ein neuer abhängiger Wagon
+  wird also ohne Anpassung am Workflow getestet.
 * Getestet wird jeder Commit auf dem Hauptbranch des Dependency-Wagons, und auf einem Pull Request
   auf Anfrage – mit demselben Label `run-wagon-tests!` wie in der Core-Pipeline.
 * Der zusammenfassende Check heisst hier "All dependent wagon tests are green" und funktioniert

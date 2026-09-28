@@ -1,0 +1,86 @@
+name: 'Summarize the results of the dependent wagon tests'
+
+# This workflow is used by dependency wagons (a wagon other wagons build upon,
+# e.g. hitobito_youth or hitobito_pfadi_de) to turn the whole matrix of the
+# wagons depending on them into the single check a branch protection can
+# require.
+on:
+  workflow_call:
+    inputs:
+      find_wagons_result:
+        description: The result of the job which determined the dependent wagons.
+        type: string
+        required: true
+      wagon_tests_result:
+        description: The result of the wagon test matrix.
+        type: string
+        required: true
+      dependency_wagon_repository:
+        description: The wagon whose dependent wagons were tested, e.g. hitobito_pfadi_de. Defaults to the calling repository.
+        type: string
+        default: ""
+
+jobs:
+  all-dependent-wagon-tests-green:
+    name: 'All dependent wagon tests are green'
+    runs-on: 'ubuntu-latest'
+    permissions:
+      checks: read
+
+    steps:
+      - name: 'Check the result of the wagon test matrix'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FIND_WAGONS_RESULT: ${{ inputs.find_wagons_result }}
+          WAGON_TESTS_RESULT: ${{ inputs.wagon_tests_result }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          DEPENDENCY_WAGON: ${{ inputs.dependency_wagon_repository || github.event.repository.name }}
+        run: |
+          # This workflow is also triggered when a pull request receives an
+          # unrelated label, which leaves the matrix unbuilt. Report again what
+          # this commit achieved earlier instead of discarding that verdict,
+          # which would force a full matrix run for every edited label.
+          if [ "$FIND_WAGONS_RESULT" = 'skipped' ]; then
+            # Take the latest verdict this job reached for the same commit, in order to
+            # support re-running a failed wagon test.
+            previous=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${HEAD_SHA}/check-runs" \
+              -X GET -f status=completed -f per_page=100 | \
+              jq -r '[.check_runs[] |
+                     select(.name | endswith("All dependent wagon tests are green")) |
+                     select(.conclusion == "success" or .conclusion == "failure")] |
+                    sort_by(.completed_at) | last | .conclusion // "none"')
+
+            case "$previous" in
+              success)
+                echo "The dependent wagon tests already passed for ${HEAD_SHA}"
+                exit 0
+                ;;
+              failure)
+                echo "::error::The dependent wagon tests failed for ${HEAD_SHA}. Re-run the failed jobs of that run."
+                exit 1
+                ;;
+              *)
+                echo "::error::The dependent wagon tests did not run. Add the 'run-wagon-tests!' label to this pull request."
+                exit 1
+                ;;
+            esac
+          fi
+
+          if [ "$FIND_WAGONS_RESULT" != 'success' ]; then
+            echo "::error::Could not determine the wagons depending on ${DEPENDENCY_WAGON}: $FIND_WAGONS_RESULT"
+            exit 1
+          fi
+
+          # An empty wagon list leaves the matrix without a single job, which
+          # reports as skipped rather than as a failure.
+          if [ "$WAGON_TESTS_RESULT" = 'skipped' ]; then
+            echo "::error::No wagon was tested, no wagon depending on ${DEPENDENCY_WAGON} was found"
+            exit 1
+          fi
+
+          if [ "$WAGON_TESTS_RESULT" != 'success' ]; then
+            echo "::error::At least one wagon did not pass its tests: $WAGON_TESTS_RESULT"
+            exit 1
+          fi
+
+          echo "All wagons depending on ${DEPENDENCY_WAGON} passed their tests"

@@ -1,0 +1,67 @@
+name: 'Find the wagons depending on a wagon'
+
+# This workflow is used by dependency wagons (a wagon other wagons build upon,
+# e.g. hitobito_youth or hitobito_pfadi_de) to build the matrix of the wagons
+# that have to be tested against a change of that wagon.
+on:
+  workflow_call:
+    inputs:
+      dependency_wagon_repository:
+        description: The wagon whose dependent wagons should be listed, e.g. hitobito_pfadi_de. Defaults to the calling repository.
+        type: string
+        default: ""
+      skip_wagons:
+        description: Space separated list of wagon names without the hitobito_ prefix which should not be listed. Defaults to the WAGON_TESTS_SKIP_WAGONS variable.
+        type: string
+        default: ""
+    outputs:
+      wagons:
+        description: The dependent wagons as a JSON array of { repo, name } objects, ready to be used as a matrix.
+        value: ${{ jobs.find-dependent-wagons.outputs.wagons }}
+
+jobs:
+  find-dependent-wagons:
+    name: 'Find all wagons depending on ${{ inputs.dependency_wagon_repository || github.event.repository.name }}'
+    runs-on: 'ubuntu-latest'
+    outputs:
+      wagons: ${{ steps.list-dependent-wagons.outputs.wagons }}
+
+    steps:
+      - name: 'List the wagon repositories depending on the wagon'
+        id: list-dependent-wagons
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEPENDENCY_WAGON: ${{ inputs.dependency_wagon_repository || github.event.repository.name }}
+          SKIP_WAGONS: ${{ inputs.skip_wagons || vars.WAGON_TESTS_SKIP_WAGONS }}
+        run: |
+          set -euo pipefail
+
+          echo "Looking for the wagons which depend on ${DEPENDENCY_WAGON}"
+
+          candidates=$(gh repo list hitobito -L 100 --no-archived --json name | \
+            jq -r --arg skip "$SKIP_WAGONS" '($skip | split(" ")) as $skipped |
+              .[].name |
+              select(startswith("hitobito_")) |
+              select(ltrimstr("hitobito_") | IN($skipped[]) | not)')
+
+          dependents=()
+          for repo in $candidates; do
+            if [ "$repo" = "$DEPENDENCY_WAGON" ]; then
+              continue
+            fi
+
+            gemspec=$(gh api "repos/hitobito/${repo}/contents/${repo}.gemspec" -H 'Accept: application/vnd.github.raw') || {
+              echo "::warning::Could not read ${repo}.gemspec, skipping ${repo}"
+              continue
+            }
+
+            if grep -qE "^[^#]*add_dependency[^#]*[\"']${DEPENDENCY_WAGON}[\"']" <<< "$gemspec"; then
+              echo "${repo} depends on ${DEPENDENCY_WAGON}"
+              dependents+=("$repo")
+            fi
+          done
+
+          WAGONS=$(printf '%s\n' "${dependents[@]}" | \
+            jq -R -s -c 'split("\n") | map(select(length > 0) | { repo: ., name: ltrimstr("hitobito_") })')
+          echo "$WAGONS"
+          echo "wagons=$WAGONS" >> $GITHUB_OUTPUT

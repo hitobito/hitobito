@@ -45,6 +45,26 @@ describe Ability do
           bottom_layer_one.id
         ])
       end
+
+      it "includes all layers of multiple layer_and_below_finance roles" do
+        Fabricate(Group::BottomLayer::LocalGuide.sti_name, group: bottom_layer_one, person: user)
+        Fabricate(Group::BottomLayer::LocalGuide.sti_name, group: bottom_layer_two, person: user)
+        stub_layer_and_below_finance_permission_on(Group::BottomLayer::LocalGuide)
+        expect(ability.user_finance_layer_ids).to match_array([
+          bottom_layer_one.id,
+          bottom_layer_two.id
+        ])
+      end
+
+      it "includes layers of finance and layer_and_below_finance roles" do
+        Fabricate(Group::BottomLayer::Member.sti_name, group: bottom_layer_one, person: user)
+        Fabricate(Group::BottomLayer::LocalGuide.sti_name, group: bottom_layer_two, person: user)
+        stub_layer_and_below_finance_permission_on(Group::BottomLayer::LocalGuide)
+        expect(ability.user_finance_layer_ids).to match_array([
+          bottom_layer_one.id,
+          bottom_layer_two.id
+        ])
+      end
     end
 
     context "root" do

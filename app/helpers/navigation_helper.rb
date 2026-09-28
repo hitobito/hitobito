@@ -165,8 +165,18 @@ module NavigationHelper
   end
 
   def first_group_invoices_or_root_path
-    return root_path if current_ability.user_finance_layer_ids.blank?
+    finance_layer_ids = current_ability.user_finance_layer_ids
+    return root_path if finance_layer_ids.blank?
 
-    group_invoices_path(current_ability.user_finance_layer_ids.first)
+    layer_id = closest_finance_layer_id(@group, finance_layer_ids) ||
+      closest_finance_layer_id(current_user.primary_group, finance_layer_ids) ||
+      Group.where(id: finance_layer_ids).order(:lft).pick(:id)
+    group_invoices_path(layer_id)
+  end
+
+  def closest_finance_layer_id(group, finance_layer_ids)
+    return unless group&.persisted?
+
+    group.self_and_ancestors.where(id: finance_layer_ids).reorder(lft: :desc).pick(:id)
   end
 end

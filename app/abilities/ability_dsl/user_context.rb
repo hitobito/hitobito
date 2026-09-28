@@ -84,7 +84,7 @@ module AbilityDsl
       user.groups_with_permission(:layer_and_below_finance).each do |group|
         layer_ids = group.layer_group.self_and_descendants.merge(Group.layers).pluck(:id)
         grant_groups_permissions(:finance, layer_ids)
-        @permissions_layer_ids[:finance] = layer_ids
+        @permissions_layer_ids[:finance] |= layer_ids
       end
     end
 

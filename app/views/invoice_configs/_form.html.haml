@@ -21,9 +21,10 @@
       = f.fields_for(:payment_reminder_configs) do |ff|
         = render 'reminder_fields', f: ff
 
-    #payment_provider_configs.tab-pane
-      = f.fields_for(:payment_provider_configs) do |ff|
-        = render 'provider_fields', f: ff
+    - if Settings.payment_providers.present?
+      #payment_provider_configs.tab-pane
+        = f.fields_for(:payment_provider_configs) do |ff|
+          = render 'provider_fields', f: ff
 
     #layout.tab-pane
       = render 'layout_fields', f: f

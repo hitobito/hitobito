@@ -6,7 +6,7 @@
 = invoice_sending_dropdown unless entry.payed?
 = button_action_edit
 = invoices_export_dropdown
-= invoices_print_dropdown
+= invoices_print_dropdown(entry)
 = action_button(t('invoices.cancel'), path_args(entry), :'trash-alt', method: :delete, data: { confirm: t('.confirm_cancel') })
 
 - if entry.payable?

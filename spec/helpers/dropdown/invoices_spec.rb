@@ -51,4 +51,41 @@ describe "Dropdown::Invoices" do
       expect(dom).to have_selector("a[data-checkable='true']", text: "Nicht zuordenbare Zahlungen")
     end
   end
+
+  describe "print" do
+    subject(:labels) { Dropdown::Invoices.new(self, :print, invoice: invoice).print.items.map(&:label) }
+
+    context "without a specific invoice" do
+      let(:invoice) { nil }
+
+      it "offers the payment slip print variants, since it cannot know" do
+        expect(labels).to include("Rechnung separat", "Einzahlungsschein separat")
+      end
+    end
+
+    context "invoice has a payment slip" do
+      let(:invoice) { invoices(:invoice) }
+
+      it "offers the payment slip print variants" do
+        expect(labels).to include("Rechnung separat", "Einzahlungsschein separat")
+      end
+
+      it "mentions the payment slip in the full and original invoice labels" do
+        expect(labels).to include("Rechnung inkl. Einzahlungsschein", "Originalrechnung inkl. Einzahlungsschein")
+      end
+    end
+
+    context "invoice has no payment slip" do
+      let(:invoice) { Invoice.new(payment_slip: "no_ps") }
+
+      it "does not offer the payment slip print variants" do
+        expect(labels).not_to include("Rechnung separat", "Einzahlungsschein separat")
+      end
+
+      it "does not mention a payment slip in the full and original invoice labels" do
+        expect(labels).to include("Rechnung", "Originalrechnung")
+        expect(labels).not_to include("Rechnung inkl. Einzahlungsschein", "Originalrechnung inkl. Einzahlungsschein")
+      end
+    end
+  end
 end

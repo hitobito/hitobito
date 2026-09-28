@@ -405,6 +405,22 @@ describe InvoicesController do
       get :show, params: {group_id: group.id, id: invoice.id, reminders: false}, format: :pdf
     end
 
+    describe "rendering view" do
+      render_views
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      it "shows the account number for an invoice with a payment slip" do
+        get :show, params: {group_id: group.id, id: invoice.id}
+        expect(dom).to have_content invoice.account_number
+      end
+
+      it "does not show the account number for an invoice without a payment slip" do
+        invoice.update_columns(payment_slip: "no_ps")
+        get :show, params: {group_id: group.id, id: invoice.id}
+        expect(dom).not_to have_content invoice.account_number
+      end
+    end
+
     describe "tabular exports" do
       let(:now) { Time.zone.now }
       let(:options) { {filename: invoice.filename("").to_s} }

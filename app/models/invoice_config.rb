@@ -45,13 +45,15 @@ class InvoiceConfig < ActiveRecord::Base
   include ValidatedEmail
 
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
-  PAYMENT_SLIPS = %w[qr no_ps].freeze
   LOGO_MAX_DIMENSION = Settings.application.image_upload.max_dimension
 
   class_attribute :logo_positions, default: %w[disabled left right]
+  class_attribute :payment_slips, default: %w[qr no_ps]
 
-  i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true
+  i18n_enum :payment_slip, ->(c) { payment_slips }, scopes: true, queries: true
   i18n_enum :logo_position, ->(c) { logo_positions.map(&:to_s) }, scopes: false, queries: false
+
+  attribute :payment_slip, :string, default: -> { payment_slips.first }
 
   belongs_to :group, class_name: "Group"
 

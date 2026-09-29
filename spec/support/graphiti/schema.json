@@ -358,7 +358,13 @@
           ]
         }
       },
-      "relationships": {},
+      "relationships": {
+        "category": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "ContactAccountCategoryResource"
+        }
+      },
       "stats": {
         "total": [
           "count"
@@ -537,6 +543,135 @@
             "eq"
           ],
           "single": true
+        }
+      },
+      "relationships": {
+        "category": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "ContactAccountCategoryResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "ContactAccountCategoryResource",
+      "type": "contact_account_categories",
+      "graphql_entrypoint": "contactAccountCategories",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "key": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "contact_account_type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "contactable_type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "unique_per_contactable": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "position": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {},
+        "key": {},
+        "contact_account_type": {},
+        "contactable_type": {},
+        "unique_per_contactable": {},
+        "position": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "key": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "contact_account_type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "contactable_type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
         }
       },
       "relationships": {},
@@ -3454,7 +3589,13 @@
           ]
         }
       },
-      "relationships": {},
+      "relationships": {
+        "category": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "ContactAccountCategoryResource"
+        }
+      },
       "stats": {
         "total": [
           "count"
@@ -4099,7 +4240,13 @@
           ]
         }
       },
-      "relationships": {},
+      "relationships": {
+        "category": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "ContactAccountCategoryResource"
+        }
+      },
       "stats": {
         "total": [
           "count"
@@ -4108,6 +4255,16 @@
     }
   ],
   "endpoints": {
+    "/api/contact_account_categories": {
+      "actions": {
+        "index": {
+          "resource": "ContactAccountCategoryResource"
+        },
+        "show": {
+          "resource": "ContactAccountCategoryResource"
+        }
+      }
+    },
     "/api/event_kind_categories": {
       "actions": {
         "index": {

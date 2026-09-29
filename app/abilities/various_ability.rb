@@ -27,6 +27,10 @@ class VariousAbility < AbilityDsl::Base
     permission(:any).may(:create, :update, :destroy, :show).own_unless_only_basic_permissions_roles
   end
 
+  on(ContactAccountCategory) do
+    class_side(:list_available).all
+  end
+
   on(Event::Kind) do
     class_side(:index, :show).all
     permission(:admin).may(:manage).if_course_types_present

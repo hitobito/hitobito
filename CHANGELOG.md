@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Dialog erstellt, um das Löschen von Gruppen schwieriger zu machen (#1976)
+
 ## Version 2.10
 
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)

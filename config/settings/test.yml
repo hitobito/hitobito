@@ -39,3 +39,7 @@ additional_address:
 
 personal_documents:
   enabled: true
+
+invoices:
+  ebics:
+    import_payments_from: <%= 3.days %>

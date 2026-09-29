@@ -13,5 +13,15 @@ class AddLegacy25EbicsToPaymentProviderConfigs < ActiveRecord::Migration[8.0]
       [:invoice_config_id, :payment_provider, :legacy_25_ebics],
       unique: true,
       name: "index_payment_provider_configs_on_config_provider_and_legacy"
+
+    reversible do |dir|
+      dir.up do
+        # Enqueued jobs with the old initialize signature would fail on the next
+        # run, so drop them. They get re-enqueued correctly by the schedule job.
+        Delayed::Job.where("handler LIKE '%Payments::EbicsImportJob%'").delete_all
+        Delayed::Job.where("handler LIKE '%Payments::EbicsImportScheduleJob%'")
+          .update_all(run_at: 1.hour.from_now)
+      end
+    end
   end
 end

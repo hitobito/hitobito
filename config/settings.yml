@@ -303,7 +303,8 @@ invoices:
       # (#1516). When disabled, only EBICS 2.5 configs are used, allowing EBICS 3.0
       # support to be turned off again per instance while it is still being rolled out.
       enabled: true
-    import_payments_from: <%= 3.days.ago %>
+    # Duration (in seconds) into the past for the EBICS payment import window.
+    import_payments_from: <%= 15.days %>
 
 wallets:
   sync_interval: <%= ENV['HITOBITO_WALLETS_SYNC_SECONDS'].presence || 3.minutes %>

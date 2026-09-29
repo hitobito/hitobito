@@ -106,6 +106,7 @@ class Payments::EbicsImportJob < BaseJob
   def payment_provider_configs
     @payment_provider_configs ||= PaymentProviderConfig.initialized
       .where(invoice_config_id: @invoice_config_id, payment_provider: @payment_provider)
+      .where(legacy_25_ebics: PaymentProviderConfig.used_legacy_25_ebics_flags)
       .list.to_a
   end
 

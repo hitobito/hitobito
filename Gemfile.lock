@@ -894,7 +894,7 @@ DEPENDENCIES
   draper (= 4.0.2)
   draper-cancancan
   dry-validation
-  epics (>= 3.0.0.rc1)
+  epics (>= 3.0.0.rc1, < 4)
   fabrication
   faker
   faraday

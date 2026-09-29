@@ -207,6 +207,38 @@ describe Payments::EbicsImportJob do
       expect(error_log.subject).to eq(legacy_config)
     end
 
+    it "uses the 2.5 config directly when the ebics_30 gate is disabled" do
+      allow(Settings.invoices.ebics.ebics_30).to receive(:enabled).and_return(false)
+
+      expect(PaymentProvider).to_not receive(:new).with(config)
+
+      allow(legacy_provider).to receive(:client).and_return(legacy_epics_client)
+      expect(legacy_epics_client).to receive(:HPB)
+      expect(legacy_provider).to receive(:check_bank_public_keys!).and_return(true)
+      expect(legacy_provider).to receive(:Z54).and_return(invoice_files)
+
+      subject.perform
+
+      _, success_log = HitobitoLogEntry.last(2)
+      expect(success_log.subject).to eq(legacy_config)
+    end
+
+    it "does not fall back to the 2.5 config when the legacy_ebics_25 gate is disabled" do
+      allow(Settings.invoices.ebics.legacy_ebics_25).to receive(:enabled).and_return(false)
+
+      error = Epics::Error::TechnicalError.new("091010")
+      expect(payment_provider).to receive(:HPB).and_raise(error)
+      expect(legacy_provider).to_not receive(:HPB)
+
+      expect do
+        subject.perform
+      end.to change { HitobitoLogEntry.count }.by(2)
+
+      _, error_log = HitobitoLogEntry.last(2)
+      expect(error_log.subject).to eq(config)
+      expect(error_log.level).to eq("error")
+    end
+
     it "does not fall back on a payment xml processing error" do
       allow(payment_provider).to receive(:client).and_return(epics_client)
       expect(epics_client).to receive(:HPB)

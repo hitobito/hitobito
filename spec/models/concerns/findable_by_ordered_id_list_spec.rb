@@ -81,6 +81,27 @@ describe FindableByOrderedIdList do
     expect { enumerator.pluck(:id) }.to raise_error(/can only be iterated once/)
   end
 
+  it "should use the given scope to eager load associations" do
+    message_recipient_ids = 3.times.map { Fabricate(:message_recipient).id }
+
+    entries = MessageRecipient.find_in_ordered_batches(
+      message_recipient_ids, scope: MessageRecipient.includes(:message)
+    ).to_a
+
+    expect(entries.map { |entry| entry.association(:message).loaded? }).to all(be true)
+  end
+
+  it "should use the given scope in find_by_ids_keeping_order" do
+    message_recipients = 3.times.map { Fabricate(:message_recipient) }
+
+    entries = MessageRecipient.find_by_ids_keeping_order(
+      message_recipients.pluck(:id), scope: MessageRecipient.includes(:message)
+    )
+
+    expect(entries.to_a).to eq(message_recipients)
+    expect(entries.map { |entry| entry.association(:message).loaded? }).to all(be true)
+  end
+
   it "should still allow #count to be called any number of times on the batch enumerator" do
     message_recipient_ids = 3.times.map { Fabricate(:message_recipient).id }
     enumerator = MessageRecipient.find_in_ordered_batches(message_recipient_ids, batch_size: 2)

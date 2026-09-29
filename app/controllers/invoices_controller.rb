@@ -151,10 +151,17 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def render_tabular_in_background(format, invoices)
-    Export::InvoicesJob.new(
-      format, current_person.id, invoices.map(&:id),
-      {filename: filename(invoices)}
-    ).enqueue!
+    if params[:invoice_items].present?
+      Export::InvoiceItemsJob.new(
+        format, current_person.id, invoices.map(&:id),
+        {filename: InvoiceItem.model_name.human(count: 2).downcase}
+      ).enqueue!
+    else
+      Export::InvoicesJob.new(
+        format, current_person.id, invoices.map(&:id),
+        {filename: filename(invoices)}
+      ).enqueue!
+    end
     redirect_after_enqueued_export
   end
 

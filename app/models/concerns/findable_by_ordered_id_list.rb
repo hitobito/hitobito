@@ -13,23 +13,23 @@ module FindableByOrderedIdList
   end
 
   module ClassMethods
-    def find_in_ordered_batches(ids, batch_size: 500)
+    def find_in_ordered_batches(ids, batch_size: 500, scope: all)
       check_findable_by_id(__method__)
 
-      batch_enumerator(ids, batch_size)
+      batch_enumerator(ids, batch_size, scope)
     end
 
-    def find_by_ids_keeping_order(ids)
+    def find_by_ids_keeping_order(ids, scope: all)
       check_findable_by_id(__method__)
 
-      where(id: ids).order(Arel.sql(
+      scope.where(id: ids).order(Arel.sql(
         "array_position(ARRAY[?]::int[], #{table_name}.id)", ids
       ))
     end
 
     private
 
-    def batch_enumerator(ids, batch_size)
+    def batch_enumerator(ids, batch_size, scope = all)
       entry_count = ids.count
       iterated = false
 
@@ -38,7 +38,7 @@ module FindableByOrderedIdList
         iterated = true
 
         ids.each_slice(batch_size) do |id_batch|
-          find_by_ids_keeping_order(id_batch).each do |entry|
+          find_by_ids_keeping_order(id_batch, scope: scope).each do |entry|
             yielder << entry
           end
         end

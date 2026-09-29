@@ -58,7 +58,7 @@ describe Export::Tabular::People::PeopleAddress do
     describe "Phone Numbers" do
       before do
         person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
-          number: "0791234567")
+          number: "0791234567", public: true)
       end
 
       it "exports phone number value in the corresponding column" do
@@ -71,7 +71,7 @@ describe Export::Tabular::People::PeopleAddress do
 
         before do
           bottom_member.phone_numbers.create!(category: contact_account_categories(:phone_number_person_mobile),
-            number: "0791234569")
+            number: "0791234569", public: true)
         end
 
         it "exports values for each person in the correct column" do
@@ -97,7 +97,7 @@ describe Export::Tabular::People::PeopleAddress do
     describe "Additional Emails" do
       before do
         person.additional_emails.create!(category: contact_account_categories(:additional_email_person_private),
-          email: "privat@example.com")
+          email: "privat@example.com", public: true)
       end
 
       it "exports additional email value in the corresponding column" do
@@ -106,15 +106,15 @@ describe Export::Tabular::People::PeopleAddress do
 
       it "exports other-category entries as label:value pairs" do
         person.additional_emails.create!(category: contact_account_categories(:additional_email_person_other),
-          label: "Ferien", email: "ferien@example.com")
+          label: "Ferien", email: "ferien@example.com", public: true)
         expect(row(0)[attributes.index(:additional_email_other)]).to eq "Ferien:ferien@example.com"
       end
 
       it "joins multiple other-category entries with semicolons" do
         person.additional_emails.create!(category: contact_account_categories(:additional_email_person_other),
-          label: "Ferien", email: "ferien@example.com")
+          label: "Ferien", email: "ferien@example.com", public: true)
         person.additional_emails.create!(category: contact_account_categories(:additional_email_person_other),
-          label: "Newsletter", email: "news@example.com")
+          label: "Newsletter", email: "news@example.com", public: true)
         other = row(0)[attributes.index(:additional_email_other)]
         expect(other).to eq "Ferien:ferien@example.com;Newsletter:news@example.com"
       end

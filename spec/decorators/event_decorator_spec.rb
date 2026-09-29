@@ -186,7 +186,7 @@ describe EventDecorator, :draper_with_helpers do
     context "with every possible attribute" do
       before do
         2.times do
-          Fabricate(:additional_email, contactable: contact)
+          Fabricate(:additional_email, contactable: contact, public: true)
         end
         contact.reload
       end

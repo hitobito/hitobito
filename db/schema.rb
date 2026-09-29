@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_09_08_151830) do
+ActiveRecord::Schema[8.0].define(version: 2026_09_21_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -82,7 +82,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_08_151830) do
     t.integer "contactable_id", null: false
     t.string "email", null: false
     t.string "label"
-    t.boolean "public", default: true, null: false
+    t.boolean "public", default: false, null: false
     t.boolean "mailings", default: true, null: false
     t.boolean "invoices", default: false
     t.bigint "category_id", null: false
@@ -1285,7 +1285,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_08_151830) do
     t.integer "contactable_id", null: false
     t.string "number", null: false
     t.string "label"
-    t.boolean "public", default: true, null: false
+    t.boolean "public", default: false, null: false
     t.bigint "category_id", null: false
     t.index ["category_id"], name: "index_phone_numbers_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_phone_numbers_on_contactable_id_and_contactable_type"
@@ -1404,7 +1404,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_08_151830) do
     t.integer "contactable_id", null: false
     t.string "name", null: false
     t.string "label"
-    t.boolean "public", default: true, null: false
+    t.boolean "public", default: false, null: false
     t.bigint "category_id", null: false
     t.index ["category_id"], name: "index_social_accounts_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_social_accounts_on_contactable_id_and_contactable_type"

@@ -2,6 +2,7 @@
 
 ## Version 2.10
 
+- Neue Telefonnummern und zusätzliche E-Mail-Adressen sind standardmässig nicht mehr öffentlich sichtbar (#4085)
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)

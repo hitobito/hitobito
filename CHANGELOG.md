@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
+
 ## Version 2.10
 
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)

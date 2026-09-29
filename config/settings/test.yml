@@ -41,3 +41,7 @@ additional_address:
     - Rechnung
     - Arbeit
     - Andere
+
+invoices:
+  ebics:
+    import_payments_from: <%= 3.days %>

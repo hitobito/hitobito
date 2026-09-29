@@ -1028,6 +1028,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_094113) do
     t.datetime "synced_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "legacy_25_ebics", default: true, null: false
+    t.index ["invoice_config_id", "payment_provider", "legacy_25_ebics"], name: "index_payment_provider_configs_on_config_provider_and_legacy", unique: true
     t.index ["invoice_config_id"], name: "index_payment_provider_configs_on_invoice_config_id"
   end
 

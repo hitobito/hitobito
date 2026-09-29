@@ -1,0 +1,2 @@
+Product;Channel;Account;Currency;Amount;Reference;Name;Street;Number;Postcode;City;Country;DebtorAddressLine;DebtorAddressLine;DebtorAccount;ReferenceType;UltimateDebtorName;UltimateDebtorStreet;UltimateDebtorNumber;UltimateDebtorPostcode;UltimateDebtorTownName;UltimateDebtorCountry;UltimateDebtorAddressLine;UltimateDebtorAddressLine;RemittanceInformationText
+QRR;PO;CH1430000001250097798;CHF;100;210000000003139471430009017;D001;Musterstrasse;1;1111;Musterstadt;CH;;;;QRR;D001;Musterstrasse;1;1111;Musterstadt;CH;;;

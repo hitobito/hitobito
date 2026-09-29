@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2021-2026, Die Mitte Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class PaymentProvider
+  # "08" matches the newer SPS 2022 message format
+  CAMT_054_MSG_NAME_VERSION = "08"
+
   def initialize(config)
     @config = config
   end
@@ -15,7 +18,9 @@ class PaymentProvider
       payment_provider_setting.url,
       payment_provider_setting.host_id,
       @config.user_identifier,
-      @config.partner_identifier)
+      @config.partner_identifier,
+      Epics::Client::DEFAULT_KEY_SIZE,
+      setup_options)
 
     @config.update(keys: client.send(:dump_keys))
   end
@@ -63,13 +68,28 @@ class PaymentProvider
   end
 
   def Z54(since_date = nil, until_date = nil)
-    xml_files = client.send(:download_and_unzip, PaymentProviders::Z54, since_date, until_date)
+    xml_files = if @config.legacy_25_ebics?
+      client.Z54(since_date, until_date)
+    else
+      client.C54(since_date, until_date, scope: ebics_scope,
+        msg_name_version: CAMT_054_MSG_NAME_VERSION)
+    end
 
     xml_files.map { |order_data| xml_from_order_data(order_data) }
   end
   # rubocop:enable Naming/MethodName
 
   private
+
+  def setup_options
+    options = {version: @config.ebics_version}
+    options[:signature_version] = Epics::Signature::A_VERSION_5 if @config.legacy_25_ebics?
+    options
+  end
+
+  def ebics_scope
+    payment_provider_setting.scope.presence || "CH"
+  end
 
   def check_bank_public_keys!(bank_x, bank_e) # rubocop:todo Metrics/CyclomaticComplexity
     authentication_key_ok = correct_public_key?(bank_x,
@@ -94,7 +114,8 @@ class PaymentProvider
       payment_provider_setting.url,
       payment_provider_setting.host_id,
       @config.user_identifier,
-      @config.partner_identifier)
+      @config.partner_identifier,
+      version: @config.ebics_version)
   end
 
   def payment_provider_setting

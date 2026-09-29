@@ -296,7 +296,7 @@ GEM
       dry-initializer (~> 3.2)
       dry-schema (~> 1.14)
       zeitwerk (~> 2.6)
-    epics (2.11.0)
+    epics (3.0.0.rc1)
       base64
       bigdecimal
       faraday (>= 1.10.0)
@@ -899,7 +899,7 @@ DEPENDENCIES
   draper (= 4.0.2)
   draper-cancancan
   dry-validation
-  epics
+  epics (>= 3.0.0.rc1, < 4)
   fabrication
   faker
   faraday

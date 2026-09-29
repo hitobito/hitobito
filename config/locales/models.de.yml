@@ -1437,6 +1437,7 @@ de:
         user_identifier: Teilnehmer-ID
         password: Passwort
         ini_letter: INI-Brief
+        ebics_version_label: EBICS-Version
         payment_providers:
           bancastato: BancaStato
           bekb: BEKB | BCBE
@@ -1450,6 +1451,7 @@ de:
           ubs: UBS
           valiant: Valiant
           zkb: Zürcher Kantonalbank
+          zkb-test: Zürcher Kantonalbank Testumgebung
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise

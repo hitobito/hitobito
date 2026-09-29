@@ -26,9 +26,27 @@ class RoleResource < ApplicationResource
   attribute :type, :string
   attribute :label, :string
 
-  filter :active, :date, single: true, only: [:eq] do
+  # The range operators use custom sql instead of arel_table, so that combining them
+  # (e.g. gte and lte) works: `with_inactive` only unscopes arel conditions on these columns
+  filter :active, :date, single: true, only: [:eq, :gt, :gte, :lt, :lte] do
     eq do |scope, value|
       scope.with_inactive.active_scope(value.presence || Time.zone.today)
+    end
+    gt do |scope, value|
+      scope.with_inactive.where("roles.end_on > :date OR roles.end_on IS NULL",
+        date: value.presence || Time.zone.today)
+    end
+    gte do |scope, value|
+      scope.with_inactive.where("roles.end_on >= :date OR roles.end_on IS NULL",
+        date: value.presence || Time.zone.today)
+    end
+    lt do |scope, value|
+      scope.with_inactive.where("roles.start_on < :date OR roles.start_on IS NULL",
+        date: value.presence || Time.zone.today)
+    end
+    lte do |scope, value|
+      scope.with_inactive.where("roles.start_on <= :date OR roles.start_on IS NULL",
+        date: value.presence || Time.zone.today)
     end
   end
 

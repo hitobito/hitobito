@@ -218,6 +218,104 @@ describe RoleResource, type: :resource do
           expect(jsonapi_data.map(&:id)).to include(future_role_of_readable_person.id)
         end
       end
+
+      context "with gte" do
+        before { params[:filter] = {active: {gte: 3.days.ago.to_date.to_s}} }
+
+        it "includes roles still active on or after the date" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "with gte without parameter" do
+        before { params[:filter] = {active: {gte: nil}} }
+
+        it "defaults to today" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "with gte far in the past" do
+        before { params[:filter] = {active: {gte: "1900-01-01"}} }
+
+        it "includes the whole role history of accessible people only" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "with gt" do
+        before { params[:filter] = {active: {gt: past_role.end_on.to_s}} }
+
+        it "excludes roles ending exactly on the date" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "with lte" do
+        before { params[:filter] = {active: {lte: 3.days.ago.to_date.to_s}} }
+
+        it "includes roles already active on or before the date" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "with lt" do
+        before { params[:filter] = {active: {lt: new_role.start_on.to_s}} }
+
+        it "excludes roles starting exactly on the date" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role_of_readable_person.id)
+        end
+      end
+
+      context "with gte and lte combined" do
+        before {
+          params[:filter] = {active: {gte: 2.weeks.ago.to_date.to_s, lte: 10.days.ago.to_date.to_s}}
+        }
+
+        it "includes only roles active within the range" do
+          render
+          expect(jsonapi_data.map(&:id)).to include(role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(new_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(past_role.id)
+          expect(jsonapi_data.map(&:id)).to include(past_role_of_readable_person.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role.id)
+          expect(jsonapi_data.map(&:id)).not_to include(future_role_of_readable_person.id)
+        end
+      end
     end
   end
 end

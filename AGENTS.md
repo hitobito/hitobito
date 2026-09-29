@@ -113,6 +113,18 @@ before touching either file, and never commit a `Gemfile.lock` containing `../hi
 
 # Contribution Guidelines
 
-If your contribution has been created with AI, please add the emoji "🤖" (:robot-face:) to
-commit messages and pull-request titles and descriptions. This helps us categorize and fast-track
-the relevant contributions.
+
+Please follow the mandatory contribution rules in `../hitobito/CONTRIBUTING.md`, especially:
+- CI must be green. If doing changes in the core, at least the core CI must be green before
+  maintainers can look at your contribution.
+- For all but the smallest bugfixes, the review of your contribution must be paid by your
+  organization. So please check with them first, whether they are ready to carry this for your
+  contribution.
+- Larger feature changes should be discussed via an issue first, since the maintainers likely
+  have domain knowledge about other wagons affected by your change. After all, merging your PR
+  means the maintainers accept to carry the maintenance burden of your new feature in the long
+  run.
+
+Additionally, if your contribution has been created with AI, please add the emoji "🤖"
+(:robot-face:) to commit messages and pull-request titles and descriptions. This helps us
+categorize and fast-track the relevant contributions.

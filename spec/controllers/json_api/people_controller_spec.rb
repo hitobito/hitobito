@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2024, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -1088,6 +1088,45 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(errors.first.title).to eq("Validation Error")
           expect(errors.first.to_json).to include('"source":{"pointer":"/data/attributes/number"}')
           expect(errors.first.detail).to eq("Nummer ist nicht gültig")
+        end
+
+        it "returns validation error for a newly created contactable when an " \
+          "untouched contactable of the same type already exists" do
+          contactable_person = Fabricate(:role, type: Group::BottomLayer::Member.to_s,
+            group: groups(:bottom_layer_two),
+            person: Fabricate(:person_with_address_and_phone,
+              social_accounts: [Fabricate(:social_account)])).person
+
+          @person_id = contactable_person.id
+
+          params[:data][:relationships] = {
+            social_accounts: {
+              data: [{
+                type: "social_accounts",
+                method: "create",
+                "temp-id": "new-social-account"
+              }]
+            }
+          }
+          params[:included] = [
+            {
+              type: "social_accounts",
+              "temp-id": "new-social-account",
+              attributes: {
+                name: "Oui",
+                label: "Site"
+              }
+            }
+          ]
+
+          jsonapi_patch "/api/people/#{@person_id}", params
+
+          expect(response).to have_http_status(422)
+
+          errors = jsonapi_errors
+
+          expect(errors.first.status).to eq("422")
+          expect(errors.first.json[:meta][:relationship][:attribute]).to eq("category")
         end
 
         it "updates contactable relations of person" do

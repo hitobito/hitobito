@@ -236,12 +236,8 @@ describe RoleResource, type: :resource do
       context "with gte without parameter" do
         before { params[:filter] = {active: {gte: nil}} }
 
-        it "defaults to today" do
-          render
-          expect(jsonapi_data.map(&:id)).to include(role.id)
-          expect(jsonapi_data.map(&:id)).to include(new_role.id)
-          expect(jsonapi_data.map(&:id)).not_to include(past_role_of_readable_person.id)
-          expect(jsonapi_data.map(&:id)).to include(future_role_of_readable_person.id)
+        it "fails" do
+          expect { render }.to raise_error(Graphiti::Errors::InvalidRequest)
         end
       end
 

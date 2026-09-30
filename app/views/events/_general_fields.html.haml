@@ -21,7 +21,7 @@
     = f.labeled_input_field(:number)
 
   - entry.used?(:description) do
-    = f.labeled_input_field(:description)
+    = f.labeled_rich_text_area(:description)
     - if entry.kind_class == Event::Kind
       = field_inheritance_values(@kinds, { description: :general_information })
 

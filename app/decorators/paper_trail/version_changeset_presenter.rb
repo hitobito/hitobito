@@ -50,27 +50,29 @@ module PaperTrail
 
     def attr_label(attr)
       if item_type.include?("Translation")
-        translation_label(attr)
+        translation_label(item, attr)
+      elsif item_type.include?("RichText")
+        translation_label(item.record, item.name.to_sym)
       else
         (item_subtype&.safe_constantize || item_class).human_attribute_name(attr)
       end
     end
 
-    def translation_label(attr)
+    def translation_label(record, attr)
       # globalized_model knows the sti model class to be able to load sti translations
       # as well as being able to load translations for translated attributes even if
       # the main_type is not the globalized_model.
       # It is nil if the record it translates has since been deleted, in which case we
       # fall back to the base translated class, losing sti-subtype-specific translations.
-      globalized_model = item.globalized_model
+      globalized_model = record.globalized_model
       klass = globalized_model&.class ||
-        item.class.reflect_on_association(:globalized_model).klass
+        record.class.reflect_on_association(:globalized_model).klass
       attribute_label = klass.human_attribute_name(attr)
 
       if globalized_model.nil? || globalized_model.is_a?(main_type.safe_constantize)
-        "#{attribute_label} (#{item})"
+        "#{attribute_label} (#{record})"
       else
-        "#{attribute_label} (#{item}) #{I18n.t("global.from")} #{globalized_model}"
+        "#{attribute_label} (#{record}) #{I18n.t("global.from")} #{globalized_model}"
       end
     end
 

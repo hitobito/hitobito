@@ -4,6 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 
 top_event_de:
+  id: <%= ActiveRecord::FixtureSet.identify(:top_event_de) %>
   event_id: <%= ActiveRecord::FixtureSet.identify(:top_event) %>
   locale: de
   created_at: <%= Time.zone.now %>
@@ -12,10 +13,10 @@ top_event_de:
   name: Top Event
 
 top_course_de:
+  id: <%= ActiveRecord::FixtureSet.identify(:top_course_de) %>
   event_id: <%= ActiveRecord::FixtureSet.identify(:top_course) %>
   locale: de
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
   name: Top Course
-  description: Some kind of course, it seems

@@ -131,7 +131,7 @@ class Event::ParticipationMailer < ApplicationMailer
     infos << labeled(:dates) { join_lines(event.dates.map(&:to_s)) }
     infos << labeled(:motto)
     infos << labeled(:cost)
-    infos << labeled(:description) { convert_newlines_to_breaks(event.description) }
+    infos << labeled(:description) { convert_newlines_to_breaks(event.plain_description) }
     infos << labeled(:location) { convert_newlines_to_breaks(event.location) }
     infos << contact_details
     infos << answers_details if @include_answers

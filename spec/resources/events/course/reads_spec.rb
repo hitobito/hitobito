@@ -26,6 +26,7 @@ describe Event::CourseResource, type: :resource do
         :cost,
         :created_at,
         :description,
+        :html_description,
         :display_booking_info,
         :external_application_link,
         :group_ids,

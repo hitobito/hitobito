@@ -30,7 +30,7 @@
 
   %dl.dl-horizontal
     = labeled(entry.object.class.human_attribute_name(:description)) do
-      %p.multiline= safe_auto_link(entry.description, html: { target: '_blank' })
+      = entry.description
 
   %dl.dl-horizontal
     = labeled(entry.object.class.human_attribute_name(:location)) do

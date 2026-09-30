@@ -24,16 +24,19 @@ class SearchStrategies::SqlConditionBuilder
 
     def column
       table = Arel::Table.new(@table_name)
+      begin
+        converted_table_name = @table_name.singularize.camelize
+        unless Object.const_defined?(converted_table_name)
+          converted_table_name.gsub!(/(?<=[a-z])([A-Z])/, '::\1')
+        end
+        arel_column = converted_table_name.constantize.columns_hash[@field]
 
-      converted_table_name = @table_name.singularize.camelize
-      unless Object.const_defined?(converted_table_name)
-        converted_table_name.gsub!(/(?<=[a-z])([A-Z])/, '::\1')
-      end
-      arel_column = converted_table_name.constantize.columns_hash[@field]
-
-      if arel_column.type == :integer
-        Arel::Nodes::SqlLiteral.new("#{table.name}." + "#{table[@field].name}::text")
-      else
+        if arel_column.type == :integer
+          Arel::Nodes::SqlLiteral.new("#{table.name}." + "#{table[@field].name}::text")
+        else
+          table[@field]
+        end
+      rescue NameError
         table[@field]
       end
     end

@@ -11,6 +11,11 @@ class JsonApi::InvoicesController < JsonApiController
     super
   end
 
+  def create
+    authorize!(:create, Invoice)
+    super
+  end
+
   def update
     authorize!(:update, entry)
     super

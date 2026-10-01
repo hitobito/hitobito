@@ -7,14 +7,14 @@
 
 require "spec_helper"
 
-describe JsonApi::RoleAbility do
+describe JsonApi::RoleReadables do
   let(:group) { groups(:top_group) }
   let(:person) { Fabricate(:person) }
   let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: group, person: person) }
 
   let(:user) { Fabricate(:person) }
 
-  subject { JsonApi::RoleAbility.new(user) }
+  subject { described_class.new(user) }
 
   context "when having `show_full` permission on person" do
     let!(:user_role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: group, person: user) }

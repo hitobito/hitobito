@@ -46,7 +46,7 @@ class SelfRegistrationResource < ApplicationResource
   private
 
   def authorize_create(model)
-    current_ability.authorize!(:register_people, group)
+    authorize!(:register_people, group)
   end
 
   def check_adult_consent(attributes)

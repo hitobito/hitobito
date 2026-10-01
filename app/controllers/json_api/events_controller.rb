@@ -6,14 +6,9 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::EventsController < JsonApiController
-  def index
-    authorize!(:list_available, Event)
-    super
-  end
+  private
 
-  def show
-    event = Event.find(params[:id])
-    authorize!(:show, event)
-    super
+  def authorize_index
+    authorize!(:list_available, Event)
   end
 end

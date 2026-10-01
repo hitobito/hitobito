@@ -6,19 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::MailingListsController < JsonApiController
-  def index
-    authorize!(:index, MailingList)
-    super
-  end
-
-  def show
-    authorize!(:show, entry)
-    super
-  end
-
-  private
-
-  def entry
-    @entry ||= MailingList.joins(:group).find(params[:id])
-  end
 end

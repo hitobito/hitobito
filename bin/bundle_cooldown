@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+#  Copyright (c) 2026, Puzzle ITC. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito.
+
+# Prints the effective bundler release cooldown in days, e.g. to feed into
+# `brakeman --ensure-latest`. Mirrors bundler's precedence: `bundle config`
+# (BUNDLE_COOLDOWN env, .bundle/config, ~/.bundle/config) beats the per-source
+# `cooldown:` option on `source` lines in the Gemfile — the largest declared
+# value wins if several sources carry one. Prints 0 if no cooldown applies.
+
+set -euo pipefail
+
+# Resolve paths relative to this script so it works from any cwd.
+bin_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# `bundle config get` lists settings in priority order, first one wins.
+configured=$("$bin_dir/bundle" config get cooldown 2>/dev/null \
+  | sed -nE 's/^Set .*: *"?([0-9]+)"?$/\1/p' | head -n1 || true)
+
+declared=$(sed -nE 's/^[[:space:]]*source\b.*cooldown:[[:space:]]*([0-9]+).*/\1/p' \
+  "${bin_dir}/../Gemfile" | sort -rn | head -n1 || true)
+
+echo "${configured:-${declared:-0}}"

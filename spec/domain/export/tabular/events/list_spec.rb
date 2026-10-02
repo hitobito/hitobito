@@ -17,7 +17,7 @@ describe Export::Tabular::Events::List do
     subject { list }
 
     its(:attributes) do
-      should == [:name, :group_names, :number, :kind, :description, :state, :location,
+      should == [:name, :group_names, :number, :kind, :plain_description, :state, :location,
         :date_0_label, :date_0_location, :date_0_duration,
         :date_1_label, :date_1_location, :date_1_duration,
         :date_2_label, :date_2_location, :date_2_duration,

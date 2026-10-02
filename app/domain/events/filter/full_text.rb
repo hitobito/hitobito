@@ -10,14 +10,14 @@ module Events::Filter
     MIN_QUERY_LENGTH = 3
     SEARCHABLE_ATTRIBUTES = %w[
       event_translations.name
-      event_translations.description
+      action_text_rich_texts.plain_text_body
       events.location
     ]
 
     self.permitted_args = [:q]
 
     def apply(scope)
-      scope.joins(:translations).where(search_condition)
+      scope.left_outer_joins(translations: :rich_text_description).where(search_condition)
     end
 
     def blank?

@@ -64,13 +64,13 @@ class EventDecorator < ApplicationDecorator
 
   def description_short
     if model.description?
-      h.truncate(h.strip_tags(model.description), length: 60)
+      h.truncate(model.plain_description, length: 60)
     end
   end
 
   def external_application_link(group)
     if external_applications?
-      url = h.group_public_event_url(group, id)
+      url = h.group_public_event_url(group_id: group.id, id: id)
       h.link_to(url, url)
     else
       translate(:not_possible)

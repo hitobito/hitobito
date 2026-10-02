@@ -162,4 +162,11 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
 
     expect(string).to eq("Secondary parent wurde auf <i>42</i> gesetzt.")
   end
+
+  it "translates human attribute name for translated rich text attributes" do
+    version.update!(item: events(:top_course).description)
+    string = presenter.attribute_change(:description, "old value", "new value")
+
+    expect(string).to eq("Beschreibung (de) Von Top Course wurde von <i>old value</i> auf <i>new value</i> geändert.")
+  end
 end

@@ -232,6 +232,11 @@ describe Event::ParticipationMailer do
       expect(subject).to include("Event Location")
     end
 
+    it "does allow valid html tags in event description" do
+      event.update(description: "Description:<h1>Header</h1><strong>Bold</strong> <em>Italic</em>")
+      expect(subject).to include("Description:<h1>Header</h1><strong>Bold</strong> <em>Italic</em>")
+    end
+
     it "does not allow xss injection in event name" do
       event.update(name: "Name:<script>alert('xss');</script>")
       expect(subject).to include("Name:&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;")
@@ -239,7 +244,7 @@ describe Event::ParticipationMailer do
 
     it "does not allow xss injection in event description" do
       event.update(description: "Description:<script>alert('xss');</script>")
-      expect(subject).to include("Description:alert(&#39;xss&#39;);")
+      expect(subject).to include("Description:alert('xss');")
     end
 
     it "does not allow xss injection in event location" do

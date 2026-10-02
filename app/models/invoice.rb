@@ -116,6 +116,8 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   validates :title, presence: true
   # In external invoices, the recipient type may also be blank
   validates :recipient_type, inclusion: {in: ["Person", "Group"]}, allow_blank: true
+  # Only on create, as existing invoices may point to soft-deleted groups, which load as nil
+  validates :recipient, presence: {if: :recipient_id?, message: :invalid}, on: :create
   validate :recipient_name_present?
   validates :recipient_zip_code, :recipient_town, :recipient_country,
     presence: true, unless: :tolerate_deprecated_recipient_address?

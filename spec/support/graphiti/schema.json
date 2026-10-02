@@ -2285,7 +2285,7 @@
         "state": {
           "type": "string",
           "readable": true,
-          "writable": true,
+          "writable": "guarded",
           "description": null
         },
         "group_id": {
@@ -2318,6 +2318,66 @@
           "writable": true,
           "description": null
         },
+        "recipient_first_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_last_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_company_name": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_address_care_of": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_street": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_housenumber": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_postbox": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_zip_code": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_town": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "recipient_country": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "payment_information": {
           "type": "string",
           "readable": true,
@@ -2332,6 +2392,18 @@
         },
         "hide_total": {
           "type": "boolean",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "shipping_method": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "pp_post": {
+          "type": "string",
           "readable": true,
           "writable": true,
           "description": null
@@ -4161,6 +4233,9 @@
     "/api/invoices": {
       "actions": {
         "index": {
+          "resource": "InvoiceResource"
+        },
+        "create": {
           "resource": "InvoiceResource"
         },
         "show": {

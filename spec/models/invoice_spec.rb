@@ -96,6 +96,19 @@ describe Invoice do
       .to include("Empfänger Adresse oder E-Mail muss ausgefüllt werden")
   end
 
+  it "validates that a given recipient exists when created" do
+    invoice = Invoice.new(title: "invoice", group: group,
+      recipient_type: Person.sti_name, recipient_id: Person.maximum(:id).next)
+    expect(invoice).not_to be_valid
+    expect(invoice.errors.full_messages).to include("Empfänger ist nicht gültig")
+  end
+
+  it "keeps existing invoices valid when their recipient no longer exists" do
+    invoice = create_invoice
+    invoice.update_columns(recipient_id: Person.maximum(:id).next)
+    expect(invoice.reload).to be_valid
+  end
+
   it "validates that an invoice in state issued or sent has at least has one invoice_item" do
     invoice = create_invoice
     invoice.update(state: :issued)

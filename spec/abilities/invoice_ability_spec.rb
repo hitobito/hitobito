@@ -117,6 +117,31 @@ describe InvoiceAbility do
     end
   end
 
+  context "in a group that is not a layer" do
+    let(:role) { roles(:bottom_member) }
+    let(:invoice) { Invoice.new(group: groups(:bottom_group_one_one)) }
+
+    it "may not create invoice" do
+      is_expected.not_to be_able_to(:create, invoice)
+    end
+
+    it "may still update invoice" do
+      is_expected.to be_able_to(:update, invoice)
+    end
+  end
+
+  context "without group" do
+    let(:role) { roles(:bottom_member) }
+
+    it "may not create invoice" do
+      is_expected.not_to be_able_to(:create, Invoice.new)
+    end
+
+    it "may not create invoice item" do
+      is_expected.not_to be_able_to(:create, Invoice.new.invoice_items.build)
+    end
+  end
+
   context "InvoiceRun" do
     def invoice_run(group, abo_group)
       InvoiceRun.new(group: groups(group), recipient_source: groups(abo_group).mailing_lists.build)

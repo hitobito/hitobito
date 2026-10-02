@@ -9,7 +9,8 @@ class InvoiceAbility < AbilityDsl::Base
   on(Invoice) do
     class_side(:index).any_finance_group
     permission(:finance).may(:show).in_layer
-    permission(:finance).may(:create, :edit, :update, :destroy).in_layer_if_active
+    permission(:finance).may(:create).in_layer_group_if_active
+    permission(:finance).may(:edit, :update, :destroy).in_layer_if_active
   end
 
   on(InvoiceItem) do
@@ -52,7 +53,7 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   def in_layer(group = subject.group)
-    user_finance_layer_ids.include?(group.layer_group_id)
+    group && user_finance_layer_ids.include?(group.layer_group_id)
   end
 
   def in_layer_with_recipient_source
@@ -63,6 +64,11 @@ class InvoiceAbility < AbilityDsl::Base
 
   def in_layer_if_active
     in_layer && !subject.group&.archived?
+  end
+
+  # Invoices are only listed on layer groups, so they may only be created there.
+  def in_layer_group_if_active
+    user_finance_layer_ids.include?(subject.group_id) && in_layer_if_active
   end
 
   def in_layer_with_recipient_source_if_active

@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Rechnungen können neu via JSON:API erstellt werden (`POST /api/invoices`), inklusive Sideposting der Positionen (#4257)
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 
 ## Version 2.10

@@ -1576,6 +1576,8 @@ de:
       resources:
         id_must_not_be_set: ID darf nicht gesetzt sein
         role_resource:
+          active:
+            blank: muss ausgefüllt werden
           group_id:
             blank: muss ausgefüllt werden
             unwritable_attribute: kann nicht geändert werden

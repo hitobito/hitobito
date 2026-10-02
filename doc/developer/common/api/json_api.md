@@ -224,6 +224,52 @@ Response **200 OK**
 }
 ```
 
+#### GET roles active within a period
+
+By default, only roles active today are returned. With `filter[active]` roles active at other dates can be listed:
+
+- filter[active][eq]: roles active on the given date
+- filter[active][gt] / filter[active][gte]: roles active after / on or after the given date
+- filter[active][lt] / filter[active][lte]: roles active before / on or before the given date
+- combine e.g. `gte` and `lte` for roles active at any time within a period, or use only
+  `filter[active][gte]=1900-01-01` for the whole role history
+
+Only roles of people that are readable today are returned.
+
+Request
+
+```curl
+curl -X 'GET' \
+  'http://hitobito.example.com/api/roles?filter%5Bperson_id%5D=48&filter%5Bactive%5D%5Bgte%5D=2020-01-01&filter%5Bactive%5D%5Blte%5D=2020-12-31' \
+  -H 'accept: */*' \
+  -H 'X-TOKEN: u-j3QQoPoSg8pwwgqe3W9CMVPVPFCFykFK2A2VCSq1BzznDuUA'
+```
+
+Response **200 OK**
+
+```json
+{
+  "data": [
+    {
+      "id": "112",
+      "type": "roles",
+      "attributes": {
+        "person_id": 48,
+        "group_id": 3,
+        "type": "Group::Layer::Leader",
+        "label": null,
+        "name": "Leitung",
+        "start_on": "2018-08-01",
+        "end_on": "2020-07-31",
+        "created_at": "2018-08-01T10:12:44+02:00",
+        "updated_at": "2020-07-31T18:03:12+02:00"
+      }
+    }
+  ],
+  "meta": {}
+}
+```
+
 #### PUT person
 
 Request

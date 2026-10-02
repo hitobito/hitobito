@@ -229,6 +229,11 @@ describe MailingLists::BulkMail::BounceHandler do
   end
 
   describe "#analyze_diagnostic_code can return" do
+    it "matches case insensitively" do
+      expect(bounce_handler.analyze_diagnostic_code("550 no such user")).to eq :block
+      expect(bounce_handler.analyze_diagnostic_code("550 NO SUCH USER")).to eq :block
+    end
+
     it "block" do
       expect(bounce_handler.analyze_diagnostic_code("550 No such user")).to eq :block
       expect(bounce_handler.analyze_diagnostic_code("550 5.1.1 <testing@example.com>... User unknown")).to eq :block
@@ -242,6 +247,13 @@ describe MailingLists::BulkMail::BounceHandler do
         "550 5.1.1 MXIN505 mailbox testing@example.com is full"
       )).to eq :continue
       expect(bounce_handler.analyze_diagnostic_code("550 5.7.1 message content rejected")).to eq :continue
+      expect(bounce_handler.analyze_diagnostic_code(
+        "552-Requested mail action aborted: exceeded storage allocation 552-Quota exceeded. 552 For explanation visit https://postmaster.gmx.net/en/case?c=r1503"
+      )).to eq :continue
+      expect(bounce_handler.analyze_diagnostic_code("552 5.2.2 <.+@.+>: user is over quota")).to eq :continue
+      expect(
+        bounce_handler.analyze_diagnostic_code("550-Callout verification failed: 550 552 5.2.2 <.+@.+> Quota exceeded")
+      ).to eq :continue
     end
 
     it "register" do

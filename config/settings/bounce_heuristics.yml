@@ -67,11 +67,8 @@ email:
         - "550 5.1.1 RCP-P1 Recipient address does not exist"
         - "550 5.1.1 <.+@.+>: Recipient address rejected: undeliverable address:"
       continue:
-        - "552-Requested mail action aborted: exceeded storage allocation 552-Quota exceeded. 552 For explanation visit https://postmaster.gmx.net/en/case?c=r1503"
         - "554 5.7.1 Spam message rejected"
         - '550 5.1.1 MXIN505 mailbox\s+.+@.+\s+is full'
-        - "552 5.2.2 <.+@.+>: user is over quota"
-        - "550-Callout verification failed: 550 552 5.2.2 <.+@.+> Quota exceeded"
         - "552 5.2.2 Mailbox is full"
         - "550 5.7.1 message content rejected"
         - "554 5.7.1 Message cannot be accepted, spam rejection"
@@ -79,6 +76,7 @@ email:
         - "550 High probability of spam"
         - "550-Callout verification failed: 550 550 user quota exceeded: mailbox is full"
         - "554 Your email is considered spam"
+        - "552.*quota"
       register:
         - "550 Unrouteable address"
         - "550-Requested action not taken: mailbox unavailable"

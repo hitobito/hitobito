@@ -31,6 +31,8 @@ Currently the following endpoints are provided:
 | GET    | /api/event_kinds/:id               | Fetch a single event kind, replace :id with the event kind's primary key                |
 | GET    | /api/event_kind_categories/        | List all accessible events kind categories                                              |
 | GET    | /api/event_kind_categories/:id     | Fetch a single event kind category, replace :id with the category's primary key         |
+| GET    | /api/contact_account_categories/   | List all categories for phone numbers, emails, addresses and social accounts             |
+| GET    | /api/contact_account_categories/:id | Fetch a single contact account category, replace :id with the category's primary key   |
 | GET    | /api/invoices/                     | List all accessible invoices                                                            |
 | GET    | /api/invoices/:id                  | Fetch a single invoice, replace :id with the invoice's primary key                      |
 | PUT    | /api/invoices/:id                  | Update an invoice, replace :id with the list's primary key                              |
@@ -404,6 +406,7 @@ The following table shows required Service Token permissions per endpoint.
 | /event_participations           | event_participations               |
 | /event_kinds                    | events                             |
 | /event_kind_categories          | events                             |
+| /contact_account_categories     | people                             |
 | /mailing_lists                  | mailing_lists                      |
 | /groups/{id}/self_registrations | register_people + write permission |
 

@@ -19,6 +19,12 @@ describe VariousAbility do
       is_expected.not_to be_able_to(:index, HitobitoLogEntry)
       is_expected.not_to be_able_to(:show, hitobito_log_entries(:info_mail))
     end
+
+    it "may list but not manage ContactAccountCategory records" do
+      is_expected.to be_able_to(:list_available, ContactAccountCategory)
+      is_expected.not_to be_able_to(:index, ContactAccountCategory)
+      is_expected.not_to be_able_to(:update, contact_account_categories(:phone_number_person_mobile))
+    end
   end
 
   context "with admin permission" do

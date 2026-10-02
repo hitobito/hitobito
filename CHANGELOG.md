@@ -3,6 +3,7 @@
 ## unreleased
 
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
+- Kategorien von Kontaktangaben sind über die JSON:API lesbar, damit API-Clients Telefonnummern, E-Mails und Adressen anlegen können (#4534)
 
 ## Version 2.10
 

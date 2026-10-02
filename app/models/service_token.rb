@@ -28,8 +28,21 @@
 class ServiceToken < ActiveRecord::Base
   include I18nEnums
 
+  PERMISSIONS = %w[layer_read
+    layer_and_below_read
+    layer_full
+    layer_and_below_full]
+
+  NON_SCOPE_ATTRIBUTES = %w[
+    id name description permission last_access token
+    layer_group_id created_at updated_at
+  ]
+
+  i18n_enum :permission, PERMISSIONS, queries: true
+
   belongs_to :layer, class_name: "Group", foreign_key: :layer_group_id
   has_many :cors_origins, as: :auth_method, dependent: :delete_all
+
   accepts_nested_attributes_for :cors_origins, allow_destroy: true
 
   before_validation :generate_token!, on: :create
@@ -43,18 +56,6 @@ class ServiceToken < ActiveRecord::Base
   def to_s
     name
   end
-
-  PERMISSIONS = %w[layer_read
-    layer_and_below_read
-    layer_full
-    layer_and_below_full]
-
-  NON_SCOPE_ATTRIBUTES = %w[
-    id name description permission last_access token
-    layer_group_id created_at updated_at
-  ]
-
-  i18n_enum :permission, PERMISSIONS, queries: true
 
   def permitted_groups
     if permission.to_s.include?("_and_below_")

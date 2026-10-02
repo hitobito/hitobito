@@ -21,7 +21,7 @@
     "jquery-ujs": "~1.2.2",
     "js-cookie": "~2.2.0",
     "lodash.debounce": "^4.0.8",
-    "moment": "~2.29.4",
+    "moment": "~2.31.0",
     "regenerator-runtime": "^0.14.1",
     "sha.js": "2.4.12",
     "tom-select": "^2.2.2",

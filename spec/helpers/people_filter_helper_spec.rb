@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2018, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Blasmusikverband. This file is part of
 #  hitobito_sbv and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sbv.
@@ -21,15 +21,28 @@ describe PeopleFilterHelper do
     let(:node) { Capybara::Node::Simple.new(people_filter_attribute_controls(attrs_filter)) }
     let(:value) { node.find("#filters_attributes_#{time}_value") }
 
-    it "renders custom gender control" do
+    it "renders i18n_enum control for gender" do
       attributes << [0, {key: "gender", constraint: "equal", value: "m"}]
       expect(node).to have_select(count: 2)
       expect(node).to have_select(count: 1, disabled: true)
       expect(node).to have_select options: ["ist leer", "ist genau"]
-      expect(node).to have_select options: ["weiblich", "männlich", "unbekannt"]
+      expect(node).to have_select options: ["männlich", "weiblich"]
       expect(node).to have_select selected: "Geschlecht", disabled: true
       expect(node).to have_select selected: "männlich"
       expect(value[:name]).to eq "filters[attributes][#{time}][value]"
+      expect(value["data-attr-key"]).to eq "gender"
+    end
+
+    it "renders i18n_enum control for canton" do
+      attributes << [0, {key: "canton", constraint: "equal", value: "be"}]
+
+      expect(node).to have_select(count: 2)
+      expect(node).to have_select(count: 1, disabled: true)
+      expect(node).to have_select options: ["ist leer", "ist genau"]
+      expect(node).to have_select(with_options: ["Bern"], selected: "Bern")
+      expect(node).to have_select selected: "Kanton", disabled: true
+      expect(value[:name]).to eq "filters[attributes][#{time}][value]"
+      expect(value["data-attr-key"]).to eq "canton"
     end
 
     it "renders custom boolean control" do
@@ -42,6 +55,28 @@ describe PeopleFilterHelper do
       expect(node).to have_select selected: "Firma", disabled: true
       expect(node).to have_select selected: "ja"
       expect(value[:name]).to eq "filters[attributes][#{time}][value]"
+    end
+
+    it "renders a text field for i18n_enum attributes without a labels method" do
+      allow(Person).to receive(:filter_attrs)
+        .and_return(hobby: {label: "Hobby", type: :i18n_enum})
+
+      attributes << [0, {key: "hobby", constraint: "equal", value: "hiking"}]
+
+      expect(node).to have_field(class: "string_field",
+        with: "hiking")
+    end
+  end
+
+  describe "#people_filter_attribute_control_template" do
+    it "renders one tagged select field per i18n_enum attribute" do
+      node = Capybara::Node::Simple.new(people_filter_attribute_control_template)
+
+      selects = node.all("select.i18n_enum_field[disabled]")
+      expect(selects.pluck("data-attr-key"))
+        .to include("canton", "gender")
+      expect(node).to have_select(options: ["männlich", "weiblich"], disabled: true)
+      expect(node).to have_select(with_options: ["Bern"], disabled: true)
     end
   end
 

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -42,7 +42,8 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
       string_field,
       integer_field,
       date_field,
-      boolean_field
+      boolean_field,
+      *i18n_enum_fields
     ])
   end
 
@@ -115,6 +116,31 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
     end
   end
 
+  # Filter attributes registered as [key, :i18n_enum] are rendered as select
+  # fields with options from model_class.#{key}_labels (as defined by
+  # i18n_enum). In the field template one select per such attribute is
+  # rendered, tagged with data-attr-key so the JS keeps the one matching
+  # the chosen attribute.
+  # See app/javascript/modules/filter_attribute.js.coffee: enableForm().
+  def i18n_enum_fields
+    model_class.filter_attrs.filter_map do |attr_key, attr|
+      i18n_enum_field(attr_key) if attr[:type] == :i18n_enum
+    end
+  end
+
+  def i18n_enum_field(attr_key = key)
+    return string_field unless model_class.respond_to?(:"#{attr_key}_labels")
+
+    select_tag(
+      "#{filter_name_prefix}[value]",
+      options_from_collection_for_select(
+        model_class.public_send(:"#{attr_key}_labels").to_a, :first, :last, value
+      ),
+      control_html_options(control_class: SELECT_CLASSES,
+        class: "i18n_enum_field", data: {attr_key: attr_key})
+    )
+  end
+
   def string_field
     text_field(class: "string_field")
   end
@@ -152,7 +178,8 @@ class Filter::AttributeControl # rubocop:disable Rails/HelperInstanceVariable
       "attribute_value_input"
     ]
     classes << "invisible" if constraint == "blank"
-    html_options.merge(class: classes.compact.join(" "))
+    html_options.merge(options.except(:control_class))
+      .merge(class: classes.compact.join(" "))
   end
 
   def attribute_remove_link

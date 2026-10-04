@@ -98,7 +98,8 @@ class Setup
     else
       <<~DIRENV
         PATH_add bin
-        export RAILS_TEST_DB_NAME=hit_core_test
+        #export RAILS_TEST_DB_NAME=hit_core_test
+        export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
         export SPRING_APPLICATION_ID=hit_core
       DIRENV
     end

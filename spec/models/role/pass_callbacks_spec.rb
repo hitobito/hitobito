@@ -108,9 +108,15 @@ describe "Role pass callbacks" do
           valid_from: 1.month.ago.to_date)
       end
 
-      it "sets pass to revoked when role is destroyed" do
+      it "sets pass to ended when role is destroyed softly" do
+        roles(:top_leader).destroy
+
+        expect(pass.reload.state).to eq("ended")
+      end
+
+      it "sets pass to revoked when role is really destroyed" do
         role = roles(:top_leader)
-        role.destroy
+        role.really_destroy!
 
         pass.reload
         expect(pass.state).to eq("revoked")

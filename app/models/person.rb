@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -116,7 +116,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     [:id, :integer], :first_name, :last_name, :nickname, :company_name,
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
-    [:country, :country_select], [:canton, :canton_select], [:gender, :gender_select],
+    [:country, :country_select], [:canton, :i18n_enum], [:gender, :i18n_enum],
     [:years, :integer], :birthday
   ]
 

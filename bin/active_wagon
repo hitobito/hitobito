@@ -89,22 +89,24 @@ class Setup
     specifics = if wagon
       <<~DIRENV
         #{"PATH_add ../hitobito/bin" if wagon}
+        PATH_add bin
         export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
         export RAILS_TMPDIR=../hitobito_#{primary_wagon}/tmp
         export SPRING_APPLICATION_ID=hit_#{primary_wagon}
-        export WAGON=#{wagon}
       DIRENV
 
     else
       <<~DIRENV
         PATH_add bin
         export RAILS_TEST_DB_NAME=hit_core_test
-        export OVERMIND_PROCFILE=#{root.join("Procfile")}
-        export OVERMIND_TITLE="#{overmind_title}"
+        export SPRING_APPLICATION_ID=hit_core
       DIRENV
     end
 
     <<~DIRENV
+      export WAGON=#{wagon}
+      export OVERMIND_PROCFILE=#{root.join("Procfile")}
+      export OVERMIND_TITLE="#{overmind_title}"
       export DISABLE_TEST_SCHEMA_MAINTENANCE=1
       export PRIMARY_WAGON=#{primary_wagon}
       export RAILS_DB_ADAPTER=postgresql

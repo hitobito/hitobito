@@ -30,12 +30,32 @@ module MailRelay
 
     def preferred_emails(person)
       additional_emails_with_default(person).select do |email|
-        (sanitized_labels & email_category_labels(email)).any?
+        matches_category?(email) || matches_legacy_label?(email)
       end.collect(&:email)
     end
 
     def default_emails(person)
       [person.email] + additional_emails(person).select(&:mailings?).collect(&:email)
+    end
+
+    def matches_category?(email)
+      email.category.present? && category_keys.include?(email.category.key)
+    end
+
+    def matches_legacy_label?(email)
+      email.label.present? && legacy_labels.include?(email.label.to_s.strip.downcase)
+    end
+
+    def category_keys
+      @category_keys ||= sanitized_labels & known_category_keys
+    end
+
+    def legacy_labels
+      @legacy_labels ||= sanitized_labels - known_category_keys
+    end
+
+    def known_category_keys
+      @known_category_keys ||= MailingList.preferred_label_categories.pluck(:key)
     end
 
     def sanitize_labels(labels)
@@ -44,15 +64,6 @@ module MailRelay
 
     def sanitized_labels
       @sanitized_labels ||= sanitize_labels(labels)
-    end
-
-    def email_category_labels(email)
-      labels = [email.label]
-
-      if email.category.present? && !email.category.other?
-        labels += [email.category.key, *email.category.translations.map(&:name)]
-      end
-      sanitize_labels(labels)
     end
 
     def additional_emails_with_default(person)
@@ -80,7 +91,7 @@ module MailRelay
     def additional_emails_scope
       AdditionalEmail.where(contactable_type: Person.sti_name,
         contactable_id: people.collect(&:id))
-        .includes(category: :translations)
+        .includes(:category)
     end
 
     def people_and_their_managers

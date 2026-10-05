@@ -22,49 +22,50 @@ describe :groups_delete, type: :feature, js: true do
   end
 
   describe "confirm_deletion modal" do
-    it "renders modal content and a disabled delete button" do
+    it "opens the modal and keeps the delete button disabled for wrong input" do
       open_delete_modal
 
       expect(page).to have_current_path(group_path(group))
       expect(page).to have_selector("#confirm-group-deletion.modal", visible: :visible)
-      expect(page).to have_selector(".modal-title", text: group.name)
-      expect(page).to have_content("Achtung")
-      expect(page).to have_content(group.name)
-      expect(page).to have_selector("input[data-action='confirm-deletion#validate']")
+
       within("#confirm-group-deletion") do
+        expect(page).to have_selector(".modal-title", text: group.name)
+        expect(page).to have_content("Achtung")
         expect(page).to have_button(delete_label, disabled: true)
+
+        fill_in "group-name", with: "Wrong Group Name"
+        expect(page).to have_button(delete_label, disabled: true)
+
+        fill_in "group-name", with: group.name[0..5]
+        expect(page).to have_button(delete_label, disabled: true)
+
+        find_field("group-name").send_keys(:enter)
       end
+
+      expect(page).to have_selector("#confirm-group-deletion.modal", visible: :visible)
+      expect(Group.find(group.id)).not_to be_deleted
     end
 
-    it "toggles delete button only for an exact group-name match" do
+    it "deletes the group when its name is entered, ignoring case and surrounding whitespace" do
+      group.update!(name: " #{group.name} ")
       open_delete_modal
-      delete_button = find("#confirm-group-deletion button.btn-danger")
-      group_name = group.name
-
-      expect(delete_button).to be_disabled
-
-      fill_in "group-name", with: "Wrong Group Name"
-      expect(delete_button).to be_disabled
-
-      fill_in "group-name", with: group_name[0..5]
-      expect(delete_button).to be_disabled
-
-      fill_in "group-name", with: ""
-      expect(delete_button).to be_disabled
-
-      fill_in "group-name", with: group_name
-      expect(delete_button).not_to be_disabled
-
-      fill_in "group-name", with: " #{group_name} "
-      expect(delete_button).not_to be_disabled
-
-      group.update(name: " #{group_name} ")
-      open_delete_modal
-      fill_in "group-name", with: group_name.to_s
-      expect(delete_button).not_to be_disabled
 
       within("#confirm-group-deletion") do
+        fill_in "group-name", with: "  #{group.name.strip.upcase}  "
         click_button delete_label
+      end
+
+      expect(page).to have_current_path(group_path(group.parent))
+      expect(Group.with_deleted.find(group.id)).to be_deleted
+    end
+
+    it "deletes the group when Enter is pressed after entering its name" do
+      open_delete_modal
+
+      within("#confirm-group-deletion") do
+        fill_in "group-name", with: group.name
+        expect(page).to have_button(delete_label, disabled: false)
+        find_field("group-name").send_keys(:enter)
       end
 
       expect(page).to have_current_path(group_path(group.parent))

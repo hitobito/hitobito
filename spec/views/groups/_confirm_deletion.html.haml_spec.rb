@@ -22,6 +22,7 @@ describe "groups/_confirm_deletion.html.haml" do
     expect(dom.find("#confirm-group-deletion")["data-confirm-deletion-expected-value"]).to eq(group.name)
     expect(dom).to have_css("h5.modal-title", text: t("groups.confirm_deletion.title", group_name: group.name))
     expect(dom).to have_css("input[name='group-name'][data-action='confirm-deletion#validate']")
+    expect(dom).to have_css("input[name='group-name'][aria-label='#{t("groups.confirm_deletion.text_field_label")}']")
     expect(dom).to have_css("form[action='#{group_path(group)}']")
     expect(dom).to have_css("button.btn.btn-danger[disabled][data-confirm-deletion-target='submitButton']",
       text: t("groups.confirm_deletion.delete"))

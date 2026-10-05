@@ -292,6 +292,12 @@ describe GroupsController do
         expect(response.body).to include("confirm-group-deletion")
         expect(response.body).to include("modal('show')")
       end
+
+      it "leader cannot open the confirmation dialog for the layer granting his permissions" do
+        expect do
+          get :confirm_deletion, params: {id: groups(:top_layer)}, format: :js
+        end.to raise_error(CanCan::AccessDenied)
+      end
     end
 
     describe "#deleted_subgroups" do

@@ -37,7 +37,6 @@ class GroupsController < CrudController
 
   respond_to :js, only: :confirm_deletion
   skip_authorize_resource only: [:confirm_deletion]
-  skip_authorization_check only: [:confirm_deletion]
 
   def index
     flash.keep if html_request?
@@ -88,7 +87,7 @@ class GroupsController < CrudController
   end
 
   def confirm_deletion
-    entry
+    authorize!(:destroy, entry)
   end
 
   private

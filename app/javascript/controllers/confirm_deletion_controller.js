@@ -13,12 +13,9 @@ export default class extends Controller {
   };
 
   validate(event) {
-    if (!this.hasSubmitButtonTarget) return;
-
     const isValid =
       event.target.value.toLowerCase().trim() === this.expectedValue.toLowerCase().trim();
 
     this.submitButtonTarget.disabled = !isValid;
-    this.submitButtonTarget.setAttribute("aria-disabled", (!isValid).toString());
   }
 }

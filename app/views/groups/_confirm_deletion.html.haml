@@ -8,22 +8,22 @@
       .modal-header
         %h5.bold.modal-title
           %b= t('.title', group_name: entry.name)
-      .modal-body
-        %p
-          = t('.warning_html')
-        %p
-          = t('.confirmation_html', group_name: entry.name)
-        = text_field_tag 'group-name', nil,
-          aria_label: ti("text_field_label"),
-          class: 'form-control form-control-sm',
-          data: {action: 'confirm-deletion#validate'}
-      .modal-footer
-        = form_with(url: group_path(entry), method: :delete, local: true, class: 'd-inline') do |f|
+      = form_with(url: group_path(entry), method: :delete, local: true) do |f|
+        .modal-body
+          %p
+            = t('.warning_html')
+          %p
+            = t('.confirmation_html', group_name: entry.name)
+          = text_field_tag 'group-name', nil,
+            aria: {label: t('.text_field_label')},
+            class: 'form-control form-control-sm',
+            data: {action: 'confirm-deletion#validate'}
+        .modal-footer
           = f.button(type: :submit,
             class: 'btn btn-danger',
             disabled: true,
             data: {'confirm-deletion-target': 'submitButton'}) do
             = safe_join([icon('trash-alt'), t('.delete')], ' ')
-        = link_to(ti('button.cancel'), '#',
-          class: 'link cancel',
-          onclick: "event.preventDefault(); $('#confirm-group-deletion').modal('hide')")
+          = link_to(ti('button.cancel'), '#',
+            class: 'link cancel',
+            onclick: "event.preventDefault(); $('#confirm-group-deletion').modal('hide')")

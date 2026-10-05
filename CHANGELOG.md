@@ -3,6 +3,7 @@
 ## unreleased
 
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
+- Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 
 ## Version 2.10
 

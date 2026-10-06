@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -776,6 +776,61 @@ describe Role do
 
     it "is true if end_on is in the past" do
       expect(Role.new(end_on: 1.day.ago)).to be_ended
+    end
+  end
+
+  context "#active?" do
+    # start_on and end_on are date columns, so the active period is a range of dates and
+    # must be compared as such. Comparing it against a Time coerces the dates to midnight
+    # UTC, which cuts the role's first day short by the zone offset and swallows almost
+    # all of its last day.
+    let(:role) { Role.new(start_on: Date.new(2026, 6, 1), end_on: Date.new(2026, 12, 31)) }
+
+    def active_at(month, day, hour)
+      travel_to(Time.zone.local(2026, month, day, hour, 30)) { role.active? }
+    end
+
+    it "is true throughout the first day, including before the UTC offset" do
+      expect(active_at(6, 1, 0)).to eq true
+      expect(active_at(6, 1, 1)).to eq true
+      expect(active_at(6, 1, 12)).to eq true
+    end
+
+    it "is true throughout the last day, including after the UTC offset" do
+      expect(active_at(12, 31, 0)).to eq true
+      expect(active_at(12, 31, 1)).to eq true
+      expect(active_at(12, 31, 23)).to eq true
+    end
+
+    it "is false outside the active period" do
+      expect(active_at(5, 31, 12)).to eq false
+      expect(active_at(1, 1, 12)).to eq false
+    end
+
+    it "accepts a date as reference" do
+      expect(role.active?(Date.new(2026, 12, 31))).to eq true
+      expect(role.active?(Date.new(2027, 1, 1))).to eq false
+    end
+
+    it "accepts a time as reference and compares it as a date" do
+      expect(role.active?(Time.zone.local(2026, 12, 31, 23, 30))).to eq true
+      expect(role.active?(Time.zone.local(2026, 6, 1, 0, 30))).to eq true
+      expect(role.active?(Time.zone.local(2027, 1, 1, 0, 30))).to eq false
+    end
+
+    it "agrees with the active scope on every hour of the first and last day" do
+      role.update!(group: groups(:top_group), person: people(:top_leader), type: Group::TopGroup::Leader.sti_name)
+
+      [[6, 1], [12, 31]].each do |month, day|
+        (0..23).each do |hour|
+          travel_to(Time.zone.local(2026, month, day, hour, 30)) do
+            in_scope = Role.active(Time.zone.today).exists?(id: role.id)
+            expect(role.active?).to eq(in_scope),
+              "expected #active? (#{role.active?}) to match the active scope " \
+              "(#{in_scope}) at #{Time.current}"
+          end
+        end
+      end
     end
   end
 

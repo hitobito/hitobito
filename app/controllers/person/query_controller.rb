@@ -24,7 +24,7 @@ class Person::QueryController < ApplicationController
       people.select! { |p| can?(limit_by_permission.to_sym, p) }
     end
 
-    render json: serialized_people
+    render json: serialized_people(people)
   end
 
   private
@@ -45,9 +45,9 @@ class Person::QueryController < ApplicationController
     params[:limit_by_permission]
   end
 
-  def serialized_people
+  def serialized_people(people)
     serialized_people = people.collect { |p| p.public_send(serializer) }
-    if serialized_people.length >= limit + 1
+    if people.count > limit
       serialized_people.last[:label] = "..."
       serialized_people.last[:id] = nil
     end

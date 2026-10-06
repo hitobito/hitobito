@@ -17,14 +17,14 @@ class Person::QueryController < ApplicationController
   def index
     people = []
     if search_param.size >= 3
-      people = list_entries.limit(limit)
+      people = list_entries.limit(limit + 1)
       people = decorate(people)
     end
     if limit_by_permission
       people.select! { |p| can?(limit_by_permission.to_sym, p) }
     end
 
-    render json: people.collect { |p| p.public_send(serializer) }
+    render json: serialized_people
   end
 
   private
@@ -43,6 +43,15 @@ class Person::QueryController < ApplicationController
 
   def limit_by_permission
     params[:limit_by_permission]
+  end
+
+  def serialized_people
+    serialized_people = people.collect { |p| p.public_send(serializer) }
+    if serialized_people.length >= limit + 1
+      serialized_people.last[:label] = "..."
+      serialized_people.last[:id] = nil
+    end
+    serialized_people
   end
 
   include Searchable

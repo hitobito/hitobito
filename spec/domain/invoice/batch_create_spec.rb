@@ -266,6 +266,159 @@ describe Invoice::BatchCreate do
       end.to change { InvoiceRun::ProcessedSubject.count }.by(1)
     end
 
+    it "documents the processed subjects of every item of the same template item" do
+      period_invoice_template = Fabricate(:period_invoice_template)
+      template_item_id = period_invoice_template.items.first.id
+
+      run = InvoiceRun.new(recipient_source: period_invoice_template.recipient_source,
+        period_invoice_template:, group:, title: "Run")
+      invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+      ["membership", "supplement"].each do |name|
+        invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name:, unit_cost: 10,
+          dynamic_cost_parameters: {
+            template_item_id:,
+            period_start_on: 1.year.ago,
+            period_end_on: Time.zone.today,
+            unit_cost: "10.00",
+            role_types: Group::BottomLayer::BasicPermissionsOnly.name
+          })
+      end
+      run.invoice = invoice
+
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, group: groups(:bottom_layer_one))
+
+      expect do
+        Invoice::BatchCreate.new(run, person).call
+      end.to change { InvoiceRun::ProcessedSubject.count }.by(2)
+        .and change { group.issued_invoices.count }.by(1)
+
+      expect(run.invalid_recipient_ids).to be_empty
+      expect(group.issued_invoices.last.invoice_items).to have(2).items
+    end
+
+    it "records a subject once per item although the item counts it several times" do
+      period_invoice_template = Fabricate(:period_invoice_template)
+      counted = Fabricate(:person)
+      Fabricate(Group::BottomLayer::Member.name, person: counted,
+        group: groups(:bottom_layer_one))
+      Fabricate(Group::BottomGroup::Member.name, person: counted,
+        group: groups(:bottom_group_one_one))
+
+      run = InvoiceRun.new(recipient_source: period_invoice_template.recipient_source,
+        period_invoice_template:, group:, title: "Run")
+      run.invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+      run.invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name: "membership",
+        unit_cost: 10,
+        dynamic_cost_parameters: {
+          template_item_id: period_invoice_template.items.first.id,
+          period_start_on: 1.year.ago,
+          period_end_on: Time.zone.today,
+          unit_cost: "10.00",
+          role_types: [Group::BottomLayer::Member.name, Group::BottomGroup::Member.name]
+        })
+
+      expect { Invoice::BatchCreate.new(run, person).call }
+        .to change { group.issued_invoices.count }.by(1)
+      expect(run.invalid_recipient_ids).to be_empty
+
+      item = group.issued_invoices.find_by(recipient: groups(:bottom_layer_one)).invoice_items.sole
+      expect(item.count).to eq 3
+      expect(item.processed_subjects.pluck(:subject_id))
+        .to contain_exactly(counted.id, people(:bottom_member).id)
+    end
+
+    it "charges a subject once per recipient, not once per invoice run" do
+      period_invoice_template = Fabricate(:period_invoice_template)
+      counted = Fabricate(:person)
+      [groups(:bottom_layer_one), groups(:bottom_layer_two)].each do |recipient_group|
+        Fabricate(Group::BottomLayer::BasicPermissionsOnly.name,
+          person: counted, group: recipient_group)
+      end
+
+      run = InvoiceRun.new(recipient_source: period_invoice_template.recipient_source,
+        period_invoice_template:, group:, title: "Run")
+      run.invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+      run.invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name: "membership",
+        unit_cost: 10,
+        dynamic_cost_parameters: {
+          template_item_id: period_invoice_template.items.first.id,
+          period_start_on: 1.year.ago,
+          period_end_on: Time.zone.today,
+          unit_cost: "10.00",
+          role_types: Group::BottomLayer::BasicPermissionsOnly.name
+        })
+
+      expect { Invoice::BatchCreate.new(run, person).call }
+        .to change { group.issued_invoices.count }.by(2)
+        .and change { InvoiceRun::ProcessedSubject.count }.by(2)
+      expect(run.invalid_recipient_ids).to be_empty
+    end
+
+    it "does not charge a subject again in a later run of the same template item" do
+      period_invoice_template = Fabricate(:period_invoice_template)
+      template_item_id = period_invoice_template.items.first.id
+      Fabricate(Group::BottomLayer::BasicPermissionsOnly.name, group: groups(:bottom_layer_one))
+
+      build_run = lambda do
+        InvoiceRun.new(recipient_source: period_invoice_template.recipient_source,
+          period_invoice_template:, group:, title: "Run").tap do |run|
+          run.invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+          ["membership", "supplement"].each do |name|
+            run.invoice.invoice_items.build(type: Invoice::RoleCountItem.name, name:,
+              unit_cost: 10,
+              dynamic_cost_parameters: {
+                template_item_id:,
+                period_start_on: 1.year.ago,
+                period_end_on: Time.zone.today,
+                unit_cost: "10.00",
+                role_types: Group::BottomLayer::BasicPermissionsOnly.name
+              })
+          end
+        end
+      end
+
+      expect { Invoice::BatchCreate.new(build_run.call, person).call }
+        .to change { group.issued_invoices.count }.by(1)
+
+      expect { Invoice::BatchCreate.new(build_run.call, person).call }
+        .to not_change { group.issued_invoices.count }
+        .and not_change { InvoiceRun::ProcessedSubject.count }
+    end
+
+    context "error reporting" do
+      let(:run) do
+        Subscription.create!(mailing_list:, subscriber: group,
+          role_types: [Group::TopGroup::Leader])
+        InvoiceRun.new(recipient_source: mailing_list, group: group, title: :title).tap do |run|
+          run.invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+          run.invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
+        end
+      end
+
+      it "does not report a recipient whose own data prevents the invoice" do
+        allow_any_instance_of(Invoice).to receive(:save!)
+          .and_raise(ActiveRecord::RecordInvalid.new(Invoice.new))
+
+        expect(Sentry).not_to receive(:capture_exception)
+
+        expect { Invoice::BatchCreate.new(run, person).call }
+          .to not_change { group.issued_invoices.count }
+        expect(run.invalid_recipient_ids).to eq [person.id]
+      end
+
+      it "reports an unexpected error, which users cannot do anything about" do
+        allow_any_instance_of(Invoice).to receive(:save!)
+          .and_raise(ActiveRecord::StatementInvalid.new("boom"))
+
+        expect(Sentry).to receive(:capture_exception)
+          .with(kind_of(ActiveRecord::StatementInvalid), hash_including(:extra))
+
+        expect { Invoice::BatchCreate.new(run, person).call }
+          .to not_change { group.issued_invoices.count }
+        expect(run.invalid_recipient_ids).to eq [person.id]
+      end
+    end
+
     it "generates the invoice in the recipient's language" do
       period_invoice_template = Fabricate(:period_invoice_template)
 

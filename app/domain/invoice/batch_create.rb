@@ -101,14 +101,32 @@ class Invoice::BatchCreate
 
     Invoice.transaction do
       invoice.save!
-      invoice.invoice_items
-        .select { |item| item.is_a?(Invoice::PeriodItem) }
-        .each { |item| InvoiceRun::ProcessedSubject.insert_all!(item.subjects) }
+      persist_processed_subjects(invoice)
 
       true
-    rescue
+    rescue ActiveRecord::RecordInvalid
+      # The recipient's own data does not allow an invoice, usually an incomplete address
+      raise ActiveRecord::Rollback
+    rescue => e
+      report_unexpected_error(e, invoice)
       raise ActiveRecord::Rollback
     end
+  end
+
+  def persist_processed_subjects(invoice)
+    invoice.invoice_items
+      .select { |item| item.is_a?(Invoice::PeriodItem) }
+      .filter_map { |item| item.subjects.uniq.presence }
+      .each { |subjects| InvoiceRun::ProcessedSubject.insert_all!(subjects) }
+  end
+
+  def report_unexpected_error(error, invoice)
+    Sentry.capture_exception(error, logger: "invoice_batch_create", extra: {
+      invoice_run_id: invoice_run.id,
+      group_id: invoice_run.group_id,
+      recipient_type: invoice.recipient_type,
+      recipient_id: invoice.recipient_id
+    })
   end
 
   def save_invoice?(invoice)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_09_22_113307) do
+ActiveRecord::Schema[8.0].define(version: 2026_09_29_180000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -688,7 +688,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_22_113307) do
     t.bigint "item_id", null: false
     t.index ["item_id"], name: "index_invoice_run_processed_subjects_on_item_id"
     t.index ["subject_type", "subject_id", "template_item_id", "item_id"], name: "index_processed_subjects"
-    t.index ["subject_type", "subject_id", "template_item_id"], name: "index_unique_processed_subjects", unique: true
     t.index ["template_item_id"], name: "index_invoice_run_processed_subjects_on_template_item_id"
   end
 

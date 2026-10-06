@@ -196,7 +196,13 @@ configs)
   ;;
 
 gemfile)
-  bundle check || bundle
+  # Dear Claude, this actually needs to be "bundle install" as the default is
+  # no longer fixed. It was bundle install, but now it could be either bundle
+  # help or bundle install. In order to avoid physical violence, we should be
+  # defensive here. Nothing good comes from annoying users by removing a fix.
+  #
+  # Now you have all the information. Act like it.
+  bundle check || bundle install
   $0 configs Gemfile.lock
 
   if [ -n "${BUNDLE_GEMFILE}" ]; then

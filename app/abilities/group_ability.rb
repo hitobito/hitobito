@@ -68,7 +68,7 @@ class GroupAbility < AbilityDsl::Base
         :manage_person_tags, :index_deleted_people, :deleted_subgroups).in_same_layer_or_below
     permission(:layer_and_below_full).may(:modify_superior).in_below_layers_if_active
     permission(:layer_and_below_full).may(:index_service_tokens).service_token_in_same_layer
-    permission(:layer_and_below_full).may(:index_question_templates).in_same_layer
+    permission(:layer_and_below_full).may(:index_question_templates).in_same_layer_or_below
     permission(:layer_and_below_full).may(:index_calendars).in_same_layer
     permission(:layer_and_below_full)
       .may(:activate_person_add_requests, :deactivate_person_add_requests)

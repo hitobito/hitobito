@@ -125,8 +125,8 @@ describe GroupAbility do
         is_expected.not_to be_able_to(:index_service_tokens, group)
       end
 
-      it "may not index question_templates" do
-        is_expected.not_to be_able_to(:index_question_templates, group)
+      it "may index question_templates" do
+        is_expected.to be_able_to(:index_question_templates, group)
       end
 
       it "may manage person tags" do

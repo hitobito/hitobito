@@ -12,6 +12,10 @@ describe Events::Filter::Leader do
 
   subject(:filter) { described_class.new(:leader, params) }
 
+  # Auth.current_person is a thread_mattr_accessor, so the examples below setting it would
+  # otherwise leak it into every later example in the same process.
+  after { Auth.current_person = nil }
+
   let(:kurs1) { Fabricate(:course) }
   let(:kurs2) { Fabricate(:course) }
   let(:kurs3) { Fabricate(:course) }

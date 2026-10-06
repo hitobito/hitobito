@@ -10,7 +10,6 @@ module SearchStrategies
 
     self.model_class = Person
     self.readables_ability = PersonReadables
-    self.searchable_identifiers = {id: /\A\d+\z/} if FeatureGate.enabled?("people.search_by_id")
 
     def initialize(user, term, page, limit: nil)
       super
@@ -19,6 +18,12 @@ module SearchStrategies
     end
 
     private
+
+    def searchable_identifiers
+      return {} unless FeatureGate.enabled?("people.search_by_id")
+
+      {id: /\A\d+\z/}
+    end
 
     def accessible_scope
       scopes = [super, people_without_role, deleted_people].compact

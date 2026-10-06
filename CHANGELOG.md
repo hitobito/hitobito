@@ -18,6 +18,8 @@
 - Für die Schwyzer Kantonalbank SZKB wurde eine Ebics Zahlungsschnittstelle hinzugefügt (#4400)
 - Zusätzliche Adressen erhalten dieselben Namensfelder (Vorname, Nachname, Firma/Firmenname) wie die Hauptadresse und sind neu auch im JSON:API verfügbar (#4411)
 - Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
+- Der Navigationspunkt "Rechnungen" öffnet das Rechnungsmenü der nächstgelegenen Ebene mit Finanzberechtigung der aktuellen Gruppe resp. der Hauptgruppe (#4510)
+- Personen mit mehreren Rollen mit Berechtigung "layer_and_below_finance" sehen im Rechnungsmenü alle entsprechenden Ebenen (#4510)
 
 
 ## Version 2.10

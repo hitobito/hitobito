@@ -99,6 +99,35 @@ use and you are running on the host, outside the containers.**
    whole schema — for a wagon that is the core schema plus that wagon's own migrations.
 3. `bundle exec rspec spec/...` for the specs themselves.
 
+# Code Comments and documenting code
+
+Comments in code mostly age poorly. Please use the following framework to decide how to document changes:
+1. First and foremost, **make the code speak for itself**. Methods, variables and specs MUST be
+   split and named to be self-explanatory.
+2. Add documentation to the dedicated places: `doc/` in the core and wagons, and the
+   `hitobito/user_documentation` repository published at hitobito.readthedocs.io.
+3. Prefer commit messages to code comments, because a git blame is more telling and easier to
+   research than figuring out the cross-repo code state back when a comment was written. Match the
+   style and length of other, human-made commits (without 🤖 emoji). No figures of speech, just
+   objective facts in short form. NEVER more than 1 commit line + 3 lines of commit message.
+4. A CHANGELOG.md entry is only made for user-facing changes (including JSON:API changes).
+5. Only if the information is directly about the class / method being commented, only if it can't
+   be expressed through the above means of documentation adequately, and only if it is relevant
+   every single time a piece of code is read, forever: Only then create a comment. Even then,
+   only include the information that isn't covered in the other docs locations, and don't mention
+   the other docs locations either. If a decision is detailed in an issue, it will already be
+   referenced in the commit message, so no need for rephrasing or linking.
+
+**Guiding Principles** for writing documentation and especially the rare comments:
+- NEVER reference comments, method names or implementation locations from other files. These will
+  be outdated very quickly.
+- NEVER narrate, retell or even mention earlier versions or decisions from previous iterations in
+  the conversation history, or how it used to be implemented. Any documentation must be written
+  as if this was the first ever implementation, and understandable by anyone without any history,
+  context or memories.
+- When there are other comments in the touched files already, any new comments MUST be shorter
+  and rarer than the existing ones. MAXIMUM BREVITY.
+
 # Dependencies
 
 Both dev setups configure the locally checked out wagons in `Wagonfile`, which bundler would then
@@ -113,6 +142,18 @@ before touching either file, and never commit a `Gemfile.lock` containing `../hi
 
 # Contribution Guidelines
 
-If your contribution has been created with AI, please add the emoji "🤖" (:robot-face:) to
-commit messages and pull-request titles and descriptions. This helps us categorize and fast-track
-the relevant contributions.
+
+Please follow the mandatory contribution rules in `../hitobito/CONTRIBUTING.md`, especially:
+- CI must be green. If doing changes in the core, at least the core CI must be green before
+  maintainers can look at your contribution.
+- For all but the smallest bugfixes, the review of your contribution must be paid by your
+  organization. So please check with them first, whether they are ready to carry this for your
+  contribution.
+- Larger feature changes should be discussed via an issue first, since the maintainers likely
+  have domain knowledge about other wagons affected by your change. After all, merging your PR
+  means the maintainers accept to carry the maintenance burden of your new feature in the long
+  run.
+
+Additionally, if your contribution has been created with AI, please add the emoji "🤖"
+(:robot-face:) to commit messages and pull-request titles and descriptions. This helps us
+categorize and fast-track the relevant contributions.

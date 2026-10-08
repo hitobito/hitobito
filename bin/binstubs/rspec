@@ -4,7 +4,9 @@
 # SC2068: Double quote array expansions to avoid re-splitting elements.
 
 if [[ $DISABLE_SPRING ]]; then
-  bundle exec rspec $@
+  # Load rspec gem directly to avoid recursion via PATH resolution
+  # (`bundle exec rspec` would find this very script again)
+  bundle exec ruby -e 'load Gem.bin_path("rspec-core", "rspec")' -- $@
 else
   bundle exec spring rspec $@
 fi

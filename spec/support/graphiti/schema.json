@@ -813,6 +813,18 @@
           "writable": false,
           "description": null
         },
+        "teamer_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "display_booking_info": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "minimum_participants": {
           "type": "integer",
           "readable": true,
@@ -821,12 +833,6 @@
         },
         "number": {
           "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "teamer_count": {
-          "type": "integer",
           "readable": true,
           "writable": false,
           "description": null

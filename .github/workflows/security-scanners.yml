@@ -23,7 +23,8 @@ jobs:
 
       - name: Run security checks
         run: |
-          bin/bundle exec brakeman -q --exit-on-warn --ensure-ignore-notes --ensure-latest
+          cooldown=$(bin/bundle_cooldown)
+          bin/bundle exec brakeman -q --exit-on-warn --ensure-ignore-notes --ensure-latest "$cooldown"
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml

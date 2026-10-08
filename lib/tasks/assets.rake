@@ -3,43 +3,25 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-# Writes JSON manifests describing every active wagon for the two
-# Node build scripts. These are prerequisites of css:build/javascript:build and
-# therefore of assets:precompile (prod build), assets:build (dev build) and
-# db:test:prepare (spec setup).
+# The node build scripts in config/ learn the wagons to include from a JSON manifest per
+# composition, i.e. per wagon composition, in tmp/wagon_manifests/<composition>/, handed to them as
+# WAGON_MANIFEST_DIR. They compile into app/assets/builds/<composition>.
 #
-# The compiled output is written to a subdirectory per instance, i.e. per wagon
-# composition.
+# yarn always runs in the core directory, so these tasks also work from a wagon directory,
+# where they carry the app: prefix.
 
 namespace :assets do
-  wagon_css_manifest_path = "tmp/wagon_css_manifest.json"
-  wagon_js_manifest_path = "tmp/wagon_js_manifest.json"
-
-  desc "Write the active wagons' stylesheet directories for build_css.mjs"
-  task wagon_css_manifest: :environment do
-    FileUtils.mkdir_p(File.dirname(wagon_css_manifest_path))
-
-    stylesheet_paths = Wagons.all.filter_map do |wagon|
+  css_manifest = lambda do |wagons, composition|
+    stylesheet_paths = wagons.filter_map do |wagon|
       path = wagon.paths.path.join("app", "assets", "stylesheets")
       path.to_s if path.exist?
     end
 
-    payload = {
-      buildDir: WagonAssetsHelper.instance_name,
-      wagonStylesheetPaths: stylesheet_paths
-    }
-    File.write(wagon_css_manifest_path, JSON.pretty_generate(payload))
+    {buildDir: composition, wagonStylesheetPaths: stylesheet_paths}
   end
 
-  if Rake::Task.task_defined?("css:build")
-    Rake::Task["css:build"].enhance(["assets:wagon_css_manifest"])
-  end
-
-  desc "Write the active wagons' JS-relevant asset files for esbuild.mjs"
-  task wagon_js_manifest: :environment do
-    FileUtils.mkdir_p(File.dirname(wagon_js_manifest_path))
-
-    wagons = Wagons.all.map do |wagon|
+  js_manifest = lambda do |wagons, composition|
+    wagon_entries = wagons.map do |wagon|
       wagon_root = wagon.paths.path
       controllers_dir = wagon_root.join("app", "javascript", "controllers")
       wagon_script = wagon_root.join("app", "assets", "javascripts", "wagon.js.coffee")
@@ -53,47 +35,67 @@ namespace :assets do
       }
     end
 
-    payload = {buildDir: WagonAssetsHelper.instance_name, wagons: wagons}
-    File.write(wagon_js_manifest_path, JSON.pretty_generate(payload))
+    {buildDir: composition, wagons: wagon_entries}
   end
 
-  if Rake::Task.task_defined?("javascript:build")
-    Rake::Task["javascript:build"].enhance(["assets:wagon_js_manifest"])
+  write_manifests = lambda do |wagons|
+    composition = WagonAssetsHelper.composition(wagons)
+    dir = Rails.root.join("tmp", "wagon_manifests", composition)
+    dir.mkpath
+    ENV["WAGON_MANIFEST_DIR"] = dir.to_s
+    dir.join("css.json").write(JSON.pretty_generate(css_manifest.call(wagons, composition)))
+    dir.join("js.json").write(JSON.pretty_generate(js_manifest.call(wagons, composition)))
   end
 
-  desc "Build the assets the test environment needs"
-  task :build_for_test do
-    # The core loads no wagons under RAILS_ENV=test (see Wagonfile.development),
-    # so its test instance - and with it the build directory - is a different one
-    # than in development. db:test:prepare itself runs in the development
-    # environment, hence the subprocess.
-    if Wagons.current_wagon
-      Bundler.with_unbundled_env do
-        sh({"RAILS_ENV" => "test"}, "cd #{Rails.root} && bundle exec rake assets:build")
-      end
-    elsif ENV["RAILS_ENV"] == "test"
-      Rake::Task["assets:build"].invoke
-    else
-      sh({"RAILS_ENV" => "test"}, "bundle exec rake assets:build")
+  yarn = ->(*args) { sh("yarn", *args, chdir: Rails.root.to_s) }
+
+  yarn_build = lambda do
+    yarn.call("install") unless ENV["SKIP_YARN_INSTALL"]
+    yarn.call("build:css") unless ENV["SKIP_CSS_BUILD"]
+    yarn.call("build") unless ENV["SKIP_JS_BUILD"]
+  end
+
+  # Core specs run without wagons, a wagon's specs with the wagon and its dependencies.
+  spec_wagons = -> { Wagons.current_wagon ? Wagons.all : [] }
+
+  desc "Write the manifests of the active wagon composition for the node build scripts"
+  task wagon_manifests: :environment do
+    write_manifests.call(Wagons.all)
+  end
+
+  desc "Build CSS and JS for the active wagon composition"
+  task build: :wagon_manifests do
+    yarn_build.call
+  end
+
+  desc "Build CSS and JS for the composition the specs of this directory run against"
+  task build_for_test: :environment do
+    write_manifests.call(spec_wagons.call)
+    yarn_build.call
+  end
+
+  if Rake::Task.task_defined?("assets:precompile")
+    Rake::Task["assets:precompile"].enhance(["assets:build"])
+  end
+
+  if Rake::Task.task_defined?("assets:clobber")
+    Rake::Task["assets:clobber"].enhance do
+      rm_rf Dir[Rails.root.join("app", "assets", "builds", "*")]
     end
   end
 
-  # cssbundling-rails/jsbundling-rails only hook their builds into spec:prepare,
-  # but we use db:test:prepare in hitobito
-  if Rake::Task.task_defined?("db:test:prepare") && !ENV["SKIP_CSS_BUILD"] && !ENV["SKIP_JS_BUILD"]
-    Rake::Task["db:test:prepare"].enhance(["assets:build_for_test"])
+  if Rake::Task.task_defined?("db:test:prepare") && !(ENV["SKIP_CSS_BUILD"] && ENV["SKIP_JS_BUILD"])
+    build_for_test = Rake.application.current_scope.path_with_task_name("build_for_test")
+    Rake::Task["db:test:prepare"].enhance { Rake::Task[build_for_test].invoke }
   end
 
-  desc "Build CSS and JS for the currently active wagon composition"
-  task build: ["css:build", "javascript:build"]
-
   desc "Rebuild the JS on every change"
-  task watch_js: ["assets:wagon_js_manifest"] do
-    sh "yarn build --watch"
+  task watch_js: :wagon_manifests do
+    yarn.call("build", "--watch")
   end
 
   desc "Rebuild the CSS on every change"
-  task watch_css: ["assets:wagon_css_manifest"] do
-    sh "yarn build:css --watch"
+  task watch_css: :wagon_manifests do
+    yarn.call("build:css", "--watch")
   end
 end

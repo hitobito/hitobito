@@ -1,11 +1,10 @@
 ## Frontend & Assets
 
 hitobito bindet JavaScript files, Stylesheets, Bilder und Fonts über [Propshaft](https://github.com/rails/propshaft)
-(die Asset Pipeline von Rails) ein. Die eigentliche Kompilation übernehmen [esbuild](https://esbuild.github.io/) (via
-[jsbundling-rails](https://github.com/rails/jsbundling-rails)) für JavaScript und
-[dart-sass](https://sass-lang.com/dart-sass/) (via [cssbundling-rails](https://github.com/rails/cssbundling-rails))
-für SCSS. Propshaft selbst kompiliert nichts - es fingerprinted und liefert einfach aus, was in
-`app/assets/builds` liegt.
+(die Asset Pipeline von Rails) ein. Die eigentliche Kompilation übernehmen [esbuild](https://esbuild.github.io/)
+für JavaScript und [dart-sass](https://sass-lang.com/dart-sass/) für SCSS, beide über yarn-Skripte in
+`package.json`, die von rake-Tasks aufgerufen werden. Propshaft selbst kompiliert nichts - es
+fingerprinted und liefert einfach aus, was in `app/assets/builds` liegt.
 
 ### Funktionsweise
 
@@ -13,24 +12,54 @@ Die Entrypoints liegen in `app/javascript/entrypoints/*.js` bzw.
 `app/assets/stylesheets/entrypoints/*.scss`, der restliche Quellcode in `app/javascript/**` bzw.
 `app/assets/stylesheets/hitobito/**`.
 
-`bin/rails assets:precompile` kompiliert diese nach `app/assets/builds/<wagon-combination>`, von wo
-Propshaft sie wie jede andere Datei unter `app/assets/*` fingerprinted ausliefert.
+Kompiliert wird nach `app/assets/builds/<composition>`, von wo Propshaft die Dateien wie jede andere
+unter `app/assets/*` fingerprinted ausliefert. `<composition>` ist die aktive Wagon-Zusammenstellung
+(`WagonAssetsHelper.composition`, z.B. `pbs-youth` oder `core`). Ein Unterverzeichnis pro
+Composition verhindert, dass sich die Builds verschiedener Kunden oder der Build für die Specs und der
+für die laufende App gegenseitig überschreiben.
 
-Zwei rake-Tasks (`lib/tasks/assets.rake`) laufen davor:
+#### Der Build
 
-* `assets:wagon_css_manifest` sucht in den aktiven Wagons die Stylesheet-Verzeichnisse zusammen
-  und schreibt sie in `tmp/wagon_css_manifest.json` nieder. `config/build_css.mjs` gibt diese dann
-  dart-sass als `--load-path` mit und sucht darin auch nach wagon-eigenen Entrypoints.
-* `assets:wagon_js_manifest` sucht in den aktiven Wagons die JS-relevanten Dateien zusammen
-  und schreibt sie in `tmp/wagon_js_manifest.json` nieder. ESBuild, konfiguriert in
-  `config/esbuild.mjs`, liest dieses Manifest und generiert daraus (bei jedem Build neu) explizite
-  Import-Listen nach `app/javascript/generated/`. Diese Listen sind dann im Core in den Entrypoints
-  eingebunden.
+Jeder Build läuft gleich ab, egal woher er angestossen wird (alles in `lib/tasks/assets.rake`):
 
-Beide Tasks sind über `Rake::Task[...].enhance([...])` an `css:build` / `javascript:build` gehängt,
-und diese wiederum an `assets:precompile` und `db:test:prepare`. So können die Assets für Produktion
-und während dem Test Setup automatisch gebuildet werden. Für die Entwicklung kann man die Builds
-watchen lassen, siehe nächstes Kapitel.
+1. `assets:wagon_manifests` schreibt nach `tmp/wagon_manifests/<composition>/` zwei JSON-Dateien mit
+   den Stylesheet-Verzeichnissen bzw. den JS-relevanten Dateien der Wagons dieser Composition und
+   übergibt dieses Verzeichnis den Node-Skripts als `WAGON_MANIFEST_DIR`.
+2. `yarn build:css` führt `config/build_css.mjs` aus: dart-sass bekommt die Wagon-Verzeichnisse als
+   `--load-path` und kompiliert alle Entrypoints, auch die wagon-eigenen.
+   `yarn build` führt `config/esbuild.mjs` aus: esbuild generiert aus dem Manifest bei jedem Build
+   explizite Import-Listen (Wagon-Skripte, Core-Module, Stimulus-Controller) und stellt sie als
+   virtuelle Module unter `app/javascript/generated/` bereit, die in den Core-Entrypoints importiert
+   werden.
+
+yarn läuft dabei immer im Core-Verzeichnis. Darum funktionieren die Tasks auch aus einem
+Wagon-Verzeichnis, wo sie das Präfix `app:` tragen (`app:assets:build`). yarn direkt aufzurufen
+funktioniert nicht, weil dann das Manifest fehlt.
+
+#### Wann welcher Task
+
+| Situation | Befehl | Was passiert |
+|---|---|---|
+| Produktion, CI | `rake assets:precompile` | `assets:build` läuft davor, Propshaft fingerprinted das Ergebnis danach nach `public/assets` |
+| Specs | `rails db:test:prepare` | hängt `assets:build_for_test` an. Es baut die Composition, gegen die die Specs des aktuellen Verzeichnisses laufen: im Core `core` ohne Wagons, egal welche gerade geladen sind, in einem Wagon den Wagon samt seinen Abhängigkeiten |
+| Entwicklung | `rake assets:watch_js`, `rake assets:watch_css` | Manifest schreiben, dann yarn mit `--watch`; siehe nächstes Kapitel |
+| Von Hand | `rake assets:build` | Manifest schreiben, dann einmal yarn. Nützlich, um einen Build-Fehler ohne Watcher zu reproduzieren, oder um `app/assets/builds` zu füllen, bevor man den Server ohne Watcher startet |
+
+`assets:precompile` ist nur für Produktion gedacht: Sobald `public/assets/.manifest.json` existiert,
+liefert Propshaft auch in Development und Test nur noch diese fingerprinted Kopien aus und ignoriert
+`app/assets/builds`. Wer es lokal ausgeführt hat, räumt mit `rake assets:clobber` auf; das löscht
+`public/assets` und `app/assets/builds`.
+
+```mermaid
+flowchart TD
+  watch["assets:watch_js,&nbsp;assets:watch_css<br>Entwicklung"] --> manifest
+  prepare["db:test:prepare<br>Specs"] --> bft["assets:build_for_test<br>Core:&nbsp;ohne&nbsp;Wagons, Wagon:&nbsp;mit&nbsp;Abhängigkeiten"]
+  precompile["assets:precompile<br>Produktion, CI"] --> build
+  bft --> manifest
+  build["assets:build<br>auch von Hand"] --> manifest["&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assets:wagon_manifests&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>tmp/wagon_manifests/&lt;composition&gt;/"]
+  manifest --> yarn["yarn&nbsp;build:css,&nbsp;yarn&nbsp;build<br>config/build_css.mjs, config/esbuild.mjs"]
+  yarn --> out["&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; app/assets/builds/&lt;composition&gt;/"]
+```
 
 ### Entwicklung
 
@@ -50,16 +79,11 @@ Der Browser lädt automatisch neu, sobald ein Build fertig ist: `hotwire-liverel
 Development, und nur im Server-Prozess) beobachtet u.a. `app/assets/builds` und schickt das Reload
 über ActionCable.
 
-Einmalig bauen, ohne Watcher: `rake assets:build`. Dies ist aber nur selten mal zum Debuggen nötig.
-
-Die Bundles tragen in ProduKtion `data-turbo-track="reload"`: Turbo erzwingt damit einen vollen
+Die Bundles tragen in Produktion `data-turbo-track="reload"`: Turbo erzwingt damit einen vollen
 Reload, wenn sich nach einem Deploy der Fingerprint eines Bundles geändert hat, ein offener Tab also
 nicht mit altem JavaScript weiterläuft. In Development wollen wir feingranulareren Live Reload,
-daher ist das nur in Produktion aktiviert.
-
-Die gebuildeten Assets liegen pro Composition in einem Unterverzeichnis von `app/assets/builds`,
-also pro Wagon-Zusammenstellung (siehe `WagonAssetsHelper.instance_name`), damit sich Builds
-verschiedener Kunden nicht gegenseitig überschreiben, wenn man mit `bin/active_wagon` arbeitet.
+der einzelne JS/CSS Files neu laden kann, daher ist der full-page `"reload"` nur in Produktion
+aktiviert.
 
 ### Eigenheiten bezüglich Wagons
 
@@ -95,7 +119,7 @@ Namespace (`@import "sac_cas/..."`).
 
 Relative `url()`-Referenzen in Stylesheets (z.B. `url('../../../fonts/x.woff2')`) funktionieren
 mit einer Customization an Propshaft. `Hitobito::RelativeAssetUrls` schreibt diese relativen urls
-um, da Propshaft + cssbundling-rails das von Haus aus nicht könnte.
+um, da Propshaft das für extern kompiliertes CSS von Haus aus nicht könnte.
 
 #### Bilder und Fonts
 

@@ -44,7 +44,6 @@ bin/bisect-check
 # without it, asset changes would silently stop triggering a live reload.
 app/assets/builds/*
 !app/assets/builds/.keep
-app/javascript/generated
 public/assets
 public/404.html
 public/500.html

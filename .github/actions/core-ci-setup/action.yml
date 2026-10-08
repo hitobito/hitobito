@@ -82,8 +82,5 @@ runs:
     - name: 'Prepare the Database'
       if: inputs.database == 'true'
       run: |
-        if [ "${{ inputs.assets }}" != "true" ]; then
-          export SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1
-        fi
-        bundle exec rake db:test:prepare
+        SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 bundle exec rake db:test:prepare
       shell: bash

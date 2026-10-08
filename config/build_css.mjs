@@ -4,21 +4,21 @@
 // https://github.com/hitobito/hitobito.
 
 // Compiles every SCSS entrypoint - the core's, plus the ones the active wagons
-// bring along (tmp/wagon_css_manifest.json, written by
-// `rake assets:wagon_css_manifest`) - with dart-sass.
+// bring along (css.json, written by `rake assets:wagon_css_manifest`) - with
+// dart-sass.
 
 import { spawn } from "child_process";
 import { globSync } from "glob";
 import fs from "fs";
 import path from "path";
+import { readWagonManifest } from "./wagon_manifest.mjs";
 
-const WAGON_MANIFEST_PATH = "tmp/wagon_css_manifest.json";
 const CORE_STYLESHEETS = "app/assets/stylesheets";
 const ENTRYPOINT_DIR = "entrypoints";
 
-const { buildDir, wagonStylesheetPaths } = JSON.parse(fs.readFileSync(WAGON_MANIFEST_PATH, "utf8"));
+const { buildDir, wagonStylesheetPaths } = readWagonManifest("css.json");
 
-// Output goes to a subdirectory per instance, i.e. per wagon composition (see
+// Output goes to a subdirectory per wagon composition (see
 // config/initializers/assets.rb), so switching wagons, or running specs from a
 // wagon's own directory, doesn't clobber a valid build.
 const OUTPUT_DIR = path.join("app/assets/builds", buildDir);

@@ -1,13 +1,17 @@
 ## Testing
 
-🚢 If your are developing with docker, the following command must be executed in the `rails-test` container console: `docker-compose exec rails-test bash`.
+Prepare the test database and build the assets the test environment needs, once per directory,
+in the core directory for core specs and in the wagon directory for that wagon's specs:
 
-Because tests for the core and for the wagons use the same database, but potentially have diverging schemas, make sure to always prepare the test database before switching between core and a wagon.
+    bin/rails db:test:prepare
 
-Prepare the test database:
+The test database name is derived from the directory, so core and wagon specs do not interfere.
+The assets are built into `app/assets/builds/<composition>`, `core` for the core specs and the wagon
+composition for a wagon's specs. To skip the asset build, for example when only running model specs,
+set `SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1`. To rebuild only the assets:
 
-    rails db:test:prepare       # in core directory
-    rails app:db:test:prepare   # in wagon directory
+    bin/rails assets:build_for_test       # in core directory
+    bin/rails app:assets:build_for_test   # in wagon directory
 
 Run tests:
 
@@ -16,11 +20,8 @@ Run tests:
 
 Run feature tests:
 
-    RAILS_ENV=test bundle exec rake assets:precompile
     rails spec:features
     bin/rspec --tag type:feature spec/features/role_lists_controller_spec.rb
-
-If you experience problems with asset requests, clean up the existing assets with `rm -rf public/assets`, then run `RAILS_ENV=test bundle exec rake assets:precompile` again.
 
 For performance reasons, logging is disabled in test env. If you need logging for debugging, activate it by:
 

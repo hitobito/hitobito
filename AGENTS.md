@@ -15,7 +15,7 @@ the README.md.
 The HTML is mostly generated server-side with HAML.
 The Testing Framework is rspec, with capybara.
 Static analysis is done with rubocop and brakeman.
-CSS and JS are processed with esbuild/dart-sass (jsbundling-rails/cssbundling-rails) and served via Propshaft
+CSS and JS are compiled with esbuild/dart-sass via yarn scripts called from rake tasks, and served via Propshaft
 Translations are handled externally, the german (de) locales are the source and under our control.
 
 # Repository Layout
@@ -95,8 +95,10 @@ use and you are running on the host, outside the containers.**
 
 1. **`cd` to the directory whose specs you want first** — the core for core specs, the wagon
    directory for that wagon's specs.
-2. `bin/rails db:test:prepare` there, once per directory, before the first spec run. It builds the
-   whole schema — for a wagon that is the core schema plus that wagon's own migrations.
+2. `bin/rails db:test:prepare` there, once per directory, before the first spec run. It loads the
+   core schema and builds the assets of that directory's test composition; the first spec run applies
+   the wagon migrations. To rebuild only the assets, run `bin/rails assets:build_for_test` in the
+   core or `bin/rails app:assets:build_for_test` in a wagon.
 3. `bundle exec rspec spec/...` for the specs themselves.
 
 # Code Comments and documenting code

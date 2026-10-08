@@ -70,7 +70,7 @@ module MailingLists::BulkMail
 
       grouped_codes.keys.detect do |action|
         grouped_codes[action].any? do |pattern|
-          Regexp.new(pattern).match? cleaned_code
+          Regexp.new(pattern, Regexp::IGNORECASE).match? cleaned_code
         end
       end || :unknown
     end

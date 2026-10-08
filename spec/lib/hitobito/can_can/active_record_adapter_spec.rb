@@ -90,6 +90,22 @@ describe Hitobito::CanCan::ActiveRecordAdapter do
     end
   end
 
+  context "with has_many associations" do
+    before { ability.can :show, Person, roles: {group_id: groups(:top_group).id} }
+
+    it "ignores unsaved records of saved subjects like sql does" do
+      bottom_member.roles.build(group: groups(:top_group))
+
+      expect(ability.can?(:show, bottom_member)).to eq(false)
+    end
+
+    it "matches unsaved records of new subjects" do
+      person = Person.new(roles: [Role.new(group: groups(:top_group))])
+
+      expect(ability.can?(:show, person)).to eq(true)
+    end
+  end
+
   context "with has_many joins" do
     before do
       Fabricate(Group::BottomGroup::Leader.sti_name, group: groups(:bottom_group_one_one),

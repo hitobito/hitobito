@@ -100,7 +100,7 @@ module AbilityDsl::Constraints
     end
 
     def group_condition_with_type(group_condition, role_condition)
-      all_of(role_condition, nested(:group, all_of(group_condition, deleted_at: nil)))
+      all_of(role_condition, nested(:group, group_condition))
     end
 
     def visible_role_types

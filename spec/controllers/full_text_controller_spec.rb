@@ -53,10 +53,16 @@ describe FullTextController, type: :controller do
     end
 
     describe "invoices" do
-      it "finds invoice" do
+      it "finds invoice in finance layer" do
+        get :index, params: {q: invoices(:group_invoice).title[0..5]}
+
+        expect(assigns(:invoices)).to include(invoices(:group_invoice))
+      end
+
+      it "does not find invoice outside of finance layers" do
         get :index, params: {q: invoices(:invoice).title[0..5]}
 
-        expect(assigns(:invoices)).to include(invoices(:invoice))
+        expect(assigns(:invoices)).not_to include(invoices(:invoice))
       end
 
       it "redirects to invoice if only finding a single invoice" do
@@ -104,9 +110,9 @@ describe FullTextController, type: :controller do
       end
 
       it "finds invoices" do
-        get :index, params: {q: invoices(:invoice).title[0..5]}, format: :json
+        get :index, params: {q: invoices(:group_invoice).title[0..5]}, format: :json
 
-        expect(@response.body).to include(invoices(:invoice).title)
+        expect(@response.body).to include(invoices(:group_invoice).title)
       end
 
       it "returns empty json if no results" do

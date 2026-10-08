@@ -24,10 +24,10 @@ class PersonAbility < AbilityDsl::Base
       .herself_unless_only_basic_permissions_roles
     permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
 
-    permission(:contact_data).may(:index, :show).other_with_contact_data
+    permission(:contact_data).may(:index, :index_with_ended_roles, :show).other_with_contact_data
 
     permission(:group_read).may(:index, :show_details, :index_messages).in_same_group
-    permission(:group_read).may(:show).readable_in_same_group
+    permission(:group_read).may(:show, :index_with_ended_roles).readable_in_same_group
 
     permission(:group_full).may(:show_full, :history).in_same_group
     permission(:group_full)
@@ -40,7 +40,9 @@ class PersonAbility < AbilityDsl::Base
     permission(:group_and_below_read)
       .may(:index, :show_details, :index_messages)
       .in_same_group_or_below
-    permission(:group_and_below_read).may(:show).readable_in_same_group_or_below
+    permission(:group_and_below_read)
+      .may(:show, :index_with_ended_roles)
+      .readable_in_same_group_or_below
 
     permission(:group_and_below_full)
       .may(:show_full, :history)
@@ -58,7 +60,7 @@ class PersonAbility < AbilityDsl::Base
       .may(:index, :show_full, :show_details, :history, :index_messages)
       .in_same_layer
     permission(:layer_read)
-      .may(:show)
+      .may(:show, :index_with_ended_roles)
       .readable_in_same_layer
 
     permission(:layer_full)
@@ -75,11 +77,11 @@ class PersonAbility < AbilityDsl::Base
       .may(:index, :show_full, :show_details, :history, :index_messages)
       .in_same_layer_or_visible_below
     permission(:layer_and_below_read)
-      .may(:show)
+      .may(:show, :index_with_ended_roles)
       .readable_in_same_layer_or_visible_below
 
     permission(:see_invisible_from_above)
-      .may(:index, :show, :show_full, :show_details, :history)
+      .may(:index, :index_with_ended_roles, :show, :show_full, :show_details, :history)
       .in_same_layer_or_below
 
     permission(:layer_and_below_full)
@@ -116,7 +118,7 @@ class PersonAbility < AbilityDsl::Base
       permission(:any).may(:show, :update, :update_email, :primary_group, :totp_reset).herself
 
       permission(:any)
-        .may(:index, :show_details, :show_full, :index_messages)
+        .may(:index, :index_with_ended_roles, :show_details, :show_full, :index_messages)
         .herself
 
       permission(:any)
@@ -157,7 +159,8 @@ class PersonAbility < AbilityDsl::Base
   end
 
   def manageds
-    {id: PeopleManager.where(manager_id: user.id).select(:managed_id)} if user.id
+    managed_ids = user.manageds.map(&:id)
+    {id: managed_ids} if managed_ids.present?
   end
 
   def people_without_roles

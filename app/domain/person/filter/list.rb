@@ -30,9 +30,14 @@ class Person::Filter::List < Filter::List
 
   def accessible_scope
     people = Person.only_public_data.select(:contact_data_visible)
+    people = people.in_group(@group, group_roles_join) if group_range?
     return people if all_group_people_accessible?
 
     people.accessible_by(ability, list_action)
+  end
+
+  def group_roles_join
+    chain.include_ended_roles? ? {roles_with_ended_readable: :group} : {roles: :group}
   end
 
   def all_group_people_accessible?
@@ -55,7 +60,7 @@ class Person::Filter::List < Filter::List
   def list_action
     @list_action ||=
       if full_ability_needed? then :show_full
-      elsif chain.include_ended_roles? then :show
+      elsif chain.include_ended_roles? then :index_with_ended_roles
       else
         :index
       end

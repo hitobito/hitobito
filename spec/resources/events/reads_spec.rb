@@ -70,7 +70,7 @@ describe EventResource, type: :resource do
     it "may include event dates" do
       params[:include] = "dates"
       render
-      date = d[0].sideload(:dates)[0]
+      date = d.find { |e| e.id == course.id }.sideload(:dates)[0]
       expect(date.label).to eq "Kurs"
       expect(date.location).to be_blank
       expect(date.start_at).to eq "2012-03-01T00:00:00+01:00"
@@ -80,13 +80,13 @@ describe EventResource, type: :resource do
     it "may include kind" do
       params[:include] = "kind"
       render
-      expect(d[0].sideload(:kind)).to be_present
+      expect(d.find { |e| e.id == course.id }.sideload(:kind)).to be_present
     end
 
     it "may include participations" do
       params[:include] = "participations"
       render
-      expect(d[0].sideload(:participations)).to be_present
+      expect(d.find { |e| e.id == course.id }.sideload(:participations)).to be_present
     end
   end
 

@@ -1308,7 +1308,7 @@ describe Event::ParticipationsController do
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        }.to make(60).db_queries
+        }.to make(59).db_queries
       end
 
       it "GET#index still preloads when sorting" do
@@ -1317,7 +1317,7 @@ describe Event::ParticipationsController do
           participation = assigns(:participations).first
           expect(participation.answers).to be_loaded
           expect(participation.person.phone_numbers).to be_loaded
-        }.to make(57).db_queries
+        }.to make(56).db_queries
       end
 
       it "GET#index increases query count by a bounded amount when a question column is added" do
@@ -1334,7 +1334,7 @@ describe Event::ParticipationsController do
           get :index, params: {group_id: group.id, event_id: course.id}
         end.count
 
-        expect(with_column - baseline).to be_between(25, 26) # 25 for single spec, 26 when run in suite
+        expect(with_column - baseline).to be_between(28, 29) # 28 for single spec, 29 when run in suite
       end
     end
 

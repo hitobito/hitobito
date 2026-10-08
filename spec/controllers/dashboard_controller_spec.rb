@@ -23,6 +23,7 @@ describe DashboardController do
 
     context "custom_dashboard_page feature enabled" do
       before do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
         allow(FeatureGate).to receive(:enabled?).with("custom_dashboard_page").and_return(true)
       end
 
@@ -54,6 +55,7 @@ describe DashboardController do
 
     context "custom_dashboard_page feature enabled" do
       before do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
         allow(FeatureGate).to receive(:enabled?).with("custom_dashboard_page").and_return(true)
 
         Fabricate(

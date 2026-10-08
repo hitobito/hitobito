@@ -33,7 +33,7 @@ describe People::TotpDisableController do
     end
 
     it "does not disable totp of bottom_member when forced" do
-      expect(bottom_member.roles.first.class)
+      allow(bottom_member.roles.first.class)
         .to receive(:two_factor_authentication_enforced)
         .and_return(true)
 

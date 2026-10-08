@@ -133,10 +133,8 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def manager
-    return unless user.id
-
-    {participant_type: Person.sti_name,
-     participant_id: PeopleManager.where(manager_id: user.id).select(:managed_id)}
+    managed_ids = user.manageds.map(&:id)
+    {participant_type: Person.sti_name, participant_id: managed_ids} if managed_ids.present?
   end
 
   def application_possible

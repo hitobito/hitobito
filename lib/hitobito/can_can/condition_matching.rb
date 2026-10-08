@@ -9,18 +9,19 @@ module Hitobito
   module CanCan
     # Matches condition values in memory which cancancan itself only supports in SQL:
     # subquery relations, arrays containing ranges and AbilityDsl::Condition trees.
+    # Like in SQL, only saved records of a has_many association of a saved subject are matched.
     module ConditionMatching
       def override_condition_matching?(subject, name, value)
-        special_value?(value) || super
+        special_value?(value) || saved_collection?(subject, name, value) || super
       end
 
       def matches_condition?(subject, name, value)
         case value
         when AbilityDsl::Condition then value.matches?(subject)
         when AbilityDsl::AccessibleIds then accessible_ids_include?(value, subject, name)
-        when AbilityDsl::LazyRelation then relation_includes?(value.relation, subject.send(name))
-        when ActiveRecord::Relation then relation_includes?(value, subject.send(name))
-        when Array then ranges_include?(value, subject.send(name))
+        when AbilityDsl::LazyRelation, ActiveRecord::Relation, Array
+          attribute_matches?(value, subject.send(name))
+        when Hash then saved_collection_matches?(subject.send(name).reject(&:new_record?), value)
         else super
         end
       end
@@ -32,6 +33,29 @@ module Hitobito
         when AbilityDsl::Condition, AbilityDsl::LazyRelation, ActiveRecord::Relation then true
         when Array then value.any?(Range)
         else false
+        end
+      end
+
+      def attribute_matches?(value, attribute)
+        case value
+        when AbilityDsl::LazyRelation then relation_includes?(value.relation, attribute)
+        when ActiveRecord::Relation then relation_includes?(value, attribute)
+        else ranges_include?(value, attribute)
+        end
+      end
+
+      def saved_collection?(subject, name, value)
+        value.is_a?(Hash) &&
+          subject.is_a?(ActiveRecord::Base) &&
+          subject.persisted? &&
+          subject.class.reflect_on_association(name)&.collection?
+      end
+
+      def saved_collection_matches?(records, conditions)
+        if records.empty?
+          conditions.values.any? && conditions.values.all?(&:nil?)
+        else
+          records.any? { |record| AbilityDsl::Condition.matches?(conditions, record) }
         end
       end
 

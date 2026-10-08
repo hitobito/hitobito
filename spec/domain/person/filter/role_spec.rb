@@ -646,10 +646,14 @@ describe Person::Filter::Role do
             expect(filter(start_at: today, finish_at: today).entries).to have(1).item
           end
 
-          it "does not find person with other role starting after range" do
-            role.update!(end_on: 2.days.ago)
-            other_role.update!(start_on: 1.day.from_now)
-            expect(filter(end_on: today).entries).to be_empty
+          context "viewed by somebody else without read permission on the person" do
+            let(:user) { people(:bottom_member) }
+
+            it "does not find person with other role starting after range" do
+              role.update!(end_on: 2.days.ago)
+              other_role.update!(start_on: 1.day.from_now)
+              expect(filter(end_on: today).entries).to be_empty
+            end
           end
         end
       end
@@ -730,10 +734,14 @@ describe Person::Filter::Role do
             expect(filter(start_at: today, finish_at: today).entries).to have(1).item
           end
 
-          it "does not find person with other role starting after range" do
-            role.update!(end_on: 2.days.ago)
-            other_role.update!(start_on: 1.day.from_now)
-            expect(filter(end_on: today).entries).to be_empty
+          context "viewed by somebody else without read permission on the person" do
+            let(:user) { people(:bottom_member) }
+
+            it "does not find person with other role starting after range" do
+              role.update!(end_on: 2.days.ago)
+              other_role.update!(start_on: 1.day.from_now)
+              expect(filter(end_on: today).entries).to be_empty
+            end
           end
         end
       end

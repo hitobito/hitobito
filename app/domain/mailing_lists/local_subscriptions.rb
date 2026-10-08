@@ -22,8 +22,8 @@ class MailingLists::LocalSubscriptions
              "ON list_groups.id = #{MailingList.quoted_table_name}.group_id")
       .joins("INNER JOIN #{Group.quoted_table_name} list_layers " \
              "ON list_layers.id = list_groups.layer_group_id")
-      .where("NOT EXISTS (#{foreign_group_subscriptions})")
-      .where("NOT EXISTS (#{foreign_event_subscriptions})")
+      .where(foreign_group_subscriptions.arel.exists.not)
+      .where(foreign_event_subscriptions.arel.exists.not)
   end
 
   private
@@ -37,16 +37,14 @@ class MailingLists::LocalSubscriptions
       .where(subscriber_type: Group.sti_name)
       .where.not(local_role_types_condition)
       .select(1)
-      .to_sql
   end
 
   def foreign_event_subscriptions
     Subscription
       .where("subscriptions.mailing_list_id = mailing_lists.id")
       .where(subscriber_type: Event.sti_name)
-      .where("NOT EXISTS (#{local_event_groups})")
+      .where(local_event_groups.arel.exists.not)
       .select(1)
-      .to_sql
   end
 
   def local_event_groups
@@ -55,7 +53,6 @@ class MailingLists::LocalSubscriptions
       .where("events_groups.event_id = subscriptions.subscriber_id")
       .where(local_groups_condition)
       .select(1)
-      .to_sql
   end
 
   def local_groups_condition

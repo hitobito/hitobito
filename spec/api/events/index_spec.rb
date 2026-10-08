@@ -82,7 +82,7 @@ RSpec.describe "events#index", type: :request do
 
         expect(response.status).to eq(200)
         data = json["data"]
-        contact_id = data[0]["relationships"]["contact"]["data"]["id"]
+        contact_id = data.find { |e| e["id"] == event.id.to_s }["relationships"]["contact"]["data"]["id"]
         contact = json["included"].first { |inc| inc["type"] == "person" && inc.id == contact_id }
         expect(contact["attributes"]["first_name"]).to eq("Bottom")
         expect(contact["attributes"]["last_name"]).to eq("Member")
@@ -98,7 +98,7 @@ RSpec.describe "events#index", type: :request do
 
           expect(response.status).to eq(200)
           data = json["data"]
-          contact_id = data[0]["relationships"]["contact"]["data"]["id"]
+          contact_id = data.find { |e| e["id"] == event.id.to_s }["relationships"]["contact"]["data"]["id"]
           contact = json["included"].first { |inc| inc["type"] == "person" && inc.id == contact_id }
           expect(contact["attributes"]["first_name"]).to eq("Bottom")
           expect(contact["attributes"]["last_name"]).to eq("Member")
@@ -116,8 +116,8 @@ RSpec.describe "events#index", type: :request do
 
         expect(response.status).to eq(200)
         data = json["data"]
-        expect(data[0]["relationships"]["leaders"]["data"].size).to eq(1)
-        leader_id = data[0]["relationships"]["leaders"]["data"].first["id"]
+        expect(data.find { |e| e["id"] == event.id.to_s }["relationships"]["leaders"]["data"].size).to eq(1)
+        leader_id = data.find { |e| e["id"] == event.id.to_s }["relationships"]["leaders"]["data"].first["id"]
         leader = json["included"].first { |inc| inc["type"] == "person-name" && inc.id == leader_id }
         expect(leader["attributes"]["first_name"]).to eq("Bottom")
         expect(leader["attributes"]["last_name"]).to eq("Member")

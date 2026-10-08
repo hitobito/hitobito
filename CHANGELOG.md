@@ -6,6 +6,7 @@
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 - Listen, Suche und JSON:API verwenden dieselben Berechtigungen wie die Detailansichten. Personen sehen sich selbst in Gruppenlisten, Anlässe ohne explizite Sichtbarkeit werden gemäss Standardeinstellung aufgelistet, und Berechtigungen auf Gruppen und darunter (`group_and_below_*`) gelten im JSON:API nicht mehr für Teilnahmen in tieferen Ebenen (#4546)
 - In der Volltextsuche werden nur noch Rechnungen der eigenen Finanz-Ebenen gefunden (#4546)
+- Im JSON:API werden Rollen, welche nur speziell verwaltet werden können (restricted), nicht mehr aufgelistet, wie bereits in der Detailansicht (#4546)
 
 ## Version 2.10
 

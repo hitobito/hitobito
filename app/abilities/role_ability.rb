@@ -28,7 +28,7 @@ class RoleAbility < AbilityDsl::Base
 
     permission(:any).may(:terminate).her_own
 
-    general(:show, :create, :create_in_subgroup, :update, :destroy, :terminate).non_restricted
+    general.non_restricted
     general(:create).group_not_deleted_or_archived
     general(:destroy).not_permission_giving
   end
@@ -45,7 +45,7 @@ class RoleAbility < AbilityDsl::Base
   end
 
   def non_restricted
-    {type: Role.all_types.reject(&:restricted?).map(&:sti_name)}
+    {type: role_types_where { |r| !r.restricted? }}
   end
 
   # A role giving the current user the permission required to edit/destroy this very role.
@@ -70,12 +70,16 @@ class RoleAbility < AbilityDsl::Base
   private
 
   def visible_role_types
-    Role.visible_types.map(&:sti_name)
+    role_types_where(&:visible_from_above)
   end
 
   def non_permission_giving_role_types
-    Role.all_types
-      .reject { |r| ([:layer_and_below_full, :layer_full, :group_full] & r.permissions).present? }
-      .map(&:sti_name)
+    giving = [:layer_and_below_full, :layer_full, :group_full]
+    role_types_where { |r| (giving & r.permissions).blank? }
+  end
+
+  # Includes new roles without a type yet.
+  def role_types_where(&)
+    sti_names([Role, *Role.all_types].select(&))
   end
 end

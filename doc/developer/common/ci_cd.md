@@ -31,13 +31,27 @@ die Tests aller Wagons gegen den geänderten Core laufen.
 
 * Welche Wagons getestet werden, wird nicht konfiguriert, sondern ermittelt: alle nicht archivierten
   `hitobito_*`-Repositories der Organisation, abzüglich der Variable `WAGON_TESTS_SKIP_WAGONS`.
-* Getestet wird jeder Commit auf dem `master` Branch, und auf einem Pull Request auf Anfrage: Der
-  Trigger dafür ist das Label `run-wagon-tests!`. Der Trigger auf jeden Push eines Pull Requests ist
-  bewusst deaktiviert, er hat die Runner zu oft belegt.
+* Getestet wird jeder Commit auf dem `master` Branch und auf den `renovate/*` Branches, und auf
+  einem Pull Request auf Anfrage: Der Trigger dafür ist das Label `run-wagon-tests!`. Der Trigger auf
+  jeden Push eines Pull Requests ist bewusst deaktiviert, er hat die Runner zu oft belegt.
 * Der Job "All wagon tests are green" fasst die ganze Matrix zu einem einzelnen Check zusammen, auf
   den sich der Branch Protection Rule abstützt. Er läuft auch dann, wenn die Matrix gar nicht
   gebaut wurde (z.B. weil ein anderes Label gesetzt wurde), und meldet in dem Fall das Resultat, das
   derselbe Commit zuletzt erreicht hat.
+
+## Dependency-Updates mit Renovate
+
+[Renovate](https://docs.renovatebot.com/) erstellt Pull Requests für Gem-Updates, konfiguriert in
+[renovate.json](https://github.com/hitobito/hitobito/blob/master/.github/renovate.json).
+
+* Aktiviert ist vorerst nur `brakeman`. Für weitere Gems müssten zusätzliche `packageRule`
+  Einträge erfasst werden.
+* Ein Release wird erst nach 7 Tagen vorgeschlagen, passend zum `cooldown` in der `Gemfile`.
+* Die Pull Requests werden automatisch gemergt, sobald alle Checks der Branch Protection Rule grün
+  sind. Die Wagon-Tests laufen dafür ohne Label, weil jeder Push auf einen `renovate/*` Branch sie
+  auslöst.
+* Ändert ein Brakeman-Update Fingerprints in `config/brakeman.ignore`, bleibt der Pull Request rot
+  und muss von Hand nachgeführt werden.
 
 ## Wagon-Tests bei Änderungen an einem Dependency-Wagon
 

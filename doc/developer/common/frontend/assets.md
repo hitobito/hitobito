@@ -56,9 +56,9 @@ flowchart TD
   prepare["db:test:prepare<br>Specs"] --> bft["assets:build_for_test<br>Core:&nbsp;ohne&nbsp;Wagons, Wagon:&nbsp;mit&nbsp;Abhängigkeiten"]
   precompile["assets:precompile<br>Produktion, CI"] --> build
   bft --> manifest
-  build["assets:build<br>auch von Hand"] --> manifest["&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assets:wagon_manifests&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>tmp/wagon_manifests/&lt;composition&gt;/"]
+  build["assets:build<br>auch von Hand"] --> manifest["&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assets:wagon_manifests&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>tmp/wagon_manifests/#60;composition#62;/"]
   manifest --> yarn["yarn&nbsp;build:css,&nbsp;yarn&nbsp;build<br>config/build_css.mjs, config/esbuild.mjs"]
-  yarn --> out["&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; app/assets/builds/&lt;composition&gt;/"]
+  yarn --> out["&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; app/assets/builds/#60;composition#62;/"]
 ```
 
 ### Entwicklung

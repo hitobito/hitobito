@@ -9,5 +9,5 @@ Folgende Punkte sind zu beachten, damit ein Issue als fertig implementiert gilt:
 - Commit Messages sind Englisch, beginnen mit einem Grossbuchstaben, verwenden die Befehlsform und enthalten am Ende immer eine Referenz zum Ticket (z.B. `(#42)`). Falls sich dieses in einem anderen Repo befindet, kann die Referenz auf einer neuen Zeile angegeben werden (z.B. `(hitobito/hitobito_pbs#42)`).
 - [User-Dokumentation](https://hitobito.readthedocs.io/de/latest/) ist geschrieben.
 - [Entwickler-Dokumentation](https://github.com/hitobito/hitobito/tree/master/doc) ist geschrieben.
-- [Changelog](../../../CHANGELOG.md) Eintrag ist erstellt.
+- [Changelog](../../../CHANGELOG.md) Eintrag ist erstellt, falls Change für User relevant und ersichtlich ist.
 - Bei Core-Änderungen werden alle Wagons vor dem Merge getestet.

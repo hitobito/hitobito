@@ -31,6 +31,12 @@ describe Person::QueryController do
 
         expect(response.body).to_not match(/Pascal/)
       end
+
+      it "returns indicator that there are more than 10 people" do
+        11.times { Fabricate(:person, first_name: "Pascal") }
+        get :index, params: {q: "pas"}
+        expect(response.body).to match(/.../)
+      end
     end
 
     context "as bottom_member" do

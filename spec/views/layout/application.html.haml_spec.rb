@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Die Mitte. This file is part of
+#  Copyright (c) 2026, Die Mitte. This file is part of
 #  hitobito_die_mitte and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_die_mitte.
@@ -144,6 +144,26 @@ describe "layouts/application.html.haml" do
       allow(Settings.application).to receive(:meta_tags).and_return(nil)
       expect { render }.not_to raise_error
       expect(subject).to have_css("title", visible: :hidden)
+    end
+  end
+
+  context "impersonation banner" do
+    let(:person) { people(:top_leader) }
+
+    context "when a stale origin_user session lingers without a signed-in user" do
+      before do
+        session[:origin_user] = person.id
+        allow(controller).to receive(:current_person).and_return(nil)
+        allow(controller).to receive(:current_user).and_return(nil)
+        allow(view).to receive(:person_signed_in?).and_return(false)
+        allow(view).to receive(:current_person).and_return(nil)
+        allow(view).to receive(:current_user).and_return(nil)
+      end
+
+      it "does not raise and does not render the impersonation banner" do
+        expect { render }.not_to raise_error
+        expect(subject).not_to have_css(".user-impersonation")
+      end
     end
   end
 end

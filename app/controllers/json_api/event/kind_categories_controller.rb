@@ -6,19 +6,4 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class JsonApi::Event::KindCategoriesController < JsonApiController
-  def index
-    authorize!(:index, Event::KindCategory)
-    super
-  end
-
-  def show
-    authorize!(:show, entry)
-    super
-  end
-
-  private
-
-  def entry
-    @entry ||= Event::KindCategory.find(params[:id])
-  end
 end

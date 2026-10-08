@@ -30,7 +30,7 @@ In diesem Fall sprich dich bitte mit den verantwortlichen Personen vorgängig ab
 Damit wir deinen PR möglichst einfach integrieren können, sind folgende Punkte wichtig:
 * Issue mit kurzer fachlicher Beschreibung
 * Die Tests sollten erfolgreich durchlaufen, und je nach Feature sollten neue Tests geschrieben werden
-* Vermerk der Änderung im Changelog
+* Vermerk der Änderung im Changelog des Repos wo der Hauptteil der Änderung gemacht wurde (nur falls für User relevant!)
 * Falls notwendig Übersetzungen in Tranisfex
 
 Bei Fehlern helfen uns folgende Informationen:

@@ -6,12 +6,13 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::SelfRegistrationsController < JsonApiController
-  def create
-    authorize!(:register_people, group)
-    super
-  end
-
   def group
     @group ||= Group.find(params[:id])
+  end
+
+  private
+
+  def authorize_create
+    authorize!(:register_people, group)
   end
 end

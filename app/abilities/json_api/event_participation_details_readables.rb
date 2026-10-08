@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito
 
 module JsonApi
-  class EventParticipationDetailsAbility < EventParticipationAbility
+  class EventParticipationDetailsReadables < EventParticipationReadables
     self.event_role_permissions = [:participations_read_details, :participations_full]
     self.layer_and_below_permissions = [:layer_and_below_full]
     self.group_and_below_permissions = [:group_and_below_full]

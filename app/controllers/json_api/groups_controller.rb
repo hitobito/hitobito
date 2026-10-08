@@ -6,14 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::GroupsController < JsonApiController
-  def index
-    authorize!(:index, Group)
-    super
-  end
-
-  def show
-    group = Group.find(params[:id])
-    authorize!(:show, group)
-    super
-  end
 end

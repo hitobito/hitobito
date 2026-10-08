@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito.
 
 module JsonApi
-  class ContactAccountAbility
+  class ContactAccountReadables
     include CanCan::Ability
 
     delegate :participation_details_people, to: :user_context
@@ -29,12 +29,6 @@ module JsonApi
       can :read, CONTACT_ACCOUNT_MODELS, contactable: participation_details_people
       # allow reading all contacts of groups on which the user has :show_details permissions
       can :read, CONTACT_ACCOUNT_MODELS, contactable: details_readable_groups
-
-      can :create, CONTACT_ACCOUNT_MODELS, contactable: details_writable_people
-
-      can :update, CONTACT_ACCOUNT_MODELS, contactable: details_writable_people
-
-      can :destroy, CONTACT_ACCOUNT_MODELS, contactable: details_writable_people
     end
 
     private
@@ -47,12 +41,6 @@ module JsonApi
 
     def details_readable_people
       Person.accessible_by(PersonDetailsReadables.new(user))
-        .unscope(:select)
-    end
-
-    def details_writable_people
-      details_readable_people
-        .accessible_by(PersonWritables.new(user))
         .unscope(:select)
     end
 

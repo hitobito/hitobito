@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceResource < ApplicationResource
   primary_endpoint "invoices", [:index, :show, :update]
-
-  self.readable_class = JsonApi::InvoiceReadables
   self.acceptable_scopes += %w[invoices]
 
   with_options filterable: false, sortable: false do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Dachverband Schweizer Jugendparlamente. This file is part of
+#  Copyright (c) 2012-2026, Dachverband Schweizer Jugendparlamente. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,39 +15,29 @@ class NoteAbility < AbilityDsl::Base
   end
 
   def in_same_layer
-    case subj
-    when Group then permission_in_layer?(subj.layer_group_id)
-    when Person then permission_in_layers?(subj.layer_group_ids)
-    else raise(ArgumentError, "Unknown note subject #{subj.class}")
-    end
+    note_subjects_in(layer_group_id: user_layer_ids)
   end
 
   def in_same_layer_if_active
-    in_same_layer && active_subject
+    note_subjects_in({layer_group_id: user_layer_ids}, archived_at: nil)
   end
 
   def in_same_layer_or_below
-    case subj
-    when Group then permission_in_layers?(subj.layer_hierarchy.collect(&:id))
-    when Person then permission_in_layers?(subj.groups_hierarchy_ids)
-    else raise(ArgumentError, "Unknown note subject #{subj.class}")
-    end
+    note_subjects_in(lft: below_layers(user_layer_ids))
   end
 
   def in_same_layer_or_below_if_active
-    in_same_layer_or_below && active_subject
+    note_subjects_in({lft: below_layers(user_layer_ids)}, archived_at: nil)
   end
 
   private
 
-  def active_subject
-    case subj
-    when Group then !subj.archived?
-    else true
-    end
-  end
-
-  def subj
-    subject.subject
+  def note_subjects_in(groups, subject_group_conditions = {})
+    any_of(
+      {subject_type: Group.polymorphic_name,
+       subject_id: Group.where(groups).where(subject_group_conditions).select(:id)},
+      {subject_type: Person.polymorphic_name,
+       subject_id: Person.joins(roles: :group).where(groups: groups).select(:id)}
+    )
   end
 end

@@ -7,13 +7,13 @@
 
 require "spec_helper"
 
-describe JsonApi::EventParticipationDetailsReadables do
+describe "Event::Participation.accessible_by(ability, :show_details)" do
   let(:participation) { event_participations(:top) } # bottom_member in top_course
   let(:event) { participation.event } # in top_layer
 
   def accessible_by(person)
     person = people(person) unless person.is_a?(Person)
-    Event::Participation.all.accessible_by(described_class.new(person))
+    Event::Participation.all.accessible_by(Ability.new(person), :show_details)
   end
 
   def person_with_role(role_type, group)

@@ -29,8 +29,8 @@ describe AbilityDsl::Condition do
   end
 
   describe ".all_of" do
-    it "drops nil operands" do
-      expect(described_class.all_of(nil, a)).to eq(a)
+    it "matches nothing if any operand is nil" do
+      expect(described_class.all_of(nil, a)).to be_nil
       expect(described_class.all_of(nil)).to be_nil
     end
 
@@ -43,6 +43,12 @@ describe AbilityDsl::Condition do
       expect(described_class.all_of(a, b, c)).to eq(a.merge(b).merge(c))
     end
 
+    it "distributes over any_of" do
+      condition = described_class.all_of(described_class.any_of(b, c), a)
+      expect(condition).to be_a(AbilityDsl::Condition::AnyOf)
+      expect(condition.operands).to eq([a.merge(b), a.merge(c)])
+    end
+
     it "keeps hashes with the same keys separate" do
       other = {roles: {type: "Foo"}}
       condition = described_class.all_of(a, b, other)
@@ -52,8 +58,8 @@ describe AbilityDsl::Condition do
   end
 
   describe ".none_of" do
-    it "keeps nil" do
-      expect(described_class.none_of(nil)).to be_nil
+    it "matches everything for nil" do
+      expect(described_class.none_of(nil)).to eq({})
     end
 
     it "never matches for an unconditional operand" do

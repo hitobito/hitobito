@@ -12,10 +12,4 @@ class Event::QuestionTemplateAbility < AbilityDsl::Base
     permission(:layer_full).may(:manage).in_same_layer
     permission(:layer_and_below_full).may(:manage).in_same_layer_or_below
   end
-
-  private
-
-  def group
-    subject.group
-  end
 end

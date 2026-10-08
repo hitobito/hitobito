@@ -12,7 +12,11 @@ module ApiScopeAbility
     Role: [:groups, :people],
     "Event::Kind": :events,
     "Event::KindCategory": :events,
-    InvoiceItem: :invoices
+    InvoiceItem: :invoices,
+    AdditionalEmail: :people,
+    PhoneNumber: :people,
+    SocialAccount: :people,
+    AdditionalAddress: :people
   }.with_indifferent_access
 
   private
@@ -70,7 +74,7 @@ module ApiScopeAbility
 
   # These permissions are used in the legacy API only.
   # The JSON:API does not nest e.g. people inside groups, so it checks
-  # `can?(:index, Person)` and uses PersonReadables instead of checking
+  # `can?(:index, Person)` and lists `Person.accessible_by(ability, :index)` instead of checking
   # `can?(:index_people, group)`
   def legacy_api_special_case?(subject_class_name, action)
     case [subject_class_name, action.to_sym]

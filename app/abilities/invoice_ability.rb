@@ -7,14 +7,14 @@
 
 class InvoiceAbility < AbilityDsl::Base
   on(Invoice) do
-    class_side(:index).any_finance_group
+    permission(:finance).may(:index).in_layer_if_active
     permission(:finance).may(:show).in_layer
     permission(:finance).may(:create, :edit, :update, :destroy).in_layer_if_active
   end
 
   on(InvoiceItem) do
-    permission(:finance).may(:show, :index).in_layer
-    permission(:finance).may(:create, :edit, :update, :destroy).in_layer_if_active
+    permission(:finance).may(:show, :index).in_invoice_layer
+    permission(:finance).may(:create, :edit, :update, :destroy).in_invoice_layer_if_active
   end
 
   on(InvoiceRun) do
@@ -34,8 +34,8 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(Payment) do
-    permission(:finance).may(:create).in_layer
-    permission(:finance).may(:index).in_layer
+    permission(:finance).may(:create).in_invoice_layer
+    permission(:finance).may(:index).in_invoice_layer
   end
 
   on(PeriodInvoiceTemplate) do
@@ -44,30 +44,51 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(PaymentReminder) do
-    permission(:finance).may(:create).in_layer_if_active
+    permission(:finance).may(:create).in_invoice_layer_if_active
   end
 
-  def any_finance_group
-    user_finance_layer_ids.any?
-  end
-
-  def in_layer(group = subject.group)
-    user_finance_layer_ids.include?(group.layer_group_id)
-  end
-
-  def in_layer_with_recipient_source
-    return in_layer unless subject.recipient_source
-
-    in_layer && in_layer(subject.recipient_source.group.layer_group)
+  def in_layer
+    {group: finance_layer_groups}
   end
 
   def in_layer_if_active
-    in_layer && !subject.group&.archived?
+    {group: active_finance_layer_groups}
+  end
+
+  def in_invoice_layer
+    {invoice: in_layer}
+  end
+
+  def in_invoice_layer_if_active
+    {invoice: in_layer_if_active}
+  end
+
+  def in_layer_with_recipient_source
+    all_of(in_layer, recipient_source_in(finance_layer_groups))
   end
 
   def in_layer_with_recipient_source_if_active
-    if in_layer_with_recipient_source
-      !subject.recipient_source.group.archived?
-    end
+    all_of(in_layer, recipient_source_in(active_finance_layer_groups))
+  end
+
+  private
+
+  def finance_layer_groups
+    {layer_group_id: user_finance_layer_ids}
+  end
+
+  def active_finance_layer_groups
+    finance_layer_groups.merge(archived_at: nil)
+  end
+
+  # Recipient sources may be new records, which is why their associations are matched
+  # instead of a subquery. Lists of invoice runs are not filtered by these conditions.
+  def recipient_source_in(groups)
+    any_of({recipient_source_type: nil},
+      {recipient_source_type: MailingList.sti_name, recipient_source: {group: groups}},
+      {recipient_source_type: PeopleFilter.sti_name, recipient_source: {group: groups}},
+      {recipient_source_type: GroupsFilter.sti_name, recipient_source: {parent: groups}},
+      {recipient_source_type: Event::ParticipationsFilter.sti_name,
+       recipient_source: {event: {groups: groups}}})
   end
 end

@@ -7,6 +7,9 @@ module AbilityDsl
   class Config
     attr_reader :permission, :subject_class, :action, :ability_class, :constraint, :options
 
+    # The general configs restricting this config.
+    attr_accessor :generals
+
     def initialize(permission, subject_class, action, ability_class, constraint, options = {})
       @permission = permission
       @subject_class = subject_class
@@ -14,6 +17,7 @@ module AbilityDsl
       @ability_class = ability_class
       @constraint = constraint
       @options = options
+      @generals = []
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -70,6 +70,15 @@ module Role::Types
     # Role types that contain all of the given permissions
     def types_with_permission(*permissions)
       all_types.select { |r| (permissions - r.permissions).blank? }
+    end
+
+    # Role types that are not restricted and have at least one permission
+    def capable_types
+      all_types.reject { |r| r.restricted? || r.permissions.blank? }
+    end
+
+    def types_enforcing_two_factor
+      all_types.select(&:two_factor_authentication_enforced)
     end
 
     # An role that is a main member of a group.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -43,20 +43,20 @@ class VariousAbility < AbilityDsl::Base
   end
 
   def own_unless_only_basic_permissions_roles
-    return false if user.roles.all?(&:basic_permissions_only)
+    return if user.roles.all?(&:basic_permissions_only)
 
-    subject.person_id == user.id
+    {person_id: user.id}
   end
 
   def everybody_unless_only_basic_permissions_roles
-    !user.roles.all?(&:basic_permissions_only)
+    {} unless user.roles.all?(&:basic_permissions_only)
   end
 
   def if_admin_and_course_types_present
-    if_admin && if_course_types_present
+    all_of(if_admin, if_course_types_present)
   end
 
   def if_course_types_present
-    Group.course_types.present?
+    {} if Group.course_types.present?
   end
 end

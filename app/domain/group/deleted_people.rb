@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017-2023 Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2017-2026 Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,12 +9,29 @@
 class Group::DeletedPeople
   class << self
     def deleted_for(layer_group, person_joins = nil)
+      people_in({layer_group_id: Array(layer_group).map(&:id)}, person_joins)
+    end
+
+    # Deleted people whose last roles were in groups matching the given conditions.
+    def people_in(group_conditions, person_joins = nil)
       subquery = new(person_joins)
         .roles_of_deleted_people
         .joins(:group)
-        .where(groups: {layer_group_id: Array(layer_group).map(&:id)})
+        .where(groups: group_conditions)
         .distinct
       Person.where(id: subquery.select(:person_id))
+    end
+
+    # People without active roles whose last non-restricted role was in one of the given groups.
+    def last_non_restricted_role_in(groups)
+      restricted = Role.all_types.select(&:restricted?).map(&:sti_name)
+      last_roles = Role.with_inactive
+        .where.not(type: restricted)
+        .where.not(person_id: Role.select(:person_id))
+        .select("DISTINCT ON (roles.person_id) roles.person_id, roles.group_id")
+        .order(:person_id, end_on: :desc)
+      last_roles_in_groups = Role.unscoped.from(last_roles, :roles).where(group_id: groups)
+      Person.where(id: last_roles_in_groups.select(:person_id))
     end
 
     def group_for_deleted(person)

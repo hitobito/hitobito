@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,15 +19,25 @@ class Event::RoleAbility < AbilityDsl::Base
   end
 
   def for_participations_full_events_except_self
-    for_participations_full_events &&
-      !(subject.participation.participant_id == user.id &&
-        subject.participation.participant_type == Person.sti_name &&
-        subject.permissions.include?(:participations_full))
+    all_of(for_participations_full_events, none_of(own_role_with_participations_full))
   end
 
   private
 
-  def event
-    subject.participation.event
+  def own_role_with_participations_full
+    return unless user.id
+
+    {participation: {participant_id: user.id, participant_type: Person.sti_name},
+     type: participations_full_role_types}
+  end
+
+  def participations_full_role_types
+    Event.all_types.flat_map(&:role_types).uniq
+      .select { |type| type.permissions.include?(:participations_full) }
+      .map(&:sti_name)
+  end
+
+  def event_condition(condition)
+    nested(:participation, :event, condition)
   end
 end

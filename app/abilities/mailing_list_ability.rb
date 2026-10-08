@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -57,85 +57,32 @@ class MailingListAbility < AbilityDsl::Base
   end
 
   def if_mail_config_present
-    Settings.email.retriever.config.present?
+    {} if Settings.email.retriever.config.present?
   end
 
   def in_same_group_if_no_subscriptions_in_below_groups
-    in_same_group && no_subscriptions_below
+    all_of(in_same_group, with_local_subscriptions)
   end
 
   def in_same_group_or_below_if_no_subscriptions_in_below_layers
-    in_same_group_or_below && no_subscriptions_below
+    all_of(in_same_group_or_below, with_local_subscriptions)
   end
 
   def in_same_layer_if_no_subscriptions_in_below_layers
-    in_same_layer && no_subscriptions_below
-  end
-
-  def no_subscriptions_below
-    !group_subscriptions_with_below_role_types? &&
-      local_event_subscription_count == total_event_subscription_count
+    all_of(in_same_layer, with_local_subscriptions)
   end
 
   def subscribable
-    subject.subscribable? &&
-      Person::Subscriptions.new(user_context.user).subscribable.exists?(id: subject.id)
+    current_user = user
+    {id: AbilityDsl::LazyRelation.new do
+      Person::Subscriptions.new(current_user).subscribable.unscope(:select).select(:id)
+    end}
   end
 
   private
 
-  def group_subscriptions_with_below_role_types?
-    subject.subscriptions
-      .where(subscriber_type: "Group")
-      .joins(:related_role_types)
-      .where.not(related_role_types: {role_type: local_role_types.collect(&:sti_name)})
-      .exists?
-  end
-
-  def local_role_types
-    case permission
-    when :group_full
-      group.class.role_types
-    when :group_and_below_full
-      local_group_role_types(group.class)
-    when :layer_full
-      local_group_role_types(group.layer_group.class)
-    else
-      raise("Unexpected permission")
-    end
-  end
-
-  def local_group_role_types(group_type)
-    list = Role::TypeList.new(group_type)
-    list.role_types[group_type.label].values.flatten
-  end
-
-  def total_event_subscription_count
-    subject.subscriptions
-      .where(subscriber_type: "Event")
-      .count
-  end
-
-  def local_event_subscription_count
-    subject.subscriptions
-      .where(subscriber_type: "Event")
-      .joins("INNER JOIN events ON subscriptions.subscriber_id = events.id")
-      .joins("INNER JOIN events_groups ON events_groups.event_id = events.id")
-      .where(events_groups: {group_id: local_group_ids})
-      .distinct
-      .count
-  end
-
-  def local_group_ids
-    case permission
-    when :group_full
-      subject.group_id
-    when :group_and_below_full
-      group.self_and_descendants.where(layer_group_id: group.layer_group_id)
-    when :layer_full
-      group.groups_in_same_layer
-    else
-      raise("Unexpected permission")
-    end
+  def with_local_subscriptions
+    local_subscriptions = MailingLists::LocalSubscriptions.new(permission)
+    {id: AbilityDsl::LazyRelation.new { local_subscriptions.lists.select(:id) }}
   end
 end

@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class GroupResource < ApplicationResource
-  self.readable_class = GroupReadables
   self.acceptable_scopes += %w[groups]
 
   primary_endpoint "groups", [:index, :show]

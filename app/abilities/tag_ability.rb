@@ -7,6 +7,6 @@ class TagAbility < AbilityDsl::Base
   end
 
   def non_validation_tags
-    PersonTags::Validation.tag_names.exclude?(subject.name)
+    none_of(name: PersonTags::Validation.tag_names)
   end
 end

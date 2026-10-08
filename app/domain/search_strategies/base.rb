@@ -7,7 +7,9 @@
 
 module SearchStrategies
   class Base
-    class_attribute :model_class, :readables_ability
+    class_attribute :model_class
+    # The action the user must be allowed on the found records, nil for no restrictions
+    class_attribute :list_action, default: :index
 
     # Hash of identifier attributes and regular expressions to match them,
     # e.g. { number: /\A\d+\z/ }
@@ -51,11 +53,15 @@ module SearchStrategies
     protected
 
     def accessible_scope
-      if readables_ability
-        model_class.accessible_by(readables_ability.new(@user))
+      if list_action
+        model_class.accessible_by(ability, list_action)
       else
         model_class.all
       end
+    end
+
+    def ability
+      @ability ||= Ability.new(@user)
     end
 
     def matching_identifiers

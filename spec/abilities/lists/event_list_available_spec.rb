@@ -7,9 +7,9 @@
 
 require "spec_helper"
 
-describe EventReadables do
+describe "Event.accessible_by(ability, :list_available)" do
   let(:user) { role.person.reload }
-  let(:ability) { EventReadables.new(user) }
+  let(:ability) { Ability.new(user) }
 
   let!(:other_top_group) { Fabricate(Group::TopGroup.sti_name, parent: groups(:top_layer)) }
   let!(:other_layer) { Fabricate(Group::TopLayer.sti_name) }
@@ -23,7 +23,27 @@ describe EventReadables do
   let!(:event_bottom_layer) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
   let!(:event_bottom_group) { Fabricate(:event, groups: [bottom_group]) }
 
-  subject(:accessible_events) { Event.accessible_by(ability) }
+  subject(:accessible_events) { Event.accessible_by(ability, :list_available) }
+
+  before { Event.update_all(globally_visible: false) }
+
+  context "event without globally visible value" do
+    let(:role) { Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)) }
+
+    before { event_other_layer.update_column(:globally_visible, nil) }
+
+    it "is listed if events are globally visible by default" do
+      allow(Settings.event).to receive(:globally_visible_by_default).and_return(true)
+      is_expected.to include(event_other_layer)
+      expect(ability).to be_able_to(:show, event_other_layer.reload)
+    end
+
+    it "is not listed if events are not globally visible by default" do
+      allow(Settings.event).to receive(:globally_visible_by_default).and_return(false)
+      is_expected.not_to include(event_other_layer)
+      expect(ability).not_to be_able_to(:show, event_other_layer.reload)
+    end
+  end
 
   context :layer_and_below_full do
     let(:role) { Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)) }

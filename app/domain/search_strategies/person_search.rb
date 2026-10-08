@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Hitobito AG. This file is part of
+#  Copyright (c) 2012-2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,7 +9,6 @@ module SearchStrategies
     REGULAR_DATE_FORMAT = "%Y-%m-%d"
 
     self.model_class = Person
-    self.readables_ability = PersonReadables
     self.searchable_identifiers = {id: /\A\d+\z/} if FeatureGate.enabled?("people.search_by_id")
 
     def initialize(user, term, page, limit: nil)
@@ -62,10 +61,6 @@ module SearchStrategies
 
     def accessible_layers
       @user.groups.flat_map(&:layer_hierarchy)
-    end
-
-    def ability
-      @ability ||= Ability.new(@user)
     end
 
     # extract first order by value to reselect in permission checked query

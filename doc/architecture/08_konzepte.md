@@ -171,9 +171,8 @@ Benutzer unsichtbar wären.
 
 Die Definition von Berechtigungen geschieht in sogenannten _Abilities_. Diese verknüpfen ein Modell
 sowie die zugehörigen Aktionen mit den entsprechenden Permissions, wobei durch sogenannte
-_Constraints_ alle Details geregelt werden. Constraints sind nichts anderes als sprechende Methoden,
-welche aufgrund Modelleigenschaften und Benutzerrollen die genauen Bedingungen der Berechtigung
-festlegen.
+_Constraints_ alle Details geregelt werden. Constraints sind sprechende Methoden, welche aufgrund der
+Rollen des Benutzers beschreiben, auf welche Datensätze die Berechtigung zutrifft.
 
 Dies sieht wie folgt aus:
 
@@ -182,19 +181,44 @@ Dies sieht wie folgt aus:
     end
 
     def in_same_group
-      roles_with_permission = user.roles.select {|r| r.permissions.include?(permission) }
-      (roles_with_permission.collect(&:group_id) & subject.group_ids).present?
+      {roles: {group_id: user_group_ids}}
     end
 
 Diese Deklaration erteilt einer Rolle mit der Permission `:group_full` die Berechtigung, die
-`update` Aktion auf einer `Person` auszuführen, falls diese `in_same_group` ist. Hier prüft z.B. die
-Constraint `in_same_group`, dass die Person (`subject`) in der selben Gruppe wie die Benutzerrolle
-mit der zugehörigen Permission sein muss. Zur Deklaration von Berechtigungen sind zusätzlich die
-beiden abstrakten Permissions `any` und `general` verfügbar.
+`update` Aktion auf einer `Person` auszuführen, falls diese `in_same_group` ist. Die Constraint
+liefert eine Condition im Stil von [CanCanCan](https://github.com/CanCanCommunity/cancancan/blob/develop/docs/hash_of_conditions.md):
+einen Hash über die Spalten und Assoziationen des Modells, wie ihn auch `where` akzeptieren würde.
+`user_group_ids` sind die Gruppen, in welchen der Benutzer die Permission der Deklaration hat.
+Dieselbe Condition beantwortet sowohl `can?(:update, person)` für einen einzelnen Datensatz als
+auch `Person.accessible_by(ability, :update)` für eine Liste. Zur Deklaration von Berechtigungen
+sind zusätzlich die beiden abstrakten Permissions `any` und `general` verfügbar.
 
-Abilities basieren immer auf einer Instanz (`subject`). Falls eine Action nicht auf einer Instanz
-agiert, sind `class_side` Abilities zu definieren. Constraints sind unique für ein (Permission,
-Subject, Action) Tupel und dürfen im Wagon neu definiert (= überschrieben) werden.
+Eine Constraint liefert:
+
+* einen Hash, z.B. `{contact_data_visible: true}` oder `{roles: {group: {layer_group_id: ids}}}`.
+  Werte können auch Arrays, Ranges (`{lft: [1..40, 90..120]}`) oder Subqueries
+  (`{id: PeopleManager.where(manager_id: user.id).select(:managed_id)}`) sein.
+* `{}`, wenn die Berechtigung für alle Datensätze gilt.
+* `nil`, wenn die Berechtigung für diesen Benutzer auf keinen Datensatz zutrifft.
+* eine Kombination davon mit `any_of(a, b)` (oder), `all_of(a, b)` (und) und `none_of(a)` (nicht).
+  `nil` trifft dabei auf nichts zu, `{}` auf alles.
+
+Mehrere Bedingungen in einem Hash beziehen sich auf dieselbe verknüpfte Zeile:
+`{roles: {type: A, group_id: G}}` verlangt eine Rolle vom Typ A in Gruppe G, während
+`all_of({roles: {type: A}}, {roles: {group_id: G}})` zwei möglicherweise verschiedene Rollen
+erlaubt.
+
+Eine Constraint kann den Datensatz nicht lesen, sondern beschreibt ihn nur über Spalten,
+Assoziationen und Model-Scopes. Muss eine Berechtigung auf einer anderen aufbauen, liefert
+`accessible_ids(Person, :update_email)` die entsprechenden IDs, z.B. als
+`{managed_id: accessible_ids(Person, :update_email)}`. Für Aktionen, welche nie aufgelistet werden,
+und für Modelle ohne Tabelle dürfen die Keys auch Methoden des Datensatzes sein.
+
+Falls eine Action nicht auf einer Instanz agiert, sind `class_side` Abilities zu definieren. Deren
+Constraints hängen nur vom Benutzer ab und liefern `{}` oder `nil`. Eine `class_side` Berechtigung
+gilt auch für alle Instanzen, weshalb Aktionen, die aufgelistet werden, als `permission` deklariert
+werden. Constraints sind unique für ein (Permission, Subject, Action) Tupel und dürfen im Wagon neu
+definiert (= überschrieben) werden.
 
 Die abstrakte Permission `any` trifft auf alle Benutzenden unabhängig ihrer Permissions zu. Damit
 können für alle Benutzer geltende Berechtigungen definiert werden oder, in der Constraint,
@@ -223,11 +247,12 @@ Gibt alle Gruppen und zugehörigen Rollen und deren Grundberechtigungen aus. Str
 Ebene, Gruppen, Rollen und Permissions. Globale Gruppen können bei jeder Gruppe als Untergruppe
 erstellt werden, Globale Rollen (Global Global) sind bei allen Gruppen verfügbar.
 
-    rake hitobito:abilities
+    rake hitobito:abilities[person_id]
 
 Gibt alle Berechtigungen entsprechend den Permissions aus und lieft somit eine Übersicht über die
 Definition der Berechtigungen, welche ein Benutzer benötigt, um eine bestimmte Aktion auf einem
-bestimmten Modell auszuführen.
+bestimmten Modell auszuführen. Mit der optionalen ID einer Person werden zusätzlich die Conditions
+ausgegeben, welche für diese Person gelten.
 
 Lesebeispiel am Beispiel Jubla: _Kann ein Mitglied der Bundesleitung einen Anlass einer Schar
 bearbeiten?_
@@ -245,19 +270,19 @@ bearbeiten. (Das `not_closed_..` trifft nur auf Kurse zu).
 
 #### Berechtigungen auf Listen
 
-`can?` beantwortet die Frage jeweils für eine einzelne Instanz. Listen dürfen deshalb nicht in Ruby
-pro Datensatz gefiltert werden, sondern werden über eigene Ability Klassen aufgelöst, welche die
-Rollen des Benutzers in einen SQL Scope übersetzen: `GroupBasedFetchables` bzw.
-`GroupBasedReadables` und deren Subklassen wie `PersonReadables`, `PersonWritables` oder
-`EventReadables`. Diese deklarieren, welche Permissions in derselben Gruppe, in Gruppen darunter,
-in derselben Ebene oder in Ebenen darüber zählen, und werden über `accessible_by` verwendet:
+Listen dürfen nicht in Ruby pro Datensatz gefiltert werden. Sie verwenden dieselben Abilities wie
+einzelne Datensätze, mit der Aktion, welche die Liste beschreibt:
 
-    Event.accessible_by(EventReadables.new(user))
+    Person.accessible_by(current_ability, :index)
+    Event.accessible_by(current_ability, :list_available)
 
-Für die Suche und das JSON API sind sie als `readables_ability` (`app/domain/search_strategies`)
-bzw. `readable_class` (`app/resources`) konfiguriert. Neue Listen, Exports oder API Endpunkte
-verwenden die bestehende Readables Klasse des Modells; ein neues, auflistbares Modell braucht eine
-eigene.
+Die Personenliste einer Gruppe lädt alle Personen der Gruppe, falls der Benutzer
+`can?(:index_local_people, group)` hat, und sonst `group.people.accessible_by(ability, :index)`.
+
+Für die Suche und das JSON API ist die Aktion als `list_action` (`app/domain/search_strategies`
+bzw. `app/resources`) konfiguriert, standardmässig `:index`. Wird eine Aktion aufgelistet, müssen
+alle Constraints dieser Aktion in SQL übersetzbar sein, d.h. nur Spalten, Assoziationen und
+Subqueries verwenden.
 
 #### Implizite Berechtigungen
 

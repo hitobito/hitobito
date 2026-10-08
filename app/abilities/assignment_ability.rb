@@ -1,6 +1,6 @@
-#  frozen_string_literal: true
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2026, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,20 +15,19 @@ class AssignmentAbility < AbilityDsl::Base
   end
 
   def if_attachment_readable?
-    attachment_can?(:show)
+    any_of(*attachment_conditions(:show))
   end
 
   def if_attachment_writeable?
-    attachment_can?(:create) || attachment_can?(:update)
-  end
-
-  def attachment
-    subject.attachment
+    any_of(*attachment_conditions(:create), *attachment_conditions(:update))
   end
 
   private
 
-  def attachment_can?(action)
-    Ability.new(user).can?(action, attachment)
+  def attachment_conditions(action)
+    Assignment::ATTACHMENT_TYPES.map do |type|
+      {attachment_type: [type.polymorphic_name, type.sti_name].uniq,
+       attachment_id: accessible_ids(type, action)}
+    end
   end
 end

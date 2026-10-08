@@ -53,8 +53,11 @@ namespace :hitobito do
     end
   end
 
-  desc "Print all abilities"
-  task abilities: :environment do
+  desc "Print all abilities, with the conditions for the given person"
+  task :abilities, [:person_id] => [:environment] do |_t, args|
+    person = Person.find(args[:person_id]) if args[:person_id]
+    evaluator = AbilityDsl::ConstraintEvaluator.new(AbilityDsl::UserContext.new(person)) if person
+
     puts ["Permission".ljust(18), "\t",
       "Class".ljust(24), "\t",
       "Action".ljust(25), "\t",
@@ -62,10 +65,15 @@ namespace :hitobito do
     puts "=" * 100
     all = Role::Permissions + [AbilityDsl::Recorder::General::PERMISSION]
     Ability.store.configs_for_permissions(all) do |c|
-      puts "#{c.permission.to_s.ljust(18)}\t" \
-           "#{c.subject_class.to_s.ljust(24)}\t" \
-           "#{c.action.to_s.ljust(25)}\t" \
-           "#{c.constraint}"
+      constraint = [c.constraint, *c.generals.map(&:constraint)].join(" & ")
+      line = "#{c.permission.to_s.ljust(18)}\t" \
+             "#{c.subject_class.to_s.ljust(24)}\t" \
+             "#{c.action.to_s.ljust(25)}\t" \
+             "#{constraint}"
+      if evaluator && c.permission != AbilityDsl::Recorder::General::PERMISSION
+        line += "\t#{evaluator.condition(c).inspect}"
+      end
+      puts line
     end
   end
 

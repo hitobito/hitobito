@@ -24,7 +24,7 @@ class Events::QueryLeadersController < Person::QueryController
 
   def accessible_event_ids
     Event
-      .accessible_by(EventReadables.new(current_user))
+      .accessible_by(current_ability, :list_available)
       .in_year(year)
       .joins(:groups)
       .where(groups: {layer_group_id: group.layer_group_id})

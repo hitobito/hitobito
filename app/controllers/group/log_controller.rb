@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2022, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2022-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -45,8 +45,7 @@ class Group::LogController < ApplicationController
 
   def people_scope
     @active_people ||= Person
-      .accessible_by(PersonFullReadables.new(current_person))
-      .unscope(:select)
+      .accessible_by(current_ability, :show_full)
       .select(:id)
       .joins(:roles_unscoped)
       .merge(Role.without_archived)

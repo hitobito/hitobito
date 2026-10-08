@@ -37,6 +37,7 @@ module AbilityDsl
       ability_classes.each do |ability_class|
         Recorder.new(self, ability_class).run
       end
+      assign_generals
       @configs
     end
 
@@ -52,6 +53,15 @@ module AbilityDsl
 
     def ability_classes
       @ability_classes ||= []
+    end
+
+    def assign_generals
+      @configs.each_value do |c|
+        next if [Recorder::General::PERMISSION,
+          Recorder::ClassSide::PERMISSION].include?(c.permission)
+
+        c.generals = general_constraints(c.subject_class, c.action)
+      end
     end
 
     def filter_configs

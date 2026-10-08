@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,45 +10,37 @@ module AbilityDsl
   # Abilities are defined for models, usually only for one per ability class.
   # Eg.
   #  on(Person) do
-  #    class_side(:index).everybody
+  #    class_side(:index_people_without_role).if_admin
   #
   #    permission(:group_read).may(:show).in_same_group
   #    permission(:layer_and_below_full).may(:update, :destroy).in_same_layer_or_below
   #    general(:send_password_instructions).not_self
   #  end
   #
-  # All permissions in the given block apply for a Person instance.
-  # Each permission then is defined for one Role::Permission, several actions and
-  # one arbitrary constraint.
-  # This constraint must exist as an instance method in the same class and return
-  # true if the current Person instance applies. The constraint method should have
-  # a speaking name that describes its complete purpose.
+  # Each permission is defined for one Role::Permission, several actions and one constraint.
+  # The constraint is a public instance method of the ability class. It describes the records
+  # the rule applies to as a cancancan conditions hash, built from the user and the
+  # permission, e.g. +{roles: {group_id: user_group_ids}}+. The same condition is used to
+  # check a single record with +can?+ and to list all records with +accessible_by+.
+  # Hashes may be combined with +any_of+, +all_of+ and +none_of+.
+  # Return +{}+ to allow all records and +nil+ if the rule does not apply to the user.
   #
-  # With a +general+ constraint an additional requirement for certain actions
-  # may be defined, indifferent of the user's permissions.
+  # With a +general+ constraint, an additional condition that every rule for the given actions
+  # must fulfill may be defined, independent of the user's permissions.
   #
-  # To define abilities for class side actions (if no subject instance is passed to +can?+),
-  # the +class_side+ method with the corresponding actions has to be used.
-  # The following constraint methods must also be defined as instance methods, but there
-  # will be no subject and no permission instance variables available. Therefore,
-  # certain helper methods like +permission_in_group?+ or permission_in_layers?+ must not
-  # be used.
+  # Constraints for +class_side+ actions only depend on the user and return +{}+ or +nil+.
   #
   # Every permission tuple (Role::Permission, Action), including :general,
   # only has one corresponding constraint method. This may be overriden by wagons.
-  #
-  # BEWARE: The constraint methods only apply if you pass an instance to the #can?
-  # method. If you pass a class, no constraints will be checked at all!
   class Base
     private
 
-    attr_reader :user_context, :subject, :permission
+    attr_reader :user_context, :permission
 
     public
 
-    def initialize(user_context, subject, permission)
+    def initialize(user_context, permission)
       @user_context = user_context
-      @subject = subject
       @permission = permission
     end
 
@@ -79,61 +73,93 @@ module AbilityDsl
 
     # Matches all subjects
     def all
-      true
+      {}
     end
 
     # Matches no subjects
     def none
-      false
+      nil
     end
 
     # Matches all users
     def everybody
-      true
+      {}
     end
 
     # Matches no user
     def nobody
-      false
+      nil
     end
 
     def if_admin
-      user_context.all_permissions.include?(:admin)
+      {} if user_context.admin
     end
 
     def if_any_role
-      user.roles.present?
+      {} if user.roles.present?
     end
 
     private
 
+    def any_of(*conditions)
+      Condition.any_of(*conditions)
+    end
+
+    def all_of(*conditions)
+      Condition.all_of(*conditions)
+    end
+
+    def none_of(*conditions)
+      Condition.none_of(*conditions)
+    end
+
+    # Nests a condition under the given path of associations to one record each.
+    def nested(*path, condition)
+      case condition
+      when nil then nil
+      when Hash then nest_hash(path, condition)
+      when Condition::AnyOf, Condition::AllOf then nest_operands(path, condition)
+      else raise ArgumentError, "Cannot nest #{condition.inspect}, use a subquery instead"
+      end
+    end
+
+    def nest_operands(path, condition)
+      operands = condition.operands.map { |o| nested(*path, o) }
+      condition.is_a?(Condition::AnyOf) ? any_of(*operands) : all_of(*operands)
+    end
+
+    def nest_hash(path, condition)
+      return condition if condition.empty?
+
+      path.reverse.inject(condition) { |nested, key| {key => nested} }
+    end
+
+    # The ids of the records the user may perform the given action on, as a subquery for
+    # a condition value. Building the other ability is deferred until the condition is evaluated.
+    def accessible_ids(model_class, action, ability_class = Ability)
+      AccessibleIds.new(model_class, action, ability_class, user)
+    end
+
+    # lft ranges of the given groups and all groups below, for a condition on Group#lft.
+    def below_layers(layer_ids)
+      user_context.group_ranges(layer_ids)
+    end
+
+    # Conditions on a group to be within the given groups or below, inside the same layer.
+    def below_groups(group_ids)
+      user_context.local_group_ranges(group_ids).map do |layer_group_id, ranges|
+        {layer_group_id: layer_group_id, lft: ranges}
+      end
+    end
+
+    # Values of the inheritance column matching the given classes. Records of a base class
+    # may have no type.
+    def sti_names(classes)
+      classes.flat_map { |c| (c == c.base_class) ? [nil, c.sti_name] : [c.sti_name] }.uniq
+    end
+
     def role_type?(*role_types)
       contains_any?(role_types, user.roles.collect(&:class))
-    end
-
-    # Check whether the permission for which the check is made is defined in the given group_id.
-    def permission_in_group?(group_id)
-      # contains_any?(user_group_ids, [group_id])
-      user_group_ids.include?(group_id)
-    end
-
-    # Check whether the permission for which the check is made is defined in the given group_ids.
-    def permission_in_groups?(group_ids)
-      contains_any?(user_group_ids, group_ids)
-    end
-
-    # Check whether the layer permission for which the check is made
-    # is defined in the given layer_id. Other permissions always return false,
-    # even if they are defined in the given layer id.
-    def permission_in_layer?(layer_id)
-      user_layer_ids.include?(layer_id)
-    end
-
-    # Check whether the layer permission for which the check is made
-    # is defined in the given layer_ids. Other permissions always return false,
-    # even if they are defined in a given layer id.
-    def permission_in_layers?(layer_ids)
-      contains_any?(user_layer_ids, layer_ids)
     end
 
     def user_group_ids

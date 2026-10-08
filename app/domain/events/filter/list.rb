@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -16,7 +16,7 @@ class Events::Filter::List < Filter::List
   private
 
   def accessible_scope
-    Event.accessible_by(EventReadables.new(user))
+    Event.accessible_by(Ability.new(user), :list_available)
   end
 
   def init_filter_chain(filters)

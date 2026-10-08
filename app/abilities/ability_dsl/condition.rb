@@ -10,10 +10,10 @@ module AbilityDsl
   # A condition is evaluated in memory by matching its hashes with cancancan, and in SQL by
   # compiling each hash to a subquery on the primary key.
   #
-  # Operands are hashes, conditions or nil. nil means "not applicable" and is dropped,
-  # {} means "unconditionally".
+  # Operands are hashes, conditions or nil. nil matches nothing, {} matches everything.
   class Condition
     NEVER = {id: [].freeze}.freeze
+    MAX_DISTRIBUTED_OPERANDS = 16
 
     class << self
       def any_of(*operands)
@@ -25,20 +25,18 @@ module AbilityDsl
       end
 
       def all_of(*operands)
-        operands = operands.compact
-        return nil if operands.empty?
+        return nil if operands.empty? || operands.include?(nil)
 
         operands = flatten(operands.reject { |o| unconditional?(o) }, AllOf)
         return {} if operands.empty?
 
-        operands = merge_disjoint_hashes(operands)
-        operands.one? ? operands.first : AllOf.new(operands)
+        distribute_over_any_of(operands) || combine_all_of(operands)
       end
 
       def none_of(*operands)
         operand = any_of(*operands)
         case operand
-        when nil then nil
+        when nil then {}
         when NoneOf then operand.operand
         else unconditional?(operand) ? NEVER : NoneOf.new(operand)
         end
@@ -73,6 +71,28 @@ module AbilityDsl
 
       def flatten(operands, type)
         operands.flat_map { |o| o.is_a?(type) ? o.operands : [o] }
+      end
+
+      def combine_all_of(operands)
+        operands = merge_disjoint_hashes(operands)
+        operands.one? ? operands.first : AllOf.new(operands)
+      end
+
+      # a AND (b OR c) is converted to (a AND b) OR (a AND c), so that hashes may be merged.
+      def distribute_over_any_of(operands)
+        any_ofs, others = operands.partition { |o| o.is_a?(AnyOf) }
+        return if any_ofs.empty?
+
+        combinations = combinations(any_ofs.map(&:operands))
+        return if combinations.size > MAX_DISTRIBUTED_OPERANDS
+
+        any_of(*combinations.map { |combo| all_of(*others, *combo) })
+      end
+
+      def combinations(alternatives_list)
+        alternatives_list.reduce([[]]) do |combos, alternatives|
+          combos.product(alternatives).map { |combo, alternative| combo + [alternative] }
+        end
       end
 
       def merge_disjoint_hashes(operands)

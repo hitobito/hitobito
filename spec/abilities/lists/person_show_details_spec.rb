@@ -1,19 +1,26 @@
-#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2023-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
 
-describe PersonFullReadables do
+describe "Person.accessible_by(ability, :show_details)" do
   [:index, :layer_search, :deep_search, :global].each do |action|
     context action do
       let(:action) { action }
       let(:user) { role.person.reload }
-      let(:ability) { PersonFullReadables.new(user, (action == :index) ? group : nil) }
+      let(:ability) { Ability.new(user) }
 
       let(:all_accessibles) do
-        people = Person.accessible_by(ability)
+        people = if action == :index
+          group_people = Person.in_group(group)
+          ability.can?(:index_local_people, group) ? group_people : group_people.accessible_by(ability, :show_details)
+        else
+          Person.accessible_by(ability, :show_details)
+        end
         case action
         when :index then people
         when :layer_search then people.in_layer(group.layer_group)
@@ -346,24 +353,18 @@ describe PersonFullReadables do
         context "own group" do
           let(:group) { role.group }
 
-          if action == :index
-            it "may not read himself" do
-              is_expected.not_to include(role.person)
-            end
-          else
-            it "may read himself" do
-              is_expected.to include(role.person)
-            end
+          it "may read himself" do
+            is_expected.to include(role.person)
           end
 
-          it "may not read people in his group" do
+          it "may read people in his group" do
             other = Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: group)
-            is_expected.not_to include(other.person)
+            is_expected.to include(other.person)
           end
 
-          it "may not read external people in his group" do
+          it "may read external people in his group" do
             other = Fabricate(Role::External.name.to_sym, group: group)
-            is_expected.not_to include(other.person)
+            is_expected.to include(other.person)
           end
         end
 
@@ -406,14 +407,8 @@ describe PersonFullReadables do
         context "own group" do
           let(:group) { role.group }
 
-          if action == :index
-            it "may not read himself" do
-              is_expected.not_to include(role.person)
-            end
-          else
-            it "may read himself" do
-              is_expected.to include(role.person)
-            end
+          it "may read himself" do
+            is_expected.to include(role.person)
           end
 
           it "may not read people in his group" do

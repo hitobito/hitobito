@@ -1,61 +1,75 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module AbilityDsl::Constraints::Event
+  # Conditions on the participation of the subject, see #participation_condition.
   module Participation
     def her_own_or_for_participations_read_details_events
-      her_own || for_participations_read_details_events
+      any_of(her_own, for_participations_read_details_events)
     end
 
     def her_own_or_for_participations_full_events
-      her_own || for_participations_full_events
+      any_of(her_own, for_participations_full_events)
     end
 
     def in_same_layer_or_different_prio
-      in_same_layer || different_prio
+      any_of(in_same_layer, different_prio)
     end
 
     def in_same_layer_or_below_or_different_prio
-      in_same_layer_or_below || different_prio
+      any_of(in_same_layer_or_below, different_prio)
     end
 
     def her_own
-      participation.participant_id == user.id && participation.participant_type == Person.sti_name
+      if user.id
+        participation_condition(participant_id: user.id,
+          participant_type: ::Person.sti_name)
+      end
     end
 
     def for_applicant_in_same_layer
       approval_groups = user.groups_with_permission(:approve_applications)
       confirm_layer_ids = user_context.layer_ids(approval_groups)
-      participation.application_id? &&
-        confirm_layer_ids.present? &&
-        contains_any?(confirm_layer_ids, participation.person.groups_hierarchy_ids)
+      return if confirm_layer_ids.blank?
+
+      all_of(with_application,
+        participation_condition(participant_type: ::Person.sti_name,
+          participant_id: people_in_or_below_layers(confirm_layer_ids)))
     end
 
     private
 
-    def event
-      participation.event
+    # Nests a condition on a participation under the association of the subject
+    # leading to the participation.
+    def participation_condition(condition)
+      condition
     end
 
-    def participation
-      subject.participation
+    def event_condition(condition)
+      participation_condition(nested(:event, condition))
     end
 
+    def with_application
+      none_of(participation_condition(application_id: nil))
+    end
+
+    # Pending applications which may be shown in courses other than their first priority.
     def different_prio
-      return false if participation.active? || !participation.application_id?
+      return unless contains_any?(user_layer_ids, user_context.course_offerers)
 
-      # This is a bit more than really needed, to restrict further we would
-      # need the actual course the participation should be displayed for,
-      # which we do not have.
-      appl = participation.application
-      (appl.waiting_list? || appl.priority_2_id? || appl.priority_3_id?) &&
-        permission_in_layers?(course_offerers)
+      all_of(participation_condition(active: false),
+        with_application,
+        none_of(participation_condition(
+          application: {waiting_list: false, priority_2_id: nil, priority_3_id: nil}
+        )))
     end
 
-    def course_offerers
-      user_context.course_offerers
+    def people_in_or_below_layers(layer_ids)
+      ::Person.joins(roles: :group).where(groups: {lft: below_layers(layer_ids)}).select(:id)
     end
   end
 end

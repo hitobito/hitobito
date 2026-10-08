@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
 require "spec_helper"
 
-describe GroupDetailsReadables do
+describe "Group.accessible_by(ability, :show_details)" do
   let(:user) { role.person.reload }
-  let(:ability) { GroupDetailsReadables.new(user) }
+  let(:ability) { Ability.new(user) }
 
   let!(:other_top_group) { Fabricate(Group::TopGroup.sti_name, parent: groups(:top_layer)) }
   let!(:other_layer) { Fabricate(Group::TopLayer.sti_name) }
   let!(:other_group) { Fabricate(Group::TopGroup.sti_name, parent: other_layer) }
   let!(:group_below_one_one) { Fabricate(Group::BottomGroup.sti_name, parent: groups(:bottom_group_one_one)) }
 
-  subject(:accessible_groups) { Group.accessible_by(ability) }
+  subject(:accessible_groups) { Group.accessible_by(ability, :show_details) }
 
   context :layer_and_below_full do
     let(:role) { Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)) }

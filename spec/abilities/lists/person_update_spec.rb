@@ -1,14 +1,16 @@
-#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito_pbs and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
 
 require "spec_helper"
 
-describe PersonWritables do
+describe "Person.accessible_by(ability, :update)" do
   let(:user) { role.person.reload }
-  let(:ability) { PersonWritables.new(user) }
-  let(:accessibles) { Person.accessible_by(ability) }
+  let(:ability) { Ability.new(user) }
+  let(:accessibles) { Person.accessible_by(ability, :update) }
 
   subject { accessibles }
 

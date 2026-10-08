@@ -1801,7 +1801,7 @@ describe PersonAbility do
       let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
       it "can not disable other person when forced" do
-        expect(people(:bottom_member).roles.first.class)
+        allow(people(:bottom_member).roles.first.class)
           .to receive(:two_factor_authentication_enforced)
           .and_return(true)
 

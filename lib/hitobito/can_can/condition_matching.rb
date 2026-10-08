@@ -17,6 +17,7 @@ module Hitobito
       def matches_condition?(subject, name, value)
         case value
         when AbilityDsl::Condition then value.matches?(subject)
+        when AbilityDsl::AccessibleIds then accessible_ids_include?(value, subject, name)
         when AbilityDsl::LazyRelation then relation_includes?(value.relation, subject.send(name))
         when ActiveRecord::Relation then relation_includes?(value, subject.send(name))
         when Array then ranges_include?(value, subject.send(name))
@@ -32,6 +33,23 @@ module Hitobito
         when Array then value.any?(Range)
         else false
         end
+      end
+
+      def accessible_ids_include?(accessible_ids, subject, foreign_key)
+        record = associated_record(subject, foreign_key)
+        if record
+          accessible_ids.allows?(record)
+        else
+          relation_includes?(accessible_ids.relation, subject.send(foreign_key))
+        end
+      end
+
+      def associated_record(subject, foreign_key)
+        return unless subject.class.respond_to?(:reflect_on_all_associations)
+
+        reflection = subject.class.reflect_on_all_associations(:belongs_to)
+          .find { |r| r.foreign_key.to_s == foreign_key.to_s }
+        subject.association(reflection.name).reader if reflection
       end
 
       def ranges_include?(values, attribute)

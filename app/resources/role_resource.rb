@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class RoleResource < ApplicationResource
   primary_endpoint "roles", [:index, :create, :show, :update, :destroy]
-
-  self.readable_class = JsonApi::RoleReadables
   self.acceptable_scopes += %w[people groups]
 
   with_options writable: false do

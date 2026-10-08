@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -25,7 +25,7 @@ class Events::Filter::CourseList < Events::Filter::List
       # list events that cannot be showed or applied to. This is weird legacy behaviour.
       # At some time, either events in the hierarchy should become showable or they
       # should not be listed here. Then, using the original `accessible_scope` method with
-      # `Event.accessible_by(EventReadables)` would be sufficient.
+      # `Event.accessible_by(ability, :list_available)` would be sufficient.
       Event::Course.in_hierarchy(user).or(Event::Course.where(globally_visible: true))
     end
   end

@@ -1,6 +1,6 @@
-#  frozen_string_literal: true
+# frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2026, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
@@ -25,24 +25,28 @@ class MessageAbility < AbilityDsl::Base
   end
 
   def if_assignment_assignee_or_creator
-    subject.assignments.any? { |a| [a.person_id, a.creator_id].include?(user.id) }
+    any_of({assignments: {person_id: user.id}}, {assignments: {creator_id: user.id}}) if user.id
   end
 
   def in_layer_or_below
-    permission_in_layers?(subject.group.layer_hierarchy.collect(&:id))
+    group_condition(lft: below_layers(user_layer_ids))
   end
 
   def in_layer_or_below_if_active
-    in_layer_or_below && !subject.group.archived?
+    group_condition(lft: below_layers(user_layer_ids), archived_at: nil)
   end
 
   def in_layer_or_below_if_not_dispatched_nor_bulkmail
-    not_bulk_mail &&
-      in_layer_or_below_if_active &&
-      !subject.dispatched?
+    all_of(not_bulk_mail, in_layer_or_below_if_active, {state: "draft"})
   end
 
   def not_bulk_mail
-    !subject.is_a?(Message::BulkMail)
+    none_of(type: sti_names([Message::BulkMail, *Message::BulkMail.descendants]))
+  end
+
+  private
+
+  def group_condition(condition)
+    {mailing_list: {group: condition}}
   end
 end

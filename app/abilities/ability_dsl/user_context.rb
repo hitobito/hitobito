@@ -57,6 +57,18 @@ module AbilityDsl
       @course_offerers ||= Group.course_offerers.pluck(:id)
     end
 
+    # lft ranges covering the given groups and all their descendants.
+    def group_ranges(group_ids)
+      group_bounds(group_ids).map { |_id, _layer_id, lft, rgt| lft..rgt }.uniq
+    end
+
+    # lft ranges covering the given groups and their descendants, by layer group id.
+    def local_group_ranges(group_ids)
+      group_bounds(group_ids)
+        .group_by { |_id, layer_id, _lft, _rgt| layer_id }
+        .transform_values { |bounds| bounds.map { |_id, _layer_id, lft, rgt| lft..rgt }.uniq }
+    end
+
     # In hitobito/hitobito_pbs#466, cbe and ama found no easy better place to put this.
     # It is a complex calculation which needs to be cached in the request context,
     # similar to course_offerers which we already have here.
@@ -156,14 +168,28 @@ module AbilityDsl
       end
     end
 
+    def group_bounds(group_ids)
+      @group_bounds ||= {}
+      missing = Array(group_ids).uniq - @group_bounds.keys
+      if missing.present?
+        found = Group.where(id: missing).pluck(:id, :layer_group_id, :lft, :rgt).index_by(&:first)
+        missing.each { |id| @group_bounds[id] = found[id] }
+      end
+      @group_bounds.values_at(*Array(group_ids).uniq).compact
+    end
+
     def find_events_with_permission(permission)
       participations.select { |p| p.roles.any? { |r| r.class.permissions.include?(permission) } }
         .collect(&:event_id)
     end
 
+    def participation_details_ability
+      user.service_token? ? TokenAbility.new(user.service_token) : Ability.new(user)
+    end
+
     def participation_details_participations
       ::Event::Participation
-        .accessible_by(JsonApi::EventParticipationDetailsReadables.new(user))
+        .accessible_by(participation_details_ability, :show_details)
         .where(participant_type: ::Person.sti_name)
     end
   end

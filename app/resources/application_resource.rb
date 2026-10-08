@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 #
-#  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class ApplicationResource < Graphiti::Resource
-  class_attribute :readable_class
+  # The action the user must be allowed on the listed records
+  class_attribute :list_action, default: :index
   class_attribute :acceptable_scopes, default: []
 
   # Must be set when no corresponding model/query
@@ -47,12 +48,11 @@ class ApplicationResource < Graphiti::Resource
   delegate :current_ability, :current_scopes, to: :context
   delegate :can?, :authorize!, to: :current_ability
 
-  # Limits accessible resources, specify readable_class or override
+  # Limits accessible resources, specify list_action or override
   def base_scope
-    fail "No readable_class defined for #{self.class.name}" unless readable_class
-
     return super.none unless scope_accepted?
-    super.accessible_by(readable_class.new(current_ability.user)).unscope(:select)
+
+    super.accessible_by(current_ability, list_action)
   end
 
   def scope_accepted?

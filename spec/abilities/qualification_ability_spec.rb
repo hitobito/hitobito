@@ -84,11 +84,11 @@ describe QualificationAbility do
 
     subject { Ability.new(user) }
 
-    it "is permitted without roles as used by json api and controlled via readables" do
+    it "is permitted without roles as used by json api and lists only fully readable people" do
       is_expected.to be_able_to(:index, Qualification)
-      expect(Qualification.accessible_by(JsonApi::QualificationReadables.new(user))).to be_empty
+      expect(Qualification.accessible_by(subject, :index)).to be_empty
       qualification = Fabricate(:qualification, person: user)
-      expect(Qualification.accessible_by(JsonApi::QualificationReadables.new(user))).to eq [qualification]
+      expect(Qualification.accessible_by(Ability.new(user), :index)).to eq [qualification]
     end
   end
 end

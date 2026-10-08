@@ -17,7 +17,9 @@ class PersonalDocumentAbility < AbilityDsl::Base
     permission(:admin).may(:manage).all
   end
 
-  def person
-    subject.person
+  private
+
+  def person_condition(condition)
+    nested(:person, condition)
   end
 end

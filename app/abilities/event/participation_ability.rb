@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,7 +17,12 @@ class Event::ParticipationAbility < AbilityDsl::Base
     permission(:any).may(:show_full, :update, :send_mails).for_participations_full_events
     permission(:any).may(:destroy).her_own_if_application_cancelable
 
-    class_side(:index).everybody # via API with session cookie
+    # Participations listed via API
+    permission(:any).may(:index).her_own_or_guests_or_manager_or_for_participations_read_events
+    permission(:group_read).may(:index).in_same_group
+    permission(:group_and_below_read).may(:index).in_same_group_or_below
+    permission(:layer_read).may(:index).in_same_layer_or_pending_application
+    permission(:layer_and_below_read).may(:index).in_same_layer_or_below_or_pending_application
 
     permission(:group_full)
       .may(:show, :show_details, :show_full, :print)
@@ -63,57 +68,89 @@ class Event::ParticipationAbility < AbilityDsl::Base
   end
 
   def her_own_or_for_leaded_events
-    her_own || for_leaded_events
+    any_of(her_own, for_leaded_events)
   end
 
   def her_own_or_for_participations_read_events
-    her_own || (event.participations_visible? && participating) || for_participations_read_events
+    any_of(her_own, visible_fellow_participations, for_participations_read_events)
   end
 
   def her_own_if_application_possible
-    her_own && event.application_possible? && participant_can_show_event?
+    all_of(her_own, event_condition(application_possible), participant_can_show_event)
   end
 
   def her_own_if_application_cancelable
-    her_own &&
-      event.applications_cancelable? &&
-      (!event.application_closing_at? || event.application_closing_at >= Time.zone.today)
+    all_of(her_own,
+      event_condition(applications_cancelable: true,
+        application_closing_at: [nil, Time.zone.today..]))
   end
 
   def her_own_or_manager_or_for_participations_read_events
-    her_own_or_for_participations_read_events || manager
+    any_of(her_own_or_for_participations_read_events, manager)
   end
 
   def her_own_or_manager_or_for_participations_read_details_events
-    her_own_or_for_participations_read_details_events || manager
+    any_of(her_own_or_for_participations_read_details_events, manager)
   end
 
   def her_own_or_manager_or_for_participations_full_events
-    her_own_or_for_participations_full_events || manager
+    any_of(her_own_or_for_participations_full_events, manager)
+  end
+
+  def her_own_or_guests_or_manager_or_for_participations_read_events
+    any_of(her_own_or_manager_or_for_participations_read_events, guests, for_leaded_events)
+  end
+
+  def in_same_layer_or_pending_application
+    any_of(in_same_layer, pending_application_in_course_offerer)
+  end
+
+  def in_same_layer_or_below_or_pending_application
+    any_of(in_same_layer_or_below, pending_application_in_course_offerer)
   end
 
   def participating
-    user_context.participations.any? { |p| p.event_id == event.id }
+    event_ids = user_context.participations.map(&:event_id)
+    {event_id: event_ids} if event_ids.present?
   end
   alias_method :if_participating, :participating
 
-  def participant_can_show_event?
-    participation.person &&
-      AbilityWithoutManagerAbilities.new(person).can?(:show, event)
+  def participant_can_show_event
+    {event_id: accessible_ids(Event, :show, AbilityWithoutManagerAbilities)}
   end
 
   private
 
-  def participation
-    subject
+  def visible_fellow_participations
+    all_of(participating, event_condition(participations_visible: true))
+  end
+
+  def guests
+    return if user_context.participations.blank?
+
+    guests = Event::Guest.where(main_applicant_id: user_context.participations.map(&:id))
+    {participant_type: Event::Guest.sti_name, participant_id: guests.select(:id)}
   end
 
   def manager
-    manager_ids = person&.managers&.pluck(:id) || []
-    contains_any?([user.id], manager_ids)
+    return unless user.id
+
+    {participant_type: Person.sti_name,
+     participant_id: PeopleManager.where(manager_id: user.id).select(:managed_id)}
   end
 
-  def person
-    participation.person
+  def application_possible
+    all_of({application_opening_at: [nil, ..Time.zone.today],
+            application_closing_at: [nil, Time.zone.today..]},
+      any_of({id: Event.with_places_available.select(:id)},
+        {type: sti_names(waiting_list_event_types), waiting_list: true}))
+  end
+
+  def waiting_list_event_types
+    Event.all_types.select { |type| type.supports_applications && type.attr_used?(:waiting_list) }
+  end
+
+  def pending_application_in_course_offerer
+    different_prio if contains_any?(user_layer_ids, user_context.course_offerers)
   end
 end

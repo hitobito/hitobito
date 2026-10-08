@@ -795,12 +795,12 @@ describe GroupAbility do
     let(:ability) { Ability.new(people(:bottom_member)) }
 
     it "may register_people in group with self registration active" do
-      allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(true)
-      is_expected.to be_able_to(:register_people, groups(:bottom_layer_one))
+      group = groups(:bottom_group_one_one)
+      group.update!(self_registration_role_type: Group::BottomGroup::NoPermissions.sti_name)
+      is_expected.to be_able_to(:register_people, group)
     end
 
     it "may not register_people in group with self registration inactive" do
-      allow_any_instance_of(Group).to receive(:self_registration_active?).and_return(false)
       is_expected.not_to be_able_to(:register_people, groups(:bottom_layer_one))
     end
   end

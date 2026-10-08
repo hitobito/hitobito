@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,9 +10,12 @@ class EventAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event::Invitation
 
   on(Event) do # rubocop:todo Metrics/BlockLength
-    class_side(:list_available, :typeahead).if_any_role
+    class_side(:typeahead).if_any_role
 
     permission(:any).may(:show).in_same_layer_or_public_or_participating
+    permission(:any).may(:list_available).in_same_layer_or_public_or_participating_if_any_role
+    permission(:layer_and_below_read).may(:list_available).in_same_layer_or_below
+    permission(:see_invisible_from_above).may(:list_available).in_same_layer_or_below
 
     permission(:any)
       .may(:index_participations)
@@ -71,68 +74,83 @@ class EventAbility < AbilityDsl::Base
 
     for_self_or_manageds do
       # abilities which managers inherit from their managed children
-      class_side(:list_available).if_any_role
+      permission(:any).may(:list_available).in_same_layer_or_public_or_participating_if_any_role
       permission(:any).may(:show).in_same_layer_or_public_or_participating
     end
   end
 
   on(Event::Course) do
-    class_side(:list_available).everybody
+    # Everybody may open the list of courses, which courses are listed is defined on Event.
+    permission(:any).may(:list_available).no_instances
     class_side(:list_all).if_full_permission_in_course_layer
     class_side(:export_list).if_layer_and_below_full_on_root
 
     for_self_or_manageds do
       # abilities which managers inherit from their managed children
-      class_side(:list_available).everybody
+      permission(:any).may(:list_available).no_instances
       permission(:any).may(:show).in_same_layer_or_public_or_participating
     end
   end
 
   def in_same_layer_or_public_or_participating
-    if_globally_visible_or_participating ||
-      contains_any?(user.groups.map(&:layer_group_id), subject.groups.map(&:layer_group_id))
+    any_of(if_globally_visible_or_participating,
+      {groups: {layer_group_id: user.groups.map(&:layer_group_id).uniq}})
+  end
+
+  def in_same_layer_or_public_or_participating_if_any_role
+    all_of(if_any_role, in_same_layer_or_public_or_participating)
   end
 
   def if_globally_visible_or_participating
-    subject.globally_visible? ||
-      subject.external_applications? ||
-      subject.token_accessible?(user.shared_access_token) ||
-      participating
+    any_of(globally_visible,
+      {external_applications: true},
+      ({shared_access_token: user.shared_access_token} if user.shared_access_token.present?),
+      participating)
+  end
+
+  def no_instances
+    AbilityDsl::Condition::NEVER
   end
 
   def for_qualify_event
-    permission_in_event?(:qualify)
+    in_events_with_permission(:qualify)
   end
 
   def if_in_course_group
-    permission_in_groups?(course_offerers)
+    {} if contains_any?(user_group_ids, course_offerers)
   end
 
   def if_full_permission_in_course_layer
-    contains_any?(user_context.permission_layer_ids(:layer_full) +
-                  user_context.permission_layer_ids(:layer_and_below_full),
+    {} if contains_any?(user_context.permission_layer_ids(:layer_full) +
+                        user_context.permission_layer_ids(:layer_and_below_full),
       course_offerers)
   end
 
   def if_layer_and_below_full_on_root
-    user_context.permission_layer_ids(:layer_and_below_full).include?(Group.root_id)
+    {} if user_context.permission_layer_ids(:layer_and_below_full).include?(Group.root_id)
   end
 
   def for_participations_read_events_or_visible_fellow_participants
-    for_participations_read_events || (event.participations_visible? && participating)
+    any_of(for_participations_read_events, all_of({participations_visible: true}, participating))
   end
 
   private
 
-  def event
-    subject
+  def event_condition(condition)
+    condition
   end
 
   def course_offerers
     user_context.course_offerers
   end
 
+  # Events without a value use the default from the settings.
+  def globally_visible
+    {globally_visible: Settings.event.globally_visible_by_default ? [true, nil] : true}
+  end
+
   def participating
-    user_context.participations.any? { |p| p.event_id == event.id }
+    event_ids = user_context.participations.map(&:event_id)
+    {id: event_ids} if event_ids.present?
   end
 end

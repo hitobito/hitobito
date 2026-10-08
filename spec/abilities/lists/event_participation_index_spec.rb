@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe JsonApi::EventParticipationReadables do
+describe "Event::Participation.accessible_by(ability, :index)" do
   let(:participation) { event_participations(:top) }
   let(:group) { participation.groups.first } # top_layer
   let(:event) { participation.event } # top_course
@@ -16,8 +16,7 @@ describe JsonApi::EventParticipationReadables do
   context "person" do
     def accessible_by(person, model_class = Event::Participation)
       person = people(person) unless person.is_a?(Person)
-      ability = described_class.new(person)
-      model_class.all.accessible_by(ability)
+      model_class.all.accessible_by(Ability.new(person), :index)
     end
 
     describe "layer_and_below" do

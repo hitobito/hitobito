@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -105,62 +105,60 @@ class GroupAbility < AbilityDsl::Base
   end
 
   def if_permission_in_layer
-    group.layer? && permission_in_layer?(group.id)
+    {id: user_layer_ids}
   end
 
   def for_finance_layer_ids
-    user_finance_layer_ids.include?(subject.id)
+    {id: user_finance_layer_ids}
   end
 
   def with_parent_in_same_layer
-    parent = group.parent
-    !group.layer? && parent && !parent.deleted? && permission_in_layer?(parent.layer_group_id)
+    {type: non_layer_group_types, parent: {deleted_at: nil, layer_group_id: user_layer_ids}}
   end
 
   def with_parent_in_same_layer_or_below
-    parent = group.parent
-    parent && !parent.deleted? && permission_in_layers?(parent.layer_hierarchy.collect(&:id))
+    {parent: {deleted_at: nil, lft: below_layers(user_layer_ids)}}
   end
 
   def with_parent_in_same_group_hierarchy
-    parent = group.parent
-    parent &&
-      !parent.deleted? &&
-      !group.layer? &&
-      permission_in_groups?(parent.local_hierarchy.collect(&:id))
+    all_of({type: non_layer_group_types},
+      nested(:parent, all_of({deleted_at: nil}, any_of(*below_groups(user_group_ids)))))
   end
 
   def in_below_group
-    !permission_in_group?(group.id) &&
-      permission_in_groups?(group.local_hierarchy.collect(&:id))
+    all_of(none_of(id: user_group_ids), in_same_group_or_below)
   end
 
   def in_same_layer_except_permission_giving
-    in_same_layer && except_permission_giving
+    all_of(in_same_layer, except_permission_giving)
   end
 
   def in_same_layer_or_below_except_permission_giving
-    in_same_layer_or_below && except_permission_giving
+    all_of(in_same_layer_or_below, except_permission_giving)
   end
 
   def except_permission_giving
-    [:layer_and_below_full, :layer_full].none? do |permission|
-      user_context.permission_group_ids(permission).include?(group.id) ||
-        user_context.permission_layer_ids(permission).include?(group.id)
+    group_ids = [:layer_and_below_full, :layer_full].flat_map do |permission|
+      user_context.permission_group_ids(permission) + user_context.permission_layer_ids(permission)
     end
+    group_ids.empty? ? {} : none_of(id: group_ids.uniq)
   end
 
+  # New groups do not have a layer group yet, so the layers above are derived from the parent.
   def in_below_layers
-    permission_in_layers?(group.upper_layer_hierarchy.collect(&:id))
+    any_of({layer_group: {lft: strictly_below_layers(user_layer_ids)}},
+      {id: nil, type: layer_group_types, parent: {lft: below_layers(user_layer_ids)}},
+      {id: nil, type: non_layer_group_types,
+       parent: {layer_group: {lft: strictly_below_layers(user_layer_ids)}}})
   end
 
   def in_below_layers_if_active
-    in_below_layers && in_active_group
+    all_of(in_below_layers, in_active_group)
   end
 
   # Member is a general role kind. Return true if user has any member role anywhere.
   def if_member
-    user.roles.any? { |r| r.class.member? }
+    {} if user.roles.any? { |r| r.class.member? }
   end
 
   def service_token_in_same_layer
@@ -168,12 +166,21 @@ class GroupAbility < AbilityDsl::Base
   end
 
   def in_self_registration_groups
-    group.self_registration_active?
+    role_types = GroupDecorator.all_allowed_roles_for_self_registration.map(&:sti_name)
+    {self_registration_role_type: role_types, archived_at: nil}
   end
 
   private
 
-  def group
-    subject
+  def group_condition(condition)
+    condition
+  end
+
+  def non_layer_group_types
+    sti_names([Group, *Group.all_types.reject(&:layer)])
+  end
+
+  def strictly_below_layers(layer_ids)
+    below_layers(layer_ids).map { |range| (range.begin + 1)..range.end }
   end
 end

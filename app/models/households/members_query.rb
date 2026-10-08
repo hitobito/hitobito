@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -25,7 +25,7 @@ class Households::MembersQuery
   private
 
   def writable_people
-    Person.accessible_by(PersonWritables.new(@current_user, @writables_scope))
+    @writables_scope.accessible_by(Ability.new(@current_user), :update)
   end
 
   def same_address_query

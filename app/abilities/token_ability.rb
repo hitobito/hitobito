@@ -30,6 +30,15 @@ class TokenAbility < Ability
     if acceptable?(:mailing_lists)
       can :show, MailingList, group_id: token.layer.groups_in_same_layer.pluck(:id)
     end
+
+    # The details of a participation are only readable for normal users with a _full
+    # permission or a corresponding event role. A service token has no event roles, and
+    # requiring a write (_full) permission for reading participant data would be unintuitive.
+    # So we allow service tokens separately, on the events of their permitted groups.
+    if acceptable?(:event_participations)
+      can :show_details, Event::Participation,
+        event: {groups: {id: token.permitted_groups.pluck(:id)}}
+    end
   end
 
   def identifier

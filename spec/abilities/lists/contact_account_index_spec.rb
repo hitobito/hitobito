@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
 
-describe JsonApi::ContactAccountReadables do
-  subject(:ability) { described_class.new(main_ability.user) }
+describe ContactAccountAbility do
+  subject(:ability) { Ability.new(main_ability.user) }
 
   let(:user) { Fabricate(:person) }
   let(:group) { groups(:bottom_layer_one) }
@@ -27,12 +27,12 @@ describe JsonApi::ContactAccountReadables do
 
       it "may read public phone_numbers" do
         phone_number.public = true
-        is_expected.to be_able_to(:read, phone_number)
+        is_expected.to be_able_to(:index, phone_number)
       end
 
       it "may read non-public phone_numbers" do
         phone_number.public = false
-        is_expected.to be_able_to(:read, phone_number)
+        is_expected.to be_able_to(:index, phone_number)
       end
     end
 
@@ -45,12 +45,12 @@ describe JsonApi::ContactAccountReadables do
 
       it "may read public phone_numbers" do
         phone_number.public = true
-        is_expected.to be_able_to(:read, phone_number)
+        is_expected.to be_able_to(:index, phone_number)
       end
 
       it "may not read non-public phone_numbers" do
         phone_number.public = false
-        is_expected.not_to be_able_to(:read, phone_number)
+        is_expected.not_to be_able_to(:index, phone_number)
       end
     end
 
@@ -63,12 +63,12 @@ describe JsonApi::ContactAccountReadables do
 
       it "may not read non-public phone_numbers" do
         phone_number.public = false
-        is_expected.not_to be_able_to(:read, phone_number)
+        is_expected.not_to be_able_to(:index, phone_number)
       end
 
       it "may read public phone_numbers" do
         phone_number.public = true
-        is_expected.to be_able_to(:read, phone_number)
+        is_expected.to be_able_to(:index, phone_number)
       end
     end
 
@@ -85,7 +85,7 @@ describe JsonApi::ContactAccountReadables do
 
       it "may read non-public phone_numbers" do
         phone_number.public = false
-        is_expected.to be_able_to(:read, phone_number)
+        is_expected.to be_able_to(:index, phone_number)
       end
     end
   end
@@ -105,12 +105,12 @@ describe JsonApi::ContactAccountReadables do
 
       it "may read public phone_numbers" do
         contact_account.public = true
-        is_expected.to be_able_to(:read, contact_account)
+        is_expected.to be_able_to(:index, contact_account)
       end
 
       it "may not read non-public phone_numbers" do
         contact_account.public = false
-        is_expected.not_to be_able_to(:read, contact_account)
+        is_expected.not_to be_able_to(:index, contact_account)
       end
     end
 
@@ -122,12 +122,12 @@ describe JsonApi::ContactAccountReadables do
 
       it "may read public phone_numbers" do
         contact_account.public = true
-        is_expected.to be_able_to(:read, contact_account)
+        is_expected.to be_able_to(:index, contact_account)
       end
 
       it "may read non-public phone_numbers" do
         contact_account.public = false
-        is_expected.to be_able_to(:read, contact_account)
+        is_expected.to be_able_to(:index, contact_account)
       end
     end
 
@@ -138,12 +138,12 @@ describe JsonApi::ContactAccountReadables do
 
       it "may read public phone_numbers" do
         contact_account.public = true
-        is_expected.to be_able_to(:read, contact_account)
+        is_expected.to be_able_to(:index, contact_account)
       end
 
       it "may not read non-public phone_numbers" do
         contact_account.public = false
-        is_expected.not_to be_able_to(:read, contact_account)
+        is_expected.not_to be_able_to(:index, contact_account)
       end
     end
   end

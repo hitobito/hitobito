@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,11 +11,11 @@ class Person::Filter::List < Filter::List
 
   attr_reader :group, :range
 
-  def initialize(group, user, params = {}, accessibles_class = nil)
+  def initialize(group, user, params = {}, list_action = nil)
     super(user, params)
     @group = group
     @range = params[:range]
-    @accessibles_class = accessibles_class
+    @list_action = list_action
   end
 
   def entries
@@ -29,12 +29,14 @@ class Person::Filter::List < Filter::List
   private
 
   def accessible_scope
-    ability = accessibles_class.new(
-      user,
-      (group_range? ? @group : nil),
-      include_ended_roles: chain.include_ended_roles?
-    )
-    Person.accessible_by(ability).select(:contact_data_visible)
+    people = Person.only_public_data.select(:contact_data_visible)
+    return people if all_group_people_accessible?
+
+    people.accessible_by(ability, list_action)
+  end
+
+  def all_group_people_accessible?
+    group_range? && list_action != :show_full && ability.can?(:index_local_people, @group)
   end
 
   def default_order(people)
@@ -50,8 +52,17 @@ class Person::Filter::List < Filter::List
       .members
   end
 
-  def accessibles_class
-    @accessibles_class ||= full_ability_needed? ? PersonFullReadables : PersonReadables
+  def list_action
+    @list_action ||=
+      if full_ability_needed? then :show_full
+      elsif chain.include_ended_roles? then :show
+      else
+        :index
+      end
+  end
+
+  def ability
+    @ability ||= Ability.new(user)
   end
 
   def full_ability_needed?

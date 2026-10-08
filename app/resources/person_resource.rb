@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2024, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class PersonResource < ApplicationResource
-  self.readable_class = PersonReadables
   self.acceptable_scopes += %w[people]
 
   primary_endpoint "people", [:index, :show, :update]

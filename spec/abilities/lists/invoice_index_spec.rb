@@ -1,20 +1,19 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 require "spec_helper"
 
-describe JsonApi::InvoiceReadables do
+describe "Invoice.accessible_by(ability, :index)" do
   let(:top_group) { groups(:top_group) }
   let(:bottom_member) { people(:bottom_member) }
 
   context "person" do
     def accessible_by(person, model_class = Invoice)
-      ability = described_class.new(people(person))
-      model_class.all.accessible_by(ability)
+      model_class.all.accessible_by(Ability.new(people(person)), :index)
     end
 
     it "filters invoices according to layer" do

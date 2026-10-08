@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018-2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,7 +19,7 @@ class ServiceTokenAbility < AbilityDsl::Base
 
   private
 
-  def group
-    subject.layer
+  def group_condition(condition)
+    nested(:layer, condition)
   end
 end

@@ -1,4 +1,6 @@
-#  Copyright (c) 2012-2017, Pfadibewegung Schweiz. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito_pbs and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_pbs.
@@ -14,6 +16,6 @@ class Event::ParticipationContactDataAbility < AbilityDsl::Base
   end
 
   def her_own
-    subject.person.id == user.id
+    {person: {id: user.id}} if user.id
   end
 end

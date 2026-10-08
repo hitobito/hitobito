@@ -90,6 +90,13 @@ describe Hitobito::CanCan::ActiveRecordAdapter do
     end
   end
 
+  it "reads columns that were not selected from the database" do
+    ability.can :show, Person, contact_data_visible: true
+
+    expect(ability.can?(:show, Person.only_public_data.find(top_leader.id))).to eq(true)
+    expect(ability.can?(:show, Person.only_public_data.find(bottom_member.id))).to eq(false)
+  end
+
   context "with has_many associations" do
     before { ability.can :show, Person, roles: {group_id: groups(:top_group).id} }
 
@@ -97,6 +104,13 @@ describe Hitobito::CanCan::ActiveRecordAdapter do
       bottom_member.roles.build(group: groups(:top_group))
 
       expect(ability.can?(:show, bottom_member)).to eq(false)
+    end
+
+    it "matches saved subjects without records for nil conditions" do
+      ability.can :index, Person, roles: {id: nil}
+
+      expect(ability.can?(:index, Fabricate(:person))).to eq(true)
+      expect(ability.can?(:index, bottom_member)).to eq(false)
     end
 
     it "matches unsaved records of new subjects" do

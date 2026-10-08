@@ -9,24 +9,34 @@ module Hitobito
   module CanCan
     # Matches condition values in memory which cancancan itself only supports in SQL:
     # subquery relations, arrays containing ranges and AbilityDsl::Condition trees.
-    # Like in SQL, only saved records of a has_many association of a saved subject are matched.
+    # Like in SQL, only saved records of a has_many association of a saved subject are matched,
+    # and columns that were not selected are read from the database.
     module ConditionMatching
       def override_condition_matching?(subject, name, value)
-        special_value?(value) || saved_collection?(subject, name, value) || super
+        special_value?(value) || saved_collection?(subject, name, value) ||
+          unselected_column?(subject, name) || super
       end
 
       def matches_condition?(subject, name, value)
-        case value
-        when AbilityDsl::Condition then value.matches?(subject)
-        when AbilityDsl::AccessibleIds then accessible_ids_include?(value, subject, name)
-        when AbilityDsl::LazyRelation, ActiveRecord::Relation, Array
-          attribute_matches?(value, subject.send(name))
-        when Hash then saved_collection_matches?(subject.send(name).reject(&:new_record?), value)
-        else super
+        if unselected_column?(subject, name)
+          unselected_column_matches?(subject, name, value)
+        elsif special_value?(value) || saved_collection?(subject, name, value)
+          special_value_matches?(subject, name, value)
+        else
+          super
         end
       end
 
       private
+
+      def special_value_matches?(subject, name, value)
+        case value
+        when AbilityDsl::Condition then value.matches?(subject)
+        when AbilityDsl::AccessibleIds then accessible_ids_include?(value, subject, name)
+        when Hash then saved_collection_matches?(subject.send(name).reject(&:new_record?), value)
+        else attribute_matches?(value, subject.send(name))
+        end
+      end
 
       def special_value?(value)
         case value
@@ -44,6 +54,18 @@ module Hitobito
         end
       end
 
+      def unselected_column?(subject, name)
+        subject.is_a?(ActiveRecord::Base) &&
+          subject.persisted? &&
+          subject.class.column_names.include?(name.to_s) &&
+          !subject.has_attribute?(name)
+      end
+
+      def unselected_column_matches?(subject, name, value)
+        value = value.relation if value.is_a?(AbilityDsl::LazyRelation)
+        subject.class.unscoped.where(subject.class.primary_key => subject.id, name => value).exists?
+      end
+
       def saved_collection?(subject, name, value)
         value.is_a?(Hash) &&
           subject.is_a?(ActiveRecord::Base) &&
@@ -53,7 +75,7 @@ module Hitobito
 
       def saved_collection_matches?(records, conditions)
         if records.empty?
-          conditions.values.any? && conditions.values.all?(&:nil?)
+          !conditions.empty? && conditions.values.all?(&:nil?)
         else
           records.any? { |record| AbilityDsl::Condition.matches?(conditions, record) }
         end

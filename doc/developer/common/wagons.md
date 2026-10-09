@@ -38,7 +38,8 @@ Consequences to keep in mind:
   *not* part of the core `schema.rb`; a wagon's test schema is the core schema plus that wagon's
   migrations.
 * Group and role types, seeds (`db/seed`) and fixtures (`spec/fixtures`) of an instance are
-  defined in its wagon, not in the core.
+  defined in its wagon, not in the core. How seeds are loaded in specs is described in
+  [Fixtures and Seeds](testing.md#fixtures-and-seeds).
 * Extending a model from a wagon usually means all of: a migration, adding the attribute to
   `Person::PUBLIC_ATTRS` if it must be readable in the optimized list queries, `permitted_attrs`
   in a controller concern, the views, the exports and the JSON API — see

@@ -42,3 +42,9 @@ Neue Wagons sollen nur noch via Seeds laden. Bei bestehenden Projekten
 akzeptieren wir die Doppelgleisigkeit, da der Wechsel zu einer der aufgeführten
 Optionen (Fixtures, Seeds oder generiererte Fixtures) zwangsläufig Anpassungen
 an der test Suite nach sich ziehen würde.
+
+## Nachtrag
+
+Seeds werden nicht mehr explizit beim Laden der Specs mit `SeedFu.seed` geladen, sondern im
+`spec_helper` über `config.seeds` registriert und nach den Fixtures geladen (#4544). Siehe
+[Fixtures and Seeds](../../developer/common/testing.md#fixtures-and-seeds).

@@ -13,7 +13,7 @@ on:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to the main branch (master).
         default: ""
   push:
-    branches: [ master, sac-master ]
+    branches: [ master, sac-master, 'renovate/**' ]
     paths-ignore:
       - 'doc/**'
       - '**.md'

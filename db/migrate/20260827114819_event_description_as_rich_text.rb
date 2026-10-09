@@ -2,13 +2,15 @@ class EventDescriptionAsRichText < ActiveRecord::Migration[8.0]
   def up
     Event::Translation.find_each do |translation|
       description = translation.description
-
-      ActionText::RichText.create!(
-        name: "description",
-        body: ActionText::Content.new(description),
-        record: translation
-      )
+      PaperTrail.request(enabled: false) do
+        ActionText::RichText.create!(
+          name: "description",
+          body: ActionText::Content.new(description),
+          record: translation
+        )
+      end
     end
+    remove_column :event_translations, :description;
   end
 
   def down

@@ -110,10 +110,10 @@ Comments in code mostly age poorly. Please use the following framework to decide
    `hitobito/user_documentation` repository published at hitobito.readthedocs.io.
 3. Prefer commit messages to code comments, because a git blame is more telling and easier to
    research than figuring out the cross-repo code state back when a comment was written. Match the
-   style and length of other, human-made commits (without 🤖 emoji). No figures of speech, just
-   objective facts in short form. NEVER more than 1 commit line + 3 lines of commit message.
-4. A CHANGELOG.md entry is only made for user-facing changes (including JSON:API changes).
-5. Only if the information is directly about the class / method being commented, only if it can't
+   style and length of other, human-made commits (the ones without 🤖 emoji). No figures of speech,
+   just objective facts in short form. NEVER more than 1 commit line + 3 lines of commit message.
+5. A CHANGELOG.md entry is only made for user-facing changes (including JSON:API changes).
+6. Only if the information is directly about the class / method being commented, only if it can't
    be expressed through the above means of documentation adequately, and only if it is relevant
    every single time a piece of code is read, forever: Only then create a comment. Even then,
    only include the information that isn't covered in the other docs locations, and don't mention

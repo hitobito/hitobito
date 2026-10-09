@@ -76,4 +76,20 @@ describe :admin_left_nav, js: true do
       end
     end
   end
+
+  context "BlocklistEntry" do
+    let(:path) { label_formats_path }
+
+    it "is visible for admins" do
+      sign_in(people(:top_leader))
+      visit path
+      expect(page.find("nav#page-navigation")).to have_link(href: blocklist_entries_path, visible: :all)
+    end
+
+    it "is not visible for non admins" do
+      sign_in(people(:bottom_member))
+      visit path
+      expect(page.find("nav#page-navigation")).to have_no_link(href: blocklist_entries_path)
+    end
+  end
 end

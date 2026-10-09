@@ -145,7 +145,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
-    :description, :plain_description, :location, :application_opening_at,
+    :description, :plain_text_description, :location, :application_opening_at,
     :application_closing_at, :application_conditions,
     :external_applications, :applications_cancelable,
     :signature, :signature_confirmation, :signature_confirmation_text,
@@ -177,7 +177,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   self.uses_form_tabs = true
 
-  self.filterable_attrs = [:name, :plain_description, :location,
+  self.filterable_attrs = [:name, :plain_text_description, :location,
     :application_opening_at, :application_closing_at]
 
   model_stamper
@@ -547,7 +547,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     dates.flat_map { [_1.start_at, _1.finish_at] }.compact.max
   end
 
-  def plain_description
+  def plain_text_description
     return if description.blank?
 
     description.to_plain_text

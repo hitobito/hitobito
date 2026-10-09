@@ -330,6 +330,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :additional_information, length: {allow_nil: true, maximum: (2**16) - 1}
   validates :canton, absence: true, unless: :swiss?
   validate :assert_has_any_name
+  validate :assert_not_blocklisted, on: :create
 
   validates :picture, dimension: {width: {max: 8_000}, height: {max: 8_000}},
     content_type: ["image/jpeg", "image/gif", "image/png"]
@@ -636,6 +637,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, :name_missing)
     end
+  end
+
+  def assert_not_blocklisted
+    return unless FeatureGate.enabled?("people.blocklist")
+
+    errors.add(:base, :blocklisted) if Person::BlocklistDetector.new(self).blocklisted?
   end
 
   # Destroy all related roles before destroying this person.

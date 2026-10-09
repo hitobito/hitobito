@@ -53,7 +53,7 @@ describe InvoiceRuns::InvoicesController do
       let(:letter) { messages(:with_invoice) }
       let(:invoice_run) {
         messages(:with_invoice).create_invoice_run(title: "test", group_id: group.id,
-          recipient_source: PeopleFilter.new)
+          recipient_source: PeopleFilter.new(group: group))
       }
       let(:top_leader) { people(:top_leader) }
 
@@ -106,7 +106,7 @@ describe InvoiceRuns::InvoicesController do
 
         it "renders filter with date values from invoice run" do
           invoice_run = InvoiceRun.create!(title: "test", group:, created_at: Time.zone.local(2025, 10, 12),
-            recipient_source: PeopleFilter.new)
+            recipient_source: PeopleFilter.new(group: group))
           invoice.update(invoice_run:)
 
           get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
@@ -147,7 +147,7 @@ describe InvoiceRuns::InvoicesController do
       end
 
       it "works with group recipients" do
-        group_recipients = GroupsFilter.create!(parent: groups(:top_layer), group_type: "Group::BottomLayer",
+        group_recipients = GroupsFilter.create!(parent: invoice_run.group, group_type: "Group::BottomLayer",
           active_at: Time.zone.today)
         invoice_run.update(recipient_source: group_recipients)
         invoice_run.update(invalid_recipient_ids: [groups(:bottom_layer_one).id])
@@ -164,7 +164,7 @@ describe InvoiceRuns::InvoicesController do
   context "DELETE#destroy" do
     it "updates and redirects to invoice_run" do
       run = InvoiceRun.create(title: "List", group: group, invoices: [invoice, invoices(:sent)],
-        recipient_source: PeopleFilter.new)
+        recipient_source: PeopleFilter.new(group: group))
 
       run.update_total
       expect(run.recipients_total).to eq(2)

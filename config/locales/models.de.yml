@@ -136,6 +136,10 @@ de:
           attributes:
             self_registration_role_type:
               blank: 'muss ausgefüllt werden wenn "Anzeige auf Loginseite" ausgewählt ist'
+        invoice_run:
+          attributes:
+            recipient_source:
+              not_in_layer: muss zur Ebene des Rechnungslaufs oder zu einer Ebene darunter gehören
         mailing_list:
           attributes:
             mail_name:

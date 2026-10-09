@@ -19,7 +19,7 @@ describe InvoiceRuns::DestroysController do
 
   let(:invoice_run) {
     InvoiceRun.create(title: "membership fee", invoices: draft_invoices, group: layer,
-      recipient_source: PeopleFilter.new)
+      recipient_source: PeopleFilter.new(group: layer))
   }
 
   let(:params) { {group_id: layer.id, invoice_run_id: invoice_run.id} }

@@ -53,7 +53,7 @@ describe InvoiceRunsController do
 
       it "renders final Empfänger count" do
         InvoiceRun.create!(group: group, title: "title", recipients_processed: 20, recipients_total: 20,
-          recipient_source: PeopleFilter.new)
+          recipient_source: PeopleFilter.new(group: group))
         get :index, params: {group_id: group.id}
         expect(column).to have_text("20")
       end
@@ -62,9 +62,9 @@ describe InvoiceRunsController do
     it "renders only standalone invoice lists if used outside of a period invoice template" do
       period_invoice_template = Fabricate(:period_invoice_template)
       InvoiceRun.create!(group: group, title: "dependent", recipients_processed: 20, recipients_total: 20,
-        recipient_source: PeopleFilter.new, period_invoice_template:)
+        recipient_source: PeopleFilter.new(group: group), period_invoice_template:)
       InvoiceRun.create!(group: group, title: "standalone", recipients_processed: 20, recipients_total: 20,
-        recipient_source: PeopleFilter.new)
+        recipient_source: PeopleFilter.new(group: group))
       get :index, params: {group_id: group.id}
       expect(node).to have_text("standalone")
       expect(node).not_to have_text("dependent")
@@ -302,7 +302,7 @@ describe InvoiceRunsController do
     end
 
     it "PUT#update redirects to invoice_run_invoices path if invoice_run is set" do
-      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new)
+      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new(group: group))
       invoice = Invoice.create!(group: group, title: "test", recipient: person,
         invoice_run: invoice_run,
         invoice_items_attributes:
@@ -312,7 +312,7 @@ describe InvoiceRunsController do
     end
 
     it "PUT#update redirects to invoice_run_invoice path if invoice_run is set and singular is true" do
-      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new)
+      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new(group: group))
       invoice = Invoice.create!(group: group, title: "test", recipient: person,
         invoice_run: invoice_run,
         invoice_items_attributes:
@@ -334,7 +334,7 @@ describe InvoiceRunsController do
 
       it "PUT#update redirects to period template nested path if invoice_run is set and singular is true" do
         period_invoice_template = Fabricate(:period_invoice_template)
-        invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new,
+        invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new(group: group),
           period_invoice_template:)
         invoice = Invoice.create!(group: group, title: "test", recipient: person,
           invoice_run: invoice_run,
@@ -378,7 +378,7 @@ describe InvoiceRunsController do
     end
 
     it "PUT#update uses year of invoice_run created_at as default filter_param from and to" do
-      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new,
+      invoice_run = InvoiceRun.create!(title: :title, group: group, recipient_source: PeopleFilter.new(group: group),
         created_at: 10.years.ago)
       invoice = Invoice.create!(group: group, title: "test", recipient: person, invoice_run: invoice_run)
 
@@ -418,7 +418,7 @@ describe InvoiceRunsController do
       end
 
       it "redirects to list and updates total" do
-        invoice_run = InvoiceRun.create!(title: "test", group: group, recipient_source: PeopleFilter.new)
+        invoice_run = InvoiceRun.create!(title: "test", group: group, recipient_source: PeopleFilter.new(group: group))
         invoice = Invoice.create!(group: group, title: "test", recipient: person, invoice_run: invoice_run)
         invoice.invoice_items.create!(name: :pens, count: 2, unit_cost: 10)
 

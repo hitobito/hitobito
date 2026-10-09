@@ -44,7 +44,7 @@ describe Invoice::Filter do
     let(:plain_run) { Fabricate(:invoice_run, group: invoice.group) }
 
     let(:template_run) do
-      Fabricate(:invoice_run, group: invoice.group, recipient_source: template.recipient_source,
+      Fabricate(:invoice_run, group: template.group, recipient_source: template.recipient_source,
         period_invoice_template: template)
     end
 

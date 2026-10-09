@@ -38,5 +38,22 @@ describe Person::QueryController do
         expect(response.body).to_not match(/Pascal/)
       end
     end
+
+    context "as top_leader limited by permission" do
+      before { sign_in(top_leader) }
+
+      it "returns permitted people even if more people match without permission" do
+        Person::QueryController.limit.times do |i|
+          Fabricate(:person, first_name: "Pascal", last_name: "A#{i}")
+        end
+        permitted = Fabricate(Group::BottomGroup::Leader.sti_name,
+          person: Fabricate(:person, first_name: "Pascal", last_name: "Z"),
+          group: groups(:bottom_group_one_one)).person
+
+        get :index, params: {q: "pas", limit_by_permission: :update}
+
+        expect(JSON.parse(response.body).pluck("id")).to eq([permitted.id])
+      end
+    end
   end
 end

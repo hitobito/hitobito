@@ -24,7 +24,7 @@ describe InvoiceRuns::DestroysController, js: true do
 
   let!(:invoice_run) do
     InvoiceRun.create(title: "membership fee", invoices: draft_invoices, group: layer,
-      recipient_source: PeopleFilter.new)
+      recipient_source: PeopleFilter.new(group: layer))
   end
 
   let(:user) { people(:top_leader) }

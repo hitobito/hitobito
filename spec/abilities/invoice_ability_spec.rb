@@ -118,28 +118,23 @@ describe InvoiceAbility do
   end
 
   context "InvoiceRun" do
-    def invoice_run(group, abo_group)
-      InvoiceRun.new(group: groups(group), recipient_source: groups(abo_group).mailing_lists.build)
+    def invoice_run(group)
+      InvoiceRun.new(group: groups(group))
     end
 
     def ability(role)
       Ability.new(roles(role).person)
     end
 
-    it "top_leader may work only with abos in his layer" do
-      expect(ability(:top_leader)).to be_able_to(:create, invoice_run(:top_layer, :top_layer))
-      expect(ability(:top_leader)).to be_able_to(:create, invoice_run(:top_layer, :top_group))
-      expect(ability(:top_leader)).not_to be_able_to(:create,
-        invoice_run(:top_layer, :bottom_layer_one))
+    it "top_leader may create invoice runs only in his layer" do
+      expect(ability(:top_leader)).to be_able_to(:create, invoice_run(:top_layer))
+      expect(ability(:top_leader)).to be_able_to(:create, invoice_run(:top_group))
+      expect(ability(:top_leader)).not_to be_able_to(:create, invoice_run(:bottom_layer_one))
     end
 
-    it "bottom_member may work only with abos in his layer" do
-      expect(ability(:bottom_member)).to be_able_to(:create,
-        invoice_run(:bottom_layer_one, :bottom_layer_one))
-      expect(ability(:bottom_member)).not_to be_able_to(:create,
-        invoice_run(:bottom_layer_one, :top_group))
-      expect(ability(:bottom_member)).not_to be_able_to(:create,
-        invoice_run(:bottom_layer_one, :top_layer))
+    it "bottom_member may create invoice runs only in his layer" do
+      expect(ability(:bottom_member)).to be_able_to(:create, invoice_run(:bottom_layer_one))
+      expect(ability(:bottom_member)).not_to be_able_to(:create, invoice_run(:top_layer))
     end
   end
 

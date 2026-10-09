@@ -54,6 +54,28 @@ describe "people/_attrs.html.haml" do
       expect(a.can?(:show_details, person)).to be_truthy
       is_expected.to have_content "private phone"
     end
+
+    context "with permission to read roles in the group" do
+      let(:ability) do
+        Ability.new(current_user).tap do |a|
+          a.can :index, Role, group_id: groups(:bottom_group_one_one).id
+        end
+      end
+
+      before do
+        Fabricate(Group::BottomGroup::Leader.name.to_s, group: groups(:bottom_group_one_two),
+          person: Person.find(person.id))
+        allow(view).to receive(:current_ability).and_return(ability)
+        allow(controller).to receive(:current_ability).and_return(ability)
+      end
+
+      it "shows only the readable roles" do
+        expect(ability.can?(:show_full, person)).to be_falsey
+        is_expected.to have_content "Aktive Rollen"
+        is_expected.to have_content groups(:bottom_group_one_one).name
+        is_expected.not_to have_content groups(:bottom_group_one_two).name
+      end
+    end
   end
 
   context "viewed by person from other group, no layer and below full" do

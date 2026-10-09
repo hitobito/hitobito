@@ -10,7 +10,7 @@ require "spec_helper"
 describe InvoiceRunsController, js: true do
   let(:group) { groups(:bottom_layer_one) }
   let(:user) { people(:bottom_member) }
-  let(:list) { mailing_lists(:leaders) }
+  let(:list) { Fabricate(:mailing_list, group: group) }
 
   before do
     sign_in(user)

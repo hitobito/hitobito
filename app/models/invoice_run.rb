@@ -57,7 +57,8 @@ class InvoiceRun < ActiveRecord::Base
 
   validates :title, presence: true
   validates :recipient_source_type, inclusion: {in: RECIPIENT_TYPES}
-  # TODO validate recipient_source_id so that no arbitrary changes can be made
+  validate :assert_recipient_source_in_layer,
+    if: -> { group && RECIPIENT_TYPES.include?(recipient_source_type) && recipient_source }
 
   scope :list, -> { order(:created_at) }
   scope :standalone, -> { where(period_invoice_template_id: nil) }
@@ -120,5 +121,21 @@ class InvoiceRun < ActiveRecord::Base
 
   def invoice_config
     group.layer_group.invoice_config
+  end
+
+  private
+
+  def assert_recipient_source_in_layer
+    layer = group.layer_group
+    in_layer = recipient_source_groups.any? { |g| g.lft.between?(layer.lft, layer.rgt) }
+    errors.add(:recipient_source, :not_in_layer) unless in_layer
+  end
+
+  def recipient_source_groups
+    case recipient_source
+    when GroupsFilter then [recipient_source.parent]
+    when Event::ParticipationsFilter then recipient_source.event&.groups.to_a
+    else [recipient_source.try(:group)]
+    end.compact
   end
 end

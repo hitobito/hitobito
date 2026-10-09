@@ -24,7 +24,8 @@ describe PaymentsController do
     end
 
     it "valid arguments create payment and updates invoice_run" do
-      invoice_run = InvoiceRun.create(title: :title, group: invoice.group, recipient_source: PeopleFilter.new)
+      invoice_run = InvoiceRun.create(title: :title, group: invoice.group,
+        recipient_source: PeopleFilter.new(group: invoice.group))
       invoice.update(state: :sent, invoice_run: invoice_run)
       expect do
         post :create, params: {group_id: group.id, invoice_id: invoice.id, payment: {amount: invoice.total}}

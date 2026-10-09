@@ -106,7 +106,7 @@ describe InvoiceItem do
 
     it "recalculates invoice run" do
       invoice_run = InvoiceRun.create!(group: invoice.group, title: new_invoice.title,
-        recipient_source: PeopleFilter.new)
+        recipient_source: PeopleFilter.new(group: invoice.group))
       new_invoice.update!(invoice_run: invoice_run)
       invoice_run.update_total
       expect {

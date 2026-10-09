@@ -27,7 +27,7 @@ describe Group::Merger do
 
       Fabricate(:invoice, group: group2, recipient: @person)
       Fabricate(:invoice_article, group: group2)
-      InvoiceRun.create!(title: "Rechnungslauf", group_id: group2.id, recipient_source: PeopleFilter.new)
+      InvoiceRun.create!(title: "Rechnungslauf", group_id: group2.id, recipient_source: PeopleFilter.new(group: group2))
     end
 
     it "creates a new group and merges roles, events" do

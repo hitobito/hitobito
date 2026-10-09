@@ -21,6 +21,14 @@ describe RoleAbility do
     is_expected.to be_able_to(:create, Group::TopGroup::Leader.new(group: groups(:top_group)))
   end
 
+  it "may not modify restricted roles but list them" do
+    allow(Group::TopGroup::Member).to receive(:kind).and_return(nil)
+    role = Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group))
+
+    [:update, :destroy, :terminate].each { |action| is_expected.not_to be_able_to(action, role) }
+    expect(Role.accessible_by(ability, :index)).to include(role)
+  end
+
   it "lists the roles of fully readable people" do
     role = Fabricate(Group::BottomLayer::Member.sti_name, group: groups(:bottom_layer_one))
 

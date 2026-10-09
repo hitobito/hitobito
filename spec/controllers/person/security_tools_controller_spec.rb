@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -68,13 +68,13 @@ describe Person::SecurityToolsController do
         sign_in(bottom_member)
 
         @user = bottom_member
-        bottom_layer = groups(:bottom_layer_one)
-        bottom_layer.update_column(:deleted_at, Time.current)
+        top_group = groups(:top_group)
+        top_group.update_column(:deleted_at, Time.current)
 
         get :index, params: nesting, xhr: true, format: :js
 
         result = assigns(:groups_and_roles_that_see_me)
-        expect(result[bottom_layer.id][:deleted]).to be true
+        expect(result[top_group.id][:deleted]).to be true
       end
     end
   end

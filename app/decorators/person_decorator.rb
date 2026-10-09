@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -99,11 +99,11 @@ class PersonDecorator < ApplicationDecorator
   end
 
   def current_roles_grouped
-    @current_roles_grouped ||= roles_grouped(scope: person.roles)
+    @current_roles_grouped ||= roles_grouped(scope: readable_roles(person.roles))
   end
 
   def future_roles_grouped
-    @future_roles_grouped ||= roles_grouped(scope: person.roles.future)
+    @future_roles_grouped ||= roles_grouped(scope: readable_roles(person.roles.future))
   end
 
   def roles_list(group = nil, multiple_groups = false)
@@ -182,6 +182,8 @@ class PersonDecorator < ApplicationDecorator
   end
 
   private
+
+  def readable_roles(roles) = roles.accessible_by(h.current_ability, :index).includes(:group)
 
   def login_status_icon_options(login_status)
     {title: I18n.t("people.login_status.#{login_status}")}

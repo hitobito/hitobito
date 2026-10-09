@@ -28,9 +28,9 @@ class RoleAbility < AbilityDsl::Base
 
     permission(:any).may(:terminate).her_own
 
-    general.non_restricted
-    general(:create).group_not_deleted_or_archived
-    general(:destroy).not_permission_giving
+    general(:create_in_subgroup, :update, :terminate).non_restricted
+    general(:create).non_restricted_in_active_group
+    general(:destroy).non_restricted_and_not_permission_giving
   end
 
   def of_fully_readable_people
@@ -46,6 +46,14 @@ class RoleAbility < AbilityDsl::Base
 
   def non_restricted
     {type: role_types_where { |r| !r.restricted? }}
+  end
+
+  def non_restricted_in_active_group
+    all_of(non_restricted, group_not_deleted_or_archived)
+  end
+
+  def non_restricted_and_not_permission_giving
+    all_of(non_restricted, not_permission_giving)
   end
 
   # A role giving the current user the permission required to edit/destroy this very role.

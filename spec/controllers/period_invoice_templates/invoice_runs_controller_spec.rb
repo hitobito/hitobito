@@ -35,7 +35,7 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
 
     it "GET#index lists invoice runs" do
       run = InvoiceRun.create!(group:, title: "title", recipients_processed: 20,
-        recipients_total: 20, recipient_source: GroupsFilter.new, period_invoice_template:)
+        recipients_total: 20, recipient_source: GroupsFilter.new(parent: group), period_invoice_template:)
       get :index, params: {group_id: group.id,
                            period_invoice_template_id: period_invoice_template.id}
       expect(assigns(:invoice_runs)).to match_array([run])
@@ -44,11 +44,11 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
     it "GET#index renders only dependent invoice lists" do
       period_invoice_template_2 = Fabricate(:period_invoice_template)
       InvoiceRun.create!(group: group, title: "dependent", recipients_processed: 20, recipients_total: 20,
-        recipient_source: PeopleFilter.new, period_invoice_template:)
+        recipient_source: PeopleFilter.new(group: group), period_invoice_template:)
       InvoiceRun.create!(group: group, title: "other", recipients_processed: 20, recipients_total: 20,
-        recipient_source: PeopleFilter.new, period_invoice_template: period_invoice_template_2)
+        recipient_source: PeopleFilter.new(group: group), period_invoice_template: period_invoice_template_2)
       InvoiceRun.create!(group: group, title: "standalone", recipients_processed: 20, recipients_total: 20,
-        recipient_source: PeopleFilter.new)
+        recipient_source: PeopleFilter.new(group: group))
       get :index, params: {group_id: group.id,
                            period_invoice_template_id: period_invoice_template.id}
       expect(node).to have_text("dependent")

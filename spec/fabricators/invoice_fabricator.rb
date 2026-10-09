@@ -14,7 +14,7 @@ end
 
 Fabricator(:invoice_run) do
   title { Faker::Name.name }
-  recipient_source { PeopleFilter.new }
+  recipient_source { |attrs| PeopleFilter.new(group: attrs[:group]) }
 end
 
 Fabricator(:invoice_item) do

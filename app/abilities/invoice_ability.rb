@@ -18,9 +18,8 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(InvoiceRun) do
-    permission(:finance).may(:show, :update, :destroy).in_layer_if_active
-    permission(:finance).may(:create).in_layer_with_recipient_source
-    permission(:finance).may(:index_invoices).in_layer_with_recipient_source_if_active
+    permission(:finance).may(:show, :update, :destroy, :index_invoices).in_layer_if_active
+    permission(:finance).may(:create).in_layer
   end
 
   on(InvoiceArticle) do
@@ -63,14 +62,6 @@ class InvoiceAbility < AbilityDsl::Base
     {invoice: in_layer_if_active}
   end
 
-  def in_layer_with_recipient_source
-    all_of(in_layer, recipient_source_in(finance_layer_groups))
-  end
-
-  def in_layer_with_recipient_source_if_active
-    all_of(in_layer, recipient_source_in(active_finance_layer_groups))
-  end
-
   private
 
   def finance_layer_groups
@@ -79,16 +70,5 @@ class InvoiceAbility < AbilityDsl::Base
 
   def active_finance_layer_groups
     finance_layer_groups.merge(archived_at: nil)
-  end
-
-  # Recipient sources may be new records, which is why their associations are matched
-  # instead of a subquery. Lists of invoice runs are not filtered by these conditions.
-  def recipient_source_in(groups)
-    any_of({recipient_source_type: nil},
-      {recipient_source_type: MailingList.sti_name, recipient_source: {group: groups}},
-      {recipient_source_type: PeopleFilter.sti_name, recipient_source: {group: groups}},
-      {recipient_source_type: GroupsFilter.sti_name, recipient_source: {parent: groups}},
-      {recipient_source_type: Event::ParticipationsFilter.sti_name,
-       recipient_source: {event: {groups: groups}}})
   end
 end

@@ -26,7 +26,8 @@ describe Sheet::Invoice do
 
     let(:sheet) { Sheet::Invoice.new(self, invoice_run, invoice) }
     let(:invoice_run) {
-      InvoiceRun.create(title: "Mitgliedsbeiträge", group_id: group.id, recipient_source: mailing_list)
+      InvoiceRun.create(title: "Mitgliedsbeiträge", group_id: mailing_list.group_id,
+        recipient_source: mailing_list)
     }
 
     it "uses title of invoice with recipient_source mailing_list" do
@@ -35,7 +36,7 @@ describe Sheet::Invoice do
     end
 
     it "uses title of invoice without recipient_source name when people_filter" do
-      invoice_run.update!(recipient_source: PeopleFilter.new)
+      invoice_run.update!(recipient_source: PeopleFilter.new(group: invoice_run.group))
       view.params[:invoice_run_id] = invoice_run.id
       expect(sheet.title).to eq "Testrechnung"
     end

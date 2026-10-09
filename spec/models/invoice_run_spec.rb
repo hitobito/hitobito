@@ -32,7 +32,7 @@ describe InvoiceRun do
     end
 
     it ".standalone returns invoice_runs without a period_invoice_template" do
-      subject.update!(group: group, title: :title, recipient_source: PeopleFilter.new)
+      subject.update!(group: group, title: :title, recipient_source: PeopleFilter.new(group: group))
       expect(InvoiceRun.standalone).to include subject
       expect(InvoiceRun.from_template).not_to include subject
     end
@@ -108,10 +108,53 @@ describe InvoiceRun do
       subject.attributes = {title: :test, recipient_source: group}
       expect(subject).not_to be_valid
     end
+
+    context "in layer of group" do
+      let(:group) { groups(:bottom_layer_one) }
+
+      def valid_with?(recipient_source)
+        subject.attributes = {title: :test, group: group, recipient_source: recipient_source}
+        subject.valid?
+      end
+
+      it "accepts mailing list in same layer or below" do
+        expect(valid_with?(group.mailing_lists.build)).to eq(true)
+        expect(valid_with?(groups(:bottom_group_one_one).mailing_lists.build)).to eq(true)
+      end
+
+      it "does not accept mailing list in layer above or other layer" do
+        expect(valid_with?(groups(:top_group).mailing_lists.build)).to eq(false)
+        expect(subject.errors[:recipient_source]).to be_present
+        expect(valid_with?(groups(:bottom_layer_two).mailing_lists.build)).to eq(false)
+      end
+
+      it "accepts mailing list in layer below" do
+        subject.attributes = {title: :test, group: groups(:top_layer),
+                              recipient_source: group.mailing_lists.build}
+        expect(subject).to be_valid
+      end
+
+      it "checks group of people filter" do
+        expect(valid_with?(PeopleFilter.new(group: groups(:bottom_group_one_one)))).to eq(true)
+        expect(valid_with?(PeopleFilter.new(group: groups(:top_group)))).to eq(false)
+        expect(valid_with?(PeopleFilter.new)).to eq(false)
+      end
+
+      it "checks parent of groups filter" do
+        expect(valid_with?(GroupsFilter.new(parent: group))).to eq(true)
+        expect(valid_with?(GroupsFilter.new(parent: groups(:top_layer)))).to eq(false)
+      end
+
+      it "checks groups of event of participations filter" do
+        expect(valid_with?(Event::ParticipationsFilter.new(event: Fabricate(:event, groups: [group]))))
+          .to eq(true)
+        expect(valid_with?(Event::ParticipationsFilter.new(event: events(:top_event)))).to eq(false)
+      end
+    end
   end
 
   it "#update_paid updates payment informations" do
-    subject.update(group: group, title: :title, recipient_source: PeopleFilter.new)
+    subject.update(group: group, title: :title, recipient_source: PeopleFilter.new(group: group))
 
     invoice = subject.invoices.create!(title: :title, recipient: person, total: 10, group: group)
     subject.invoices.create!(title: :title, recipient: other_person, total: 20, group: group)
@@ -124,7 +167,7 @@ describe InvoiceRun do
   end
 
   it "#update_paid and #update_total update also invalid invoice_runs" do
-    subject.update(group: group, title: :title, recipient_source: PeopleFilter.new)
+    subject.update(group: group, title: :title, recipient_source: PeopleFilter.new(group: group))
 
     invoice = subject.invoices.create!(title: :title, recipient: person, total: 10, group: group)
     subject.invoices.create!(title: :title, recipient: other_person, total: 20, group: group)

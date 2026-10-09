@@ -474,6 +474,9 @@ Hitobito::Application.routes.draw do
     FeatureGate.if("personal_documents") do
       resources :personal_document_labels
     end
+    FeatureGate.if("people.blocklist") do
+      resources :blocklist_entries, only: [:index, :new, :create, :destroy]
+    end
   end # scope locale
 
   get "/api", to: "json_api/documentation#index"

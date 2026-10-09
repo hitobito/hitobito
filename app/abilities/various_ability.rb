@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,6 +14,10 @@ class VariousAbility < AbilityDsl::Base
   on(HelpText) do
     class_side(:index).if_admin
     permission(:admin).may(:manage).all
+  end
+
+  on(BlocklistEntry) do
+    class_side(:manage).if_admin
   end
 
   on(HitobitoLogEntry) do

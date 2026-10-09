@@ -81,6 +81,41 @@ describe Person do
     expect(person.errors.messages[:base].size).to be_zero
   end
 
+  context "blocklist" do
+    before do
+      BlocklistEntry.create!(manual_person_attributes: {first_name: "Max", last_name: "Mustermann",
+                                                        birthday: "1980-01-15"})
+    end
+
+    let(:person) { Person.new(first_name: " max", last_name: "MUSTERMANN", birthday: "1980-01-15") }
+
+    it "may not be created when blocklisted" do
+      expect(person).not_to be_valid
+      expect(person.errors[:base]).to eq ["Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden."]
+    end
+
+    it "may be created when blocklisted with another birthday" do
+      person.birthday = "1980-01-16"
+
+      expect(person).to be_valid
+    end
+
+    it "may be created when blocklisted if feature is disabled" do
+      allow(FeatureGate).to receive(:enabled?).and_call_original
+      allow(FeatureGate).to receive(:enabled?).with("people.blocklist").and_return(false)
+
+      expect(person).to be_valid
+    end
+
+    it "may still be updated when blocklisted after creation" do
+      person = people(:bottom_member)
+      BlocklistEntry.create!(person_id: person.id)
+
+      person.town = "Bern"
+      expect(person).to be_valid
+    end
+  end
+
   context "birthday year validation" do
     it "is valid with a 4-digit year" do
       person = Person.new(last_name: "Foo", birthday: Date.new(9999, 12, 31))

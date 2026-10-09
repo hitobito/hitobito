@@ -1,0 +1,14 @@
+-#  Copyright (c) 2026, BdP and DPSG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= entry_form do |f|
+  %p= t('.explanation')
+
+  = f.labeled_person_field(:person, help: t('.person_help'))
+
+  %p= t('.manual_entry')
+
+  = f.fields_for(:manual_person, entry.manual_person || Person.new) do |fields|
+    = fields.labeled_input_fields(*Person::BlocklistDetector.hash_attrs)

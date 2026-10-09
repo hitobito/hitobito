@@ -79,8 +79,11 @@ module NavigationHelper
       position: 30,
       items: [
         Item.new(model: SelfRegistrationReason, path: :self_registration_reasons_path),
-        Item.new(model: ContactAccountCategory, path: :contact_account_categories_path)
-      ]
+        Item.new(model: ContactAccountCategory, path: :contact_account_categories_path),
+        FeatureGate.if("people.blocklist") do
+          Item.new(model: BlocklistEntry, path: :blocklist_entries_path)
+        end
+      ].compact_blank
     },
     info: {
       heading: "admins.show.info",

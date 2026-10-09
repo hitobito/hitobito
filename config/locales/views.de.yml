@@ -630,6 +630,19 @@ de:
       attachment:
         subject: "Nachrichten Betreff:"
 
+  blocklist_entries:
+    form:
+      explanation: >-
+        Personen auf der Ausschlussliste können nicht mehr in hitobito erfasst werden.
+        Gespeichert wird nur ein Hash über Vorname, Nachname und Geburtstag.
+      person_help: Bestehende oder gelöschte Person suchen. Die Angaben unten werden dann ignoriert.
+      manual_entry: Oder Angaben manuell erfassen
+    create:
+      flash:
+        success_with_person_html: >-
+          Die Person wurde auf die Ausschlussliste gesetzt. Sie ist weiterhin erfasst
+          und kann bei Bedarf unter %{person} gelöscht oder blockiert werden.
+
   second_factor_authentication:
     flash:
       success:

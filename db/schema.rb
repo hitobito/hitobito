@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_09_22_113307) do
+ActiveRecord::Schema[8.0].define(version: 2026_10_08_080000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -130,6 +130,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_22_113307) do
     t.index ["job_id", "attempt"], name: "index_background_job_log_entries_on_job_id_and_attempt", unique: true
     t.index ["job_id"], name: "index_background_job_log_entries_on_job_id"
     t.index ["job_name"], name: "index_background_job_log_entries_on_job_name"
+  end
+
+  create_table "blocklist_entries", force: :cascade do |t|
+    t.string "blocked_hash", null: false
+    t.bigint "creator_id"
+    t.datetime "created_at", null: false
+    t.index ["blocked_hash"], name: "index_blocklist_entries_on_blocked_hash", unique: true
+    t.index ["creator_id"], name: "index_blocklist_entries_on_creator_id"
   end
 
   create_table "bounces", force: :cascade do |t|

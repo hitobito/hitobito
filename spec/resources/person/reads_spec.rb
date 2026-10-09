@@ -296,6 +296,21 @@ describe PersonResource, type: :resource do
       end
     end
 
+    describe "roles with group_read" do
+      let(:group) { groups(:bottom_group_one_one) }
+      let!(:group_role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: group, person: person) }
+      let(:reader) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: group).person }
+      let(:ability) { Ability.new(reader) }
+
+      before { params[:include] = "roles" }
+
+      it "includes only the roles in the readable group" do
+        render
+        roles = d[0].sideload(:roles)
+        expect(roles.map(&:id)).to eq [group_role.id]
+      end
+    end
+
     describe "qualifications" do
       let!(:qualification1) { Fabricate(:qualification, person: person) }
       let!(:qualification2) { Fabricate(:qualification, person: person) }

@@ -70,6 +70,23 @@ describe RoleResource, type: :resource do
     end
   end
 
+  describe "with group_read in the group of the role" do
+    let(:group) { groups(:bottom_group_one_one) }
+    let!(:group_role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, group: group) }
+    let!(:role_in_other_group) do
+      Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_two),
+        person: group_role.person)
+    end
+    let(:person) { Fabricate(Group::BottomGroup::Member.name.to_sym, group: group).person }
+
+    before { params[:filter] = {person_id: {eq: group_role.person_id}} }
+
+    it "exposes only the roles in that group" do
+      render
+      expect(jsonapi_data.map(&:id)).to eq [group_role.id]
+    end
+  end
+
   describe "sideloading" do
     before { params[:filter] = {id: role.id.to_s} }
 

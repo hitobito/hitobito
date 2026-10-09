@@ -276,8 +276,8 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     start_on == Time.zone.today
   end
 
-  def active?(reference_time = Time.current)
-    active_period.cover?(reference_time)
+  def active?(reference = Date.current)
+    active_period.cover?(reference.to_date)
   end
 
   def active_period

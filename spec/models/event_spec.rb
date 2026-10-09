@@ -1214,6 +1214,13 @@ describe Event do
         expect(event.finish_at).to eq Time.zone.local(2001, 3, 1)
       end
     end
+
+    context "plain_text_description" do
+      it "returns the plain text version of the description" do
+        event.update(description: "Description:<h1>Header</h1><strong>Bold</strong> <em>Italic</em>")
+        expect(event.plain_text_description).to eq("Description:Header\n\nBold Italic")
+      end
+    end
   end
 
   def set_start_finish(event, start_at)

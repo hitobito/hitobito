@@ -38,9 +38,8 @@ ActiveSupport.on_load(:active_record) do
   def self.has_paper_trail(options = {})
     options[:meta] ||= {}
 
-    options[:meta][:item_label] = lambda do |item|
+    options[:meta][:item_label] ||= lambda do |item|
       return nil if item.blank?
-
       if item.method(:to_s).arity != 0
         item.to_s(:long)
       else

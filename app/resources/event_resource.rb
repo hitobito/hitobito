@@ -22,7 +22,7 @@ class EventResource < ApplicationResource
     attribute :kind_id, :integer, filterable: true
     attribute :name, :string
     attribute :description, :string do
-      @object.plain_description
+      @object.plain_text_description
     end
     attribute :html_description, :string do
       @object.description

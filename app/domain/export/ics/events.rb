@@ -21,10 +21,10 @@ module Export::Ics
     end
 
     def event_description(event)
-      return event.plain_description unless event.contact
+      return event.plain_text_description unless event.contact
 
       [
-        event.plain_description, "",
+        event.plain_text_description, "",
         event.contact.person_name,
         event.contact.phone_numbers.map { |pn| "#{pn.label}: #{pn.number}" if pn.public },
         event.contact.email, "",

@@ -753,7 +753,7 @@ de:
         contact_id: Kontaktperson
         description: Beschreibung
         body: Beschreibung
-        plain_description: Beschreibung
+        plain_text_description: Beschreibung
         location: Ort / Adresse
         application_opening_at: Anmeldebeginn
         application_closing_at: Anmeldeschluss

@@ -1215,10 +1215,10 @@ describe Event do
       end
     end
 
-    context "plain_description" do
+    context "plain_text_description" do
       it "returns the plain text version of the description" do
         event.update(description: "Description:<h1>Header</h1><strong>Bold</strong> <em>Italic</em>")
-        expect(event.plain_description).to eq("Description:Header\n\nBold Italic")
+        expect(event.plain_text_description).to eq("Description:Header\n\nBold Italic")
       end
     end
   end

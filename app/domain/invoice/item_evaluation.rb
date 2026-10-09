@@ -33,13 +33,12 @@ class Invoice::ItemEvaluation
   def article_rows # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     return @article_rows if @article_rows.present?
 
-    # rubocop:todo Layout/LineLength
-    invoice_items_by_article = InvoiceItem.where(invoice_id: payments_of_paid_invoices.payments.pluck(:invoice_id).uniq)
-      # rubocop:enable Layout/LineLength
+    invoice_items_by_article = InvoiceItem
+      .where(invoice_id: payments_of_paid_invoices.payments.pluck(:invoice_id).uniq)
+      .order(:id)
       .group_by { |invoice_item|
-      [invoice_item.name, invoice_item.account,
-        invoice_item.cost_center]
-    }
+        [invoice_item.name, invoice_item.account, invoice_item.cost_center]
+      }
 
     @article_rows = invoice_items_by_article.map do |ids, invoice_items|
       name, account, cost_center = *ids

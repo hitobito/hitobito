@@ -6,6 +6,9 @@
   "vulnerabilityAlerts": {
     "enabled": false
   },
+  "timezone": "Europe/Zurich",
+  "schedule": ["* 22-23,0-3 * * *"],
+  "automergeSchedule": ["* 22-23,0-3 * * *"],
   "minimumReleaseAge": "7 days",
   "internalChecksFilter": "strict",
   "rebaseWhen": "conflicted",

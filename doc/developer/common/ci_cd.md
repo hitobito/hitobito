@@ -47,6 +47,8 @@ die Tests aller Wagons gegen den geänderten Core laufen.
 * Aktiviert ist vorerst nur `brakeman`. Für weitere Gems müssten zusätzliche `packageRule`
   Einträge erfasst werden.
 * Ein Release wird erst nach 7 Tagen vorgeschlagen, passend zum `cooldown` in der `Gemfile`.
+* Renovate erstellt, aktualisiert und mergt Pull Requests nur zwischen 22 und 4 Uhr, damit die
+  Wagon-Tests tagsüber keine Runner belegen.
 * Die Pull Requests werden automatisch gemergt, sobald alle Checks der Branch Protection Rule grün
   sind. Die Wagon-Tests laufen dafür ohne Label, weil jeder Push auf einen `renovate/*` Branch sie
   auslöst.

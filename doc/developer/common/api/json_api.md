@@ -11,33 +11,34 @@ This documentation is about the new JSON API introduced in 2023. Check the [lega
 
 Currently the following endpoints are provided:
 
-| Method | Path                               | Function                                                                                |
-|--------|------------------------------------|-----------------------------------------------------------------------------------------|
-| GET    | /api/people/                       | List all accessible people                                                              |
-| GET    | /api/people/:id                    | Fetch a single person entry, replace :id with the person's primary key                  |
-| PUT    | /api/people/:id                    | Update a person entry, replace :id with the person's primary key                        |
-| GET    | /api/roles/                        | List all accessible roles                                                               |
-| POST   | /api/roles/                        | Create a new role                                                                       |
-| GET    | /api/roles/:id                     | Fetch a single role entry, replace :id with the roles' primary key                      |
-| PUT    | /api/roles/:id                     | Update a role entry, replace :id with the roles' primary key                            |
-| DELETE | /api/roles/:id                     | Remove a role entry, replace :id with the roles' primary key                            |
-| GET    | /api/groups/                       | List all accessible groups                                                              |
-| GET    | /api/groups/:id                    | Fetch a single group entry, replace :id with the groups's primary key                   |
-| GET    | /api/events/                       | List all accessible events                                                              |
-| GET    | /api/events/:id                    | Fetch a single event entry, replace :id with the event's primary key                    |
-| GET    | /api/event_participations/         | List all accessible event participations                                                |
-| GET    | /api/event_participations/:id      | Fetch a single event participation entry, replace :id with the participation's primary key       |
-| GET    | /api/event_kinds/                  | List all accessible events kinds                                                        |
-| GET    | /api/event_kinds/:id               | Fetch a single event kind, replace :id with the event kind's primary key                |
-| GET    | /api/event_kind_categories/        | List all accessible events kind categories                                              |
-| GET    | /api/event_kind_categories/:id     | Fetch a single event kind category, replace :id with the category's primary key         |
-| GET    | /api/invoices/                     | List all accessible invoices                                                            |
-| GET    | /api/invoices/:id                  | Fetch a single invoice, replace :id with the invoice's primary key                      |
-| PUT    | /api/invoices/:id                  | Update an invoice, replace :id with the list's primary key                              |
-| GET    | /api/mailing_lists/                | List all accessible mailing lists                                                       |
-| GET    | /api/mailing_lists/:id             | Fetch a single mailing_list, replace :id with the list's primary key                    |
-| GET    | /api/groups/:id/self_registrations | Create a new person in a group that allows it, replace :id with the group's primary key |
-
+| Method | Path                               | Function                                                                                   |
+|--------|------------------------------------|--------------------------------------------------------------------------------------------|
+| GET    | /api/people/                       | List all accessible people                                                                 |
+| GET    | /api/people/:id                    | Fetch a single person entry, replace :id with the person's primary key                     |
+| PUT    | /api/people/:id                    | Update a person entry, replace :id with the person's primary key                           |
+| GET    | /api/roles/                        | List all accessible roles                                                                  |
+| POST   | /api/roles/                        | Create a new role                                                                          |
+| GET    | /api/roles/:id                     | Fetch a single role entry, replace :id with the roles' primary key                         |
+| PUT    | /api/roles/:id                     | Update a role entry, replace :id with the roles' primary key                               |
+| DELETE | /api/roles/:id                     | Remove a role entry, replace :id with the roles' primary key                               |
+| GET    | /api/groups/                       | List all accessible groups                                                                 |
+| GET    | /api/groups/:id                    | Fetch a single group entry, replace :id with the groups's primary key                      |
+| GET    | /api/events/                       | List all accessible events                                                                 |
+| GET    | /api/events/:id                    | Fetch a single event entry, replace :id with the event's primary key                       |
+| GET    | /api/event_participations/         | List all accessible event participations                                                   |
+| GET    | /api/event_participations/:id      | Fetch a single event participation entry, replace :id with the participation's primary key |
+| GET    | /api/event_kinds/                  | List all accessible events kinds                                                           |
+| GET    | /api/event_kinds/:id               | Fetch a single event kind, replace :id with the event kind's primary key                   |
+| GET    | /api/event_kind_categories/        | List all accessible events kind categories                                                 |
+| GET    | /api/event_kind_categories/:id     | Fetch a single event kind category, replace :id with the category's primary key            |
+| GET    | /api/invoices/                     | List all accessible invoices                                                               |
+| GET    | /api/invoices/:id                  | Fetch a single invoice, replace :id with the invoice's primary key                         |
+| PUT    | /api/invoices/:id                  | Update an invoice, replace :id with the list's primary key                                 |
+| GET    | /api/mailing_lists/                | List all accessible mailing lists                                                          |
+| GET    | /api/mailing_lists/:id             | Fetch a single mailing_list, replace :id with the list's primary key                       |
+| GET    | /api/groups/:id/self_registrations | Create a new person in a group that allows it, replace :id with the group's primary key    |
+| GET    | /api/role_types/                   | List all role types of this hitobito instance. Accessible without authentication.          |
+| GET    | /api/group_types/                  | List all group types of this hitobito instance. Accessible without authentication.         |
 
 All successful responses do have HTTP Status `2xx`.
 
@@ -71,7 +72,7 @@ the error's field detail is translated by provided locale. all other fields are 
 
 ### Authentication
 
-To use the API you need a valid authentication token, this can be one of the following
+Except for `/api/role_types` and `/api/group_types`, using the API requires a valid authentication token, this can be one of the following
 
 - Service tokens
 - Personal OAuth access tokens

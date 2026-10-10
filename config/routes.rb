@@ -495,6 +495,7 @@ Hitobito::Application.routes.draw do
         resources :self_registrations, only: [:create]
       end
     end
+    resources :contact_account_categories, only: [:index, :show]
     resources :events, only: [:index, :show]
     resources :event_kinds, module: :event, controller: :kinds, only: [:index, :show]
     resources :event_kind_categories, module: :event, controller: :kind_categories,

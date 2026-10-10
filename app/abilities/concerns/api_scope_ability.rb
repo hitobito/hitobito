@@ -10,6 +10,7 @@ module ApiScopeAbility
 
   REQUIRED_SCOPES = {
     Role: [:groups, :people],
+    ContactAccountCategory: :people,
     "Event::Kind": :events,
     "Event::KindCategory": :events,
     InvoiceItem: :invoices

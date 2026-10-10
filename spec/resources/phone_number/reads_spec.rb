@@ -38,6 +38,16 @@ describe PhoneNumberResource, type: :resource do
         expect(data.label).to eq phone_number.label
         expect(data.number).to eq phone_number.number
         expect(data.public).to eq phone_number.public
+        expect(data.category_id).to eq phone_number.category_id
+      end
+
+      it "sideloads the category" do
+        params[:include] = "category"
+        render
+        category_data = d[0].sideload(:category)
+        expect(category_data.id).to eq phone_number.category_id
+        expect(category_data.jsonapi_type).to eq "contact_account_categories"
+        expect(category_data.key).to eq phone_number.category.key
       end
     end
   end

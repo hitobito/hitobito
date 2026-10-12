@@ -18,7 +18,7 @@ module Event::ContactAttrs
       :gender, :birthday, :phone_numbers, :language]
 
     FeatureGate.if("address.company") do
-      # if company feature is enabled, insert company_name after email
+      # if company feature is enabled, insert company_name before email
       possible_contact_attrs.insert(possible_contact_attrs.index(:email), :company_name)
     end
 

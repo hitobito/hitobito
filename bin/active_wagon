@@ -87,24 +87,24 @@ class Setup
 
   def environment(wagon = nil)
     specifics = if wagon
-      <<~DIRENV
+      <<~BASH
         #{"PATH_add ../hitobito/bin" if wagon}
         PATH_add bin
         export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
         export RAILS_TMPDIR=../hitobito_#{primary_wagon}/tmp
         export SPRING_APPLICATION_ID=hit_#{primary_wagon}
-      DIRENV
+      BASH
 
     else
-      <<~DIRENV
+      <<~BASH
         PATH_add bin
         export RAILS_TEST_DB_NAME=hit_core_test
         export SPRING_APPLICATION_ID=hit_core
-      DIRENV
+      BASH
     end
 
-    <<~DIRENV
-      export WAGON=#{wagon}
+    <<~BASH
+      export WAGON=#{wagons.join(",")}
       export OVERMIND_PROCFILE=#{root.join("Procfile")}
       export OVERMIND_TITLE="#{overmind_title}"
       export DISABLE_TEST_SCHEMA_MAINTENANCE=1
@@ -119,7 +119,7 @@ class Setup
       #{'export WAGONS="' + wagons.join(" ") + '"' if wagons.any?}
       source_up
       log_status "hitobito now uses: #{wagons.any? ? wagons.join(", ") : "just the core"}"
-    DIRENV
+    BASH
   end
 
   def root

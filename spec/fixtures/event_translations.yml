@@ -18,5 +18,4 @@ top_course_de:
   locale: de
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
-
   name: Top Course

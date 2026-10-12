@@ -13,7 +13,17 @@ class Person::Filter::AttributeControl < Filter::AttributeControl
   private
 
   def all_field_types
-    safe_join([super, country_select_field])
+    safe_join([super, gender_select_field, country_select_field])
+  end
+
+  # NOTE: kept intentionally to include the _blank as a distinct filter value
+  def gender_select_field
+    gender_options = (Person::GENDERS + [""]).collect { |g| [g, Person.new.gender_label(g)] }
+    select_tag(
+      "#{filter_name_prefix}[value]",
+      options_from_collection_for_select(gender_options, :first, :last, value),
+      control_html_options(control_classes: SELECT_CLASSES, class: "gender_select_field")
+    )
   end
 
   def country_select_field

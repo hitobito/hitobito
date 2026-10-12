@@ -26,11 +26,10 @@ describe PeopleFilterHelper do
       expect(node).to have_select(count: 2)
       expect(node).to have_select(count: 1, disabled: true)
       expect(node).to have_select options: ["ist leer", "ist genau"]
-      expect(node).to have_select options: ["männlich", "weiblich"]
+      expect(node).to have_select options: ["weiblich", "männlich", "unbekannt"]
       expect(node).to have_select selected: "Geschlecht", disabled: true
       expect(node).to have_select selected: "männlich"
       expect(value[:name]).to eq "filters[attributes][#{time}][value]"
-      expect(value["data-attr-key"]).to eq "gender"
     end
 
     it "renders i18n_enum control for canton" do
@@ -73,9 +72,7 @@ describe PeopleFilterHelper do
       node = Capybara::Node::Simple.new(people_filter_attribute_control_template)
 
       selects = node.all("select.i18n_enum_field[disabled]")
-      expect(selects.pluck("data-attr-key"))
-        .to include("canton", "gender")
-      expect(node).to have_select(options: ["männlich", "weiblich"], disabled: true)
+      expect(selects.pluck("data-attr-key")).to include("canton")
       expect(node).to have_select(with_options: ["Bern"], disabled: true)
     end
   end

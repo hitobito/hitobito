@@ -191,7 +191,7 @@ describe PeopleController, js: true do
 
     it "has gender field for gender attrs" do
       find("#attribute_filter option", text: "Geschlecht").click
-      expect(page).to have_css ".i18n_enum_field[data-attr-key='gender']"
+      expect(page).to have_css ".gender_select_field"
     end
 
     it "has canton select dropdown for canton attrs" do

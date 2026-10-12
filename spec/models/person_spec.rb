@@ -585,7 +585,7 @@ describe Person do
     expect(attrs[:zip_code]).to eq(label: "PLZ", type: :string)
     expect(attrs[:town]).to eq(label: "Ort", type: :string)
     expect(attrs[:country]).to eq(label: "Land", type: :country_select)
-    expect(attrs[:gender]).to eq(label: "Geschlecht", type: :i18n_enum)
+    expect(attrs[:gender]).to eq(label: "Geschlecht", type: :gender_select)
     expect(attrs[:years]).to eq(label: "Alter", type: :integer)
     expect(attrs[:canton]).to eq(label: "Kanton", type: :i18n_enum)
 

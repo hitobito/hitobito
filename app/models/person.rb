@@ -116,7 +116,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     [:id, :integer], :first_name, :last_name, :nickname, :company_name,
     :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
-    [:country, :country_select], [:canton, :i18n_enum], [:gender, :i18n_enum],
+    [:country, :country_select], [:canton, :i18n_enum], [:gender, :gender_select],
     [:years, :integer], :birthday
   ]
 

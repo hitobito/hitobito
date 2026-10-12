@@ -4,6 +4,7 @@
 
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
+- In der JSON:API sind Rollen in Gruppen lesbar, deren Personenliste man mit Gruppenrechten (z.B. `group_read`) lesen darf, wie in der Personenliste im UI (#4555)
 
 ## Version 2.10
 

@@ -116,7 +116,10 @@ RSpec.configure do |config|
 
   config.global_fixtures = :all
 
+  config.add_setting :seeds, default: []
+
   config.before(:suite) do
+    TestDatabase.prepare(config)
     Group.reset_root_id # make sure to use root_id from fixtures, not from seeds
   end
 

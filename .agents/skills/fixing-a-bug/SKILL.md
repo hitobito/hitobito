@@ -21,7 +21,7 @@ Any bugfix task: reproducing and resolving a defect. For new functionality, use 
 4. Implement the fix.
 5. Do not touch locales other than `de`, not even german variants like `de_CH` or `de_DE`.
 6. Confirm the spec now passes.
-7. Update the copyright notice at the top of touched files to cover the current year.
+7. Update the copyright notice at the top of touched files to also cover the current year. The previous start should be preserved, e.g. 2015-2026
 8. Run `bundle exec rake brakeman` — no new security findings.
 9. Run `bundle exec rake rubocop` — code style must be clean. `bundle exec rake rubocop:changed` checks only the
    files you touched.

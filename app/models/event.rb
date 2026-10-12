@@ -452,8 +452,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     def filter_attrs
       filterable_attrs.map do |key, type|
-        type = :string if translated_attribute_names.include?(key.to_sym)
-        type ||= columns_hash[key.to_s]&.type || :string
+        if translated_attribute_names.include?(key.to_sym) || key.to_sym == :plain_text_description
+          type = :string
+        end
+        type ||= columns_hash.fetch(key.to_s).type
         [key.to_sym, {label: human_attribute_name(key), type: type}]
       end.to_h
     end

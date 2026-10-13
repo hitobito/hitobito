@@ -1607,13 +1607,14 @@ fr:
         name: Nom
         description: Description
         key: Clef
-        range: Zone d'accès
-        abilities: Droits
+        permission: Berechtigung
+        permissions:
+          layer_read: Leserechte auf dieser Ebene
+          layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebenen
+          layer_full: Lese- und Schreibrechte auf dieser Ebene
+          layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
+        scopes: Zugriffsbereich
         last_access: Dernier accès
-        layer_read: Droits de lecture à ce niveau
-        layer_and_below_read: Droits de lecture à ce niveau et aux niveaux inférieurs
-        layer_full: Droits d'écriture et lecture à ce niveau
-        layer_and_below_full: Droits d'écriture et lecture à ce niveau et aux niveaux inférieurs
         people: Personnes
         register_people: Enregistrer de nouvelles personnes (nécessite des droits d'écriture)
         groups: Groupes

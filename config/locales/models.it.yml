@@ -1606,13 +1606,14 @@ it:
         name: Cognome
         description: Descrizione
         key: Codice
-        range: Zona di accesso
-        abilities: Diritti
+        permission: Berechtigung
+        permissions:
+          layer_read: Leserechte auf dieser Ebene
+          layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebenen
+          layer_full: Lese- und Schreibrechte auf dieser Ebene
+          layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
+        scopes: Zugriffsbereich
         last_access: Ultimo Accesso
-        layer_read: Diritti di lettura per questo livello
-        layer_and_below_read: Diritti di lettura per questo livello e per i livelli inferiori
-        layer_full: Diritti di lettura e scrittura per questo livello
-        layer_and_below_full: Diritti di lettura e scrittura per questo livello e per i livelli inferiori
         people: Persone
         register_people: Registrare una nuova persona (richiede autorizzazione)
         groups: Gruppi

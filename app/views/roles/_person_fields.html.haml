@@ -13,7 +13,8 @@
   = f.fields_for(:new_person, entry.person) do |fields|
     = field_set_tag do
       = fields.labeled_input_fields *entry.person.decorate.used_attributes(:first_name, :last_name, :nickname, :company_name)
-      = fields.labeled_boolean_field :company
+      - if entry.person.attr_used?(:company)
+        = fields.labeled_boolean_field :company
       = fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), class: 'd-inline '
       = render_extensions :additional_person_fields, locals: { fields: fields }
 

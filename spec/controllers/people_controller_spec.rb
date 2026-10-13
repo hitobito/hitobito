@@ -668,6 +668,21 @@ describe PeopleController do
             expect(dom).to have_field("#{base}_organization_name")
             expect(dom).to have_content("Namen der Person übernehmen")
           end
+
+          it "does not render organization/organization_name when address.company is disabled" do
+            allow(Settings.address.company).to receive(:enabled).and_return(false)
+            Fabricate(:additional_address, contactable: person, label: "Rechnung")
+
+            get :edit, params: {group_id: group.id, id: person.id}
+
+            expect(response).to have_http_status(:ok)
+            dom = Capybara::Node::Simple.new(response.body)
+            base = "person_additional_addresses_attributes_0"
+            expect(dom).to have_field("#{base}_first_name")
+            expect(dom).to have_field("#{base}_last_name")
+            expect(dom).to have_no_field("#{base}_organization")
+            expect(dom).to have_no_field("#{base}_organization_name")
+          end
         end
 
         context "PUT update with blank additional address category id" do

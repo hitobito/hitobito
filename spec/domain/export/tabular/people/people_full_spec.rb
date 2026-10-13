@@ -18,7 +18,8 @@ describe Export::Tabular::People::PeopleFull do
       :layer_group, :roles, :gender, :birthday, :additional_information, :language, :canton, :tags,
       :additional_email_private, :additional_email_work, :additional_email_invoices, :additional_email_other,
       :phone_number_mobile, :phone_number_landline, :phone_number_work, :phone_number_other,
-      :social_account_facebook, :social_account_x_twitter, :social_account_website, :social_account_other]
+      :social_account_facebook, :social_account_x_twitter, :social_account_website, :social_account_other,
+      :additional_address_work, :additional_address_invoices, :additional_address_other]
     should match_array expected
     should eq expected
   end

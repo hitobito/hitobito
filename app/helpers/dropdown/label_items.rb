@@ -52,19 +52,23 @@ module Dropdown
       end
     end
 
-    def add_label_format_items_with_additional_address(parent) # rubocop:todo Metrics/AbcSize
+    def add_label_format_items_with_additional_address(parent)
       LabelFormat.list.for_person(user).each do |label_format|
         format_item = Item.new(label_format.to_s, "#")
         parent.sub_items << format_item
 
-        categories = ContactAccountCategory.for("AdditionalAddress", "Person")
-        types_with_labels = categories.map { |category| [category.key, category.to_s] }
-        types_with_labels.unshift([:main,
-          I18n.t(".additional_address.main", scope: self.class.to_s.underscore)])
-        types_with_labels.each do |category_key, label|
+        additional_address_types_with_labels.each do |category_key, label|
           format_item.sub_items << add_label_format_item(label_format, label:, category_key:)
         end
       end
+    end
+
+    def additional_address_types_with_labels
+      @additional_address_types_with_labels ||= ContactAccountCategory
+        .for("AdditionalAddress", "Person")
+        .map { |category| [category.key, category.to_s] }
+        .unshift([:main,
+          I18n.t(".additional_address.main", scope: self.class.to_s.underscore)])
     end
 
     def add_label_format_items_without_additional_address(parent)

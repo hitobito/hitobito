@@ -6,13 +6,9 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["toggle", "organizationToggle"];
+  static targets = ["toggle"];
 
   toggle(event) {
     this.toggleTarget.classList.toggle("hidden");
-  }
-
-  toggleOrganization(event) {
-    this.organizationToggleTarget.classList.toggle("hidden");
   }
 }

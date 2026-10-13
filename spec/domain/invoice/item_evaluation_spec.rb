@@ -114,6 +114,27 @@ describe Invoice::ItemEvaluation do
          type: :by_article}])
     end
 
+    it "keeps the row order when an invoice item is rewritten" do
+      invoice = Invoice.create(
+        title: "Membership",
+        creator: top_leader,
+        recipient: bottom_member,
+        group: top_layer,
+        invoice_items_attributes: [
+          {name: "Membership", unit_cost: 100, count: 1, vat_rate: 0,
+           cost_center: "Members", account: "01-23456-7"},
+          {name: "Shirt", unit_cost: 30, count: 2, vat_rate: 5,
+           cost_center: "Merch", account: "08-76543-2"}
+        ]
+      )
+      Payment.create(amount: invoice.recalculate, invoice: invoice, received_at: 2.months.ago)
+
+      InvoiceItem.where(invoice_id: invoice.id, name: "Membership").update_all(description: "x")
+
+      evaluations = described_class.new(top_layer, 1.year.ago, 1.month.from_now).fetch_evaluations
+      expect(evaluations.pluck(:name)).to eq ["Membership", "Shirt"]
+    end
+
     it "returns sum of deficit" do
       invoice_attrs = {
         title: "Membership",

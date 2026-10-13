@@ -5,6 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+# Records which subjects an invoice item has already charged, so that a later invoice run
+# with the same period invoice template does not charge them again.
+
 # == Schema Information
 #
 # Table name: invoice_run_processed_subjects
@@ -20,7 +23,6 @@
 #  index_invoice_run_processed_subjects_on_item_id           (item_id)
 #  index_invoice_run_processed_subjects_on_template_item_id  (template_item_id)
 #  index_processed_subjects                                  (subject_type,subject_id,template_item_id,item_id)
-#  index_unique_processed_subjects                           (subject_type,subject_id,template_item_id) UNIQUE
 #
 class InvoiceRun::ProcessedSubject < ActiveRecord::Base
   self.table_name = "invoice_run_processed_subjects"

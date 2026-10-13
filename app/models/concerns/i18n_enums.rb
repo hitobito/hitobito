@@ -37,9 +37,7 @@ module I18nEnums
       define_method(:"#{attr}_label") do |value = nil|
         value ||= send(attr)
         if value.present?
-          # Unknown values (e.g. from csv import) are rendered quoted to mark
-          # them as raw values instead of raising I18n::MissingTranslationData.
-          I18n.t("#{prefix}.#{value.to_s.downcase}", default: %("#{value}"))
+          I18n.t("#{prefix}.#{value.to_s.downcase}")
         else
           I18n.t("#{prefix}.#{NIL_KEY}", default: "")
         end

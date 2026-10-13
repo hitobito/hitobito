@@ -66,6 +66,10 @@ class Ability
     "user-#{user.id}"
   end
 
+  def admin?
+    user_context.all_permissions.include?(:admin)
+  end
+
   def user_finance_layer_ids
     user.root? ? Group.layers.pluck(:id) : user_context.permission_layer_ids(:finance)
   end

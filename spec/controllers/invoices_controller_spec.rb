@@ -273,6 +273,24 @@ describe InvoicesController do
           get :index, params: {group_id: group.id}, format: :xlsx
         end.to change { Delayed::Job.count }.by(1)
       end
+
+      it "exports the invoice items as csv" do
+        expect(Export::InvoiceItemsJob).to receive(:new)
+          .with(:csv, anything, expected_ids, {filename: "rechnungsposten"}).and_call_original
+
+        expect do
+          get :index, params: {group_id: group.id, invoice_items: true}, format: :csv
+        end.to change { Delayed::Job.count }.by(1)
+      end
+
+      it "exports the invoice items as xlsx" do
+        expect(Export::InvoiceItemsJob).to receive(:new)
+          .with(:xlsx, anything, expected_ids, {filename: "rechnungsposten"}).and_call_original
+
+        expect do
+          get :index, params: {group_id: group.id, invoice_items: true}, format: :xlsx
+        end.to change { Delayed::Job.count }.by(1)
+      end
     end
 
     it "handles exporting only one invoice" do

@@ -28,6 +28,7 @@
 #
 class InvoiceItem < ActiveRecord::Base
   include Globalized
+  include FindableByOrderedIdList
 
   # used to map declassified type string to class constant
   class_attribute :type_mappings

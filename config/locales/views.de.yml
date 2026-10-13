@@ -1107,6 +1107,9 @@ de:
 
   import/person_importer:
     row_with_error: "Zeile %{row}: %{errors}"
+    missing_ids: "Keine ID in Zeile(n): %{rows}"
+    duplicate_ids: "ID mehrmals vergeben: %{ids}"
+    invalid_ids: "Ungültige ID in Zeile(n): %{rows}"
 
   import/person_duplicate_finder:
     duplicates: "%{count} Treffer in Duplikatserkennung."
@@ -1802,6 +1805,11 @@ de:
         import_details_html: >
           Folgende Personen werden mit der <strong>Rolle %{role}</strong>
           in die <strong>Gruppe %{group}</strong> importiert.
+        id_mapped_hint: >
+          Eine Spalte ist der Personennummer zugeordnet. Personen werden ausschliesslich
+          anhand ihrer Personennummer gefunden. Die Duplikaterkennung ist deaktiviert.
+          Für Personennummern, die noch nicht existieren, werden neue Personen mit
+          dieser Personennummer erstellt.
 
     add_request_mailer:
       request_link: Anfrage beantworten
@@ -1871,6 +1879,7 @@ de:
 
   person/csv_imports:
     invalid_file: Bitte wählen Sie eine gültige CSV Datei aus.
+    id_mapping_not_allowed: Die Zuordnung einer Spalte auf die Personennummer erfordert Admin-Berechtigung.
 
     duplicate_keys:
       one: "%{list} wurde mehrfach zugewiesen."

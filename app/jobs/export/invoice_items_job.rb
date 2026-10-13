@@ -19,8 +19,10 @@ class Export::InvoiceItemsJob < Export::ExportBaseJob
   end
 
   def entries
-    # Every row repeats the data of its invoice, so we preload the invoices.
-    InvoiceItem.find_in_ordered_batches(invoice_item_ids, scope: InvoiceItem.includes(:invoice))
+    # Every row repeats the globalized name and the data of its invoice, so we preload
+    # the invoices and translations.
+    InvoiceItem.find_in_ordered_batches(invoice_item_ids,
+      scope: InvoiceItem.includes(:invoice, :translations))
   end
 
   def data

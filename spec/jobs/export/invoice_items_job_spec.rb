@@ -42,10 +42,19 @@ describe Export::InvoiceItemsJob do
     job.perform
   end
 
-  it "loads the invoice of every item without an extra query per item" do
+  it "loads the invoice and translations of every item without extra queries per item" do
     entries = job.entries.to_a
     expect(entries.size).to eq 6
     expect(entries.map { |entry| entry.association(:invoice).loaded? }).to all(be true)
+    expect(entries.map { |entry| entry.association(:translations).loaded? }).to all(be true)
+  end
+
+  it "exports without N+1 queries" do
+    expect { job.data }.to make.db_queries.with(
+      "InvoiceItem Load" => 1,
+      "Invoice Load" => 1,
+      "InvoiceItem::Translation Load" => 1
+    )
   end
 
   context "xlsx" do

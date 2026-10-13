@@ -30,7 +30,7 @@ module Import
       return false if id_mapped? && !ids_valid?
 
       save_results = people.each_with_index.map { |p, i| valid?(p) && save_person(p, i) }
-      ::Person.connection.reset_pk_sequence!("people") if id_mapped?
+      reset_pk_sequence if id_mapped?
       !save_results.include?(false)
     end
 

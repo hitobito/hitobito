@@ -317,6 +317,14 @@ describe Import::PersonImporter do
         expect(importer.new_count).to eq 0
       end
 
+      it "does not move the pk sequence backwards" do
+        Person.connection.execute(
+          "SELECT setval(pg_get_serial_sequence('people', 'id'), #{new_id})"
+        )
+        subject.import
+        expect(Fabricate(:person).id).to be > new_id
+      end
+
       context "with override behaviour" do
         let(:importer) do
           importer = Import::PersonImporter.new(data, group, role_type,

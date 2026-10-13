@@ -1496,6 +1496,8 @@ it:
         cost: Importo
         cost_center: Centro di costo
         account: Conto
+        vat: MwSt. Betrag
+        total: Total
 
 
       invoice_run:

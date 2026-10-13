@@ -1407,6 +1407,8 @@ en:
         cost: Invoice
         cost_center: Cost center
         account: Account
+        vat: MwSt. Betrag
+        total: Total
 
 
       invoice_run:

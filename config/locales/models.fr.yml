@@ -1497,6 +1497,8 @@ fr:
         cost: Montant
         cost_center: Poste
         account: Compte
+        vat: MwSt. Betrag
+        total: Total
 
 
       invoice_run:

@@ -384,6 +384,33 @@ describe Import::PersonImporter do
         expect(subject.import).to eq false
         expect(importer.errors).to eq ["ID mehrmals vergeben: #{new_id}"]
       end
+
+      context "differing only in leading zeros" do
+        let(:data) { [{id: new_id.to_s, first_name: "A"}, {id: "00#{new_id}", first_name: "B"}] }
+
+        it "aborts the whole import" do
+          expect { subject.import }.not_to change(Person, :count)
+          expect(subject.import).to eq false
+          expect(importer.errors).to eq ["ID mehrmals vergeben: #{new_id}"]
+        end
+      end
+    end
+
+    context "invalid ids" do
+      let(:data) do
+        [{id: new_id, first_name: "A"},
+          {id: "abc", first_name: "B"},
+          {id: "0", first_name: "C"},
+          {id: "-5", first_name: "D"},
+          {id: "12.5", first_name: "E"},
+          {id: "99999999999", first_name: "F"}]
+      end
+
+      it "aborts the whole import" do
+        expect { subject.import }.not_to change(Person, :count)
+        expect(subject.import).to eq false
+        expect(importer.errors).to eq ["Ungültige ID in Zeile(n): 2, 3, 4, 5, 6"]
+      end
     end
   end
 

@@ -1109,6 +1109,7 @@ de:
     row_with_error: "Zeile %{row}: %{errors}"
     missing_ids: "Keine ID in Zeile(n): %{rows}"
     duplicate_ids: "ID mehrmals vergeben: %{ids}"
+    invalid_ids: "Ungültige ID in Zeile(n): %{rows}"
 
   import/person_duplicate_finder:
     duplicates: "%{count} Treffer in Duplikatserkennung."

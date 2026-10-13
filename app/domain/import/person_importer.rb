@@ -9,6 +9,8 @@ module Import
   class PersonImporter
     include Translatable
 
+    MAX_ID = 2**31 - 1
+
     attr_reader :data, :role_type, :group, :options,
       :failure_count, :new_count, :request_people, :errors
 
@@ -150,7 +152,7 @@ module Import
     end
 
     def validate_ids
-      [missing_ids_error, duplicate_ids_error].compact
+      [missing_ids_error, invalid_ids_error, duplicate_ids_error].compact
     end
 
     def missing_ids_error
@@ -158,11 +160,28 @@ module Import
       translate(:missing_ids, rows: rows.join(", ")) if rows.any?
     end
 
+    def invalid_ids_error
+      rows = data.each_with_index.filter_map do |row, index|
+        index + 1 if row[:id].present? && parse_id(row[:id]).nil?
+      end
+      translate(:invalid_ids, rows: rows.join(", ")) if rows.any?
+    end
+
+    # Compares the parsed ids, so "0123" and "123" count as duplicates.
     def duplicate_ids_error
-      ids = data.filter_map { |row| row[:id].presence }
+      ids = data.filter_map { |row| parse_id(row[:id]) }
         .tally
         .filter_map { |id, count| id if count > 1 }
       translate(:duplicate_ids, ids: ids.join(", ")) if ids.any?
+    end
+
+    # Returns the id as a positive integer within the range of people.id
+    # (a 4 byte serial), or nil if it is not one.
+    def parse_id(value)
+      return unless /\A\d+\z/.match?(value.to_s)
+
+      id = value.to_s.to_i
+      id if id.between?(1, MAX_ID)
     end
 
     def duplicate_finder

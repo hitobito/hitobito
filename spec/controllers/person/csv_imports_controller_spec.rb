@@ -96,6 +96,22 @@ describe Person::CsvImportsController do
         end
       end
 
+      context "with rendered views" do
+        render_views
+
+        let(:hint) { "Die Duplikaterkennung ist deaktiviert" }
+
+        it "hints that people are matched by id only" do
+          post :preview, params: required_params.merge(field_mappings: field_mappings)
+          expect(response.body).to include(hint)
+        end
+
+        it "shows no hint when id is not mapped" do
+          post :preview, params: required_params.merge(field_mappings: {Vorname: "first_name"})
+          expect(response.body).not_to include(hint)
+        end
+      end
+
       context "as non-admin" do
         let(:role_type) { "Group::BottomLayer::Member" }
         let(:group) { groups(:bottom_layer_one) }

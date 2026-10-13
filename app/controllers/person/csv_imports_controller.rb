@@ -7,7 +7,8 @@ class Person::CsvImportsController < ApplicationController
   attr_accessor :group
   attr_reader :importer, :parser, :entries, :can_manage_tags
 
-  helper_method :group, :parser, :guess, :model_class, :entries, :role_name, :field_mappings
+  helper_method :group, :parser, :importer, :guess, :model_class, :entries, :role_name,
+    :field_mappings
 
   before_action :load_group
   before_action :custom_authorization

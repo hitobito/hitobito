@@ -1805,6 +1805,11 @@ de:
         import_details_html: >
           Folgende Personen werden mit der <strong>Rolle %{role}</strong>
           in die <strong>Gruppe %{group}</strong> importiert.
+        id_mapped_hint: >
+          Eine Spalte ist der Personennummer zugeordnet. Personen werden ausschliesslich
+          anhand ihrer Personennummer gefunden. Die Duplikaterkennung ist deaktiviert.
+          Für Personennummern, die noch nicht existieren, werden neue Personen mit
+          dieser Personennummer erstellt.
 
     add_request_mailer:
       request_link: Anfrage beantworten

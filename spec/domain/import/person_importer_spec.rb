@@ -354,6 +354,16 @@ describe Import::PersonImporter do
       end
     end
 
+    context "multiple existing people" do
+      let!(:existing) { Fabricate.times(3, :person) }
+      let(:data) { existing.map { |person| {id: person.id, town: "Zürich"} } }
+
+      it "loads them with a single query" do
+        importer
+        expect { importer.people }.to make.db_queries.with("Person Load" => 1)
+      end
+    end
+
     context "duplicate detection" do
       let!(:dup1) { Fabricate(:person, first_name: "Foo", last_name: "Bar") }
       let!(:dup2) { Fabricate(:person, first_name: "Foo", last_name: "Bar") }

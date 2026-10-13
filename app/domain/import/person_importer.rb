@@ -125,17 +125,15 @@ module Import
     def find_person(attrs)
       return duplicate_finder.find(attrs) unless id_mapped?
 
-      ::Person.find_by(id: attrs[:id]).tap do |person|
-        existing_ids[person.id] = person if person
-      end
+      people_by_id[parse_id(attrs[:id])]
     end
 
-    def existing_ids
-      @existing_ids ||= {}
+    def people_by_id
+      @people_by_id ||= ::Person.where(id: data.map { |row| parse_id(row[:id]) }).index_by(&:id)
     end
 
     def existing_count
-      id_mapped? ? existing_ids.size : duplicate_finder.unique_count
+      id_mapped? ? people_by_id.size : duplicate_finder.unique_count
     end
 
     # Pre-validation when id is mapped: every row needs an id value and all

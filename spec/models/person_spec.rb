@@ -587,7 +587,7 @@ describe Person do
     expect(attrs[:country]).to eq(label: "Land", type: :country_select)
     expect(attrs[:gender]).to eq(label: "Geschlecht", type: :gender_select)
     expect(attrs[:years]).to eq(label: "Alter", type: :integer)
-    expect(attrs[:canton]).to eq(label: "Kanton", type: :canton_select)
+    expect(attrs[:canton]).to eq(label: "Kanton", type: :i18n_enum)
 
     expect(Person.filter_attrs.count).to eq(Person::FILTER_ATTRS.count)
   end

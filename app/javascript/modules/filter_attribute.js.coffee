@@ -49,6 +49,10 @@ app.FilterAttribute = {
     form.find('.attribute_key_hidden_field').removeAttr('disabled')
     form.find('.attribute_constraint_dropdown').removeAttr('disabled')
     Array.from(form.find('.attribute_value_input:not(.' + type + '_field)')).forEach((element) => element.remove(););
+    # attribute types like i18n_enum share one field class across attributes;
+    # the rendered variants are tagged with data-attr-key, keep the matching one
+    form.find('.attribute_value_input[data-attr-key]').filter(->
+      $(this).data('attrKey') != field).remove()
     form.find('.' + type + '_field').removeAttr('disabled')
 
   toggleValueVisibility: (e) ->

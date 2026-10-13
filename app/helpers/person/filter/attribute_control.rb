@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,19 +13,10 @@ class Person::Filter::AttributeControl < Filter::AttributeControl
   private
 
   def all_field_types
-    fields = [super, country_select_field, gender_select_field, canton_select_field]
-    safe_join(fields)
+    safe_join([super, gender_select_field, country_select_field])
   end
 
-  def country_select_field
-    country_select(
-      filter_name_prefix,
-      "value",
-      {priority_countries: Settings.countries.prioritized, selected: value, include_blank: ""},
-      control_html_options(control_classes: SELECT_CLASSES, class: "country_select_field")
-    )
-  end
-
+  # NOTE: kept intentionally to include the _blank as a distinct filter value
   def gender_select_field
     gender_options = (Person::GENDERS + [""]).collect { |g| [g, Person.new.gender_label(g)] }
     select_tag(
@@ -35,12 +26,12 @@ class Person::Filter::AttributeControl < Filter::AttributeControl
     )
   end
 
-  def canton_select_field
-    canton_options = Person.canton_labels.to_a
-    select_tag(
-      "#{filter_name_prefix}[value]",
-      options_from_collection_for_select(canton_options, :first, :last, value),
-      control_html_options(control_classes: SELECT_CLASSES, class: "canton_select_field")
+  def country_select_field
+    country_select(
+      filter_name_prefix,
+      "value",
+      {priority_countries: Settings.countries.prioritized, selected: value, include_blank: ""},
+      control_html_options(control_class: SELECT_CLASSES, class: "country_select_field")
     )
   end
 end

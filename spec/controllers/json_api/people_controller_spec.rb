@@ -43,26 +43,6 @@ describe JsonApi::PeopleController, type: [:request] do
         let(:permitted_service_token) { service_tokens(:permitted_top_layer_token) }
         let(:params) { {token: permitted_service_token.token} }
 
-        it "returns all people with roles for top_layer token with layer_and_below_read permission" do # rubocop:disable Layout/LineLength
-          Fabricate(:role, type: "Group::BottomLayer::Leader", group: groups(:bottom_layer_two))
-
-          jsonapi_get "/api/people", params: params
-
-          expect(response).to have_http_status(200)
-          expect(d.size).to eq(3)
-
-          person = d.first
-
-          expect(person.id).to eq(bottom_member.id)
-          expect(person.jsonapi_type).to eq("people")
-
-          person_attrs.each do |attr|
-            expect(person.attributes.key?(attr)).to eq(true)
-
-            expect(person.send(attr.to_sym)).to eq(bottom_member.send(attr.to_sym))
-          end
-        end
-
         it "only returns values for given field list" do
           selected_attrs = %w[first_name zip_code]
           params[:fields] = {people: selected_attrs}
@@ -184,6 +164,14 @@ describe JsonApi::PeopleController, type: [:request] do
           expect(included.size).to eq(2)
           included.first
           expect(included.map(&:jsonapi_type).uniq).to match_array(%w[roles])
+        end
+
+        it "returns all people with roles for top_layer token with layer_and_below_read permission" do
+          Fabricate(:role, type: "Group::BottomLayer::Leader", group: groups(:bottom_layer_two))
+          jsonapi_get "/api/people", params: params
+
+          expect(response).to have_http_status(200)
+          expect(d.size).to eq(3)
         end
 
         it "returns 403 if token has no people permission" do

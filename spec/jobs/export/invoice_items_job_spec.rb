@@ -42,10 +42,11 @@ describe Export::InvoiceItemsJob do
     job.perform
   end
 
-  it "loads the invoice and translations of every item without extra queries per item" do
+  it "loads the invoice, recipient and translations of every item without extra queries per item" do
     entries = job.entries.to_a
     expect(entries.size).to eq 6
     expect(entries.map { |entry| entry.association(:invoice).loaded? }).to all(be true)
+    expect(entries.map { |entry| entry.invoice.association(:recipient).loaded? }).to all(be true)
     expect(entries.map { |entry| entry.association(:translations).loaded? }).to all(be true)
   end
 
@@ -53,6 +54,7 @@ describe Export::InvoiceItemsJob do
     expect { job.data }.to make.db_queries.with(
       "InvoiceItem Load" => 1,
       "Invoice Load" => 1,
+      "Person Load" => 1,
       "InvoiceItem::Translation Load" => 1
     )
   end

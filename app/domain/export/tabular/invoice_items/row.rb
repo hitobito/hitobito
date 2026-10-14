@@ -13,6 +13,10 @@ module Export::Tabular::InvoiceItems
       define_method(attr) { invoice.public_send(attr) }
     end
 
+    def name
+      LocaleSetter.with_locale(person: invoice.recipient) { entry.name }
+    end
+
     def state
       invoice.state_label
     end

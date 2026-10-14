@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -14,8 +14,8 @@
         = l(entry.sent_at, format: :long) if entry.sent_at?
 
   = table(entry.invoice_items.list, class: 'table table-striped') do |t|
-    - t.attr(:name)
-    - t.attr(:description)
+    - t.attr(:name) { |i| LocaleSetter.with_locale(person: entry.recipient) { format_attr(i, :name) } }
+    - t.attr(:description) { |i| LocaleSetter.with_locale(person: entry.recipient) { format_attr(i, :description) } }
     - t.attr(:cost_center)
     - t.attr(:account)
     - t.attr(:count)

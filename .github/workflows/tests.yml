@@ -85,7 +85,7 @@ jobs:
       - name: 'Main Specs without features'
         run: |
           git fetch --tags
-          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:without_features
+          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:without_features_group
 
   main-specs:
     runs-on: 'ubuntu-24.04'

@@ -37,6 +37,46 @@ describe InvoiceArticlesController do
     end
   end
 
+  context "sheets" do
+    render_views
+
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    it "GET#edit nests the article below the article list" do
+      article = invoice_articles(:beitrag)
+
+      get :edit, params: {group_id: group.id, id: article.id}
+
+      expect(dom).to have_link "Rechnungsartikel",
+        href: group_invoice_articles_path(group, returning: true)
+      expect(dom).to have_css "h1", text: "BEI-18 - Beitrag Erwachsene"
+    end
+
+    it "GET#index shows the article list below the group" do
+      get :index, params: {group_id: group.id}
+
+      expect(dom).not_to have_link "Rechnungsartikel",
+        href: group_invoice_articles_path(group, returning: true)
+      expect(dom).to have_css "h1", text: "Rechnungsartikel"
+    end
+  end
+
+  it "routes show only as json" do
+    path = "/groups/#{group.id}/invoice_articles/#{invoice_articles(:beitrag).id}"
+
+    expect(Rails.application.routes.recognize_path("#{path}.json")).to include(action: "show")
+    expect { Rails.application.routes.recognize_path(path) }
+      .to raise_error(ActionController::RoutingError)
+  end
+
+  it "PATCH#update redirects to index page" do
+    article = invoice_articles(:beitrag)
+
+    patch :update, params: {group_id: group.id, id: article.id, invoice_article: {name: "Neu"}}
+
+    expect(response).to redirect_to(group_invoice_articles_path(group, returning: true))
+  end
+
   it "POST#create redirects to index page" do
     post :create, params: {group_id: group.id, invoice_article: {number: "1", name: "a"}}
     expect(response).to redirect_to(group_invoice_articles_path(group, returning: true))

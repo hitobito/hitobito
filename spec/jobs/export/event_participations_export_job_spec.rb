@@ -22,9 +22,12 @@ describe Export::EventParticipationsExportJob do
 
   let(:file) { subject.job_observation }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+  end
+
+  before do
 
     other_participation = Event::Participation.create(event: event, active: true, person: other_user)
     Event::Role::Participant.create(participation: other_participation)

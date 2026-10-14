@@ -23,9 +23,12 @@ describe Export::PaymentsExportJob do
     end
   end
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+  end
+
+  before do
     subject.enqueue!
     subject.perform
   end

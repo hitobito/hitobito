@@ -13,7 +13,7 @@ describe Event::SendRegisterLoginJob do
 
   subject { Event::SendRegisterLoginJob.new(person, group, event) }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
   end

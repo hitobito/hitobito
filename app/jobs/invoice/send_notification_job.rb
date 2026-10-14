@@ -1,4 +1,4 @@
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,7 +13,7 @@ class Invoice::SendNotificationJob < BaseJob
   end
 
   def perform
-    LocaleSetter.with_locale(person: invoice.recipient.then { _1.is_a?(Person) ? _1 : nil }) do
+    LocaleSetter.with_locale(person: invoice.recipient) do
       InvoiceMailer.notification(invoice, sender).deliver_now if invoice.recipient_email.present?
     end
   end

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -917,6 +917,12 @@ describe Export::Pdf::Invoice do
       invoice_text.each_with_index do |text, i|
         expect(text_with_position[i]).to eq(text)
       end
+    end
+
+    it "renders invoice in language of the group" do
+      group.update!(language: :fr)
+
+      expect(text_with_position).to include([347, 685, "No. de facture:"])
     end
   end
 

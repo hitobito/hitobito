@@ -23,17 +23,14 @@ describe "people management", :js do
     click_link text
   end
 
-  def find_person(name, retries = 0)
+  def find_person(name)
+    wait_for_typeahead_setup("Person suchen...")
     fill_in "Person suchen...", with: name
     find('ul[role="listbox"] li[role="option"]', text: name).click
-  rescue Capybara::ElementNotFound => e
-    if (retries += 1) <= 3
-      puts "#{e.class}, retrying in #{retries} second(s)..."
-      sleep(retries)
-      retry
-    else
-      raise
-    end
+  end
+
+  def wait_for_typeahead_setup(placeholder)
+    expect(page).to have_css("input[placeholder='#{placeholder}'][aria-autocomplete]")
   end
 
   before do

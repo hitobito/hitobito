@@ -199,7 +199,6 @@ describe Event::ApplicationMarketController do
     context "for regular event" do
       let(:event) { events(:top_event) }
 
-
       it "is not possible" do
         expect do
           get :index, params: {group_id: group.id, event_id: event.id}

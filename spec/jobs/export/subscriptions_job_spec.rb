@@ -30,7 +30,6 @@ describe Export::SubscriptionsJob do
   end
 
   before do
-
     Fabricate(:subscription, mailing_list: mailing_list)
     Fabricate(:subscription, mailing_list: mailing_list)
     subject.enqueue!

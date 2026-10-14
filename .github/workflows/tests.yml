@@ -36,8 +36,13 @@ jobs:
         run: |
           bundle exec rake rubocop
 
-  main-specs:
+  main-specs-group:
+    name: 'main-specs (${{ matrix.group }}/3)'
     runs-on: 'ubuntu-24.04'
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [ 1, 2, 3 ]
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -80,10 +85,23 @@ jobs:
       - name: 'Main Specs without features'
         run: |
           git fetch --tags
-          bundle exec rake spec:without_features
+          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:without_features
 
-  feature-specs:
+  main-specs:
     runs-on: 'ubuntu-24.04'
+    needs: main-specs-group
+    if: always()
+    steps:
+      - name: 'All main spec groups passed'
+        run: test "${{ needs.main-specs-group.result }}" = "success"
+
+  feature-specs-group:
+    name: 'feature-specs (${{ matrix.group }}/3)'
+    runs-on: 'ubuntu-24.04'
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [ 1, 2, 3 ]
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -125,15 +143,23 @@ jobs:
 
       - name: 'Features'
         run: |
-          bundle exec rake spec:features:lenient
+          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:features:lenient
 
       - name: 'Make capybara output downloadable'
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: capybara-output
+          name: capybara-output-${{ matrix.group }}
           path: |
             tmp/capybara
+
+  feature-specs:
+    runs-on: 'ubuntu-24.04'
+    needs: feature-specs-group
+    if: always()
+    steps:
+      - name: 'All feature spec groups passed'
+        run: test "${{ needs.feature-specs-group.result }}" = "success"
 
   pending-specs:
     runs-on: 'ubuntu-24.04'

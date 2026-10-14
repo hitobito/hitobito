@@ -69,6 +69,7 @@ jobs:
       core_ref: ${{ inputs.core_ref || github.ref }}
       wagon_ref: ${{ inputs.wagon_ref || '' }}
       wagon_dependency_ref: ${{ inputs.wagon_dependency_ref || '' }}
+      spec_groups: ${{ fromJSON('{"sac_cas":3}')[matrix.wagon.name] || 1 }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

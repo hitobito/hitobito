@@ -5,6 +5,26 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+if defined?(RSpec::Core::RakeTask)
+  # SPEC_GROUP=2/3 restricts the files to the second of three groups of similar size.
+  def spec_group_files(pattern, exclude: nil)
+    group, groups = ENV["SPEC_GROUP"]&.split("/")&.map(&:to_i)
+    return pattern unless group
+
+    require "parallel_tests/rspec/runner"
+    files = Dir[pattern].sort - Dir[exclude.to_s]
+    ParallelTests::RSpec::Runner.tests_in_groups(files, groups, group_by: :filesize)[group - 1]
+  end
+
+  # Wagons define their own spec:without_features, which app:spec:without_features runs too.
+  namespace :spec do
+    RSpec::Core::RakeTask.new(:without_features_group) do |t|
+      t.pattern = spec_group_files("./spec/**/*_spec.rb", exclude: "./spec/features/**/*_spec.rb")
+      t.rspec_opts = "--tag ~type:feature --format Fivemat"
+    end
+  end
+end
+
 if Rake::Task.task_defined?("spec:features") # only if current environment knows rspec
   Rake::Task["spec:features"].actions.clear
 
@@ -54,7 +74,7 @@ if Rake::Task.task_defined?("spec:features") # only if current environment knows
       end
 
       RSpec::Core::RakeTask.new("start") do |t|
-        t.pattern = "./spec/features/**/*_spec.rb"
+        t.pattern = spec_group_files("./spec/features/**/*_spec.rb")
         t.rspec_opts = "--tag type:feature --format Fivemat"
         t.fail_on_error = false # don't stop the whole run
       end

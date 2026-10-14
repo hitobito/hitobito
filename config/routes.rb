@@ -126,7 +126,8 @@ Hitobito::Application.routes.draw do
           resources :recalculate, only: [:new], module: :invoices, as: "recalculate"
         end
       end
-      resources :invoice_articles
+      resources :invoice_articles, except: :show
+      get "invoice_articles/:id.:format" => "invoice_articles#show", constraints: {format: "json"}
       resource :invoice_config, only: [:edit, :show, :update]
 
       get "received_invoices" => "contactables/invoices#index"

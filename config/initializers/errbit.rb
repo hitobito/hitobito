@@ -3,6 +3,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+airbrake_stats = ENV['RAILS_AIRBRAKE_STATS'].present?
+Airbrake::Config.instance.merge(
+  performance_stats: airbrake_stats,
+  query_stats: airbrake_stats,
+  job_stats: airbrake_stats
+)
+
 if ENV['RAILS_AIRBRAKE_HOST'] && ENV['RAILS_AIRBRAKE_API_KEY']
   Airbrake.configure do |config|
     config.environment = Rails.env

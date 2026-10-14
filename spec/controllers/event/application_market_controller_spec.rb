@@ -9,84 +9,72 @@ describe Event::ApplicationMarketController do
   let(:event) { events(:top_course) }
   let(:group) { event.groups.first }
 
-  let(:appl_prio_1) do
+  let_it_be(:appl_prio_1, reload: true) do
     p = Fabricate(:event_participation,
-      event: event,
+      event: events(:top_course),
       active: false,
-      application: Fabricate(:event_application, priority_1: event))
+      application: Fabricate(:event_application, priority_1: events(:top_course)))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
     p.reload
   end
 
-  let(:appl_prio_2) do
+  let_it_be(:appl_prio_2, reload: true) do
     p = Fabricate(:event_participation,
       active: false,
-      event: Fabricate(:course, kind: event.kind),
-      application: Fabricate(:event_application, priority_2: event))
+      event: Fabricate(:course, kind: events(:top_course).kind),
+      application: Fabricate(:event_application, priority_2: events(:top_course)))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
     p.reload
   end
 
-  let(:appl_prio_3) do
+  let_it_be(:appl_prio_3, reload: true) do
     p = Fabricate(:event_participation,
       active: false,
-      event: Fabricate(:course, kind: event.kind),
-      application: Fabricate(:event_application, priority_3: event))
+      event: Fabricate(:course, kind: events(:top_course).kind),
+      application: Fabricate(:event_application, priority_3: events(:top_course)))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
     p.reload
   end
 
-  let(:appl_waiting) do
+  let_it_be(:appl_waiting, reload: true) do
     p = Fabricate(:event_participation,
       active: false,
       application: Fabricate(:event_application, waiting_list: true),
-      event: Fabricate(:course, kind: event.kind))
+      event: Fabricate(:course, kind: events(:top_course).kind))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
     p.reload
   end
 
-  let(:appl_other) do
+  let_it_be(:appl_other, reload: true) do
     p = Fabricate(:event_participation,
       active: false,
-      event: Fabricate(:course, kind: event.kind),
+      event: Fabricate(:course, kind: events(:top_course).kind),
       application: Fabricate(:event_application))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
     p.reload
   end
 
-  let(:appl_other_assigned) do
+  let_it_be(:appl_other_assigned, reload: true) do
     participation = Fabricate(:event_participation,
-      event: Fabricate(:course, kind: event.kind),
+      event: Fabricate(:course, kind: events(:top_course).kind),
       active: true,
-      application: Fabricate(:event_application, priority_2: event))
+      application: Fabricate(:event_application, priority_2: events(:top_course)))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
     participation.reload
   end
 
-  let(:appl_participant) do
+  let_it_be(:appl_participant, reload: true) do
     participation = Fabricate(:event_participation,
-      event: event,
+      event: events(:top_course),
       active: true,
-      application: Fabricate(:event_application, priority_2: event))
+      application: Fabricate(:event_application, priority_2: events(:top_course)))
     Fabricate(Event::Course::Role::Participant.name.to_sym, participation: participation)
     participation.reload
   end
 
-  let(:leader) do
-    participation = Fabricate(:event_participation, event: event)
+  let_it_be(:leader, reload: true) do
+    participation = Fabricate(:event_participation, event: events(:top_course))
     Fabricate(Event::Role::Leader.name.to_sym, participation: participation)
-  end
-
-  before do
-    # init required data
-    appl_prio_1
-    appl_prio_2
-    appl_prio_3
-    appl_waiting
-    appl_other
-    appl_other_assigned
-    appl_participant
-    leader
   end
 
   before { sign_in(people(:top_leader)) }
@@ -211,15 +199,6 @@ describe Event::ApplicationMarketController do
     context "for regular event" do
       let(:event) { events(:top_event) }
 
-      # no required for this test
-      let(:appl_prio_1) {}
-      let(:appl_prio_2) {}
-      let(:appl_prio_3) {}
-      let(:appl_waiting) {}
-      let(:appl_other) {}
-      let(:appl_other_assigned) {}
-      let(:appl_participant) {}
-      let(:leader) {}
 
       it "is not possible" do
         expect do

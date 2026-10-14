@@ -8,7 +8,6 @@ require "spec_helper"
 describe Person::Filter::Qualification do
   let(:user) { people(:top_leader) }
   let(:group) { groups(:top_layer) }
-  let(:today) { Time.zone.today }
   let(:range) { nil }
   let(:validity) { "all" }
   let(:match) { "one" }
@@ -34,7 +33,7 @@ describe Person::Filter::Qualification do
 
   let(:entries) { list_filter.entries }
 
-  let(:bl_leader) { create_person(Group::BottomLayer::Leader, :bottom_layer_one, "reactivateable", :sl, :gl_leader) }
+  def today = Time.zone.today
 
   def additional_filter_params
     additional_filters.invert.stringify_keys.invert
@@ -81,19 +80,28 @@ describe Person::Filter::Qualification do
   end
 
   context "filtering" do
-    before do
-      @tg_member = create_person(Group::TopGroup::Member, :top_group, "active", :sl)
-      # duplicate qualification
-      Fabricate(:qualification, person: @tg_member, qualification_kind: qualification_kinds(:sl),
-        start_at: today - 2.weeks)
+    let_it_be(:tg_member, reload: true) do
+      create_person(Group::TopGroup::Member, :top_group, "active", :sl).tap do |person|
+        # duplicate qualification
+        Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:sl),
+          start_at: today - 2.weeks)
+      end
+    end
 
-      @tg_extern = create_person(Role::External, :top_group, "active", :sl)
+    let_it_be(:tg_extern, reload: true) { create_person(Role::External, :top_group, "active", :sl) }
 
-      @bl_leader = bl_leader
-      @bl_extern = create_person(Role::External, :bottom_layer_one, "reactivateable", :gl_leader)
+    let_it_be(:bl_leader, reload: true) do
+      create_person(Group::BottomLayer::Leader, :bottom_layer_one, "reactivateable", :sl, :gl_leader)
+    end
+    let_it_be(:bl_extern, reload: true) do
+      create_person(Role::External, :bottom_layer_one, "reactivateable", :gl_leader)
+    end
 
-      @bg_leader = create_person(Group::BottomGroup::Leader, :bottom_group_one_one, "all", :sl, :ql)
-      @bg_member = create_person(Group::BottomGroup::Member, :bottom_group_one_one, "active", :sl)
+    let_it_be(:bg_leader, reload: true) do
+      create_person(Group::BottomGroup::Leader, :bottom_group_one_one, "all", :sl, :ql)
+    end
+    let_it_be(:bg_member, reload: true) do
+      create_person(Group::BottomGroup::Member, :bottom_group_one_one, "active", :sl)
     end
 
     context "no filter" do
@@ -114,9 +122,9 @@ describe Person::Filter::Qualification do
           expect(entries).to match_array([
             people(:top_leader),
             people(:bottom_member),
-            @tg_member,
-            @bl_leader,
-            @bg_leader
+            tg_member,
+            bl_leader,
+            bg_leader
           ])
         end
       end
@@ -125,7 +133,7 @@ describe Person::Filter::Qualification do
         let(:qualification_kind_ids) { qualification_kinds(:sl, :gl_leader).collect(&:id) }
 
         it "loads all entries in layer and below" do
-          expect(entries).to match_array([@tg_member, @tg_extern, @bl_leader, @bg_leader])
+          expect(entries).to match_array([tg_member, tg_extern, bl_leader, bg_leader])
         end
 
         it "contains only visible people" do
@@ -241,7 +249,7 @@ describe Person::Filter::Qualification do
           let(:user) { bl_leader }
 
           it "loads all accessible entries" do
-            expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, @bl_extern])
+            expect(entries).to match_array([bl_leader, bg_leader, bg_member, bl_extern])
           end
 
           it "contains only visible people" do
@@ -269,7 +277,7 @@ describe Person::Filter::Qualification do
             end
 
             it "loads all accessible entries" do
-              expect(entries).to match_array([@bl_leader, @bg_leader])
+              expect(entries).to match_array([bl_leader, bg_leader])
             end
 
             it "contains only visible people" do
@@ -287,7 +295,7 @@ describe Person::Filter::Qualification do
         let(:qualification_kind_ids) { qualification_kinds(:sl, :gl_leader).collect(&:id) }
 
         it "loads all entries in layer" do
-          expect(entries).to match_array([@tg_member, @tg_extern])
+          expect(entries).to match_array([tg_member, tg_extern])
         end
 
         it "contains all people" do
@@ -306,7 +314,7 @@ describe Person::Filter::Qualification do
         let(:validity) { "active" }
 
         it "loads matched entries" do
-          expect(entries).to match_array([@bg_member])
+          expect(entries).to match_array([bg_member])
         end
 
         it "contains all people" do
@@ -317,7 +325,7 @@ describe Person::Filter::Qualification do
           let(:additional_filters) { {reference_date: "1.1.#{(today - 2.years).year}"} }
 
           it "loads matched entries" do
-            expect(entries).to match_array([@bl_leader])
+            expect(entries).to match_array([bl_leader])
           end
         end
 
@@ -325,7 +333,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { qualification_kinds(:sl, :ql).collect(&:id) }
 
           it "contains them" do
-            expect(entries).to match_array([@bg_member, @bg_leader])
+            expect(entries).to match_array([bg_member, bg_leader])
           end
         end
 
@@ -335,24 +343,24 @@ describe Person::Filter::Qualification do
 
           it "contains only people with all qualifications" do
             Fabricate(:qualification,
-              person: @bg_leader,
+              person: bg_leader,
               qualification_kind: qualification_kinds(:sl),
               start_at: today)
 
-            expect(entries).to match_array([@bg_leader])
+            expect(entries).to match_array([bg_leader])
           end
 
           it "contains people with additional qualifications" do
             Fabricate(:qualification,
-              person: @bg_leader,
+              person: bg_leader,
               qualification_kind: qualification_kinds(:sl),
               start_at: today)
             Fabricate(:qualification,
-              person: @bg_leader,
+              person: bg_leader,
               qualification_kind: qualification_kinds(:gl_leader),
               start_at: today)
 
-            expect(entries).to match_array([@bg_leader])
+            expect(entries).to match_array([bg_leader])
           end
 
           it "does not contain people with all, but expired qualifications" do
@@ -377,7 +385,7 @@ describe Person::Filter::Qualification do
         let(:validity) { "reactivateable" }
 
         it "loads matched entries" do
-          expect(entries).to match_array([@bg_member, @bl_extern, @bl_leader])
+          expect(entries).to match_array([bg_member, bl_extern, bl_leader])
         end
 
         it "contains all people" do
@@ -388,7 +396,7 @@ describe Person::Filter::Qualification do
           let(:additional_filters) { {reference_date: "1.1.#{(today - 1.year).year}"} }
 
           it "loads matched entries" do
-            expect(entries).to match_array([@bl_leader, @bl_extern])
+            expect(entries).to match_array([bl_leader, bl_extern])
           end
         end
 
@@ -396,7 +404,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { qualification_kinds(:sl, :ql).collect(&:id) }
 
           it "contains them" do
-            expect(entries).to match_array([@bg_member, @bg_leader])
+            expect(entries).to match_array([bg_member, bg_leader])
           end
         end
 
@@ -406,31 +414,31 @@ describe Person::Filter::Qualification do
           before { qualification_kinds(:sl).update!(reactivateable: 2) }
 
           it "loads matched entries" do
-            expect(entries).to match_array([@bl_leader])
+            expect(entries).to match_array([bl_leader])
           end
 
           it "loads matched entries with multiple, old qualifications just once" do
             kind = qualification_kinds(:sl)
             Fabricate(:qualification,
-              person: @bg_member,
+              person: bg_member,
               qualification_kind: kind,
               start_at: today - kind.validity.years - 1.year)
             kind = qualification_kinds(:gl_leader)
             Fabricate(:qualification,
-              person: @bg_member,
+              person: bg_member,
               qualification_kind: kind,
               start_at: today - kind.validity.years - 1.year)
 
-            expect(entries).to match_array([@bg_member, @bl_leader])
+            expect(entries).to match_array([bg_member, bl_leader])
           end
 
           it "does not contain people with all, but expired qualifications" do
             Fabricate(:qualification,
-              person: @bg_member,
+              person: bg_member,
               qualification_kind: qualification_kinds(:gl_leader),
               start_at: today - 10.years)
 
-            expect(entries).to match_array([@bl_leader])
+            expect(entries).to match_array([bl_leader])
           end
         end
       end
@@ -439,52 +447,52 @@ describe Person::Filter::Qualification do
         let(:validity) { "not_active" }
 
         it "loads matched entries" do
-          expect(entries).to match_array([@bl_extern, @bl_leader, @bg_leader, people(:bottom_member)])
+          expect(entries).to match_array([bl_extern, bl_leader, bg_leader, people(:bottom_member)])
         end
 
         it "contains only people without any active qualification" do
           kind = qualification_kinds(:gl_leader)
           Fabricate(:qualification,
-            person: @bl_leader,
+            person: bl_leader,
             qualification_kind: kind,
             start_at: today - 5.years)
           Fabricate(:qualification,
-            person: @bl_leader,
+            person: bl_leader,
             qualification_kind: kind,
             start_at: today - 1.year)
 
-          sl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:sl)).order(:start_at).last
+          sl_quali = bl_leader.qualifications.where(qualification_kind: qualification_kinds(:sl)).order(:start_at).last
           expect(sl_quali).not_to be_active
           # rubocop:todo Layout/LineLength
-          gl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
+          gl_quali = bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
           # rubocop:enable Layout/LineLength
           expect(gl_quali).to be_active
-          expect(entries).to match_array([@bl_extern, @bg_leader, people(:bottom_member)])
+          expect(entries).to match_array([bl_extern, bg_leader, people(:bottom_member)])
         end
 
         it "does contain people without any qualifications of the given kinds" do
-          @bg_member.qualifications.destroy_all
+          bg_member.qualifications.destroy_all
           # active, but not filtered kind
           Fabricate(:qualification,
-            person: @bg_leader,
+            person: bg_leader,
             qualification_kind: qualification_kinds(:sl_leader),
             start_at: today)
-          expect(entries).to match_array([@bl_extern, @bl_leader, @bg_leader, @bg_member, people(:bottom_member)])
+          expect(entries).to match_array([bl_extern, bl_leader, bg_leader, bg_member, people(:bottom_member)])
         end
 
         it "loads matched entries with multiple, old qualifications just once" do
           kind = qualification_kinds(:sl)
           Fabricate(:qualification,
-            person: @bl_extern,
+            person: bl_extern,
             qualification_kind: kind,
             start_at: today - kind.validity.years - 4.years)
           kind = qualification_kinds(:gl_leader)
           Fabricate(:qualification,
-            person: @bl_extern,
+            person: bl_extern,
             qualification_kind: kind,
             start_at: today - kind.validity.years - 5.years)
 
-          expect(entries).to match_array([@bl_extern, @bl_leader, @bg_leader, people(:bottom_member)])
+          expect(entries).to match_array([bl_extern, bl_leader, bg_leader, people(:bottom_member)])
         end
 
         it "contains all people" do
@@ -498,23 +506,23 @@ describe Person::Filter::Qualification do
           it "contains only people without any active qualification" do
             kind = qualification_kinds(:gl_leader)
             Fabricate(:qualification,
-              person: @bl_leader,
+              person: bl_leader,
               qualification_kind: kind,
               start_at: today - 5.years)
             Fabricate(:qualification,
-              person: @bl_leader,
+              person: bl_leader,
               qualification_kind: kind,
               start_at: today - 1.year)
 
             # rubocop:todo Layout/LineLength
-            sl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:sl)).order(:start_at).last
+            sl_quali = bl_leader.qualifications.where(qualification_kind: qualification_kinds(:sl)).order(:start_at).last
             # rubocop:enable Layout/LineLength
             expect(sl_quali).to be_cover(reference_date)
             # rubocop:todo Layout/LineLength
-            gl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
+            gl_quali = bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
             # rubocop:enable Layout/LineLength
             expect(gl_quali).not_to be_cover(reference_date)
-            expect(entries).to match_array([@bg_member, @bl_extern, @bg_leader, people(:bottom_member)])
+            expect(entries).to match_array([bg_member, bl_extern, bg_leader, people(:bottom_member)])
           end
         end
       end
@@ -525,32 +533,32 @@ describe Person::Filter::Qualification do
         before { qualification_kinds(:sl).update!(reactivateable: 2) }
 
         it "loads matched entries" do
-          expect(entries).to match_array([@bl_extern, @bl_leader])
+          expect(entries).to match_array([bl_extern, bl_leader])
         end
 
         it "contains only people without any active qualification" do
           # active, but not filtered kind
           Fabricate(:qualification,
-            person: @bl_extern,
+            person: bl_extern,
             qualification_kind: qualification_kinds(:sl_leader),
             start_at: today)
           kind = qualification_kinds(:gl_leader)
           Fabricate(:qualification,
-            person: @bl_leader,
+            person: bl_leader,
             qualification_kind: kind,
             start_at: today - 5.years)
           Fabricate(:qualification,
-            person: @bl_leader,
+            person: bl_leader,
             qualification_kind: kind,
             start_at: today - 1.year)
 
-          sl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:sl)).order(:start_at).last
+          sl_quali = bl_leader.qualifications.where(qualification_kind: qualification_kinds(:sl)).order(:start_at).last
           expect(sl_quali).to be_reactivateable
           # rubocop:todo Layout/LineLength
-          gl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
+          gl_quali = bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
           # rubocop:enable Layout/LineLength
           expect(gl_quali).to be_active
-          expect(entries).to match_array([@bl_extern])
+          expect(entries).to match_array([bl_extern])
         end
 
         it "contains all people" do
@@ -564,23 +572,23 @@ describe Person::Filter::Qualification do
           it "contains only people with at least one reactivateable qualification" do
             kind = qualification_kinds(:gl_leader)
             Fabricate(:qualification,
-              person: @bl_leader,
+              person: bl_leader,
               qualification_kind: kind,
               start_at: today - 5.years)
             Fabricate(:qualification,
-              person: @bl_leader,
+              person: bl_leader,
               qualification_kind: kind,
               start_at: today - 1.year)
 
             # rubocop:todo Layout/LineLength
-            sl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:sl)).order(:start_at).last
+            sl_quali = bl_leader.qualifications.where(qualification_kind: qualification_kinds(:sl)).order(:start_at).last
             # rubocop:enable Layout/LineLength
             expect(sl_quali).not_to be_reactivateable(reference_date)
             # rubocop:todo Layout/LineLength
-            gl_quali = @bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
+            gl_quali = bl_leader.qualifications.where(qualification_kind: qualification_kinds(:gl_leader)).order(:start_at).last
             # rubocop:enable Layout/LineLength
             expect(gl_quali).to be_reactivateable(reference_date)
-            expect(entries).to match_array([@bl_leader])
+            expect(entries).to match_array([bl_leader])
           end
         end
 
@@ -608,53 +616,53 @@ describe Person::Filter::Qualification do
           before do
             qualification_kinds(:sl).update!(reactivateable: 2)
             # make sl qualification reactivateable
-            @bg_member.qualifications.first.update(start_at: today - 3.years, finish_at: today - 1.year)
+            bg_member.qualifications.first.update(start_at: today - 3.years, finish_at: today - 1.year)
           end
 
           it "loads matched entries" do
-            expect(entries).to match_array([@bl_leader])
+            expect(entries).to match_array([bl_leader])
           end
 
           it "loads matched entries with multiple, old qualifications just once" do
             kind = qualification_kinds(:sl)
             Fabricate(:qualification,
-              person: @bl_extern,
+              person: bl_extern,
               qualification_kind: kind,
               start_at: today - kind.validity.years - 1.year)
             kind = qualification_kinds(:gl_leader)
             Fabricate(:qualification,
-              person: @bl_extern,
+              person: bl_extern,
               qualification_kind: kind,
               start_at: today - kind.validity.years - 3.years)
 
-            expect(entries).to match_array([@bl_extern, @bl_leader])
+            expect(entries).to match_array([bl_extern, bl_leader])
           end
 
           it "does contain people with all reactivateable qualifications" do
             Fabricate(:qualification,
-              person: @bg_member,
+              person: bg_member,
               qualification_kind: qualification_kinds(:gl_leader),
               start_at: today - 3.year)
 
-            expect(entries).to match_array([@bl_leader, @bg_member])
+            expect(entries).to match_array([bl_leader, bg_member])
           end
 
           it "does not contain people with all, but some active qualifications" do
             Fabricate(:qualification,
-              person: @bg_member,
+              person: bg_member,
               qualification_kind: qualification_kinds(:gl_leader),
               start_at: today - 1.years)
 
-            expect(entries).to match_array([@bl_leader])
+            expect(entries).to match_array([bl_leader])
           end
 
           it "does not contain people with all, but some not reactivateable qualifications" do
             Fabricate(:qualification,
-              person: @bg_member,
+              person: bg_member,
               qualification_kind: qualification_kinds(:gl_leader),
               start_at: today - 5.years)
 
-            expect(entries).to match_array([@bl_leader])
+            expect(entries).to match_array([bl_leader])
           end
         end
       end
@@ -663,7 +671,7 @@ describe Person::Filter::Qualification do
         let(:validity) { "all" }
 
         it "loads matched entries" do
-          expect(entries).to match_array([@bg_member, @bl_extern, @bg_leader, @bl_leader])
+          expect(entries).to match_array([bg_member, bl_extern, bg_leader, bl_leader])
         end
 
         it "contains all people" do
@@ -676,15 +684,15 @@ describe Person::Filter::Qualification do
           it "loads matched entries with multiple, old qualifications just once" do
             kind = qualification_kinds(:sl)
             Fabricate(:qualification,
-              person: @bg_member,
+              person: bg_member,
               qualification_kind: kind,
               start_at: today - kind.validity.years - 1.year)
             Fabricate(:qualification,
-              person: @bg_member,
+              person: bg_member,
               qualification_kind: qualification_kinds(:gl_leader),
               start_at: today - 10.years)
 
-            expect(entries).to match_array([@bg_member, @bl_leader])
+            expect(entries).to match_array([bg_member, bl_leader])
           end
         end
       end
@@ -698,7 +706,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [] }
 
           it "does no filtering on qualifications but somehow on roles excluding external" do
-            expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, bottom_member])
+            expect(entries).to match_array([bl_leader, bg_leader, bg_member, bottom_member])
           end
         end
 
@@ -706,7 +714,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [-1] }
 
           it "does no filtering on qualifications and also not on roles" do
-            expect(entries).to match_array([@bl_leader, @bg_leader, @bg_member, bottom_member, @bl_extern])
+            expect(entries).to match_array([bl_leader, bg_leader, bg_member, bottom_member, bl_extern])
           end
         end
 
@@ -714,7 +722,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [qualification_kinds(:sl).id] }
 
           it "excludes people with qualification matching sl quali kind" do
-            expect(entries).to match_array([bottom_member, @bl_extern])
+            expect(entries).to match_array([bottom_member, bl_extern])
           end
         end
 
@@ -737,7 +745,7 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [sl.id] }
 
           it "includes bg_leader and bl_leader" do
-            expect(entries).to match_array([@bg_leader, @bl_leader])
+            expect(entries).to match_array([bg_leader, bl_leader])
           end
         end
 
@@ -746,13 +754,13 @@ describe Person::Filter::Qualification do
           let(:qualification_kind_ids) { [sl.id, gl_leader.id] }
 
           it "excludes bl_leader because his gl_leader quali is reactivateable" do
-            expect(entries).to match_array([@bg_leader])
+            expect(entries).to match_array([bg_leader])
           end
 
           it "includes bl_leader because if gl_leader quali is no longer reactivateable" do
-            @bl_leader.qualifications
+            bl_leader.qualifications
               .find_by(qualification_kind: gl_leader).update_columns(finish_at: 3.years.ago)
-            expect(entries).to match_array([@bg_leader, @bl_leader])
+            expect(entries).to match_array([bg_leader, bl_leader])
           end
         end
       end

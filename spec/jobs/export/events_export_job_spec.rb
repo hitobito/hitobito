@@ -18,9 +18,12 @@ describe Export::EventsExportJob do
   end
   let(:file) { subject.job_observation }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+  end
+
+  before do
     Fabricate(:event)
     subject.enqueue!
     subject.perform

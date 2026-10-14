@@ -12,7 +12,7 @@ describe Event::CancelApplicationJob do
     Fabricate(:event_participation, event: course, participant: Fabricate(:person, email: "anybody@example.com"))
   end
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
   end

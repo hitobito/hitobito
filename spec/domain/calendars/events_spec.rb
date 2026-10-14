@@ -32,9 +32,10 @@ describe Calendars::Events do
 
   subject { Calendars::Events.new(calendar).events }
 
-  def expect_events(included:, excluded:)
+  def expect_only_events(*included)
     found = subject.to_a
-    found_names = (included + excluded).select { |name| found.include?(send(name)) }
+    all = %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
+    found_names = all.select { |name| found.include?(send(name)) }
     expect(found_names).to match_array(included)
   end
 
@@ -49,10 +50,7 @@ describe Calendars::Events do
           before { calendar_group.update(with_subgroups: false) }
 
           it "includes only layer_event, layer_course" do
-            expect_events(
-              included: %i[layer_event layer_course],
-              excluded: %i[subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-            )
+            expect_only_events(:layer_event, :layer_course)
           end
 
           context "with excluded calendar group" do
@@ -68,10 +66,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -79,10 +74,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -94,10 +86,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_course" do
-                    expect_events(
-                      included: %i[layer_course],
-                      excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_course)
                   end
                 end
 
@@ -105,10 +94,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only layer_course" do
-                    expect_events(
-                      included: %i[layer_course],
-                      excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_course)
                   end
                 end
               end
@@ -120,10 +106,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_event" do
-                    expect_events(
-                      included: %i[layer_event],
-                      excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event)
                   end
                 end
 
@@ -131,10 +114,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only layer_event" do
-                    expect_events(
-                      included: %i[layer_event],
-                      excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event)
                   end
                 end
               end
@@ -144,10 +124,7 @@ describe Calendars::Events do
               before { excluded_calendar_group.update(group: subgroup, event_type: nil, with_subgroups: true) }
 
               it "includes only layer_event, layer_course" do
-                expect_events(
-                  included: %i[layer_event layer_course],
-                  excluded: %i[subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                )
+                expect_only_events(:layer_event, :layer_course)
               end
             end
           end
@@ -156,10 +133,9 @@ describe Calendars::Events do
         context "with subgroups" do
           before { calendar_group.update(with_subgroups: true) }
 
-          it "includes only layer_event, layer_course, subgroup_event, subgroup_course, subsubgroup_event, subsubgroup_course" do
-            expect_events(
-              included: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course],
-              excluded: []
+          it "includes all events" do
+            expect_only_events(
+              :layer_event, :layer_course, :subgroup_event, :subgroup_course, :subsubgroup_event, :subsubgroup_course
             )
           end
 
@@ -176,21 +152,15 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
                 context "not excluding subgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only subgroup_event, subgroup_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_event subgroup_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_event layer_course]
-                    )
+                  it "includes all events except layer_event, layer_course" do
+                    expect_only_events(:subgroup_event, :subgroup_course, :subsubgroup_event, :subsubgroup_course)
                   end
                 end
               end
@@ -202,20 +172,16 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_course, subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_course subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:layer_course, :subgroup_course, :subsubgroup_course)
                   end
                 end
 
                 context "not excluding subgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only layer_course, subgroup_event, subgroup_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_event]
+                  it "includes all events except layer_event" do
+                    expect_only_events(
+                      :layer_course, :subgroup_event, :subgroup_course, :subsubgroup_event, :subsubgroup_course
                     )
                   end
                 end
@@ -228,20 +194,16 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_event, subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[layer_event subgroup_event subsubgroup_event],
-                      excluded: %i[layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event, :subgroup_event, :subsubgroup_event)
                   end
                 end
 
                 context "not excluding subgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only layer_event, subgroup_event, subgroup_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_event subgroup_event subgroup_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_course]
+                  it "includes all events except layer_course" do
+                    expect_only_events(
+                      :layer_event, :subgroup_event, :subgroup_course, :subsubgroup_event, :subsubgroup_course
                     )
                   end
                 end
@@ -258,21 +220,15 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_event, layer_course" do
-                    expect_events(
-                      included: %i[layer_event layer_course],
-                      excluded: %i[subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event, :layer_course)
                   end
                 end
 
                 context "not excluding subsubgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only layer_event, layer_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_event layer_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[subgroup_event subgroup_course]
-                    )
+                  it "includes all events except subgroup_event, subgroup_course" do
+                    expect_only_events(:layer_event, :layer_course, :subsubgroup_event, :subsubgroup_course)
                   end
                 end
               end
@@ -283,21 +239,17 @@ describe Calendars::Events do
                 context "excluding also subsubgroups" do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
-                  it "includes only layer_event, layer_course, subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_event layer_course subgroup_course subsubgroup_course],
-                      excluded: %i[subgroup_event subsubgroup_event]
-                    )
+                  it "includes all events except subgroup_event, subsubgroup_event" do
+                    expect_only_events(:layer_event, :layer_course, :subgroup_course, :subsubgroup_course)
                   end
                 end
 
                 context "not excluding subsubgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only layer_event, layer_course, subgroup_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[subgroup_event]
+                  it "includes all events except subgroup_event" do
+                    expect_only_events(
+                      :layer_event, :layer_course, :subgroup_course, :subsubgroup_event, :subsubgroup_course
                     )
                   end
                 end
@@ -309,21 +261,17 @@ describe Calendars::Events do
                 context "excluding also subsubgroups" do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
-                  it "includes only layer_event, layer_course, subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[layer_event layer_course subgroup_event subsubgroup_event],
-                      excluded: %i[subgroup_course subsubgroup_course]
-                    )
+                  it "includes all events except subgroup_course, subsubgroup_course" do
+                    expect_only_events(:layer_event, :layer_course, :subgroup_event, :subsubgroup_event)
                   end
                 end
 
                 context "not excluding subsubgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only layer_event, layer_course, subgroup_event, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course],
-                      excluded: %i[subgroup_course]
+                  it "includes all events except subgroup_course" do
+                    expect_only_events(
+                      :layer_event, :layer_course, :subgroup_event, :subsubgroup_event, :subsubgroup_course
                     )
                   end
                 end
@@ -350,10 +298,7 @@ describe Calendars::Events do
               }
 
               it "includes only layer_event, subgroup_course, subsubgroup_course" do
-                expect_events(
-                  included: %i[layer_event subgroup_course subsubgroup_course],
-                  excluded: %i[layer_course subgroup_event subsubgroup_event]
-                )
+                expect_only_events(:layer_event, :subgroup_course, :subsubgroup_course)
               end
             end
 
@@ -365,11 +310,8 @@ describe Calendars::Events do
                 Fabricate(:calendar_tag, excluded: false, calendar: calendar, tag: tag_world)
               }
 
-              it "includes only layer_event, subgroup_event, subgroup_course, subsubgroup_course" do
-                expect_events(
-                  included: %i[layer_event subgroup_event subgroup_course subsubgroup_course],
-                  excluded: %i[layer_course subsubgroup_event]
-                )
+              it "includes all events except layer_course, subsubgroup_event" do
+                expect_only_events(:layer_event, :subgroup_event, :subgroup_course, :subsubgroup_course)
               end
             end
 
@@ -377,10 +319,7 @@ describe Calendars::Events do
               let!(:excluded_tag_hello) { Fabricate(:calendar_tag, excluded: true, calendar: calendar, tag: tag_hello) }
 
               it "includes only layer_course, subgroup_event, subsubgroup_event" do
-                expect_events(
-                  included: %i[layer_course subgroup_event subsubgroup_event],
-                  excluded: %i[layer_event subgroup_course subsubgroup_course]
-                )
+                expect_only_events(:layer_course, :subgroup_event, :subsubgroup_event)
               end
             end
 
@@ -389,10 +328,7 @@ describe Calendars::Events do
               let!(:excluded_tag_world) { Fabricate(:calendar_tag, excluded: true, calendar: calendar, tag: tag_world) }
 
               it "includes only layer_course, subsubgroup_event" do
-                expect_events(
-                  included: %i[layer_course subsubgroup_event],
-                  excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_course]
-                )
+                expect_only_events(:layer_course, :subsubgroup_event)
               end
             end
 
@@ -403,10 +339,7 @@ describe Calendars::Events do
               let!(:excluded_tag_world) { Fabricate(:calendar_tag, excluded: true, calendar: calendar, tag: tag_world) }
 
               it "includes only subgroup_course, subsubgroup_course" do
-                expect_events(
-                  included: %i[subgroup_course subsubgroup_course],
-                  excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                )
+                expect_only_events(:subgroup_course, :subsubgroup_course)
               end
             end
           end
@@ -422,10 +355,7 @@ describe Calendars::Events do
           end
 
           it "includes only layer_event" do
-            expect_events(
-              included: %i[layer_event],
-              excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-            )
+            expect_only_events(:layer_event)
           end
 
           context "with excluded calendar group" do
@@ -441,10 +371,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -452,10 +379,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -467,10 +391,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -478,10 +399,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -490,10 +408,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name, with_subgroups: true) }
 
                 it "includes only layer_event" do
-                  expect_events(
-                    included: %i[layer_event],
-                    excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:layer_event)
                 end
               end
             end
@@ -502,10 +417,7 @@ describe Calendars::Events do
               before { excluded_calendar_group.update(group: subgroup, event_type: nil, with_subgroups: true) }
 
               it "includes only layer_event" do
-                expect_events(
-                  included: %i[layer_event],
-                  excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                )
+                expect_only_events(:layer_event)
               end
             end
           end
@@ -515,10 +427,7 @@ describe Calendars::Events do
           before { calendar_group.update(with_subgroups: true) }
 
           it "includes only layer_event, subgroup_event, subsubgroup_event" do
-            expect_events(
-              included: %i[layer_event subgroup_event subsubgroup_event],
-              excluded: %i[layer_course subgroup_course subsubgroup_course]
-            )
+            expect_only_events(:layer_event, :subgroup_event, :subsubgroup_event)
           end
 
           context "with excluded calendar group" do
@@ -534,10 +443,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -545,10 +451,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event subsubgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subsubgroup_event)
                   end
                 end
               end
@@ -560,10 +463,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -571,10 +471,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event subsubgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subsubgroup_event)
                   end
                 end
               end
@@ -586,10 +483,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_event, subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[layer_event subgroup_event subsubgroup_event],
-                      excluded: %i[layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event, :subgroup_event, :subsubgroup_event)
                   end
                 end
 
@@ -597,10 +491,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only layer_event, subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[layer_event subgroup_event subsubgroup_event],
-                      excluded: %i[layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event, :subgroup_event, :subsubgroup_event)
                   end
                 end
               end
@@ -616,10 +507,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_event" do
-                    expect_events(
-                      included: %i[layer_event],
-                      excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event)
                   end
                 end
 
@@ -627,10 +515,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only layer_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[layer_event subsubgroup_event],
-                      excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event, :subsubgroup_event)
                   end
                 end
               end
@@ -642,10 +527,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_event" do
-                    expect_events(
-                      included: %i[layer_event],
-                      excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event)
                   end
                 end
 
@@ -653,10 +535,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only layer_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[layer_event subsubgroup_event],
-                      excluded: %i[layer_course subgroup_event subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:layer_event, :subsubgroup_event)
                   end
                 end
               end
@@ -665,10 +544,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name, with_subgroups: true) }
 
                 it "includes only layer_event, subgroup_event, subsubgroup_event" do
-                  expect_events(
-                    included: %i[layer_event subgroup_event subsubgroup_event],
-                    excluded: %i[layer_course subgroup_course subsubgroup_course]
-                  )
+                  expect_only_events(:layer_event, :subgroup_event, :subsubgroup_event)
                 end
               end
             end
@@ -683,10 +559,7 @@ describe Calendars::Events do
           before { calendar_group.update(with_subgroups: false) }
 
           it "includes only layer_course" do
-            expect_events(
-              included: %i[layer_course],
-              excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-            )
+            expect_only_events(:layer_course)
           end
 
           context "with excluded calendar group" do
@@ -702,10 +575,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -713,10 +583,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -725,10 +592,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event.name, with_subgroups: true) }
 
                 it "includes only layer_course" do
-                  expect_events(
-                    included: %i[layer_course],
-                    excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:layer_course)
                 end
               end
 
@@ -739,10 +603,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -750,10 +611,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -763,10 +621,7 @@ describe Calendars::Events do
               before { excluded_calendar_group.update(group: subgroup, event_type: nil, with_subgroups: true) }
 
               it "includes only layer_course" do
-                expect_events(
-                  included: %i[layer_course],
-                  excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                )
+                expect_only_events(:layer_course)
               end
             end
           end
@@ -776,10 +631,7 @@ describe Calendars::Events do
           before { calendar_group.update(with_subgroups: true) }
 
           it "includes only layer_course, subgroup_course, subsubgroup_course" do
-            expect_events(
-              included: %i[layer_course subgroup_course subsubgroup_course],
-              excluded: %i[layer_event subgroup_event subsubgroup_event]
-            )
+            expect_only_events(:layer_course, :subgroup_course, :subsubgroup_course)
           end
 
           context "with excluded calendar group" do
@@ -795,10 +647,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -806,10 +655,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:subgroup_course, :subsubgroup_course)
                   end
                 end
               end
@@ -821,10 +667,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_course, subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_course subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:layer_course, :subgroup_course, :subsubgroup_course)
                   end
                 end
 
@@ -832,10 +675,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only layer_course, subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_course subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:layer_course, :subgroup_course, :subsubgroup_course)
                   end
                 end
               end
@@ -847,10 +687,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -858,10 +695,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:subgroup_course, :subsubgroup_course)
                   end
                 end
               end
@@ -877,10 +711,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_course" do
-                    expect_events(
-                      included: %i[layer_course],
-                      excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_course)
                   end
                 end
 
@@ -888,10 +719,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only layer_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_course subsubgroup_course],
-                      excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event]
-                    )
+                    expect_only_events(:layer_course, :subsubgroup_course)
                   end
                 end
               end
@@ -900,10 +728,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event.name, with_subgroups: true) }
 
                 it "includes only layer_course, subgroup_course, subsubgroup_course" do
-                  expect_events(
-                    included: %i[layer_course subgroup_course subsubgroup_course],
-                    excluded: %i[layer_event subgroup_event subsubgroup_event]
-                  )
+                  expect_only_events(:layer_course, :subgroup_course, :subsubgroup_course)
                 end
               end
 
@@ -914,10 +739,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only layer_course" do
-                    expect_events(
-                      included: %i[layer_course],
-                      excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:layer_course)
                   end
                 end
 
@@ -925,10 +747,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only layer_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[layer_course subsubgroup_course],
-                      excluded: %i[layer_event subgroup_event subgroup_course subsubgroup_event]
-                    )
+                    expect_only_events(:layer_course, :subsubgroup_course)
                   end
                 end
               end
@@ -948,10 +767,7 @@ describe Calendars::Events do
           before { calendar_group.update(with_subgroups: false) }
 
           it "includes only subgroup_event, subgroup_course" do
-            expect_events(
-              included: %i[subgroup_event subgroup_course],
-              excluded: %i[layer_event layer_course subsubgroup_event subsubgroup_course]
-            )
+            expect_only_events(:subgroup_event, :subgroup_course)
           end
 
           context "with excluded calendar group" do
@@ -967,10 +783,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -978,10 +791,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event, subgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_event subgroup_course],
-                      excluded: %i[layer_event layer_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subgroup_course)
                   end
                 end
               end
@@ -993,10 +803,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only subgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_course)
                   end
                 end
 
@@ -1004,10 +811,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event, subgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_event subgroup_course],
-                      excluded: %i[layer_event layer_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subgroup_course)
                   end
                 end
               end
@@ -1019,10 +823,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only subgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event)
                   end
                 end
 
@@ -1030,10 +831,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event, subgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_event subgroup_course],
-                      excluded: %i[layer_event layer_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subgroup_course)
                   end
                 end
               end
@@ -1049,10 +847,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1060,10 +855,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -1075,10 +867,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only subgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_course)
                   end
                 end
 
@@ -1086,10 +875,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_course)
                   end
                 end
               end
@@ -1101,10 +887,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only subgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event)
                   end
                 end
 
@@ -1112,10 +895,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event)
                   end
                 end
               end
@@ -1125,10 +905,7 @@ describe Calendars::Events do
               before { excluded_calendar_group.update(group: subsubgroup, event_type: nil, with_subgroups: true) }
 
               it "includes only subgroup_event, subgroup_course" do
-                expect_events(
-                  included: %i[subgroup_event subgroup_course],
-                  excluded: %i[layer_event layer_course subsubgroup_event subsubgroup_course]
-                )
+                expect_only_events(:subgroup_event, :subgroup_course)
               end
             end
           end
@@ -1137,11 +914,8 @@ describe Calendars::Events do
         context "with subsubgroups" do
           before { calendar_group.update(with_subgroups: true) }
 
-          it "includes only subgroup_event, subgroup_course, subsubgroup_event, subsubgroup_course" do
-            expect_events(
-              included: %i[subgroup_event subgroup_course subsubgroup_event subsubgroup_course],
-              excluded: %i[layer_event layer_course]
-            )
+          it "includes all events except layer_event, layer_course" do
+            expect_only_events(:subgroup_event, :subgroup_course, :subsubgroup_event, :subsubgroup_course)
           end
 
           context "with excluded calendar group" do
@@ -1157,21 +931,15 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
                 context "not excluding subgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only subgroup_event, subgroup_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_event subgroup_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_event layer_course]
-                    )
+                  it "includes all events except layer_event, layer_course" do
+                    expect_only_events(:subgroup_event, :subgroup_course, :subsubgroup_event, :subsubgroup_course)
                   end
                 end
               end
@@ -1183,21 +951,15 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:subgroup_course, :subsubgroup_course)
                   end
                 end
 
                 context "not excluding subgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only subgroup_event, subgroup_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_event subgroup_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_event layer_course]
-                    )
+                  it "includes all events except layer_event, layer_course" do
+                    expect_only_events(:subgroup_event, :subgroup_course, :subsubgroup_event, :subsubgroup_course)
                   end
                 end
               end
@@ -1209,21 +971,15 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event subsubgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subsubgroup_event)
                   end
                 end
 
                 context "not excluding subgroups" do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
-                  it "includes only subgroup_event, subgroup_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_event subgroup_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_event layer_course]
-                    )
+                  it "includes all events except layer_event, layer_course" do
+                    expect_only_events(:subgroup_event, :subgroup_course, :subsubgroup_event, :subsubgroup_course)
                   end
                 end
               end
@@ -1239,10 +995,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1250,10 +1003,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course]
-                    )
+                    expect_only_events(:subsubgroup_event, :subsubgroup_course)
                   end
                 end
               end
@@ -1265,10 +1015,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:subgroup_course, :subsubgroup_course)
                   end
                 end
 
@@ -1276,10 +1023,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_course, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event]
-                    )
+                    expect_only_events(:subgroup_course, :subsubgroup_event, :subsubgroup_course)
                   end
                 end
               end
@@ -1291,10 +1035,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes only subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event subsubgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subsubgroup_event)
                   end
                 end
 
@@ -1302,10 +1043,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event, subsubgroup_event, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_event subsubgroup_event subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subsubgroup_event, :subsubgroup_course)
                   end
                 end
               end
@@ -1318,10 +1056,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: nil) }
 
                 it "includes only subgroup_event, subgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_event subgroup_course],
-                    excluded: %i[layer_event layer_course subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event, :subgroup_course)
                 end
               end
 
@@ -1329,10 +1064,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event.name) }
 
                 it "includes only subgroup_event, subgroup_course, subsubgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_event subgroup_course subsubgroup_course],
-                    excluded: %i[layer_event layer_course subsubgroup_event]
-                  )
+                  expect_only_events(:subgroup_event, :subgroup_course, :subsubgroup_course)
                 end
               end
 
@@ -1340,10 +1072,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name) }
 
                 it "includes only subgroup_event, subgroup_course, subsubgroup_event" do
-                  expect_events(
-                    included: %i[subgroup_event subgroup_course subsubgroup_event],
-                    excluded: %i[layer_event layer_course subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event, :subgroup_course, :subsubgroup_event)
                 end
               end
             end
@@ -1360,10 +1089,7 @@ describe Calendars::Events do
           end
 
           it "includes only subgroup_event" do
-            expect_events(
-              included: %i[subgroup_event],
-              excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-            )
+            expect_only_events(:subgroup_event)
           end
 
           context "with excluded calendar group" do
@@ -1379,10 +1105,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1390,10 +1113,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event)
                   end
                 end
               end
@@ -1405,10 +1125,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1416,10 +1133,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event)
                   end
                 end
               end
@@ -1428,10 +1142,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name, with_subgroups: true) }
 
                 it "includes only subgroup_event" do
-                  expect_events(
-                    included: %i[subgroup_event],
-                    excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event)
                 end
               end
             end
@@ -1446,10 +1157,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1457,10 +1165,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -1472,10 +1177,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1483,10 +1185,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -1495,10 +1194,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name, with_subgroups: true) }
 
                 it "includes only subgroup_event" do
-                  expect_events(
-                    included: %i[subgroup_event],
-                    excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event)
                 end
               end
             end
@@ -1507,10 +1203,7 @@ describe Calendars::Events do
               before { excluded_calendar_group.update(group: subsubgroup, event_type: nil, with_subgroups: true) }
 
               it "includes only subgroup_event" do
-                expect_events(
-                  included: %i[subgroup_event],
-                  excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                )
+                expect_only_events(:subgroup_event)
               end
             end
           end
@@ -1520,10 +1213,7 @@ describe Calendars::Events do
           before { calendar_group.update(with_subgroups: true) }
 
           it "includes only subgroup_event, subsubgroup_event" do
-            expect_events(
-              included: %i[subgroup_event subsubgroup_event],
-              excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-            )
+            expect_only_events(:subgroup_event, :subsubgroup_event)
           end
 
           context "with excluded calendar group" do
@@ -1539,10 +1229,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1550,10 +1237,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event subsubgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subsubgroup_event)
                   end
                 end
               end
@@ -1565,10 +1249,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1576,10 +1257,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_event, subsubgroup_event" do
-                    expect_events(
-                      included: %i[subgroup_event subsubgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_event, :subsubgroup_event)
                   end
                 end
               end
@@ -1588,10 +1266,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name, with_subgroups: true) }
 
                 it "includes only subgroup_event, subsubgroup_event" do
-                  expect_events(
-                    included: %i[subgroup_event subsubgroup_event],
-                    excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event, :subsubgroup_event)
                 end
               end
             end
@@ -1606,10 +1281,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1617,10 +1289,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subsubgroup_event" do
-                    expect_events(
-                      included: %i[subsubgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:subsubgroup_event)
                   end
                 end
               end
@@ -1632,10 +1301,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1643,10 +1309,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subsubgroup_event" do
-                    expect_events(
-                      included: %i[subsubgroup_event],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_course]
-                    )
+                    expect_only_events(:subsubgroup_event)
                   end
                 end
               end
@@ -1655,10 +1318,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name, with_subgroups: true) }
 
                 it "includes only subgroup_event, subsubgroup_event" do
-                  expect_events(
-                    included: %i[subgroup_event subsubgroup_event],
-                    excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event, :subsubgroup_event)
                 end
               end
             end
@@ -1670,10 +1330,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: nil) }
 
                 it "includes only subgroup_event" do
-                  expect_events(
-                    included: %i[subgroup_event],
-                    excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event)
                 end
               end
 
@@ -1681,10 +1338,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event.name) }
 
                 it "includes only subgroup_event" do
-                  expect_events(
-                    included: %i[subgroup_event],
-                    excluded: %i[layer_event layer_course subgroup_course subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event)
                 end
               end
 
@@ -1692,10 +1346,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name) }
 
                 it "includes only subgroup_event, subsubgroup_event" do
-                  expect_events(
-                    included: %i[subgroup_event subsubgroup_event],
-                    excluded: %i[layer_event layer_course subgroup_course subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_event, :subsubgroup_event)
                 end
               end
             end
@@ -1710,10 +1361,7 @@ describe Calendars::Events do
           before { calendar_group.update(with_subgroups: false) }
 
           it "includes only subgroup_course" do
-            expect_events(
-              included: %i[subgroup_course],
-              excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-            )
+            expect_only_events(:subgroup_course)
           end
 
           context "with excluded calendar group" do
@@ -1729,10 +1377,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1740,20 +1385,14 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_course)
                   end
                 end
               end
 
               context "excluding only plain events makes no difference" do
                 it "includes only subgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_course],
-                    excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_course)
                 end
               end
 
@@ -1764,10 +1403,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1775,10 +1411,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events(:subgroup_course)
                   end
                 end
               end
@@ -1794,10 +1427,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1805,10 +1435,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -1817,10 +1444,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event.name, with_subgroups: true) }
 
                 it "includes only subgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_course],
-                    excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_course)
                 end
               end
 
@@ -1831,10 +1455,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1842,10 +1463,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
               end
@@ -1855,10 +1473,7 @@ describe Calendars::Events do
               before { excluded_calendar_group.update(group: subsubgroup, event_type: nil, with_subgroups: true) }
 
               it "includes only subgroup_course" do
-                expect_events(
-                  included: %i[subgroup_course],
-                  excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                )
+                expect_only_events(:subgroup_course)
               end
             end
           end
@@ -1868,10 +1483,7 @@ describe Calendars::Events do
           before { calendar_group.update(with_subgroups: true) }
 
           it "includes only subgroup_course, subsubgroup_course" do
-            expect_events(
-              included: %i[subgroup_course subsubgroup_course],
-              excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-            )
+            expect_only_events(:subgroup_course, :subsubgroup_course)
           end
 
           context "with excluded calendar group" do
@@ -1887,10 +1499,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1898,10 +1507,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:subgroup_course, :subsubgroup_course)
                   end
                 end
               end
@@ -1910,10 +1516,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event.name, with_subgroups: true) }
 
                 it "includes only subgroup_course, subsubgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_course subsubgroup_course],
-                    excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                  )
+                  expect_only_events(:subgroup_course, :subsubgroup_course)
                 end
               end
 
@@ -1924,10 +1527,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1935,10 +1535,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subgroup_course, subsubgroup_course" do
-                    expect_events(
-                      included: %i[subgroup_course subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                    )
+                    expect_only_events(:subgroup_course, :subsubgroup_course)
                   end
                 end
               end
@@ -1954,10 +1551,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -1965,10 +1559,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subsubgroup_course" do
-                    expect_events(
-                      included: %i[subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event]
-                    )
+                    expect_only_events(:subsubgroup_course)
                   end
                 end
               end
@@ -1977,10 +1568,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event.name, with_subgroups: true) }
 
                 it "includes only subgroup_course, subsubgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_course subsubgroup_course],
-                    excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                  )
+                  expect_only_events(:subgroup_course, :subsubgroup_course)
                 end
               end
 
@@ -1991,10 +1579,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: true) }
 
                   it "includes none of the events" do
-                    expect_events(
-                      included: [],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event subsubgroup_course]
-                    )
+                    expect_only_events
                   end
                 end
 
@@ -2002,10 +1587,7 @@ describe Calendars::Events do
                   before { excluded_calendar_group.update(with_subgroups: false) }
 
                   it "includes only subsubgroup_course" do
-                    expect_events(
-                      included: %i[subsubgroup_course],
-                      excluded: %i[layer_event layer_course subgroup_event subgroup_course subsubgroup_event]
-                    )
+                    expect_only_events(:subsubgroup_course)
                   end
                 end
               end
@@ -2018,10 +1600,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: nil) }
 
                 it "includes only subgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_course],
-                    excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_course)
                 end
               end
 
@@ -2029,10 +1608,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event.name) }
 
                 it "includes only subgroup_course, subsubgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_course subsubgroup_course],
-                    excluded: %i[layer_event layer_course subgroup_event subsubgroup_event]
-                  )
+                  expect_only_events(:subgroup_course, :subsubgroup_course)
                 end
               end
 
@@ -2040,10 +1616,7 @@ describe Calendars::Events do
                 before { excluded_calendar_group.update(event_type: Event::Course.name) }
 
                 it "includes only subgroup_course" do
-                  expect_events(
-                    included: %i[subgroup_course],
-                    excluded: %i[layer_event layer_course subgroup_event subsubgroup_event subsubgroup_course]
-                  )
+                  expect_only_events(:subgroup_course)
                 end
               end
             end

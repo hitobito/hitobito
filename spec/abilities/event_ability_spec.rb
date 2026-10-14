@@ -1443,6 +1443,7 @@ describe EventAbility do
 
   context :approver do
     let(:event) { Fabricate(:course, groups: [groups(:top_layer)]) }
+
     let_it_be(:role) do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
     end

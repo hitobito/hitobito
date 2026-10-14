@@ -28,7 +28,6 @@ describe Export::EventParticipationsExportJob do
   end
 
   before do
-
     other_participation = Event::Participation.create(event: event, active: true, person: other_user)
     Event::Role::Participant.create(participation: other_participation)
     subject.enqueue!

@@ -34,7 +34,6 @@ describe Event::ParticipationConfirmationJob do
   end
 
   before do
-
     # create one person with two approvers
     Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app1, group: groups(:bottom_layer_one))
     Fabricate(Group::BottomLayer::Leader.name.to_sym, person: app2, group: groups(:bottom_layer_one))

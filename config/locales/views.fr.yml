@@ -1109,6 +1109,9 @@ fr:
       other: "%{count} entrées lues avec succès."
   import/person_importer:
     row_with_error: "Ligne %{row}: %{errors}"
+    missing_ids: "Keine ID in Zeile(n): %{rows}"
+    duplicate_ids: "ID mehrmals vergeben: %{ids}"
+    invalid_ids: "Ungültige ID in Zeile(n): %{rows}"
 
   import/person_duplicate_finder:
     duplicates: "%{count} emplacements trouvés lors de la recherche de doublons."
@@ -1816,6 +1819,11 @@ fr:
         import_details_html: >
             Les personnes suivantes vont être importées avec le <strong>rôle %{role}</strong>
             dans le <strong>groupe %{group}</strong>.
+        id_mapped_hint: >
+            Eine Spalte ist der Personennummer zugeordnet. Personen werden ausschliesslich
+            anhand ihrer Personennummer gefunden. Die Duplikaterkennung ist deaktiviert.
+            Für Personennummern, die noch nicht existieren, werden neue Personen mit
+            dieser Personennummer erstellt.
     add_request_mailer:
       request_link: Répondre à la demande
 
@@ -1884,6 +1892,7 @@ fr:
 
   person/csv_imports:
     invalid_file: Veuillez choisir un fichier CSV valable.
+    id_mapping_not_allowed: Die Zuordnung einer Spalte auf die Personennummer erfordert Admin-Berechtigung.
 
     duplicate_keys:
       one: "%{list} a été attribué plusieurs fois."

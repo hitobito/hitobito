@@ -1107,6 +1107,9 @@ it:
       other: "%{count} record sono stati letti con successo."
   import/person_importer:
     row_with_error: "riga %{row}: %{errors}"
+    missing_ids: "Keine ID in Zeile(n): %{rows}"
+    duplicate_ids: "ID mehrmals vergeben: %{ids}"
+    invalid_ids: "Ungültige ID in Zeile(n): %{rows}"
 
   import/person_duplicate_finder:
     duplicates: "%{count} risultati nel riconoscimento di duplicati."
@@ -1816,6 +1819,11 @@ it:
         import_details_html: >
             Le persone seguenti sono importate con il ruolo<strong>%{role}</strong>
             nel gruppo<strong> %{group}</strong>.
+        id_mapped_hint: >
+            Eine Spalte ist der Personennummer zugeordnet. Personen werden ausschliesslich
+            anhand ihrer Personennummer gefunden. Die Duplikaterkennung ist deaktiviert.
+            Für Personennummern, die noch nicht existieren, werden neue Personen mit
+            dieser Personennummer erstellt.
     add_request_mailer:
       request_link: Rispondere alla richiesta
 
@@ -1884,6 +1892,7 @@ it:
 
   person/csv_imports:
     invalid_file: Selezionare un file CSV valido.
+    id_mapping_not_allowed: Die Zuordnung einer Spalte auf die Personennummer erfordert Admin-Berechtigung.
 
     duplicate_keys:
       one: "%{list} è stato assegnato più volte."

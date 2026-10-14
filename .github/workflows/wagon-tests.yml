@@ -32,6 +32,10 @@ on:
         type: string
         required: false
         default: ''
+      spec_groups:
+        description: Number of parallel jobs the specs and the feature specs are each split into. Only worth it for wagons with long running specs.
+        type: number
+        default: 1
     secrets:
       HEARTBEAT_URL:
         description: "URL to the heartbeat-application"
@@ -51,6 +55,7 @@ jobs:
 
     outputs:
       wagon_dependency_repository: ${{ steps.determine.outputs.dependency_repo }}
+      spec_groups: ${{ steps.spec_groups.outputs.list }}
 
     steps:
       - name: Determine dependency-repo
@@ -76,6 +81,11 @@ jobs:
           fi
 
           echo "dependency_repo=${dependency_repo}" >> "$GITHUB_OUTPUT"
+
+      - name: List spec groups
+        id: spec_groups
+        working-directory: "."
+        run: echo "list=[$(seq -s, 1 ${{ inputs.spec_groups }})]" >> "$GITHUB_OUTPUT"
 
   wagon_rubocop:
     name: rubocop
@@ -231,9 +241,13 @@ jobs:
         run: |
           bundle exec rake db:seed wagon:seed
 
-  wagon_specs:
-    name: specs
+  wagon_specs_group:
+    name: specs (${{ matrix.group }}/${{ inputs.spec_groups }})
     runs-on: "ubuntu-24.04"
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.detect_wagon_dependency.outputs.spec_groups) }}
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -288,11 +302,30 @@ jobs:
       - name: Run ${{ inputs.wagon_repository }} specs
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          bundle exec rake app:ci:setup:rspec spec:without_features
+          # core refs without SPEC_GROUP support run all specs in the first group
+          if grep -q spec_group_files ../hitobito/lib/tasks/spec.rake; then
+            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:ci:setup:rspec app:spec:without_features_group
+          elif [ "${{ matrix.group }}" = 1 ]; then
+            bundle exec rake app:ci:setup:rspec spec:without_features
+          fi
 
-  wagon_feature_specs:
-    name: feature specs
+  wagon_specs:
+    name: specs
     runs-on: "ubuntu-24.04"
+    needs: wagon_specs_group
+    if: always()
+    steps:
+      - name: All spec groups passed
+        working-directory: .
+        run: test "${{ needs.wagon_specs_group.result }}" = "success"
+
+  wagon_feature_specs_group:
+    name: feature specs (${{ matrix.group }}/${{ inputs.spec_groups }})
+    runs-on: "ubuntu-24.04"
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.detect_wagon_dependency.outputs.spec_groups) }}
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -356,15 +389,30 @@ jobs:
         if: ${{ steps.check-wagon-feature-specs.outputs.feature_specs_exist }}
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          bundle exec rake app:ci:setup:rspec app:spec:features:lenient
+          # core refs without SPEC_GROUP support run all feature specs in the first group
+          if grep -q spec_group_files ../hitobito/lib/tasks/spec.rake; then
+            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:ci:setup:rspec app:spec:features:lenient
+          elif [ "${{ matrix.group }}" = 1 ]; then
+            bundle exec rake app:ci:setup:rspec app:spec:features:lenient
+          fi
 
       - name: "Make capybara output downloadable"
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: capybara-output-wagon
+          name: capybara-output-wagon-${{ matrix.group }}
           path: |
             hitobito/tmp/capybara
+
+  wagon_feature_specs:
+    name: feature specs
+    runs-on: "ubuntu-24.04"
+    needs: wagon_feature_specs_group
+    if: always()
+    steps:
+      - name: All feature spec groups passed
+        working-directory: .
+        run: test "${{ needs.wagon_feature_specs_group.result }}" = "success"
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml

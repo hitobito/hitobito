@@ -23,8 +23,8 @@
     = render "invoices/message_template", f: fi, group: entry
     -# NOTE: title belongs to InvoiceRun (f), not Invoice (fi). The InvoiceRun's title is copied to each generated Invoice.
     = f.labeled_input_field :title, help: t('.recipient_info', count: entry.recipients(current_user).count), data: { message_template_target: :title }
-    = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
-    = fi.labeled_input_field :payment_information
+    = f.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
+    = f.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose
     = fi.labeled_date_field :issued_at
     = render_extensions :form_invoice_fields, locals: { f: fi }

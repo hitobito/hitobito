@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -8,7 +8,7 @@
   = f.hidden_field :recipient_type
 
   = field_set_tag do
-    = render "message_template", f: f, group: group
+    = render "message_template", f: f, group: group, recipient: entry.recipient
     = f.labeled_input_field :title, data: { message_template_target: :title }
     = f.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
 

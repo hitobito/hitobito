@@ -1,0 +1,28 @@
+# Copyright (c) 2026, Schweizer Wanderwege. This file is part of
+# hitobito and licensed under the Affero General Public License version 3
+# or later. See the COPYING file at the top-level directory or at
+# https://github.com/hitobito/hitobito.
+
+beitrag_de:
+  invoice_article_id: <%= ActiveRecord::FixtureSet.identify(:beitrag) %>
+  locale: de
+  name: Beitrag Erwachsene
+  description: normaler Beitrag für Erwachsene
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+ermaessigt_de:
+  invoice_article_id: <%= ActiveRecord::FixtureSet.identify(:ermaessigt) %>
+  locale: de
+  name: Beitrag Kinder
+  description: ermässiger Beitrage für Kinder und Jugendliche
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+abo_de:
+  invoice_article_id: <%= ActiveRecord::FixtureSet.identify(:abo) %>
+  locale: de
+  name: Abonnement der Mitgliederzeitschrift
+  description: monatliche Mitgliederzeitschrift
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

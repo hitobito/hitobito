@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_10_08_080000) do
+ActiveRecord::Schema[8.0].define(version: 2026_10_14_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -621,10 +621,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_08_080000) do
     t.index ["subject_type", "subject_id"], name: "index_hitobito_log_entries_on_subject"
   end
 
+  create_table "invoice_article_translations", force: :cascade do |t|
+    t.integer "invoice_article_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.text "description"
+    t.index ["invoice_article_id"], name: "index_invoice_article_translations_on_invoice_article_id"
+    t.index ["locale"], name: "index_invoice_article_translations_on_locale"
+  end
+
   create_table "invoice_articles", id: :serial, force: :cascade do |t|
     t.string "number"
-    t.string "name", null: false
-    t.text "description"
     t.string "category"
     t.decimal "unit_cost", precision: 12, scale: 2
     t.decimal "vat_rate", precision: 5, scale: 2
@@ -636,12 +645,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_08_080000) do
     t.index ["number", "group_id"], name: "index_invoice_articles_on_number_and_group_id", unique: true
   end
 
+  create_table "invoice_config_translations", force: :cascade do |t|
+    t.integer "invoice_config_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "payment_information"
+    t.index ["invoice_config_id"], name: "index_invoice_config_translations_on_invoice_config_id"
+    t.index ["locale"], name: "index_invoice_config_translations_on_locale"
+  end
+
   create_table "invoice_configs", id: :serial, force: :cascade do |t|
     t.integer "sequence_number", default: 1, null: false
     t.integer "due_days", default: 30, null: false
     t.integer "group_id", null: false
     t.text "address"
-    t.text "payment_information"
     t.string "account_number"
     t.string "iban"
     t.string "payment_slip", default: "qr", null: false
@@ -671,13 +689,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_08_080000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.text "description"
     t.index ["invoice_item_id"], name: "index_invoice_item_translations_on_invoice_item_id"
     t.index ["locale"], name: "index_invoice_item_translations_on_locale"
   end
 
   create_table "invoice_items", id: :serial, force: :cascade do |t|
     t.integer "invoice_id", null: false
-    t.text "description"
     t.decimal "vat_rate", precision: 5, scale: 2
     t.decimal "unit_cost", precision: 12, scale: 2
     t.integer "count", default: 1
@@ -705,6 +723,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_08_080000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
+    t.text "description"
+    t.text "payment_information"
     t.index ["invoice_run_id"], name: "index_invoice_run_translations_on_invoice_run_id"
     t.index ["locale"], name: "index_invoice_run_translations_on_locale"
   end
@@ -897,11 +917,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_08_080000) do
     t.index ["person_id"], name: "index_message_recipients_on_person_id"
   end
 
+  create_table "message_template_translations", force: :cascade do |t|
+    t.bigint "message_template_id", null: false
+    t.string "locale", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "title"
+    t.text "body"
+    t.index ["locale"], name: "index_message_template_translations_on_locale"
+    t.index ["message_template_id"], name: "index_message_template_translations_on_message_template_id"
+  end
+
   create_table "message_templates", force: :cascade do |t|
     t.string "templated_type"
     t.bigint "templated_id"
-    t.string "title", null: false
-    t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["templated_type", "templated_id"], name: "index_message_templates_on_templated"

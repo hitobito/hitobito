@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,7 +28,6 @@
 #  payee_street                     :string
 #  payee_town                       :string
 #  payee_zip_code                   :string
-#  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
 #  reference_prefix                 :integer
 #  sender_name                      :string
@@ -43,6 +42,7 @@
 class InvoiceConfig < ActiveRecord::Base
   include I18nEnums
   include ValidatedEmail
+  include Globalized
 
   ACCOUNT_NUMBER_REGEX = /\A[0-9]{2}-[0-9]{2,20}-[0-9]\z/
   PAYMENT_SLIPS = %w[qr no_ps].freeze
@@ -52,6 +52,8 @@ class InvoiceConfig < ActiveRecord::Base
 
   i18n_enum :payment_slip, PAYMENT_SLIPS, scopes: true, queries: true
   i18n_enum :logo_position, ->(c) { logo_positions.map(&:to_s) }, scopes: false, queries: false
+
+  translates :payment_information
 
   belongs_to :group, class_name: "Group"
 

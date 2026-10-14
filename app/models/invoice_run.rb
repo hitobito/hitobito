@@ -19,7 +19,6 @@
 #  recipients_processed       :integer          default(0), not null
 #  recipients_total           :integer          default(0), not null
 #  shipping_method            :string           default("own")
-#  title                      :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #  creator_id                 :bigint
@@ -39,7 +38,7 @@ class InvoiceRun < ActiveRecord::Base
   include Shippable
   include Globalized
 
-  translates :title
+  translates :title, :description, :payment_information
   serialize :invalid_recipient_ids, type: Array, coder: YAML
   belongs_to :group
   belongs_to :period_invoice_template, optional: true

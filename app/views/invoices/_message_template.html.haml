@@ -1,11 +1,13 @@
 -#  frozen_string_literal: true
 -
--#  Copyright (c) 2024, Schweizer Wanderwege. This file is part of
+-#  Copyright (c) 2024-2026, Schweizer Wanderwege. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if group.invoice_config.message_templates.any?
+- templates = group.invoice_config.message_templates.includes(:translations)
+- if templates.any?
+  - options = LocaleSetter.with_locale(person: local_assigns[:recipient]) { templates.map(&:option_for_select) }
   = f.labeled(MessageTemplate.model_name.human) do
-    = select_tag('message_template_id', options_for_select(group.invoice_config.message_templates.map(&:option_for_select)), include_blank: true, 
-      class: "form-select form-select-sm", data: { message_template_id: true }) 
+    = select_tag('message_template_id', options_for_select(options), include_blank: "",
+      class: "form-select form-select-sm", data: { message_template_id: true })

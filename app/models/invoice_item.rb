@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,9 +14,7 @@
 #  cost                    :decimal(12, 2)
 #  cost_center             :string
 #  count                   :integer          default(1)
-#  description             :text
 #  dynamic_cost_parameters :text
-#  name                    :string
 #  type                    :string           default("InvoiceItem"), not null
 #  unit_cost               :decimal(12, 2)
 #  vat_rate                :decimal(5, 2)
@@ -50,7 +48,7 @@ class InvoiceItem < ActiveRecord::Base
   class_attribute :dynamic_cost_parameter_definitions
   self.dynamic_cost_parameter_definitions = {}
 
-  translates :name
+  translates :name, :description
 
   before_update :recalculate, if: :count_or_unit_cost_changed?
   after_update :recalculate_invoice!

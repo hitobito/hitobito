@@ -17,6 +17,23 @@ describe InvoiceRunsController, js: true do
     Subscription.create!(mailing_list: list, subscriber: people(:top_leader))
   end
 
+  it "fills texts of all languages from the selected message template" do
+    group.invoice_config.message_templates.create!(title: "Beitrag", title_fr: "Cotisation",
+      body: "Bitte bezahlen", body_fr: "Veuillez payer")
+
+    visit new_group_invoice_run_path(group, invoice_run: {
+      recipient_source_id: list.id,
+      recipient_source_type: "MailingList"
+    })
+    select "Beitrag", from: :message_template_id
+
+    expect(page).to have_field(:invoice_run_title, with: "Beitrag")
+    expect(page).to have_field(:invoice_run_title_fr, with: "Cotisation", visible: :all)
+    expect(page).to have_field(:invoice_run_description, with: "Bitte bezahlen")
+    expect(page).to have_field(:invoice_run_description_fr, with: "Veuillez payer", visible: :all)
+    expect(page).to have_field(:invoice_run_title_it, with: "", visible: :all)
+  end
+
   it "creates invoice run with all attributes and invoice items" do
     visit new_group_invoice_run_path(group, invoice_run: {
       recipient_source_id: list.id,

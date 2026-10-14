@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -84,7 +84,9 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       entry.recipient = recipient
       entry.send(:set_recipient_fields)
     end
-    entry.attributes = {payment_information: entry.invoice_config.payment_information}
+    LocaleSetter.with_locale(person: entry.recipient) do
+      entry.payment_information = entry.invoice_config.payment_information
+    end
   end
 
   def destroy

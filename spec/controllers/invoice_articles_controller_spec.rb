@@ -1,4 +1,4 @@
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -35,6 +35,32 @@ describe InvoiceArticlesController do
         get :edit, params: {group_id: groups(:top_layer).id, id: invoice.id}
       end.to raise_error(CanCan::AccessDenied)
     end
+  end
+
+  it "GET#index sorts by translated name" do
+    get :index, params: {group_id: group.id, sort: :name, sort_dir: :desc}
+
+    expect(assigns(:invoice_articles).map(&:name))
+      .to eq ["Beitrag Kinder", "Beitrag Erwachsene", "Abonnement der Mitgliederzeitschrift"]
+  end
+
+  it "GET#show renders texts of all languages as json" do
+    article = invoice_articles(:beitrag)
+    article.update!(name_fr: "Cotisation adultes", description_fr: "Cotisation normale")
+
+    get :show, params: {group_id: group.id, id: article.id}, format: :json
+
+    expect(response.parsed_body).to include(
+      "name" => "Beitrag Erwachsene", "name_fr" => "Cotisation adultes",
+      "description_fr" => "Cotisation normale"
+    )
+  end
+
+  it "POST#create stores translated name" do
+    post :create, params: {group_id: group.id,
+                           invoice_article: {number: "1", name: "Stift", name_fr: "Crayon"}}
+
+    expect(InvoiceArticle.find_by(number: "1").name_fr).to eq "Crayon"
   end
 
   context "sheets" do

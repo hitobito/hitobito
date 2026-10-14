@@ -9,7 +9,7 @@ describe Person::SendLoginJob do
   let(:sender) { people(:top_leader) }
   let(:recipient) { people(:bottom_member) }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
   end

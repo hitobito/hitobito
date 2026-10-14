@@ -23,7 +23,7 @@ describe Event::ParticipationNotificationJob do
 
   let(:person) { Fabricate(:person, email: "anybody@example.com") }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
   end

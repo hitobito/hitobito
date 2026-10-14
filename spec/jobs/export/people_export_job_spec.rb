@@ -22,9 +22,12 @@ describe Export::PeopleExportJob do
   let(:selection) { false }
   let(:file) { subject.job_observation }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+  end
+
+  before do
     subject.enqueue!
   end
 

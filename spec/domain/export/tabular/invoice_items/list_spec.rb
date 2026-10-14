@@ -71,5 +71,19 @@ describe Export::Tabular::InvoiceItems::List do
         .to eq({"Preis" => "1.50", "Betrag" => "4.50", "MwSt." => "8.0",
                 "MwSt. Betrag" => "0.36", "Total" => "4.86"})
     end
+
+    it "writes the item name in the language of the recipient" do
+      item.update!(name_fr: "stylos")
+      invoice.recipient.update!(language: :fr)
+
+      expect(csv.pluck(0)).to include "stylos"
+    end
+
+    it "writes the item name in the language of the user without recipient" do
+      item.update!(name_fr: "stylos")
+      invoice.update_columns(recipient_id: nil, recipient_type: nil)
+
+      expect(csv.pluck(0)).to include "pens"
+    end
   end
 end

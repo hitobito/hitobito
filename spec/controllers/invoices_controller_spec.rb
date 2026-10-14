@@ -1,4 +1,4 @@
-#  Copyright (c) 2017-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -51,6 +51,17 @@ describe InvoicesController do
       expect(response).to be_successful
       expect(assigns(:invoice).recipient).to be_present
       expect(assigns(:invoice).recipient_name).to be_present
+    end
+
+    it "GET#new prefills payment information in the language of the recipient" do
+      group.invoice_config.update!(payment_information: "Zahlbar",
+        payment_information_fr: "Payable")
+      person.update!(language: :fr)
+
+      get :new, params: {group_id: group.id,
+                         invoice: {recipient_type: "Person", recipient_id: person.id}}
+
+      expect(assigns(:invoice).payment_information).to eq "Payable"
     end
 
     it "GET#new creating invoice for with Group recipient params" do

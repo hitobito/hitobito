@@ -64,8 +64,7 @@ class Invoice::BatchCreate
   # and saves it.
   def create_invoice(recipient)
     LocaleSetter.with_locale(person: recipient) do
-      invoice_attrs = invoice.attributes.merge(
-        title: invoice_run.title || invoice.title,
+      invoice_attrs = invoice.attributes.merge(run_texts).merge(
         creator_id: invoice_run.creator_id,
         invoice_run_id: invoice_run.id,
         recipient: recipient
@@ -74,6 +73,12 @@ class Invoice::BatchCreate
       add_invoice_items(invoice, recipient)
       save_invoice(invoice)
     end
+  end
+
+  def run_texts
+    InvoiceRun.translated_attribute_names.index_with do |attr|
+      invoice_run.public_send(attr) || invoice.public_send(attr)
+    end.stringify_keys
   end
 
   # Creates clones of all invoice items on the invoice_run invoice

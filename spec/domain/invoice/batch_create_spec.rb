@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2026, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
@@ -46,10 +46,13 @@ describe Invoice::BatchCreate do
       person_fr.update!(language: :fr)
 
       run = InvoiceRun.create!(recipient_source: mailing_list, group: group,
-        title: "title", title_fr: "titre")
+        title: "title", title_fr: "titre",
+        description: "description", description_fr: "déscription",
+        payment_information: "pay", payment_information_fr: "payer")
 
       invoice = Fabricate.build(:invoice, title: "invoice", group: group)
-      invoice.invoice_items.build(name: "pens", name_fr: "crayons", unit_cost: 1.5)
+      invoice.invoice_items.build(name: "pens", name_fr: "crayons",
+        description: "blue", description_fr: "bleu", unit_cost: 1.5)
       run.invoice = invoice
       expect do
         Invoice::BatchCreate.call(run, person)
@@ -61,18 +64,27 @@ describe Invoice::BatchCreate do
           {
             recipient: invoice.recipient,
             title: invoice.title,
-            item_name: invoice.invoice_items.first.name
+            description: invoice.description,
+            payment_information: invoice.payment_information,
+            item_name: invoice.invoice_items.first.name,
+            item_description: invoice.invoice_items.first.description
           }
         end
       end
       expect(interesting_attributes).to match_array([{
         recipient: person_de,
         title: "title",
-        item_name: "pens"
+        description: "description",
+        payment_information: "pay",
+        item_name: "pens",
+        item_description: "blue"
       }, {
         recipient: person_fr,
         title: "titre",
-        item_name: "crayons"
+        description: "déscription",
+        payment_information: "payer",
+        item_name: "crayons",
+        item_description: "bleu"
       }])
     end
 

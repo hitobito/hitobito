@@ -189,12 +189,28 @@ describe InvoiceRunsController do
     end
 
     it "GET#new assigns payment_information from invoice_config" do
-      group.invoice_config.update(payment_information: "Bitte schnellstmöglich einzahlen")
+      group.invoice_config.update(payment_information: "Bitte schnellstmöglich einzahlen",
+        payment_information_fr: "Veuillez payer au plus vite")
 
       get :new,
         params: {group_id: group.id, invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class}}
       expect(response).to render_template("crud/new")
-      expect(assigns(:invoice_run).invoice.payment_information).to eq "Bitte schnellstmöglich einzahlen"
+      expect(assigns(:invoice_run).payment_information).to eq "Bitte schnellstmöglich einzahlen"
+      expect(assigns(:invoice_run).payment_information_de).to eq "Bitte schnellstmöglich einzahlen"
+      expect(assigns(:invoice_run).payment_information_fr).to eq "Veuillez payer au plus vite"
+      expect(assigns(:invoice_run).payment_information_en).to be_nil
+    end
+
+    it "GET#new assigns fallback payment_information for language of the user" do
+      group.invoice_config.update(payment_information: "Bitte schnellstmöglich einzahlen")
+
+      get :new, params: {locale: "en", group_id: group.id,
+                         invoice_run: {recipient_source_id: list.id, recipient_source_type: list.class}}
+
+      expect(assigns(:invoice_run).payment_information).to eq "Bitte schnellstmöglich einzahlen"
+      expect(assigns(:invoice_run).payment_information_de).to eq "Bitte schnellstmöglich einzahlen"
+      expect(assigns(:invoice_run).payment_information_en).to eq "Bitte schnellstmöglich einzahlen"
+      expect(assigns(:invoice_run).payment_information_fr).to be_nil
     end
 
     it "POST#create creates an invoice for single member" do
@@ -231,6 +247,21 @@ describe InvoiceRunsController do
       expect(created.title).to eq "current_user"
       expect(created.title_fr).to eq "personne"
       expect(Invoice.find_by(title: "current_user").creator).to eq(person)
+    end
+
+    it "POST#create allows to set translated description and payment information" do
+      post :create, params: {group_id: group.id, ids: person.id, invoice_run: {
+        title: "Title",
+        description: "Beschreibung", description_fr: "Déscription",
+        payment_information: "Zahlbar", payment_information_fr: "Payable",
+        invoice: invoice_attrs
+      }}
+
+      run = InvoiceRun.last
+      expect(run.description_fr).to eq "Déscription"
+      expect(run.payment_information_fr).to eq "Payable"
+      expect(run.invoices.first.description).to eq "Beschreibung"
+      expect(run.invoices.first.payment_information).to eq "Zahlbar"
     end
 
     it "POST#create allows to set translated invoice item names" do

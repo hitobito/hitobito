@@ -129,7 +129,7 @@ describe Invoice::ItemEvaluation do
       )
       Payment.create(amount: invoice.recalculate, invoice: invoice, received_at: 2.months.ago)
 
-      InvoiceItem.where(invoice_id: invoice.id, name: "Membership").update_all(description: "x")
+      InvoiceItem.where(invoice_id: invoice.id, name: "Membership").update_all(account: "01-23456-7")
 
       evaluations = described_class.new(top_layer, 1.year.ago, 1.month.from_now).fetch_evaluations
       expect(evaluations.pluck(:name)).to eq ["Membership", "Shirt"]

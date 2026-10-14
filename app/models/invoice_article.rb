@@ -1,4 +1,4 @@
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,8 +11,6 @@
 #  account     :string
 #  category    :string
 #  cost_center :string
-#  description :text
-#  name        :string           not null
 #  number      :string
 #  unit_cost   :decimal(12, 2)
 #  vat_rate    :decimal(5, 2)
@@ -25,6 +23,10 @@
 #  index_invoice_articles_on_number_and_group_id  (number,group_id) UNIQUE
 #
 class InvoiceArticle < ActiveRecord::Base
+  include Globalized
+
+  translates :name, :description
+
   belongs_to :group
 
   validates :name, presence: true, uniqueness: {scope: :group_id, case_sensitive: false}

@@ -80,9 +80,9 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
         period_invoice_template_id: period_invoice_template.id,
         invoice_run: {
           title: "Test run",
+          description: "Description",
+          payment_information: "Payment info",
           invoice: {
-            description: "Description",
-            payment_information: "Payment info",
             payment_purpose: "Purpose",
             issued_at: Time.zone.today
           }
@@ -90,5 +90,6 @@ describe PeriodInvoiceTemplates::InvoiceRunsController do
       }
     end.to change { InvoiceRun.count }.by(1).and change { Invoice.count }.by(2)
     expect(flash[:notice]).to eq "Rechnung <i>Test run</i> wurde für 2 Empfänger erstellt."
+    expect(InvoiceRun.last.invoices.map(&:payment_information)).to eq ["Payment info"] * 2
   end
 end

@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -16,8 +16,8 @@
   = f.fields_for :invoice, entry.invoice do |fi|
     = render "invoices/message_template", f: fi, group: entry
     = f.labeled_input_field :title, help: t('.recipient_info', count: entry.recipients(current_user).count), data: { message_template_target: :title }
-    = fi.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
-    = fi.labeled_input_field :payment_information
+    = f.labeled_input_field :description, rows: 3, data: { message_template_target: :body }
+    = f.labeled_input_field :payment_information
     = fi.labeled_input_field :payment_purpose
     = fi.labeled_date_field :issued_at
 

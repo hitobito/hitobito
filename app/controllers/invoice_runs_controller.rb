@@ -15,9 +15,9 @@ class InvoiceRunsController < CrudController
     :recipient_source_id,
     :recipient_source_type,
     :title,
+    :description,
+    :payment_information,
     invoice: [
-      :description,
-      :payment_information,
       :payment_purpose,
       :hide_total,
       :issued_at,
@@ -42,8 +42,7 @@ class InvoiceRunsController < CrudController
 
   def new
     assign_attributes
-
-    entry.invoice.payment_information = entry.invoice_config.payment_information
+    assign_payment_information_from_config
     session[:invoice_referer] = request.referer
   end
 
@@ -161,7 +160,7 @@ class InvoiceRunsController < CrudController
   # rubocop:todo Metrics/CyclomaticComplexity
   # rubocop:todo Metrics/MethodLength
   def assign_attributes # rubocop:disable Metrics/AbcSize
-    entry.attributes = title_params
+    entry.attributes = translated_text_params
     entry.creator = current_user
     entry.invoice = build_invoice
     entry.recipient_source = recipient_source
@@ -176,6 +175,14 @@ class InvoiceRunsController < CrudController
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/CyclomaticComplexity
+
+  def assign_payment_information_from_config
+    Globalized.languages.each do |locale|
+      attr = :"payment_information_#{locale}"
+      entry.send(:"#{attr}=", entry.invoice_config.send(attr))
+    end
+    entry.payment_information = entry.invoice_config.payment_information
+  end
 
   def authorize_class
     authorize!(:index_issued_invoices, group)
@@ -212,16 +219,22 @@ class InvoiceRunsController < CrudController
     group.issued_invoices
       .build(model_params.present? ? permitted_params[:invoice] : {})
       .tap { |invoice| invoice.issued_at ||= Time.zone.today }
-      .tap { |invoice| invoice.title ||= entry.title }
+      .tap { |invoice| assign_run_texts(invoice) }
+  end
+
+  def assign_run_texts(invoice)
+    InvoiceRun.translated_attribute_names.each do |attr|
+      invoice[attr] = entry.public_send(attr)
+    end
   end
 
   def recipient_source
     InvoiceRuns::RecipientSourceBuilder.new(params, @group).recipient_source
   end
 
-  def title_params
+  def translated_text_params
     model_params&.permit(GlobalizedPermittedAttrs.new(
-      InvoiceRun, [:title]
+      InvoiceRun, InvoiceRun.translated_attribute_names
     ).permitted_attrs) || {}
   end
 

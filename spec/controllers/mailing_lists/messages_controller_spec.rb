@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2026, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -71,6 +71,26 @@ describe MailingLists::MessagesController do
       expect(assigns(:message)).to be_persisted
       expect(assigns(:message).invoice.invoice_items.first.name).to eq "Mitgliedsbeitrag"
       expect(response).to redirect_to group_mailing_list_message_path(id: assigns(:message).id)
+    end
+
+    it "saves LetterWithInvoice with translated invoice item names" do
+      Subscription.create!(mailing_list: list, subscriber: top_leader)
+
+      post :create, params: nesting.merge(
+        message: {
+          subject: "Mitgliedsbeitrag",
+          type: "Message::LetterWithInvoice",
+          body: "Bitte einzahlen",
+          invoice_attributes: {
+            invoice_items_attributes: {
+              "1" => {"name" => "Mitgliedsbeitrag", "name_fr" => "Cotisation", "unit_cost" => 42,
+                      "_destroy" => "false"}
+            }
+          }
+        }
+      )
+      expect(assigns(:message)).to be_persisted
+      expect(assigns(:message).reload.invoice.invoice_items.first.name_fr).to eq "Cotisation"
     end
 
     it "keeps invoice_items attributes if missing body for LetterWithInvoice" do

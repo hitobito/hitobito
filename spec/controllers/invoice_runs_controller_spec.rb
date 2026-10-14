@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -231,6 +231,21 @@ describe InvoiceRunsController do
       expect(created.title).to eq "current_user"
       expect(created.title_fr).to eq "personne"
       expect(Invoice.find_by(title: "current_user").creator).to eq(person)
+    end
+
+    it "POST#create allows to set translated invoice item names" do
+      post :create, params: {group_id: group.id, ids: person.id, invoice_run: {
+        title: "Title",
+        invoice: {
+          invoice_items_attributes: {
+            "1" => {name: "Stift", name_fr: "Crayon", unit_cost: 1, count: 1}
+          }
+        }
+      }}
+
+      item = InvoiceRun.last.invoices.first.invoice_items.first
+      expect(item.name).to eq "Stift"
+      expect(item.name_fr).to eq "Crayon"
     end
 
     it "POST#create for mailing list recipient_source redirects to invoice_runs page" do

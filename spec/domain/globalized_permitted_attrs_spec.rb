@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2025, Puzzle ITC. This file is part of
+#  Copyright (c) 2012-2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,7 +38,7 @@ describe GlobalizedPermittedAttrs do
       expect(globalized_permitted_attrs).not_to include(:title_fr, :body_fr)
     end
 
-    it "doesnt add globalized version of permitted attrs when base attr not permitted" do
+    it "doesn't add globalized version of permitted attrs when base attr not permitted" do
       permitted_attrs.delete(:body)
 
       expected_attrs = attrs_with_globalized_versions(:title)
@@ -69,7 +69,7 @@ describe GlobalizedPermittedAttrs do
       expect(globalized_comment_permitted_attrs).not_to include(:title_en, :content_en)
     end
 
-    it "doesnt add globalized version of permitted attrs when base attr not permitted" do
+    it "doesn't add globalized version of permitted attrs when base attr not permitted" do
       permitted_attrs.last[:comment_attributes].delete(:content)
       globalized_comment_permitted_attrs = globalized_permitted_attrs.last[:comment_attributes]
 
@@ -103,7 +103,7 @@ describe GlobalizedPermittedAttrs do
       expect(globalized_comment_award_permitted_attrs).not_to include(:award_en)
     end
 
-    it "doesnt add globalized version of permitted attrs for relations when base attr not permitted" do
+    it "doesn't add globalized version of permitted attrs for relations when base attr not permitted" do
       permitted_attrs.last[:comment_attributes].last[:comment_award_attributes].delete(:award)
       globalized_comment_award_permitted_attrs = globalized_permitted_attrs.last[:comment_attributes]
         .last[:comment_award_attributes]
@@ -116,19 +116,45 @@ describe GlobalizedPermittedAttrs do
 
   it "still includes non globalized attrs but does not globalize them" do
     expected_attr = :not_globalized
-    unexpected_attr = Globalized.globalized_names_for_attr(:not_globalized)
+    unexpected_attrs = Globalized.globalized_names_for_attr(:not_globalized)
 
     expect(globalized_permitted_attrs).to include(expected_attr)
-    expect(globalized_permitted_attrs).not_to include(unexpected_attr)
+    expect(globalized_permitted_attrs).not_to include(*unexpected_attrs)
 
     globalized_comment_permitted_attrs = globalized_permitted_attrs.last[:comment_attributes]
     expect(globalized_comment_permitted_attrs).to include(expected_attr)
-    expect(globalized_comment_permitted_attrs).not_to include(unexpected_attr)
+    expect(globalized_comment_permitted_attrs).not_to include(*unexpected_attrs)
 
     globalized_comment_award_permitted_attrs = globalized_permitted_attrs.last[:comment_attributes]
       .last[:comment_award_attributes]
     expect(globalized_comment_award_permitted_attrs).to include(expected_attr)
-    expect(globalized_comment_award_permitted_attrs).not_to include(unexpected_attr)
+    expect(globalized_comment_award_permitted_attrs).not_to include(*unexpected_attrs)
+  end
+
+  it "adds globalized version of permitted attrs for explicitly given nested model class" do
+    globalized_permitted_attrs = described_class.new(
+      GlobalizedTestModels::Post,
+      [{comment: [:title, :not_globalized, {comment_award_attributes: [:award]}]}],
+      comment: GlobalizedTestModels::Comment
+    ).permitted_attrs
+    globalized_comment_permitted_attrs = globalized_permitted_attrs.last[:comment]
+
+    expect(globalized_comment_permitted_attrs)
+      .to include(*attrs_with_globalized_versions(:title), :not_globalized)
+    expect(globalized_comment_permitted_attrs).not_to include(:title_de)
+    expect(globalized_comment_permitted_attrs.last[:comment_award_attributes])
+      .to contain_exactly(*attrs_with_globalized_versions(:award))
+  end
+
+  it "ignores explicitly given nested model class below top level" do
+    globalized_permitted_attrs = described_class.new(
+      GlobalizedTestModels::Post,
+      [{comment_attributes: [{comment_award: [:award]}]}],
+      comment_award: GlobalizedTestModels::CommentAward
+    ).permitted_attrs
+
+    expect(globalized_permitted_attrs.last[:comment_attributes].last[:comment_award])
+      .to eq([:award])
   end
 
   def attrs_with_globalized_versions(*attrs, only_additional: true)

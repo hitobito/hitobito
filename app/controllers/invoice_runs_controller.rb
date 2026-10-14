@@ -1,4 +1,4 @@
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -192,6 +192,10 @@ class InvoiceRunsController < CrudController
         attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
       end
     end
+  end
+
+  def globalized_permitted_attrs
+    GlobalizedPermittedAttrs.new(model_class, permitted_attrs, invoice: Invoice).permitted_attrs
   end
 
   def cancel_all_invoices

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -97,7 +97,7 @@ class MailingLists::MessagesController < CrudController
   def permitted_params
     p = model_params.dup
     p.delete(:type)
-    p = p.permit(permitted_attrs)
+    p = p.permit(globalized_permitted_attrs)
 
     return p unless entry.invoice? && p.dig(:invoice_attributes, :invoice_items_attributes)
 
@@ -119,6 +119,11 @@ class MailingLists::MessagesController < CrudController
     when Message::TextMessage.sti_name
       PERMITTED_TEXT_MESSAGE_ATTRS
     end
+  end
+
+  def globalized_permitted_attrs
+    GlobalizedPermittedAttrs.new(Message, Array(permitted_attrs), invoice_attributes: Invoice)
+      .permitted_attrs
   end
 
   def duplication_source

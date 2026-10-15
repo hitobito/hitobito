@@ -98,6 +98,11 @@ fr:
       models:
         additional_address:
           name_missing: 'Bitte geben Sie einen Namen ein'
+        blocklist_entry:
+          already_blocklisted: Diese Person ist bereits auf der Ausschlussliste.
+          attributes:
+            blocked_hash:
+              blank: kann nur berechnet werden, wenn eine Person gesucht oder Angaben erfasst werden
         contact_account_category:
           attributes:
             unique_per_contactable:
@@ -163,6 +168,7 @@ fr:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Veuillez saisir votre nom'
+          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
           attributes:
             base:
@@ -256,6 +262,10 @@ fr:
         one: Commandes
         many: Commandes
         other: Commandes
+      blocklist_entry:
+        one: Ausschlusslisten-Eintrag
+        many: Ausschlussliste
+        other: Ausschlussliste
       bounce:
         one: Bounce
         many: Bounces
@@ -651,6 +661,12 @@ fr:
         description: Description
         state: Statut
         read_at: Lu le
+
+      blocklist_entry:
+        person: Person
+        blocked_hash: Hash
+        creator: Erstellt von
+        created_at: Erstellt am
 
       cors_origins:
         origin: Serveur avec accès via API

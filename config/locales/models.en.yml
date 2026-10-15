@@ -96,6 +96,11 @@ en:
       models:
         additional_address:
           name_missing: 'Bitte geben Sie einen Namen ein'
+        blocklist_entry:
+          already_blocklisted: Diese Person ist bereits auf der Ausschlussliste.
+          attributes:
+            blocked_hash:
+              blank: kann nur berechnet werden, wenn eine Person gesucht oder Angaben erfasst werden
         contact_account_category:
           attributes:
             unique_per_contactable:
@@ -161,6 +166,7 @@ en:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Please enter a name'
+          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
           attributes:
             base:
@@ -248,6 +254,9 @@ en:
       assignment:
         one: Order
         other: Orders
+      blocklist_entry:
+        one: Ausschlusslisten-Eintrag
+        other: Ausschlussliste
       bounce:
         one: Bounce
         other: Bounces
@@ -567,6 +576,12 @@ en:
         description: Description
         state: Status
         read_at: read at
+
+      blocklist_entry:
+        person: Person
+        blocked_hash: Hash
+        creator: Erstellt von
+        created_at: Erstellt am
 
       cors_origins:
         origin: Host with API access

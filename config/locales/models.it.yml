@@ -98,6 +98,11 @@ it:
       models:
         additional_address:
           name_missing: 'Bitte geben Sie einen Namen ein'
+        blocklist_entry:
+          already_blocklisted: Diese Person ist bereits auf der Ausschlussliste.
+          attributes:
+            blocked_hash:
+              blank: kann nur berechnet werden, wenn eine Person gesucht oder Angaben erfasst werden
         contact_account_category:
           attributes:
             unique_per_contactable:
@@ -163,6 +168,7 @@ it:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Inserire un nome'
+          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             base:
@@ -255,6 +261,10 @@ it:
         one: Ordine
         many: Ordini
         other: Ordini
+      blocklist_entry:
+        one: Ausschlusslisten-Eintrag
+        many: Ausschlussliste
+        other: Ausschlussliste
       bounce:
         one: Bounce
         many: Bounces
@@ -650,6 +660,12 @@ it:
         description: Descrizione
         state: Stato
         read_at: Letto il
+
+      blocklist_entry:
+        person: Person
+        blocked_hash: Hash
+        creator: Erstellt von
+        created_at: Erstellt am
 
       cors_origins:
         origin: host con accesso API

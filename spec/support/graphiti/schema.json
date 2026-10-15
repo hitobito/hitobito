@@ -3856,7 +3856,11 @@
         "active": {
           "type": "date",
           "operators": [
-            "eq"
+            "eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
           ],
           "single": true
         }

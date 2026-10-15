@@ -96,6 +96,17 @@ it:
         year_must_be_four_digits: può contenere al massimo un anno di 4 cifre
         year_must_be_after_1900: deve contenere un'anno a partire dal 1900
       models:
+        additional_address:
+          name_missing: 'Bitte geben Sie einen Namen ein'
+        blocklist_entry:
+          already_blocklisted: Diese Person ist bereits auf der Ausschlussliste.
+          attributes:
+            blocked_hash:
+              blank: kann nur berechnet werden, wenn eine Person gesucht oder Angaben erfasst werden
+        contact_account_category:
+          attributes:
+            unique_per_contactable:
+              required_when_used_for_invoices: "muss aktiviert sein, wenn '%{attribute}' aktiviert ist"
         cors_origin:
           attributes:
             origin:
@@ -157,13 +168,12 @@ it:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Inserire un nome'
+          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             base:
-              max_one_additional_invoice_address: È possibile selezionare un solo indirizzo come indirizzo di fatturazione.
-              additional_address_labels_must_be_unique: Le denominazioni degli altri indirizzi devono essere univoche.
               cannot_have_managers_and_manageds: '%{name} non può avere sia amministratori che figli.'
-              manager_already_managed: Non è stato possibile aggiungere l'amministratore perché è già gestito.
+              manager_already_managed: Verwalter*in konnte nicht hinzugefügt werden, da diese Person selbst bereits verwaltet wird.
               managed_already_manager: Impossibile aggiungere il bambino perché è già amministratore.
             email:
               taken: >
@@ -251,6 +261,10 @@ it:
         one: Ordine
         many: Ordini
         other: Ordini
+      blocklist_entry:
+        one: Ausschlusslisten-Eintrag
+        many: Ausschlussliste
+        other: Ausschlussliste
       bounce:
         one: Bounce
         many: Bounces
@@ -259,6 +273,10 @@ it:
         one: Registrazione nel calendario
         many: Registrazioni nel calendario
         other: Registrazioni nel calendario
+      contact_account_category:
+        one: Kontaktangaben-Kategorie
+        many: Kontaktangaben-Kategorien
+        other: Kontaktangaben-Kategorien
       custom_content:
         one: testo
         many: Osservazioni
@@ -316,21 +334,21 @@ it:
         many: Cucina
         other: Cucina
       event/role/helper:
-        one: Aiutante
-        many: Aiutanti
-        other: Aiutanti
+        one: Helfer/-in
+        many: Helfende
+        other: Helfende
       event/role/participant:
-        one: Partecipante
-        many: Partecipante
-        other: Partecipante
+        one: Teilnehmer/-in
+        many: Teilnehmende
+        other: Teilnehmende
       event/role/treasurer:
         one: Cassiere
         many: Cassiere
         other: Cassiere
       event/role/speaker:
-        one: Conferenziere
-        many: Conferenziere
-        other: Conferenziere
+        one: Referent/-in
+        many: Referierende
+        other: Referierende
       event/date:
         one: data
         many: Date
@@ -576,7 +594,12 @@ it:
         category: Categoria
 
       additional_address:
-        translated_label: Denominazione
+        category: Kategorie
+        label: Bezeichnung
+        first_name: Vorname
+        last_name: Nachname
+        organization_name: Firmenname
+        organization: Firma
         street_and_number: Strada/Numero civico # can be removed with next release
         street: Strada
         housenumber: Numero civico
@@ -585,10 +608,11 @@ it:
         town: Luogo
         country: Nazione
         postbox: Casella postale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: c/o-Adresse
         public: Pubblico
 
       additional_addresses:
+        category: Kategorie
         label: Denominazione
         street: Strada
         postbox: Postfach
@@ -637,6 +661,12 @@ it:
         state: Stato
         read_at: Letto il
 
+      blocklist_entry:
+        person: Person
+        blocked_hash: Hash
+        creator: Erstellt von
+        created_at: Erstellt am
+
       cors_origins:
         origin: host con accesso API
 
@@ -655,7 +685,7 @@ it:
         password: Password
         password_confirmation: Confermare la password
         current_password: Vecchia password
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: c/o-Adresse
         address: Indirizzo
         street: Strada
         housenumber: Numero civico
@@ -663,6 +693,7 @@ it:
         zip_code: NAP
         town: Luogo
         country: Nazione
+        canton: Kanton
         gender: Sesso
         genders:
           m: uomo
@@ -755,7 +786,7 @@ it:
         short_name: Abbreviazione
         email: Email principale
         address: Indirizzo
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: c/o-Adresse
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -814,8 +845,8 @@ it:
         contact: Persona di contatto
         creator_id: Ersteller
         notify_contact_on_participations: Avvisare della nuova registrazione via e-mail la persona di contatto
-        maximum_participants: Numero massimo di partecipanti
-        minimum_participants: Numero minimo di partecipanti
+        maximum_participants: Maximale Teilnehmendenzahl
+        minimum_participants: Minimale Teilnehmendenzahl
         contact_id: Persona di contatto
         description: Descrizione
         location: Luogo / Indirizzo
@@ -858,7 +889,7 @@ it:
         nickname: Soprannome
         company_name: Nome della ditta
         email: Email principale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: c/o-Adresse
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -881,7 +912,7 @@ it:
         nickname: Soprannome
         company_name: Nome della ditta
         email: Email principale
-        address_care_of: Riga dell'indirizzo aggiuntiva
+        address_care_of: c/o-Adresse
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -1082,6 +1113,7 @@ it:
 
       phone_number:
         number: Numero
+        category: Kategorie
         label: Tipo
         public: Pubblico
 
@@ -1111,6 +1143,7 @@ it:
       # used for nested phone_numbers
       phone_numbers:
         number: Numero di telefono
+        category: Kategorie
         label: Tipo di numero di telefono
         public: Pubblico
 
@@ -1159,7 +1192,7 @@ it:
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
               finance: Emettere e amministrare fatture
               layer_and_below_finance: Creazione e gestione delle fatture a questo livello e a tutti i livelli sottostanti.
-              impersonation: Utilizza Hitobito come altra persona.
+              impersonation: "%{application_name} als andere Person bedienen."
               see_invisible_from_above: Vedere altre persone che altrimenti non possono essere viste dai livelli superiori.
               manual_deletion: Eliminazione di persone senza ruoli
           kind:
@@ -1179,33 +1212,23 @@ it:
               one: In futuro
               many: Futuro
               other: Futuro
-      contact_account:
-        custom_label: Testo libero
-        predefined_labels:
-          privat: Privato
-          mobil: Cellulare
-          arbeit: Ufficio
-          vater: Padre
-          mutter: Madre
-          fax: Fax
-          andere: Altro
-          webseite: Sito web
-          rechnung: Fattura
-
       social_account:
         name: Nickname
+        category: Kategorie
         label: Tipo
         public: Pubblico
 
       # used for nested social accounts
       social_accounts:
         name: Nome dei social media
+        category: Kategorie
         label: Tipo di social media
         public: Pubblico
 
       additional_email:
         email: Email
         name: Altre email
+        category: Kategorie
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1214,6 +1237,7 @@ it:
       additional_emails:
         email: E-mail
         name: Altre email
+        category: Kategorie
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1333,6 +1357,15 @@ it:
         subject: Soggetto
         message: Rapporto
 
+      contact_account_category:
+        key: Schlüssel
+        contact_account_type: Kontaktangaben-Typ
+        contactable_type: Gilt für
+        unique_per_contactable: Nur einmal pro Person/Gruppe
+        used_for_invoices: Für Rechnungen verwenden
+        position: Reihenfolge
+        name: Bezeichnung
+
       label_format:
         name: Definizione
         page_size: Formato della pagina
@@ -1383,7 +1416,7 @@ it:
         recipient_name: Nome
         recipient_first_name: Nome
         recipient_last_name: Cognome
-        recipient_address_care_of: Riga dell'indirizzo aggiuntiva
+        recipient_address_care_of: Indirizzo c/o
         recipient_postbox: Casella postale
         recipient_country: Nazione
         recipient_street: Strada
@@ -1479,6 +1512,8 @@ it:
         cost: Importo
         cost_center: Centro di costo
         account: Conto
+        vat: MwSt. Betrag
+        total: Total
 
 
       invoice_run:
@@ -1543,6 +1578,7 @@ it:
         user_identifier: ID partecipante
         password: password
         ini_letter: INI lettera
+        ebics_version_label: EBICS-Version
         payment_providers:
           bancastato: BancaStato
           bekb: BEKB | BCBE
@@ -1556,6 +1592,7 @@ it:
           ubs: UBS
           valiant: Valiant
           zkb: Zürcher Kantonalbank
+          zkb-test: Zürcher Kantonalbank Testumgebung
           zugerkb: Zuger Kantonalbank
           ukb: Urner Kantonalbank
           bcn: Banque Cantonale Neuchâteloise
@@ -1587,13 +1624,14 @@ it:
         name: Cognome
         description: Descrizione
         key: Codice
-        range: Zona di accesso
-        abilities: Diritti
+        permission: Berechtigung
+        permissions:
+          layer_read: Leserechte auf dieser Ebene
+          layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebenen
+          layer_full: Lese- und Schreibrechte auf dieser Ebene
+          layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
+        scopes: Zugriffsbereich
         last_access: Ultimo Accesso
-        layer_read: Diritti di lettura per questo livello
-        layer_and_below_read: Diritti di lettura per questo livello e per i livelli inferiori
-        layer_full: Diritti di lettura e scrittura per questo livello
-        layer_and_below_full: Diritti di lettura e scrittura per questo livello e per i livelli inferiori
         people: Persone
         register_people: Registrare una nuova persona (richiede autorizzazione)
         groups: Gruppi
@@ -1675,6 +1713,9 @@ it:
       qualifications: Leggere, creare ed eliminare tutte le qualifiche a cui hai accesso
 
   errors:
+    attributes:
+      category:
+        already_assigned: "%{category} ist bereits vergeben"
     messages:
       invalid_zipcode: non è valido
       attachments_not_allowed: "Non può contenere allegati"

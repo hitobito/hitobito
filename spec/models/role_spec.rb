@@ -36,11 +36,6 @@ describe Role do
       is_expected.to be_valid
     end
 
-    it "is valid when start_on is blank and end_on is set" do
-      role.attributes = {start_on: nil, end_on: tomorrow}
-      is_expected.to be_valid
-    end
-
     it "is valid when start_on is before end_on" do
       role.attributes = {start_on: yesterday, end_on: tomorrow}
       is_expected.to be_valid
@@ -63,7 +58,7 @@ describe Role do
     end
 
     it "is valid when end_on has a normal 4-digit year" do
-      role.attributes = {start_on: nil, end_on: Date.new(9999, 12, 31)}
+      role.attributes = {end_on: Date.new(9999, 12, 31)}
       is_expected.to be_valid
     end
 
@@ -180,7 +175,7 @@ describe Role do
 
       it "includes ended roles if from anytime if setting is set to nil" do
         allow(Settings.people).to receive(:ended_roles_readable_for).and_return(nil)
-        role.update!(end_on: 100.years.ago)
+        role.update!(start_on: 100.years.ago, end_on: 100.years.ago)
         expect(Role.with_ended_readable).to include(role)
       end
     end
@@ -569,11 +564,6 @@ describe Role do
       date = Date.new(2025, 3, 17)
       r = Role.new(start_on: date)
       expect(r.start_on).to eq(date)
-    end
-
-    it "does not override given blank start_on" do
-      r = Role.new(start_on: nil)
-      expect(r.start_on).to be_nil
     end
   end
 

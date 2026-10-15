@@ -14,6 +14,6 @@
 
 =t('.explain_special_fields_html')
 %dl.dl-horizontal
-  = csv_field_documentation(:gender, 'm' => t('global.gender.male'), 'w' => t('global.gender.female'))
+  = csv_field_documentation(:gender, Person.gender_labels)
 
   = render_extensions 'special_fields'

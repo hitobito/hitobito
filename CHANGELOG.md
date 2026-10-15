@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.10
 
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 

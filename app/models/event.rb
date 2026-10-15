@@ -94,6 +94,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     social_account
   ].freeze
 
+  class_attribute :default_visible_contact_attributes
+  self.default_visible_contact_attributes = ALLOWED_VISIBLE_CONTACT_ATTRIBUTES
+
   SEARCHABLE_ATTRS = [:number, {event_translations: [:name], groups: [:name]}]
 
   include Event::Participatable

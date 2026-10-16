@@ -20,7 +20,7 @@ gem "bcrypt"
 gem "bleib"
 gem "bootsnap", require: false
 gem "cancancan"
-gem "caxlsx", "< 4.3.0" # Otherwise generated xlsx files are corrupted, see https://github.com/caxlsx/caxlsx/issues/481
+gem "caxlsx", "< 4.6.0" # Otherwise generated xlsx files are corrupted, see https://github.com/caxlsx/caxlsx/issues/481
 gem "charlock_holmes"
 gem "commonmarker"
 gem "config"

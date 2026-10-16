@@ -63,8 +63,8 @@ runs:
         SKIP_YARN_INSTALL=1 bundle exec rake assets:build_for_test
       shell: bash
 
-    - name: 'Prepare the Database'
+    - name: 'Prepare a database per CPU'
       if: inputs.database == 'true'
       run: |
-        SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 bundle exec rake db:test:prepare
+        bundle exec rake parallel:create parallel:load_schema
       shell: bash

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -31,7 +31,7 @@ module Export::Pdf::Invoice
       {
         invoice_number: invoice.sequence_number,
         invoice_date: (I18n.l(invoice.issued_at) if invoice.issued_at),
-        due_at: (I18n.l(invoice.due_at) if invoice.due_at),
+        due_at: (I18n.l(displayed_due_at) if displayed_due_at),
         creator: invoice.creator.try(:full_name),
         vat_number: invoice.vat_number
       }

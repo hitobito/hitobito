@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,6 +28,12 @@ module Export::Pdf::Invoice
     def deprecated_receiver_address_data
       # Old invoices do not have recipient_address_values, so we have to use the old address
       invoice.deprecated_recipient_address&.split("\n")&.compact_blank&.take(3) || []
+    end
+
+    def displayed_due_at
+      return invoice.due_at if @options[:reminders]
+
+      invoice.original_due_at || invoice.due_at
     end
 
     def table(table, options)

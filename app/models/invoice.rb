@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,6 +22,7 @@
 #  hide_total                   :boolean          default(FALSE), not null
 #  iban                         :string
 #  issued_at                    :date
+#  original_due_at              :date
 #  participant_number           :string
 #  payee_country                :string
 #  payee_housenumber            :string

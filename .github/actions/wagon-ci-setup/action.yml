@@ -249,3 +249,12 @@ runs:
         bundle exec rake wagon:migrate
       working-directory: hitobito
       shell: bash
+
+    - name: "Copy the migrated test database for each further CPU"
+      if: inputs.migrations == 'true'
+      run: |
+        for number in $(seq 2 "$(nproc)"); do
+          PGPASSWORD="$RAILS_DB_PASSWORD" psql -h "$RAILS_DB_HOST" -U "$RAILS_DB_USERNAME" -d postgres \
+            -c "CREATE DATABASE ${RAILS_TEST_DB_NAME}${number} TEMPLATE ${RAILS_TEST_DB_NAME}"
+        done
+      shell: bash

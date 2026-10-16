@@ -10,7 +10,7 @@
         .modal-body
           .row-fluid
             = hidden_field_tag('return_url', params[:return_url])
-            = hidden_field_tag('range', params[:range])
+            = hidden_list_filter_fields
             = hidden_field_tag('ids', people_ids)
             = render 'roles/fields', f: f
         .modal-footer

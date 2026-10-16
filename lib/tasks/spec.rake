@@ -94,6 +94,28 @@ if Rake::Task.task_defined?("spec:features") # only if current environment knows
         t.rspec_opts = "--only-failures --format Fivemat"
         t.fail_on_error = true # do fail the run
       end
+
+      desc "Run feature specs in one process per CPU at most three times to handle flaky specs"
+      task :lenient_parallel do # rubocop:disable Rails/RakeEnvironment
+        files = spec_group_files("./spec/features/**/*_spec.rb")
+        files = Dir[files] if files.is_a?(String)
+        attempt = lambda do |rspec_opts|
+          # filesize grouping is stable, so each retrying process finds its own status file
+          system("parallel_rspec", "--group-by", "filesize",
+            "--serialize-stdout", "--combine-stderr",
+            "-o", "#{rspec_opts} --format Fivemat", *files)
+        end
+
+        sh "rm -f tmp/examples*.txt"
+        puts "\nFIRST ATTEMPT\n"
+        next if attempt.call("--tag type:feature")
+
+        puts "\nSECOND ATTEMPT\n"
+        next if attempt.call("--only-failures")
+
+        puts "\nLAST ATTEMPT\n"
+        abort unless attempt.call("--only-failures")
+      end
     end
   end
 end

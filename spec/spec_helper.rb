@@ -89,7 +89,7 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.backtrace_exclusion_patterns = [/lib\/rspec/, /asdf/]
-  config.example_status_persistence_file_path = Rails.root.join("tmp", "examples.txt").to_s
+  config.example_status_persistence_file_path = Rails.root.join("tmp", "examples#{ENV["TEST_ENV_NUMBER"]}.txt").to_s
 
   config.expect_with :rspec do |c|
     c.max_formatted_output_length = 1000

@@ -41,7 +41,7 @@ describe "export import person" do
     # change to not get a duplicate match
     exported.update!(last_name: "Exported", email: "exported@hitobito.example.org")
 
-    import(csv_without_bom)
+    import(csv_without_bom, with_id: false)
 
     imported = Person.find_by(email: "exporter@hitobito.example.org")
     expect(imported).not_to eq(exported)
@@ -60,18 +60,26 @@ describe "export import person" do
     end
   end
 
+  it "updates exported people by person number" do
+    exported = Fabricate(:person, first_name: "Foo", last_name: "Exporter")
+    csv = export(exported).gsub(Regexp.new("^#{Export::Csv::UTF8_BOM}"), "")
+    exported.update!(last_name: "Exported", email: "exported@hitobito.example.org")
+
+    expect { import(csv, with_id: true) }.not_to change { Person.count }
+    expect(exported.roles.map(&:type)).to eq [role_type.sti_name]
+  end
+
   def export(person)
     Export::Tabular::People::PeopleFull.csv(Person.where(id: person.id))
   end
 
-  def import(csv) # rubocop:disable Metrics/AbcSize
+  def import(csv, with_id:) # rubocop:disable Metrics/AbcSize
     parser = Import::CsvParser.new(csv)
     parser.parse
 
     guesser = Import::PersonColumnGuesser.new(parser.headers)
-    header_mapping = guesser.mapping.each_with_object({}) do |map, hash|
-      hash[map.first] = map.last[:key]
-    end
+    header_mapping = guesser.mapping.transform_values { |field| field[:key] }
+    header_mapping.delete(Person.human_attribute_name(:id)) unless with_id
 
     data = parser.map_data(header_mapping)
     importer = Import::PersonImporter.new(data, group, role_type)

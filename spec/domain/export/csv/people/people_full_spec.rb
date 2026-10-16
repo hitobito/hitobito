@@ -39,7 +39,7 @@ describe Export::Tabular::People::PeopleFull do
 
     it "has correct headers" do
       expected = [
-        "Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
+        "Personennummer", "Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
         "c/o-Adresse", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
         "Hauptebene", "Rollen",
         "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Sprache", "Kanton", "Tags",
@@ -57,6 +57,7 @@ describe Export::Tabular::People::PeopleFull do
     context "first row" do
       subject { csv[0] }
 
+      its(["Personennummer"]) { should eq person.id.to_s }
       its(["Rollen"]) { should eq "Leader Top / TopGroup" }
       its(["Telefonnummer Arbeit"]) { should eq "'+41 79 123 45 67" }
       its(["Weitere E-Mail Arbeit"]) { should eq "vater@example.com" }
@@ -71,6 +72,7 @@ describe Export::Tabular::People::PeopleFull do
 
     it "has correct headers" do
       headers = [
+        "N° personnel",
         "Prénom",
         "Nom",
         "Surnom",

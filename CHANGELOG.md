@@ -9,7 +9,8 @@
 - Firmenfelder (Firma/Firmenname) auf Personen, zusätzlichen Adressen und im Anmeldeformular von Anlässen können per Feature Gate `address.company` ausgeblendet werden (#4471)
 - Beim CSV-Import von Personen kann neu eine Spalte auf die Personen-ID gemappt werden (nur mit Admin-Berechtigung). Bestehende Personen werden anhand der ID aktualisiert bzw. neue Personen mit vorgegebener ID erstellt (#4517)
 - Beim CSV-Import von Personen wird das manuell gesetzte Spalten-Mapping im Browser gespeichert und beim nächsten Import wieder angewendet (#4517)
-- Die Anmeldebestätigung (PDF) zeigt von der Kontaktperson nur die in den Anzeigeoptionen gewählten Angaben (hitobito_sww#376)
+- Die Anmeldebestätigung (PDF), die Teilnahme-Detailseite, Teilnahme-Mails und der Kalender-Export (iCal) zeigen von der Kontaktperson nur die in den Anzeigeoptionen gewählten Angaben (hitobito_sww#376)
+- JSON:API: Bei Anlässen mit `include=contact` werden nur die in den Anzeigeoptionen gewählten Angaben der Kontaktperson ausgeliefert, neu mit dem Typ `event-contact` statt `people`. Beziehungen der Kontaktperson (z.B. `contact.phone_numbers`) können nicht mehr mitgeladen werden (hitobito_sww#376)
 
 ## Version 2.10
 

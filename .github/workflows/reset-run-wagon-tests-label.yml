@@ -1,0 +1,31 @@
+name: 'Reset the run-wagon-tests! label'
+
+# The 'run-wagon-tests!' label triggers the wagon tests once.
+# Removing it on every push to a pull request makes clear that its
+# verdict referred to an older commit and that the label has to be
+# added again to test the current state.
+#
+# pull_request_target is used so this also works for pull requests
+# from forks; the job does not check out or run any of their code.
+
+on:
+  pull_request_target:
+    types: [synchronize]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  remove-label:
+    name: 'Remove the run-wagon-tests! label'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Remove the label if present'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          if gh pr view "$PR" --json labels --jq '.labels[].name' | grep -qx 'run-wagon-tests!'; then
+            gh pr edit "$PR" --remove-label 'run-wagon-tests!'
+          fi

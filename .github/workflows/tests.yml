@@ -136,12 +136,10 @@ jobs:
 
       - name: 'Prepare'
         uses: ./.github/actions/core-ci-setup
-        with:
-          database: false
 
       - name: 'Features'
         run: |
-          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:features:lenient
+          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:features:lenient_parallel
 
       - name: 'Make capybara output downloadable'
         uses: actions/upload-artifact@v7

@@ -16,6 +16,9 @@ on:
       - '**.md'
       - 'VERSION'
 
+env:
+  NO_COVERAGE: true
+
 jobs:
   rubocop:
     runs-on: 'ubuntu-24.04'

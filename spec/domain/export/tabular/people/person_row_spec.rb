@@ -70,7 +70,8 @@ describe Export::Tabular::People::PersonRow do
 
     it "when the label is missing exports without colon" do
       person.additional_emails.update_all(label: nil)
-      expect(row.fetch(:additional_email_other)).to eq "ferien@example.com;news@example.com"
+      expect(row.fetch(:additional_email_other).split(";"))
+        .to match_array %w[ferien@example.com news@example.com]
     end
   end
 

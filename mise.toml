@@ -1,0 +1,4 @@
+[tools]
+ruby = "{{ read_file(path=config_root ~ '/Dockerfile') | regex_replace(pattern='(?s).*ARG RUBY_VERSION=\"([^\"]+)\".*', rep='$1') | trim }}"
+node = "{{ read_file(path=config_root ~ '/Dockerfile') | regex_replace(pattern='(?s).*ARG NODEJS_VERSION=\"([^\"]+)\".*', rep='$1') | trim }}"
+yarn = "{{ read_file(path=config_root ~ '/Dockerfile') | regex_replace(pattern='(?s).*ARG YARN_VERSION=\"([^\"]+)\".*', rep='$1') | trim }}"

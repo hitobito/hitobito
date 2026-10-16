@@ -11,6 +11,7 @@
 - Beim CSV-Import von Personen wird das manuell gesetzte Spalten-Mapping im Browser gespeichert und beim nächsten Import wieder angewendet (#4517)
 - Zahlungsinformation, Rechnungsvorlagen und Rechnungsartikel sind übersetzbar. Rechnungen werden mit diesen Texten in der Sprache der Empfänger erstellt (sww#413)
 - Die Originalrechnung einer gemahnten Rechnung zeigt wieder das ursprüngliche Fälligkeitsdatum statt jenes der Mahnung (hitobito_sww#378)
+- Die Personennummer wird neu auf der Person angezeigt und ist im Export "Alle Angaben" enthalten (hitobito_zss#8)
 
 ## Version 2.10
 

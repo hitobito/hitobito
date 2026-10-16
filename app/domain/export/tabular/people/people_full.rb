@@ -11,7 +11,7 @@ module Export::Tabular::People
     }
 
     def person_attributes
-      super +
+      [:id] + super +
         (Person.column_names.collect(&:to_sym) -
           Person::INTERNAL_ATTRS -
           excluded_person_attributes +
@@ -19,7 +19,7 @@ module Export::Tabular::People
     end
 
     def excluded_person_attributes
-      [:picture, :primary_group_id, :id]
+      [:picture, :primary_group_id]
     end
 
     def association_attributes

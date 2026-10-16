@@ -13,7 +13,7 @@ describe Export::Tabular::People::PeopleFull do
   subject { people_list }
 
   its(:attributes) do
-    expected = [:first_name, :last_name, :nickname, :company_name, :company, :email,
+    expected = [:id, :first_name, :last_name, :nickname, :company_name, :company, :email,
       :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
       :layer_group, :roles, :gender, :birthday, :additional_information, :language, :canton, :tags,
       :additional_email_private, :additional_email_work, :additional_email_invoices, :additional_email_other,
@@ -27,6 +27,7 @@ describe Export::Tabular::People::PeopleFull do
   context "#attribute_labels" do
     subject { people_list.attribute_labels }
 
+    its([:id]) { should eq "Personennummer" }
     its([:roles]) { should eq "Rollen" }
 
     its([:company]) { should eq "Firma" }
@@ -63,6 +64,10 @@ describe Export::Tabular::People::PeopleFull do
         other = data[subject.keys.index(:additional_address_other)]
         expect(other).to start_with("Ferien:Top Leader, abc")
       end
+    end
+
+    it "exports the id as person number" do
+      expect(people_list.data_rows.to_a.first[subject.keys.index(:id)]).to eq person.id
     end
 
     it "includes non-public contact accounts in full export" do

@@ -39,6 +39,30 @@ describe Person::CsvImportsController do
       expect(flash[:alert]).to eq "Bitte wählen Sie eine gültige CSV Datei aus."
       is_expected.to redirect_to new_group_csv_imports_path(group)
     end
+
+    context "with person number column" do
+      render_views
+
+      let(:data) { generate_csv(%w[Personennummer Vorname], [person.id, "foo"]) }
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+      let(:select) { dom.find("select[data-header='Personennummer']") }
+
+      it "maps it to id for admins" do
+        post :define_mapping, params: {group_id: group.id, data: data}
+        expect(select.find("option[selected]").value).to eq "id"
+      end
+
+      context "as non-admin" do
+        let(:group) { groups(:bottom_layer_one) }
+        let(:person) { Fabricate(Group::BottomLayer::Leader.name, group: group).person }
+
+        it "does not offer id" do
+          post :define_mapping, params: {group_id: group.id, data: data}
+          expect(select).not_to have_css("option[value='id']")
+          expect(select).not_to have_css("option[selected]")
+        end
+      end
+    end
   end
 
   describe "POST preview" do

@@ -41,12 +41,12 @@ jobs:
           bundle exec rake rubocop
 
   main-specs-group:
-    name: 'main-specs (${{ matrix.group }}/3)'
+    name: 'main-specs (${{ matrix.group }}/2)'
     runs-on: 'ubuntu-24.04'
     strategy:
       fail-fast: false
       matrix:
-        group: [ 1, 2, 3 ]
+        group: [ 1, 2 ]
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -86,7 +86,7 @@ jobs:
       - name: 'Main Specs without features'
         run: |
           git fetch --tags
-          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:without_features_group_parallel
+          SPEC_GROUP=${{ matrix.group }}/2 bundle exec rake spec:without_features_group_parallel
 
   main-specs:
     runs-on: 'ubuntu-24.04'

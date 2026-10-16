@@ -99,8 +99,7 @@ module Globalized
           end
         end
       end
-
-      const_get(:Translation).include globalized_rich_text_module(columns)
+      translation_class.include globalized_rich_text_module(columns)
     end
 
     def list

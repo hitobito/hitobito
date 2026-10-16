@@ -10,6 +10,8 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency "event/course/role/participant"
 
+  class_attribute :translation_class
+
   self.manually_sendable_participant_mails = [
     Event::ParticipationMailer::CONTENT_CONFIRMATION
   ].freeze
@@ -33,6 +35,8 @@ class Event::Course < Event
   self.kind_class = Event::Kind
 
   self.filterable_attrs += [:number]
+
+  self.translation_class = Event::Translation
 
   # Used for Event::CourseResource
   attr_accessor :leaders

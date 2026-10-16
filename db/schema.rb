@@ -455,7 +455,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_04_163451) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.text "description"
     t.text "application_conditions"
     t.string "signature_confirmation_text"
     t.index ["event_id"], name: "index_event_translations_on_event_id"

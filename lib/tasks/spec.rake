@@ -22,6 +22,14 @@ if defined?(RSpec::Core::RakeTask)
       t.pattern = spec_group_files("./spec/**/*_spec.rb", exclude: "./spec/features/**/*_spec.rb")
       t.rspec_opts = "--tag ~type:feature --format Fivemat"
     end
+
+    desc "Run the specs without features of SPEC_GROUP in one process per CPU"
+    task :without_features_group_parallel do # rubocop:disable Rails/RakeEnvironment
+      files = spec_group_files("./spec/**/*_spec.rb", exclude: "./spec/features/**/*_spec.rb")
+      files = Dir[files] - Dir["./spec/features/**/*_spec.rb"] if files.is_a?(String)
+      sh "parallel_rspec", "--serialize-stdout", "--combine-stderr",
+        "-o", "--tag ~type:feature --format progress", *files
+    end
   end
 end
 

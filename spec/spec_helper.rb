@@ -207,6 +207,16 @@ RSpec.configure do |config|
     FileUtils.rm_rf(ActiveStorage::Blob.services.fetch(:test_fixtures).root)
   end
 
+  if ENV["CI"]
+    config.after(:suite) do
+      pending = RSpec.world.reporter.pending_examples.map(&:id)
+      if config.only_failures?
+        pending |= config.last_run_statuses.select { |_id, status| status == "pending" }.keys
+      end
+      raise "Pending specs are not allowed:\n#{pending.join("\n")}" if pending.any?
+    end
+  end
+
   unless RSpec.configuration.exclusion_filter[:type] == "feature"
     config.include Warden::Test::Helpers
     Warden.test_mode!

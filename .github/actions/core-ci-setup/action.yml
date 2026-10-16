@@ -12,13 +12,10 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: 'Set up Ruby'
+    - name: 'Set up Ruby and install gems'
       uses: ruby/setup-ruby@v1
-
-    - name: 'Configure Bundler'
-      run: |
-        bundle config set --local path 'vendor/bundle'
-      shell: bash
+      with:
+        bundler-cache: true
 
     - name: Read .tool-versions
       uses: marocchino/tool-versions-action@v1
@@ -37,26 +34,6 @@ runs:
         echo "bundle version: $(bundle -v)"
         echo "node version: $(node -v)"
         echo "yarn version: $(yarn -v)"
-      shell: bash
-
-    - name: 'create cache key'
-      run: cp Gemfile.lock Gemfile.lock.backup
-      shell: bash
-
-    - uses: actions/cache@v5
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
-        restore-keys: |
-          ${{ runner.os }}-ruby-bundle-
-
-    - name: 'Bundle install'
-      run: |
-        bundle install --jobs 4 --retry 3
-      shell: bash
-
-    - name: 'Make changes to Gemfile.lock transparent'
-      run: git diff Gemfile.lock || true
       shell: bash
 
     - uses: actions/cache@v5

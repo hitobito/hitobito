@@ -6,7 +6,7 @@ inputs:
     description: Unless set to false, prepare the database for the tests
     default: 'true'
   assets:
-    description: Unless set to false, assets will be precompiled as part of the setup.
+    description: Unless set to false, assets will be built as part of the setup.
     default: 'true'
 
 runs:
@@ -73,10 +73,17 @@ runs:
         yarn install --frozen-lockfile
       shell: bash
 
-    - name: 'Build assets'
+    - uses: actions/cache@v5
       if: inputs.assets == 'true'
+      id: assets-cache
+      with:
+        path: app/assets/builds
+        key: ${{ runner.os }}-assets-${{ hashFiles('yarn.lock', 'package.json', 'config/*.mjs', 'app/javascript/**', 'app/components/**/*.js', 'app/assets/stylesheets/**') }}
+
+    - name: 'Build assets'
+      if: inputs.assets == 'true' && steps.assets-cache.outputs.cache-hit != 'true'
       run: |
-        bundle exec rake assets:precompile
+        SKIP_YARN_INSTALL=1 bundle exec rake assets:build_for_test
       shell: bash
 
     - name: 'Prepare the Database'

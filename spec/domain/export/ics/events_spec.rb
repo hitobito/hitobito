@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -59,6 +59,43 @@ describe Export::Ics::Events do
       url = Rails.application.routes.url_helpers.group_event_url(group_id: event.groups.first.id, id: event.id,
         host: ENV["RAILS_HOST_NAME"])
       is_expected.to include(url)
+    end
+
+    context "with restricted contact display options" do
+      before do
+        contact.phone_numbers.create!(label: "showme", number: "+41 44 123 45 67", public: true,
+          category: contact_account_categories(:phone_number_person_other))
+      end
+
+      it "includes only the visible contact attributes" do
+        event.visible_contact_attributes = %w[phone_number]
+
+        is_expected.to include("showme: +41 44 123 45 67")
+        is_expected.not_to include(contact.person_name)
+        is_expected.not_to include(contact.email)
+      end
+
+      it "includes no contact attributes when none of them is visible" do
+        event.visible_contact_attributes = %w[address]
+
+        is_expected.to eq(event.description)
+      end
+    end
+  end
+
+  describe "contact of generated ical event" do
+    subject { export.generate_ical_from_event_date(event_date, event).contact }
+
+    before { event.contact = people(:top_leader) }
+
+    it "contains the contact name" do
+      expect(subject.first.value).to eq "Top Leader"
+    end
+
+    it "is empty when the name is not visible" do
+      event.visible_contact_attributes = %w[email]
+
+      expect(subject).to be_empty
     end
   end
 

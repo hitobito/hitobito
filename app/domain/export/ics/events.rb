@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,15 +21,29 @@ module Export::Ics
     end
 
     def event_description(event)
-      return event.description unless event.contact
+      contact_lines = contact_lines(event)
+      return event.description if contact_lines.empty?
+
+      [event.description, "", *contact_lines, "", url(event)].compact.join("\n")
+    end
+
+    def contact_lines(event)
+      contact = event.contact
+      return [] unless contact
 
       [
-        event.description, "",
-        event.contact.person_name,
-        event.contact.phone_numbers.map { |pn| "#{pn.label}: #{pn.number}" if pn.public },
-        event.contact.email, "",
-        url(event)
-      ].flatten.compact.join("\n")
+        (contact.person_name if event.contact_attribute_visible?(:name)),
+        *(public_phone_numbers(contact) if event.contact_attribute_visible?(:phone_number)),
+        (contact.email if event.contact_attribute_visible?(:email))
+      ].compact_blank
+    end
+
+    def contact_name(event)
+      event.contact.to_s if event.contact && event.contact_attribute_visible?(:name)
+    end
+
+    def public_phone_numbers(contact)
+      contact.phone_numbers.select(&:public).map { |pn| "#{pn.label}: #{pn.number}" }
     end
 
     def url(event)
@@ -44,7 +58,7 @@ module Export::Ics
         ical_event.summary += ": #{event_date.label}" unless event_date.label.blank?
         ical_event.location = event_date.location || event.location
         ical_event.description = event_description(event)
-        ical_event.contact = event.contact && event.contact.to_s
+        ical_event.contact = contact_name(event)
       end
     end
 

@@ -84,19 +84,23 @@ module Export::Pdf::Participation
     end
 
     def contact_name_lines
-      return [] unless event.contact_attribute_visible?(:name)
+      return [] unless contact_attribute_visible?(:name)
 
       [contact.company_name, contact.full_name]
     end
 
     def contact_postal_address_lines
-      return [] unless event.contact_attribute_visible?(:address)
+      return [] unless contact_attribute_visible?(:address)
 
       [*contact.address&.split("\n"), "#{contact.zip_code} #{contact.town}".strip]
     end
 
     def contact_email
-      contact.email if event.contact_attribute_visible?(:email)
+      contact.email if contact_attribute_visible?(:email)
+    end
+
+    def contact_attribute_visible?(attr)
+      event.contact_attribute_visible?(attr)
     end
 
     def label_with_dots(content)

@@ -44,6 +44,9 @@ on:
         description: "Token to interact with the heartbeat-application"
         required: true
 
+env:
+  NO_COVERAGE: true
+
 defaults:
   run:
     working-directory: hitobito

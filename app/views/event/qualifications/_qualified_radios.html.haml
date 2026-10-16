@@ -1,0 +1,12 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- name = "qualifications[#{participation.id}][qualified]"
+- {true => :qualified, false => :not_qualified, nil => :not_assessed}.each do |value, label|
+  %td.center.col-fit.p-0
+    %label.d-block.m-0.p-2
+      = radio_button_tag(name, value.to_s, participation.qualified == value,
+                         class: 'form-check-input m-0 align-middle',
+                         'aria-label': t("event.qualifications.index.#{label}"))

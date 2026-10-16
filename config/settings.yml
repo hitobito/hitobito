@@ -197,6 +197,8 @@ event:
   globally_visible_by_default: true # previous behaviour
   participations:
     delete_additional_information_after_months: 1200
+  qualifications:
+    comment_required_if_not_qualified: false
   questions:
     list_alphabetically: false
   use_contact_as_reply_to: false

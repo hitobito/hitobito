@@ -115,6 +115,14 @@ table.roles {
   }
 }
 
+// Shrinks a column to the width of its content
+th.col-fit,
+td.col-fit {
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 1rem;
+}
+
 table.actions-enabled {
   .multiselect {
     white-space: nowrap;

@@ -1,11 +1,10 @@
--#  Copyright (c) 2025, Schweizer Alpenclub SAC. This file is part of
+-#  Copyright (c) 2025-2026, Schweizer Alpenclub SAC. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if p.event.qualifications_visible?
+- if p.event.qualifications_visible? && !p.qualified.nil?
   = t("person.history.index.#{p.qualified ? '' : 'not_'}qualified")
+  - if p.qualification_comment.present?
+    = icon(:"info-circle", title: p.qualification_comment, class: 'ms-1')
   %br
-- if p.event.training_days?
-  - days = p.event.training_days
-  = t('person.history.index.training_days', count: days.to_i == days ? days.to_i : days)

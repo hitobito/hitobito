@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,10 +9,11 @@
 class Event::Qualifier
   class << self
     def for(participation)
-      person = participation.person
-      event = participation.event
-      role = qualifier_role(participation)
-      new(person, event, role, participation)
+      new(participation, qualifier_role(participation))
+    end
+
+    def qualifyable_role_types(event)
+      event.role_types.select { |type| type.leader? || type.qualifiable? || type.participant? }
     end
 
     private
@@ -22,58 +23,41 @@ class Event::Qualifier
     end
 
     def leader?(participation)
-      participation.roles.any? { |role| role.class.leader? }
+      participation.roles.any? { |role| role.class.leader? || role.class.qualifiable? }
     end
   end
 
-  attr_reader :created, :prolonged, :participation, :person, :event, :role
+  attr_reader :participation, :role_kind
 
+  delegate :person, :event, to: :participation
   delegate :qualification_date, to: :event
 
-  def initialize(person, event, role, participation = nil)
+  def initialize(participation, role_kind)
     @participation = participation
-    @person = person
-    @event = event
+    @role_kind = role_kind
+  end
 
-    @created = []
-    @prolonged = []
-    @role = role
+  def apply
+    Qualification.transaction do
+      if participation.qualified
+        issue
+      else
+        revoke
+      end
+      participation.save!
+    end
   end
 
   def issue
-    Qualification.transaction do
-      issue_qualifications
-      participation&.update_column(:qualified, true)
-    end
+    QualifyAction.new(person, event, role_kind).run
+    ProlongAction.new(person, event, role_kind).run
   end
 
   def revoke
-    Qualification.transaction do
-      revoke_qualifications
-      participation&.update_column(:qualified, false)
-    end
+    RevokeAction.new(person, event, role_kind).run
   end
 
-  def nothing_changed?
-    qualification_kinds.blank? && (prolongation_kinds.present? && prolonged.blank?)
-  end
-
-  private
-
-  def issue_qualifications
-    @created = QualifyAction.new(person, event, qualification_kinds).run
-    @prolonged = ProlongAction.new(person, event, prolongation_kinds, role).run
-  end
-
-  def revoke_qualifications
-    RevokeAction.new(person, event, qualification_kinds + prolongation_kinds).run
-  end
-
-  def qualification_kinds(kind = event.kind)
-    kind.qualification_kinds("qualification", @role)
-  end
-
-  def prolongation_kinds(kind = event.kind)
-    kind.qualification_kinds("prolongation", @role)
+  def valid?
+    participation.valid?(:qualification)
   end
 end

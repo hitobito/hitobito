@@ -564,6 +564,13 @@ de:
     qualifications:
       index:
         save: Qualifikationen aktualisieren
+        qualified: Bestanden
+        not_qualified: Nicht bestanden
+        not_assessed: Nicht beurteilt
+        town: Wohnort
+        roles: Rolle
+        name: Name
+        comment: Kommentar
       update:
         flash:
           success: Die Qualifikationen wurden erfolgreich aktualisiert.
@@ -1087,7 +1094,6 @@ de:
 
   group_decorator:
     archived_suffix: " (archiviert)"
-
 
   help_texts:
     form:

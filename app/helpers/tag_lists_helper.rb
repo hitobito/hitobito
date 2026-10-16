@@ -27,12 +27,10 @@ module TagListsHelper
   private
 
   def tag_checkbox(tag, count)
-    label_tag(nil, class: "checkbox ") do
-      out = check_box_tag("tags[]", tag.name, false, class: "me-2")
+    label_tag(nil, class: "checkbox") do
+      out = check_box_tag("tags[]", tag.name, false, class: "me-2 form-check-input")
       out << tag.to_s
-      out << content_tag(:div, class: "role-count") do
-        count.to_s
-      end
+      out << content_tag(:span, count.to_s, class: "badge text-bg-light ms-1")
       out.html_safe
     end
   end

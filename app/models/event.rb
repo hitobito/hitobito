@@ -143,7 +143,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     :kind_class,
     :supports_invitations,
     :uses_form_tabs,
-    :filterable_attrs
+    :filterable_attrs,
+    :translation_class
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -181,6 +182,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   self.filterable_attrs = [:name, :plain_text_description, :location,
     :application_opening_at, :application_closing_at]
+
+  self.translation_class = Event::Translation
 
   model_stamper
   stampable stamper_class_name: :person, deleter: false

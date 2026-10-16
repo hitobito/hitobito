@@ -97,6 +97,14 @@ describe Wallets::AppleWallet::PkpassGenerator do
       expect(entries).to include("pass.json", "manifest.json", "signature")
     end
 
+    it "writes entries without Zip64 extra fields" do
+      Zip::InputStream.open(StringIO.new(pkpass_data)) do |zip|
+        while (entry = zip.get_next_entry)
+          expect(entry).not_to be_zip64
+        end
+      end
+    end
+
     it "includes pass.json with correct content" do
       content = extract_entry(pkpass_data, "pass.json")
       parsed = JSON.parse(content)

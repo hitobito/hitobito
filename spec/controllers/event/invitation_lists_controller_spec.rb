@@ -23,11 +23,10 @@ describe Event::InvitationListsController do
       sign_in(people(:bottom_member))
     end
 
-    it "POST create" do
+    it "POST create ignores people the user cannot access" do
       expect do
         post :create, params: {group_id: group, event_id: course, ids: person1.id, role: {type: Event::Role::Leader}}
-      end.to raise_error(CanCan::AccessDenied)
-        .and change(Event::Invitation, :count).by(0)
+      end.not_to change(Event::Invitation, :count)
     end
   end
 

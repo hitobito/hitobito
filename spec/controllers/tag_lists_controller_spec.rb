@@ -24,7 +24,7 @@ describe TagListsController do
         tags: "Tagname"
       }
 
-      expect(assigns(:manageable_people)).to contain_exactly bottom_member
+      expect(assigns(:people)).to contain_exactly bottom_member
     end
 
     it "leaves people whose tags we can manage from create request" do
@@ -34,7 +34,7 @@ describe TagListsController do
         tags: "Tagname"
       }
 
-      expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
+      expect(assigns(:people)).to contain_exactly leader, bottom_member
     end
 
     it "filters out people whose tags we cannot manage from destroy request" do
@@ -44,7 +44,7 @@ describe TagListsController do
         tags: "Tagname"
       }
 
-      expect(assigns(:manageable_people)).to contain_exactly bottom_member
+      expect(assigns(:people)).to contain_exactly bottom_member
     end
   end
 
@@ -62,7 +62,7 @@ describe TagListsController do
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/new")
 
-      expect(assigns(:manageable_people))
+      expect(assigns(:people))
         .to contain_exactly(leader, bottom_member)
         .and have(person_query_double.count).items
     end
@@ -82,7 +82,7 @@ describe TagListsController do
 
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/new")
-      expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
+      expect(assigns(:people)).to contain_exactly leader, bottom_member
     end
   end
 
@@ -140,7 +140,7 @@ describe TagListsController do
         format: :js
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/deletable")
-      expect(assigns(:manageable_people)).to contain_exactly leader, bottom_member
+      expect(assigns(:people)).to contain_exactly leader, bottom_member
       expect(assigns(:existing_tags)).to be_empty
     end
 
@@ -159,10 +159,12 @@ describe TagListsController do
         format: :js
       expect(response).to have_http_status(:ok)
       expect(response).to render_template("tag_lists/deletable")
-      expect(assigns(:manageable_people)).to contain_exactly leader, root
-      expect(assigns(:existing_tags)).to contain_exactly([tag_test, 1],
-        [tag_once, 1],
-        [tag_twice, 2])
+      expect(assigns(:people)).to contain_exactly leader, root
+      expect(assigns(:existing_tags)).to eq({
+        tag_test => 1,
+        tag_once => 1,
+        tag_twice => 2
+      })
     end
   end
 

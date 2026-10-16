@@ -7,28 +7,6 @@
   form {
     margin-bottom: 0;
   }
-
-  .tag-list-add,
-  .mailing-list-add {
-    width: 100%;
-  }
-
-  .checkboxes {
-    .available-role-type,
-    .available-tag {
-      margin-left: 10px;
-
-      .role-count,
-      .tag-count {
-        display: inline;
-        padding: 0px 5px;
-        background-color: #eee;
-        border-radius: 2px;
-        border: 1px solid gray;
-        margin-left: 5px;
-      }
-    }
-  }
 }
 
 #participation-lists-new,

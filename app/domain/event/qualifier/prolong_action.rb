@@ -5,12 +5,6 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class Event::Qualifier::ProlongAction < Event::Qualifier::QualifyAction
-  def initialize(person, event, kinds, role)
-    super(person, event, kinds)
-
-    @role = role
-  end
-
   def run
     prolongation_kinds.filter_map do |kind|
       if kind.required_training_days.blank?
@@ -31,7 +25,7 @@ class Event::Qualifier::ProlongAction < Event::Qualifier::QualifyAction
       @person,
       @event,
       prolongation_kinds,
-      @role
+      @role_kind
     )
   end
 
@@ -39,9 +33,13 @@ class Event::Qualifier::ProlongAction < Event::Qualifier::QualifyAction
     @prolongation_kinds ||= @person
       .qualifications
       .includes(:qualification_kind)
-      .where(qualification_kind_id: @kinds.map(&:id))
+      .where(qualification_kind_id: qualification_kinds.map(&:id))
       .select { |quali| quali.reactivateable?(event_start_date) }
       .map(&:qualification_kind)
+  end
+
+  def qualification_kinds
+    @event.kind.qualification_kinds("prolongation", @role_kind)
   end
 
   def event_start_date

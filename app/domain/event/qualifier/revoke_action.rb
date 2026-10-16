@@ -4,11 +4,11 @@
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
-class Event::Qualifier::RevokeAction < Event::Qualifier::QualifyAction
-  def initialize(person, event, qualification_kinds)
+class Event::Qualifier::RevokeAction
+  def initialize(person, event, role_kind)
     @person = person
-    @qualification_date = event.qualification_date
-    @qualification_kinds = qualification_kinds
+    @event = event
+    @role_kind = role_kind
   end
 
   def run
@@ -20,8 +20,12 @@ class Event::Qualifier::RevokeAction < Event::Qualifier::QualifyAction
   # Qualifications set for this qualification_date (via preceeding #issue call in controller)
   def obtained
     @person.qualifications.where(
-      qualified_at: @qualification_date,
-      qualification_kind_id: @qualification_kinds.map(&:id)
+      qualified_at: @event.qualification_date,
+      qualification_kind_id: qualification_kinds.map(&:id)
     )
+  end
+
+  def qualification_kinds
+    @event.kind.qualification_kinds(%w[qualification prolongation], @role_kind)
   end
 end

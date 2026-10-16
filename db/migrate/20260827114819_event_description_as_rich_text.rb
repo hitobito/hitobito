@@ -14,11 +14,11 @@ class EventDescriptionAsRichText < ActiveRecord::Migration[8.0]
         )
       end
     end
-    # remove_column :event_translations, :description
+    remove_column :event_translations, :description
   end
 
   def down
-    # add_column :event_translations, :description, :text;
+    add_column :event_translations, :description, :text;
     ActionText::RichText
       .where(record_type: "Event::Translation", name: "description").find_each do |action_text|
       PaperTrail.request(enabled: false) do

@@ -993,12 +993,21 @@ describe Export::Pdf::Invoice do
       end
     end
 
+    it "shows due date of payment reminder" do
+      is_expected.to include(I18n.l(due_at))
+    end
+
     context "with option reminders: false" do
       let(:reminders) { false }
 
       it "does not include payment reminders" do
         is_expected.not_to include("#{reminder.title} - #{sent.title}")
         is_expected.not_to include(reminder.text)
+      end
+
+      it "shows original due date of invoice" do
+        is_expected.to include(I18n.l(sent.original_due_at))
+        is_expected.not_to include(I18n.l(due_at))
       end
     end
   end

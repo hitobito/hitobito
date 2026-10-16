@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -51,7 +51,8 @@ class PaymentReminder < ActiveRecord::Base
   private
 
   def update_invoice
-    invoice.update(state: :reminded, due_at: due_at)
+    invoice.update(state: :reminded, due_at: due_at,
+      original_due_at: invoice.original_due_at || invoice.due_at)
   end
 
   def assert_invoice_remindable

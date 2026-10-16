@@ -10,6 +10,7 @@
 - Beim CSV-Import von Personen kann neu eine Spalte auf die Personen-ID gemappt werden (nur mit Admin-Berechtigung). Bestehende Personen werden anhand der ID aktualisiert bzw. neue Personen mit vorgegebener ID erstellt (#4517)
 - Beim CSV-Import von Personen wird das manuell gesetzte Spalten-Mapping im Browser gespeichert und beim nächsten Import wieder angewendet (#4517)
 - Zahlungsinformation, Rechnungsvorlagen und Rechnungsartikel sind übersetzbar. Rechnungen werden mit diesen Texten in der Sprache der Empfänger erstellt (sww#413)
+- Die Originalrechnung einer gemahnten Rechnung zeigt wieder das ursprüngliche Fälligkeitsdatum statt jenes der Mahnung (hitobito_sww#378)
 
 ## Version 2.10
 

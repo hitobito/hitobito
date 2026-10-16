@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -15,6 +15,19 @@ describe PaymentReminder do
     end.to change { [sent.due_at, sent.state] }
     expect(sent.due_at).to eq due_at
     expect(sent.state).to eq "reminded"
+  end
+
+  it "first payment_reminder stores original due_at of invoice" do
+    original_due_at = sent.due_at
+    Fabricate(:payment_reminder, invoice: sent, due_at: sent.due_at + 2.weeks)
+    expect(sent.original_due_at).to eq original_due_at
+  end
+
+  it "further payment_reminders keep original due_at of invoice" do
+    original_due_at = sent.due_at
+    Fabricate(:payment_reminder, invoice: sent, due_at: sent.due_at + 2.weeks, level: 1)
+    Fabricate(:payment_reminder, invoice: sent, due_at: sent.due_at + 2.weeks, level: 2)
+    expect(sent.original_due_at).to eq original_due_at
   end
 
   it "validates invoice is in state sent" do

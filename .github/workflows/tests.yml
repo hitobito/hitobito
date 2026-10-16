@@ -18,6 +18,7 @@ on:
 
 env:
   NO_COVERAGE: true
+  SECRET_KEY_BASE: test-secret-key-base-for-ci
 
 jobs:
   rubocop:
@@ -85,7 +86,7 @@ jobs:
       - name: 'Main Specs without features'
         run: |
           git fetch --tags
-          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:without_features_group
+          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:without_features_group_parallel
 
   main-specs:
     runs-on: 'ubuntu-24.04'

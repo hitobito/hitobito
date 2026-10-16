@@ -576,6 +576,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     dates.flat_map { [_1.start_at, _1.finish_at] }.compact.max
   end
 
+  def contact_attribute_visible?(attr)
+    visible_contact_attributes.map(&:to_s).include?(attr.to_s)
+  end
+
   private
 
   def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity

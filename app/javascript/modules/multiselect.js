@@ -94,8 +94,7 @@ function getSelectedIds(table) {
   const extendedAllElement = document.querySelector(
     "thead input[name=extended_all]",
   );
-  if (extendedAllElement?.checked)
-    return extendedAllElement.dataset.ids;
+  if (extendedAllElement?.checked) return extendedAllElement.dataset.ids;
 
   const checkboxElements = table.querySelectorAll(
     "tbody input[type=checkbox]:checked",
@@ -109,8 +108,7 @@ function getFilterParams() {
   const extendedAllElement = document.querySelector(
     "thead input[name=extended_all]",
   );
-  if (extendedAllElement?.checked)
-    return window.location.search.substring(1);
+  if (extendedAllElement?.checked) return window.location.search.substring(1);
 
   return null;
 }
@@ -126,7 +124,11 @@ function buildLinkWithIds(templateHref, table) {
     const ids = getSelectedIds(table);
     const filterParams = getFilterParams();
 
-    queryParams = [`ids=${ids}`, filterParams].filter(function(it) {return it}).join("&")
+    queryParams = [`ids=${ids}`, filterParams]
+      .filter(function (it) {
+        return it;
+      })
+      .join("&");
   }
   return templateHref + separator + queryParams;
 }
@@ -141,11 +143,19 @@ function toggleActions(table) {
     allElement.checked = counts.checked > 0 && counts.unchecked === 0;
 
   // toggle extended select all checkbox
-  const extendedAllElement = table.querySelector("thead input[name=extended_all]");
+  const extendedAllElement = table.querySelector(
+    "thead input[name=extended_all]",
+  );
   if (extendedAllElement && extendedAllElement.checked && !allElement?.checked)
     extendedAllElement.checked = false;
-  const showExtendedAllElement = !extendedAllElement?.checked && +extendedAllElement?.value > counts.checked;
-  extendedAllElement?.parentElement?.classList?.toggle("d-none", !showExtendedAllElement);
+  const showExtendedAllElement =
+    allElement?.checked &&
+    !extendedAllElement?.checked &&
+    +extendedAllElement?.value > counts.checked;
+  extendedAllElement?.parentElement?.classList?.toggle(
+    "d-none",
+    !showExtendedAllElement,
+  );
 
   // display count of selected elements
   const showCount = extendedAllElement?.checked

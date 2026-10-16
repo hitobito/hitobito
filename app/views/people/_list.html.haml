@@ -26,8 +26,8 @@
 
 - if @people.total_count > 0
   = crud_table(data: { checkable: true }) do |t|
-    - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
-      - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
+    - t.col(check_box_tag(:all, 0, false, data: :multiselect, class: "form-check-input")) do |i|
+      - check_box_tag('ids[]', i.id, false, data: { multiselect: true }, class: "form-check-input")
     - t.col('') do |p|
       .profil= image_tag(upload_url(p, :picture, variant: :thumb, default: :profil), size: '32x32')
     - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|

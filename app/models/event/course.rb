@@ -10,6 +10,8 @@ class Event::Course < Event
   # This statement is required because this class would not be loaded otherwise.
   require_dependency "event/course/role/participant"
 
+  class_attribute
+
   self.manually_sendable_participant_mails = [
     Event::ParticipationMailer::CONTENT_CONFIRMATION
   ].freeze

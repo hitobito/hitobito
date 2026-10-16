@@ -170,4 +170,10 @@ content_inactivity_block_warning_body:
   name: body
   body: |
     Hallo {recipient-name}, <br/>
-    TBD auf [#{Settings.application.name}] 
+    TBD auf [#{Settings.application.name}]
+
+top_course_de_description:
+  record: top_course_de (Event::Translation)
+  name: description
+  body: Some kind of course, it seems
+

@@ -16,13 +16,7 @@ if defined?(RSpec::Core::RakeTask)
     ParallelTests::RSpec::Runner.tests_in_groups(files, groups, group_by: :filesize)[group - 1]
   end
 
-  # Wagons define their own spec:without_features, which app:spec:without_features runs too.
   namespace :spec do
-    RSpec::Core::RakeTask.new(:without_features_group) do |t|
-      t.pattern = spec_group_files("./spec/**/*_spec.rb", exclude: "./spec/features/**/*_spec.rb")
-      t.rspec_opts = "--tag ~type:feature --format Fivemat"
-    end
-
     desc "Run the specs without features of SPEC_GROUP in one process per CPU"
     task :without_features_group_parallel do # rubocop:disable Rails/RakeEnvironment
       files = spec_group_files("./spec/**/*_spec.rb", exclude: "./spec/features/**/*_spec.rb")
@@ -82,7 +76,7 @@ if Rake::Task.task_defined?("spec:features") # only if current environment knows
       end
 
       RSpec::Core::RakeTask.new("start") do |t|
-        t.pattern = spec_group_files("./spec/features/**/*_spec.rb")
+        t.pattern = "./spec/features/**/*_spec.rb"
         t.rspec_opts = "--tag type:feature --format Fivemat"
         t.fail_on_error = false # don't stop the whole run
       end

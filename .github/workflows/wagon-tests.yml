@@ -46,6 +46,7 @@ on:
 
 env:
   NO_COVERAGE: true
+  SECRET_KEY_BASE: test-secret-key-base-for-ci
 
 defaults:
   run:
@@ -242,9 +243,9 @@ jobs:
       - name: Run ${{ inputs.wagon_repository }} specs
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          # core refs without SPEC_GROUP support run all specs in the first group
-          if grep -q spec_group_files ../hitobito/lib/tasks/spec.rake; then
-            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:ci:setup:rspec app:spec:without_features_group
+          # core refs without parallel spec tasks run all specs in the first group
+          if grep -q without_features_group_parallel ../hitobito/lib/tasks/spec.rake; then
+            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:ci:setup:rspec app:spec:without_features_group_parallel
           elif [ "${{ matrix.group }}" = 1 ]; then
             bundle exec rake app:ci:setup:rspec spec:without_features
           fi
@@ -326,9 +327,9 @@ jobs:
         if: ${{ steps.check-wagon-feature-specs.outputs.feature_specs_exist }}
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          # core refs without SPEC_GROUP support run all feature specs in the first group
-          if grep -q spec_group_files ../hitobito/lib/tasks/spec.rake; then
-            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:ci:setup:rspec app:spec:features:lenient
+          # core refs without parallel spec tasks run all feature specs in the first group
+          if grep -q lenient_parallel ../hitobito/lib/tasks/spec.rake; then
+            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:ci:setup:rspec app:spec:features:lenient_parallel
           elif [ "${{ matrix.group }}" = 1 ]; then
             bundle exec rake app:ci:setup:rspec app:spec:features:lenient
           fi

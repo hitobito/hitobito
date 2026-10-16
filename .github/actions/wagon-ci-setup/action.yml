@@ -216,7 +216,7 @@ runs:
     - uses: actions/cache@v5
       if: inputs.assets == 'true'
       with:
-        path: node_modules
+        path: hitobito/node_modules
         key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-node_modules-
@@ -228,10 +228,17 @@ runs:
       working-directory: hitobito
       shell: bash
 
-    - name: "Build assets"
+    - uses: actions/cache@v5
       if: inputs.assets == 'true'
+      id: assets-cache
+      with:
+        path: hitobito/app/assets/builds
+        key: ${{ runner.os }}-assets-${{ inputs.wagon_repository }}-${{ hashFiles('hitobito/yarn.lock', 'hitobito/package.json', 'hitobito/config/*.mjs', 'hitobito/app/javascript/**', 'hitobito/app/components/**/*.js', 'hitobito/app/assets/stylesheets/**', 'hitobito_*/app/javascript/**', 'hitobito_*/app/assets/javascripts/**', 'hitobito_*/app/assets/stylesheets/**') }}
+
+    - name: "Build assets"
+      if: inputs.assets == 'true' && steps.assets-cache.outputs.cache-hit != 'true'
       run: |
-        bundle exec rake assets:precompile
+        SKIP_YARN_INSTALL=1 bundle exec rake assets:build
       working-directory: hitobito
       shell: bash
 

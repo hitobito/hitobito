@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,7 +11,7 @@ module Export::Pdf::Participation
       render_read_and_agreed if event.signature? || signature_confirmation?
       render_signature if event.signature?
       render_signature_confirmation if signature_confirmation?
-      render_contact_address if contact
+      render_contact_address if contact_text.present?
     end
 
     private
@@ -34,11 +34,21 @@ module Export::Pdf::Participation
       text(I18n.t("event.applied_to"), style: :bold)
 
       pdf.bounding_box([10, cursor], width: bounds.width) do
-        text(I18n.t("contactable.address_or_email",
-          address: contact_address,
-          email: contact.email))
+        text(contact_text)
       end
       move_down_line
+    end
+
+    def contact_text
+      return if contact.nil?
+
+      address = contact_address.presence
+      email = contact_email.presence
+      if address && email
+        I18n.t("contactable.address_or_email", address: address, email: email)
+      else
+        address || email
+      end
     end
 
     def render_signature_confirmation
@@ -70,13 +80,23 @@ module Export::Pdf::Participation
     end
 
     def contact_address
-      [contact.company_name,
-        contact.full_name,
-        contact.address.present? && contact.address.split("\n"),
-        "#{contact.zip_code} #{contact.town}".strip]
-        .flatten
-        .select { |v| v.present? }
-        .join(", ")
+      [*contact_name_lines, *contact_postal_address_lines].compact_blank.join(", ")
+    end
+
+    def contact_name_lines
+      return [] unless event.contact_attribute_visible?(:name)
+
+      [contact.company_name, contact.full_name]
+    end
+
+    def contact_postal_address_lines
+      return [] unless event.contact_attribute_visible?(:address)
+
+      [*contact.address&.split("\n"), "#{contact.zip_code} #{contact.town}".strip]
+    end
+
+    def contact_email
+      contact.email if event.contact_attribute_visible?(:email)
     end
 
     def label_with_dots(content)

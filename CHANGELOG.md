@@ -3,6 +3,7 @@
 ## unreleased
 
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
+- Kategorien von Kontaktangaben sind über die JSON:API lesbar, damit API-Clients Telefonnummern, E-Mails und Adressen anlegen können (#4534)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 - Rechnungen können als CSV oder Excel mit einer Zeile pro Rechnungsposten exportiert werden (hitobito_florist#7)
 - Zusätzliche Adressen sind neu in allen Wagons aktiviert (#4471)

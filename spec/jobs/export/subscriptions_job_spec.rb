@@ -24,10 +24,12 @@ describe Export::SubscriptionsJob do
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
   let(:file) { subject.job_observation }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+  end
 
+  before do
     Fabricate(:subscription, mailing_list: mailing_list)
     Fabricate(:subscription, mailing_list: mailing_list)
     subject.enqueue!

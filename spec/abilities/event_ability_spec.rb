@@ -28,7 +28,7 @@ describe EventAbility do
   subject { Ability.new(user.reload) }
 
   context :layer_and_below_full do
-    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
     context Event do
       it "may create event in his group" do
@@ -72,7 +72,7 @@ describe EventAbility do
       end
 
       context "in other layer" do
-        let(:role) do
+        let_it_be(:role) do
           Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
         end
 
@@ -200,7 +200,7 @@ describe EventAbility do
       end
 
       context "in other layer" do
-        let(:role) do
+        let_it_be(:role) do
           Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
         end
 
@@ -214,7 +214,7 @@ describe EventAbility do
   end
 
   context :layer_full do
-    let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 
     context Event do
       it "may create event in his group" do
@@ -362,7 +362,7 @@ describe EventAbility do
   end
 
   context :group_and_below_full do
-    let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
+    let_it_be(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
 
     context Event do
       context "in own group" do
@@ -588,7 +588,7 @@ describe EventAbility do
   end
 
   context :group_full do
-    let(:role) do
+    let_it_be(:role) do
       Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
     end
 
@@ -658,7 +658,7 @@ describe EventAbility do
       end
 
       context "below layers" do
-        let(:role) do
+        let_it_be(:role) do
           Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: groups(:toppers))
         end
 
@@ -689,7 +689,7 @@ describe EventAbility do
       end
 
       context "below layers" do
-        let(:role) do
+        let_it_be(:role) do
           Fabricate(Group::GlobalGroup::Leader.name.to_sym, group: groups(:toppers))
         end
 
@@ -728,7 +728,7 @@ describe EventAbility do
   end
 
   context :group_read do
-    let(:role) do
+    let_it_be(:role) do
       Fabricate(Group::GlobalGroup::Member.name.to_sym, group: groups(:toppers))
     end
 
@@ -799,7 +799,7 @@ describe EventAbility do
 
   context :event_full do
     let(:group) { groups(:bottom_layer_one) }
-    let(:role) do
+    let_it_be(:role) do
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
     end
     let(:participation) { Fabricate(:event_participation, event: event, participant: user) }
@@ -932,7 +932,7 @@ describe EventAbility do
   end
 
   context :participations_read do
-    let(:role) do
+    let_it_be(:role) do
       Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
     end
     let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
@@ -1077,7 +1077,7 @@ describe EventAbility do
   end
 
   context :participations_read_details do
-    let(:role) do
+    let_it_be(:role) do
       Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
     end
     let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
@@ -1222,7 +1222,7 @@ describe EventAbility do
   end
 
   context "inactive participation" do
-    let(:role) do
+    let_it_be(:role) do
       Fabricate(Group::BottomGroup::Leader.name.to_sym, group: groups(:bottom_group_one_one))
     end
     let(:event) do
@@ -1322,7 +1322,7 @@ describe EventAbility do
   end
 
   context :in_same_hierarchy do
-    let(:role) do
+    let_it_be(:role) do
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one))
     end
 
@@ -1371,7 +1371,7 @@ describe EventAbility do
   end
 
   context :in_other_hierarchy do
-    let(:role) do
+    let_it_be(:role) do
       Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_two))
     end
     let(:event) { Fabricate(:event, groups: [groups(:bottom_layer_one)], globally_visible: false) }
@@ -1434,7 +1434,7 @@ describe EventAbility do
   end
 
   context :admin do
-    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
     it "may manage event kinds" do
       is_expected.to be_able_to(:manage, Event::Kind)
@@ -1443,7 +1443,8 @@ describe EventAbility do
 
   context :approver do
     let(:event) { Fabricate(:course, groups: [groups(:top_layer)]) }
-    let(:role) do
+
+    let_it_be(:role) do
       Fabricate(Group::BottomLayer::Leader.name.to_sym, group: groups(:bottom_layer_one))
     end
 
@@ -1485,7 +1486,7 @@ describe EventAbility do
   context :application_market do
     let(:course) { Fabricate(:course, groups: [groups(:top_layer)]) }
 
-    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
     it "allowed " do
       is_expected.to be_able_to(:application_market, course)
@@ -1500,7 +1501,7 @@ describe EventAbility do
       Fabricate(:event_role, participation: participation, type: "Event::Role::Leader")
     end
 
-    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
     it "allowed for course" do
       is_expected.to be_able_to(:qualify, course)

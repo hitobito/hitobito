@@ -5,6 +5,34 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+if defined?(RSpec::Core::RakeTask)
+  # SPEC_GROUP=2/3 restricts the files to the second of three groups of similar size.
+  def spec_group_files(pattern, exclude: nil)
+    group, groups = ENV["SPEC_GROUP"]&.split("/")&.map(&:to_i)
+    return pattern unless group
+
+    require "parallel_tests/rspec/runner"
+    files = Dir[pattern].sort - Dir[exclude.to_s]
+    ParallelTests::RSpec::Runner.tests_in_groups(files, groups, group_by: :filesize)[group - 1]
+  end
+
+  # Wagons define their own spec:without_features, which app:spec:without_features runs too.
+  namespace :spec do
+    RSpec::Core::RakeTask.new(:without_features_group) do |t|
+      t.pattern = spec_group_files("./spec/**/*_spec.rb", exclude: "./spec/features/**/*_spec.rb")
+      t.rspec_opts = "--tag ~type:feature --format Fivemat"
+    end
+
+    desc "Run the specs without features of SPEC_GROUP in one process per CPU"
+    task :without_features_group_parallel do # rubocop:disable Rails/RakeEnvironment
+      files = spec_group_files("./spec/**/*_spec.rb", exclude: "./spec/features/**/*_spec.rb")
+      files = Dir[files] - Dir["./spec/features/**/*_spec.rb"] if files.is_a?(String)
+      sh "parallel_rspec", "--serialize-stdout", "--combine-stderr",
+        "-o", "--tag ~type:feature --format progress", *files
+    end
+  end
+end
+
 if Rake::Task.task_defined?("spec:features") # only if current environment knows rspec
   Rake::Task["spec:features"].actions.clear
 
@@ -54,7 +82,7 @@ if Rake::Task.task_defined?("spec:features") # only if current environment knows
       end
 
       RSpec::Core::RakeTask.new("start") do |t|
-        t.pattern = "./spec/features/**/*_spec.rb"
+        t.pattern = spec_group_files("./spec/features/**/*_spec.rb")
         t.rspec_opts = "--tag type:feature --format Fivemat"
         t.fail_on_error = false # don't stop the whole run
       end
@@ -65,6 +93,28 @@ if Rake::Task.task_defined?("spec:features") # only if current environment knows
       RSpec::Core::RakeTask.new("last") do |t|
         t.rspec_opts = "--only-failures --format Fivemat"
         t.fail_on_error = true # do fail the run
+      end
+
+      desc "Run feature specs in one process per CPU at most three times to handle flaky specs"
+      task :lenient_parallel do # rubocop:disable Rails/RakeEnvironment
+        files = spec_group_files("./spec/features/**/*_spec.rb")
+        files = Dir[files] if files.is_a?(String)
+        attempt = lambda do |rspec_opts|
+          # filesize grouping is stable, so each retrying process finds its own status file
+          system("parallel_rspec", "--group-by", "filesize",
+            "--serialize-stdout", "--combine-stderr",
+            "-o", "#{rspec_opts} --format Fivemat", *files)
+        end
+
+        sh "rm -f tmp/examples*.txt"
+        puts "\nFIRST ATTEMPT\n"
+        next if attempt.call("--tag type:feature")
+
+        puts "\nSECOND ATTEMPT\n"
+        next if attempt.call("--only-failures")
+
+        puts "\nLAST ATTEMPT\n"
+        abort unless attempt.call("--only-failures")
       end
     end
   end

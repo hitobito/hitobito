@@ -34,6 +34,8 @@ describe Export::Tabular::Invitations::List do
 
   subject { csv }
 
+  before { freeze_time }
+
   its(:headers) do
     expected = [
       "Person",

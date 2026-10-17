@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -542,6 +542,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # Event dates can have no finish_at date, if so, we want to return the latest start_at date
   def finish_at
     dates.flat_map { [_1.start_at, _1.finish_at] }.compact.max
+  end
+
+  def contact_attribute_visible?(attr)
+    visible_contact_attributes.map(&:to_s).include?(attr.to_s)
   end
 
   private

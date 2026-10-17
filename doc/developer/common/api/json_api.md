@@ -434,11 +434,15 @@ There are two separate permission checks happening during an API request.
 ##### Sideloading via include
 
 If resources are included within other resources, the index ability of the included resource is checked. This leads to
-situations that diverge from the behaviour of the main application. For example, `EventResource` can include `contact`
-(a `PersonResource`). To actually include the contact, the `ServiceToken` also requires the scope `people`. If the scope
-includes only `events`, the `contact` will be empty. Furthermore, the respective people must have a role in the defined
-permission range. So if the permission is `layer_read`, but the contact is in another layer, it will also not be
-included in the response. The same applies for event leaders and participants.
+situations that diverge from the behaviour of the main application. For example, `EventResource` can include
+`participations.participant` (a `PersonResource`). To actually include these people, the `ServiceToken` also requires
+the scope `people`. If the scope includes only `events`, the participants will be empty. Furthermore, the respective
+people must have a role in the defined permission range. So if the permission is `layer_read`, but a participant is in
+another layer, they will also not be included in the response.
+
+The `contact` of an event is an exception: it is included as `event-contact` (an `Event::ContactResource`) whenever the
+event itself is readable, without checking the `people` scope or the permission range. Its name, address, email and picture
+attributes are limited to those selected in the event's `visible_contact_attributes`, and it has no relationships.
 
 ##### Custom permissions
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -493,6 +493,12 @@ describe Event do
     it "does not validate visible_contact_attributes when contact is blank" do
       subject.visible_contact_attributes = ["invalidvalue"]
       is_expected.to be_valid
+    end
+
+    it "tells whether a contact attribute is visible" do
+      subject.visible_contact_attributes = ["name"]
+      expect(subject.contact_attribute_visible?(:name)).to eq true
+      expect(subject.contact_attribute_visible?("email")).to eq false
     end
 
     context "expects the guest_limit to be a positive number, specifically" do

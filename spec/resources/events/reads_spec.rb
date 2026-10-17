@@ -88,6 +88,62 @@ describe EventResource, type: :resource do
       render
       expect(d[0].sideload(:participations)).to be_present
     end
+
+    describe "contact" do
+      let(:contact) do
+        Fabricate(:person, first_name: "Kurt", last_name: "Kontakt", email: "kurt@example.com",
+          street: "Kontaktweg", housenumber: "3", zip_code: "3000", town: "Bern")
+      end
+      let(:contact_attributes) { d[0].sideload(:contact).attributes }
+
+      before do
+        event.update!(contact: contact)
+        params[:filter] = {id: {eq: event.id}}
+        params[:include] = "contact"
+      end
+
+      it "includes the contact as event contact" do
+        render
+
+        expect(d[0].sideload(:contact).jsonapi_type).to eq "event-contact"
+        expect(d[0].sideload(:contact).id).to eq contact.id
+      end
+
+      it "does not allow to include relationships of the contact" do
+        params[:include] = "contact.phone_numbers"
+
+        expect { render }.to raise_error(Graphiti::Errors::InvalidInclude)
+      end
+
+      it "includes all contact attributes by default" do
+        render
+
+        expect(contact_attributes).to include(
+          "first_name" => "Kurt", "email" => "kurt@example.com", "street" => "Kontaktweg"
+        )
+      end
+
+      it "excludes contact attributes that are not visible" do
+        event.update!(visible_contact_attributes: %w[name])
+        render
+
+        expect(contact_attributes).to include("first_name" => "Kurt", "last_name" => "Kontakt")
+        expect(contact_attributes.keys).not_to include(
+          "email", "address", "street", "housenumber", "zip_code", "town", "picture"
+        )
+      end
+
+      it "excludes attributes hidden on any of the events the person is contact of" do
+        Fabricate(:event, contact: contact, visible_contact_attributes: %w[name email])
+        event.update!(visible_contact_attributes: %w[name address])
+        params[:filter] = {}
+        render
+
+        contact_resource = d.map { |e| e.sideload(:contact) }.compact.find { |c| c.id == contact.id }
+        expect(contact_resource.attributes).to include("first_name" => "Kurt")
+        expect(contact_resource.attributes.keys).not_to include("email", "street")
+      end
+    end
   end
 
   describe "filtering" do

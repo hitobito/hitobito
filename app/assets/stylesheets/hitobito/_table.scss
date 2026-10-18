@@ -83,6 +83,12 @@ th.right {
 
 .table-fixed {
   table-layout: fixed;
+
+  td,
+  th {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 }
 
 @media (max-width: 768px) {

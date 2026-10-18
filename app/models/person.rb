@@ -326,7 +326,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   validates :email, length: {allow_nil: true, maximum: 255} # other email validations by devise
   validates :company_name, presence: {if: :company?}
   validates :birthday,
-    timeliness: {type: :date, allow_blank: true, before: Date.new(10_000, 1, 1)}
+    timeliness: {type: :date, allow_blank: true, on_or_before: -> { Date.current }}
   validates :additional_information, length: {allow_nil: true, maximum: (2**16) - 1}
   validates :canton, absence: true, unless: :swiss?
   validate :assert_has_any_name

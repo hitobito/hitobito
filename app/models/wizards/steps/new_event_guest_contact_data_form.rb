@@ -37,7 +37,7 @@ class Wizards::Steps::NewEventGuestContactDataForm < Wizards::Step
   validates :email, length: {maximum: 255}
   validates :language, inclusion: {in: Person::LANGUAGES.keys.map(&:to_s), allow_blank: true}
   validates :birthday,
-    timeliness: {type: :date, allow_blank: true, before: Date.new(10_000, 1, 1)}
+    timeliness: {type: :date, allow_blank: true, on_or_before: -> { Date.current }}
   validates :phone_number, phone: true, allow_blank: true
   validate :assert_privacy_policy, if: :requires_policy_acceptance?
 

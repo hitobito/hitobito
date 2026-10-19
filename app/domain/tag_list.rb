@@ -13,9 +13,11 @@ class TagList
   end
 
   def remove
-    tags = ActsAsTaggableOn::Tagging.where(taggable_type: Person.name,
-      taggable_id: @people.map(&:id),
-      tag_id: @tags.map(&:id))
+    tags = ActsAsTaggableOn::Tagging.where(
+      taggable_type: Person.name,
+      taggable_id: @people.pluck(:id),
+      tag_id: @tags.map(&:id)
+    )
     tags.destroy_all.count
   end
 

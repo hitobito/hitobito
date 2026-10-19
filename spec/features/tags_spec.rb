@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe TagsController, js: true do
+describe "Tags", js: true do
   subject { page }
 
   let(:top_leader) { people(:top_leader) }

@@ -31,15 +31,15 @@ describe :invoices, js: true do
         visit group_invoices_path(group)
 
         find("#all").click
-        expect(page).to have_content("3 Ausgewählt")
+        expect(page).to have_content("3 ausgewählt")
         expect(page).not_to have_content("auswählen")
 
         find("#all").click
-        expect(page).not_to have_content("Ausgewählt")
+        expect(page).not_to have_content("ausgewählt")
 
         find_all("input[name='ids[]']").sample.click
 
-        expect(page).to have_content("1 Ausgewählt")
+        expect(page).to have_content("1 ausgewählt")
       end
     end
 
@@ -50,10 +50,10 @@ describe :invoices, js: true do
         visit group_invoices_path(group)
 
         find("#all").click
-        expect(page).to have_content("50 Ausgewählt")
+        expect(page).to have_content("50 ausgewählt")
         expect(page).to have_content("Alle 51 auswählen")
         find("label.extended_all").click
-        expect(page).to have_content("51 Ausgewählt")
+        expect(page).to have_content("51 ausgewählt")
         click_link("Rechnung stellen / mahnen")
         click_link("Status setzen (Gestellt/Gemahnt)")
 
@@ -65,14 +65,14 @@ describe :invoices, js: true do
         visit group_invoices_path(group)
 
         find("#all").click
-        expect(page).to have_content("50 Ausgewählt")
+        expect(page).to have_content("50 ausgewählt")
         expect(page).to have_content("Alle 51 auswählen")
         find("label.extended_all").click
-        expect(page).to have_content("51 Ausgewählt")
+        expect(page).to have_content("51 ausgewählt")
 
         find_all("input[name='ids[]']").sample.click
 
-        expect(page).to have_content("49 Ausgewählt")
+        expect(page).to have_content("49 ausgewählt")
       end
     end
   end

@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -14,6 +14,7 @@
 
           = render_extensions :details, locals: { show_full: can?(:show_full, entry) }
 
+          = render_attrs(entry, :id)
           = render_present_attrs(entry, :created_info, :updated_info)
           - if can?(:update, entry)
             = render_present_attrs(entry, :login_status) 

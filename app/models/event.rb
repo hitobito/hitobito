@@ -678,6 +678,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   end
 
   def attributes_for_duplicate
-    attributes.excluding("id")
+    attributes.compact.excluding("id")
   end
 end

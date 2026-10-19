@@ -140,6 +140,27 @@ describe Event::TemplatesController do
       end
     end
 
+    describe "GET#new with source" do
+      it "creates a template on the layer from an event of a subgroup" do
+        source = Fabricate(:event, groups: [groups(:top_group)])
+
+        get :new, params: {group_id: top_layer.id, source_id: source.id}
+
+        event = assigns(:event)
+        expect(event.template).to eq true
+        expect(event.name).to eq source.name
+        expect(event.groups).to eq [top_layer]
+      end
+
+      it "raises 404 for an event outside of the layer" do
+        source = Fabricate(:event, groups: [bottom_layer_one])
+
+        expect do
+          get :new, params: {group_id: top_layer.id, source_id: source.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
     describe "PUT#update" do
       it "updates name and inherit flag, and redirects to the templates index" do
         put :update, params: {

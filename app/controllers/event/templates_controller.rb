@@ -40,6 +40,10 @@ class Event::TemplatesController < EventsController
     end
   end
 
+  def build_from_source
+    Event.joins(:groups).where(groups: {layer_group_id: group.id}).find(params[:source_id]).duplicate
+  end
+
   def build_default_dates; end
 
   def list_entries

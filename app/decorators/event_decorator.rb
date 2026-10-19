@@ -16,7 +16,7 @@ class EventDecorator < ApplicationDecorator
   }
 
   def saveable_as_template?(group)
-    !template? && group.layer? && can?(:create, object.class.new(template: true, groups: [group]))
+    !template? && can?(:index_event_templates, group)
   end
 
   def label

@@ -5,16 +5,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class Event::TemplatesController < ListController
-  self.nesting = Group
+class Event::TemplatesController < EventsController
+  self.permitted_attrs += [:inherit]
   self.sort_mappings = {name: "event_translations.name"}
+  self.search_columns = []
 
-  decorates :events
+  skip_authorize_resource
+  before_action :authorize_class
 
   helper_method :group
 
   def self.model_class
     Event
+  end
+
+  def index
+    respond_with(entries)
   end
 
   private
@@ -23,8 +29,21 @@ class Event::TemplatesController < ListController
     authorize!(:index_event_templates, group)
   end
 
+  def model_scope
+    super.templates
+  end
+
+  def build_entry
+    super.tap do |event|
+      event.template = true
+      event.groups = [group]
+    end
+  end
+
+  def build_default_dates; end
+
   def list_entries
-    scope = group.events.templates.includes(:translations)
+    scope = model_scope.includes(:translations)
     return scope unless sorting?
 
     scope.left_join_translation.reorder(Arel.sql(order_expression))
@@ -45,5 +64,13 @@ class Event::TemplatesController < ListController
     "CASE #{whens} END"
   end
 
-  def group = @group ||= parent
+  def form_url
+    entry.new_record? ? group_event_templates_path(group) : group_event_template_path(group, entry)
+  end
+
+  def cancel_url = index_path
+
+  def return_path = index_path
+
+  def index_path = group_event_templates_path(group)
 end

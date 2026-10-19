@@ -8,5 +8,5 @@
   - t.sortable_attr :type do |event|
     = event.model.class.model_name.human
   - t.sortable_attr :inherit
-  - action_col_edit(t)
-  - action_col_destroy(t)
+  - action_col(t) { |e| link_action_edit(edit_group_event_template_path(group, e)) }
+  - action_col(t) { |e| link_action_destroy(group_event_template_path(group, e)) }

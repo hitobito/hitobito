@@ -3,8 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- cancel_url = entry.template? ? group_event_templates_path(@group) : typed_group_events_path(@group, entry.klass)
-= entry_form cancel_url_new: cancel_url, cancel_url_edit: cancel_url,
+= entry_form url: form_url, cancel_url: cancel_url,
   html: { class: 'tabbed', data: { controller: 'form-field-inheritance' } } do |f|
   - if entry.new_record?
     = f.hidden_field :type

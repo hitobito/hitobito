@@ -4,8 +4,6 @@
 -#  https://github.com/hitobito/hitobito.
 
 - group.event_types.each do |type|
-  - new_template = type.new.tap { |e| e.groups << group }
-  - if can?(:new, new_template)
-    = action_button(new_event_template_title(new_template),
-                    new_group_event_path(group, event: {type: type.sti_name, template: true}),
-                    :plus)
+  = action_button(new_event_template_title(type.new),
+                  new_group_event_template_path(group, event: {type: type.sti_name}),
+                  :plus)

@@ -143,6 +143,16 @@ describe Event::TemplatesController do
         expect(event.template).to eq true
         expect(event.groups).to eq [bottom_layer_one]
       end
+
+      it "ignores group_ids and keeps the template on the group" do
+        post :create, params: {
+          group_id: top_layer.id,
+          event: {type: "Event", name: "Vorlage", group_ids: [bottom_layer_one.id]}
+        }
+
+        expect(assigns(:event)).to be_persisted
+        expect(assigns(:event).groups).to eq [top_layer]
+      end
     end
 
     describe "GET#new with source" do
@@ -175,6 +185,14 @@ describe Event::TemplatesController do
         expect(template.reload.name).to eq("Renamed")
         expect(template.inherit).to eq true
         expect(response).to redirect_to(group_event_templates_path(top_layer))
+      end
+
+      it "ignores group_ids" do
+        put :update, params: {
+          group_id: top_layer.id, id: template.id, event: {group_ids: [bottom_layer_one.id]}
+        }
+
+        expect(template.reload.groups).to eq [top_layer]
       end
 
       it "raises 404 for a normal event" do
@@ -218,6 +236,13 @@ describe Event::TemplatesController do
 
         expect(dom).to have_css(%(form[action="#{group_event_template_path(top_layer, template)}"]))
         expect(dom).to have_css(%(a.link.cancel[href="#{group_event_templates_path(top_layer)}"]))
+      end
+
+      it "does not offer sister groups for selection" do
+        Fabricate(Group::BottomLayer::Leader.sti_name, group: bottom_layer_one, person: top_leader)
+        get :new, params: {group_id: bottom_layer_one.id, event: {type: "Event::Course"}}
+
+        expect(dom).not_to have_css(%(input[name="event[group_ids][]"]))
       end
     end
   end

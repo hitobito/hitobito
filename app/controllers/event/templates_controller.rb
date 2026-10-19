@@ -46,7 +46,16 @@ class Event::TemplatesController < EventsController
     Event.joins(:groups).where(groups: {layer_group_id: group.id}).find(params[:source_id]).duplicate
   end
 
-  def build_default_dates; end
+  # templates have no dates
+  def build_default_dates
+  end
+
+  # templates belong to their layer only, other groups must not be selectable
+  def load_sister_groups
+  end
+
+  # templates belong to their layer only, other groups must not be assignable
+  def permitted_params = super.except(:group_ids)
 
   def list_entries
     scope = model_scope.includes(:translations)

@@ -188,4 +188,26 @@ describe Event::TemplatesController do
       end
     end
   end
+
+  context "authorization" do
+    it "denies managing templates with group_and_below_full on the layer group" do
+      sign_in(Fabricate(Group::TopLayer::TopAdmin.sti_name, group: top_layer).person)
+
+      expect do
+        get :new, params: {group_id: top_layer.id, event: {type: "Event"}}
+      end.to raise_error(CanCan::AccessDenied)
+      expect do
+        get :edit, params: {group_id: top_layer.id, id: template.id}
+      end.to raise_error(CanCan::AccessDenied)
+    end
+
+    it "permits managing templates with layer_full in the same layer" do
+      sign_in(Fabricate(Group::BottomLayer::LocalGuide.sti_name, group: bottom_layer_one).person)
+
+      post :create, params: {group_id: bottom_layer_one.id, event: {type: "Event", name: "Vorlage"}}
+
+      expect(assigns(:event)).to be_persisted
+      expect(assigns(:event).groups).to eq [bottom_layer_one]
+    end
+  end
 end

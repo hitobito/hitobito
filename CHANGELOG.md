@@ -28,6 +28,7 @@
 - Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
 - Berechtigungen der API-Keys werden nun richtig angezeigt, das Token nur noch auf der Detail Seite (#3029)
 - Bei der Vergabe von Kurs-Qualifikationen kann pro Person zwischen «Bestanden», «Nicht bestanden» und «Nicht beurteilt» gewählt und ein Kommentar erfasst werden. Der Kommentar ist in der Personen-Historie als Tooltip sichtbar (hitobito_sac_cas#2646)
+- Die Verifikationsseite von Ausweisen wird in der Browsersprache angezeigt und die Sprache kann gewechselt werden (hitobito_sac_cas#2677)
 
 
 ## Version 2.10

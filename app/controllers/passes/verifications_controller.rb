@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito
 
 class Passes::VerificationsController < ActionController::Base # rubocop:disable Rails/ApplicationController
+  include Localizable
+
   layout false
 
   # Public endpoint for verifying a pass via QR code scan.

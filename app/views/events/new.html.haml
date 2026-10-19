@@ -6,6 +6,6 @@
 - if entry.template? && entry.new_record?
   - title new_event_template_title(entry)
 - else
-  title ti(:title, :model => model_class_label(entry), :default => model_class_label(entry))
+  - title ti(:title, :model => model_class_label(entry), :default => model_class_label(entry))
 
 = render "form"

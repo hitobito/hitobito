@@ -316,6 +316,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     def applicable_templates(group, event_type: nil)
       event_type = nil if event_type == Event.sti_name
       templates_in_hierarchy([group]).where(type: event_type)
+        .left_join_translation
+        .includes(:translations)
+        .select("events.*", "event_translations.name")
+        .order("event_translations.name NULLS LAST")
     end
 
     # Events with at least one date in the given year

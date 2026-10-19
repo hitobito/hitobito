@@ -37,6 +37,13 @@ describe Dropdown::Event::New do
     is_expected.to have_css(%(a[href$="events/new?source_id=#{template.id}"]))
   end
 
+  it "loads the template translations once, not per template" do
+    Fabricate(:event, groups: [groups(:top_layer)], template: true, name: "Alpha")
+
+    expect { dropdown.to_s }.to make.db_queries.with("Event::Translation Load" => 1)
+    is_expected.to have_css("ul.dropdown-menu li", count: 2)
+  end
+
   it "renders a plain button when no templates are applicable" do
     events(:template).destroy
     is_expected.to have_content "Anlass erstellen"

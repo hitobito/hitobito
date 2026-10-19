@@ -1071,6 +1071,13 @@ describe Event do
         expect(Event.applicable_templates(top_layer, event_type: "Event"))
           .not_to include(course_template)
       end
+
+      it "orders by name" do
+        other = Fabricate(:event, groups: [top_layer], template: true, name: "Alpha")
+
+        expect(Event.applicable_templates(top_layer, event_type: "Event"))
+          .to eq [other, events(:template)]
+      end
     end
   end
 

@@ -10,6 +10,8 @@ class Event::TemplatesController < EventsController
   self.sort_mappings = {name: "event_translations.name"}
   self.search_columns = []
 
+  # cancancan would otherwise add the skip to the hash inherited from EventsController
+  self._cancan_skipper = _cancan_skipper.deep_dup
   skip_authorize_resource
   before_action :authorize_class
 

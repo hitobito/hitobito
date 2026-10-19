@@ -43,7 +43,11 @@ class Event::TemplatesController < EventsController
   end
 
   def build_from_source
-    Event.joins(:groups).where(groups: {layer_group_id: group.id}).find(params[:source_id]).duplicate
+    Event
+      .joins(:groups)
+      .where(groups: {layer_group_id: group.id})
+      .find(params[:source_id])
+      .duplicate
   end
 
   # templates have no dates

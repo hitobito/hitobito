@@ -31,7 +31,7 @@ describe "event templates", js: true do
 
       expect(page).to have_css("#main-content h1", text: "Eventvorlagen")
       expect(page).to have_text "Vorlage #{label}"
-      template = Event.templates.find_by!(id: Event::Translation.where(name: "Vorlage #{label}").select(:event_id))
+      template = Event.templates.find(Event::Translation.where(name: "Vorlage #{label}").select(:event_id))
       expect(template.groups).to eq [top_layer]
       expect(template.type).to eq source.type
     end

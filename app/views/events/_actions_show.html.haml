@@ -13,7 +13,8 @@
                   :copy)
 - if entry.saveable_as_template?(@group)
   = action_button(t('.save_as_template'),
-                  new_group_event_template_path(@group.layer_group, source_id: entry.id),
+                  new_group_event_template_path(@group.layer_group, source_id: entry.id,
+                                                return_url: group_event_path(@group, entry)),
                   :copy)
 = export_events_ical_button
 - if can?(:update, entry)

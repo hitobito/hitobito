@@ -201,6 +201,13 @@ describe Event::TemplatesController do
         expect(dom).to have_css(%(a.link.cancel[href="#{group_event_templates_path(top_layer)}"]))
       end
 
+      it "cancels to the source event given as return_url" do
+        source_path = group_event_path(top_layer, events(:top_event))
+        get :new, params: {group_id: top_layer.id, source_id: events(:top_event).id, return_url: source_path}
+
+        expect(dom).to have_css(%(a.link.cancel[href="#{source_path}"]))
+      end
+
       it "patches the edit form to the template path and cancels to the index" do
         get :edit, params: {group_id: top_layer.id, id: template.id}
 

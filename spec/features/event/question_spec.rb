@@ -268,6 +268,29 @@ describe EventsController, js: true do
 
       expect(page).not_to have_field "Sensibel"
     end
+
+    it "removes a question with choices in one click" do
+      event_question = event.questions.create!(
+        question: "Testquestion",
+        choices: "Antwort 1, Antwort 2, Antwort 3",
+        required: true
+      )
+
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_link I18n.t("event.participations.application_answers")
+
+      question_fields = find_field("Frage", with: "Testquestion").ancestor(".fields")
+      question_fields.find("[data-action='events--question-template-nested-form#remove']").click
+
+      click_save
+      expect(page).to have_content("wurde erfolgreich aktualisiert")
+      expect(Event::Question.find_by(id: event_question.id)).to be_nil
+
+      # the question must stay gone (previously only one choice was removed per click)
+      click_link I18n.t("global.link.edit")
+      click_link I18n.t("event.participations.application_answers")
+      expect(page).not_to have_field("Frage", with: "Testquestion")
+    end
   end
 
   describe "global application_questions" do

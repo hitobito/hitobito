@@ -1428,6 +1428,8 @@ en:
 
       invoice_run:
         title: Title
+        description: Text
+        payment_information: Zahlungsinformation
         recipient_source: Recipient
         recipients_total: Recipients total
         recipients_paid: Recipient paid

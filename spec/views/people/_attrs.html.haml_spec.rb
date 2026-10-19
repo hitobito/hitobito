@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -34,6 +34,11 @@ describe "people/_attrs.html.haml" do
     end
     it "does show detailed contact info" do
       is_expected.to have_content "private phone"
+    end
+
+    it "shows person number" do
+      is_expected.to have_css("dt", text: "Personennummer")
+      is_expected.to have_css("dd", text: person.id.to_s)
     end
   end
 

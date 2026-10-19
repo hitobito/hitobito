@@ -1,4 +1,4 @@
-#  Copyright (c) 2017-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -54,10 +54,10 @@ describe Export::EventParticipationsExportJob do
 
       lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
-      expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
+      expect(lines[0]).to match(/Personennummer;Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
 
-      expect(lines[0].split(";").count).to match(41)
+      expect(lines[0].split(";").count).to match(42)
     end
 
     it "shows the correct timestamps on the participation instances" do

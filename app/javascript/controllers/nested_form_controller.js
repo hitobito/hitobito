@@ -46,10 +46,44 @@ export default class extends NestedForm {
   }
 
   remove(event) {
-    super.remove(event)
+    this.#removeEntry(event)
+
     this.dispatch("remove")
     this.#handleAddButtonVisibility()
     this.#removeRequiredAttributeFromRemovedInputs(event.target)
+  }
+
+  // Copied from the parent's (rails-nested-form) remove() because we cannot
+  // just call super: it sets _destroy=1 on the first "input[name*='_destroy']"
+  // found inside the wrapper. When a wrapper contains nested form fields
+  // itself (e.g. an event question with choices), that input belongs to a
+  // nested entry and the wrapper's own _destroy stays unset, so the record is
+  // never destroyed.
+  // See https://github.com/hitobito/hitobito/issues/4514
+  #removeEntry(event) {
+    event.preventDefault()
+
+    const wrapper = event.target.closest(this.wrapperSelectorValue)
+    if (!wrapper) return
+
+    if (wrapper.dataset.newRecord === "true") {
+      wrapper.remove()
+    } else {
+      wrapper.style.display = "none"
+      const input = this.#findOwnDestroyInput(wrapper)
+      if (input) input.value = "1"
+    }
+
+    const removeEvent = new CustomEvent("rails-nested-form:remove", { bubbles: true })
+    this.element.dispatchEvent(removeEvent)
+  }
+
+  // Finds the wrapper's own _destroy input. Wrappers may contain nested
+  // forms (e.g. event question choices) which carry their own _destroy
+  // inputs, so a plain querySelector would hit the wrong one.
+  #findOwnDestroyInput(wrapper) {
+    return Array.from(wrapper.querySelectorAll("input[name*='_destroy']"))
+      .find((el) => el.closest(this.wrapperSelectorValue) === wrapper)
   }
 
   #setFocusOnFirstFieldInLastWrapper() {

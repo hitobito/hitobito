@@ -1519,6 +1519,8 @@ fr:
 
       invoice_run:
         title: Titre
+        description: Text
+        payment_information: Zahlungsinformation
         recipient_source: Destinataire
         recipients_total: Nombre total de destinataires
         recipients_paid: Destinataire payé

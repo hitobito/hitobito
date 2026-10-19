@@ -1518,6 +1518,8 @@ it:
 
       invoice_run:
         title: Titolo
+        description: Text
+        payment_information: Zahlungsinformation
         recipient_source: Destinatario
         recipients_total: Destinatario complessivo
         recipients_paid: Destinatario pagato

@@ -70,7 +70,7 @@ jobs:
           - '5432:5432'
         options: >-
           --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
+          --health-interval 2s
           --health-timeout 10s
           --health-retries 10
 
@@ -126,7 +126,7 @@ jobs:
           - '5432:5432'
         options: >-
           --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
+          --health-interval 2s
           --health-timeout 10s
           --health-retries 10
 

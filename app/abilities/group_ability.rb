@@ -83,6 +83,7 @@ class GroupAbility < AbilityDsl::Base
     permission(:finance).may(:index_received_invoices).in_same_layer_or_below
     permission(:finance).may(:create_invoice).in_same_layer_or_below
 
+    permission(:admin).may(:manage_person_duplicates).if_layer_group_if_active
     permission(:layer_and_below_full).may(:manage_person_duplicates).if_permission_in_layer
 
     permission(:admin).may(:import_people_with_id).all
@@ -90,14 +91,13 @@ class GroupAbility < AbilityDsl::Base
     permission(:manual_deletion)
       .may(:manually_delete_people)
       .if_permission_in_layer
+    permission(:admin).may(:manually_delete_people).all
 
     permission(:layer_full).may(:log).in_same_layer_if_active
     permission(:layer_and_below_full).may(:log).in_same_layer_or_below_if_active
     permission(:group_full).may(:log).in_same_group_if_active
     permission(:group_and_below_full).may(:log).in_same_group_or_below_if_active
 
-    permission(:admin).may(:manage_person_duplicates).if_layer_group_if_active
-    permission(:admin).may(:manually_delete_people).all
     permission(:admin).may(:set_main_self_registration_group).in_active_group
     permission(:admin).may(:sync_addresses).on_root_group
 

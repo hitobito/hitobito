@@ -186,7 +186,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### ASSOCIATIONS
 
   # Autosave would change updated_at and updater on the group when creating an event.
-  has_and_belongs_to_many :groups, autosave: false
+  has_and_belongs_to_many :groups, autosave: false, validate: false
 
   belongs_to :kind
   belongs_to :contact, class_name: "Person"

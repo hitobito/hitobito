@@ -144,6 +144,14 @@ describe Event::TemplatesController do
         expect(event.groups).to eq [bottom_layer_one]
       end
 
+      it "creates a template on an invalid group" do
+        top_layer.update_column(:contact_id, people(:bottom_member).id)
+
+        post :create, params: {group_id: top_layer.id, event: {type: "Event", name: "Vorlage"}}
+
+        expect(assigns(:event)).to be_persisted
+      end
+
       it "ignores group_ids and keeps the template on the group" do
         post :create, params: {
           group_id: top_layer.id,

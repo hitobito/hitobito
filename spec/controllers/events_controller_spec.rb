@@ -59,6 +59,18 @@ describe EventsController do
         expect(event.group_ids).to match_array([group.id, group2.id])
       end
 
+      it "creates new event on an invalid group" do
+        sign_in(people(:top_leader))
+        group.update_column(:contact_id, people(:bottom_member).id)
+
+        post :create, params: {
+          event: {name: "foo", dates_attributes: [date], type: "Event"},
+          group_id: group.id
+        }
+
+        expect(assigns(:event)).to be_persisted
+      end
+
       it "validates permission to read contact person" do
         invisible_person = Fabricate(:person)
         person = people(:bottom_member)

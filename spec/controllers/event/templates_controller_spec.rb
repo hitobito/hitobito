@@ -42,6 +42,11 @@ describe Event::TemplatesController do
 
       let(:dom) { Capybara::Node::Simple.new(response.body) }
 
+      it "has the templates title" do
+        get :index, params: {group_id: top_layer.id}
+        expect(dom).to have_css("#main-content h1", text: "Eventvorlagen")
+      end
+
       it "has edit and destroy action links" do
         get :index, params: {group_id: top_layer.id}
         expect(dom).to have_css(%(a[href="#{edit_group_event_template_path(top_layer, template)}"]))

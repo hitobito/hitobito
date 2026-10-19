@@ -573,10 +573,6 @@ de:
         default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
         inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
 
-    templates:
-      index:
-        title: Eventvorlagen
-
     register:
       register:
         title:
@@ -819,6 +815,10 @@ de:
 
   event/roles:
     full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"
+
+  event/templates:
+    index:
+      title: Eventvorlagen
 
   events/filters:
     new:

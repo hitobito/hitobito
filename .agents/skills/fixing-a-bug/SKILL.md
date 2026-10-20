@@ -26,3 +26,7 @@ Any bugfix task: reproducing and resolving a defect. For new functionality, use 
 9. Run `bundle exec rake rubocop` — code style must be clean. `bundle exec rake rubocop:changed` checks only the
    files you touched.
 10. Write a commit message summarizing the need for the change.
+
+## Rules
+
+- DB-Migrations MUST be created with `bundle exec rails generate migration` to ensure proper filenames

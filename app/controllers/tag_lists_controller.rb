@@ -11,12 +11,12 @@ class TagListsController < ListController
   respond_to :js, only: [:new, :deletable]
 
   def create
-    Bulk::TagAddJob.new(people.pluck(:id), tag_names).enqueue!
+    Bulk::TagAddJob.new(people_ids, tag_names).enqueue!
     redirect_to_people
   end
 
   def destroy
-    Bulk::TagRemoveJob.new(people.pluck(:id), tag_names).enqueue!
+    Bulk::TagRemoveJob.new(people_ids, tag_names).enqueue!
     redirect_to_people
   end
 

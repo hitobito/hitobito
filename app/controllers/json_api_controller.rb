@@ -57,6 +57,11 @@ class JsonApiController < ActionController::API
     title: "Unsupported include parameter",
     message: ->(error) { "The include parameter is not supported." }
 
+  register_exception Graphiti::Errors::StatNotFound,
+    status: 400,
+    title: "Unsupported stat",
+    message: ->(error) { "The stat is not supported: Message: #{error.message}" }
+
   register_exception Graphiti::Errors::InvalidAttributeAccess,
     status: 400,
     title: "Unsupported filter parameter",

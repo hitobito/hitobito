@@ -122,7 +122,8 @@ runs:
 
     - name: 'Configure Bundler'
       run: |
-        bundle config set --local path 'vendor/bundle'
+        echo "BUNDLE_PATH=$PWD/vendor/bundle" >> $GITHUB_ENV
+      working-directory: hitobito
       shell: bash
 
     - name: "Set up Node"
@@ -132,8 +133,9 @@ runs:
 
     - name: "Setup OS"
       run: |
-        sudo apt-get -qq update
-        sudo apt-get install libvips42
+        sudo rm -f /var/lib/man-db/auto-update
+        sudo apt-get install -qq --no-install-recommends libvips42 \
+          || { sudo apt-get -qq update && sudo apt-get install -qq --no-install-recommends libvips42; }
         echo "ruby version: $(ruby -v)"
         echo "node version: $(node -v)"
         echo "yarn version: $(yarn -v)"
@@ -175,21 +177,6 @@ runs:
         restore-keys: |
           ${{ runner.os }}-ruby-bundle-
 
-    - uses: actions/cache@v5
-      if: ${{ inputs.wagon_dependency_repository != '' }}
-      with:
-        path: ${{ inputs.wagon_dependency_repository }}/vendor/bundle
-        key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
-        restore-keys: |
-          ${{ runner.os }}-ruby-bundle-
-
-    - uses: actions/cache@v5
-      with:
-        path: ${{ inputs.wagon_repository }}/vendor/bundle
-        key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
-        restore-keys: |
-          ${{ runner.os }}-ruby-bundle-
-
     - name: "Bundle install core"
       run: |
         bundle install --jobs 4 --retry 3
@@ -216,7 +203,7 @@ runs:
     - uses: actions/cache@v5
       if: inputs.assets == 'true'
       with:
-        path: node_modules
+        path: hitobito/node_modules
         key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-node_modules-
@@ -228,17 +215,32 @@ runs:
       working-directory: hitobito
       shell: bash
 
-    - name: "Build assets"
+    - uses: actions/cache@v5
       if: inputs.assets == 'true'
+      id: assets-cache
+      with:
+        path: hitobito/app/assets/builds
+        key: ${{ runner.os }}-assets-${{ inputs.wagon_repository }}-${{ hashFiles('hitobito/yarn.lock', 'hitobito/package.json', 'hitobito/config/*.mjs', 'hitobito/app/javascript/**', 'hitobito/app/components/**/*.js', 'hitobito/app/assets/stylesheets/**', 'hitobito_*/app/javascript/**', 'hitobito_*/app/assets/javascripts/**', 'hitobito_*/app/assets/stylesheets/**') }}
+
+    - name: "Build assets"
+      if: inputs.assets == 'true' && steps.assets-cache.outputs.cache-hit != 'true'
       run: |
-        bundle exec rake assets:precompile
+        SKIP_YARN_INSTALL=1 bundle exec rake assets:build
       working-directory: hitobito
       shell: bash
 
     - name: "Prepare DB"
       if: inputs.migrations == 'true'
       run: |
-        bundle exec rake db:migrate
-        bundle exec rake wagon:migrate
+        bundle exec rake db:schema:load wagon:migrate
       working-directory: hitobito
+      shell: bash
+
+    - name: "Copy the migrated test database for each further CPU"
+      if: inputs.migrations == 'true'
+      run: |
+        for number in $(seq 2 "$(nproc)"); do
+          PGPASSWORD="$RAILS_DB_PASSWORD" psql -h "$RAILS_DB_HOST" -U "$RAILS_DB_USERNAME" -d postgres \
+            -c "CREATE DATABASE ${RAILS_TEST_DB_NAME}${number} TEMPLATE ${RAILS_TEST_DB_NAME}"
+        done
       shell: bash

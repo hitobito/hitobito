@@ -232,6 +232,12 @@ describe EventResource, type: :resource do
         render
         expect(jsonapi_data).to have(3).items
       end
+
+      it "excludes events of given group_ids" do
+        params[:filter] = {group_id: {not_eq: top_group.id}}
+        render
+        expect(jsonapi_data.map(&:id)).to match_array [event.id, course.id]
+      end
     end
 
     describe "by before_or_on" do

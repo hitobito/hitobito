@@ -59,6 +59,9 @@ class EventResource < ApplicationResource
     eq do |scope, group_ids|
       scope.select("events.*").references(:groups).where(groups: {id: group_ids})
     end
+    not_eq do |scope, group_ids|
+      scope.where.not(id: Event.joins(:groups).where(groups: {id: group_ids}).select(:id))
+    end
   end
 
   filter :before_or_on, :date, single: true, only: [:eq] do

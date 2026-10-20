@@ -6,10 +6,13 @@
 require "spec_helper"
 
 describe Person::ImpersonationController do
-  before do
-    @ref = @request.env["HTTP_REFERER"] = root_path
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+  end
+
+  before do
+    @ref = @request.env["HTTP_REFERER"] = root_path
   end
 
   let(:group) { groups(:top_layer) }

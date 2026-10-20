@@ -7,13 +7,15 @@
 Fabricator(:calendar) do
   name { Faker::Lorem.words(number: 1).first.capitalize }
   description { Faker::Lorem.sentences }
-  group { Fabricate("Group::TopLayer") }
+  group { Group.root }
   token { SecureRandom.urlsafe_base64 }
-  included_calendar_groups(count: 1, fabricator: :calendar_group_base)
+  included_calendar_groups do |attrs|
+    [Fabricate.build(:calendar_group_base, group: attrs[:group])]
+  end
 end
 
 Fabricator(:calendar_group_base, class_name: :calendar_group) do
-  group { Fabricate("Group::TopLayer") }
+  group { Group.root }
   excluded { false }
   with_subgroups { false }
 end

@@ -25,6 +25,10 @@ require "view_component/system_test_helpers"
 require "test_prof/recipes/logging"
 require "test_prof/recipes/rspec/let_it_be"
 
+TestProf::BeforeAll.configure do |config|
+  config.setup_fixtures = true
+end
+
 TestProf::StackProf.configure do |config|
   config.format = "json"
 end

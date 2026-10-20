@@ -47,7 +47,13 @@ namespace :assets do
     dir.join("js.json").write(JSON.pretty_generate(js_manifest.call(wagons, composition)))
   end
 
-  yarn = ->(*args) { sh("yarn", *args, chdir: Rails.root.to_s) }
+  # bin/yarn is a ruby binstub that would re-evaluate the wagon Gemfile and abort with
+  # "same gem twice" since its gemspec registers the already loaded wagon again.
+  # The unbundled env is the one from process start, so the manifest dir set above is passed along.
+  yarn = lambda do |*args|
+    env = {"WAGON_MANIFEST_DIR" => ENV["WAGON_MANIFEST_DIR"]}
+    Bundler.with_unbundled_env { sh(env, "yarn", *args, chdir: Rails.root.to_s) }
+  end
 
   yarn_build = lambda do
     yarn.call("install") unless ENV["SKIP_YARN_INSTALL"]

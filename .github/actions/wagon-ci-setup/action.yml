@@ -232,12 +232,12 @@ runs:
     - name: "Prepare DB"
       if: inputs.migrations == 'true'
       run: |
-        bundle exec rake db:schema:load wagon:migrate
+        SKIP_TEST_DATABASE=true bundle exec rake db:schema:load wagon:migrate
       working-directory: hitobito
       shell: bash
 
     - name: "Copy the migrated test database for each further CPU"
-      if: inputs.migrations == 'true'
+      if: inputs.migrations == 'true' && env.RAILS_TEST_DB_NAME != ''
       run: |
         for number in $(seq 2 "$(nproc)"); do
           PGPASSWORD="$RAILS_DB_PASSWORD" psql -h "$RAILS_DB_HOST" -U "$RAILS_DB_USERNAME" -d postgres \

@@ -89,7 +89,7 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.backtrace_exclusion_patterns = [/lib\/rspec/, /asdf/]
-  config.example_status_persistence_file_path = Rails.root.join("tmp", "examples.txt").to_s
+  config.example_status_persistence_file_path = Rails.root.join("tmp", "examples#{ENV["TEST_ENV_NUMBER"]}.txt").to_s
 
   config.expect_with :rspec do |c|
     c.max_formatted_output_length = 1000
@@ -205,6 +205,16 @@ RSpec.configure do |config|
   config.after(:suite) do
     # Clean up ActiveStorage fixture files after all tests complete
     FileUtils.rm_rf(ActiveStorage::Blob.services.fetch(:test_fixtures).root)
+  end
+
+  if ENV["CI"]
+    config.after(:suite) do
+      pending = RSpec.world.reporter.pending_examples.map(&:id)
+      if config.only_failures?
+        pending |= config.last_run_statuses.select { |_id, status| status == "pending" }.keys
+      end
+      raise "Pending specs are not allowed:\n#{pending.join("\n")}" if pending.any?
+    end
   end
 
   unless RSpec.configuration.exclusion_filter[:type] == "feature"

@@ -1,6 +1,7 @@
 # CI/CD
 
 * Tests werden auf GitHub als GitHub Actions ausgeführt
+* Pending Specs (`xit`, `skip`, `pending`, `it` ohne Block) lassen die Spec-Jobs fehlschlagen, sobald `CI` gesetzt ist
 
 # Test-Pipelines
 

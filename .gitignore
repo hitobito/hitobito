@@ -113,3 +113,4 @@ Gemfile.local.lock
 
 # git knows to ignore its directory, other tools only using this file do not
 .git/
+.sentryclirc

@@ -16,7 +16,7 @@ class RoleResource < ApplicationResource
     attribute :updated_at, :datetime
     attribute :start_on, :date
     attribute :end_on, :date
-    attribute(:name, :string) do
+    attribute(:name, :string, filterable: false, sortable: false) do
       @object.class.model_name.human
     end
   end

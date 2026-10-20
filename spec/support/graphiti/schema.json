@@ -3879,7 +3879,6 @@
         "updated_at": {},
         "start_on": {},
         "end_on": {},
-        "name": {},
         "person_id": {},
         "group_id": {},
         "type": {},
@@ -3939,21 +3938,6 @@
             "gte",
             "lt",
             "lte"
-          ]
-        },
-        "name": {
-          "type": "string",
-          "operators": [
-            "eq",
-            "not_eq",
-            "eql",
-            "not_eql",
-            "prefix",
-            "not_prefix",
-            "suffix",
-            "not_suffix",
-            "match",
-            "not_match"
           ]
         },
         "person_id": {

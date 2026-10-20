@@ -10,7 +10,7 @@ app.InvitationLists = {
     event = JSON.parse(e)
     form = $('form#new_event_invitation')[0]
     $("#new_event_invitation button[type='submit']").prop('disabled', false)
-    form.action = form.action.replace(/(\d|-)*?(?=\/\w*$)/, event['id'])
+    form.action = form.action.replace('/-1/', "/#{event['id']}/")
     metaToken = $('meta[name=csrf-token]')[0].content
     form.elements['authenticity_token'].value = metaToken
     app.InvitationLists.resetOptions(event.types)

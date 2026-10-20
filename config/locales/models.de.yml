@@ -1581,6 +1581,8 @@ de:
           error: Bei der Bearbeitung trat ein Fehler auf
 
   delayed_job:
+    bulk/tag_add_job: Tags hinzufügen
+    bulk/tag_remove_job: Tags entfernen
     export/event_participations_export_job: Event-Teilnahmen-Export
     export/events_export_job: Anlass-Export
     export/export_base_job: Basis-Export

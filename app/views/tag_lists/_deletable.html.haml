@@ -6,10 +6,10 @@
           %b=t('.title')
 
       = standard_form(:remove_tag_list,
-        url: group_tag_list_path(group), method: :delete) do |f|
+        url: group_tag_list_path(group, list_filter_params), method: :delete) do |f|
         .modal-body
           .row-fluid
-            = hidden_field_tag('ids', @manageable_people.map(&:id).join(','))
+            = hidden_field_tag('ids', people_ids.join(','))
             .checkboxes
               - unless @existing_tags.empty?
                 = available_tags_checkboxes(@existing_tags)

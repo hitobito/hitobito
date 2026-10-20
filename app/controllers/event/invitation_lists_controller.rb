@@ -19,7 +19,7 @@ class Event::InvitationListsController < SimpleCrudController
       new_invitations.map(&:save).all?(&:present?)
     end
 
-    redirect_to(group_people_path(group),
+    redirect_to(group_people_path(group, list_filter_params),
       notice: flash_message(:success, count: new_invitations.count))
   end
 

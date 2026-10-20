@@ -5,26 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sww.
 
-class Bulk::TagRemoveJob < BaseJob
-  self.parameters = [:ids, :tag_names]
-
-  def initialize(ids, tag_names)
-    @ids = ids
-    @tag_names = tag_names
-    super()
-  end
-
-  def perform
-    TagList.new(people, tags).remove
-  end
-
+class Bulk::TagRemoveJob < Bulk::TagBulkJob
   private
 
-  def people
-    Person.where(id: @ids).includes(:tags).distinct
-  end
-
-  def tags
-    ActsAsTaggableOn::Tag.find_or_create_all_with_like_by_name(@tag_names)
+  def perform_action(tag_list)
+    tag_list.remove
   end
 end

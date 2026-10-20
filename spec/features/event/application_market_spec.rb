@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe Event::ApplicationMarketController do
+describe "Event Application Market", js: true do
   let(:event) { Fabricate(:course) }
 
   let(:group) { event.groups.first }

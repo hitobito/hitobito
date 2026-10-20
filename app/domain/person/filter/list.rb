@@ -26,8 +26,6 @@ class Person::Filter::List < Filter::List
     range == "deep" || range == "layer"
   end
 
-  private
-
   def accessible_scope
     ability = accessibles_class.new(
       user,
@@ -36,6 +34,8 @@ class Person::Filter::List < Filter::List
     )
     Person.accessible_by(ability).select(:contact_data_visible)
   end
+
+  private
 
   def default_order(people)
     people = people.order_by_role if Settings.people.default_sort == "role"

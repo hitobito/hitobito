@@ -20,7 +20,7 @@ de:
     confirm_delete: Wollen Sie diesen Eintrag wirklich löschen?
     do_not_fill: Bitte dieses Feld nicht ausfüllen
     chosen_no_results: Keine Einträge gefunden
-    selected: Ausgewählt
+    selected: ausgewählt
     extended_select_all: Alle %{count} auswählen
     columns: Spalten
     start_on: ab %{date}

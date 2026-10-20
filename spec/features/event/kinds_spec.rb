@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe Event::KindsController, js: true do
+describe "Event Kinds", js: true do
   it "may add new preconditions" do
     sign_in
     visit edit_event_kind_path(event_kinds(:slk))

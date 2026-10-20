@@ -30,7 +30,7 @@ module Subscriber
         new_subscriptions.map(&:save).all?(&:present?)
       end
 
-      redirect_to(group_people_path(group),
+      redirect_to(group_people_path(group, list_filter_params),
         notice: flash_message(:success, count: new_subscriptions.count))
     end
 

@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe EventsController, js: true do
+describe "Events", js: true do
   let!(:event) do
     event = Fabricate(:course, kind: event_kinds(:slk), groups: [groups(:top_group)], contact: nil)
     event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
@@ -24,12 +24,11 @@ describe EventsController, js: true do
   end
 
   context "contacts" do
-    NOTIFICATION_CHECKBOX_SELECTOR = "#event_notify_contact_on_participations"
-
+    let(:notification_checkbox_selector) { "#event_notify_contact_on_participations" }
     let(:edit_path) { edit_group_event_path(event.group_ids.first, event.id) }
 
     def hidden_contact_fields_visible(visible)
-      have_checkbox = have_selector(NOTIFICATION_CHECKBOX_SELECTOR)
+      have_checkbox = have_selector(notification_checkbox_selector)
       text = "Anzeigeoptionen (Kontaktperson)"
       if visible
         expect(page).to(have_checkbox)
@@ -41,7 +40,7 @@ describe EventsController, js: true do
     end
 
     def notification_checkbox
-      find(NOTIFICATION_CHECKBOX_SELECTOR)
+      find(notification_checkbox_selector)
     end
 
     it "may set and remove contact from event" do

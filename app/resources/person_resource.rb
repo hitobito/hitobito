@@ -33,7 +33,7 @@ class PersonResource < ApplicationResource
   attribute :company_name, :string if Person.used_attributes.include? :company_name
   attribute :company, :boolean if Person.used_attributes.include? :company
   attribute :email, :string
-  attribute :address, :string, writable: false
+  attribute :address, :string, writable: false, filterable: false, sortable: false
   attribute :address_care_of, :string
   attribute :street, :string
   attribute :housenumber, :string
@@ -46,7 +46,7 @@ class PersonResource < ApplicationResource
   attribute :gender, :string, readable: :show_details?, writable: :write_details?
   attribute :birthday, :date, readable: :show_details?, writable: :write_details?
   attribute :language, :string
-  attribute :picture, :string do
+  attribute :picture, :string, filterable: false, sortable: false do
     @object.decorate.picture_full_url
   end
   attribute :updated_at, :datetime

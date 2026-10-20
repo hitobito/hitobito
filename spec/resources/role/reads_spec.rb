@@ -143,6 +143,28 @@ describe RoleResource, type: :resource do
           expect(group_data.jsonapi_type).to eq "groups"
         end
       end
+
+      context "together with group of a role in a deleted group" do
+        let(:person) { role.person }
+        let(:deleted_group_role) do
+          group = Fabricate(Group::BottomGroup.sti_name, parent: role.group)
+          Fabricate(Group::BottomGroup::Member.sti_name, group:, person:).tap do
+            group.update_column(:deleted_at, 1.day.ago)
+          end
+        end
+
+        before do
+          params[:filter] = {id: deleted_group_role.id.to_s}
+          params[:include] = "group,layer_group"
+        end
+
+        it "omits both groups" do
+          render
+          expect(d[0].id).to eq deleted_group_role.id
+          expect(d[0].relationships.dig(:group, :data)).to be_nil
+          expect(d[0].relationships.dig(:layer_group, :data)).to be_nil
+        end
+      end
     end
   end
 

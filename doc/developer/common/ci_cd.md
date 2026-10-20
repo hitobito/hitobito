@@ -32,6 +32,9 @@ die Tests aller Wagons gegen den geänderten Core laufen.
 
 * Welche Wagons getestet werden, wird nicht konfiguriert, sondern ermittelt: alle nicht archivierten
   `hitobito_*`-Repositories der Organisation, abzüglich der Variable `WAGON_TESTS_SKIP_WAGONS`.
+* Wagons mit lange laufenden Specs teilen ihre Specs und Feature-Specs auf mehrere parallele Jobs
+  auf, festgelegt in `SPEC_GROUPS` im Job `find-wagons` (z.B. `sac_cas=3`). Alle anderen Wagons
+  laufen in je einem Job.
 * Getestet wird jeder Commit auf dem `master` Branch und auf den `renovate/*` Branches, und auf
   einem Pull Request auf Anfrage: Der Trigger dafür ist das Label `run-wagon-tests!`. Der Trigger auf
   jeden Push eines Pull Requests ist bewusst deaktiviert, er hat die Runner zu oft belegt.

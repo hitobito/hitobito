@@ -6,19 +6,16 @@ inputs:
     description: Unless set to false, prepare the database for the tests
     default: 'true'
   assets:
-    description: Unless set to false, assets will be precompiled as part of the setup.
+    description: Unless set to false, assets will be built as part of the setup.
     default: 'true'
 
 runs:
   using: composite
   steps:
-    - name: 'Set up Ruby'
+    - name: 'Set up Ruby and install gems'
       uses: ruby/setup-ruby@v1
-
-    - name: 'Configure Bundler'
-      run: |
-        bundle config set --local path 'vendor/bundle'
-      shell: bash
+      with:
+        bundler-cache: true
 
     - name: Read .tool-versions
       uses: marocchino/tool-versions-action@v1
@@ -31,32 +28,13 @@ runs:
 
     - name: 'Setup OS'
       run: |
-        sudo apt-get -qq update
-        sudo apt-get install libvips42
+        sudo rm -f /var/lib/man-db/auto-update
+        sudo apt-get install -qq --no-install-recommends libvips42 \
+          || { sudo apt-get -qq update && sudo apt-get install -qq --no-install-recommends libvips42; }
         echo "ruby version: $(ruby -v)"
         echo "bundle version: $(bundle -v)"
         echo "node version: $(node -v)"
         echo "yarn version: $(yarn -v)"
-      shell: bash
-
-    - name: 'create cache key'
-      run: cp Gemfile.lock Gemfile.lock.backup
-      shell: bash
-
-    - uses: actions/cache@v5
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-ruby-bundle-${{ hashFiles('**/Gemfile.lock.backup') }}
-        restore-keys: |
-          ${{ runner.os }}-ruby-bundle-
-
-    - name: 'Bundle install'
-      run: |
-        bundle install --jobs 4 --retry 3
-      shell: bash
-
-    - name: 'Make changes to Gemfile.lock transparent'
-      run: git diff Gemfile.lock || true
       shell: bash
 
     - uses: actions/cache@v5
@@ -73,14 +51,21 @@ runs:
         yarn install --frozen-lockfile
       shell: bash
 
-    - name: 'Build assets'
+    - uses: actions/cache@v5
       if: inputs.assets == 'true'
+      id: assets-cache
+      with:
+        path: app/assets/builds
+        key: ${{ runner.os }}-assets-${{ hashFiles('yarn.lock', 'package.json', 'config/*.mjs', 'app/javascript/**', 'app/components/**/*.js', 'app/assets/stylesheets/**') }}
+
+    - name: 'Build assets'
+      if: inputs.assets == 'true' && steps.assets-cache.outputs.cache-hit != 'true'
       run: |
-        bundle exec rake assets:precompile
+        SKIP_YARN_INSTALL=1 bundle exec rake assets:build_for_test
       shell: bash
 
-    - name: 'Prepare the Database'
+    - name: 'Prepare a database per CPU'
       if: inputs.database == 'true'
       run: |
-        SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 bundle exec rake db:test:prepare
+        bundle exec rake parallel:create parallel:load_schema
       shell: bash

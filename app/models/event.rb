@@ -286,7 +286,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       .distinct
   }
 
-  default_scope { without_templates }
+  default_scope { without_templates if column_names.include?("template") }
 
   ### CLASS METHODS
 

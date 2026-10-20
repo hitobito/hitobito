@@ -108,10 +108,8 @@ describe Event::Qualifier::Calculator do
         end
 
         it "ignores course if occuring in qualification year in relevant period" do
-          skip if Date.current.day == 31 && Date.current.month == 12
-
-          qualification_dates[gl.id] = 1.year.ago.to_date
-          add_course(training_days: 0.5, start_at: 1.year.ago.to_date + 1.day)
+          qualification_dates[gl.id] = begin_of_period + 1.month
+          add_course(training_days: 0.5, start_at: begin_of_period + 1.month + 1.day)
           expect(gl_records).to be_nil
         end
 

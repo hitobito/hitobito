@@ -6,7 +6,7 @@
 require "spec_helper"
 
 describe Event::RegisterMailer do
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
   end

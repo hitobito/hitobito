@@ -940,6 +940,7 @@ de:
         created_at: Anmeldedatum
         roles: Rolle
         active: Aktiv
+        qualification_comment: Kommentar
 
       event/question:
         question: Frage

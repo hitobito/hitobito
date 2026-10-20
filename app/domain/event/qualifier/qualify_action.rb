@@ -5,14 +5,14 @@
 #  or at https://github.com/hitobito/hitobito.
 
 class Event::Qualifier::QualifyAction
-  def initialize(person, event, kinds)
+  def initialize(person, event, role_kind)
     @person = person
     @event = event
-    @kinds = kinds
+    @role_kind = role_kind
   end
 
   def run
-    @kinds.map do |kind|
+    @event.kind.qualification_kinds("qualification", @role_kind).map do |kind|
       create(kind)
     end
   end

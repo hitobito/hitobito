@@ -1,0 +1,12 @@
+-#  Copyright (c) 2026, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- errors = participation.errors[:qualification_comment]
+= text_field_tag("qualifications[#{participation.id}][qualification_comment]",
+                 participation.qualification_comment,
+                 class: "form-control form-control-sm #{'is-invalid' if errors.present?}",
+                 'aria-label': t('event.qualifications.index.comment'))
+- if errors.present?
+  .invalid-feedback.d-block= errors.to_sentence

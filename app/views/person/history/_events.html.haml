@@ -15,6 +15,7 @@
         = p.event.dates_full
       - if participations.first.event.is_a?(Event::Course)
         - t.col(Qualification.model_name.human) do |p|
-          = render 'course_qualification', p: p
+          = render 'person/history/course_qualification', p: p
+          = render 'person/history/course_training_days', p: p
       - else
         - t.col('') {}

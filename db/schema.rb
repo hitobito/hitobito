@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_10_15_080000) do
+ActiveRecord::Schema[8.0].define(version: 2026_10_20_110330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -376,6 +376,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_15_080000) do
     t.integer "application_id"
     t.boolean "qualified"
     t.string "participant_type"
+    t.string "qualification_comment"
     t.index ["application_id"], name: "index_event_participations_on_application_id"
     t.index ["event_id"], name: "index_event_participations_on_event_id"
     t.index ["participant_id"], name: "index_event_participations_on_participant_id"

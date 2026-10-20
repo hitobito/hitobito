@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 20120-2020, Stiftung für junge Auslandssschweizer. This file is part of
+#  Copyright (c) 20120-2026, Stiftung für junge Auslandssschweizer. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -242,6 +242,67 @@ describe Event::Participation do
       guest.save(validate: false)
       subject.participant = guest
       expect(subject).to be_valid
+    end
+  end
+
+  context "qualification comment" do
+    let(:required) { false }
+
+    before do
+      subject.save!
+      subject.qualified = false
+      allow(Settings.event.qualifications)
+        .to receive(:comment_required_if_not_qualified).and_return(required)
+    end
+
+    it "is valid without comment if not required" do
+      expect(subject).to be_valid(:qualification)
+    end
+
+    context "when required" do
+      let(:required) { true }
+
+      it "is invalid without comment if not qualified in qualification context" do
+        expect(subject).not_to be_valid(:qualification)
+        expect(subject.errors[:qualification_comment]).to be_present
+      end
+
+      it "is valid without comment outside of qualification context" do
+        expect(subject).to be_valid
+      end
+
+      it "is valid with comment" do
+        subject.qualification_comment = "Fehlende Praxis"
+        expect(subject).to be_valid(:qualification)
+      end
+
+      it "is valid without comment if qualified or not assessed" do
+        [true, nil].each do |qualified|
+          subject.qualified = qualified
+          expect(subject).to be_valid(:qualification)
+        end
+      end
+    end
+  end
+
+  context "uniqueness validation of participant" do
+    before { subject.save! }
+
+    it "is not queried for unchanged persisted participations" do
+      queries = []
+      callback = ->(*, payload) { queries << payload[:sql] }
+      ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+        subject.valid?
+      end
+
+      expect(queries.grep(/event_participations.*participant_id/)).to be_empty
+    end
+
+    it "is still enforced if participant changes" do
+      Fabricate(:event_participation, participant: people(:bottom_member), event: course)
+      subject.participant = people(:bottom_member)
+
+      expect(subject).not_to be_valid
     end
   end
 

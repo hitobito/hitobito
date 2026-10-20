@@ -19,3 +19,12 @@ top_course_de:
 
   name: Top Course
   description: Some kind of course, it seems
+
+template_de:
+  event_id: <%= ActiveRecord::FixtureSet.identify(:template) %>
+  locale: de
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+  name: Vorlage
+  description: Some kind of course, it seems

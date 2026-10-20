@@ -499,6 +499,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_15_080000) do
     t.boolean "automatic_assignment", default: false, null: false
     t.string "visible_contact_attributes", default: "[\"name\", \"address\", \"phone_number\", \"email\", \"social_account\"]"
     t.integer "guest_limit", default: 0, null: false
+    t.boolean "template", default: false, null: false
+    t.boolean "inherit", default: false, null: false
     t.index ["kind_id"], name: "index_events_on_kind_id"
     t.index ["shared_access_token"], name: "index_events_on_shared_access_token"
   end

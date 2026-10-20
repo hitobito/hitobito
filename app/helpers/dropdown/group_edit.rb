@@ -29,6 +29,7 @@ module Dropdown
     def setting_items
       edit_service_token_item if template.can?(:index_service_tokens, group)
       edit_event_question_template_item if template.can?(:index_question_templates, group)
+      edit_event_template_item if template.can?(:index_event_templates, group)
       edit_calendar_feeds_item
     end
 
@@ -49,6 +50,10 @@ module Dropdown
       add_item(
         translate(:edit_event_question_template), template.group_question_templates_path(group)
       )
+    end
+
+    def edit_event_template_item
+      add_item(translate(:edit_event_template), template.group_event_templates_path(group))
     end
 
     def edit_calendar_feeds_item

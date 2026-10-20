@@ -222,6 +222,7 @@ de_DE:
     delete: Löschen
     edit_service_token: API-Keys
     edit_event_question_template: Vorlagen Anmeldeangaben Veranstaltungen
+    edit_event_template: Eventvorlagen
     edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
@@ -671,6 +672,7 @@ de_DE:
         select_layers: Gruppen suchen...
     actions_show:
       copy_share_link: Direktlink kopieren
+      save_as_template: Als Vorlage speichern
     application_fields:
       caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
@@ -724,6 +726,7 @@ de_DE:
         social_account: Social Media anzeigen
         picture: Profilfoto anzeigen
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
+      inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
     global:
       link:
         add_event: Veranstaltung erstellen
@@ -802,6 +805,10 @@ de_DE:
 
   event/roles:
     full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"
+
+  event/templates:
+    index:
+      title: Eventvorlagen
 
   events/filters:
     new:

@@ -85,6 +85,7 @@ en:
         type_not_allowed: can't be created here
         must_be_after_opening: must be after the start of the application period
         must_have_same_type: must be of the same type
+        must_be_layer: können für Eventvorlagen nur eine Ebene sein
         greater_than: must be bigger than %{count}
         greater_than_or_equal_to: 'must be bigger or equal to '
         must_exist: must exist
@@ -793,6 +794,8 @@ en:
         no_name: "[No name]"
         visible_contact_attributes: "Display options (contact person)"
         guest_limit: Maximum number of guests per person
+        template: Vorlage
+        inherit: Vererbung
 
       event/contact_attrs:
         required: Mandatory

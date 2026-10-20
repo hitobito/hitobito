@@ -87,6 +87,7 @@ fr:
         type_not_allowed: ne peut pas être créé ici
         must_be_after_opening: doit être ultérieur à l'inscription
         must_have_same_type: doivent être du même type
+        must_be_layer: können für Eventvorlagen nur eine Ebene sein
         greater_than: doit être supérieur à %{count}.
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
         must_exist: doivent être présents
@@ -878,6 +879,8 @@ fr:
         no_name: "[Sans nom]"
         visible_contact_attributes: "Options d'affichage (personne de contact)"
         guest_limit: Nombre maximum d'invités par personne
+        template: Vorlage
+        inherit: Vererbung
 
       event/contact_attrs:
         required: Obligatoire

@@ -223,6 +223,7 @@ it:
     delete: Cancellare
     edit_service_token: Chiavi API
     edit_event_question_template: Modelli Dati di registrazione Eventi
+    edit_event_template: Eventvorlagen
     edit_calendar_feeds: Registrazioni nel calendario
 
   dropdown/people_email_export:
@@ -675,6 +676,7 @@ it:
         select_layers: cercare gruppi
     actions_show:
       copy_share_link: Copiare il link diretto
+      save_as_template: Als Vorlage speichern
     application_fields:
       caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: L'iscrizione deve essere confermata da una seconda firma
@@ -728,6 +730,7 @@ it:
         social_account: Mostra i social media
         picture: Mostra foto del profilo
       kind_overrides_link_title: "Vengono trasferiti i seguenti campi: Descrizione"
+      inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
     global:
       link:
         add_event: Creare un evento
@@ -806,6 +809,10 @@ it:
 
   event/roles:
     full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"
+
+  event/templates:
+    index:
+      title: Eventvorlagen
 
   events/filters:
     new:

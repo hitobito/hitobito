@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -132,11 +132,21 @@ class Event::ParticipationMailer < ApplicationMailer
     infos << labeled(:cost)
     infos << labeled(:description) { convert_newlines_to_breaks(event.description) }
     infos << labeled(:location) { convert_newlines_to_breaks(event.location) }
-    infos << labeled(:contact) { escape_html(event.contact) + br_tag + event.contact.email }
+    infos << contact_details
     infos << answers_details
     infos << additional_information_details
     infos << placeholder_participation_details
     join_lines(infos.compact, br_tag * 2)
+  end
+
+  def contact_details
+    return unless event.contact
+
+    lines = [
+      (escape_html(event.contact) if event.contact_attribute_visible?(:name)),
+      (event.contact.email if event.contact_attribute_visible?(:email))
+    ].compact_blank
+    labeled(:contact) { join_lines(lines) } if lines.present?
   end
 
   def event_without_participation

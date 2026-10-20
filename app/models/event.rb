@@ -190,6 +190,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   belongs_to :kind
   belongs_to :contact, class_name: "Person"
+  attr_accessor :contact_details
 
   has_many :attachments, dependent: :destroy
 
@@ -574,6 +575,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   # Event dates can have no finish_at date, if so, we want to return the latest start_at date
   def finish_at
     dates.flat_map { [_1.start_at, _1.finish_at] }.compact.max
+  end
+
+  def contact_attribute_visible?(attr)
+    visible_contact_attributes.map(&:to_s).include?(attr.to_s)
   end
 
   private

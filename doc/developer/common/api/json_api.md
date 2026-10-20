@@ -440,6 +440,21 @@ includes only `events`, the `contact` will be empty. Furthermore, the respective
 permission range. So if the permission is `layer_read`, but the contact is in another layer, it will also not be
 included in the response. The same applies for event leaders and participants.
 
+`contact_details` (an `Event::ContactDetailsResource`) is the alternative to `contact` for clients that only need what
+the event publishes about its contact. It is included whenever the event itself is readable, without the `people`
+scope, and has the id of its event. Only the attributes belonging to the event's `visible_contact_attributes` are
+returned, and contact accounts only if they are public:
+
+| visible contact attribute | attributes                                                                    |
+|---------------------------|-------------------------------------------------------------------------------|
+| `name`                    | `first_name`, `last_name`, `nickname`, `company_name`, `company`              |
+| `picture`                 | `picture`                                                                     |
+| `address`                 | `address_care_of`, `street`, `housenumber`, `postbox`, `zip_code`, `town`,    |
+|                           | `country`, `additional_addresses` (`label` and the address attributes)        |
+| `email`                   | `email`, `additional_emails` (`label`, `email`)                               |
+| `phone_number`            | `phone_numbers` (`label`, `number`)                                           |
+| `social_account`          | `social_accounts` (`label`, `name`)                                           |
+
 ##### Custom permissions
 
 A `ServiceToken`'s `dynamic_user` is a synthetic `Person` with exactly one role, whose `permissions` are derived from

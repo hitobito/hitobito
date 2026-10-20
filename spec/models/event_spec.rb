@@ -495,6 +495,12 @@ describe Event do
       is_expected.to be_valid
     end
 
+    it "tells whether a contact attribute is visible" do
+      subject.visible_contact_attributes = ["name"]
+      expect(subject.contact_attribute_visible?(:name)).to eq true
+      expect(subject.contact_attribute_visible?("email")).to eq false
+    end
+
     context "expects the guest_limit to be a positive number, specifically" do
       it "is not a negative number" do
         subject.guest_limit = -1

@@ -12,6 +12,8 @@
 - Zahlungsinformation, Rechnungsvorlagen und Rechnungsartikel sind übersetzbar. Rechnungen werden mit diesen Texten in der Sprache der Empfänger erstellt (sww#413)
 - Die Originalrechnung einer gemahnten Rechnung zeigt wieder das ursprüngliche Fälligkeitsdatum statt jenes der Mahnung (hitobito_sww#378)
 - Die Personennummer wird neu auf der Person angezeigt und ist im Export "Alle Angaben" enthalten (hitobito_zss#8)
+- Die Anmeldebestätigung (PDF), die Teilnahme-Detailseite, Teilnahme-Mails und der Kalender-Export (iCal) zeigen von der Kontaktperson nur die in den Anzeigeoptionen gewählten Angaben (hitobito_sww#376)
+- JSON:API: Anlässe können mit `include=contact_details` die Angaben der Kontaktperson laden, die in den Anzeigeoptionen gewählt sind (hitobito_sww#376)
 - Eventvorlagen können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (#4259)
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)
@@ -31,6 +33,7 @@
 ## Version 2.10
 
 - Pro Frage kann neu festgelegt werden, welche Rollen des Anlass/Kurses die Antworten sehen dürfen. Die Hauptleitung sieht immer alle Antworten (#4046)
+- Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)
 - Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
 - Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
 - Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)

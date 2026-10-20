@@ -55,8 +55,6 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
 
   decorates :event, :events, :group
 
-  helper_method :form_url, :cancel_url
-
   prepend_before_action :authenticate_person_from_onetime_token!
   prepend_before_action :prepare_authorization_via_shared_access_token
   # load group before authorization
@@ -183,12 +181,6 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
 
   def index_path
     typed_group_events_path(group, @event.class, returning: true)
-  end
-
-  def form_url = nil
-
-  def cancel_url
-    typed_group_events_path(group, entry.klass) if entry.new_record?
   end
 
   def load_sister_groups

@@ -47,6 +47,12 @@ module EventsHelper
     end
   end
 
+  def event_form_url = nil
+
+  def event_form_cancel_url
+    typed_group_events_path(@group, entry.klass) if entry.new_record?
+  end
+
   def typed_group_events_path(group, event_type, options = {})
     path = "#{event_type.type_name}_group_events_path"
     send(path, group, options)

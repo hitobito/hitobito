@@ -15,7 +15,7 @@ class Event::TemplatesController < EventsController
   skip_authorize_resource
   before_action :authorize_class
 
-  helper_method :group
+  helper_method :group, :event_form_url, :event_form_cancel_url
 
   def self.model_class
     Event
@@ -83,11 +83,11 @@ class Event::TemplatesController < EventsController
     "CASE #{whens} END"
   end
 
-  def form_url
+  def event_form_url
     entry.new_record? ? group_event_templates_path(group) : group_event_template_path(group, entry)
   end
 
-  def cancel_url = index_path
+  def event_form_cancel_url = index_path
 
   def return_path = index_path
 

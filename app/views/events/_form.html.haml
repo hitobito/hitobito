@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-= entry_form url: form_url, cancel_url: cancel_url,
+= entry_form url: event_form_url, cancel_url: event_form_cancel_url,
   html: { class: 'tabbed', data: { controller: 'form-field-inheritance' } } do |f|
   - if entry.new_record?
     = f.hidden_field :type

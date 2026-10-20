@@ -190,6 +190,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   belongs_to :kind
   belongs_to :contact, class_name: "Person"
+  attr_accessor :contact_details
 
   has_many :attachments, dependent: :destroy
 

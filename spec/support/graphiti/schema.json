@@ -547,6 +547,151 @@
       }
     },
     {
+      "name": "Event::ContactDetailsResource",
+      "type": "event-contact-details",
+      "graphql_entrypoint": "contactDetails",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "first_name": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "last_name": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "nickname": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "company_name": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "company": {
+          "type": "boolean",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "picture": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "address_care_of": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "street": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "housenumber": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "postbox": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "zip_code": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "town": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "country": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "additional_addresses": {
+          "type": "array",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "email": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "additional_emails": {
+          "type": "array",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "phone_numbers": {
+          "type": "array",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "social_accounts": {
+          "type": "array",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {},
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "Event::CourseResource",
       "type": "courses",
       "graphql_entrypoint": "courses",
@@ -810,6 +955,11 @@
           "type": "belongs_to",
           "description": null,
           "resource": "PersonResource"
+        },
+        "contact_details": {
+          "type": "has_one",
+          "description": null,
+          "resource": "Event::ContactDetailsResource"
         },
         "kind": {
           "type": "belongs_to",
@@ -1622,6 +1772,11 @@
           "type": "belongs_to",
           "description": null,
           "resource": "PersonResource"
+        },
+        "contact_details": {
+          "type": "has_one",
+          "description": null,
+          "resource": "Event::ContactDetailsResource"
         },
         "kind": {
           "type": "belongs_to",

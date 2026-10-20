@@ -1,10 +1,10 @@
 test:
   service: Disk
-  root: <%= Rails.root.join("tmp/storage") %>
+  root: <%= Rails.root.join("tmp/storage#{ENV["TEST_ENV_NUMBER"]}") %>
 
 test_fixtures:
   service: Disk
-  root: <%= Rails.root.join("tmp/storage_fixtures") %>
+  root: <%= Rails.root.join("tmp/storage_fixtures#{ENV["TEST_ENV_NUMBER"]}") %>
 
 local:
   service: Disk

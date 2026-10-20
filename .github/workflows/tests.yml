@@ -16,6 +16,10 @@ on:
       - '**.md'
       - 'VERSION'
 
+env:
+  NO_COVERAGE: true
+  SECRET_KEY_BASE: test-secret-key-base-for-ci
+
 jobs:
   rubocop:
     runs-on: 'ubuntu-24.04'
@@ -36,8 +40,13 @@ jobs:
         run: |
           bundle exec rake rubocop
 
-  main-specs:
+  main-specs-group:
+    name: 'main-specs (${{ matrix.group }}/2)'
     runs-on: 'ubuntu-24.04'
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [ 1, 2 ]
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -61,12 +70,9 @@ jobs:
           - '5432:5432'
         options: >-
           --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
+          --health-interval 2s
           --health-timeout 10s
           --health-retries 10
-      memcached:
-        image: 'memcached'
-        ports: [ '11211:11211' ]
 
     steps:
       - name: 'Checkout'
@@ -80,10 +86,23 @@ jobs:
       - name: 'Main Specs without features'
         run: |
           git fetch --tags
-          bundle exec rake spec:without_features
+          SPEC_GROUP=${{ matrix.group }}/2 bundle exec rake spec:without_features_group_parallel
 
-  feature-specs:
+  main-specs:
     runs-on: 'ubuntu-24.04'
+    needs: main-specs-group
+    if: always()
+    steps:
+      - name: 'All main spec groups passed'
+        run: test "${{ needs.main-specs-group.result }}" = "success"
+
+  feature-specs-group:
+    name: 'feature-specs (${{ matrix.group }}/3)'
+    runs-on: 'ubuntu-24.04'
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [ 1, 2, 3 ]
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -107,12 +126,9 @@ jobs:
           - '5432:5432'
         options: >-
           --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
+          --health-interval 2s
           --health-timeout 10s
           --health-retries 10
-      memcached:
-        image: 'memcached'
-        ports: [ '11211:11211' ]
 
     steps:
       - name: 'Checkout'
@@ -120,74 +136,34 @@ jobs:
 
       - name: 'Prepare'
         uses: ./.github/actions/core-ci-setup
-        with:
-          database: false
 
       - name: 'Features'
         run: |
-          bundle exec rake spec:features:lenient
+          SPEC_GROUP=${{ matrix.group }}/3 bundle exec rake spec:features:lenient_parallel
 
       - name: 'Make capybara output downloadable'
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: capybara-output
+          name: capybara-output-${{ matrix.group }}
           path: |
             tmp/capybara
 
-  pending-specs:
+  feature-specs:
     runs-on: 'ubuntu-24.04'
-    env:
-      HEADLESS: true
-      RAILS_DB_ADAPTER: postgresql
-      RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 5432
-      RAILS_DB_USERNAME: hitobito
-      RAILS_DB_PASSWORD: hitobito
-      RAILS_DB_NAME: hitobito_test
-      RAILS_TEST_DB_NAME: hitobito_test
-      TZ: Europe/Berlin
-      RAILS_USE_TEST_GROUPS: true
-      RAILS_ENV: test
-
-    services:
-      postgres:
-        image: 'postgres:16'
-        env:
-          POSTGRES_USER: hitobito
-          POSTGRES_PASSWORD: hitobito
-          POSTGRES_DB: hitobito_test
-        ports:
-          - '5432:5432'
-        options: >-
-          --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
-          --health-timeout 10s
-          --health-retries 10
-      memcached:
-        image: 'memcached'
-        ports: [ '11211:11211' ]
-
+    needs: feature-specs-group
+    if: always()
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v6
-        with:
-          fetch-tags: true
-
-      - name: 'Prepare'
-        uses: ./.github/actions/core-ci-setup
-
-      - name: 'Check pending specs'
-        run: |
-          bundle exec rake ci:check_pending
+      - name: 'All feature spec groups passed'
+        run: test "${{ needs.feature-specs-group.result }}" = "success"
 
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [ rubocop, main-specs, feature-specs, pending-specs ]
+    needs: [ rubocop, main-specs, feature-specs ]
     if: ( success() || failure() ) && ( github.ref_name == 'master' || github.ref_name == 'stable' )
     with:
       repository: 'hitobito'
-      test_result: ${{ needs.rubocop.result == 'success' && needs.main-specs.result == 'success' && needs.feature-specs.result == 'success' && needs.pending-specs.result == 'success' }}
+      test_result: ${{ needs.rubocop.result == 'success' && needs.main-specs.result == 'success' && needs.feature-specs.result == 'success' }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

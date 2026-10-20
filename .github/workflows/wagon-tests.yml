@@ -245,7 +245,7 @@ jobs:
         run: |
           # core refs without parallel spec tasks run all specs in the first group
           if grep -q without_features_group_parallel ../hitobito/lib/tasks/spec.rake; then
-            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:ci:setup:rspec app:spec:without_features_group_parallel
+            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:spec:without_features_group_parallel
           elif [ "${{ matrix.group }}" = 1 ]; then
             bundle exec rake app:ci:setup:rspec spec:without_features
           fi
@@ -329,7 +329,7 @@ jobs:
         run: |
           # core refs without parallel spec tasks run all feature specs in the first group
           if grep -q lenient_parallel ../hitobito/lib/tasks/spec.rake; then
-            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:ci:setup:rspec app:spec:features:lenient_parallel
+            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:spec:features:lenient_parallel
           elif [ "${{ matrix.group }}" = 1 ]; then
             bundle exec rake app:ci:setup:rspec app:spec:features:lenient
           fi

@@ -89,6 +89,32 @@ describe Messages::BulkMail::Delivery do
         expect(delivery.blocked).to eq(emails.take(1))
       end
     end
+
+    context "only blocked mails" do
+      it "#deliver" do
+        emails.each { |email| Bounce.record(email).block! }
+
+        expect(mail_factory).not_to receive(:to)
+
+        delivery.deliver
+        expect(delivery.succeeded).to eq([])
+        expect(delivery.failed).to eq([])
+        expect(delivery.blocked).to match_array(emails)
+      end
+    end
+
+    context "only rejected mails" do
+      it "#deliver" do
+        expect(mail_factory).to receive(:to)
+          .once
+          .with(emails)
+          .and_return(error_mail(emails.join(", ")))
+
+        delivery.deliver
+        expect(delivery.succeeded).to eq([])
+        expect(delivery.failed).to eq(emails)
+      end
+    end
   end
 
   context "with errors" do

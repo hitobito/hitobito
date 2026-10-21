@@ -938,6 +938,7 @@ de_DE:
         created_at: Anmeldedatum
         roles: Rolle
         active: Aktiv
+        qualification_comment: Kommentar
 
       event/question:
         question: Frage
@@ -1576,6 +1577,8 @@ de_DE:
           error: Bei der Bearbeitung trat ein Fehler auf
 
   delayed_job:
+    bulk/tag_add_job: Tags hinzufügen
+    bulk/tag_remove_job: Tags entfernen
     export/event_participations_export_job: Veranstaltungs-Teilnahmen-Export
     export/events_export_job: Veranstaltungs-Export
     export/export_base_job: Basis-Export

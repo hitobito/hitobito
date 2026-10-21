@@ -20,7 +20,7 @@ fr:
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
     do_not_fill: Ne pas remplir cette case SVP.
     chosen_no_results: Aucun résultat.
-    selected: Sélectionné
+    selected: ausgewählt
     extended_select_all: Sélectionner tout %{count}
     columns: Colonnes
     start_on: à partir de %{date}
@@ -564,6 +564,13 @@ fr:
     qualifications:
       index:
         save: Mettre à jour les qualifications
+        qualified: Bestanden
+        not_qualified: Nicht bestanden
+        not_assessed: Nicht beurteilt
+        town: Wohnort
+        roles: Rolle
+        name: Name
+        comment: Kommentar
       update:
         flash:
           success: Les qualifications ont été mises à jour.
@@ -1089,7 +1096,6 @@ fr:
 
   group_decorator:
     archived_suffix: "(archivé)"
-
 
   help_texts:
     form:

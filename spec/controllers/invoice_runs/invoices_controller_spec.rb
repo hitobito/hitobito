@@ -113,6 +113,13 @@ describe InvoiceRuns::InvoicesController do
           expect(dom).to have_field("from", with: "1.1.2025")
           expect(dom).to have_field("to", with: "31.12.2025")
         end
+
+        it "does not render invoice type checkboxes" do
+          get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
+          Invoice::TYPE_SCOPES.each do |type|
+            expect(dom).not_to have_field(type.to_s)
+          end
+        end
       end
     end
 

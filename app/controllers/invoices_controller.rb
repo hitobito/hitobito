@@ -273,8 +273,9 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def available_invoice_types
-    @available_invoice_types ||= Invoice::TYPE_SCOPES.select do |type|
-      parent_scope.where(id: Invoice.send(type).select(:id)).exists?
-    end
+    return [] if invoice_run
+    return Invoice::TYPE_SCOPES if FeatureGate.enabled?("groups.period_invoice_templates")
+
+    Invoice::TYPE_SCOPES - [:from_template_invoice_run]
   end
 end

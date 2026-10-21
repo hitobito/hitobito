@@ -13,7 +13,7 @@ on:
       skip_wagons:
         description: Space separated list of wagon names without the hitobito_ prefix which should not be listed. Defaults to the WAGON_TESTS_SKIP_WAGONS variable.
         type: string
-        default: "birdlife"
+        default: ""
     outputs:
       wagons:
         description: The dependent wagons as a JSON array of { repo, name } objects, ready to be used as a matrix.

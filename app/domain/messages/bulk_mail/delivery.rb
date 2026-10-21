@@ -33,6 +33,7 @@ module Messages
       end
 
       def retried_delivery(mail_factory, emails, retries_left)
+        return [] if emails.empty?
         raise RetriesExceeded if retries_left == 0
 
         failed = try_to_send_mail(mail_factory, emails)

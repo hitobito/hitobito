@@ -13,7 +13,12 @@ module Export::Tabular::People
     attr_reader :table_display, :selected_group
 
     def initialize(list, ability, table_display, selected_group)
-      super(add_table_display_to_query(list, table_display.person, selected_group), ability)
+      super(
+        select_show_permission_attrs(
+          add_table_display_to_query(list, table_display.person, selected_group)
+        ),
+        ability
+      )
       @table_display = table_display
       @selected_group = selected_group
       @table_display.selected_group = selected_group
@@ -42,6 +47,14 @@ module Export::Tabular::People
     def attribute_label(attr)
       column = table_display.column_for(attr)
       column.present? ? column.label(attr) : super
+    end
+
+    private
+
+    def select_show_permission_attrs(scope)
+      return scope unless scope.model <= ::Person
+
+      scope.select("people.contact_data_visible")
     end
   end
 end

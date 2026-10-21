@@ -117,11 +117,29 @@ jobs:
       - name: Update graphiti schema
         working-directory: ${{ matrix.wagon.repo }}
         run: |
-          # Check the new schema against the wagon master, not against the wagon PR branch,
-          # so that modifications can be made freely without graphiti reporting breaking changes
-          # as long as the wagon PR hasn't been merged yet.
-          git fetch --depth=1 origin refs/heads/master
-          git checkout FETCH_HEAD -- "$SCHEMA_FILE"
+          echo "WAGON_START_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+          # Generate from the wagon code as it will be after merging the wagon PR.
+          git fetch $([ "$(git rev-parse --is-shallow-repository)" = true ] && echo --unshallow) \
+            origin "+refs/heads/master:refs/remotes/origin/master"
+          if ! git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
+               merge --no-edit origin/master; then
+            CONFLICTS=$(git diff --name-only --diff-filter=U | grep -vxF "$SCHEMA_FILE" || true)
+            if [ -n "$CONFLICTS" ]; then
+              echo "::error::Could not merge master into the $WAGON_REPO branch, resolve these conflicts manually: $CONFLICTS"
+              exit 1
+            fi
+            git checkout origin/master -- "$SCHEMA_FILE" 2>/dev/null || git rm -q -- "$SCHEMA_FILE"
+            git -c user.name="github-actions[bot]" -c user.email="github-actions[bot]@users.noreply.github.com" \
+              commit --no-edit
+          fi
+
+          # Ignore any schema versions generated previously for the same core change (reset schema to wagon's master)
+          if git cat-file -e "origin/master:$SCHEMA_FILE" 2>/dev/null; then
+            git checkout origin/master -- "$SCHEMA_FILE"
+          else
+            rm -f -- "$SCHEMA_FILE"
+          fi
 
           bundle exec rake app:graphiti:schema:generate
 
@@ -139,8 +157,8 @@ jobs:
             echo "Updating the existing branch $BRANCH_NAME of $WAGON_REPO"
             git checkout -f -B "$BRANCH_NAME" FETCH_HEAD
           else
-            echo "Creating the branch $BRANCH_NAME of $WAGON_REPO from $(git rev-parse --abbrev-ref HEAD)"
-            git checkout -f -B "$BRANCH_NAME"
+            echo "Creating the branch $BRANCH_NAME of $WAGON_REPO from $WAGON_START_SHA"
+            git checkout -f -B "$BRANCH_NAME" "$WAGON_START_SHA"
           fi
 
           cp "$RUNNER_TEMP/schema.json" "$SCHEMA_FILE"

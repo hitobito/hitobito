@@ -1144,6 +1144,7 @@ en:
     add_payments: Capture payment
     issued: Invoice sent
     sent: Invoice sent per e-mail
+    cancelled: Rechnung storniert
     reminder_sent: Reminded, due at %{date}(%{title})
     payed: paid
     cancel: Cancel

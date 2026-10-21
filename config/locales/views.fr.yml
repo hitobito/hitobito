@@ -1158,6 +1158,7 @@ fr:
     add_payments: Saisir un paiement
     issued: Facture établie
     sent: Facture envoyé par courriel
+    cancelled: Rechnung storniert
     reminder_sent: rappel établi, échu le %{date} (%{title})
     payed: payé
     cancel: Annuler

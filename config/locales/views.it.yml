@@ -1156,6 +1156,7 @@ it:
     add_payments: Inserire un pagamento
     issued: Fattura emessa
     sent: Fattura inviata per e-mail.
+    cancelled: Rechnung storniert
     reminder_sent: Promemoria impostato, scadenza il
     payed: Pagato
     cancel: Annullamento

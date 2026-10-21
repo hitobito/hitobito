@@ -54,6 +54,15 @@ describe Export::SubscriptionsJob do
         lines = read_data_from_generated_file(file).lines
         expect(lines.size).to eq(3)
       end
+
+      context "by a user with contact data permission" do
+        let(:user) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)).person }
+
+        it "and saves it" do
+          lines = read_data_from_generated_file(file).lines
+          expect(lines.size).to eq(3)
+        end
+      end
     end
   end
 

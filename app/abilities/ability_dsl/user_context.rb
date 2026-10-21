@@ -91,14 +91,17 @@ module AbilityDsl
     def init_permission_groups
       permissions_groups = Hash.new { |hash, key| hash[key] = [] }
       GROUP_PERMISSIONS.each do |permission|
-        groups = user.groups_with_permission(permission).to_a
-        given = Role::PermissionImplications.invert[permission]
-        groups += user.groups_with_permission(given).to_a if given
+        groups = [permission, *granting_permissions(permission)]
+          .flat_map { |p| user.groups_with_permission(p).to_a }
 
         grant_groups_permissions(permission, groups.map(&:id))
         permissions_groups[permission] |= groups
       end
       permissions_groups
+    end
+
+    def granting_permissions(permission)
+      Role::PermissionImplications.select { |_, implied| Array(implied).include?(permission) }.keys
     end
 
     def init_permission_layers(permissions_groups)

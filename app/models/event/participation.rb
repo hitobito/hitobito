@@ -141,6 +141,7 @@ class Event::Participation < ActiveRecord::Base
         .distinct_on(:id)
 
       Event::Participation.from(subquery, "event_participations")
+        .select("event_participations.*")
         .order(:order_weight, :order_by_name_statement)
     end
 

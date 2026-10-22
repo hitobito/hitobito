@@ -30,6 +30,11 @@
     }
   }
 
+  div {
+    border-bottom: 1px solid $border-color;
+    padding: 5px;
+  }
+
   li[aria-selected="true"] {
     color: white;
 

@@ -1,5 +1,12 @@
 #!/usr/bin/env sh
 
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+
+# use the local procfile variant if one exists next to it
+if [ -f "$script_dir/../Procfile.local" ]; then
+  export OVERMIND_PROCFILE="$script_dir/../Procfile.local"
+fi
+
 if ! gem list overmind -i --silent; then
   echo "Installing overmind..."
   gem install overmind

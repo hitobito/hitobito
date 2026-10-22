@@ -64,6 +64,26 @@ describe "groups/_form.html.haml" do
     expect(dom).to have_field("Kurzname", disabled: false)
   end
 
+  context "with name and short_name as superior attributes" do
+    before { allow(Group::TopLayer).to receive(:superior_attributes).and_return([:name, :short_name]) }
+
+    it "disables name and short_name fields without modify_superior" do
+      @rendered = render partial: "groups/form"
+
+      expect(dom).to have_field("Name", disabled: true)
+      expect(dom).to have_field("Kurzname", disabled: true)
+    end
+
+    it "enables name and short_name fields with modify_superior" do
+      allow(view).to receive(:can?).and_call_original
+      allow(view).to receive(:can?).with(:modify_superior, group).and_return(true)
+      @rendered = render partial: "groups/form"
+
+      expect(dom).to have_field("Name", disabled: false)
+      expect(dom).to have_field("Kurzname", disabled: false)
+    end
+  end
+
   context "static_name group" do
     before { allow(group).to receive(:static_name).and_return(true) }
 

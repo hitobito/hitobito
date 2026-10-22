@@ -63,30 +63,21 @@ ARG TZ="Europe/Zurich"
 
 
 #################################
-#          Build Stage          #
+#          Base Stage           #
 #################################
 
-FROM ruby:${RUBY_VERSION}-${DEBIAN_VERSION} AS build
+# The toolchain (ruby, node, yarn, bundler, build packages) without any
+# app code. Used as the base for the build stage below and for the
+# development image in the hitobito/development repository.
+
+FROM ruby:${RUBY_VERSION}-${DEBIAN_VERSION} AS base
 
 # arguments for steps
-ARG HOME
 ARG PRE_INSTALL_SCRIPT
 ARG BUILD_PACKAGES
 ARG EXTRA_PACKAGES
 ARG INSTALL_SCRIPT
 ARG BUNDLER_VERSION
-ARG PRE_BUILD_SCRIPT
-ARG BUNDLE_WITHOUT_GROUPS
-ARG BUILD_SCRIPT
-ARG POST_BUILD_SCRIPT
-
-# arguments potentially used by steps
-ARG NODE_ENV
-ARG RACK_ENV
-ARG RAILS_ENV
-ARG RAILS_HOST_NAME
-ARG SECRET_KEY_BASE
-ARG TZ
 
 # Set build shell
 SHELL ["/bin/bash", "-c"]
@@ -107,6 +98,33 @@ RUN bash -vxc "${INSTALL_SCRIPT:-"echo 'no INSTALL_SCRIPT provided'"}"
 # Explicitly install specific versions of bundler
 # (not required with newer bundler versions?)
 RUN gem install bundler:${BUNDLER_VERSION} --no-document
+
+#################################
+#          Build Stage          #
+#################################
+
+FROM base AS build
+
+# arguments for steps
+ARG HOME
+ARG PRE_BUILD_SCRIPT
+ARG BUNDLE_WITHOUT_GROUPS
+ARG BUILD_SCRIPT
+ARG POST_BUILD_SCRIPT
+
+# arguments potentially used by steps
+ARG NODE_ENV
+ARG RACK_ENV
+ARG RAILS_ENV
+ARG RAILS_HOST_NAME
+ARG SECRET_KEY_BASE
+ARG TZ
+
+# Set build shell
+SHELL ["/bin/bash", "-c"]
+
+# Use root user
+USER root
 
 # TODO: Load artifacts
 

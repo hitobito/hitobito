@@ -78,7 +78,7 @@ describe Export::Ics::Events do
       it "includes no contact attributes when none of them is visible" do
         event.visible_contact_attributes = %w[address]
 
-        is_expected.to eq(event.description)
+        is_expected.to eq(event.plain_text_description)
       end
     end
   end

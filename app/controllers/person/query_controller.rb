@@ -46,11 +46,8 @@ class Person::QueryController < ApplicationController
   end
 
   def serialized_people(people)
-    serialized_people = people.collect { |p| p.public_send(serializer) }
-    if people.count > limit
-      serialized_people.last[:label] = "..."
-      serialized_people.last[:id] = nil
-    end
+    serialized_people = people.limit(limit).collect { |p| p.public_send(serializer) }
+    serialized_people.push({more_results: people.count > limit})
     serialized_people
   end
 

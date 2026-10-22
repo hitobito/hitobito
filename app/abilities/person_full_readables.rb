@@ -23,6 +23,10 @@ class PersonFullReadables < PersonReadables
     []
   end
 
+  def group_read_contact_data_group_ids
+    []
+  end
+
   def group_read_in_this_group?
     permission_group_ids(:group_full).include?(group.id)
   end

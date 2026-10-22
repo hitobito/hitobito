@@ -37,7 +37,7 @@ class PersonReadables < GroupBasedReadables
   def group_accessible_people
     group_people = Person.only_public_data.joins(roles_join).where(groups: {id: group.id})
 
-    if read_permission_for_this_group?
+    if read_permission_for_this_group? || group_read_contact_data_in_this_group?
       can :index, Person, group_people
 
     elsif layer_and_below_read_in_above_layer? || layer_and_below_read_details_in_above_layer?
@@ -52,6 +52,7 @@ class PersonReadables < GroupBasedReadables
     OrCondition.new.tap do |condition|
       condition.or(*herself_condition)
       condition.or(*contact_data_condition) if contact_data_visible?
+      condition.or(*group_read_contact_data_condition) if group_read_contact_data_group_ids.present?
       condition.or(*manager_condition)
       see_invisible_from_above_condition(condition)
       append_group_conditions(condition)
@@ -64,11 +65,16 @@ class PersonReadables < GroupBasedReadables
       group_ids_same_group.present? ||
       group_ids_above_group.present? ||
       layer_group_ids_same_layer.present? ||
-      layer_group_ids_above.present?
+      layer_group_ids_above.present? ||
+      group_read_contact_data_group_ids.present?
   end
 
   def contact_data_condition
     ["people.contact_data_visible = ?", true]
+  end
+
+  def group_read_contact_data_condition
+    ["#{Group.quoted_table_name}.id IN (?)", group_read_contact_data_group_ids]
   end
 
   def herself_condition
@@ -95,6 +101,14 @@ class PersonReadables < GroupBasedReadables
 
   def contact_data_visible?
     user.contact_data_visible?
+  end
+
+  def group_read_contact_data_group_ids
+    permission_group_ids(:group_read_contact_data)
+  end
+
+  def group_read_contact_data_in_this_group?
+    group_read_contact_data_group_ids.include?(group.id)
   end
 
   def group_read_in_this_group?

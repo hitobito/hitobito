@@ -667,4 +667,30 @@ describe PersonReadables do
       end
     end
   end
+
+  describe "group_read_contact_data" do
+    let(:group) { groups(:bottom_group_one_one) }
+    let(:user) { Fabricate(Group::BottomGroup::NoPermissions.name.to_sym, group: group).person.reload }
+    let(:other) { Fabricate(Role::External.name.to_sym, group: group).person }
+
+    before do
+      allow(Group::BottomGroup::NoPermissions).to receive(:permissions)
+        .and_return([:group_read_contact_data])
+    end
+
+    it "lists people of same group in group list" do
+      expect(Person.accessible_by(PersonReadables.new(user, group))).to include(other)
+    end
+
+    it "lists people of same group but no others in global list" do
+      accessibles = Person.accessible_by(PersonReadables.new(user))
+      expect(accessibles).to include(other)
+      expect(accessibles).not_to include(people(:bottom_member))
+    end
+
+    it "does not list people of same group in full and details lists" do
+      expect(Person.accessible_by(PersonFullReadables.new(user))).not_to include(other)
+      expect(Person.accessible_by(PersonDetailsReadables.new(user))).not_to include(other)
+    end
+  end
 end

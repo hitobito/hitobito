@@ -17,6 +17,7 @@ class GroupAbility < AbilityDsl::Base
       .in_self_registration_groups
 
     permission(:contact_data).may(:index_people).all
+    permission(:group_read_contact_data).may(:index_people).in_same_group
 
     # local people are the ones not visible from above
     permission(:group_read).may(:show_details, :index_people, :index_local_people).in_same_group

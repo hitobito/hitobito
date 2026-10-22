@@ -21,6 +21,7 @@ class PersonAbility < AbilityDsl::Base
     permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
 
     permission(:contact_data).may(:show).other_with_contact_data
+    permission(:group_read_contact_data).may(:show).readable_in_same_group
 
     permission(:group_read).may(:show_details, :index_messages).in_same_group
     permission(:group_read).may(:show).readable_in_same_group

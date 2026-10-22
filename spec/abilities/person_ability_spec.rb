@@ -1110,6 +1110,38 @@ describe PersonAbility do
     end
   end
 
+  context :group_read_contact_data do
+    let(:role) { Fabricate(Group::BottomGroup::NoPermissions.name.to_sym, group: groups(:bottom_group_one_one)) }
+    let(:other) { Fabricate(Role::External.name.to_sym, group: groups(:bottom_group_one_one)).person.reload }
+
+    before do
+      allow(Group::BottomGroup::NoPermissions).to receive(:permissions)
+        .and_return([:group_read_contact_data])
+    end
+
+    it "may show people in same group" do
+      is_expected.to be_able_to(:show, other)
+    end
+
+    it "may not show_full or show_details people in same group" do
+      is_expected.not_to be_able_to(:show_full, other)
+      is_expected.not_to be_able_to(:show_details, other)
+    end
+
+    it "may not show people outside the group" do
+      is_expected.not_to be_able_to(:show, people(:bottom_member))
+    end
+
+    it "may index people of same group only" do
+      is_expected.to be_able_to(:index_people, groups(:bottom_group_one_one))
+      is_expected.not_to be_able_to(:index_people, groups(:bottom_group_one_two))
+    end
+
+    it "does not make the holder visible to people in same group" do
+      expect(Ability.new(other)).not_to be_able_to(:show, role.person.reload)
+    end
+  end
+
   context :group_and_below_full do
     let(:role) { Fabricate(Group::TopLayer::TopAdmin.name.to_sym, group: groups(:top_layer)) }
 

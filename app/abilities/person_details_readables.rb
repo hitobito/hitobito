@@ -12,4 +12,8 @@ class PersonDetailsReadables < PersonReadables
   def contact_data_visible?
     false
   end
+
+  def group_read_contact_data_group_ids
+    []
+  end
 end

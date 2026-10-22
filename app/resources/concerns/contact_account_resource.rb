@@ -19,6 +19,7 @@ module ContactAccountResource
     attribute :label, :string
     attribute :public, :boolean
     attribute :category_id, :integer
+    belongs_to :category, resource: ContactAccountCategoryResource, writable: false
 
     attribute :contactable_id, :integer
     attribute :contactable_type, :string

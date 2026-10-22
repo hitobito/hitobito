@@ -286,6 +286,26 @@ describe TokenAbility do
     end
   end
 
+  describe :contact_account_categories do
+    let(:token) { service_tokens(:rejected_top_layer_token) }
+
+    it "may list contact account categories when token has people flag" do
+      token.update!(people: true)
+      is_expected.to be_able_to(:list_available, ContactAccountCategory)
+    end
+
+    it "may not list contact account categories when token does not have people flag" do
+      token.update!(people: false)
+      is_expected.not_to be_able_to(:list_available, ContactAccountCategory)
+    end
+
+    it "may not manage contact account categories" do
+      token.update!(people: true)
+      is_expected.not_to be_able_to(:index, ContactAccountCategory)
+      is_expected.not_to be_able_to(:update, ContactAccountCategory.new)
+    end
+  end
+
   describe :groups do
     context "authorized" do
       let(:token) { service_tokens(:permitted_top_layer_token) }

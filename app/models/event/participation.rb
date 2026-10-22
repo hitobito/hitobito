@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,6 +13,7 @@
 #  active                 :boolean          default(FALSE), not null
 #  additional_information :text
 #  participant_type       :string
+#  qualification_comment  :string
 #  qualified              :boolean
 #  created_at             :datetime
 #  updated_at             :datetime
@@ -83,7 +84,10 @@ class Event::Participation < ActiveRecord::Base
   # price_category is used as enum in hitobito_sac_cas. validates_by_schema cannot be overridden
   # inside a wagon because of the loading order, so it must be excluded in the core instead
   validates_by_schema except: [:price_category]
-  validates :participant_id, uniqueness: {scope: [:participant_type, :event_id]}
+  validates :participant_id, uniqueness: {scope: [:participant_type, :event_id]},
+    if: :participant_identity_changed?
+  validates :qualification_comment, presence: true, on: :qualification,
+    if: :qualification_comment_required?
   validates :additional_information,
     length: {allow_nil: true, maximum: (2**16) - 1}
 
@@ -137,6 +141,7 @@ class Event::Participation < ActiveRecord::Base
         .distinct_on(:id)
 
       Event::Participation.from(subquery, "event_participations")
+        .select("event_participations.*")
         .order(:order_weight, :order_by_name_statement)
     end
 
@@ -235,6 +240,17 @@ class Event::Participation < ActiveRecord::Base
   end
 
   private
+
+  def participant_identity_changed?
+    new_record? ||
+      will_save_change_to_participant_id? ||
+      will_save_change_to_participant_type? ||
+      will_save_change_to_event_id?
+  end
+
+  def qualification_comment_required?
+    qualified == false && Settings.event.qualifications.comment_required_if_not_qualified
+  end
 
   def set_self_in_nested
     # don't try to set self in frozen nested attributes (-> marked for destroy)

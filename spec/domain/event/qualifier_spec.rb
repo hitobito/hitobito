@@ -89,16 +89,16 @@ describe Event::Qualifier do
     end
   end
 
-  it "has correct role for participant " do
-    expect(participant_qualifier.role).to eq "participant"
+  it "has correct role_kind for participant" do
+    expect(participant_qualifier.role_kind).to eq "participant"
   end
 
-  it "has correct role for leader" do
-    expect(leader_qualifier.role).to eq "leader"
+  it "has correct role_kind for leader" do
+    expect(leader_qualifier.role_kind).to eq "leader"
   end
 
-  it "has correct role for leader that is also participant" do
-    expect(hybrid_qualifier.role).to eq "leader"
+  it "has correct role_kind for leader that is also participant" do
+    expect(hybrid_qualifier.role_kind).to eq "leader"
   end
 
   context "#revoke" do
@@ -113,33 +113,34 @@ describe Event::Qualifier do
     end
   end
 
-  context "#nothing_changed?" do
-    it "is false if event_kind has no qualifications to prolong" do
-      event_kind.event_kind_qualification_kinds.create!(qualification_kind_id: qualification_kinds(:gl).id,
-        category: "qualification",
-        role: "participant")
+  context "#apply" do
+    it "issues qualifications and stores comment if qualified" do
+      participation.assign_attributes(qualified: true, qualification_comment: "Gut")
 
-      participant_qualifier.issue
-      expect(participant_qualifier).not_to be_nothing_changed
+      expect { participant_qualifier.apply }.to change { participant.qualifications.count }.by(1)
+      participation.reload
+      expect(participation.qualified).to be true
+      expect(participation.qualification_comment).to eq "Gut"
     end
 
-    it "is false if prologation was created" do
-      create_qualification(participant, Date.new(2012, 3, 10), :gl)
+    it "revokes qualifications and stores comment if not qualified" do
+      create_qualification(participant, quali_date, :sl)
+      participation.assign_attributes(qualified: false, qualification_comment: "Abwesend")
 
-      participant_qualifier.issue
-      expect(participant_qualifier).not_to be_nothing_changed
+      expect { participant_qualifier.apply }.to change { participant.qualifications.count }.by(-1)
+      participation.reload
+      expect(participation.qualified).to be false
+      expect(participation.qualification_comment).to eq "Abwesend"
     end
 
-    it "is true if no existing qualification could not be prolonged" do
-      event_kind.event_kind_qualification_kinds.destroy_all
-      event_kind.event_kind_qualification_kinds.create!(qualification_kind_id: qualification_kinds(:sl).id,
-        category: "prolongation",
-        role: "participant")
-      create_qualification(participant, Date.new(2009, 3, 10), :gl)
-      create_qualification(participant, Date.new(2007, 3, 10), :sl)
+    it "resets if not assessed" do
+      create_qualification(participant, quali_date, :sl)
+      participation.update_column(:qualified, true)
+      participation.assign_attributes(qualified: nil)
 
-      participant_qualifier.issue
-      expect(participant_qualifier).to be_nothing_changed
+      expect { participant_qualifier.apply }.to change { participant.qualifications.count }.by(-1)
+      participation.reload
+      expect(participation.qualified).to be_nil
     end
   end
 

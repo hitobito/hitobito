@@ -5,6 +5,54 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
+if defined?(RSpec::Core::RakeTask)
+  # SPEC_GROUP=2/3 runs the second third of the groups of similar size parallel_tests splits the
+  # spec files into, one process per CPU. Exits 2 on errors outside of examples, e.g. pending specs.
+  def parallel_rspec(*args, rspec_opts)
+    require "parallel_tests"
+    group, groups = ENV.fetch("SPEC_GROUP", "1/1").split("/").map(&:to_i)
+    processes = ParallelTests.determine_number_of_processes(nil)
+    system("parallel_rspec", "-n", (processes * groups).to_s,
+      "--only-group", (((group - 1) * processes + 1)..(group * processes)).to_a.join(","),
+      "--highest-exit-status", "--serialize-stdout", "--combine-stderr",
+      "-o", "--error-exit-code 2 #{rspec_opts}", *args, "spec")
+  end
+
+  namespace :spec do
+    desc "Run the specs without features of SPEC_GROUP in one process per CPU"
+    task :without_features_group_parallel do # rubocop:disable Rails/RakeEnvironment
+      abort unless parallel_rspec("--exclude-pattern", "spec/features/",
+        "--tag ~type:feature --format progress")
+    end
+
+    namespace :features do
+      desc "Run feature specs of SPEC_GROUP in one process per CPU, rerun failed examples twice"
+      task :lenient_parallel do # rubocop:disable Rails/RakeEnvironment
+        failures = "tmp/failing_specs.log"
+        log_failures = %W[--require parallel_tests/rspec/failures_logger
+          --format ParallelTests::RSpec::FailuresLogger --out #{failures}]
+
+        puts "\nFIRST ATTEMPT\n"
+        passed = parallel_rspec("--pattern", "spec/features/",
+          "--tag type:feature --format Fivemat #{log_failures.join(" ")}")
+
+        %w[SECOND LAST].each do |attempt|
+          break if passed
+          abort if $CHILD_STATUS.exitstatus != 1
+
+          examples = File.read(failures).gsub(/\e\[[\d;]*m/, "").scan(/^rspec (\S+)/).flatten
+          abort "No failed examples found in #{failures}" if examples.empty?
+
+          puts "\n#{attempt} ATTEMPT\n"
+          passed = system("rspec", "--error-exit-code", "2", "--format", "Fivemat",
+            *log_failures, *examples)
+        end
+        abort unless passed
+      end
+    end
+  end
+end
+
 if Rake::Task.task_defined?("spec:features") # only if current environment knows rspec
   Rake::Task["spec:features"].actions.clear
 

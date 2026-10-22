@@ -42,7 +42,8 @@ RSpec.describe "mailing_lists#index", type: :request do
         expect(response.status).to eq(200), response.body
         expect(d.map(&:jsonapi_type).uniq).to match_array(["mailing_lists"])
         expect(d.map(&:id)).to match_array(MailingList.pluck(:id))
-        expect(d.first.attributes["subscribers"]).to match_array([{
+        leaders = d.find { |list| list.id == mailing_lists(:leaders).id }
+        expect(leaders.attributes["subscribers"]).to match_array([{
           list_emails: [subscriber.email],
           primary_group_id: subscriber.primary_group_id,
           primary_group_name: subscriber.primary_group.name

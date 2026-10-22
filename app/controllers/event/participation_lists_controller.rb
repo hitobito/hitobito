@@ -16,17 +16,13 @@ class Event::ParticipationListsController < SimpleCrudController
   def create
     new_participations = build_new_participations
     success = ActiveRecord::Base.transaction do
-      raise ActiveRecord::Rollback unless new_participations.select(&:present?).all?(&:save)
+      raise ActiveRecord::Rollback unless new_participations.all?(&:save)
       true
     end
 
-    if success
-      redirect_to(group_people_path(group),
-        notice: flash_message(:success, count: new_participations.count))
-    else
-      redirect_to(group_people_path(group),
-        alert: flash_message(:failure, count: new_participations.count))
-    end
+    flash_key = success ? :notice : :alert
+    redirect_to(group_people_path(group, list_filter_params),
+      flash_key => flash_message(success ? :success : :failure, count: new_participations.count))
   end
 
   def new
@@ -43,17 +39,21 @@ class Event::ParticipationListsController < SimpleCrudController
   private
 
   def build_new_participations
-    people.map do |person|
-      Event::Participation.find_or_initialize_by(event: event, participant_id: person.id,
-        participant_type: Person.sti_name).tap do |participation|
-        role = role_type.new(participation: participation)
-        break nil if cannot?(:create, role)
+    people.filter_map do |person|
+      participation = build_participation(person)
+      next if participation.roles.any? { |role| role.type == role_type.sti_name }
 
-        # rubocop:todo Layout/LineLength
-        participation.roles << role unless participation.roles.map(&:type).include?(role_type.sti_name)
-        # rubocop:enable Layout/LineLength
-      end
+      role = role_type.new(participation: participation)
+      participation if can?(:create, role)
     end
+  end
+
+  def build_participation(person)
+    Event::Participation.find_or_initialize_by(
+      event: event,
+      participant_id: person.id,
+      participant_type: Person.sti_name
+    )
   end
 
   def flash_message(type, attrs = {})

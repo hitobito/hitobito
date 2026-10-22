@@ -366,20 +366,29 @@ describe InvoicesController do
         expect(dom).to have_field("to", with: "31.12.#{current_year}")
       end
 
-      it "renders no invoice type checkboxes when the group only has one type of invoice" do
-        get :index, params: {group_id: group.id}
-        Invoice::TYPE_SCOPES.each do |type|
-          expect(dom).not_to have_field(type.to_s)
-        end
-      end
-
-      it "renders a checkbox per type present, checked by default, once several types exist" do
-        Fabricate(:invoice, group: invoice.group, invoice_run: Fabricate(:invoice_run))
-
+      it "renders checked invoice type checkboxes without template type when templates are disabled" do
         get :index, params: {group_id: group.id}
         expect(dom).to have_field("Einzelrechnungen", checked: true)
         expect(dom).to have_field("from_standalone_invoice_run", checked: true)
         expect(dom).not_to have_field("from_template_invoice_run")
+      end
+
+      context "with period invoice templates enabled" do
+        around do |example|
+          original = Settings.groups.period_invoice_templates.enabled
+          Settings.groups.period_invoice_templates.enabled = true
+          Rails.application.reload_routes!
+          example.run
+          Settings.groups.period_invoice_templates.enabled = original
+          Rails.application.reload_routes!
+        end
+
+        it "renders checked checkboxes for all invoice types" do
+          get :index, params: {group_id: group.id}
+          Invoice::TYPE_SCOPES.each do |type|
+            expect(dom).to have_field(type.to_s, checked: true)
+          end
+        end
       end
     end
   end
@@ -480,8 +489,9 @@ describe InvoicesController do
         delete :destroy, params: {group_id: group.id, id: invoice.id}
       end.not_to change { group.issued_invoices.count }
       expect(invoice.reload.state).to eq "cancelled"
-      expect(response).to redirect_to group_invoices_path(group, returning: true)
+      expect(response).to redirect_to group_invoice_path(group, invoice)
       expect(flash[:notice]).to eq "Rechnung wurde storniert."
+      expect(invoice.cancelled_at).to eq Time.zone.today
     end
   end
 

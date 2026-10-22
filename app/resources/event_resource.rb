@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -42,6 +42,8 @@ class EventResource < ApplicationResource
 
   belongs_to :contact, resource: PersonResource, writable: false,
     base_scope: ::Person.all # hitobito/hitobito_pbs#466
+  has_one :contact_details, resource: Event::ContactDetailsResource, writable: false,
+    foreign_key: :id
   belongs_to :kind, resource: Event::KindResource, writable: false
   has_many :dates, resource: Event::DateResource, writable: false
   has_many :participations, resource: Event::ParticipationResource, writable: false
@@ -56,6 +58,9 @@ class EventResource < ApplicationResource
   filter :group_id, :integer, only: [:eq, :not_eq] do
     eq do |scope, group_ids|
       scope.select("events.*").references(:groups).where(groups: {id: group_ids})
+    end
+    not_eq do |scope, group_ids|
+      scope.where.not(id: Event.joins(:groups).where(groups: {id: group_ids}).select(:id))
     end
   end
 

@@ -35,6 +35,16 @@ RSpec.describe "people#index", type: :request do
       end
     end
 
+    describe "unsupported param stats" do
+      let(:params) { {stats: {total: "count,sum"}} }
+
+      it "reports 400 instead of server error" do
+        make_request
+        expect(response.status).to eq(400), response.body
+        expect(response.body).to include("Unsupported stat")
+      end
+    end
+
     describe "email matching" do
       let(:params) { {filter: {email: {match: people(:top_leader).email}}} }
 

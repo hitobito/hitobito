@@ -20,7 +20,7 @@ it:
     confirm_delete: Vuoi veramente cancellare questa voce?
     do_not_fill: Per favore lasciare libero questo campo
     chosen_no_results: Nessuna voce trovata
-    selected: Selezionato
+    selected: ausgewählt
     extended_select_all: 'Selezionare tutti i siti %{count} '
     columns: Colonna
     start_on: da %{date}
@@ -223,6 +223,7 @@ it:
     delete: Cancellare
     edit_service_token: Chiavi API
     edit_event_question_template: Modelli Dati di registrazione Eventi
+    edit_event_template: Eventvorlagen
     edit_calendar_feeds: Registrazioni nel calendario
 
   dropdown/people_email_export:
@@ -561,6 +562,13 @@ it:
     qualifications:
       index:
         save: Aggiornare le qualifiche
+        qualified: Bestanden
+        not_qualified: Nicht bestanden
+        not_assessed: Nicht beurteilt
+        town: Wohnort
+        roles: Rolle
+        name: Name
+        comment: Kommentar
       update:
         flash:
           success: Le qualifiche sono state aggiornate con successo.
@@ -675,6 +683,7 @@ it:
         select_layers: cercare gruppi
     actions_show:
       copy_share_link: Copiare il link diretto
+      save_as_template: Als Vorlage speichern
     application_fields:
       caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: L'iscrizione deve essere confermata da una seconda firma
@@ -728,6 +737,7 @@ it:
         social_account: Mostra i social media
         picture: Mostra foto del profilo
       kind_overrides_link_title: "Vengono trasferiti i seguenti campi: Descrizione"
+      inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
     global:
       link:
         add_event: Creare un evento
@@ -806,6 +816,10 @@ it:
 
   event/roles:
     full_entry_label: "ruolo<i>%{role}</i> per <i>%{person}</i>"
+
+  event/templates:
+    index:
+      title: Eventvorlagen
 
   events/filters:
     new:
@@ -1081,7 +1095,6 @@ it:
   group_decorator:
     archived_suffix: "(archiviato)"
 
-
   help_texts:
     form:
       caption_start_open: Text initial Anzeigen
@@ -1143,6 +1156,7 @@ it:
     add_payments: Inserire un pagamento
     issued: Fattura emessa
     sent: Fattura inviata per e-mail.
+    cancelled: Rechnung storniert
     reminder_sent: Promemoria impostato, scadenza il
     payed: Pagato
     cancel: Annullamento

@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe RolesController, js: true do
+describe "Roles", js: true do
   subject { page }
 
   let(:group) { groups(:top_group) }

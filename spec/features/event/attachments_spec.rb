@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Event::AttachmentsController, js: true do
+describe "Event Attachments", js: true do
   let(:group) { groups(:top_layer) }
   let(:event) { events(:top_event) }
 

@@ -85,6 +85,7 @@ de_DE:
         type_not_allowed: kann hier nicht erstellt werden
         must_be_after_opening: muss nach dem Anmeldebeginn sein
         must_have_same_type: müssen von demselben Typ sein
+        must_be_layer: können für Eventvorlagen nur eine Ebene sein
         greater_than: muss größer als %{count} sein
         greater_than_or_equal_to: muss größer oder gleich %{count} sein
         must_exist: müssen vorhanden sein
@@ -793,6 +794,8 @@ de_DE:
         no_name: "[Kein Name]"
         visible_contact_attributes: "Anzeigeoptionen (Kontaktperson)"
         guest_limit: Maximale Anzahl Gäste pro Person
+        template: Vorlage
+        inherit: Vererbung
 
       event/contact_attrs:
         required: Erforderlich
@@ -935,6 +938,7 @@ de_DE:
         created_at: Anmeldedatum
         roles: Rolle
         active: Aktiv
+        qualification_comment: Kommentar
 
       event/question:
         question: Frage
@@ -1573,6 +1577,8 @@ de_DE:
           error: Bei der Bearbeitung trat ein Fehler auf
 
   delayed_job:
+    bulk/tag_add_job: Tags hinzufügen
+    bulk/tag_remove_job: Tags entfernen
     export/event_participations_export_job: Veranstaltungs-Teilnahmen-Export
     export/events_export_job: Veranstaltungs-Export
     export/export_base_job: Basis-Export

@@ -115,6 +115,14 @@ table.roles {
   }
 }
 
+// Shrinks a column to the width of its content
+th.col-fit,
+td.col-fit {
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 1rem;
+}
+
 table.actions-enabled {
   .multiselect {
     white-space: nowrap;
@@ -137,8 +145,8 @@ table.actions-enabled {
 }
 
 table tr :first-child input[type="checkbox"] {
-  width: 20px;
-  margin-right: 5px;
+  margin-left: 4px;
+  margin-right: 6px;
 }
 
 table tr.divider,

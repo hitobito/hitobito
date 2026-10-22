@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe Event::ApplicationMarketController do
+describe "Event Application Market", js: true do
   let(:event) { Fabricate(:course) }
 
   let(:group) { event.groups.first }
@@ -138,7 +138,7 @@ describe Event::ApplicationMarketController do
         expect do
           expect(page).to have_text "Bestätigen ohne E-Mail"
           click_on "Bestätigen ohne E-Mail"
-          sleep(0.5)
+          expect(page).to have_selector("#participants ##{appl_id}")
           click_on "Abbrechen"
           expect(page).to have_no_text "Bestätigen ohne E-Mail"
         end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
@@ -157,7 +157,7 @@ describe Event::ApplicationMarketController do
         expect do
           expect(page).to have_text "Bestätigen und E-Mail senden"
           click_on "Bestätigen und E-Mail senden"
-          sleep(0.5)
+          expect(page).to have_selector("#applications ##{appl_id}")
           click_on "Abbrechen"
           expect(page).to have_no_text "Bestätigen und E-Mail senden"
         end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
@@ -193,7 +193,7 @@ describe Event::ApplicationMarketController do
         expect do
           expect(page).to have_text "Bestätigen ohne E-Mail"
           click_on "Bestätigen ohne E-Mail"
-          sleep(0.5)
+          expect(page).to have_selector("#participants ##{appl_id}")
           click_on "Abbrechen"
           expect(page).to have_no_text "Bestätigen ohne E-Mail"
         end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
@@ -208,7 +208,7 @@ describe Event::ApplicationMarketController do
         expect do
           expect(page).to have_text "Bestätigen und E-Mail senden"
           click_on "Bestätigen und E-Mail senden"
-          sleep(0.5)
+          expect(page).to have_selector("#applications ##{appl_id}")
           click_on "Abbrechen"
           expect(page).to have_no_text "Bestätigen und E-Mail senden"
         end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
@@ -243,7 +243,7 @@ describe Event::ApplicationMarketController do
         expect do
           expect(page).to have_text "Bestätigen und E-Mail senden"
           click_on "Bestätigen und E-Mail senden"
-          sleep(0.5)
+          expect(page).to have_selector("#applications ##{appl_id}")
           click_on "Abbrechen"
           expect(page).to have_no_text "Bestätigen und E-Mail senden"
         end.to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }.by(1)
@@ -258,7 +258,7 @@ describe Event::ApplicationMarketController do
         expect do
           expect(page).to have_text "Bestätigen ohne E-Mail"
           click_on "Bestätigen ohne E-Mail"
-          sleep(0.5)
+          expect(page).to have_selector("#participants ##{appl_id}")
           click_on "Abbrechen"
           expect(page).to have_no_text "Bestätigen ohne E-Mail"
         end.not_to change { Delayed::Job.where("handler LIKE '%Event::ParticipationConfirmationJob%'").count }
@@ -282,9 +282,7 @@ describe Event::ApplicationMarketController do
         expect(page).to have_text(appl_prio_1.person.first_name)
         find(".fa-arrow-left").click
         expect(page).to have_text "Bestätigen ohne E-Mail"
-        click_on "Bestätigen ohne E-Mail"
-        sleep(3)
-        alert_text = page.driver.browser.switch_to.alert.text
+        alert_text = accept_alert { click_on "Bestätigen ohne E-Mail" }
         expect(alert_text).to include(
           "Die maximal erlaubte Teilnehmerzahl ist erreicht. Um weitere Anmeldungen zu bestätigen, muss die " \
           "maximale Teilnehmerzahl erhöht werden."
@@ -310,12 +308,12 @@ describe Event::ApplicationMarketController do
       expect(page).to have_selector("#applications ##{appl2_id} td .fa-minus")
 
       find("#applications ##{appl2_id} td div a", text: "Warteliste").click
-      sleep(2)
-      expect(body).to have_selector(".popover[role='tooltip']", count: 1)
+      expect(page).to have_selector(".popover[role='tooltip']", count: 1)
+      expect(page).to have_selector(".popover form[action*='application_market/#{appl_prio_2.id}/']")
 
       find("#applications ##{appl1_id} td div a", text: "Warteliste").click
-      sleep(2)
-      expect(body).to have_selector(".popover[role='tooltip']", count: 1)
+      expect(page).to have_selector(".popover[role='tooltip']", count: 1)
+      expect(page).to have_selector(".popover form[action*='application_market/#{appl_prio_1.id}/']")
     end
 
     it "may be closed with cancel link" do

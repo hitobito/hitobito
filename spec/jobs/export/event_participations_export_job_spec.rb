@@ -22,10 +22,12 @@ describe Export::EventParticipationsExportJob do
 
   let(:file) { subject.job_observation }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+  end
 
+  before do
     other_participation = Event::Participation.create(event: event, active: true, person: other_user)
     Event::Role::Participant.create(participation: other_participation)
     subject.enqueue!
@@ -74,6 +76,16 @@ describe Export::EventParticipationsExportJob do
 
       csv_created_ats = lines[1..2].map { _1.split(";")[created_at_index].strip }
       expect(csv_created_ats).to all(eq(created_at.strftime("%d.%m.%Y")))
+    end
+
+    it "works when people are sorted by role" do
+      allow(Settings.people).to receive(:default_sort).and_return("role")
+
+      subject.perform
+
+      lines = read_data_from_generated_file(file).lines
+      expect(lines.size).to eq(3)
+      expect(lines[0]).to match(/Personennummer;Vorname;Nachname;.*/)
     end
   end
 

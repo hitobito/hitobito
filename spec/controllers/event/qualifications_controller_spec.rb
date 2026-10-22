@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -69,12 +69,44 @@ describe Event::QualificationsController do
         end.to raise_error(ActionController::RoutingError)
       end
     end
+
+    context "views" do
+      render_views
+
+      it "renders radio buttons per participation and comment field" do
+        participant_1.update_columns(qualified: false, qualification_comment: "Zu wenig Praxis")
+        get :index, params: {group_id: group.id, event_id: event.id}
+
+        dom = Capybara::Node::Simple.new(response.body)
+        row = dom.find("tr#event_participation_#{participant_1.id}")
+        expect(row).to have_field("qualifications_#{participant_1.id}_qualified_false", type: "radio", checked: true)
+        expect(row).to have_field("qualifications_#{participant_1.id}_qualified_true", type: "radio", checked: false)
+        expect(row).to have_field("qualifications_#{participant_1.id}_qualified_", type: "radio", checked: false)
+        expect(row).to have_field("qualifications[#{participant_1.id}][qualification_comment]", with: "Zu wenig Praxis")
+      end
+
+      it "preselects not assessed for new participations" do
+        get :index, params: {group_id: group.id, event_id: event.id}
+
+        dom = Capybara::Node::Simple.new(response.body)
+        row = dom.find("tr#event_participation_#{participant_1.id}")
+        expect(row).to have_field("qualifications_#{participant_1.id}_qualified_", type: "radio", checked: true)
+      end
+    end
   end
 
   describe "PUT update" do
     subject { obtained_qualifications }
 
-    context "adding" do
+    def submission(qualified, comment = nil)
+      {qualified: qualified, qualification_comment: comment}
+    end
+
+    def update_with(submissions)
+      put :update, params: {group_id: group.id, event_id: event.id, qualifications: submissions.transform_keys(&:id)}
+    end
+
+    context "passing" do
       context "with one existing qualifications" do
         before do
           qualification_kind_id = event.kind.qualification_kinds("qualification", "participant").first.id
@@ -87,7 +119,7 @@ describe Event::QualificationsController do
 
           it "issues qualification" do
             expect do
-              put :update, params: {group_id: group.id, event_id: event.id, participation_ids: [participant_1.id.to_s]}
+              update_with(participant_1 => submission("true"))
             end.to change { Qualification.count }.by(1)
             expect(subject.size).to eq(1)
           end
@@ -98,7 +130,7 @@ describe Event::QualificationsController do
 
           it "keeps existing qualification" do
             expect do
-              put :update, params: {group_id: group.id, event_id: event.id, participation_ids: [participant_1.id]}
+              update_with(participant_1 => submission("true"))
             end.not_to change { Qualification.count }
             expect(subject.size).to eq(1)
           end
@@ -106,15 +138,24 @@ describe Event::QualificationsController do
       end
 
       context "without existing qualifications for participant" do
-        before { put :update, params: {group_id: group.id, event_id: event.id, participation_ids: [participant_1.id]} }
+        before { update_with(participant_1 => submission("true")) }
 
         it "has 1 item" do
           expect(subject.size).to eq(1)
         end
+
+        it "marks participation as qualified" do
+          expect(participant_1.reload.qualified).to be true
+        end
+
+        it "redirects with notice" do
+          expect(response).to redirect_to(group_event_qualifications_path(group, event))
+          expect(flash[:notice]).to be_present
+        end
       end
 
       context "without existing qualifications for leader" do
-        before { put :update, params: {group_id: group.id, event_id: event.id, participation_ids: [leader_1.id]} }
+        before { update_with(leader_1 => submission("true")) }
 
         it "should obtain a qualification" do
           obtained = obtained_qualifications(leader_1)
@@ -123,28 +164,82 @@ describe Event::QualificationsController do
       end
     end
 
-    context "removing" do
-      context "without existing qualifications" do
-        before do
-          put :update, params: {group_id: group.id, event_id: event.id}
-        end
-
-        it "has no items" do
-          expect(subject.size).to eq(0)
-        end
-      end
-
+    context "not passing" do
       context "with one existing qualification" do
         before do
           qualification_kind_id = event.kind.qualification_kinds("qualification", "participant").first.id
           participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
             start_at: event.qualification_date)
-          put :update, params: {group_id: group.id, event_id: event.id, participation_ids: []}
+          participant_1.update_column(:qualified, true)
+          update_with(participant_1 => submission("false", "Zu wenig Praxis"))
         end
 
         it "has no items" do
           expect(subject.size).to eq(0)
         end
+
+        it "stores qualified false and comment" do
+          participant_1.reload
+          expect(participant_1.qualified).to be false
+          expect(participant_1.qualification_comment).to eq "Zu wenig Praxis"
+        end
+      end
+
+      context "without comment" do
+        it "is accepted if comment is not required" do
+          update_with(participant_1 => submission("false"))
+          expect(participant_1.reload.qualified).to be false
+          expect(response).to redirect_to(group_event_qualifications_path(group, event))
+        end
+
+        context "if comment is required" do
+          before do
+            allow(Settings.event.qualifications).to receive(:comment_required_if_not_qualified).and_return(true)
+          end
+
+          it "re-renders form with error and stores nothing" do
+            update_with(participant_1 => submission("false"), participant_2 => submission("true"))
+
+            expect(response).to have_http_status(:unprocessable_content)
+            expect(response).to render_template(:index)
+            expect(participant_1.reload.qualified).to be_nil
+            expect(participant_2.reload.qualified).to be_nil
+            expect(obtained_qualifications(participant_2)).to be_empty
+          end
+
+          it "is accepted with comment" do
+            update_with(participant_1 => submission("false", "Abwesend"))
+            expect(participant_1.reload.qualified).to be false
+          end
+
+          it "is not required for qualified participants" do
+            update_with(participant_1 => submission("true"))
+            expect(participant_1.reload.qualified).to be true
+          end
+        end
+      end
+    end
+
+    context "not assessed" do
+      before do
+        qualification_kind_id = event.kind.qualification_kinds("qualification", "participant").first.id
+        participant_1.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
+          start_at: event.qualification_date)
+        participant_1.update_columns(qualified: true, qualification_comment: "Alt")
+        update_with(participant_1 => submission(""))
+      end
+
+      it "resets qualified to nil and revokes qualification" do
+        expect(participant_1.reload.qualified).to be_nil
+        expect(subject.size).to eq(0)
+      end
+    end
+
+    context "participations without submitted qualification" do
+      it "are left untouched" do
+        participant_2.update_column(:qualified, false)
+        update_with(participant_1 => submission("true"))
+        expect(participant_2.reload.qualified).to be false
       end
     end
   end

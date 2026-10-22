@@ -144,7 +144,6 @@ before touching either file, and never commit a `Gemfile.lock` containing `../hi
 
 # Contribution Guidelines
 
-
 Please follow the mandatory contribution rules in `../hitobito/CONTRIBUTING.md`, especially:
 - CI must be green. If doing changes in the core, at least the core CI must be green before
   maintainers can look at your contribution.

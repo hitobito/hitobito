@@ -95,21 +95,10 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       InvoiceRun::ProcessedSubject.where(item_id: entry.invoice_item_ids).delete_all
     end
     set_failure_notice unless cancelled
-    respond_with(entry, success: cancelled, location: invoices_return_path)
+    respond_with(entry, success: cancelled, location: path_args(entry))
   end
 
   private
-
-  def invoices_return_path
-    if period_invoice_template
-      group_period_invoice_template_invoice_run_invoices_path(group, period_invoice_template,
-        invoice_run, returning: true)
-    elsif invoice_run
-      group_invoice_run_invoices_path(group, invoice_run, returning: true)
-    else
-      group_invoices_path(group, returning: true)
-    end
-  end
 
   def render_entries_json(entries)
     paged_entries = entries.page(params[:page])
@@ -273,8 +262,9 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def available_invoice_types
-    @available_invoice_types ||= Invoice::TYPE_SCOPES.select do |type|
-      parent_scope.where(id: Invoice.send(type).select(:id)).exists?
-    end
+    return [] if invoice_run
+    return Invoice::TYPE_SCOPES if FeatureGate.enabled?("groups.period_invoice_templates")
+
+    Invoice::TYPE_SCOPES - [:from_template_invoice_run]
   end
 end

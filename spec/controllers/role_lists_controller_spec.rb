@@ -16,7 +16,7 @@ describe RoleListsController do
 
   context "authorization" do
     before do
-      sign_in(people(:bottom_member))
+      sign_in(Fabricate(:"Group::BottomLayer::Leader", group: groups(:bottom_layer_one)).person)
     end
 
     it "GET#move initializes entry so form extensions can rely on it" do

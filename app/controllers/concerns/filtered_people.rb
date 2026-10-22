@@ -16,7 +16,7 @@ module FilteredPeople
   include ParamConverters # for list_param
 
   included do
-    helper_method :list_filter_args
+    helper_method :list_filter_args, :list_filter_params
   end
 
   private
@@ -28,12 +28,12 @@ module FilteredPeople
       @people_ids = %w[all]
       person_filter.entries
     else
-      Person.where(id: list_param(:ids)).distinct
+      person_filter.accessible_scope.where(id: list_param(:ids)).distinct
     end
   end
 
-  def person_filter(accessibles_class = nil)
-    @person_filter = Person::Filter::List.new(
+  def person_filter
+    @person_filter ||= Person::Filter::List.new(
       group, current_user, list_filter_args, accessibles_class
     )
   end
@@ -47,4 +47,10 @@ module FilteredPeople
       params
     end
   end
+
+  def list_filter_params
+    params.permit(:filter_id, :range, filters: {}).to_h
+  end
+
+  def accessibles_class = nil # uses PersonReadables by default
 end

@@ -20,7 +20,7 @@ de_DE:
     confirm_delete: Wollen Sie diesen Eintrag wirklich löschen?
     do_not_fill: Bitte dieses Feld nicht ausfüllen
     chosen_no_results: Keine Einträge gefunden
-    selected: Ausgewählt
+    selected: ausgewählt
     extended_select_all: Alle %{count} auswählen
     columns: Spalten
     start_on: ab %{date}
@@ -222,6 +222,7 @@ de_DE:
     delete: Löschen
     edit_service_token: API-Keys
     edit_event_question_template: Vorlagen Anmeldeangaben Veranstaltungen
+    edit_event_template: Eventvorlagen
     edit_calendar_feeds: Kalender-Feeds
 
   dropdown/people_email_export:
@@ -560,6 +561,13 @@ de_DE:
     qualifications:
       index:
         save: Qualifikationen aktualisieren
+        qualified: Bestanden
+        not_qualified: Nicht bestanden
+        not_assessed: Nicht beurteilt
+        town: Wohnort
+        roles: Rolle
+        name: Name
+        comment: Kommentar
       update:
         flash:
           success: Die Qualifikationen wurden erfolgreich aktualisiert.
@@ -671,6 +679,7 @@ de_DE:
         select_layers: Gruppen suchen...
     actions_show:
       copy_share_link: Direktlink kopieren
+      save_as_template: Als Vorlage speichern
     application_fields:
       caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: Anmeldung muss durch eine Zweitunterschrift bestätigt werden
@@ -724,6 +733,7 @@ de_DE:
         social_account: Social Media anzeigen
         picture: Profilfoto anzeigen
       kind_overrides_link_title: "Folgende Felder werden übernommen: Beschreibung"
+      inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
     global:
       link:
         add_event: Veranstaltung erstellen
@@ -802,6 +812,10 @@ de_DE:
 
   event/roles:
     full_entry_label: "Rolle <i>%{role}</i> für <i>%{person}</i>"
+
+  event/templates:
+    index:
+      title: Eventvorlagen
 
   events/filters:
     new:
@@ -1073,7 +1087,6 @@ de_DE:
   group_decorator:
     archived_suffix: " (archiviert)"
 
-
   help_texts:
     form:
       caption_start_open: Text initial Anzeigen
@@ -1134,6 +1147,7 @@ de_DE:
     add_payments: Zahlungen erfassen
     issued: Rechnung gestellt
     sent: Rechnung per Mail versendet
+    cancelled: Rechnung storniert
     reminder_sent: Mahnung gestellt, fällig am %{date} (%{title})
     payed: bezahlt
     cancel: Stornieren

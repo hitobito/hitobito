@@ -96,8 +96,8 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
 
   def new
     assign_attributes if model_params
-    entry.dates.build if entry.dates.empty? # allow wagons to use derived dates
-    entry.init_questions
+    build_default_dates
+    entry.init_questions if params[:source_id].blank?
     respond_with(entry)
   end
 
@@ -123,15 +123,25 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
   end
 
   def build_entry
-    if params[:source_id]
-      group.events.find(params[:source_id]).duplicate
-    else
-      type = model_params && model_params[:type].presence
-      type ||= Event.sti_name
-      event = Event.find_event_type!(type).new
-      event.groups << parent
-      event
+    params[:source_id] ? build_from_source : build_new_entry
+  end
+
+  def build_from_source
+    source = Event.templates_in_hierarchy([group]).find_by(id: params[:source_id]) ||
+      group.events.find(params[:source_id])
+    source.duplicate.tap do |duplicate|
+      duplicate.groups = [group] if source.template?
     end
+  end
+
+  def build_new_entry
+    type = model_params && model_params[:type].presence
+    type ||= Event.sti_name
+    Event.find_event_type!(type).new.tap { |e| e.groups << parent }
+  end
+
+  def build_default_dates
+    entry.dates.build if entry.dates.empty? # allow wagons to use derived dates
   end
 
   def permitted_params

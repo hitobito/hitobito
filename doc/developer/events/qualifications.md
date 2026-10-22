@@ -19,6 +19,8 @@ Qualifikationen sind immer bis zum Ende eines Kalenderjahres gültig. Das `finis
 
 Bei Kursen wird das letzte Kursdatum als Qualifikationsdatum verwendet. Beim Verlängeren einer Qualifikation wird immer eine neue Qualifikationsinstanz mit einem neuem Start- und Enddatum erzeugt. Die ursprüngliche Qualifikation bleibt unverändert.
 
+Zu jeder Beurteilung kann ein Kommentar in `Event::Participation#qualification_comment` erfasst werden. Mit dem Setting `event.qualifications.comment_required_if_not_qualified` (Default `false`) kann pro Wagon festgelegt werden, ob der Kommentar bei "Nicht bestanden" obligatorisch ist. Der Kommentar ist in der Personen-Historie als Tooltip bei der Qualifikation des Kurses sichtbar.
+
 ## Erforderliche Aubildungstage
 
 Falls auf einer Qualifikationsart das Feld "Erforderliche Ausbildungstage" gesetzt ist, werden bestehende Qualifikationen nicht bei jedem Kursbesuch einer entsprechend konfigurierten Kursart verlängert, sondern nur, wenn die Summe der Ausbildungstage von vergangenen Kursen gleich oder grösser als die "Erforderlichen Ausbildungstage" ist.

@@ -6,40 +6,42 @@ class TagListsController < ListController
   skip_authorization_check
   skip_authorize_resource
 
-  helper_method :group, :manageable_people_ids
+  helper_method :group, :people_ids
 
   respond_to :js, only: [:new, :deletable]
 
   def create
-    manageable_people_ids = manageable_people.map(&:id)
-
-    Bulk::TagAddJob.new(manageable_people_ids, tag_names).enqueue!
-    count = manageable_people.size
-
-    redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
+    Bulk::TagAddJob.new(people_ids, tag_names).enqueue!
+    redirect_to_people
   end
 
   def destroy
-    manageable_people_ids = manageable_people.map(&:id)
-
-    Bulk::TagRemoveJob.new(manageable_people_ids, tag_names).enqueue!
-    count = manageable_people.size
-
-    redirect_to(group_people_path(group), notice: flash_message(:success, count: count))
+    Bulk::TagRemoveJob.new(people_ids, tag_names).enqueue!
+    redirect_to_people
   end
 
   def new
-    @people_count = manageable_people.count
+    @people_count = people.count
   end
 
   def deletable
-    @existing_tags = manageable_people.flat_map(&:tags)
-      .each_with_object(Hash.new(0)) do |tag, tag_counts|
-      tag_counts[tag] += 1
+    counts = ActsAsTaggableOn::Tagging
+      .where(taggable_type: Person.name, taggable_id: people.reselect(:id))
+      .group(:tag_id)
+      .distinct
+      .count(:taggable_id)
+    tags = ActsAsTaggableOn::Tag.where(id: counts.keys).order(:name).index_by(&:id)
+    @existing_tags = tags.each_with_object({}) do |(id, tag), hash|
+      hash[tag] = counts[tag.id]
     end
   end
 
   private
+
+  def redirect_to_people
+    redirect_to(group_people_path(group, list_filter_params),
+      notice: flash_message(:success, count: people.count))
+  end
 
   def flash_message(type, attrs = {})
     I18n.t("#{controller_name}.#{action_name}.#{type}", **attrs)
@@ -49,22 +51,12 @@ class TagListsController < ListController
     @group ||= Group.find(params[:group_id])
   end
 
-  def manageable_people_ids
-    @manageable_people_ids ||= manageable_people.map(&:id)
+  def people_ids
+    @people_ids ||= people.pluck(:id)
   end
 
-  def manageable_people
-    @manageable_people ||= if params[:ids] == "all"
-      params.delete(:ids)
-      @manageable_people_ids = %w[all]
-
-      person_filter(PersonFullReadables).entries.includes(:tags).distinct
-    else
-      Person.includes(:tags)
-        .where(id: list_param(:ids))
-        .distinct
-        .select { |person| current_ability.can?(:assign_tags, person) }
-    end
+  def people
+    @people ||= all_filtered_or_listed_people.unscope(:order)
   end
 
   def tags
@@ -72,11 +64,12 @@ class TagListsController < ListController
   end
 
   def tag_names
-    return params[:tags].each(&:strip) if params[:tags].is_a?(Array)
-    list_param(:tags)
+    if params[:tags].is_a?(Array)
+      params[:tags].each(&:strip)
+    else
+      list_param(:tags)
+    end
   end
 
-  def tag_list
-    @tag_list ||= TagList.new(manageable_people, tags)
-  end
+  def accessibles_class = PersonWritables
 end

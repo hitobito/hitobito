@@ -10,6 +10,7 @@
         .modal-body
           .row-fluid
             = hidden_field_tag('ids', people_ids)
+            = hidden_list_filter_fields
             = yield
 
             .checkboxes

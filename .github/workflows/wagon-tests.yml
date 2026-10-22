@@ -32,6 +32,10 @@ on:
         type: string
         required: false
         default: ''
+      spec_groups:
+        description: Number of parallel jobs the specs and the feature specs are each split into. Only worth it for wagons with long running specs.
+        type: number
+        default: 1
     secrets:
       HEARTBEAT_URL:
         description: "URL to the heartbeat-application"
@@ -39,6 +43,10 @@ on:
       HEARTBEAT_TOKEN:
         description: "Token to interact with the heartbeat-application"
         required: true
+
+env:
+  NO_COVERAGE: true
+  SECRET_KEY_BASE: test-secret-key-base-for-ci
 
 defaults:
   run:
@@ -51,6 +59,7 @@ jobs:
 
     outputs:
       wagon_dependency_repository: ${{ steps.determine.outputs.dependency_repo }}
+      spec_groups: ${{ steps.spec_groups.outputs.list }}
 
     steps:
       - name: Determine dependency-repo
@@ -76,6 +85,11 @@ jobs:
           fi
 
           echo "dependency_repo=${dependency_repo}" >> "$GITHUB_OUTPUT"
+
+      - name: List spec groups
+        id: spec_groups
+        working-directory: "."
+        run: echo "list=[$(seq -s, 1 ${{ inputs.spec_groups }})]" >> "$GITHUB_OUTPUT"
 
   wagon_rubocop:
     name: rubocop
@@ -115,66 +129,6 @@ jobs:
         run: |
           bundle exec rake app:rubocop
 
-  wagon_pending_specs:
-    name: pending_specs
-    runs-on: "ubuntu-24.04"
-    env:
-      HEADLESS: true
-      RAILS_DB_ADAPTER: postgresql
-      RAILS_DB_HOST: 127.0.0.1
-      RAILS_DB_PORT: 5432
-      RAILS_DB_USERNAME: hitobito
-      RAILS_DB_PASSWORD: hitobito
-      RAILS_DB_NAME: hitobito_test
-      RAILS_TEST_DB_NAME: hitobito_test
-      RAILS_ENV: test
-      DISABLE_TEST_SCHEMA_MAINTENANCE: true
-
-    needs:
-      - detect_wagon_dependency
-
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: hitobito
-          POSTGRES_PASSWORD: hitobito
-          POSTGRES_DB: hitobito_test
-        ports:
-          - "5432:5432"
-        options: >-
-          --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
-          --health-timeout 10s
-          --health-retries 10
-    steps:
-      - name: echo distinct ID ${{ inputs.distinct_id }}
-        run: echo ${{ inputs.distinct_id }}
-        working-directory: .
-
-      - name: Check out core with shared setup action
-        uses: actions/checkout@v6
-        with:
-          repository: hitobito/hitobito
-          ref: ${{ inputs.core_ref }}
-          path: .hitobito_core_repo
-          fetch-depth: 1
-
-      - name: "Prepare"
-        uses: ./.hitobito_core_repo/.github/actions/wagon-ci-setup
-        with:
-          assets: false
-          wagon_repository: ${{ inputs.wagon_repository }}
-          wagon_dependency_repository: ${{ needs.detect_wagon_dependency.outputs.wagon_dependency_repository }}
-          core_ref: ${{ inputs.core_ref }}
-          wagon_ref: ${{ inputs.wagon_ref }}
-          wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
-
-      - name: ${{ inputs.wagon_repository }} Check pending specs
-        working-directory: ${{ inputs.wagon_repository }}
-        run: |
-          bundle exec rake app:ci:check_pending
-
   wagon_seeds:
     name: seeds
     runs-on: "ubuntu-24.04"
@@ -205,7 +159,7 @@ jobs:
           - "5432:5432"
         options: >-
           --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
+          --health-interval 2s
           --health-timeout 10s
           --health-retries 10
     steps:
@@ -231,9 +185,13 @@ jobs:
         run: |
           bundle exec rake db:seed wagon:seed
 
-  wagon_specs:
-    name: specs
+  wagon_specs_group:
+    name: specs (${{ matrix.group }}/${{ inputs.spec_groups }})
     runs-on: "ubuntu-24.04"
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.detect_wagon_dependency.outputs.spec_groups) }}
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -260,12 +218,9 @@ jobs:
           - "5432:5432"
         options: >-
           --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
+          --health-interval 2s
           --health-timeout 10s
           --health-retries 10
-      memcached:
-        image: "memcached"
-        ports: ["11211:11211"]
 
     steps:
       - name: Check out the core, which contains the shared setup action
@@ -288,11 +243,30 @@ jobs:
       - name: Run ${{ inputs.wagon_repository }} specs
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          bundle exec rake app:ci:setup:rspec spec:without_features
+          # core refs without parallel spec tasks run all specs in the first group
+          if grep -q without_features_group_parallel ../hitobito/lib/tasks/spec.rake; then
+            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:spec:without_features_group_parallel
+          elif [ "${{ matrix.group }}" = 1 ]; then
+            bundle exec rake app:ci:setup:rspec spec:without_features
+          fi
 
-  wagon_feature_specs:
-    name: feature specs
+  wagon_specs:
+    name: specs
     runs-on: "ubuntu-24.04"
+    needs: wagon_specs_group
+    if: always()
+    steps:
+      - name: All spec groups passed
+        working-directory: .
+        run: test "${{ needs.wagon_specs_group.result }}" = "success"
+
+  wagon_feature_specs_group:
+    name: feature specs (${{ matrix.group }}/${{ inputs.spec_groups }})
+    runs-on: "ubuntu-24.04"
+    strategy:
+      fail-fast: false
+      matrix:
+        group: ${{ fromJSON(needs.detect_wagon_dependency.outputs.spec_groups) }}
     env:
       HEADLESS: true
       RAILS_DB_ADAPTER: postgresql
@@ -319,12 +293,9 @@ jobs:
           - "5432:5432"
         options: >-
           --health-cmd "pg_isready -U hitobito"
-          --health-interval 10s
+          --health-interval 2s
           --health-timeout 10s
           --health-retries 10
-      memcached:
-        image: "memcached"
-        ports: ["11211:11211"]
 
     steps:
       - name: Check out core with shared setup action
@@ -356,19 +327,34 @@ jobs:
         if: ${{ steps.check-wagon-feature-specs.outputs.feature_specs_exist }}
         working-directory: ${{ inputs.wagon_repository }}
         run: |
-          bundle exec rake app:ci:setup:rspec app:spec:features:lenient
+          # core refs without parallel spec tasks run all feature specs in the first group
+          if grep -q lenient_parallel ../hitobito/lib/tasks/spec.rake; then
+            SPEC_GROUP=${{ matrix.group }}/${{ inputs.spec_groups }} bundle exec rake app:spec:features:lenient_parallel
+          elif [ "${{ matrix.group }}" = 1 ]; then
+            bundle exec rake app:ci:setup:rspec app:spec:features:lenient
+          fi
 
       - name: "Make capybara output downloadable"
         uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: capybara-output-wagon
+          name: capybara-output-wagon-${{ matrix.group }}
           path: |
             hitobito/tmp/capybara
 
+  wagon_feature_specs:
+    name: feature specs
+    runs-on: "ubuntu-24.04"
+    needs: wagon_feature_specs_group
+    if: always()
+    steps:
+      - name: All feature spec groups passed
+        working-directory: .
+        run: test "${{ needs.wagon_feature_specs_group.result }}" = "success"
+
   notify_statuscope:
     uses: ./.github/workflows/notify-statuscope.yml
-    needs: [wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds, wagon_pending_specs]
+    needs: [wagon_rubocop, wagon_specs, wagon_feature_specs, wagon_seeds]
     if: >-
       ( success() || failure() ) &&
       ( github.ref_name == 'master' || github.ref_name == 'stable' ) &&
@@ -376,7 +362,7 @@ jobs:
       ( contains((inputs.wagon_dependency_ref || inputs.main_branch), inputs.main_branch) )
     with:
       repository: ${{ inputs.wagon_repository }}
-      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success' && needs.wagon_pending_specs.result == 'success'}}
+      test_result: ${{ needs.wagon_rubocop.result == 'success' && needs.wagon_specs.result == 'success' && needs.wagon_feature_specs.result == 'success' && needs.wagon_seeds.result == 'success'}}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
       HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}

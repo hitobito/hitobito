@@ -88,6 +88,88 @@ describe EventResource, type: :resource do
       render
       expect(d[0].sideload(:participations)).to be_present
     end
+
+    describe "contact_details" do
+      let(:contact) do
+        Fabricate(:person, first_name: "Kurt", last_name: "Kontakt", email: "kurt@example.com",
+          street: "Kontaktweg", housenumber: "3", zip_code: "3000", town: "Bern")
+      end
+      let(:contact_details) { d[0].sideload(:contact_details) }
+
+      before do
+        event.update!(contact: contact)
+        params[:filter] = {id: {eq: event.id}}
+        params[:include] = "contact_details"
+      end
+
+      it "is identified by the event" do
+        render
+
+        expect(contact_details.jsonapi_type).to eq "event-contact-details"
+        expect(contact_details.id).to eq event.id
+      end
+
+      it "includes all contact attributes by default" do
+        render
+
+        expect(contact_details.attributes).to include(
+          "first_name" => "Kurt", "email" => "kurt@example.com", "street" => "Kontaktweg"
+        )
+      end
+
+      it "excludes contact attributes that are not visible" do
+        event.update!(visible_contact_attributes: %w[name])
+        render
+
+        expect(contact_details.attributes).to include("first_name" => "Kurt", "last_name" => "Kontakt")
+        expect(contact_details.attributes.keys).not_to include(
+          "email", "additional_emails", "street", "zip_code", "town", "additional_addresses",
+          "phone_numbers", "social_accounts", "picture"
+        )
+      end
+
+      it "includes only public contact accounts" do
+        Fabricate(:phone_number, contactable: contact, number: "+41 79 111 11 11", public: true)
+        Fabricate(:phone_number, contactable: contact, number: "+41 79 222 22 22", public: false)
+        Fabricate(:social_account, contactable: contact, name: "kurt", public: true)
+        render
+
+        expect(contact_details.attributes["phone_numbers"].pluck("number"))
+          .to eq ["+41 79 111 11 11"]
+        expect(contact_details.attributes["social_accounts"].pluck("name")).to eq ["kurt"]
+      end
+
+      it "applies the visibility of each event to a shared contact" do
+        course.update!(contact: contact, visible_contact_attributes: %w[name email])
+        event.update!(visible_contact_attributes: %w[name address])
+        params[:filter] = {id: {eq: [event.id, course.id]}}
+        render
+
+        details = d.to_h { |e| [e.id, e.sideload(:contact_details).attributes] }
+        expect(details[event.id]).to include("street" => "Kontaktweg")
+        expect(details[event.id].keys).not_to include("email")
+        expect(details[course.id]).to include("email" => "kurt@example.com")
+        expect(details[course.id].keys).not_to include("street")
+      end
+
+      it "is empty for events without contact" do
+        event.update!(contact: nil)
+        render
+
+        expect(contact_details).to be_nil
+      end
+
+      it "loads contact accounts without N+1 queries" do
+        course.update!(contact: Fabricate(:person))
+        [contact, course.contact].each do |person|
+          Fabricate(:phone_number, contactable: person, public: true)
+          Fabricate(:social_account, contactable: person, public: true)
+        end
+        params[:filter] = {id: {eq: [event.id, course.id]}}
+
+        expect { render }.to make.db_queries.with("PhoneNumber Load" => 1, "SocialAccount Load" => 1)
+      end
+    end
   end
 
   describe "filtering" do
@@ -149,6 +231,12 @@ describe EventResource, type: :resource do
         params[:filter] = {group_id: [top_group.id, top_layer.id]}
         render
         expect(jsonapi_data).to have(3).items
+      end
+
+      it "excludes events of given group_ids" do
+        params[:filter] = {group_id: {not_eq: top_group.id}}
+        render
+        expect(jsonapi_data.map(&:id)).to match_array [event.id, course.id]
       end
     end
 

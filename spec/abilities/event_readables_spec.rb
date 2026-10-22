@@ -11,22 +11,22 @@ describe EventReadables do
   let(:user) { role.person.reload }
   let(:ability) { EventReadables.new(user) }
 
-  let!(:other_top_group) { Fabricate(Group::TopGroup.sti_name, parent: groups(:top_layer)) }
-  let!(:other_layer) { Fabricate(Group::TopLayer.sti_name) }
-  let!(:top_sub_group) { Fabricate(Group::TopGroup.sti_name, parent: groups(:top_group)) }
-  let!(:bottom_group) { groups(:bottom_group_one_one) }
+  let_it_be(:other_top_group) { Fabricate(Group::TopGroup.sti_name, parent: groups(:top_layer)) }
+  let_it_be(:other_layer) { Fabricate(Group::TopLayer.sti_name) }
+  let_it_be(:top_sub_group) { Fabricate(Group::TopGroup.sti_name, parent: groups(:top_group)) }
+  let_it_be(:bottom_group) { groups(:bottom_group_one_one) }
 
-  let!(:event_top_layer) { events(:top_event) }
-  let!(:event_top_group) { Fabricate(:event, groups: [groups(:top_group)]) }
-  let!(:event_top_sub_group) { Fabricate(:event, groups: [top_sub_group]) }
-  let!(:event_other_layer) { Fabricate(:event, groups: [other_layer]) }
-  let!(:event_bottom_layer) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
-  let!(:event_bottom_group) { Fabricate(:event, groups: [bottom_group]) }
+  let_it_be(:event_top_layer) { events(:top_event) }
+  let_it_be(:event_top_group) { Fabricate(:event, groups: [groups(:top_group)]) }
+  let_it_be(:event_top_sub_group) { Fabricate(:event, groups: [top_sub_group]) }
+  let_it_be(:event_other_layer, reload: true) { Fabricate(:event, groups: [other_layer]) }
+  let_it_be(:event_bottom_layer) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
+  let_it_be(:event_bottom_group) { Fabricate(:event, groups: [bottom_group]) }
 
   subject(:accessible_events) { Event.accessible_by(ability) }
 
   context :layer_and_below_full do
-    let(:role) { Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)) }
 
     it "can index events in own group" do
       is_expected.to include(event_top_group)
@@ -50,7 +50,7 @@ describe EventReadables do
   end
 
   context :layer_and_below_read do
-    let(:role) { Fabricate(Group::TopGroup::Secretary.sti_name, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::Secretary.sti_name, group: groups(:top_group)) }
 
     it "can index events in own group" do
       is_expected.to include(event_top_group)
@@ -70,7 +70,7 @@ describe EventReadables do
   end
 
   context :layer_full do
-    let(:role) { Fabricate(Group::TopGroup::LocalGuide.sti_name, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::LocalGuide.sti_name, group: groups(:top_group)) }
 
     it "can index events in own group" do
       is_expected.to include(event_top_group)
@@ -90,7 +90,7 @@ describe EventReadables do
   end
 
   context :layer_read do
-    let(:role) { Fabricate(Group::TopGroup::LocalSecretary.sti_name, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::LocalSecretary.sti_name, group: groups(:top_group)) }
 
     it "can index events in own group" do
       is_expected.to include(event_top_group)
@@ -110,7 +110,7 @@ describe EventReadables do
   end
 
   context :group_and_below_full do
-    let(:role) { Fabricate(Group::TopGroup::GroupManager.sti_name, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::GroupManager.sti_name, group: groups(:top_group)) }
 
     it "can index events in own group" do
       is_expected.to include(event_top_group)
@@ -134,7 +134,7 @@ describe EventReadables do
   end
 
   context :group_and_below_read do
-    let(:role) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)) }
+    let_it_be(:role) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)) }
 
     it "can index events in own group" do
       is_expected.to include(event_top_group)
@@ -158,7 +158,7 @@ describe EventReadables do
   end
 
   context :group_full do
-    let(:role) { Fabricate(Group::BottomGroup::Leader.sti_name, group: bottom_group) }
+    let_it_be(:role) { Fabricate(Group::BottomGroup::Leader.sti_name, group: bottom_group) }
 
     it "can index events in own group" do
       is_expected.to include(event_bottom_group)
@@ -178,7 +178,7 @@ describe EventReadables do
   end
 
   context :group_read do
-    let(:role) { Fabricate(Group::BottomGroup::Member.sti_name, group: bottom_group) }
+    let_it_be(:role) { Fabricate(Group::BottomGroup::Member.sti_name, group: bottom_group) }
 
     it "can index events in own group" do
       is_expected.to include(event_bottom_group)

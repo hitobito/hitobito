@@ -59,6 +59,18 @@ describe EventsController do
         expect(event.group_ids).to match_array([group.id, group2.id])
       end
 
+      it "creates new event on an invalid group" do
+        sign_in(people(:top_leader))
+        group.update_column(:contact_id, people(:bottom_member).id)
+
+        post :create, params: {
+          event: {name: "foo", dates_attributes: [date], type: "Event"},
+          group_id: group.id
+        }
+
+        expect(assigns(:event)).to be_persisted
+      end
+
       it "validates permission to read contact person" do
         invisible_person = Fabricate(:person)
         person = people(:bottom_member)
@@ -279,6 +291,18 @@ describe EventsController do
         expect do
           get :new, params: {group_id: group.id, source_id: events(:top_course).id}
         end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "does not duplicate default questions on top of an existing source's questions" do
+        Event::QuestionTemplate.update_all(default: false)
+        sign_in(people(:top_leader))
+        source = events(:top_course)
+        source.questions << Fabricate(:event_question)
+
+        get :new, params: {group_id: source.groups.first.id, source_id: source.id}
+
+        event = assigns(:event)
+        expect(event.application_questions.size).to eq(source.application_questions.size)
       end
     end
 
@@ -543,6 +567,53 @@ describe EventsController do
         expect(event).not_to be_valid
         expect(event.errors.messages[:contact]).to include("Zugriff verweigert")
         Auth.current_person = nil
+      end
+    end
+  end
+
+  context "templates" do
+    let(:top_leader) { people(:top_leader) }
+    let(:top_layer) { groups(:top_layer) }
+    let(:bottom_layer_one) { groups(:bottom_layer_one) }
+    let(:template) { events(:template) }
+
+    before { sign_in(top_leader) }
+
+    describe "GET#new" do
+      it "duplicates a template into a normal event" do
+        get :new, params: {group_id: top_layer.id, source_id: template.id}
+
+        event = assigns(:event)
+        expect(event.template).to eq false
+        expect(event.name).to eq(template.name)
+        expect(event.groups).to eq [top_layer]
+      end
+
+      it "duplicates an inherited template from an ancestor top_layer" do
+        template.update!(inherit: true)
+        Fabricate(Group::BottomLayer::Leader.sti_name, group: bottom_layer_one, person: people(:top_leader))
+
+        get :new, params: {group_id: bottom_layer_one.id, source_id: template.id}
+
+        event = assigns(:event)
+        expect(event.template).to eq false
+        expect(event.groups).to eq [bottom_layer_one]
+      end
+    end
+
+    describe "GET#show" do
+      it "raises 404 as not supported" do
+        expect do
+          get :show, params: {group_id: top_layer.id, id: template.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    describe "GET#edit" do
+      it "raises 404 as templates are edited in their own controller" do
+        expect do
+          get :edit, params: {group_id: top_layer.id, id: template.id}
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

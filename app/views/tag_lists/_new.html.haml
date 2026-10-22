@@ -6,17 +6,17 @@
           %b=t('.title')
 
       = standard_form(:add_tag_list,
-        url: group_tag_list_path(group), method: :post, remote: false) do |f|
+        url: group_tag_list_path(group, list_filter_params), method: :post, remote: false) do |f|
         .modal-body
           .row-fluid
 
             - unless @people_count.zero?
-              = hidden_field_tag('ids', manageable_people_ids.join(','))
+              = hidden_field_tag('ids', people_ids.join(','))
               = f.text_field(:tags,
                              name: :tags,
-                             class: 'tag-list-add form-control form-control-sm',
+                             class: 'form-control form-control-sm',
                              data: { provide: 'entity',
-                                     url: group_person_tags_query_path(group_id: group.id, person_id: @manageable_people.first.id) })
+                                     url: group_person_tags_query_path(group_id: group.id, person_id: @people.first.id) })
               = f.help_inline t('.separate_multiple_tags_with_comma')
             - else
               = t('.no_entries')

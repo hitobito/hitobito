@@ -87,6 +87,7 @@ it:
         type_not_allowed: non può essere salvato
         must_be_after_opening: deve essere dopo l'inizio dell'annuncio
         must_have_same_type: devono essere dello stesso tipo
+        must_be_layer: können für Eventvorlagen nur eine Ebene sein
         greater_than: deve essere più grande di %{count}
         greater_than_or_equal_to: deve essere più grande o uguale a %{count}
         must_exist: non può essere lasciato vuoto
@@ -877,6 +878,8 @@ it:
         no_name: "[Nessun nome]"
         visible_contact_attributes: "Opzioni di visualizzazione (persona di contatto)"
         guest_limit: Maximale Anzahl Gäste pro Person
+        template: Vorlage
+        inherit: Vererbung
 
       event/contact_attrs:
         required: Obbligatorio
@@ -1019,6 +1022,7 @@ it:
         created_at: Data di iscrizione
         roles: Ruolo
         active: Aktiv
+        qualification_comment: Kommentar
 
       event/question:
         question: Domanda
@@ -1663,6 +1667,8 @@ it:
           error: Si è verificato un errore durante l'elaborazione
 
   delayed_job:
+    bulk/tag_add_job: Tags hinzufügen
+    bulk/tag_remove_job: Tags entfernen
     export/event_participations_export_job: Esportazione delle partecipazioni agli eventi
     export/events_export_job: Esportazione eventi
     export/export_base_job: Esportazione di base

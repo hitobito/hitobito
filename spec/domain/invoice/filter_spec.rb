@@ -91,10 +91,20 @@ describe Invoice::Filter do
       expect(filtered).to include(invoice, from_plain_run_invoice, from_template_run_invoice)
     end
 
-    it "combines invoice_run_id with invoice type without dropping the invoice_run_id restriction" do
+    it "ignores invoice type params entirely when invoice_run_id is given" do
       filtered = Invoice::Filter.new(
         invoice_run_id: plain_run.id,
         standalone: "1", from_standalone_invoice_run: "1", from_template_invoice_run: "1"
+      ).apply(Invoice)
+      expect(filtered).to include from_plain_run_invoice
+      expect(filtered).not_to include(invoice, from_template_run_invoice)
+    end
+
+    it "does not empty the result via invoice type when invoice_run_id is given, even if " \
+      "every type is deselected" do
+      filtered = Invoice::Filter.new(
+        invoice_run_id: plain_run.id,
+        standalone: "0", from_standalone_invoice_run: "0", from_template_invoice_run: "0"
       ).apply(Invoice)
       expect(filtered).to include from_plain_run_invoice
       expect(filtered).not_to include(invoice, from_template_run_invoice)

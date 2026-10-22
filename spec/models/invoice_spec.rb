@@ -251,6 +251,22 @@ describe Invoice do
       expect(invoice.issued_at).to eq(now.to_date)
       expect(invoice.sent_at).to eq(now.to_date)
     end
+
+    it "changing state to cancelled sets cancelled_at date" do
+      expect do
+        invoice.update(state: :cancelled)
+      end.to change { invoice.cancelled_at }.from(nil).to(now.to_date)
+    end
+
+    it "updating a cancelled invoice keeps its cancelled_at date" do
+      invoice.update(state: :cancelled)
+
+      travel(1.day) do
+        expect do
+          invoice.update(title: "changed")
+        end.not_to change { invoice.cancelled_at }
+      end
+    end
   end
 
   context "#remindable?" do

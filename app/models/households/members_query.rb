@@ -25,7 +25,7 @@ class Households::MembersQuery
   private
 
   def writable_people
-    Person.accessible_by(PersonWritables.new(@current_user, @writables_scope))
+    Person.accessible_by(PersonWritables.new(@current_user, scope: @writables_scope))
   end
 
   def same_address_query

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -28,6 +28,7 @@
 #  globally_visible                 :boolean
 #  guest_limit                      :integer          default(0), not null
 #  hidden_contact_attrs             :text
+#  inherit                          :boolean          default(FALSE), not null
 #  location                         :text
 #  maximum_participants             :integer
 #  minimum_participants             :integer
@@ -46,6 +47,7 @@
 #  signature_confirmation_text      :string
 #  state                            :string(60)
 #  teamer_count                     :integer          default(0)
+#  template                         :boolean          default(FALSE), not null
 #  training_days                    :decimal(5, 2)
 #  type                             :string
 #  visible_contact_attributes       :string           default(["name", "address", "phone_number", "email", "social_account"])
@@ -184,10 +186,11 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   ### ASSOCIATIONS
 
   # Autosave would change updated_at and updater on the group when creating an event.
-  has_and_belongs_to_many :groups, autosave: false
+  has_and_belongs_to_many :groups, autosave: false, validate: false
 
   belongs_to :kind
   belongs_to :contact, class_name: "Person"
+  attr_accessor :contact_details
 
   has_many :attachments, dependent: :destroy
 
@@ -224,7 +227,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   validates_by_schema except: [:canceled_reason]
   # name is a translated attribute and thus needs to be validated explicitly
   validates :name, presence: true
-  validates :dates, presence: {message: :must_exist}
+  validates :dates, presence: {message: :must_exist}, unless: :template?
   validates :contact, permission: :show_full, allow_blank: true, if: :contact_id_changed?
   validates :group_ids, presence: {message: :must_exist}
   validates :application_opening_at, :application_closing_at,
@@ -233,6 +236,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     length: {allow_nil: true, maximum: 2**16 - 1}
   validates :guest_limit, numericality: {only_integer: true, greater_than_or_equal_to: 0}
   validate :assert_type_is_allowed_for_groups
+  validate :assert_template_on_layer_group
   validate :assert_application_closing_is_after_opening
   validate :assert_required_contact_attrs_valid
   validate :assert_hidden_contact_attrs_valid
@@ -267,6 +271,24 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       .where("events.application_closing_at IS NULL OR events.application_closing_at >= ?", today)
   }
 
+  scope :without_templates, -> { where(template: false) }
+  scope :with_templates, -> { unscope(where: :template) }
+  scope :templates, -> { with_templates.where(template: true) }
+
+  scope :templates_in_hierarchy, ->(groups) {
+    layer_ids = groups.map(&:layer_group_id).uniq
+    hierarchy_ids = groups.flat_map { |g| g.hierarchy.pluck(:layer_group_id) }.uniq
+
+    templates.joins(:groups)
+      .where(
+        "groups.layer_group_id IN (?) OR (groups.layer_group_id IN (?) AND events.inherit IS TRUE)",
+        layer_ids, hierarchy_ids
+      )
+      .distinct
+  }
+
+  default_scope { without_templates if column_names.include?("template") }
+
   ### CLASS METHODS
 
   class << self
@@ -290,6 +312,15 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     def preload_all_dates
       all.extending(Event::PreloadAllDates)
+    end
+
+    def applicable_templates(group, event_type: nil)
+      event_type = nil if event_type == Event.sti_name
+      templates_in_hierarchy([group]).where(type: event_type)
+        .left_join_translation
+        .includes(:translations)
+        .select("events.*", "event_translations.name")
+        .order("event_translations.name NULLS LAST")
     end
 
     # Events with at least one date in the given year
@@ -478,13 +509,15 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def duplicate # rubocop:disable Metrics/AbcSize,Metrics/MethodLength splitting this up does not make it better
     Event.build(attributes_for_duplicate).tap do |event|
-      event.groups = groups
+      event.groups = groups unless template?
       event.state = nil
       event.application_opening_at = nil
       event.application_closing_at = nil
       event.participant_count = 0
       event.applicant_count = 0
       event.teamer_count = 0
+      event.template = false
+      event.inherit = false
       # rubocop:disable Rails/FindEach -- questions per event are few, order must be preserved
       application_questions.includes(:question_visibilities).each do |q|
         new_question = event.application_questions.build(q.attributes.excluding("id"))
@@ -544,6 +577,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     dates.flat_map { [_1.start_at, _1.finish_at] }.compact.max
   end
 
+  def contact_attribute_visible?(attr)
+    visible_contact_attributes.map(&:to_s).include?(attr.to_s)
+  end
+
   private
 
   def assert_type_is_allowed_for_groups # rubocop:disable Metrics/CyclomaticComplexity
@@ -555,6 +592,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     elsif type && !master.class.event_types.collect(&:sti_name).include?(type)
       errors.add(:type, :type_not_allowed)
     end
+  end
+
+  def assert_template_on_layer_group
+    return unless template?
+
+    errors.add(:groups, :must_be_layer) if groups.any? { |g| !g.layer? }
   end
 
   def assert_application_closing_is_after_opening

@@ -20,7 +20,7 @@ fr:
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
     do_not_fill: Ne pas remplir cette case SVP.
     chosen_no_results: Aucun résultat.
-    selected: Sélectionné
+    selected: ausgewählt
     extended_select_all: Sélectionner tout %{count}
     columns: Colonnes
     start_on: à partir de %{date}
@@ -223,6 +223,7 @@ fr:
     delete: Effacer
     edit_service_token: Clefs API
     edit_event_question_template: Modèles, informations d'inscription, événements
+    edit_event_template: Eventvorlagen
     edit_calendar_feeds: Feed du calendrier
 
   dropdown/people_email_export:
@@ -563,6 +564,13 @@ fr:
     qualifications:
       index:
         save: Mettre à jour les qualifications
+        qualified: Bestanden
+        not_qualified: Nicht bestanden
+        not_assessed: Nicht beurteilt
+        town: Wohnort
+        roles: Rolle
+        name: Name
+        comment: Kommentar
       update:
         flash:
           success: Les qualifications ont été mises à jour.
@@ -677,6 +685,7 @@ fr:
         select_layers: Chercher les groupes...
     actions_show:
       copy_share_link: Copier le lien direct
+      save_as_template: Als Vorlage speichern
     application_fields:
       caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
@@ -730,6 +739,7 @@ fr:
         social_account: Afficher les médias sociaux
         picture: Afficher la photo de profil
       kind_overrides_link_title: "Les champs suivants sont repris: Description"
+      inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
     global:
       link:
         add_event: Créer un événement
@@ -808,6 +818,10 @@ fr:
 
   event/roles:
     full_entry_label: "Rôle <i>%{role}</i> pour <i>%{person}</i>"
+
+  event/templates:
+    index:
+      title: Eventvorlagen
 
   events/filters:
     new:
@@ -1083,7 +1097,6 @@ fr:
   group_decorator:
     archived_suffix: "(archivé)"
 
-
   help_texts:
     form:
       caption_start_open: Text initial Anzeigen
@@ -1145,6 +1158,7 @@ fr:
     add_payments: Saisir un paiement
     issued: Facture établie
     sent: Facture envoyé par courriel
+    cancelled: Rechnung storniert
     reminder_sent: rappel établi, échu le %{date} (%{title})
     payed: payé
     cancel: Annuler

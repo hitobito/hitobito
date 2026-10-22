@@ -24,10 +24,12 @@ describe Export::SubscriptionsJob do
   let(:mailing_list) { Fabricate(:mailing_list, group: group) }
   let(:file) { subject.job_observation }
 
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+  end
 
+  before do
     Fabricate(:subscription, mailing_list: mailing_list)
     Fabricate(:subscription, mailing_list: mailing_list)
     subject.enqueue!
@@ -51,6 +53,15 @@ describe Export::SubscriptionsJob do
 
         lines = read_data_from_generated_file(file).lines
         expect(lines.size).to eq(3)
+      end
+
+      context "by a user with contact data permission" do
+        let(:user) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)).person }
+
+        it "and saves it" do
+          lines = read_data_from_generated_file(file).lines
+          expect(lines.size).to eq(3)
+        end
       end
     end
   end

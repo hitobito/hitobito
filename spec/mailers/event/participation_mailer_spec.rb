@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Event::ParticipationMailer do
-  before do
+  before_all do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
   end
@@ -258,6 +258,36 @@ describe Event::ParticipationMailer do
     it "does not allow xss injection in participant name" do
       person.update(first_name: "First Name:<script>alert('xss');</script>")
       expect(subject).to include("First Name:&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;")
+    end
+
+    context "with contact" do
+      let(:contact) { Fabricate(:person, first_name: "Kurt", last_name: "Kontakt", email: "kurt@example.com") }
+
+      before { event.update!(contact: contact) }
+
+      it "includes name and email of the contact" do
+        expect(subject).to include("Kontaktperson:<br/>#{contact}<br/>kurt@example.com")
+      end
+
+      it "includes only the email when the name is not visible" do
+        event.update!(visible_contact_attributes: %w[email])
+
+        expect(subject).to include("Kontaktperson:<br/>kurt@example.com")
+        expect(subject).not_to include(contact.to_s)
+      end
+
+      it "includes only the name when the email is not visible" do
+        event.update!(visible_contact_attributes: %w[name])
+
+        expect(subject).to include("Kontaktperson:<br/>#{contact}")
+        expect(subject).not_to include("kurt@example.com")
+      end
+
+      it "omits the contact when neither name nor email is visible" do
+        event.update!(visible_contact_attributes: %w[address])
+
+        expect(subject).not_to include("Kontaktperson")
+      end
     end
   end
 end

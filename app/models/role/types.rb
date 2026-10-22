@@ -16,7 +16,7 @@ module Role::Types
     :layer_full, :layer_read,
     :group_and_below_full, :group_and_below_read, :group_full, :group_read,
     :finance, :layer_and_below_finance,
-    :contact_data, :approve_applications, :impersonation,
+    :contact_data, :group_read_contact_data, :approve_applications, :impersonation,
     :see_invisible_from_above, :manual_deletion]
 
   # If a role contains the first permission, the second one is automatically active as well

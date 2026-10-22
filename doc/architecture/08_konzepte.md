@@ -163,6 +163,9 @@ Ebenen). Inkl. Erstellen von Anlässen und Abos (Mailinglisten).
 
 **contact_data**: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
 
+**group_read_contact_data**: Lesen der Kontaktdaten aller Personen in dieser Gruppe, ohne für diese
+selbst sichtbar zu werden.
+
 **approve_applications**: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
 
 **impersonation**: Darf andere Accounts temporär übernehmen, z. B. für Support Aufgaben oder für Tests.

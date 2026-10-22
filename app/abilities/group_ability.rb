@@ -62,6 +62,12 @@ class GroupAbility < AbilityDsl::Base
       .in_same_layer_or_below
     permission(:layer_and_below_read).may(:index_local_people).in_same_layer
 
+    permission(:layer_and_below_read_details)
+      .may(:show_details, :index_people,
+        :export_subgroups, :export_events, :"export_event/courses")
+      .in_same_layer_or_below
+    permission(:layer_and_below_read_details).may(:index_local_people).in_same_layer
+
     permission(:layer_and_below_full).may(:create).with_parent_in_same_layer_or_below
     permission(:layer_and_below_full).may(:destroy).in_same_layer_or_below_except_permission_giving
     permission(:layer_and_below_full)

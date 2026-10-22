@@ -11,6 +11,25 @@ ActiveSupport.on_load(:action_view) do
   include ActionText::TagHelper
 end
 
+ActiveSupport.on_load :action_text_rich_text do
+  has_paper_trail if: -> (action_text) { action_text.record_type == "Event::Translation" }, meta: {
+    main_id: ->(t) { t.record.event_id },
+    main_type:  Event.sti_name,
+    item_label: -> (action_text) do
+      return nil if action_text.blank?
+
+      action_text.to_s
+    end
+  }, only: [:body]
+  before_save do
+    if respond_to?(:plain_text_body=) && body.present?
+      self.plain_text_body = body.to_plain_text
+    else
+      self.plain_text_body = nil;
+    end
+  end
+end
+
 Rails.application.config.after_initialize do
 
   # Only allow tags that are supported in Trix.

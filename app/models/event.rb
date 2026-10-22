@@ -116,7 +116,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
                                     globalize_attribute_names.map(&:to_s))
   end
 
-  translates :application_conditions, :description, :name, :signature_confirmation_text
+  translates :application_conditions, :name, :signature_confirmation_text
+
+  translates_rich_text :description
 
   translation_class.class_eval do
     has_paper_trail meta: {
@@ -141,11 +143,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     :kind_class,
     :supports_invitations,
     :uses_form_tabs,
-    :filterable_attrs
+    :filterable_attrs,
+    :translation_class
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
-    :description, :location, :application_opening_at,
+    :description, :plain_text_description, :location, :application_opening_at,
     :application_closing_at, :application_conditions,
     :external_applications, :applications_cancelable,
     :signature, :signature_confirmation, :signature_confirmation_text,
@@ -177,8 +180,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   self.uses_form_tabs = true
 
-  self.filterable_attrs = [:name, :description, :location,
+  self.filterable_attrs = [:name, :plain_text_description, :location,
     :application_opening_at, :application_closing_at]
+
+  self.translation_class = Event::Translation
 
   model_stamper
   stampable stamper_class_name: :person, deleter: false
@@ -234,6 +239,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     timeliness: {type: :date, allow_blank: true, before: ::Date.new(9999, 12, 31)}
   validates :description, :location, :application_conditions,
     length: {allow_nil: true, maximum: 2**16 - 1}
+  validates :description, no_attachments: true
   validates :guest_limit, numericality: {only_integer: true, greater_than_or_equal_to: 0}
   validate :assert_type_is_allowed_for_groups
   validate :assert_template_on_layer_group
@@ -449,7 +455,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     def filter_attrs
       filterable_attrs.map do |key, type|
-        type = :string if translated_attribute_names.include?(key.to_sym)
+        if translated_attribute_names.include?(key.to_sym) || key.to_sym == :plain_text_description
+          type = :string
+        end
         type ||= columns_hash.fetch(key.to_s).type
         [key.to_sym, {label: human_attribute_name(key), type: type}]
       end.to_h
@@ -579,6 +587,12 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   def contact_attribute_visible?(attr)
     visible_contact_attributes.map(&:to_s).include?(attr.to_s)
+  end
+
+  def plain_text_description
+    return if description.blank?
+
+    description.to_plain_text
   end
 
   private

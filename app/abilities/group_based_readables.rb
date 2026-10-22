@@ -9,9 +9,9 @@ class GroupBasedReadables < GroupBasedFetchables
     :group_and_below_full, :group_and_below_read]
   self.above_group_permissions = [:group_and_below_full, :group_and_below_read]
   self.same_layer_permissions = [:layer_full, :layer_read, :layer_and_below_full,
-    :layer_and_below_read, :see_invisible_from_above]
+    :layer_and_below_read, :layer_and_below_read_details, :see_invisible_from_above]
   self.above_layer_permissions = [:layer_and_below_full, :layer_and_below_read,
-    :see_invisible_from_above]
+    :layer_and_below_read_details, :see_invisible_from_above]
 
   delegate :permission_group_ids, :permission_layer_ids, to: :user_context
 end

@@ -11,7 +11,8 @@ module JsonApi
 
     class_attribute :event_role_permissions, default: [:participations_read,
       :participations_read_details, :participations_full, :event_full]
-    class_attribute :layer_and_below_permissions, default: [:layer_and_below_read]
+    class_attribute :layer_and_below_permissions,
+      default: [:layer_and_below_read, :layer_and_below_read_details]
     class_attribute :group_and_below_permissions, default: [:group_and_below_read]
     class_attribute :layer_permissions, default: [:layer_read]
     class_attribute :group_permissions, default: [:group_read]
@@ -59,7 +60,8 @@ module JsonApi
 
       # from pending applications
       if include_pending_applications &&
-          (permission_layer_ids(:layer_read, :layer_and_below_read) & course_offerers).any?
+          (permission_layer_ids(:layer_read, :layer_and_below_read,
+            :layer_and_below_read_details) & course_offerers).any?
         can_read_if(active: false, application_id: pending_applications.select(:id))
       end
     end

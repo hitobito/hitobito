@@ -532,6 +532,75 @@ describe PersonAbility do
     end
   end
 
+  context :layer_and_below_read_details do
+    let(:role) { Fabricate(Group::TopGroup::LocalSecretary.name.to_sym, group: groups(:top_group)) }
+
+    before do
+      allow(Group::TopGroup::LocalSecretary).to receive(:permissions)
+        .and_return([:layer_and_below_read_details])
+    end
+
+    context "in same layer" do
+      let(:other) { Fabricate(Group::GlobalGroup::Member.name.to_sym, group: groups(:toppers)).person.reload }
+
+      it "may show details of people" do
+        is_expected.to be_able_to(:show, other)
+        is_expected.to be_able_to(:show_details, other)
+      end
+
+      it "may not show_full or history of people" do
+        is_expected.not_to be_able_to(:show_full, other)
+        is_expected.not_to be_able_to(:history, other)
+      end
+
+      it "may not modify people" do
+        is_expected.not_to be_able_to(:update, other)
+      end
+
+      it "may show externals" do
+        external = Fabricate(Role::External.name.to_sym, group: groups(:toppers))
+        is_expected.to be_able_to(:show_details, external.person.reload)
+      end
+
+      it "may index people and local people but not full people of groups" do
+        is_expected.to be_able_to(:index_people, groups(:toppers))
+        is_expected.to be_able_to(:index_local_people, groups(:toppers))
+        is_expected.not_to be_able_to(:index_full_people, groups(:toppers))
+        is_expected.not_to be_able_to(:index_deep_full_people, groups(:toppers))
+      end
+    end
+
+    context "in layer below" do
+      let(:other) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)).person.reload }
+
+      it "may show details of people" do
+        is_expected.to be_able_to(:show, other)
+        is_expected.to be_able_to(:show_details, other)
+      end
+
+      it "may not show_full or history of people" do
+        is_expected.not_to be_able_to(:show_full, other)
+        is_expected.not_to be_able_to(:history, other)
+      end
+
+      it "may not modify people" do
+        is_expected.not_to be_able_to(:update, other)
+      end
+
+      it "may not show people who are invisible from above" do
+        invisible = Fabricate(Group::BottomGroup::Member.name.to_sym, group: groups(:bottom_group_one_one))
+        is_expected.not_to be_able_to(:show, invisible.person.reload)
+      end
+
+      it "may index people but not local or full people of groups" do
+        is_expected.to be_able_to(:index_people, groups(:bottom_layer_one))
+        is_expected.not_to be_able_to(:index_local_people, groups(:bottom_layer_one))
+        is_expected.not_to be_able_to(:index_full_people, groups(:bottom_layer_one))
+        is_expected.not_to be_able_to(:index_deep_full_people, groups(:bottom_layer_one))
+      end
+    end
+  end
+
   context :layer_full do
     let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
 

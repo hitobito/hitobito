@@ -40,7 +40,7 @@ class PersonReadables < GroupBasedReadables
     if read_permission_for_this_group?
       can :index, Person, group_people
 
-    elsif layer_and_below_read_in_above_layer?
+    elsif layer_and_below_read_in_above_layer? || layer_and_below_read_details_in_above_layer?
       can :index, Person, group_people.visible_from_above(group)
 
     elsif contact_data_visible?
@@ -83,8 +83,13 @@ class PersonReadables < GroupBasedReadables
     user.root? ||
       group_read_in_this_group? ||
       group_read_in_above_group? ||
-      layer_read_in_same_layer? ||
+      layer_read_permission_for_this_group?
+  end
+
+  def layer_read_permission_for_this_group?
+    layer_read_in_same_layer? ||
       layer_and_below_read_in_same_layer? ||
+      layer_and_below_read_details_in_same_layer? ||
       see_invisible_from_above_in_above_layer?
   end
 
@@ -112,6 +117,18 @@ class PersonReadables < GroupBasedReadables
   def layer_and_below_read_in_above_layer?
     ids = permission_layer_ids(:layer_and_below_read)
     ids.present? && (ids & group.layer_hierarchy.collect(&:id)).present?
+  end
+
+  def layer_and_below_read_details_in_same_layer?
+    layer_and_below_read_details_layer_ids.include?(group.layer_group_id)
+  end
+
+  def layer_and_below_read_details_in_above_layer?
+    layer_and_below_read_details_layer_ids.intersect?(group.layer_hierarchy.collect(&:id))
+  end
+
+  def layer_and_below_read_details_layer_ids
+    permission_layer_ids(:layer_and_below_read_details)
   end
 
   def see_invisible_from_above_in_above_layer?

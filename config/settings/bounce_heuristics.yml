@@ -31,6 +31,7 @@
 # The order of the keys is relevant. we check in the order that is mentioned
 # here and the first match determines the action.
 #
+# we match this case insensitive and without additional anchors.
 email:
   bounces:
     diagnostic_codes:
@@ -82,6 +83,10 @@ email:
         - "This address no longer accepts mail"
         - "The email account that you tried to reach does not exist"
         - "The email account you tried to reach does not exist"
+        - "550 Recipient address does not exist"
+        - "552 5.2.2 <.+@.+>: Recipient address rejected: Address does not exist"
+        - "550 Mailbox not found"
+        - "553-5.1.3 The recipient address <.+@.+> is not a 553-5.1.3 valid RFC 5321 address"
       continue:
         - "554 5.7.1 Spam message rejected"
         - '550 5.1.1 MXIN505 mailbox\s+.+@.+\s+is full'
@@ -90,14 +95,12 @@ email:
         - "554 5.7.1 Message cannot be accepted, spam rejection"
         - "552-5.2.2 The recipient's inbox is out of storage space and inactive."
         - "550 High probability of spam"
-        - "550-Callout verification failed: 550 550 user quota exceeded: mailbox is full"
         - "554 Your email is considered spam"
-        - "552.*quota"
+        - "quota exceeded"
+        - "mailbox full"
+        - "over quota"
         - "452-4.2.2 The recipient's inbox is out of storage space"
-        - "452 4.2.2 Mailbox full"
-        - "450 4.7.1 <.+@.+>: Recipient address rejected: Mailbox full"
         - "550 MXIN505 mailbox"
-        - "554 5.2.2 mailbox full"
         - "550 Mailbox is full / Blocks limit exceeded / Inode limit exceeded"
         - 'https://support\.apple\.com/en-us/HT204137'
         - "Reject(ed)? (for|due to) policy reason"
@@ -122,6 +125,14 @@ email:
         - "451 4.7.1 Try again later"
         - "450 Temporary rejected"
         - "Message can not be delivered at this time"
+        - "X-Postfix; lost connection with .+ while sending message body"
+        - "400 4.4.7 Message delayed"
+        - "QUEUE.Expired; message expired"
+        - "is of a file type that is NOT allowed by the recipient's organization"
+        - "554 5.7.1 Mail rejected by destination domain"
+        - "554 5.7.0 Reject, id=.+ - spam"
+        - "OUTSCATTER - Marked as spam by sending server"
+        - "550 5.7.1 Command rejected"
       register:
         - "550 Unrouteable address"
         - "550-Requested action not taken: mailbox unavailable"
@@ -150,6 +161,7 @@ email:
         - "Konto deaktiviert / Account disabled"
         - "550 account locked"
         - "SMTPUTF8 is required, but was not offered by host"
+        - '554 5\.7\.1 Access denied$'
       internal_error:
         - "554-Transaction failed 554-Reject due to policy restrictions. 554 For explanation visit https://postmaster.gmx.net/en/case?c=r0735"
         - "554-Transaction failed 554-Reject due to policy restrictions. 554 For explanation visit https://postmaster.gmx.net/en/case?c=r0710"

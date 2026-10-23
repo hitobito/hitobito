@@ -10,6 +10,7 @@
 - Beim CSV-Import von Personen kann neu eine Spalte auf die Personen-ID gemappt werden (nur mit Admin-Berechtigung). Bestehende Personen werden anhand der ID aktualisiert bzw. neue Personen mit vorgegebener ID erstellt (#4517)
 - Beim CSV-Import von Personen wird das manuell gesetzte Spalten-Mapping im Browser gespeichert und beim nächsten Import wieder angewendet (#4517)
 - Zahlungsinformation, Rechnungsvorlagen und Rechnungsartikel sind übersetzbar. Rechnungen werden mit diesen Texten in der Sprache der Empfänger erstellt (sww#413)
+- In den E-Mails zur Kontobestätigung, zum Zurücksetzen des Passworts und zum Entsperren des Kontos wird neu der Grussname statt des vollständigen Namens verwendet (#4459)
 - Die Originalrechnung einer gemahnten Rechnung zeigt wieder das ursprüngliche Fälligkeitsdatum statt jenes der Mahnung (hitobito_sww#378)
 - Die Personennummer wird neu auf der Person angezeigt und ist im Export "Alle Angaben" enthalten (hitobito_zss#8)
 - Die Anmeldebestätigung (PDF), die Teilnahme-Detailseite, Teilnahme-Mails und der Kalender-Export (iCal) zeigen von der Kontaktperson nur die in den Anzeigeoptionen gewählten Angaben (hitobito_sww#376)

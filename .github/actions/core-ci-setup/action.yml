@@ -12,19 +12,33 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: 'Set up Ruby and install gems'
+    - name: 'Install mise'
+      uses: jdx/mise-action@v5
+      with:
+        minimum_release_age: 7d
+        install: false
+        cache: false
+        env: false
+        add_shims_to_path: false
+
+    - name: 'Read tool versions from mise.toml'
+      id: toolVersions
+      run: |
+        mise trust mise.toml
+        echo "ruby=$(mise tool ruby --requested)" >> "$GITHUB_OUTPUT"
+        echo "node=$(mise tool node --requested)" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: 'Set up Ruby ${{ steps.toolVersions.outputs.ruby }} and install gems'
       uses: ruby/setup-ruby@v1
       with:
+        ruby-version: ${{ steps.toolVersions.outputs.ruby }}
         bundler-cache: true
 
-    - name: Read .tool-versions
-      uses: marocchino/tool-versions-action@v1
-      id: readToolVersions
-
-    - name: Set up Node.js ${{ steps.readToolVersions.outputs.nodejs }}
+    - name: Set up Node.js ${{ steps.toolVersions.outputs.node }}
       uses: actions/setup-node@v6
       with:
-        node-version: ${{ steps.readToolVersions.outputs.nodejs }}
+        node-version: ${{ steps.toolVersions.outputs.node }}
 
     - name: 'Setup OS'
       run: |

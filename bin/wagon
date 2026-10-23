@@ -403,8 +403,9 @@ create)
   ln -s AGENTS.md CLAUDE.md
   ln -s ../hitobito/.claude .claude
   ln -s ../hitobito/.opencode .opencode
+  ln -s ../hitobito/mise.toml mise.toml
   git add .
-  git commit -m "Link AI agent instructions to the core"
+  git commit -m "Link AI agent instructions and mise config to the core"
   popd
 
   echo "Wagon has been created in ${new_wagon_dir}. The License has been inserted."

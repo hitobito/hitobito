@@ -2011,8 +2011,8 @@ fr:
     email_field:
       used_as_login: Utilisé en tant qu'identifiant.
       only_changeable_by_superior: >
-          Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur von einer
-          über alle diese Rollen übergeordneten Person geändert werden.
+          L'adresse e-mail principale d'une personne occupant plusieurs rôles ne peut
+          être modifiée que par une personne ayant un rôle supérieur à tous ces rôles.
     fields:
       format_birthday: (TT.MM.JJJJ)
       no_sensitive_information: ""

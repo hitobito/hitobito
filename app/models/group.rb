@@ -229,7 +229,11 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     # queries where multiple groups have the same type
     def order_by_type
       joins("INNER JOIN group_type_orders ON group_type_orders.name = groups.type")
-        .reorder("group_type_orders.order_weight ASC, groups.lft ASC")
+        .reorder(
+          "group_type_orders.order_weight ASC",
+          Arel.sql("LOWER(COALESCE(NULLIF(groups.short_name, ''), groups.name)) ASC"),
+          "groups.lft ASC"
+        )
     end
 
     private

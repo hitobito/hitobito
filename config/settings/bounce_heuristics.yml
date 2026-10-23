@@ -86,7 +86,6 @@ email:
         - "550 Recipient address does not exist"
         - "552 5.2.2 <.+@.+>: Recipient address rejected: Address does not exist"
         - "550 Mailbox not found"
-        - "553-5.1.3 The recipient address <.+@.+> is not a 553-5.1.3 valid RFC 5321 address"
       continue:
         - "554 5.7.1 Spam message rejected"
         - '550 5.1.1 MXIN505 mailbox\s+.+@.+\s+is full'
@@ -161,7 +160,7 @@ email:
         - "Konto deaktiviert / Account disabled"
         - "550 account locked"
         - "SMTPUTF8 is required, but was not offered by host"
-        - '554 5\.7\.1 Access denied$'
+        - '554 5.7.1 Access denied'
       internal_error:
         - "554-Transaction failed 554-Reject due to policy restrictions. 554 For explanation visit https://postmaster.gmx.net/en/case?c=r0735"
         - "554-Transaction failed 554-Reject due to policy restrictions. 554 For explanation visit https://postmaster.gmx.net/en/case?c=r0710"

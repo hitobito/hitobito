@@ -10,7 +10,7 @@ describe RolesController do
 
   let(:group) { groups(:top_group) }
   let(:person) { Fabricate(:person) }
-  let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group, created_at: 1.year.ago) }
+  let(:role) { Fabricate(Group::TopGroup::Member.name.to_sym, person: person, group: group, start_on: 1.year.ago) }
 
   describe "GET new" do
     it "sets a role of the correct type" do
@@ -389,8 +389,8 @@ describe RolesController do
       # rubocop:enable Layout/LineLength
     end
 
-    it "hard destroys and creates new role if type changes and role was created recently" do
-      role.update_attribute(:created_at, Time.zone.yesterday)
+    it "hard destroys and creates new role if type changes and role starts today" do
+      role.update_attribute(:start_on, Time.zone.today)
       expect do
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
       end.not_to change { Role.with_inactive.count }
@@ -421,8 +421,8 @@ describe RolesController do
       expect(person.reload.primary_group).to eq group2
     end
 
-    it "hard destroys and creates new role if type and group changes and role was created recently" do
-      role.update_attribute(:created_at, Time.zone.yesterday)
+    it "hard destroys and creates new role if type and group changes and role starts today" do
+      role.update_attribute(:start_on, Time.zone.today)
       group2 = groups(:toppers)
       expect do
         put :update,
@@ -480,7 +480,9 @@ describe RolesController do
     context "multiple groups" do
       let(:group) { groups(:bottom_group_one_one) }
       let(:group2) { groups(:bottom_group_one_two) }
-      let(:role) { Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: group) }
+      let(:role) {
+        Fabricate(Group::BottomGroup::Leader.name.to_sym, person: person, group: group, start_on: Time.zone.today)
+      }
 
       it "terminates and creates new role if group changes" do
         group3 = Fabricate(Group::GlobalGroup::Leader.name.to_s, person: person, group: groups(:toppers)).group
@@ -533,8 +535,8 @@ describe RolesController do
         # rubocop:enable Layout/LineLength
       end
 
-      it "hard destroys and creates new role if type changes and role was created recently" do
-        role.update_attribute(:created_at, Time.zone.yesterday)
+      it "hard destroys and creates new role if type changes and role starts today" do
+        role.update_attribute(:start_on, Time.zone.today)
         expect do
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
         end.not_to change { Role.with_inactive.count }
@@ -567,7 +569,7 @@ describe RolesController do
     }
 
     it "redirects to group after hard delete" do
-      role.update_attribute(:created_at, 1.day.ago)
+      role.update_attribute(:start_on, Time.zone.today)
       user = Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: group)
       sign_in(user.person)
       delete :destroy, params: {group_id: group.id, id: role.id}

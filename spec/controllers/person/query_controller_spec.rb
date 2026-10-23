@@ -35,7 +35,12 @@ describe Person::QueryController do
       it "returns indicator that there are more than 10 people" do
         11.times { Fabricate(:person, first_name: "Pascal") }
         get :index, params: {q: "pas"}
-        expect(response.body).to match(/.../)
+        expect(response.body).to match(/"more_results":true/)
+      end
+
+      it "returns more results false if there are not more than 10 people" do
+        get :index, params: {q: "pas"}
+        expect(response.body).to match(/"more_results":false/)
       end
     end
 

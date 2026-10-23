@@ -141,4 +141,25 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
 
     expect(string).to eq("Name (de) wurde von <i>Alter Name</i> auf <i>Neuer Name</i> geändert.")
   end
+
+  it "does not raise if the translation itself was deleted" do
+    translation = events(:top_course).translations.first
+    version.update!(item: translation)
+    translation.delete
+    version.reload
+
+    string = presenter.attribute_change(:name, "Alter Name", "Neuer Name")
+
+    expect(string).to eq("Name wurde von <i>Alter Name</i> auf <i>Neuer Name</i> geändert.")
+  end
+
+  it "shows the id if the association is missing on the sti subclass" do
+    item = version.item
+    item.define_singleton_method(:secondary_parent) { association(:secondary_parent).reader }
+    allow(version).to receive(:item).and_return(item)
+
+    string = presenter.attribute_change(:secondary_parent_id, nil, 42)
+
+    expect(string).to eq("Secondary parent wurde auf <i>42</i> gesetzt.")
+  end
 end

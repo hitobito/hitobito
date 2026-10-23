@@ -61,5 +61,14 @@ describe "Person Autocomplete", js: true do
       all("form .btn-group").first.click_button "Speichern"
       is_expected.to have_content "Rolle Leader für Top Leader in TopGroup wurde erfolgreich erstellt."
     end
+
+    it "returns more results true if there are more than 10 people" do
+      11.times { Fabricate(:person, first_name: "Pascal") }
+      sign_in
+      visit new_group_role_path(group, role: {type: "Group::TopGroup::Leader"})
+
+      fill_in "Person", with: "Pas"
+      expect(find('ul[role="listbox"] div')).to have_content "..."
+    end
   end
 end

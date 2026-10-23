@@ -54,8 +54,8 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
             url.searchParams.set(queryKey, query);
             const source = await fetch(url);
             const data = await source.json();
-            if (data.at(-1).more_results) {
-              moreResults = true;
+            if (data.at(-1).more_results !== undefined) {
+              moreResults = data.at(-1).more_results;
               data.pop();
             }
             input.classList.remove("input-loading");

@@ -784,6 +784,12 @@ describe Person do
       expect(person.email).to be_nil
     end
 
+    it "does not allow e-mail address with consecutive dots" do
+      person.email = "kein.zweitemail...realmail@hitobito.com"
+
+      expect(person).not_to be_valid
+    end
+
     it "can create two people with empty email" do
       expect { 2.times { Fabricate(:person, email: "") } }.to change { Person.count }.by(2)
     end

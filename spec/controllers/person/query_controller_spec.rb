@@ -24,6 +24,17 @@ describe Person::QueryController do
         expect(response.body).to match(/Pascal/)
         expect(response.body).to match(/Opassum/)
       end
+
+      it "returns more results true if there are more than 10 people" do
+        11.times { Fabricate(:person, first_name: "Pascal") }
+        get :index, params: {q: "pas"}
+        expect(response.body).to match(/"more_results":true/)
+      end
+
+      it "returns more results false if there are not more than 10 people" do
+        get :index, params: {q: "pas"}
+        expect(response.body).to match(/"more_results":false/)
+      end
     end
 
     context "as bottom_member" do

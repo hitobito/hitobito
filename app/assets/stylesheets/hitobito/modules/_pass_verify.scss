@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2024, Schweizerischer Kanu-Verband. This file is part of
+// Copyright (c) 2012-2026, Schweizerischer Kanu-Verband. This file is part of
 // hitobito and licensed under the Affero General Public License version 3
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito.
@@ -35,6 +35,16 @@
     text-align: center;
     padding: 15px;
     font-size: 18px;
+
+    .lang {
+      gap: 0.75rem;
+      font-size: 1rem;
+
+      a.active {
+        font-weight: bold;
+        text-decoration: none;
+      }
+    }
 
     #member-img {
       img {

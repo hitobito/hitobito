@@ -56,7 +56,7 @@ module PaperTrail
       end
     end
 
-    def translation_label(attr)
+    def translation_label(attr) # rubocop:disable Metrics/CyclomaticComplexity
       # globalized_model knows the sti model class to be able to load sti translations
       # as well as being able to load translations for translated attributes even if
       # the main_type is not the globalized_model.

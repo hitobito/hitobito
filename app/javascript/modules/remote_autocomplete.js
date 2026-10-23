@@ -84,7 +84,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
         element: (list, data) => {
           if (moreResults) {
             const more = document.createElement("div");
-            more.textContent = "…";
+            more.textContent = "...";
             list.appendChild(more);
           }
         },

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_cvp.
@@ -84,6 +84,28 @@ describe Messages::TextMessageDeliveryReportJob do
 
       expect(recipient.state).to eq("failed")
       expect(recipient.error).to eq(no_credit_available_msg)
+    end
+  end
+
+  context "with the provider settings of the group" do
+    before do
+      allow(subject).to receive(:client).and_call_original
+      message.mailing_list.group.update!(text_message_username: "goofy",
+        text_message_password: "max42")
+    end
+
+    it "fetches delivery reports with the group's credentials" do
+      stub_request(:post, "https://json.aspsms.com/InquireDeliveryNotifications")
+        .with { |request| JSON.parse(request.body).values_at("UserName", "Password") == %w[goofy max42] }
+        .to_return(status: 200, body: {
+          StatusCode: "1",
+          StatusInfo: "OK",
+          DeliveryNotifications: [{TransactionReferenceNumber: recipient.id.to_s, DeliveryStatus: "0"}]
+        }.to_json)
+
+      subject.perform
+
+      expect(recipient.reload.state).to eq("sent")
     end
   end
 end

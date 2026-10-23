@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2026, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -13,6 +13,13 @@ module Messages
       STATUS_AUTH_ERROR = :auth_error
 
       MAX_RECIPIENTS = 1000
+
+      def self.for(group)
+        init(config: {provider: group.text_message_provider,
+                      originator: group.text_message_originator || group.name,
+                      username: group.text_message_username,
+                      password: group.text_message_password}.with_indifferent_access)
+      end
 
       def self.init(config:)
         case config["provider"]

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2021-2026, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -30,13 +30,6 @@ module Messages
       TextMessageDeliveryReportJob
         .new(@message)
         .enqueue!(run_at: 15.seconds.from_now)
-    end
-
-    def provider_config
-      {provider: group.text_message_provider,
-       originator: group.text_message_originator || group.name,
-       username: group.text_message_username,
-       password: group.text_message_password}.with_indifferent_access
     end
 
     def group
@@ -106,7 +99,7 @@ module Messages
     end
 
     def client
-      @client ||= Messages::TextMessageProvider::Base.init(config: provider_config)
+      @client ||= Messages::TextMessageProvider::Base.for(group)
     end
 
     def not_ok?(status)

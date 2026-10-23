@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Schweizerischer Kanu-Verband. This file is part of
+#  Copyright (c) 2012-2026, Schweizerischer Kanu-Verband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -8,7 +8,7 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
 
   def show
     verify_token = find_legacy_pass&.verify_token || "not-found"
-    redirect_to pass_verify_path(verify_token), status: :found
+    redirect_to pass_verify_path(verify_token, locale: params[:locale].presence), status: :found
   end
 
   private

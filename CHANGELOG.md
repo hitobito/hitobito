@@ -28,12 +28,14 @@
 - Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
 - Berechtigungen der API-Keys werden nun richtig angezeigt, das Token nur noch auf der Detail Seite (#3029)
 - Bei der Vergabe von Kurs-Qualifikationen kann pro Person zwischen «Bestanden», «Nicht bestanden» und «Nicht beurteilt» gewählt und ein Kommentar erfasst werden. Der Kommentar ist in der Personen-Historie als Tooltip sichtbar (hitobito_sac_cas#2646)
+- Die Verifikationsseite von Ausweisen wird in der Browsersprache angezeigt und die Sprache kann gewechselt werden (hitobito_sac_cas#2677)
 - Die JSON:API stellt die verfügbaren Rollen- und Gruppentypen der Instanz zur Verfügung, ohne Authentisierung
+- Pro Frage kann neu festgelegt werden, welche Rollen des Anlass/Kurses die Antworten sehen dürfen. Die Hauptleitung sieht immer alle Antworten (#4046)
+- Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)
 
 ## Version 2.10
 
-- Pro Frage kann neu festgelegt werden, welche Rollen des Anlass/Kurses die Antworten sehen dürfen. Die Hauptleitung sieht immer alle Antworten (#4046)
-- Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)
+- Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
 - Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
 - Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)
 - Statistiken auf Gruppen können in Wagons erweitert werden (hitobito_sww#345)

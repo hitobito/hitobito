@@ -56,18 +56,20 @@ module PaperTrail
       end
     end
 
-    def translation_label(attr)
+    def translation_label(attr) # rubocop:disable Metrics/CyclomaticComplexity
       # globalized_model knows the sti model class to be able to load sti translations
       # as well as being able to load translations for translated attributes even if
       # the main_type is not the globalized_model.
       # It is nil if the record it translates has since been deleted, in which case we
       # fall back to the base translated class, losing sti-subtype-specific translations.
-      globalized_model = item.globalized_model
+      globalized_model = item&.globalized_model
       klass = globalized_model&.class ||
-        item.class.reflect_on_association(:globalized_model).klass
+        item_class.reflect_on_association(:globalized_model).klass
       attribute_label = klass.human_attribute_name(attr)
 
-      if globalized_model.nil? || globalized_model.is_a?(main_type.safe_constantize)
+      if item.nil?
+        attribute_label
+      elsif globalized_model.nil? || globalized_model.is_a?(main_type.safe_constantize)
         "#{attribute_label} (#{item})"
       else
         "#{attribute_label} (#{item}) #{I18n.t("global.from")} #{globalized_model}"
@@ -108,7 +110,7 @@ module PaperTrail
     def belongs_to_change_args(attr, value)
       association_name = attr.to_s.chomp("_id")
 
-      if item.respond_to?(association_name)
+      if item&.class&.reflect_on_association(association_name)
         record = item.send(association_name)
         record.class.base_class.find_by(id: value).to_s if record
       else

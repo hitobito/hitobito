@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe People::Membership::VerifyController do
+describe People::Membership::VerifyController, :outside_language_scope do
   let(:person) { people(:top_leader) }
   let(:definition) { pass_definitions(:top_layer_pass) }
   let!(:pass) do
@@ -27,6 +27,12 @@ describe People::Membership::VerifyController do
 
         expect(response).to redirect_to(pass_verify_path(pass.verify_token))
         expect(response.status).to eq(302)
+      end
+
+      it "keeps a given locale" do
+        get :show, params: {verify_token: person.membership_verify_token, locale: "fr"}
+
+        expect(response).to redirect_to(pass_verify_path(pass.verify_token, locale: "fr"))
       end
 
       it "redirects to not-found when person is unknown" do

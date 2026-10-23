@@ -135,5 +135,62 @@ describe Passes::VerificationsController do
         expect(dom).to have_css("#logo img[src=\"#{logo_path("oauth_app.png")}\"]")
       end
     end
+
+    describe "language" do
+      let(:languages) { {de: "Deutsch", fr: "Français", it: "Italiano"} }
+
+      around do |example|
+        cached_locales = I18n.available_locales
+        cached_languages = Settings.application.languages
+        Settings.application.languages = languages
+        I18n.available_locales = languages.keys
+        example.run
+      ensure
+        I18n.available_locales = cached_locales
+        Settings.application.languages = cached_languages
+        I18n.locale = I18n.default_locale
+      end
+
+      context "with a single language" do
+        let(:languages) { {de: "Deutsch"} }
+
+        it "has no language links" do
+          get :show, params: {verify_token: pass.verify_token}
+
+          expect(dom).not_to have_css("#pass-verify #details .lang")
+        end
+      end
+
+      it "renders in the browser language" do
+        request.headers["Accept-Language"] = "fr-CH,fr;q=0.9,en;q=0.8"
+        get :show, params: {verify_token: pass.verify_token}
+
+        expect(dom).to have_css("html[lang=fr]")
+        expect(cookies[:locale]).to eq("fr")
+      end
+
+      it "prefers the locale param over the browser language" do
+        request.headers["Accept-Language"] = "fr"
+        get :show, params: {verify_token: pass.verify_token, locale: "it"}
+
+        expect(dom).to have_css("html[lang=it]")
+      end
+
+      it "falls back to the default language for unsupported browser languages" do
+        request.headers["Accept-Language"] = "en"
+        get :show, params: {verify_token: pass.verify_token}
+
+        expect(dom).to have_css("html[lang=de]")
+      end
+
+      it "renders language links keeping the verify token" do
+        request.headers["Accept-Language"] = "fr"
+        get :show, params: {verify_token: pass.verify_token}
+
+        expect(dom).to have_css("#pass-verify #details .lang a", count: 3)
+        expect(dom).to have_css("#pass-verify #details .lang a.active", text: "FR")
+        expect(dom).to have_link("IT", href: "/passes/verify/#{pass.verify_token}?locale=it")
+      end
+    end
   end
 end

@@ -4,6 +4,8 @@
 -# https://github.com/hitobito/hitobito
 
 #details
+  .d-flex.justify-content-end
+    = render 'layouts/languages'
   - if @person
     #member-img= image_tag(upload_url(@person, :picture))
     #member-name= @person.full_name

@@ -616,4 +616,81 @@ describe PersonReadables do
       end
     end
   end
+
+  describe "layer_and_below_read_details" do
+    let(:user) { Fabricate(Group::TopGroup::LocalSecretary.name.to_sym, group: groups(:top_group)).person.reload }
+
+    before do
+      allow(Group::TopGroup::LocalSecretary).to receive(:permissions)
+        .and_return([:layer_and_below_read_details])
+    end
+
+    shared_examples "lists people only up to details" do
+      it "lists people in group list" do
+        expect(Person.accessible_by(PersonReadables.new(user, group))).to include(other)
+      end
+
+      it "lists people in global and details lists" do
+        expect(Person.accessible_by(PersonReadables.new(user))).to include(other)
+        expect(Person.accessible_by(PersonDetailsReadables.new(user))).to include(other)
+      end
+
+      it "does not list people in full lists" do
+        expect(Person.accessible_by(PersonFullReadables.new(user, group))).not_to include(other)
+        expect(Person.accessible_by(PersonFullReadables.new(user))).not_to include(other)
+      end
+    end
+
+    context "in same layer" do
+      let(:group) { groups(:toppers) }
+      let(:other) { Fabricate(Group::GlobalGroup::Member.name.to_sym, group: group).person }
+
+      it_behaves_like "lists people only up to details"
+
+      context "with people invisible from above" do
+        let(:other) { Fabricate(Role::External.name.to_sym, group: group).person }
+
+        it_behaves_like "lists people only up to details"
+      end
+    end
+
+    context "in layer below" do
+      let(:group) { groups(:bottom_layer_one) }
+      let(:other) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: group).person }
+
+      it_behaves_like "lists people only up to details"
+
+      it "does not list people invisible from above" do
+        invisible = Fabricate(Role::External.name.to_sym, group: group).person
+        expect(Person.accessible_by(PersonReadables.new(user, group))).not_to include(invisible)
+        expect(Person.accessible_by(PersonReadables.new(user))).not_to include(invisible)
+      end
+    end
+  end
+
+  describe "group_read_contact_data" do
+    let(:group) { groups(:bottom_group_one_one) }
+    let(:user) { Fabricate(Group::BottomGroup::NoPermissions.name.to_sym, group: group).person.reload }
+    let(:other) { Fabricate(Role::External.name.to_sym, group: group).person }
+
+    before do
+      allow(Group::BottomGroup::NoPermissions).to receive(:permissions)
+        .and_return([:group_read_contact_data])
+    end
+
+    it "lists people of same group in group list" do
+      expect(Person.accessible_by(PersonReadables.new(user, group))).to include(other)
+    end
+
+    it "lists people of same group but no others in global list" do
+      accessibles = Person.accessible_by(PersonReadables.new(user))
+      expect(accessibles).to include(other)
+      expect(accessibles).not_to include(people(:bottom_member))
+    end
+
+    it "does not list people of same group in full and details lists" do
+      expect(Person.accessible_by(PersonFullReadables.new(user))).not_to include(other)
+      expect(Person.accessible_by(PersonDetailsReadables.new(user))).not_to include(other)
+    end
+  end
 end

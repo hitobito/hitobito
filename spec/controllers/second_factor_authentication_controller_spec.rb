@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2021, hitobito AG. This file is part of
+# Copyright (c) 2021-2026, hitobito AG. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https ://github.com/hitobito/hitobito.
@@ -102,6 +102,13 @@ describe SecondFactorAuthenticationController do
             expect(bottom_member.two_factor_authentication).to eq("totp")
             expect(bottom_member.two_fa_secret).to eq(@secret)
             expect(bottom_member.two_factor_authentication_registered?).to be(true)
+            expect(controller.send(:current_person)).to be_nil
+          end
+
+          it "does not sign in without TOTP code" do
+            post :create, params: {person: {second_factor_code: totp_authenticator.now}}
+
+            expect(response).to redirect_to new_users_second_factor_path
             expect(controller.send(:current_person)).to be_nil
           end
 

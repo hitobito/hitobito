@@ -17,6 +17,7 @@ class GroupAbility < AbilityDsl::Base
       .in_self_registration_groups
 
     permission(:contact_data).may(:index_people).all
+    permission(:group_read_contact_data).may(:index_people).in_same_group
 
     # local people are the ones not visible from above
     permission(:group_read).may(:show_details, :index_people, :index_local_people).in_same_group
@@ -61,6 +62,12 @@ class GroupAbility < AbilityDsl::Base
         :export_subgroups, :export_events, :"export_event/courses")
       .in_same_layer_or_below
     permission(:layer_and_below_read).may(:index_local_people).in_same_layer
+
+    permission(:layer_and_below_read_details)
+      .may(:show_details, :index_people,
+        :export_subgroups, :export_events, :"export_event/courses")
+      .in_same_layer_or_below
+    permission(:layer_and_below_read_details).may(:index_local_people).in_same_layer
 
     permission(:layer_and_below_full).may(:create).with_parent_in_same_layer_or_below
     permission(:layer_and_below_full).may(:destroy).in_same_layer_or_below_except_permission_giving

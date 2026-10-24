@@ -71,6 +71,26 @@ describe AbilityDsl::UserContext do
     }
   end
 
+  context "with a permission implied by several permissions" do
+    let(:user) do
+      p = Fabricate(:person)
+      Fabricate(Group::BottomLayer::Leader.sti_name.to_sym, group: groups(:bottom_layer_one), person: p)
+      Fabricate(Group::TopGroup::LocalGuide.sti_name.to_sym, group: groups(:top_group), person: p)
+      p
+    end
+
+    before do
+      stub_const("Role::Types::PermissionImplications",
+        Role::PermissionImplications.merge(layer_full: [:layer_read, :layer_and_below_read]))
+    end
+
+    it "grants the implied permission for the groups of all implying permissions" do
+      expect(subject.permission_layer_ids(:layer_and_below_read))
+        .to match_array([groups(:bottom_layer_one).id, groups(:top_layer).id])
+      expect(subject.permission_layer_ids(:layer_read)).to eq [groups(:top_layer).id]
+    end
+  end
+
   describe "permission implication for groups" do
     let!(:group_a) { Fabricate(Group::StaticNameAGroup.sti_name.to_sym, parent: groups(:bottom_layer_one)) }
     let!(:group_b) { Fabricate(Group::StaticNameBGroup.sti_name.to_sym, parent: groups(:bottom_layer_one)) }

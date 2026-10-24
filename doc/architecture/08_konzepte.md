@@ -143,6 +143,9 @@ Ebenen. Erstellen von Anlässen und Abos (Mailinglisten) auf dieser Ebene.
 
 **layer_and_below_read**: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
 
+**layer_and_below_read_details**: Lesen auf dieser Ebene und allen darunter liegenden Ebenen, ohne
+vollständige Historie der Personen.
+
 **layer_full**: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Anlässen und Abos
 (Mailinglisten) auf dieser Ebene.
 
@@ -159,6 +162,9 @@ Ebenen). Inkl. Erstellen von Anlässen und Abos (Mailinglisten).
 **group_read**: Lesen nur auf dieser Gruppe.
 
 **contact_data**: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
+
+**group_read_contact_data**: Lesen der Kontaktdaten aller Personen in dieser Gruppe, ohne für diese
+selbst sichtbar zu werden.
 
 **approve_applications**: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
 

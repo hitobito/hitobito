@@ -6,11 +6,13 @@
 module AbilityDsl
   class UserContext
     # rubocop:disable Style/MutableConstant These constants are meant to be extended
-    GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
+    GROUP_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read,
+      :layer_and_below_read_details, :layer_full, :layer_read,
       :group_and_below_full, :group_and_below_read, :group_full, :group_read,
-      :finance, :see_invisible_from_above, :manual_deletion]
+      :group_read_contact_data, :finance, :see_invisible_from_above, :manual_deletion]
 
-    LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read, :layer_full, :layer_read,
+    LAYER_PERMISSIONS = [:layer_and_below_full, :layer_and_below_read,
+      :layer_and_below_read_details, :layer_full, :layer_read,
       :finance, :see_invisible_from_above, :manual_deletion, :layer_and_below_finance]
     # rubocop:enable Style/MutableConstant
 
@@ -91,14 +93,17 @@ module AbilityDsl
     def init_permission_groups
       permissions_groups = Hash.new { |hash, key| hash[key] = [] }
       GROUP_PERMISSIONS.each do |permission|
-        groups = user.groups_with_permission(permission).to_a
-        given = Role::PermissionImplications.invert[permission]
-        groups += user.groups_with_permission(given).to_a if given
+        groups = [permission, *granting_permissions(permission)]
+          .flat_map { |p| user.groups_with_permission(p).to_a }
 
         grant_groups_permissions(permission, groups.map(&:id))
         permissions_groups[permission] |= groups
       end
       permissions_groups
+    end
+
+    def granting_permissions(permission)
+      Role::PermissionImplications.select { |_, implied| Array(implied).include?(permission) }.keys
     end
 
     def init_permission_layers(permissions_groups)

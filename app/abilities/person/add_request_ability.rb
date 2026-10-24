@@ -32,6 +32,7 @@ class Person::AddRequestAbility < AbilityDsl::Base
     permission(:group_and_below_read).may(:add_without_request).in_same_group_or_below
     permission(:layer_read).may(:add_without_request).in_same_layer
     permission(:layer_and_below_read).may(:add_without_request).in_same_layer_or_below
+    permission(:layer_and_below_read_details).may(:add_without_request).in_same_layer_or_below
     permission(:group_full)
       .may(:add_without_request)
       .active_or_deleted_in_same_group

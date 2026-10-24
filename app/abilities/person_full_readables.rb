@@ -9,10 +9,22 @@ class PersonFullReadables < PersonReadables
   self.same_group_permissions = [:group_full, :group_and_below_full]
   self.above_group_permissions = [:group_and_below_full]
 
+  def self.same_layer_permissions = super - [:layer_and_below_read_details]
+
+  def self.above_layer_permissions = super - [:layer_and_below_read_details]
+
   private
 
   def contact_data_visible?
     false
+  end
+
+  def layer_and_below_read_details_layer_ids
+    []
+  end
+
+  def group_read_contact_data_group_ids
+    []
   end
 
   def group_read_in_this_group?

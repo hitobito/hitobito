@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -29,6 +29,30 @@ describe "event_participations#index", type: :request do
       it "works" do
         make_request
         expect(response.status).to eq(200), response.body
+      end
+    end
+
+    describe "where_exists on a polymorphic relationship" do
+      let(:params) { {where_exists: "participant", filter: {participant: {id: participant.id}}} }
+
+      context "matching the participant" do
+        let(:participant) { people(:bottom_member) }
+
+        it "returns the participation" do
+          make_request
+          expect(response.status).to eq(200), response.body
+          expect(d.map(&:id)).to eq([event_participations(:top).id])
+        end
+      end
+
+      context "matching nobody" do
+        let(:participant) { people(:top_leader) }
+
+        it "returns nothing" do
+          make_request
+          expect(response.status).to eq(200), response.body
+          expect(d).to be_empty
+        end
       end
     end
 

@@ -36,6 +36,7 @@
 - OAuth-Applikationen können eine eigene Gültigkeitsdauer für Refresh Tokens erhalten, z. B. damit Logins in Mobile-Apps länger gültig bleiben (hitobito_sac_cas#2755)
 - JSON:API: Rollen können mit einem beliebigen `start_on` erstellt und über `end_on` zu einem Stichtag beendet werden. Das Setzen von `end_on` erfordert die Berechtigung, die Rolle zu löschen (hitobito_bdp#65)
 - Rechnungen ohne Einzahlungsschein enthalten im PDF keine Felder des alten Einzahlungsscheins mehr, und die Druckoptionen für den Einzahlungsschein entfallen (hitobito_pfadi_de#87)
+- In der JSON:API kann neu mit dem Parameter `where_exists` nach Feldern in inkludierten Ressourcen gefiltert werden. Zum Beispiel können damit nur diejenigen Personen mit einer bestimmten Rolle oder in einer bestimmten Gruppe abgerufen werden (#2700)
 
 ## Version 2.10
 

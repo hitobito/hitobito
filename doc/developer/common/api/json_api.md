@@ -44,6 +44,34 @@ All successful responses do have HTTP Status `2xx`.
 
 To protect from CSRF attacks, requests must have set **Content-Type** header to **application/vnd.api+json**.
 
+### Filtering by related resources: `include` vs `where_exists`
+
+Filtering an included relationship only trims that relationship.
+
+    GET /api/people?include=roles&filter[roles][type]=Group::BottomLayer::Leader
+
+returns *every* person you may read, and merely narrows the roles shown for each of them, like an
+SQL `LEFT OUTER JOIN` would. People who are no bottom layer leader are still in `data`, just with an
+empty `roles` relationship.
+
+Adding `where_exists` drops those:
+
+    GET /api/people?include=roles&where_exists=roles&filter[roles][type]=Group::BottomLayer::Leader
+
+now returns only the people who actually are a bottom layer leader, like an SQL `EXISTS` would.
+`where_exists` says which records to keep, `include` says which related records to serialize; a
+relationship may appear in either or in both.
+
+All paths given to `where_exists` must match (`where_exists=roles,phone_numbers` keeps the people
+having a role *and* a phone number), only related records you are allowed to read count, and paths
+may be nested arbitrarily deep:
+
+    GET /api/events?include=participations&where_exists=participations.roles&filter[participations.roles.type]=Event::Role::Leader
+
+returns the events having a participation which has a leader role — and, because the condition
+applies at every position along the path, the participations serialized for those events are
+likewise only the ones having a leader role.
+
 ### Errors
 
 Any error like authentication or validation errors are rendered as JSON as defined by the [json:api](https://jsonapi.org/format/#errors) standard. Also a specific http status code is being returned for any errors.

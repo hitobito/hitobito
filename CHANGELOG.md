@@ -32,6 +32,7 @@
 - Die JSON:API stellt die verfügbaren Rollen- und Gruppentypen der Instanz zur Verfügung, ohne Authentisierung
 - Pro Frage kann neu festgelegt werden, welche Rollen des Anlass/Kurses die Antworten sehen dürfen. Die Hauptleitung sieht immer alle Antworten (#4046)
 - Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)
+- In der JSON:API kann neu mit dem Parameter `where_exists` nach Feldern in inkludierten Ressourcen gefiltert werden. Zum Beispiel können damit nur diejenigen Personen mit einer bestimmten Rolle oder in einer bestimmten Gruppe abgerufen werden (#2700)
 
 ## Version 2.10
 

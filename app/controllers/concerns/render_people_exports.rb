@@ -4,8 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 module RenderPeopleExports
-  include ExportableRedirect
   extend ActiveSupport::Concern
+  include ExportableRedirect
 
   def render_pdf(people, group = nil, title = nil)
     pdf = generate_pdf(people, title || group&.name)
@@ -27,7 +27,7 @@ module RenderPeopleExports
 
   def render_pdf_in_background(people, group, filename)
     Export::LabelsJob.new(:pdf,
-      current_user.id,
+      exporting_person_id,
       Person.from(people.select("people.id AS person_id")).pluck(:person_id),
       group.id,
       params.slice(:label_format_id, :household, :category_key)

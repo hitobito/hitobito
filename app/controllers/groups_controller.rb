@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -78,7 +78,7 @@ class GroupsController < CrudController
 
   def export_subgroups
     Export::SubgroupsExportJob.new(
-      current_person.id, entry.id, filename: :subgroups_export
+      exporting_person_id, entry.id, filename: :subgroups_export
     ).enqueue!
     redirect_after_enqueued_export(entry)
   end

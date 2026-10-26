@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -259,7 +259,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def render_tabular_in_background(format)
     Export::EventParticipationsExportJob.new(format,
-      current_person.id,
+      exporting_person_id,
       event.id,
       group.id,
       params.merge(filename: :event_participation_export)).enqueue!

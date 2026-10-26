@@ -1056,6 +1056,15 @@ describe PeopleController do
       end.to raise_error(CanCan::AccessDenied)
     end
 
+    it "rejects background export without a person to receive it" do
+      expect do
+        get :index, params: {group_id: group.id, token: "PermittedToken"}, format: :csv
+      end.not_to change { Delayed::Job.count }
+      expect(response).to have_http_status(:not_acceptable)
+      expect(response.body).to eq "Dieser Export läuft im Hintergrund und benötigt eine " \
+        "angemeldete Person. Mit API-Tokens bitte die JSON-API verwenden."
+    end
+
     context "bottom_group" do
       let(:group) { groups(:bottom_group_one_one_one) }
 

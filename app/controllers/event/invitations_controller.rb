@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, CEVI ZH SH GL. This file is part of
+#  Copyright (c) 2021-2026, CEVI ZH SH GL. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -64,7 +64,7 @@ class Event::InvitationsController < CrudController
 
   def render_tabular_in_background(format, name = :invitation_export)
     Export::InvitationsExportJob.new(format,
-      current_person.id,
+      exporting_person_id,
       event.id,
       filename: name).enqueue!
     redirect_after_enqueued_export

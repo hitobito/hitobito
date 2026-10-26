@@ -33,6 +33,7 @@ describe EventResource, type: :resource do
         :maximum_participants,
         :motto,
         :external_application_link,
+        :participations_visible,
         :type,
         :updated_at
       ]

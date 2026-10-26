@@ -1,4 +1,4 @@
-#  Copyright (c) 2020-2024, Hitobito AG. This file is part of
+#  Copyright (c) 2020-2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,7 +14,8 @@ Truemail.configure do |config|
   # config.verifier_domain = 'somedomain.com'
 
   # Optional parameter. You can override default regex pattern
-  # config.email_pattern = /regex_pattern/
+  # Rejects consecutive dots and a dot before the @, which SMTP servers refuse
+  config.email_pattern = /\A(?![^@]*\.[.@])#{Truemail::RegexConstant::REGEX_EMAIL_PATTERN}/
 
   # Optional parameter. You can override default regex pattern
   # config.smtp_error_body_pattern = /regex_pattern/

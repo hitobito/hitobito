@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 module RenderMessagesExports
-  include ExportableRedirect
   extend ActiveSupport::Concern
+  include ExportableRedirect
 
   def render_pdf_preview(letter = entry)
     assert_type(letter)
@@ -27,7 +27,7 @@ module RenderMessagesExports
   end
 
   def render_in_background(letter, format, name)
-    Export::MessageJob.new(format, current_person.id, letter.id, {filename: name}).enqueue!
+    Export::MessageJob.new(format, exporting_person_id, letter.id, {filename: name}).enqueue!
     redirect_after_enqueued_export
   end
 

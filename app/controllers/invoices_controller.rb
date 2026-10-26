@@ -144,12 +144,12 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   def render_tabular_in_background(format, invoices)
     if params[:invoice_items].present?
       Export::InvoiceItemsJob.new(
-        format, current_person.id, invoices.map(&:id),
+        format, exporting_person_id, invoices.map(&:id),
         {filename: InvoiceItem.model_name.human(count: 2).downcase}
       ).enqueue!
     else
       Export::InvoicesJob.new(
-        format, current_person.id, invoices.map(&:id),
+        format, exporting_person_id, invoices.map(&:id),
         {filename: filename(invoices)}
       ).enqueue!
     end
@@ -164,7 +164,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
       format = :pdf
       Export::InvoicesJob.new(
         format,
-        current_person.id,
+        exporting_person_id,
         invoices.map(&:id),
         pdf_options.merge({filename: filename(invoices)})
       ).enqueue!

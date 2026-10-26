@@ -238,7 +238,7 @@ class EventsController < CrudController # rubocop:todo Metrics/ClassLength
 
   def render_tabular_in_background(format, name = :events_export)
     Export::EventsExportJob.new(format,
-      current_person.id,
+      exporting_person_id,
       group.id,
       event_filter.to_h,
       filename: name).enqueue!

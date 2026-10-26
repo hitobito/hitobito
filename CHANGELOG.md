@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Im Login-Menü wird die Zwei-Faktor-Authentifizierung auf dem eigenen Profil neu eingerichtet oder deaktiviert, auf anderen Personen nur noch deaktiviert. Ist 2FA für eine Rolle vorgeschrieben, muss sie beim nächsten Login erneut eingerichtet werden (#1798)
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 - Rechnungen können als CSV oder Excel mit einer Zeile pro Rechnungsposten exportiert werden (hitobito_florist#7)

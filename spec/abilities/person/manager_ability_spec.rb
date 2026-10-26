@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, CEVI Schweiz, Pfadibewegung Schweiz,
+#  Copyright (c) 2023-2026, CEVI Schweiz, Pfadibewegung Schweiz,
 #  Jungwacht Blauring Schweiz, Pro Natura, Stiftung für junge Auslandschweizer.
 #  This file is part of hitobito_youth and
 #  licensed under the Affero General Public License version 3
@@ -16,7 +16,7 @@ describe PersonAbility do
   let(:member) { member_role.person }
   let(:actions) {
     [:show, :show_details, :show_full, :history, :update, :update_email,
-      :primary_group, :log, :totp_reset]
+      :primary_group, :log, :totp_disable]
   }
 
   subject { ability }

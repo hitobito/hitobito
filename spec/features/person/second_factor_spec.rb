@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
@@ -19,14 +19,12 @@ describe "second factor" do
     visit person_path(person)
   end
 
-  it "rests second factor" do
+  it "sets up second factor anew" do
     click_on "Login"
-    click_on "Zwei-Faktor-Authentifizierung zurücksetzen"
-    expect(page).to have_content "Du wirst beim nächsten Login aufgefordert, " \
-      "Zwei-Faktor-Authentifizierung erneut einzurichten"
-    click_on "Login"
-    expect(page).not_to have_link "Zwei-Faktor-Authentifizierung zurücksetzen"
-    expect(page).to have_link "Zwei-Faktor-Authentifizierung einrichten"
+    expect(page).to have_link("Zwei-Faktor-Authentifizierung", count: 2)
+    click_on "Zwei-Faktor-Authentifizierung einrichten"
+    expect(page).to have_content "Bitte scanne den QR-Code"
+    expect(page).to have_css(".qr-code img")
   end
 
   it "disables second factor" do

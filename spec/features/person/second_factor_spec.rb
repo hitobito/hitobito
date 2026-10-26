@@ -19,7 +19,7 @@ describe "second factor" do
     visit person_path(person)
   end
 
-  it "sets up second factor anew" do
+  it "sets up second factor" do
     click_on "Login"
     expect(page).to have_link("Zwei-Faktor-Authentifizierung", count: 2)
     click_on "Zwei-Faktor-Authentifizierung einrichten"

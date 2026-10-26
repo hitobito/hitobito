@@ -731,12 +731,13 @@ describe EventsController do
       sign_in(people(:top_leader))
     end
 
-    it "renders a disabled, checked checkbox for participations_full roles and reflects " \
-      "the configured visibility for other roles" do
+    it "names participations_full roles once and reflects the configured visibility " \
+      "for other roles" do
       get :edit, params: {group_id: group.id, id: course.id}
 
-      expect(dom).to have_field(Event::Role::Leader.label_plural, disabled: true, checked: true)
-      expect(dom).to have_field(Event::Role::AssistantLeader.label_plural, disabled: true, checked: true)
+      expect(dom).to have_text("Antworten sind für Hauptleitung und Leitung immer einsehbar.")
+      expect(dom).not_to have_field(Event::Role::Leader.label_plural)
+      expect(dom).not_to have_field(Event::Role::AssistantLeader.label_plural)
       expect(dom).to have_field(Event::Role::Cook.label_plural, checked: true)
       expect(dom).to have_field(Event::Role::Helper.label_plural, checked: false)
     end

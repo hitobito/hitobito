@@ -4,7 +4,9 @@
 -#  https://github.com/hitobito/hitobito.
 
 
-%p.mt-3= t('events.form.explain_admin_questions')
+%p.mt-3
+  = t('events.form.explain_admin_questions')
+  = render 'event/questions/visibility_explanation'
 
 = field_set_tag nil do
 

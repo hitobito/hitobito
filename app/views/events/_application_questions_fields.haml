@@ -4,7 +4,9 @@
 -#  https://github.com/hitobito/hitobito.
 
 
-%p.mt-3= t('events.form.explain_application_questions')
+%p.mt-3
+  = t('events.form.explain_application_questions')
+  = render 'event/questions/visibility_explanation'
 
 = field_set_tag nil do
   = NestedFieldsForBuilders::EventQuestion.new(f, :application_questions).build(admin: false) do |fields|

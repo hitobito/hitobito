@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2012-2022, Hitobito AG. This file is part of
+# Copyright (c) 2012-2026, Hitobito AG. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
@@ -116,6 +116,18 @@ describe MailingLists::BulkMail::BounceHandler do
       expect(bounce_mail.raw_source).to include("<nothing@example2.com>: Recipient address rejected: undeliverable address:")
       # rubocop:enable Layout/LineLength
       expect(last_bounce.email).to eql "nothing@example2.com"
+    end
+
+    it "records the bounce for an address with dots" do
+      dotted_bounce = Mail.read_from_string(
+        Rails.root.join("spec", "fixtures", "email", "list_bounce.eml")
+        .read.gsub("nothing@example2.com", "first.last@example2.com")
+      )
+      allow(bounce_imap_mail).to receive(:mail).and_return(dotted_bounce)
+
+      bounce_handler.process
+
+      expect(Bounce.order(:updated_at).last.email).to eq "first.last@example2.com"
     end
 
     it "handles unusual bounces gracefully" do

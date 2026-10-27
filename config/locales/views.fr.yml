@@ -1056,9 +1056,9 @@ fr:
     confirm_deletion:
       title: Willst du die Gruppe "%{group_name}" wirklich löschen?
       text_field_label: "Gruppenname Eingabefeld"
-      warning_html: "<strong>Achtung!</strong> Dabei werden unwiderruflich alle Rollen aller Personen in dieser Gruppe gelöscht. <strong>Diese Operation kann nicht rückgängig gemacht werden.</strong>"
-      confirmation_html: Bitte tippe zur Bestätigung <strong>"%{group_name}"</strong> ein
-      delete: "Gruppen und Rollen definitiv löschen"
+      warning_html: "<strong>Attention!</strong> Cette opération entraînera la suppression définitive de tous les rôles attribués à tous les membres de ce groupe. Elle ne peut pas être annulée..</strong>"
+      confirmation_html: Veuillez saisir <strong>"%{group_name}"</strong> pour confirmer
+      delete: "Supprimer définitivement des groupes et des rôles"
 
   groups_filter:
     description: "Tous les %{group_type_plural} dans %{parent}"
@@ -2011,8 +2011,8 @@ fr:
     email_field:
       used_as_login: Utilisé en tant qu'identifiant.
       only_changeable_by_superior: >
-          Die Haupt-E-Mail Adresse einer Person mit mehreren Rollen kann nur von einer
-          über alle diese Rollen übergeordneten Person geändert werden.
+          L'adresse e-mail principale d'une personne occupant plusieurs rôles ne peut
+          être modifiée que par une personne ayant un rôle supérieur à tous ces rôles.
     fields:
       format_birthday: (TT.MM.JJJJ)
       no_sensitive_information: ""

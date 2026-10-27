@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito.
 # Kueche
 class Event::Role::Helper < Event::Role
-  self.permissions = [:participations_read_details]
+  self.permissions = [:participations_read]
 
   self.kind = :helper
 end

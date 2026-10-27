@@ -11,3 +11,22 @@ Prawn::Document.prepend(Module.new do
     fallback_fonts(options[:fallback_fonts])
   end
 end)
+
+# Render the Trix blocks unknown to prawn-markup as paragraphs.
+Prawn::Markup::Processor.prepend(Module.new do
+  def self.prepended(base)
+    base.known_elements.push("blockquote", "pre")
+  end
+
+  def parse(html)
+    super(html.to_s.gsub(%r{<pre\b[^>]*>.*?</pre>}m) { |pre| pre.gsub("\n", "<br>") })
+  end
+
+  def start_blockquote = start_div
+
+  def end_blockquote = end_div
+
+  def start_pre = start_div
+
+  def end_pre = end_div
+end)

@@ -56,6 +56,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_20_110330) do
   create_table "additional_addresses", force: :cascade do |t|
     t.string "contactable_type"
     t.bigint "contactable_id"
+    t.bigint "category_id"
     t.string "label"
     t.string "street", null: false
     t.string "housenumber", limit: 20
@@ -71,8 +72,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_20_110330) do
     t.string "last_name"
     t.string "organization_name"
     t.boolean "organization", default: false, null: false
-    t.bigint "category_id", null: false
     t.index ["category_id"], name: "index_additional_addresses_on_category_id"
+    t.index ["contactable_id", "contactable_type", "label"], name: "idx_on_contactable_id_contactable_type_label_53043e4f10", unique: true
     t.index ["contactable_id", "contactable_type"], name: "index_additional_addresses_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
     t.index ["contactable_type", "contactable_id"], name: "index_additional_addresses_on_contactable"
   end

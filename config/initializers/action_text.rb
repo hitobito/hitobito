@@ -1,9 +1,19 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2026, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
+
+module ActionText::ContentHelper
+  module AutoLink
+    def sanitize_action_text_content(content)
+      super(ActionText::Content.new(auto_link(content.to_html, sanitize: false)))
+    end
+  end
+
+  prepend AutoLink
+end
 
 # See https://github.com/rails/rails/issues/37672 - this issue was affecting the specs
 ActiveSupport.on_load(:action_view) do

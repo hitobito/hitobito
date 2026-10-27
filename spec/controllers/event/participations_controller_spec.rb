@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -274,6 +274,14 @@ describe Event::ParticipationsController do
         get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
 
         expect(assigns(:answers).map(&:question_id)).to eq [course.questions.first.id]
+      end
+
+      it "renders only answers visible to the viewer's roles as json" do
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id},
+          format: :json
+
+        answers = JSON.parse(response.body)["linked"]["event_answers"]
+        expect(answers.pluck("answer")).to eq ["juhu"]
       end
 
       it "assigns all answers to a viewer with full access (e.g. group admin)" do

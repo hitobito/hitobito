@@ -191,7 +191,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
       {
         group: parents.first,
         event: parents.last,
-        controller: self
+        controller: self,
+        visible_list_cache: {}
       }
     )
   end
@@ -215,7 +216,8 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
         event: event,
         page: params[:page],
         serializer: EventParticipationSerializer,
-        controller: self)].inject(&:merge)
+        controller: self,
+        visible_list_cache: {})].inject(&:merge)
   end
 
   def sort_mappings_with_indifferent_access

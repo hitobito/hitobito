@@ -35,8 +35,13 @@ class Event::Question::VisibleList
   end
 
   def visible?(question)
-    (own_participation? && !question.admin?) ||
+    service_token? ||
+      (own_participation? && !question.admin?) ||
       question.visible_to?(role_types, full_access: full_access?)
+  end
+
+  def service_token?
+    ability.is_a?(TokenAbility)
   end
 
   def ordered_questions

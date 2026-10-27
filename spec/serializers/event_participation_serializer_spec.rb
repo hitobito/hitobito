@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,9 +22,10 @@
 require "spec_helper"
 
 describe EventParticipationSerializer do
-  let(:controller) { double.as_null_object }
+  let(:viewer) { people(:top_leader) }
+  let(:controller) { double(current_ability: Ability.new(viewer)).as_null_object }
   let(:participation) { event_participations(:top) }
-  let(:serializer) { EventParticipationSerializer.new(participation, controller) }
+  let(:serializer) { EventParticipationSerializer.new(participation, controller:) }
 
   let(:hash) { serializer.to_hash.with_indifferent_access }
 
@@ -79,6 +80,20 @@ describe EventParticipationSerializer do
       keys = [:question, :answer]
       keys.each do |key|
         expect(hash[:linked][:event_answers].first).to have_key(key)
+      end
+    end
+
+    context "for a viewer with a role selected on only one question" do
+      let(:viewer) do
+        cook_participation = Fabricate(:event_participation, event: participation.event)
+        Fabricate(Event::Role::Cook.sti_name, participation: cook_participation)
+        cook_participation.person
+      end
+
+      before { event_questions(:top_ov).update!(visible_role_types: [Event::Role::Cook.sti_name]) }
+
+      it "includes only the answer of that question" do
+        expect(hash[:linked][:event_answers].pluck(:answer)).to eq ["GA"]
       end
     end
   end

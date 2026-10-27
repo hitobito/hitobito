@@ -42,6 +42,14 @@ describe Event::Question::VisibleList do
       expect(questions_seen_by(participation.person)).to eq [cook_question]
     end
 
+    it "returns all of the event's questions to a service token, even without full access" do
+      admin_question = Fabricate(:event_question, event:, admin: true)
+      ability = TokenAbility.new(service_tokens(:rejected_top_layer_token))
+
+      expect(described_class.new(event:, ability:).questions)
+        .to match_array([cook_question, unconfigured_question, admin_question])
+    end
+
     context "for a specific participation" do
       let(:participation) { Fabricate(:event_participation, event:) }
       let!(:admin_question) do

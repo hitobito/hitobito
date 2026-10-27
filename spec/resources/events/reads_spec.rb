@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -24,7 +24,7 @@ describe EventResource, type: :resource do
         :application_opening_at,
         :application_conditions,
         :description,
-        :html_description,
+        :description_html,
         :name,
         :cost,
         :created_at,
@@ -49,6 +49,16 @@ describe EventResource, type: :resource do
       expect(data.id).to eq(event.id)
       expect(data.jsonapi_type).to eq("events")
       expect(data.attributes["type"]).to be_blank
+    end
+
+    describe "description" do
+      it "is returned as plain text and as html" do
+        event.update!(description: "<div>Erste Zeile<br><strong>fett</strong></div>")
+        render
+        attributes = jsonapi_data[0].attributes
+        expect(attributes["description"]).to eq("Erste Zeile\nfett")
+        expect(attributes["description_html"]).to include("<div>Erste Zeile<br><strong>fett</strong></div>")
+      end
     end
 
     describe "external_application_link" do

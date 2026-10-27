@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -71,7 +71,7 @@ class EventListSerializer < ApplicationSerializer
     property :external_application_link, h.group_public_event_url(item.groups.first, item.id)
 
     property :description, item.plain_text_description
-    property :html_description, item.description.to_s
+    property :description_html, item.description.to_s
 
     entity :kind, item.kind, EventKindSerializer if item.object.class.method_defined?(:kind)
 

@@ -24,7 +24,7 @@ class EventResource < ApplicationResource
     attribute :description, :string do
       @object.plain_text_description
     end
-    attribute :html_description, :string do
+    attribute :description_html, :string do
       @object.description
     end
     attribute :application_conditions, :string

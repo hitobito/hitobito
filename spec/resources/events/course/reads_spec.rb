@@ -37,6 +37,7 @@ describe Event::CourseResource, type: :resource do
         :name,
         :number,
         :participant_count,
+        :participations_visible,
         :teamer_count,
         :training_days,
         :type,

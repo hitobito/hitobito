@@ -300,6 +300,18 @@ describe Event::ParticipationsController do
         expect(assigns(:answers).size).to eq(2)
       end
 
+      it "assigns all answers to a manager viewing the participation of their managed" do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
+        allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
+        manager = Fabricate(:person)
+        PeopleManager.create!(manager:, managed: participation.person)
+        sign_in(manager)
+
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+        expect(assigns(:answers).size).to eq(2)
+      end
+
       context "answers" do
         render_views
         let(:dom) { Capybara::Node::Simple.new(response.body) }
@@ -546,6 +558,28 @@ describe Event::ParticipationsController do
         expect(participation.answers.size).to eq(2)
         expect(participation.person).to eq(user)
         expect(assigns(:priority_2s)).to be_nil
+      end
+    end
+
+    context "for managed person" do
+      let(:event) { course }
+      let(:user) { Fabricate(:person) }
+      let(:managed) { people(:bottom_member) }
+      let!(:admin_question) { Fabricate(:event_question, event:, admin: true) }
+
+      before do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
+        allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
+        PeopleManager.create!(manager: user, managed:)
+        event.questions.first.update!(visible_role_types: [Event::Role::Cook.sti_name])
+      end
+
+      it "assigns all non-admin answers" do
+        get :new, params: {group_id: group.id, event_id: event.id,
+                           event_participation: {person_id: managed.id}}
+
+        expect(assigns(:participation).person).to eq(managed)
+        expect(assigns(:answers).map(&:question)).to match_array(event.questions - [admin_question])
       end
     end
 
@@ -1169,6 +1203,15 @@ describe Event::ParticipationsController do
         PeopleManager.create!(manager_id: people(:top_leader).id, managed_id: people(:bottom_member).id)
 
         expect(make_request(people(:top_leader), "", people(:bottom_member).id)).not_to be_valid
+      end
+
+      it "manager without event permissions sees the required answer to supply for their child" do
+        manager = Fabricate(:person)
+        PeopleManager.create!(manager:, managed: people(:bottom_member))
+
+        make_request(manager, "", people(:bottom_member).id)
+
+        expect(assigns(:answers).map(&:question).map(&:question)).to include("dummy")
       end
     end
   end

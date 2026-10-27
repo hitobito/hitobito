@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,7 +22,7 @@ module Export::Pdf::Participation
 
     def render_description
       with_header(description_title) do
-        text strip_tags(event.description)
+        pdf.markup(event.description.to_s)
       end
     end
 

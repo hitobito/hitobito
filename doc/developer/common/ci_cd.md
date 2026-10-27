@@ -18,6 +18,22 @@ Gebaut wird
 * Jeder Commit
 * Einmal nächtlich, um mitzubekommen, wenn Änderungen am Core die Wagon-Tests fehlschlagen lassen.
 
+### Core-Version
+
+Gegen welchen Core getestet wird, bestimmt die erste zutreffende Regel:
+
+1. Der Input `core_ref`, z.B. beim manuellen Start oder aus der Core-Pipeline.
+2. Der Core-Pull-Request, auf den der Wagon-Pull-Request mit einer eigenen Zeile
+   `Requires hitobito/hitobito#1234` verweist. Nach dem Ergänzen der Zeile muss der Lauf neu
+   gestartet werden.
+3. Ein Branch in `hitobito/hitobito` mit demselben Namen wie der Wagon-Branch.
+4. `master`.
+
+Core-Pull-Requests aus Forks werden nur über diesen ausdrücklichen Verweis gefunden, nicht über den
+Branch-Namen. Sonst könnte jeder mit einem passend benannten Fork fremden Code in den Wagon-Tests
+ausführen. Der Dependency-Wagon wird über einen gleichnamigen Branch gesucht, auch mit dem
+Branch-Namen eines referenzierten Core-Pull-Requests.
+
 ### Entscheid: Nightlies vs getriggerte Wagon-Builds
 
 Es wäre eleganter, wenn Commits im Core den Rebuild der Wagons triggern. Aus Security-Überlegungen ist das nicht so umgesetzt.

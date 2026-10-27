@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -235,6 +235,11 @@ describe Event::ParticipationMailer do
     it "does allow valid html tags in event description" do
       event.update(description: "Description:<h1>Header</h1><strong>Bold</strong> <em>Italic</em>")
       expect(subject).to include("Description:<h1>Header</h1><strong>Bold</strong> <em>Italic</em>")
+    end
+
+    it "links urls in event description" do
+      event.update(description: "Infos auf https://example.com")
+      expect(subject).to include('<a href="https://example.com">https://example.com</a>')
     end
 
     it "does not allow xss injection in event name" do

@@ -36,6 +36,7 @@ class EventResource < ApplicationResource
       context.group_public_event_url(params)
     end
     attribute :maximum_participants, :integer
+    attribute :participations_visible, :boolean
     attribute :created_at, :datetime
     attribute :updated_at, :datetime, filterable: true
   end

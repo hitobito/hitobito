@@ -55,7 +55,7 @@ runs:
       working-directory: .hitobito_core_repo
       env:
         GH_TOKEN: ${{ inputs.github_token }}
-        INPUT_CORE_REF: ${{ inputs.core_ref }}
+        CORE_REF: ${{ env.CORE_REF }}
         WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
         INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
         INPUT_WAGON_REF: ${{ inputs.wagon_ref }}

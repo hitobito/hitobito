@@ -411,6 +411,49 @@ describe Event::ParticipationsController do
             expect(dom).to have_text("Peanuts")
           end
         end
+
+        context "viewed by a role without show_details" do
+          let(:application_question) do
+            Fabricate(:event_question, event: course, admin: false, question: "Shoe size?")
+          end
+          let(:admin_question) do
+            Fabricate(:event_question, event: course, admin: true, question: "Allergies?")
+          end
+
+          before do
+            participation.answers.find_by!(question: application_question).update!(answer: "42")
+            participation.answers.find_by!(question: admin_question).update!(answer: "Peanuts")
+            participation.update!(additional_information: "Arrives late")
+
+            treasurer_participation = Fabricate(:event_participation, event: course)
+            Fabricate(Event::Role::Treasurer.sti_name, participation: treasurer_participation)
+            sign_in(treasurer_participation.person)
+          end
+
+          it "shows application and admin answers configured as visible to the role" do
+            treasurer = [Event::Role::Treasurer.sti_name]
+            application_question.update!(visible_role_types: treasurer)
+            admin_question.update!(visible_role_types: treasurer)
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_text("42")
+            expect(dom).to have_text("Peanuts")
+          end
+
+          it "shows no answers not configured as visible to the role" do
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_no_text("Shoe size?")
+            expect(dom).to have_no_text("Allergies?")
+          end
+
+          it "does not show the additional information" do
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_no_text("Arrives late")
+          end
+        end
       end
     end
 

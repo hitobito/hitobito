@@ -787,6 +787,12 @@
           "writable": false,
           "description": null
         },
+        "participations_visible": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "created_at": {
           "type": "datetime",
           "readable": true,
@@ -1682,6 +1688,12 @@
           "writable": false,
           "description": null
         },
+        "participations_visible": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "created_at": {
           "type": "datetime",
           "readable": true,
@@ -1878,7 +1890,7 @@
           "description": null
         },
         "zip_code": {
-          "type": "integer",
+          "type": "string",
           "readable": true,
           "writable": false,
           "description": null
@@ -2125,14 +2137,18 @@
           ]
         },
         "zip_code": {
-          "type": "integer",
+          "type": "string",
           "operators": [
             "eq",
             "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
           ]
         },
         "town": {

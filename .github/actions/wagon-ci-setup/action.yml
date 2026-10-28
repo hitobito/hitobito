@@ -34,9 +34,16 @@ runs:
     - name: "Determine common branch and set branch name for core"
       env:
         INPUT_CORE_REF: ${{ inputs.core_ref }}
+        PR_BODY: ${{ github.event.pull_request.body }}
       run: |
         CORE_REF="$INPUT_CORE_REF"
-        if [ -z "$INPUT_CORE_REF" ]; then
+        if [ -z "$CORE_REF" ]; then
+          REQUIRED_CORE_PR=$(grep -oiP '^\s*requires:?\s+hitobito/hitobito#\K[0-9]+' <<< "$PR_BODY" | head -n 1 || true)
+          if [ -n "$REQUIRED_CORE_PR" ]; then
+            CORE_REF="refs/pull/$REQUIRED_CORE_PR/head"
+          fi
+        fi
+        if [ -z "$CORE_REF" ]; then
           CORE_REF=$(git ls-remote --heads https://github.com/hitobito/hitobito | cut -d/ -f3- | grep -x "${{github.head_ref || github.ref_name}}" || echo 'master')
         fi
 
@@ -48,7 +55,7 @@ runs:
       working-directory: .hitobito_core_repo
       env:
         GH_TOKEN: ${{ inputs.github_token }}
-        INPUT_CORE_REF: ${{ inputs.core_ref }}
+        CORE_REF: ${{ env.CORE_REF }}
         WAGON_DEPENDENCY_REPO: ${{ inputs.wagon_dependency_repository }}
         INPUT_WDEP_REF: ${{ inputs.wagon_dependency_ref }}
         INPUT_WAGON_REF: ${{ inputs.wagon_ref }}
@@ -61,7 +68,7 @@ runs:
           RESOLVED_REF="$INPUT_WDEP_REF"
         else
           PR_BRANCH=""
-          if [[ "$INPUT_CORE_REF" =~ refs/pull/([0-9]+)/ ]]; then
+          if [[ "$CORE_REF" =~ refs/pull/([0-9]+)/ ]]; then
             PR_BRANCH=$(gh pr view "${BASH_REMATCH[1]}" --repo hitobito/hitobito --json headRefName -q '.headRefName' 2>/dev/null || echo "")
           fi
 

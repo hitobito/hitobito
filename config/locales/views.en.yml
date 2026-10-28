@@ -92,6 +92,7 @@ en:
     jump_to_content: "Skip to main content"
 
     export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
+    export_requires_person: "Dieser Export läuft im Hintergrund und benötigt eine angemeldete Person. Mit API-Tokens bitte die JSON-API verwenden."
 
   list:
     index:
@@ -1044,9 +1045,9 @@ en:
     confirm_deletion:
       title: Willst du die Gruppe "%{group_name}" wirklich löschen?
       text_field_label: "Gruppenname Eingabefeld"
-      warning_html: "<strong>Achtung!</strong> Dabei werden unwiderruflich alle Rollen aller Personen in dieser Gruppe gelöscht. <strong>Diese Operation kann nicht rückgängig gemacht werden.</strong>"
-      confirmation_html: Bitte tippe zur Bestätigung <strong>"%{group_name}"</strong> ein
-      delete: "Gruppen und Rollen definitiv löschen"
+      warning_html: "<strong>Warning! </strong> This will irrevocably delete all roles assigned to every person in this group.<strong>This action cannot be undone.</strong>"
+      confirmation_html: Please type <strong>"%{group_name}"</strong> to confirm
+      delete: "Permanently delete groups and roles"
 
   groups_filter:
     description: "Alle %{group_type_plural} in %{parent}"

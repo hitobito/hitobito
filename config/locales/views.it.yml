@@ -93,6 +93,7 @@ it:
     jump_to_content: "Vai al contenuto principale"
 
     export_enqueued: "L'esportazione viene avviata in background e, una volta completata, potrà essere scaricata dalla panoramica dei processi: %{overview_link}"
+    export_requires_person: "Dieser Export läuft im Hintergrund und benötigt eine angemeldete Person. Mit API-Tokens bitte die JSON-API verwenden."
 
   list:
     index:

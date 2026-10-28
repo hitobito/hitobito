@@ -93,6 +93,7 @@ fr:
     jump_to_content: "Aller au contenu principal"
 
     export_enqueued: "L'exportation commence en arrière-plan et peut être téléchargée une fois terminée depuis l'aperçu des travaux: %{overview_link}"
+    export_requires_person: "Dieser Export läuft im Hintergrund und benötigt eine angemeldete Person. Mit API-Tokens bitte die JSON-API verwenden."
 
   list:
     index:

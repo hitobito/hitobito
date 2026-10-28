@@ -92,6 +92,7 @@ en:
     jump_to_content: "Skip to main content"
 
     export_enqueued: "The export has started in the background and can be downloaded from the job overview once it is complete: %{overview_link}"
+    export_requires_person: "Dieser Export läuft im Hintergrund und benötigt eine angemeldete Person. Mit API-Tokens bitte die JSON-API verwenden."
 
   list:
     index:

@@ -484,6 +484,28 @@ describe EventsController, js: true do
     end
   end
 
+  describe "adding a new admin question" do
+    let(:event) do
+      Fabricate(:course, groups: [groups(:top_layer)]).tap do |e|
+        e.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
+      end
+    end
+
+    before do
+      sign_in
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_link I18n.t("events.form_tabs.admin_questions")
+      within("#admin_questions") { click_link I18n.t("global.associations.add") }
+    end
+
+    it "does not offer the participant role as visible" do
+      within(all(".fields[data-new-record='true']").last) do
+        expect(page).to have_field(Event::Role::Cook.label_plural, type: "checkbox")
+        expect(page).to have_no_field(Event::Role::Participant.label_plural, type: "checkbox")
+      end
+    end
+  end
+
   describe "answers for global questions" do
     let(:event_with_questions) do
       event.init_questions

@@ -12,13 +12,18 @@ module NestedFieldsForBuilders
     def build(admin:, &block)
       add_button = Dropdown::Event::QuestionAdd.new(template, @form.object.groups.first,
         @form.object, admin:).to_s
-      question_template_record = object.class.reflect_on_association(assoc)&.klass&.new(admin:)
-      templates = new_record_template(partial_name, &block) +
+      templates = new_record_template(partial_name, model_object: new_question(admin:), &block) +
         new_record_template("event/questions/template_fields",
-          model_object: question_template_record,
+          model_object: new_question(admin:),
           target: "questionTemplateFormTemplate")
 
       build_nested_form(add_button:, templates:, &block)
+    end
+
+    private
+
+    def new_question(admin:)
+      object.class.reflect_on_association(assoc)&.klass&.new(admin:)
     end
   end
 end

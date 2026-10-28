@@ -90,6 +90,12 @@ describe ActionText::RichText do
     expect(rich_text.reload.plain_text_body).to be_nil
   end
 
+  it "stores the event name as item_label of its versions", versioning: true do
+    rich_text = build("<div>x</div>").tap(&:save!)
+
+    expect(rich_text.versions.last.item_label).to eq "Top Event"
+  end
+
   it "saves without the plain_text_body column" do
     rich_text = build("<div>x</div>")
     allow(rich_text).to receive(:respond_to?).and_call_original

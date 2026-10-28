@@ -22,14 +22,10 @@ ActiveSupport.on_load(:action_view) do
 end
 
 ActiveSupport.on_load :action_text_rich_text do
-  has_paper_trail if: -> (action_text) { action_text.record_type == "Event::Translation" }, meta: {
+  has_paper_trail if: ->(action_text) { action_text.record_type == "Event::Translation" }, meta: {
     main_id: ->(t) { t.record.event_id },
-    main_type:  Event.sti_name,
-    item_label: -> (action_text) do
-      return nil if action_text.blank?
-
-      action_text.to_s
-    end
+    main_type: Event.sti_name,
+    item_label: ->(action_text) { action_text.record.globalized_model.to_s }
   }, only: [:body]
   before_save do
     self.plain_text_body = body&.to_plain_text.presence if respond_to?(:plain_text_body=)

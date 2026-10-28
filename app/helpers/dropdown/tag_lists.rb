@@ -7,6 +7,7 @@ module Dropdown
   class TagLists < Dropdown::Base
     def initialize(template, group, translation)
       super(template, translation, :tag)
+      @fixed_menu = true
       @template = template
       @group = group
       init_items

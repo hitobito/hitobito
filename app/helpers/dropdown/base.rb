@@ -9,7 +9,8 @@ module Dropdown
   class Base
     include Translatable
 
-    attr_accessor :template, :label, :main_link, :icon, :button_class, :button_group_class
+    attr_accessor :template, :label, :main_link, :icon, :button_class, :button_group_class,
+      :fixed_menu
     attr_reader :items
 
     delegate :content_tag, :link_to, :safe_join, to: :template
@@ -56,11 +57,17 @@ module Dropdown
         content_tag(:a,
           class: "dropdown-toggle #{button_class}",
           href: "#",
-          data: {bs_toggle: "dropdown"}) do
+          data: toggle_data) do
           safe_join([label_without_link,
             content_tag(:b, "", class: "caret")].compact, " ")
         end
       ].compact, " ")
+    end
+
+    def toggle_data
+      data = {bs_toggle: "dropdown"}
+      data[:bs_popper_config] = {strategy: "fixed"}.to_json if fixed_menu
+      data
     end
 
     def label_with_link

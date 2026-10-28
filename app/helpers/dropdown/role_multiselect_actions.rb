@@ -11,6 +11,7 @@ module Dropdown
 
     def initialize(template, group, translation, params)
       super(template, translation, :user)
+      @fixed_menu = true
       @template = template
       @group = group
       @params = params

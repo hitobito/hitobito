@@ -180,7 +180,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   self.uses_form_tabs = true
 
-  self.filterable_attrs = [:name, :plain_text_description, :location,
+  self.filterable_attrs = [:name, :description, :location,
     :application_opening_at, :application_closing_at]
 
   self.translation_class = Event::Translation
@@ -455,9 +455,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
     def filter_attrs
       filterable_attrs.map do |key, type|
-        if translated_attribute_names.include?(key.to_sym) || key.to_sym == :plain_text_description
-          type = :string
-        end
+        type = :string if translated_attribute_names.include?(key.to_sym)
         type ||= columns_hash.fetch(key.to_s).type
         [key.to_sym, {label: human_attribute_name(key), type: type}]
       end.to_h

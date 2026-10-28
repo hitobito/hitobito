@@ -32,11 +32,7 @@ ActiveSupport.on_load :action_text_rich_text do
     end
   }, only: [:body]
   before_save do
-    if respond_to?(:plain_text_body=) && body.present?
-      self.plain_text_body = body.to_plain_text
-    else
-      self.plain_text_body = nil;
-    end
+    self.plain_text_body = body&.to_plain_text.presence if respond_to?(:plain_text_body=)
   end
 end
 

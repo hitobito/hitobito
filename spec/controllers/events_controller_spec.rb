@@ -402,6 +402,16 @@ describe EventsController do
         expect(second.finish_at_date).to eq Date.new(2014, 2, 5)
       end
 
+      it "ignores plain_text_description param" do
+        put :update, params: {
+          group_id: group.id,
+          id: event.id,
+          event: {name: "testevent", plain_text_description: "x"}
+        }
+
+        expect(event.reload.name).to eq "testevent"
+      end
+
       it "creates, updates and destroys questions" do
         q1 = event.questions.create!(question: "Who?", required: false)
         q2 = event.questions.create!(question: "What?", required: false)

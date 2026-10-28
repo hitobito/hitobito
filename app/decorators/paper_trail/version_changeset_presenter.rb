@@ -77,6 +77,8 @@ module PaperTrail
     end
 
     def normalize(attr, value) # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
+      value = value.to_plain_text if value.is_a?(ActionText::Content)
+
       if attr.to_s.end_with?("_id") && value.present?
         belongs_to_change_args(attr, value)
       elsif attr.to_s.end_with?("type") && value.present?

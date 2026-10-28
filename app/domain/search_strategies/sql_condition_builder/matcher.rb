@@ -24,10 +24,6 @@ class SearchStrategies::SqlConditionBuilder
 
     def column
       table = Arel::Table.new(@table_name)
-      converted_table_name = @table_name.singularize.camelize
-      unless Object.const_defined?(converted_table_name)
-        converted_table_name.gsub!(/(?<=[a-z])([A-Z])/, '::\1')
-      end
       arel_column = ActiveRecord::Base.with_connection do |c|
         c.schema_cache.columns_hash(@table_name).fetch(@field)
       end

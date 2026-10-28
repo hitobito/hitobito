@@ -72,3 +72,30 @@ describe "ActionText::ContentHelper::AutoLink" do
     expect(rendered).not_to have_css("a[onmouseover]")
   end
 end
+
+describe ActionText::RichText do
+  def build(body)
+    ActionText::RichText.new(record: events(:top_event).translation, name: "description", body:)
+  end
+
+  it "stores the plain text of the body" do
+    rich_text = build("<div>Erste <strong>Zeile</strong><br>Zweite Zeile</div>").tap(&:save!)
+
+    expect(rich_text.reload.plain_text_body).to eq "Erste Zeile\nZweite Zeile"
+  end
+
+  it "stores no plain text for a blank body" do
+    rich_text = build("<div> </div>").tap(&:save!)
+
+    expect(rich_text.reload.plain_text_body).to be_nil
+  end
+
+  it "saves without the plain_text_body column" do
+    rich_text = build("<div>x</div>")
+    allow(rich_text).to receive(:respond_to?).and_call_original
+    allow(rich_text).to receive(:respond_to?).with(:plain_text_body=).and_return(false)
+    expect(rich_text).not_to receive(:plain_text_body=)
+
+    rich_text.save!
+  end
+end

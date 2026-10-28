@@ -51,15 +51,9 @@ class Event::QuestionTemplate < ActiveRecord::Base
     attrs = question.attributes.excluding("id", "created_at", "updated_at")
     Event::Question.build(attrs).tap do |derived_question|
       derived_question.template_id = id
-
-      # copy translations from template question
-      [:question, :choices].each do |attribute|
-        template_translations = question.send(:"#{attribute}_translations")
-        derived_question.send(:"#{attribute}_translations=", question.globalize_locales
-                                                                     .map { [_1.to_s, nil] }
-                                                                     .to_h
-                                                                     .merge(template_translations))
-      end
+      derived_question.visible_role_types =
+        question.visible_role_types & question.selectable_role_types
+      copy_translations_to(derived_question)
     end
   end
 
@@ -73,5 +67,17 @@ class Event::QuestionTemplate < ActiveRecord::Base
 
   def editable?
     question&.class&.template_editable
+  end
+
+  private
+
+  def copy_translations_to(derived_question)
+    [:question, :choices].each do |attribute|
+      template_translations = question.send(:"#{attribute}_translations")
+      derived_question.send(:"#{attribute}_translations=", question.globalize_locales
+                                                                   .map { [_1.to_s, nil] }
+                                                                   .to_h
+                                                                   .merge(template_translations))
+    end
   end
 end

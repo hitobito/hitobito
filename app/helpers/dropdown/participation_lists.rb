@@ -7,6 +7,7 @@ module Dropdown
   class ParticipationLists < Dropdown::Base
     def initialize(template, group, translation)
       super(template, translation, :plus)
+      @fixed_menu = true
       @template = template
       @group = group
       init_items

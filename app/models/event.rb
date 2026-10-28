@@ -126,6 +126,10 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
       main_type: Event.sti_name
     }
 
+    def paper_trail_rich_text_meta
+      {main_id: event_id, main_type: Event.sti_name, item_label: globalized_model.to_s}
+    end
+
     # This is used to display in log what language record actually changed. Currently those
     # values are just the strings from settings.yml, so the log does not display translated
     # language names

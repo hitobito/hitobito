@@ -33,10 +33,27 @@ describe Event::QuestionVisibility do
   end
 
   describe ".selectable_role_types_for" do
-    it "falls back to the base Event role types when no event is given" do
-      role_types = described_class.selectable_role_types_for(event: nil, admin: false)
+    it "returns no role types without an event" do
+      expect(described_class.selectable_role_types_for(event: nil, admin: false)).to eq []
+    end
+  end
 
-      expect(role_types).to eq described_class.selectable_role_types_for(event: Event, admin: false)
+  context "on a question template" do
+    let(:template) { event_question_templates(:vegi_template) }
+    let(:question) { template.question }
+
+    it "is valid for a role of the template's event type" do
+      template.event_type = Event::Course.sti_name
+      visibility.role_type = Event::Role::Cook.sti_name
+
+      expect(visibility).to be_valid
+    end
+
+    it "is invalid for any role when the template applies to all event types" do
+      template.event_type = nil
+      visibility.role_type = Event::Role::Cook.sti_name
+
+      expect(visibility).not_to be_valid
     end
   end
 end

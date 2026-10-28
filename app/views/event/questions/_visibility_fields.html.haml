@@ -3,15 +3,21 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-- selectable_types = Event::QuestionVisibility.selectable_role_types_for(event: entry, admin: f.object.admin)
+- selectable_types = Event::QuestionVisibility.selectable_role_types_for(event:, admin: f.object.admin)
+- disabled = local_assigns.fetch(:disabled, false)
+- explain = local_assigns.fetch(:explain, false)
+- id_scope = local_assigns[:id_scope]
 
 - if selectable_types.any?
   = f.labeled(t('.caption')) do
     .controls.mt-2
-      = hidden_field_tag("#{f.object_name}[visible_role_types][]")
+      = hidden_field_tag("#{f.object_name}[visible_role_types][]", nil, id: nil, disabled:)
       - selectable_types.each do |role_type|
         = label_tag(nil, class: 'checkbox inline') do
           = check_box_tag("#{f.object_name}[visible_role_types][]", role_type,
                           f.object.visible_role_types.include?(role_type),
-                          id: "#{f.object_name}_visible_role_types_#{role_type.demodulize.underscore}")
+                          disabled:,
+                          id: f.field_id(:visible_role_types, *id_scope, role_type.underscore.tr('/', '_')))
           = role_type.constantize.label_plural
+      - if explain
+        = f.help_block(render('event/questions/visibility_explanation', event:))

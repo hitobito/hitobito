@@ -280,7 +280,7 @@ describe Event::Question do
     end
 
     describe "#visible_role_types=" do
-      subject(:question) { described_class.new(question: "Test?", required: false) }
+      subject(:question) { described_class.new(event: events(:top_course), question: "Test?", required: false) }
 
       it "ignores blank entries submitted alongside checked roles" do
         question.visible_role_types = ["", Event::Role::Cook.sti_name]

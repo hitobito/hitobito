@@ -29,11 +29,13 @@ class Event::QuestionVisibility < ActiveRecord::Base
   end
 
   def selectable_role_types
-    self.class.selectable_role_types_for(event: question.event, admin: question.admin?)
+    question.selectable_role_types
   end
 
-  def self.selectable_role_types_for(event:, admin:) # rubocop:disable Metrics/CyclomaticComplexity
-    (event&.role_types || Event.role_types)
+  def self.selectable_role_types_for(event:, admin:)
+    return [] unless event
+
+    event.role_types
       .reject(&:participations_full?)
       .reject { |role| role.participant? && admin }
       .collect(&:sti_name)

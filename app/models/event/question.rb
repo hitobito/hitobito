@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -73,6 +73,8 @@ class Event::Question < ActiveRecord::Base
   has_many :answers, dependent: :destroy
   has_many :question_visibilities, class_name: "Event::QuestionVisibility",
     dependent: :destroy, inverse_of: :question
+  has_one :question_template, class_name: "Event::QuestionTemplate", inverse_of: :question,
+    dependent: nil
 
   attribute :type, default: -> { Event::Question::Default.sti_name }
   attr_accessor :skip_add_answer_to_participations
@@ -132,6 +134,12 @@ class Event::Question < ActiveRecord::Base
     self.question_visibilities = @visible_role_types.collect do |role_type|
       Event::QuestionVisibility.new(role_type: role_type)
     end
+  end
+
+  def selectable_role_types
+    Event::QuestionVisibility.selectable_role_types_for(
+      event: event || question_template&.event_class, admin: admin?
+    )
   end
 
   def visible_to?(role_classes, full_access: false)

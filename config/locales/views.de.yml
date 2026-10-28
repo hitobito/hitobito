@@ -580,6 +580,10 @@ de:
       form:
         default_caption: Wird standardmässig bei neuen Anlässen hinzugefügt
         inherit_caption: Steht ebenfalls auf untergeordneten Ebenen zur Verfügung.
+      visibility_fields:
+        all_event_types_hint:
+          Nur Leitungsrollen mit vollem Zugriff sehen die Antworten.
+          Für weitere Rollen eine Anlassart wählen.
 
     register:
       register:

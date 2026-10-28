@@ -22,7 +22,7 @@
 #  index_event_question_templates_on_question_id  (question_id)
 #
 class Event::QuestionTemplate < ActiveRecord::Base
-  belongs_to :question, dependent: :destroy
+  belongs_to :question, dependent: :destroy, inverse_of: :question_template
   belongs_to :group
 
   has_many :derived_questions, class_name: "Event::Question", foreign_key: :template_id,
@@ -61,6 +61,10 @@ class Event::QuestionTemplate < ActiveRecord::Base
                                                                      .merge(template_translations))
       end
     end
+  end
+
+  def event_class
+    Event.all_types.find { |type| type.sti_name == event_type }
   end
 
   def to_s

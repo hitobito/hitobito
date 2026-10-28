@@ -138,6 +138,22 @@ describe "Events", js: true do
       expect(find("#event_description").value).to have_content event.kind.general_information
     end
 
+    it "fills description with the kind's text as plain text" do
+      event_kinds(:slk).update!(general_information: "Erste Zeile <b>x</b> & y\nZweite Zeile")
+      visit form_path
+      select "SLK (Scharleiterkurs)", from: "event_kind_id"
+      expect(find("#event_description").value)
+        .to eq "<div>Erste Zeile &lt;b&gt;x&lt;/b&gt; &amp; y<br>Zweite Zeile</div>"
+    end
+
+    it "replaces description with the kind's text on override" do
+      event_kinds(:slk).update!(general_information: "Erste Zeile\nZweite Zeile")
+      visit form_path
+      select "SLK (Scharleiterkurs)", from: "event_kind_id"
+      click_link "Werte übernehmen"
+      expect(find("#event_description").value).to eq "<div>Erste Zeile<br>Zweite Zeile</div>"
+    end
+
     it "does not fill textarea" do
       find("trix-editor").click.set prefill_description
       select "SLK (Scharleiterkurs)", from: "event_kind_id"

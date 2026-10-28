@@ -61,6 +61,18 @@ To maintain a clean version history, we prevent PaperTrail from creating version
 
 We exclude all translated attribute names (e.g., name) and globalized accessors (e.g., name_de, name_en) from the base model's PaperTrail configuration. By default, Globalize accessors trigger ActiveRecord change tracking on the base model. Without this configuration, updating a translation would create two version records: one (mostly empty) on the Event and one on the Event::Translation. This implementation ensures a single version for translation changes. If those paper trail configs are added to the core, overridding the translates method to resync these skip for translated wagon attributes is also needed.
 
+### Paper Trail Versions for Rich Texts
+All rich texts are stored in the shared `ActionText::RichText` model. It creates versions only for
+records that define `paper_trail_rich_text_meta`, which provides the meta columns of these versions:
+
+```
+  translation_class.class_eval do
+    def paper_trail_rich_text_meta
+      {main_id: event_id, main_type: Event.sti_name, item_label: globalized_model.to_s}
+    end
+  end
+```
+
 ## Access versions
 You can access the different versions of a model by entering the rails console with `rails c`
 Then you get the first role and save it inside a variable with `role = Role.first`. After executing this

@@ -21,14 +21,14 @@ module Events::Filter
       super(scope.left_outer_joins(translations: :rich_text_description))
     end
 
+    private
+
     def attribute_condition_sql(key, value, constraint, scope)
       return super unless key.to_s == "description"
 
       persisted_attribute_condition_sql("action_text_rich_texts", "plain_text_body", value,
         constraint)
     end
-
-    private
 
     def model_class
       event_type

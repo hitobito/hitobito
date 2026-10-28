@@ -90,10 +90,21 @@ describe ActionText::RichText do
     expect(rich_text.reload.plain_text_body).to be_nil
   end
 
-  it "stores the event name as item_label of its versions", versioning: true do
-    rich_text = build("<div>x</div>").tap(&:save!)
+  context "with versioning", versioning: true do
+    it "stores versions with the paper_trail_rich_text_meta of the record" do
+      rich_text = build("<div>x</div>").tap(&:save!)
 
-    expect(rich_text.versions.last.item_label).to eq "Top Event"
+      expect(rich_text.versions.last).to have_attributes(
+        main_id: events(:top_event).id, main_type: "Event", item_label: "Top Event"
+      )
+    end
+
+    it "stores no versions for records without paper_trail_rich_text_meta" do
+      rich_text = action_text_rich_texts(:login_de_body)
+      rich_text.update!(body: "<div>x</div>")
+
+      expect(rich_text.versions).to be_empty
+    end
   end
 
   it "saves without the plain_text_body column" do

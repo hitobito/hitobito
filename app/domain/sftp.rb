@@ -70,11 +70,18 @@ class Sftp
 
   def options
     credentials = if @config.private_key.present?
-      {key_data: [@config.private_key]}
+      {key_data: [normalized_private_key]}
     else
       {password: @config.password}
     end
     credentials.merge(non_interactive: true, port: @config.port).compact
+  end
+
+  def normalized_private_key
+    key = @config.private_key.to_s
+    return key if key.start_with?("-----BEGIN RSA PRIVATE KEY-----")
+
+    "-----BEGIN RSA PRIVATE KEY-----\n#{key.strip}\n-----END RSA PRIVATE KEY-----"
   end
 
   def format_config_errors(result)

@@ -19,6 +19,10 @@ module Events::Filter
 
     private
 
+    def join_attribute_tables(scope)
+      scope.left_outer_joins(:translations)
+    end
+
     def model_class
       event_type
     end

@@ -333,8 +333,8 @@ de:
         one: Vorlage Anmeldeangabe Anlässe
         other: Vorlagen Anmeldeangaben Anlässe
       event/question_visibility:
-        one: Sichtbare Rolle
-        other: Sichtbare Rollen
+        one: Rolle mit Einsicht
+        other: Rollen mit Einsicht
       event/answer:
         one: Antwort auf Anmeldeangabe
         other: Antworten auf Anmeldeangaben
@@ -948,7 +948,7 @@ de:
         multiple_choices: Mehrfachauswahl
         required: Obligatorisch
         sensitive: Sensibel
-        question_visibilities: Sichtbare Rollen
+        question_visibilities: Einsehbar für
 
       event/question_template:
         question: Frage

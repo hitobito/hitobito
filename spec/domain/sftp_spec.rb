@@ -46,7 +46,7 @@ describe Sftp do
     it "creates connection with private key" do
       expect(::Net::SFTP).to receive(:start)
         .with("sftp.local", "hitobito", {
-          key_data: ["private key"],
+          key_data: ["-----BEGIN RSA PRIVATE KEY-----\nprivate key\n-----END RSA PRIVATE KEY-----"],
           non_interactive: true,
           port: 22
         })
@@ -60,7 +60,7 @@ describe Sftp do
     it "creates connection with private key" do
       expect(::Net::SFTP).to receive(:start)
         .with("sftp.local", "hitobito", {
-          key_data: ["private key"],
+          key_data: ["-----BEGIN RSA PRIVATE KEY-----\nprivate key\n-----END RSA PRIVATE KEY-----"],
           non_interactive: true,
           port: 22
         })

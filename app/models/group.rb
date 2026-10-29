@@ -125,6 +125,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   before_save :prevent_changes, if: ->(g) { Group.archival_validation && g.archived? }
   after_create :create_invoice_config, if: :layer?
+  after_restore :create_invoice_config, if: :layer?
 
   protect_if :root? # Root group may not be destroyed
   protect_if :children_without_deleted

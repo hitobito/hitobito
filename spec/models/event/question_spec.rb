@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -293,6 +293,37 @@ describe Event::Question do
         question.visible_role_types = [""]
 
         expect(question.visible_role_types).to eq []
+      end
+
+      context "on a persisted question" do
+        subject(:question) { events(:top_course).questions.create!(question: "Test?", required: false) }
+
+        it "keeps assigned roles in memory until the question is saved" do
+          question.visible_role_types = [Event::Role::Cook.sti_name]
+
+          expect(Event::QuestionVisibility.where(question: question)).to be_empty
+          expect(question.visible_role_types).to eq [Event::Role::Cook.sti_name]
+
+          question.save!
+          expect(Event::QuestionVisibility.where(question: question).count).to eq 1
+        end
+
+        it "keeps removed roles in the database until the question is saved" do
+          question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+          question.visible_role_types = []
+
+          expect(Event::QuestionVisibility.where(question: question).count).to eq 1
+
+          question.save!
+          expect(Event::QuestionVisibility.where(question: question)).to be_empty
+        end
+
+        it "rejects a role type that cannot be selected as a validation error" do
+          expect { question.visible_role_types = ["Group::BottomLayer::Member"] }.not_to raise_error
+          expect(question.save).to eq false
+          expect(question.errors).to be_present
+          expect(Event::QuestionVisibility.where(question: question)).to be_empty
+        end
       end
     end
 

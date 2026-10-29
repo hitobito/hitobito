@@ -72,7 +72,7 @@ class Event::Question < ActiveRecord::Base
 
   has_many :answers, dependent: :destroy
   has_many :question_visibilities, class_name: "Event::QuestionVisibility",
-    dependent: :destroy, inverse_of: :question
+    dependent: :destroy, inverse_of: :question, autosave: true
   has_one :question_template, class_name: "Event::QuestionTemplate", inverse_of: :question,
     dependent: nil
 
@@ -131,8 +131,10 @@ class Event::Question < ActiveRecord::Base
 
   def visible_role_types=(role_types)
     @visible_role_types = Array(role_types).compact_blank
-    self.question_visibilities = @visible_role_types.collect do |role_type|
-      Event::QuestionVisibility.new(role_type: role_type)
+
+    question_visibilities.each(&:mark_for_destruction)
+    @visible_role_types.each do |role_type|
+      question_visibilities.build(role_type:)
     end
   end
 

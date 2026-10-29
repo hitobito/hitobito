@@ -618,6 +618,13 @@ describe Group do
       group = Fabricate(Group::BottomLayer.sti_name, name: "g", parent: parent)
       expect { group.destroy }.to change { InvoiceConfig.count }.by(-1)
     end
+
+    it "is recreated when destroyed layer group gets restored" do
+      group = Fabricate(Group::BottomLayer.sti_name, name: "g", parent: parent)
+      group.destroy
+      group.restore!
+      expect(group.reload.invoice_config).to be_present
+    end
   end
 
   context :self_registration do

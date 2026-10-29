@@ -43,6 +43,18 @@ describe Events::Filter::GroupList do
     end
   end
 
+  context "type" do
+    it "lists regular events for type Event" do
+      entries = list_entries(type: "Event")
+      expect(entries).to have(3).entries
+      expect(entries).not_to include(events(:top_course))
+    end
+
+    it "lists courses for type Event::Course" do
+      expect(list_entries(type: "Event::Course")).to eq [events(:top_course)]
+    end
+  end
+
   context "date params" do
     before do
       travel_back

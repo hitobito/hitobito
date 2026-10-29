@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -26,8 +26,8 @@ describe StepsComponent, type: :component do
     end
   end
 
-  def render(**args)
-    render_inline(described_class.new(**args.merge(form: form)))
+  def render(**args, &)
+    render_inline(described_class.new(**args.merge(form: form)), &)
   end
 
   it "does not render when partials are empty" do
@@ -59,6 +59,22 @@ describe StepsComponent, type: :component do
     def stub_header_translation(header, value)
       expect(I18n).to receive(:t).with("main_person_title").and_return("Personendaten")
       expect(I18n).to receive(:t).with("#{header}_title").and_return(value)
+    end
+  end
+
+  describe "aside" do
+    it "puts content and aside into grid columns that only split from lg up" do
+      html = render(partials: [:main_person], step: 0) { |c| c.with_aside { "costs" } }
+
+      expect(html).to have_css(".row .col-lg-7.wizard-main .step-content.main-person")
+      expect(html).to have_css(".row .col-lg-5", text: "costs")
+    end
+
+    it "keeps a single full width column without aside" do
+      html = render(partials: [:main_person], step: 0)
+
+      expect(html).to have_css(".row > .col")
+      expect(html).not_to have_css(".wizard-main")
     end
   end
 end

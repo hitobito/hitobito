@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -65,7 +65,8 @@ module FormHelper
 
   def button_toolbar(form, toolbar_class:, &block)
     toolbar_class = toolbar_class.to_s
-    toolbar_class += " offset-md-3 offset-xl-2" unless toolbar_class.include?("offset-")
+    builder = form.is_a?(StandardFormBuilder) ? form.class : StandardFormBuilder
+    toolbar_class += " #{builder.offset_class}" unless toolbar_class.include?("offset-")
     content_tag(:div, class: "row mb-2 mt-0") do
       content_tag(:div, class: toolbar_class) do
         capture(form, &block)

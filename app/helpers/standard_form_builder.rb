@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,7 +21,6 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
   FORM_CONTROL = "form-control form-control-sm"
   FORM_CONTROL_WITH_WIDTH = "form-control form-control-sm #{WIDTH_CLASSES}"
   FORM_CONTROL_SELECT_WITH_WIDTH = "form-select form-select-sm #{WIDTH_CLASSES}"
-  LABEL_CLASSES = "col-md-3 col-xl-2 pb-1"
 
   attr_reader :template
 
@@ -29,6 +28,18 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     :content_tag, :safe_join, :capture, :add_css_class, :assoc_and_id_attr,
     :render, :f, :icon, :check_box_tag, :action_button,
     to: :template
+
+  class << self
+    def label_class
+      "col-md-3 col-xl-2"
+    end
+
+    def offset_class
+      label_class.gsub("col-", "offset-")
+    end
+  end
+
+  delegate :label_class, :offset_class, to: :class
 
   # Render multiple input fields together with a label for the given attributes.
   def labeled_input_fields(*attrs)
@@ -349,7 +360,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     html_options = {class: "labeled controls mb-3 d-flex " \
                             "justify-content-start align-items-baseline"}
     css_classes = {row: true, "mb-2": true, required: required}
-    label_classes = "control-label col-form-label col-md-3 col-xl-2 pb-1 text-md-end"
+    label_classes = "control-label col-form-label #{label_class} pb-1 text-md-end"
     label_classes += " required" if required
     content_tag(:div, class: css_classes.select { |_css, show| show }.keys.join(" ")) do
       label(assoc, class: label_classes) +
@@ -403,7 +414,7 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
 
     caption_or_content ||= captionize(attr, klass)
 
-    label_classes = html_options.delete(:label_class) || "col-md-3 col-xl-2"
+    label_classes = html_options.delete(:label_class) || label_class
     label_classes += " col-form-label text-md-end pb-1"
     label_classes += " required" if mark_as_required || required?(attr)
 

@@ -41,7 +41,8 @@ class EventParticipationSerializer < ApplicationSerializer
         PersonIdSerializer
     end
 
-    map_properties :additional_information, :active, :qualified
+    map_properties :additional_information if show_details?
+    map_properties :active, :qualified
 
     entities :event_answers, visible_answers, EventAnswerSerializer
 
@@ -51,6 +52,11 @@ class EventParticipationSerializer < ApplicationSerializer
   end
 
   private
+
+  def show_details?
+    h.current_ability.is_a?(TokenAbility) ||
+      h.current_ability.can?(:show_details, Draper.undecorate(item))
+  end
 
   def visible_answers
     Event::Question::VisibleList.new(

@@ -453,6 +453,14 @@ describe Event::ParticipationsController do
 
             expect(dom).to have_no_text("Arrives late")
           end
+
+          it "does not render the additional information as json" do
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id},
+              format: :json
+
+            json = JSON.parse(response.body)["event_participations"].first
+            expect(json).not_to have_key("additional_information")
+          end
         end
       end
     end

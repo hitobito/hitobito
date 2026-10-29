@@ -62,6 +62,38 @@ describe EventParticipationSerializer do
     }])
   end
 
+  describe "additional information" do
+    before { participation.update!(additional_information: "Allergisch auf Nüsse") }
+
+    it "is included for a viewer with show_details" do
+      expect(subject[:additional_information]).to eq "Allergisch auf Nüsse"
+    end
+
+    context "for a viewer without show_details" do
+      let(:viewer) do
+        treasurer_participation = Fabricate(:event_participation, event: participation.event)
+        Fabricate(Event::Role::Treasurer.sti_name, participation: treasurer_participation)
+        treasurer_participation.person
+      end
+
+      it "is omitted" do
+        expect(subject).not_to have_key(:additional_information)
+      end
+    end
+
+    context "for a service token without the event_participations scope" do
+      let(:token) do
+        Fabricate(:service_token, layer: groups(:top_layer), permission: :layer_and_below_full,
+          events: true, event_participations: false)
+      end
+      let(:controller) { double(current_ability: TokenAbility.new(token)).as_null_object }
+
+      it "is included" do
+        expect(subject[:additional_information]).to eq "Allergisch auf Nüsse"
+      end
+    end
+  end
+
   it "includes person template link" do
     expect(hash["links"]["event_participations.person"]).to have_key("href")
   end

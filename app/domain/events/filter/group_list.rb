@@ -65,7 +65,11 @@ class Events::Filter::GroupList < Events::Filter::List
   end
 
   def group_events
-    Event.with_group_id(relevant_group_ids).where(type: params[:type])
+    Event.with_group_id(relevant_group_ids).where(type: persisted_type)
+  end
+
+  def persisted_type
+    type unless type == "Event" # regular events set type=nil
   end
 
   def relevant_group_ids

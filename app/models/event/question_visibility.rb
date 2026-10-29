@@ -24,10 +24,6 @@ class Event::QuestionVisibility < ActiveRecord::Base
   validates_by_schema
   validates :role_type, inclusion: {in: :selectable_role_types}
 
-  def role_class
-    role_type.constantize
-  end
-
   def selectable_role_types
     question.selectable_role_types
   end

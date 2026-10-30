@@ -192,12 +192,12 @@ it:
     all_groups: "tutti i gruppi"
 
   dropdown/event/events_export:
-    button: esportare
+    button: Esportare
     csv: CSV
     xlsx: Excel
 
   dropdown/event/role_add:
-    add: "aggiungere una persona"
+    add: "Aggiungere una persona"
 
   dropdown/event/invitation_add:
     add: "Invitare una persona"
@@ -223,7 +223,7 @@ it:
     archive: "archiviare"
     delete: Cancellare
     edit_service_token: Chiavi API
-    edit_event_question_template: Modelli Dati di registrazione Eventi
+    edit_event_question_template: Modelli per i dati di iscrizione agli eventi
     edit_event_template: Eventvorlagen
     edit_calendar_feeds: Registrazioni nel calendario
 
@@ -233,13 +233,13 @@ it:
     emails_semicolon_separated: "Separato da punto e virgola (Outlook)"
 
   dropdown/people_export:
-    button: "esportare"
+    button: "Esportare"
     csv: "CSV"
     xlsx: "Excel"
     vcard: "vCard"
-    labels: "etichette"
+    labels: "Etichette"
     pdf: "PDF"
-    emails: "indirizzi email"
+    emails: "Indirizzi email"
     emails_comma_separated: "Komma getrennt (Apple Mail, Thunderbird, ...)"
     emails_semicolon_separated: "Semikolon getrennt (Outlook)"
     addresses: "lista di indirizzi"
@@ -428,7 +428,7 @@ it:
         title: "corsi disponibili"
         no_category: Altri corsi
         explanation: "Qui vengono mostrati i corsi per il tuo gruppo così come per i gruppi superiori. Puoi trovare altri corsi tra i gruppi che li organizzano."
-        csv_export_button: "esportazione CSV"
+        csv_export_button: "Esportazione CSV"
         ical_export_button: "Esportazione del calendario"
       events:
         title: "Eventi che si terranno prossimamente"
@@ -451,7 +451,7 @@ it:
       prio_buttons:
         national_waitinglist: "lista d'attesa nazionale"
       index:
-        assigned_participants: "partecipanti assegnati"
+        assigned_participants: "Partecipanti assegnati"
         add_participant: Aggiungere partecipante
       waiting_list_link:
         title_active: "Eliminare dalla lista d'attesa"
@@ -485,7 +485,7 @@ it:
       edit:
         title: Registrare i dati di contatto del/la partecipante
         wizard_title: Dati di contatto
-        save: avanti
+        save: Avanti
       update:
         flash:
           privacy_policy_not_accepted: "Per completare l'iscrizione deve venir accettata la dichiarazione di protezione dei dati."
@@ -526,7 +526,7 @@ it:
       form:
         title_new: "Iscrizione come %{role}"
         title_edit: "Modificare l'iscrizone di %{person}"
-        apply: "iscrivere"
+        apply: "Iscrivere"
       new:
         add_guests: "Accedere e aggiungere un ospite (max. %{limit})"
       application_fields:
@@ -593,7 +593,7 @@ it:
         login: Login
         no_login: Non hai ancora nessun login?
       email_check:
-        next: avanti
+        next: Avanti
         enter_email: Inserisci per favore il tuo indirizzo email, affinché tu possa iscriverti all'evento.
         next_for_manager: Iscrivere il/la mio bambino/a
       manager_fields:
@@ -684,7 +684,7 @@ it:
         select_layers: cercare gruppi
     actions_show:
       copy_share_link: Copiare il link diretto
-      save_as_template: Als Vorlage speichern
+      save_as_template: Salva come modello
     application_fields:
       caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: L'iscrizione deve essere confermata da una seconda firma
@@ -750,7 +750,7 @@ it:
       title_event/course: Creare un corso
     preconditions: "qualifiche necessarie"
     tabs:
-      participants: "partecipanti"
+      participants: "Partecipanti"
     export_enqueued: "L'esportazione viene avviata in background e, una volta completata, potrà essere scaricata dalla panoramica dei processi: %{overview_link}"
 
   event/applications:
@@ -824,7 +824,7 @@ it:
 
   events/filters:
     new:
-      title: "%{type} filtern"
+      title: "Filtrare %{type}"
     form:
       range:
         deep: Al livello attuale e in tutti i livelli e gruppi sottostanti
@@ -888,7 +888,7 @@ it:
         reset: L'indirizzo è stato attualizzato.
 
   filter_navigation/dropdown:
-    additional_views: "altre opzioni"
+    additional_views: "Altre opzioni"
 
   filter_navigation/people:
     custom_filter: "filtro personale"
@@ -904,9 +904,9 @@ it:
 
   filter_navigation/event/participations:
     predefined_filters:
-      all: tutte le persone
+      all: Tutte le persone
       teamers: Gruppo di direzione
-      participants: partecipanti
+      participants: Partecipanti
 
   filters:
     attributes:
@@ -1332,7 +1332,7 @@ it:
       flash:
         success: Pagamento sopra i %{amount} è stato registrato
     actions_index:
-      export: "Export CSV"
+      export: "Esportazione CSV"
     table:
       number_of_payments_shown:
         one: "%{count} pagamento visualizzato."
@@ -2448,9 +2448,9 @@ it:
       add_person: Aggiungere una persona
       add_group_roles: Aggiungre un gruppo/ruolo
       add_event: Aggiungere un evento
-      exclude_person: "escludere persone"
+      exclude_person: "Escludere persone"
     list:
-      excluded_people: "persone escluse"
+      excluded_people: "Persone escluse"
       export_not_allowed: "Non è possibiie esportare gli abbonati di questo abbonamento perché contengono anche ruoli e/o eventi del tuo ambito di autorizzazioni."
       subscribable_mode_opt_out_info: >
           Solo le persone configurate qui possono effettuare il log-in e il log-out

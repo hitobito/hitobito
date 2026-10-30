@@ -360,9 +360,9 @@ fr:
         many: Données pour l'inscription
         other: Données pour l'inscription
       event/question_template:
-        one: Vorlage Anmeldeangabe Anlässe
-        many: Vorlagen Anmeldeangaben Anlässe
-        other: Vorlagen Anmeldeangaben Anlässe
+        one: Modèle pour les données d'inscription aux événements
+        many: Modèles pour les données d'inscription aux événements
+        other: Modèles pour les données d'inscription aux événements
       event/question_visibility:
         one: Sichtbare Rolle
         many: Sichtbare Rollen
@@ -880,7 +880,7 @@ fr:
         visible_contact_attributes: "Options d'affichage (personne de contact)"
         guest_limit: Nombre maximum d'invités par personne
         template: Vorlage
-        inherit: Vererbung
+        inherit: Héritage
 
       event/contact_attrs:
         required: Obligatoire
@@ -1036,8 +1036,8 @@ fr:
       event/question_template:
         question: Question
         default: Default
-        event_type: Anlasstyp
-        inherit: Vererbung
+        event_type: Type d'événement
+        inherit: Héritage
 
 
       admin_questions:

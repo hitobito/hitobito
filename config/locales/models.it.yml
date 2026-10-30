@@ -663,7 +663,7 @@ it:
         read_at: Letto il
 
       blocklist_entry:
-        person: Person
+        person: Persona
         blocked_hash: Hash
         creator: Erstellt von
         created_at: Erstellt am
@@ -879,7 +879,7 @@ it:
         visible_contact_attributes: "Opzioni di visualizzazione (persona di contatto)"
         guest_limit: Maximale Anzahl Gäste pro Person
         template: Vorlage
-        inherit: Vererbung
+        inherit: Ereditarietà
 
       event/contact_attrs:
         required: Obbligatorio
@@ -1035,8 +1035,8 @@ it:
       event/question_template:
         question: Frage
         default: Default
-        event_type: Anlasstyp
-        inherit: Vererbung
+        event_type: Tipo d'evento
+        inherit: Ereditarietà
 
 
       admin_questions:
@@ -1082,7 +1082,7 @@ it:
       pass:
         member_name: Mitgliedsname
         member_number: Mitgliedsnummer
-        person: Person
+        person: Persona
         pass_definition: Pass-Definition
         state: Stato
         valid_from: Gültig von

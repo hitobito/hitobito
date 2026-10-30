@@ -223,7 +223,7 @@ fr:
     archive: "Archiver"
     delete: Effacer
     edit_service_token: Clefs API
-    edit_event_question_template: Modèles, informations d'inscription, événements
+    edit_event_question_template: Modèles pour les données d'inscription aux événements
     edit_event_template: Eventvorlagen
     edit_calendar_feeds: Feed du calendrier
 
@@ -686,7 +686,7 @@ fr:
         select_layers: Chercher les groupes...
     actions_show:
       copy_share_link: Copier le lien direct
-      save_as_template: Als Vorlage speichern
+      save_as_template: Enregistrer comme modèle
     application_fields:
       caption_signature: Teilnehmende müssen die Anmeldung unterschreiben
       caption_signature_confirmation: L'inscription doit être confirmée par une deuxième signature.
@@ -826,7 +826,7 @@ fr:
 
   events/filters:
     new:
-      title: "%{type} filtrer"
+      title: "Filtrer %{type}"
     form:
       range:
         deep: Dans le niveau actuel et tous les niveaux et groupes en dessous

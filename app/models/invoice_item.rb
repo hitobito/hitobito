@@ -14,7 +14,9 @@
 #  cost                    :decimal(12, 2)
 #  cost_center             :string
 #  count                   :integer          default(1)
+#  description             :text
 #  dynamic_cost_parameters :text
+#  name                    :string
 #  type                    :string           default("InvoiceItem"), not null
 #  unit_cost               :decimal(12, 2)
 #  vat_rate                :decimal(5, 2)

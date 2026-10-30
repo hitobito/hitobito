@@ -28,6 +28,7 @@
 #  payee_street                     :string
 #  payee_town                       :string
 #  payee_zip_code                   :string
+#  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
 #  reference_prefix                 :integer
 #  sender_name                      :string

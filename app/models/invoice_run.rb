@@ -12,13 +12,16 @@
 #  id                         :bigint           not null, primary key
 #  amount_paid                :decimal(15, 2)   default(0.0), not null
 #  amount_total               :decimal(15, 2)   default(0.0), not null
+#  description                :text
 #  invalid_recipient_ids      :text
+#  payment_information        :text
 #  pp_post                    :string
 #  recipient_source_type      :string
 #  recipients_paid            :integer          default(0), not null
 #  recipients_processed       :integer          default(0), not null
 #  recipients_total           :integer          default(0), not null
 #  shipping_method            :string           default("own")
+#  title                      :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #  creator_id                 :bigint

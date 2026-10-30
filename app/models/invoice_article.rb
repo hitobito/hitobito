@@ -11,6 +11,8 @@
 #  account     :string
 #  category    :string
 #  cost_center :string
+#  description :text
+#  name        :string
 #  number      :string
 #  unit_cost   :decimal(12, 2)
 #  vat_rate    :decimal(5, 2)

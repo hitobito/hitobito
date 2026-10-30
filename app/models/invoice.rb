@@ -13,6 +13,7 @@
 #  account_number               :string
 #  address                      :text
 #  beneficiary                  :text
+#  cancelled_at                 :date
 #  currency                     :string           default("CHF"), not null
 #  deprecated_payee             :text
 #  deprecated_recipient_address :text

@@ -10,7 +10,9 @@
 # Table name: message_templates
 #
 #  id             :bigint           not null, primary key
+#  body           :text
 #  templated_type :string
+#  title          :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #  templated_id   :bigint

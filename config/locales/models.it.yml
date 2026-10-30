@@ -363,9 +363,9 @@ it:
         many: Vorlagen Anmeldeangaben Anlässe
         other: Vorlagen Anmeldeangaben Anlässe
       event/question_visibility:
-        one: Sichtbare Rolle
-        many: Sichtbare Rollen
-        other: Sichtbare Rollen
+        one: Rolle mit Einsicht
+        many: Rollen mit Einsicht
+        other: Rollen mit Einsicht
       event/answer:
         one: Antwort auf Anmeldeangabe
         many: Antworten auf Anmeldeangaben
@@ -1030,7 +1030,7 @@ it:
         multiple_choices: Scelta multipla
         required: Obbligatorio
         sensitive: Delicato
-        question_visibilities: Sichtbare Rollen
+        question_visibilities: Einsehbar für
 
       event/question_template:
         question: Frage

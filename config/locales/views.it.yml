@@ -578,6 +578,9 @@ it:
       form:
         default_caption: Viene aggiunto di default ai nuovi eventi
         inherit_caption: È disponibile anche a livelli inferiori.
+      visibility_fields:
+        all_event_types_hint:
+          Nur Leitungsrollen mit vollem Zugriff sehen die Antworten. Für weitere Rollen eine Anlassart wählen.
 
     register:
       register:
@@ -632,7 +635,9 @@ it:
       sensitive_caption: Le risposte vengono cancellate %{cutoff} mesi dopo la conclusione dell'evento.
       required_caption: È necessario rispondere a questa domanda al momento della registrazione.
       visibility_fields:
-        caption: "Sichtbar für"
+        caption: "Einsehbar für"
+      visibility_explanation:
+        Antworten sind für %{roles} immer einsehbar. Weiteren Rollen kann der Zugriff pro Frage gewährt werden.
 
   assignments:
     attachment: "Mostrare l'allegato."

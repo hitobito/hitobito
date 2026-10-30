@@ -364,9 +364,9 @@ fr:
         many: Modèles pour les données d'inscription aux événements
         other: Modèles pour les données d'inscription aux événements
       event/question_visibility:
-        one: Sichtbare Rolle
-        many: Sichtbare Rollen
-        other: Sichtbare Rollen
+        one: Rolle mit Einsicht
+        many: Rollen mit Einsicht
+        other: Rollen mit Einsicht
       event/answer:
         one: Réponse aux informations d'inscription
         many: Réponses aux informations d'inscription
@@ -1031,7 +1031,7 @@ fr:
         multiple_choices: Sélection multiple
         required: Obligatoire
         sensitive: Sensible
-        question_visibilities: Sichtbare Rollen
+        question_visibilities: Einsehbar für
 
       event/question_template:
         question: Question

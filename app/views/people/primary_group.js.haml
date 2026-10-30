@@ -3,4 +3,5 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-$('section.roles').html("#{j(render(partial: 'roles'))}");
+- partial = render 'roles_aside', title: t('people.roles.title'), grouped_roles: entry.current_roles_grouped, primary_group_link: true
+$('section.roles').first().html("#{j(partial)}");

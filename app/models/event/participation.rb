@@ -249,7 +249,9 @@ class Event::Participation < ActiveRecord::Base
   end
 
   def qualification_comment_required?
-    qualified == false && Settings.event.qualifications.comment_required_if_not_qualified
+    qualified == false &&
+      FeatureGate.enabled?("event.qualifications.comments") &&
+      Settings.event.qualifications.comment_required_if_not_qualified
   end
 
   def set_self_in_nested

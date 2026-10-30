@@ -20,7 +20,7 @@ fr:
     confirm_delete: Souhaitez-vous vraiment effacer cet enregistrement?
     do_not_fill: Ne pas remplir cette case SVP.
     chosen_no_results: Aucun résultat.
-    selected: ausgewählt
+    selected: sélectionné
     extended_select_all: Sélectionner tout %{count}
     columns: Colonnes
     start_on: à partir de %{date}
@@ -137,10 +137,10 @@ fr:
 
   admins:
     show:
-      main: Allgemein
+      main: Général
       info: Information
-      events: Anlässe und Kurse
-      people: Mitgliederverwaltung
+      events: Événements et cours
+      people: Gestion des membres
 
   blocked:
     index:
@@ -148,7 +148,7 @@ fr:
 
   changelog:
     index:
-      meta_description: "%{application_name} Changelog Seite"
+      meta_description: "Page du changelog de %{application_name}"
   contactable:
     address_or_email: "%{address} ou %{email}"
     fields:
@@ -158,7 +158,7 @@ fr:
       invoices_tooltip_title: Utilisé pour les factures
       blocked_mail_tooltip_title: E-mail bloqué à cause de bounces
 
-    label_placeholder: Ergänzungen
+    label_placeholder: Compléments
 
     public_check_box:
       tooltip: Les entrées privées ne sont visibles qu'au sein du groupe auquel tu appartiens. Les responsables d'autres groupes peuvent voir les entrées identifiées en tant qu'entrées publiques si toi-même, tu fais partie d'une maîtrise.
@@ -167,15 +167,15 @@ fr:
       placeholder_type: Intitulé (Vie privée, Travail...)
 
     social_account_fields:
-      placeholder_value: Website, Profillink...
+      placeholder_value: ' Site web, lien vers le profil...'
 
     additional_email_fields:
       placeholder_value: Courriel
       tooltip_mailings: Les diffusions d'abonnements, les confirmations par e-mail etc. sont également envoyées à toutes les adresses marquées ici.
 
     additional_address_fields:
-      caption_uses_contactable_name_person: Namen der Person übernehmen
-      caption_uses_contactable_name_group: Namen der Gruppe übernehmen
+      caption_uses_contactable_name_person: Reprendre le nom de la personne
+      caption_uses_contactable_name_group: Reprendre le nom du groupe
 
     address_fields:
       housenumber: N°

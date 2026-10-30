@@ -87,7 +87,7 @@ fr:
         type_not_allowed: ne peut pas être créé ici
         must_be_after_opening: doit être ultérieur à l'inscription
         must_have_same_type: doivent être du même type
-        must_be_layer: können für Eventvorlagen nur eine Ebene sein
+        must_be_layer: ne peuvent comporter qu’un seul niveau pour les modèles d’événements
         greater_than: doit être supérieur à %{count}.
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}.
         must_exist: doivent être présents
@@ -98,9 +98,9 @@ fr:
         year_must_be_after_1900: doit comporter une année à partir de 1900
       models:
         additional_address:
-          name_missing: 'Bitte geben Sie einen Namen ein'
+          name_missing: ' Veuillez saisir un nom'
         blocklist_entry:
-          already_blocklisted: Diese Person ist bereits auf der Ausschlussliste.
+          already_blocklisted: Cette personne figure déjà sur la liste d’exclusion.
           attributes:
             blocked_hash:
               blank: kann nur berechnet werden, wenn eine Person gesucht oder Angaben erfasst werden
@@ -364,9 +364,9 @@ fr:
         many: Modèles pour les données d'inscription aux événements
         other: Modèles pour les données d'inscription aux événements
       event/question_visibility:
-        one: Sichtbare Rolle
-        many: Sichtbare Rollen
-        other: Sichtbare Rollen
+        one: Rolle mit Einsicht
+        many: Rollen mit Einsicht
+        other: Rollen mit Einsicht
       event/answer:
         one: Réponse aux informations d'inscription
         many: Réponses aux informations d'inscription
@@ -598,10 +598,10 @@ fr:
       additional_address:
         category: Kategorie
         label: Bezeichnung
-        first_name: Vorname
-        last_name: Nachname
-        organization_name: Firmenname
-        organization: Firma
+        first_name: Prénom
+        last_name: Nom
+        organization_name: Nom de l'entreprise
+        organization: Entreprise
         street_and_number: Rue/Numéro # can be removed with next release
         street: Rue
         housenumber: Numéro de la maison
@@ -614,7 +614,7 @@ fr:
         public: Public
 
       additional_addresses:
-        category: Kategorie
+        category: Catégorie
         label: Désignation
         street: Rue
         postbox: Postfach
@@ -664,10 +664,10 @@ fr:
         read_at: Lu le
 
       blocklist_entry:
-        person: Person
+        person: Personne
         blocked_hash: Hash
-        creator: Erstellt von
-        created_at: Erstellt am
+        creator: Créé par
+        created_at: Créé à
 
       cors_origins:
         origin: Serveur avec accès via API
@@ -695,7 +695,7 @@ fr:
         zip_code: NPA
         town: Lieu
         country: Pays
-        canton: Kanton
+        canton: Canton
         gender: Sexe
         genders:
           m: masculin
@@ -773,14 +773,14 @@ fr:
         label: "%{body} dans %{group}"
 
       personal_document:
-        file: Datei
+        file: Fichier
         filename: Dateiname
         description: Beschreibung
         label_id: Label
         label: Label
-        author_id: Erstellt von
-        author: Erstellt von
-        created_at: Erstellt am
+        author_id: Créé par
+        author: Créé par
+        created_at: Créé à
         updated_at: Geändert am
 
       group:
@@ -847,8 +847,8 @@ fr:
         contact: 'Personne de contact '
         creator_id: Crée par
         notify_contact_on_participations: Notifier la personne de contact par e-mail de toute nouvelle inscription.
-        maximum_participants: Maximale Teilnehmendenzahl
-        minimum_participants: Minimale Teilnehmendenzahl
+        maximum_participants: Nombre maximal de participants
+        minimum_participants: Nombre minimal de participants
         contact_id: 'Personne de contact '
         description: Description
         location: Lieu / Adresse
@@ -879,7 +879,7 @@ fr:
         no_name: "[Sans nom]"
         visible_contact_attributes: "Options d'affichage (personne de contact)"
         guest_limit: Nombre maximum d'invités par personne
-        template: Vorlage
+        template: Modèle
         inherit: Héritage
 
       event/contact_attrs:
@@ -1031,7 +1031,7 @@ fr:
         multiple_choices: Sélection multiple
         required: Obligatoire
         sensitive: Sensible
-        question_visibilities: Sichtbare Rollen
+        question_visibilities: Einsehbar für
 
       event/question_template:
         question: Question
@@ -1096,7 +1096,7 @@ fr:
       wallets/pass_installation:
         pass: Ausweis
         wallet_type: Wallet-Typ
-        state: Status
+        state: Statut
         wallet_identifier: Wallet-ID
         authentication_token: Authentifizierungs-Token
         last_synced_at: Letzte Synchronisation
@@ -1118,7 +1118,7 @@ fr:
 
       phone_number:
         number: Numéro
-        category: Kategorie
+        category: Catégorie
         label: Type
         public: Public
 
@@ -1148,7 +1148,7 @@ fr:
       # used for nested phone_numbers
       phone_numbers:
         number: Numéro de téléphone
-        category: Kategorie
+        category: Catégorie
         label: Type de numéro de téléphone
         public: Public
 
@@ -1219,21 +1219,21 @@ fr:
               other: Futur
       social_account:
         name: Nom
-        category: Kategorie
+        category: Catégorie
         label: Type
         public: Public
 
       # used for nested social accounts
       social_accounts:
         name: Nom du réseau social
-        category: Kategorie
+        category: Catégorie
         label: Type de réseau social
         public: Public
 
       additional_email:
         email: Adresse e-mail
         name: Adresse e-mail supplémentaire
-        category: Kategorie
+        category: Catégorie
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
@@ -1242,7 +1242,7 @@ fr:
       additional_emails:
         email: Courriel
         name: Adresse e-mail supplémentaire
-        category: Kategorie
+        category: Catégorie
         label: Autre type d'e-mail
         public: Public
         mailings: Envoi
@@ -1364,12 +1364,12 @@ fr:
 
       contact_account_category:
         key: Schlüssel
-        contact_account_type: Kontaktangaben-Typ
-        contactable_type: Gilt für
-        unique_per_contactable: Nur einmal pro Person/Gruppe
-        used_for_invoices: Für Rechnungen verwenden
-        position: Reihenfolge
-        name: Bezeichnung
+        contact_account_type: Type de coordonnées
+        contactable_type: S'applique à
+        unique_per_contactable: ' Une seule fois par personne/groupe'
+        used_for_invoices: Utilisé pour les factures
+        position: Ordre
+        name: Désignation
 
       label_format:
         name: Désignation
@@ -1517,14 +1517,14 @@ fr:
         cost: Montant
         cost_center: Poste
         account: Compte
-        vat: MwSt. Betrag
+        vat: Montant de la TVA
         total: Total
 
 
       invoice_run:
         title: Titre
-        description: Text
-        payment_information: Zahlungsinformation
+        description: Texte
+        payment_information: Information sur le paiement
         recipient_source: Destinataire
         recipients_total: Nombre total de destinataires
         recipients_paid: Destinataire payé
@@ -1585,7 +1585,7 @@ fr:
         user_identifier: ID du participant
         password: Mot de passe
         ini_letter: Lettre INI
-        ebics_version_label: EBICS-Version
+        ebics_version_label: ' Version EBICS'
         payment_providers:
           bancastato: BancaStato
           bekb: BEKB | BCBE
@@ -1599,13 +1599,13 @@ fr:
           ubs: UBS
           valiant: Valiant
           zkb: Zürcher Kantonalbank
-          zkb-test: Zürcher Kantonalbank Testumgebung
+          zkb-test: Environnement de test de la Banque Cantonale de Zurich
           zugerkb: Zuger Kantonalbank
           ukb: 'Urner Kantonalbank '
           bcn: Banque Cantonale Neuchâteloise
           bcv: Banque Cantonale Vaudoise
           bcvs: Banque Cantonale du Valais
-          szkb: Schwyzer Kantonalbank
+          szkb: Banque Cantonale de Schwytz
 
       period_invoice_template:
         name: Désignation
@@ -1631,13 +1631,13 @@ fr:
         name: Nom
         description: Description
         key: Clef
-        permission: Berechtigung
+        permission: Autorisation
         permissions:
-          layer_read: Leserechte auf dieser Ebene
-          layer_and_below_read: Leserechte auf dieser und darunterliegenden Ebenen
-          layer_full: Lese- und Schreibrechte auf dieser Ebene
-          layer_and_below_full: Lese- und Schreibrechte auf dieser und darunterliegenden Ebenen
-        scopes: Zugriffsbereich
+          layer_read: Droits de lecture à ce niveau
+          layer_and_below_read: Droits de lecture à ce niveau et aux niveaux inférieurs
+          layer_full: Droits d'écriture et lecture à ce niveau
+          layer_and_below_full: Droits d'écriture et lecture à ce niveau et aux niveaux inférieurs
+        scopes: Zone d'accès
         last_access: Dernier accès
         people: Personnes
         register_people: Enregistrer de nouvelles personnes (nécessite des droits d'écriture)
@@ -1668,14 +1668,14 @@ fr:
           error: Une erreur s'est produite lors du traitement
 
   delayed_job:
-    bulk/tag_add_job: Tags hinzufügen
-    bulk/tag_remove_job: Tags entfernen
+    bulk/tag_add_job: Rajouter des tags
+    bulk/tag_remove_job: Enlever les tags
     export/event_participations_export_job: Exportation des participations aux événements
     export/events_export_job: Exportation d'événement
     export/export_base_job: Exportation de base
     export/invitations_export_job: Exportation des invitations
     export/invoices_job: Exportation des factures
-    export/labels_job: Personen-Export
+    export/labels_job: Exportation des personnes
     export/message_job: Exportation des messages
     export/payments_export_job: Exportation des paiements
     export/people_export_job: Exportation des personnes
@@ -1689,7 +1689,7 @@ fr:
         id_must_not_be_set: ID ne doit pas être défini
         role_resource:
           group_id:
-            blank: muss ausgefüllt werden
+            blank: doit être renseigné
             unwritable_attribute: Ne peut pas être modifié
           person_id:
             unwritable_attribute: kann nicht geändert werden
@@ -1697,7 +1697,7 @@ fr:
             unwritable_attribute: ne peut pas être modifié
         qualification_resource:
           person_id:
-            blank: muss ausgefüllt werden
+            blank: doit être renseigné
         self_registration_resource:
           adult_consent:
             must_be_accepted: doit être accepté
@@ -1724,7 +1724,7 @@ fr:
   errors:
     attributes:
       category:
-        already_assigned: "%{category} ist bereits vergeben"
+        already_assigned: "%{category} est déjà attribuée"
     messages:
       invalid_zipcode: n'est pas valable
       attachments_not_allowed: "ne doit pas contenir d'annexe"

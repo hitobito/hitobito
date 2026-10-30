@@ -45,7 +45,6 @@ describe StepsComponent::ContentComponent, type: :component do
 
       it "does not render component if index is greater than step but step has value set" do
         step.name = "dummy"
-        expect(render_inline(component).to_s).not_to be_blank
         expect(content).to have_css "div[data-steps-component-target]", class: "step-content partial", text: "dummy"
       end
     end

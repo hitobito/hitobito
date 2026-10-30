@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Bei der Personnensuche wird nun ... als Indikator angezeigt, dass mehr als 10 Personnen gefunden wurden (#1797) 
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 - Rechnungen können als CSV oder Excel mit einer Zeile pro Rechnungsposten exportiert werden (hitobito_florist#7)

@@ -223,7 +223,7 @@ fr:
     archive: "Archiver"
     delete: Effacer
     edit_service_token: Clefs API
-    edit_event_question_template: Modèles, informations d'inscription, événements
+    edit_event_question_template: Modèles pour les données d'inscription aux événements
     edit_event_template: Eventvorlagen
     edit_calendar_feeds: Feed du calendrier
 

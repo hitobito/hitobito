@@ -3,8 +3,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- if p.event.qualifications_visible? && !p.qualified.nil?
+- comments_enabled = FeatureGate.enabled?('event.qualifications.comments')
+- if p.event.qualifications_visible? && (!comments_enabled || !p.qualified.nil?)
   = t("person.history.index.#{p.qualified ? '' : 'not_'}qualified")
-  - if p.qualification_comment.present?
+  - if comments_enabled && p.qualification_comment.present?
     = icon(:"info-circle", title: p.qualification_comment, class: 'ms-1')
   %br

@@ -244,6 +244,57 @@ describe Event::QualificationsController do
     end
   end
 
+  context "with comments disabled" do
+    before do
+      allow(FeatureGate).to receive(:enabled?).and_call_original
+      allow(FeatureGate).to receive(:enabled?).with("event.qualifications.comments").and_return(false)
+    end
+
+    describe "GET index" do
+      render_views
+
+      it "renders checkbox per participation without comment field" do
+        participant_1.update_columns(qualified: true, qualification_comment: "Gut")
+        get :index, params: {group_id: group.id, event_id: event.id}
+
+        dom = Capybara::Node::Simple.new(response.body)
+        row = dom.find("tr#event_participation_#{participant_1.id}")
+        expect(row).to have_field("participation_ids[]", type: "checkbox", with: participant_1.id, checked: true)
+        expect(row).not_to have_css("input[type=radio]")
+        expect(row).not_to have_field("qualifications[#{participant_1.id}][qualification_comment]")
+        expect(dom).not_to have_css("thead")
+      end
+    end
+
+    describe "PUT update" do
+      before do
+        qualification_kind_id = event.kind.qualification_kinds("qualification", "participant").first.id
+        participant_2.person.qualifications.create!(qualification_kind_id: qualification_kind_id,
+          start_at: event.qualification_date, qualified_at: event.qualification_date)
+        participant_2.update_column(:qualified, true)
+        allow(Settings.event.qualifications).to receive(:comment_required_if_not_qualified).and_return(true)
+
+        put :update, params: {group_id: group.id, event_id: event.id, participation_ids: [participant_1.id.to_s]}
+      end
+
+      it "issues qualifications for checked participations" do
+        expect(participant_1.reload.qualified).to be true
+        expect(obtained_qualifications(participant_1).size).to eq(1)
+      end
+
+      it "revokes qualifications for unchecked participations" do
+        expect(participant_2.reload.qualified).to be false
+        expect(obtained_qualifications(participant_2)).to be_empty
+        expect(leader_1.reload.qualified).to be false
+      end
+
+      it "redirects with notice" do
+        expect(response).to redirect_to(group_event_qualifications_path(group, event))
+        expect(flash[:notice]).to be_present
+      end
+    end
+  end
+
   def obtained_qualifications(participation = participant_1)
     role = (participation.roles.any? { |role| role.class.leader? }) ? "leader" : "participant"
     qualification_kinds = participation.event.kind.qualification_kinds(:qualification, role)

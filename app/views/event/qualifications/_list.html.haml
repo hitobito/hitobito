@@ -3,22 +3,28 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
+- comments_enabled = FeatureGate.enabled?('event.qualifications.comments')
 %table.table.table-striped.table-hover.align-middle
-  %thead
-    %tr
-      %th.center.col-fit= t('event.qualifications.index.qualified')
-      %th.center.col-fit= t('event.qualifications.index.not_qualified')
-      %th.center.col-fit= t('event.qualifications.index.not_assessed')
-      %th= t('event.qualifications.index.name')
-      %th= t('event.qualifications.index.roles')
-      %th= t('event.qualifications.index.town')
-      %th= t('event.qualifications.index.comment')
+  - if comments_enabled
+    %thead
+      %tr
+        %th.center.col-fit= t('event.qualifications.index.qualified')
+        %th.center.col-fit= t('event.qualifications.index.not_qualified')
+        %th.center.col-fit= t('event.qualifications.index.not_assessed')
+        %th= t('event.qualifications.index.name')
+        %th= t('event.qualifications.index.roles')
+        %th= t('event.qualifications.index.town')
+        %th= t('event.qualifications.index.comment')
   %tbody
     - entries.each do |participation|
       %tr{id: dom_id(participation)}
-        = render 'qualified_radios', participation: participation
+        - if comments_enabled
+          = render 'qualified_radios', participation: participation
+        - else
+          %td.center= render 'checkbox', participation: participation
         %td
           %strong= link_to(participation.to_s(:list), group_event_participation_path(@group, @event, participation))
         %td= participation.roles_short
         %td= participation.town
-        %td= render 'comment_field', participation: participation
+        - if comments_enabled
+          %td= render 'comment_field', participation: participation

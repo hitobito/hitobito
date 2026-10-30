@@ -198,6 +198,8 @@ event:
   participations:
     delete_additional_information_after_months: 1200
   qualifications:
+    comments:
+      enabled: true
     comment_required_if_not_qualified: false
   questions:
     list_alphabetically: false

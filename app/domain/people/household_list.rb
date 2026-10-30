@@ -99,7 +99,7 @@ class People::HouseholdList
       .project(Person.arel_table[:id].as("person_id"))
       .project(household_key_column.as("household_key"))
       .project(ordinal_column.as("ordinal"))
-      .order(ordinal_column.alias)
+      .order(Arel.sql("ordinal"))
   end
 
   def person_ids_grouped_by_household_query(scope)

@@ -9,7 +9,6 @@ describe ContactableDecorator do
   let(:event) { events(:top_event).decorate }
 
   before do
-    Draper::ViewContext.clear!
     group = Group.new(
       id: 1, name: "foo", street: "foostreet", housenumber: "3", zip_code: "4242",
       town: "footown", email: "foo@foobar.com", country: "CH"

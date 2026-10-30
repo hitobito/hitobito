@@ -224,7 +224,7 @@ fr:
     delete: Effacer
     edit_service_token: Clefs API
     edit_event_question_template: Modèles pour les données d'inscription aux événements
-    edit_event_template: Eventvorlagen
+    edit_event_template: Modèles d’événements
     edit_calendar_feeds: Feed du calendrier
 
   dropdown/people_email_export:
@@ -311,7 +311,7 @@ fr:
       signed_out: "Tu es maintenant déconnecté(e)."
       new:
         sign_in: Inscription
-        meta_description: "Anmeldeseite für %{application_name}"
+        meta_description: "Page d’inscription pour %{application_name}"
       form:
         login_identity: Adresse e-mail principale
         sign_in: Inscription
@@ -327,7 +327,7 @@ fr:
       no_token: "Vous ne pouvez accéder à cette page qu'en cliquant sur le lien indiqué dans un courriel de récupération de mot de passe. Si vous avez copié le lien dans un courriel de récupération de mot de passe, veuillez vous assurer que vous avez copié l'URL en entier."
       new:
         reset_password_button: "Réinitialiser le mot de passe"
-        meta_description: "%{application_name} Passwort zurücksetzen Seite"
+        meta_description: "Page de réinitialisation du mot de passe de %{application_name}"
     confirmations:
       new:
         resend_confirmation_instructions: "Confirmer l'adresse e-mail"
@@ -357,7 +357,7 @@ fr:
         old_password: "Ancien mot de passe"
         new_password: "Nouveau mot de passe"
         new_password_confirmation: "Confirmer le nouveau mot de passe"
-        meta_description: "%{application_name} Passwort ändern Seite"
+        meta_description: "Page de modification du mot de passe de %{application_name}"
       person:
         updated: "Ton mot de passe a été actualisé."
 
@@ -368,7 +368,7 @@ fr:
           greeting: "Salut %{name} !"
           information_html: "Tu peux confirmer ton adresse e-mail en cliquant sur le lien suivant :"
           link_text: "Confirmer %{email} "
-          footer: "Diese E-Mail wurde von %{application_name} gesendet"
+          footer: "Cet e-mail a été envoyé par %{application_name}"
       reset_password_instructions:
         subject: "Instructions pour initialiser ton mot de passe"
         body:
@@ -383,7 +383,7 @@ fr:
           greeting: "Bonjour %{name}!"
           information_html: "Ton compte a été bloqué en raison d’un nombre trop élevé de tentatives de connexion. <br> Appuie sur le lien suivant pour le débloquer:"
           link_text: "Débloquer mon compte"
-          footer: "Diese E-Mail wurde von %{application_name} gesendet"
+          footer: "Cet e-mail a été envoyé par %{application_name}"
 
   errors:
     link_to_main: "Page principale"
@@ -394,7 +394,7 @@ fr:
       title: "Accès refusé"
       explanation: "Tu n'es pas autorisé·e à accéder à cette ressource."
       update_email:
-        explanation: "Du bist nicht berechtigt, die E-Mail-Adresse dieser Person zu ändern."
+        explanation: "Tu n’es pas autorisé·e à modifier l’adresse e-mail de cette personne."
     "404":
       title: "Cette page n'existe pas (404)"
       explanation: "L'adresse entrée est erronée ou la page a été effacée."
@@ -827,7 +827,7 @@ fr:
 
   event/templates:
     index:
-      title: Eventvorlagen
+      title: Modèles d’événements
 
   events/filters:
     new:
@@ -1158,13 +1158,13 @@ fr:
         one_month: un mois
       invoice_type:
         standalone: Factures individuelles
-        from_standalone_invoice_run: aus Rechnungsläufen
+        from_standalone_invoice_run: des séries de factures
         from_template_invoice_run: à partir de factures collectives
     add: Établir une facture externe
     add_payments: Saisir un paiement
     issued: Facture établie
     sent: Facture envoyé par courriel
-    cancelled: Rechnung storniert
+    cancelled: Facture annulée
     reminder_sent: rappel établi, échu le %{date} (%{title})
     payed: payé
     cancel: Annuler

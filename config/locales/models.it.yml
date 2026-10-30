@@ -56,7 +56,7 @@ it:
 
     errors:
       messages:
-        blank: "muss ausgefüllt werden"
+        blank: "deve essere compilato"
         record_invalid: 'Il controllo di validità è fallito: %{errors}'
       models:
         event/participation_contact_datas/managed:
@@ -1117,7 +1117,7 @@ it:
 
       phone_number:
         number: Numero
-        category: Kategorie
+        category: Categoria
         label: Tipo
         public: Pubblico
 
@@ -1147,7 +1147,7 @@ it:
       # used for nested phone_numbers
       phone_numbers:
         number: Numero di telefono
-        category: Kategorie
+        category: Categoria
         label: Tipo di numero di telefono
         public: Pubblico
 
@@ -1218,21 +1218,21 @@ it:
               other: Futuro
       social_account:
         name: Nickname
-        category: Kategorie
+        category: Categoria
         label: Tipo
         public: Pubblico
 
       # used for nested social accounts
       social_accounts:
         name: Nome dei social media
-        category: Kategorie
+        category: Categoria
         label: Tipo di social media
         public: Pubblico
 
       additional_email:
         email: Email
         name: Altre email
-        category: Kategorie
+        category: Categoria
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1241,7 +1241,7 @@ it:
       additional_emails:
         email: E-mail
         name: Altre email
-        category: Kategorie
+        category: Categoria
         label: Altro tipo di email
         public: Pubblico
         mailings: Invio
@@ -1368,7 +1368,7 @@ it:
         unique_per_contactable: Nur einmal pro Person/Gruppe
         used_for_invoices: Für Rechnungen verwenden
         position: Reihenfolge
-        name: Bezeichnung
+        name: Denominazione
 
       label_format:
         name: Definizione
@@ -1523,7 +1523,7 @@ it:
       invoice_run:
         title: Titolo
         description: Text
-        payment_information: Zahlungsinformation
+        payment_information: Informazioni sul pagamento
         recipient_source: Destinatario
         recipients_total: Destinatario complessivo
         recipients_paid: Destinatario pagato

@@ -596,8 +596,8 @@ fr:
         category: Catégorie
 
       additional_address:
-        category: Kategorie
-        label: Bezeichnung
+        category: Catégorie
+        label: Désignation
         first_name: Prénom
         last_name: Nom
         organization_name: Nom de l'entreprise
@@ -775,13 +775,13 @@ fr:
       personal_document:
         file: Fichier
         filename: Dateiname
-        description: Beschreibung
+        description: Description
         label_id: Label
         label: Label
         author_id: Créé par
         author: Créé par
         created_at: Créé à
-        updated_at: Geändert am
+        updated_at: Modifié le
 
       group:
         name: Nom
@@ -1023,7 +1023,7 @@ fr:
         created_at: Date d'inscription
         roles: Rôle
         active: Actif
-        qualification_comment: Kommentar
+        qualification_comment: Commentaire
 
       event/question:
         question: Question
@@ -1085,7 +1085,7 @@ fr:
         member_number: Numéro de membre
         person: Personne
         pass_definition: Pass-Definition
-        state: Status
+        state: Statut
         valid_from: Valable à partir de
         valid_until: Valable jusqu'au
         states:

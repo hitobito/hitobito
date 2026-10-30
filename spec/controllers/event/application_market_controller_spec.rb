@@ -196,6 +196,32 @@ describe Event::ApplicationMarketController do
       end
     end
 
+    context "sorting" do
+      def fabricate_application(last_name:, created_at:, priority: :priority_1)
+        Fabricate(:event_participation,
+          event: events(:top_course),
+          active: false,
+          participant: Fabricate(:person, last_name:),
+          application: Fabricate(:event_application, priority => events(:top_course)))
+          .tap { _1.update_columns(created_at:) }
+      end
+
+      let!(:appl_late) { fabricate_application(last_name: "Alpha", created_at: 1.day.ago) }
+      let!(:appl_early) { fabricate_application(last_name: "Zulu", created_at: 4.days.ago) }
+
+      before do
+        appl_prio_1.participant.update!(last_name: "Mike")
+        appl_prio_1.update_columns(created_at: 3.days.ago)
+        appl_prio_3.update_columns(created_at: 5.days.ago)
+        get :index, params: {group_id: group.id, event_id: event.id, prio: %w[1 3]}
+      end
+
+      it "sorts applications by priority and then by participation creation" do
+        expect(assigns(:applications).map(&:model))
+          .to eq [appl_early, appl_prio_1, appl_late, appl_prio_3]
+      end
+    end
+
     context "for regular event" do
       let(:event) { events(:top_event) }
 

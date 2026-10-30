@@ -880,7 +880,7 @@ fr:
         visible_contact_attributes: "Options d'affichage (personne de contact)"
         guest_limit: Nombre maximum d'invités par personne
         template: Vorlage
-        inherit: Vererbung
+        inherit: Héritage
 
       event/contact_attrs:
         required: Obligatoire
@@ -1036,8 +1036,8 @@ fr:
       event/question_template:
         question: Question
         default: Default
-        event_type: Anlasstyp
-        inherit: Vererbung
+        event_type: Type d'événement
+        inherit: Héritage
 
 
       admin_questions:

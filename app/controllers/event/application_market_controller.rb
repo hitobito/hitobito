@@ -69,25 +69,11 @@ class Event::ApplicationMarketController < ApplicationController
       .references(:application)
       .where(filter_applications)
       .merge(Event::Participation.pending)
-      .reorder(*applications_sort_expression)
+      .reorder(:created_at)
 
     Event::Participation::PreloadParticipations.preload(applications)
 
     applications
-  end
-
-  def applications_sort_expression
-    [
-      Arel.sql(<<~SQL.squish),
-        CASE
-          WHEN event_applications.priority_1_id = #{event.id} THEN 1
-          WHEN event_applications.priority_2_id = #{event.id} THEN 2
-          WHEN event_applications.priority_3_id = #{event.id} THEN 3
-          ELSE 99
-        END
-      SQL
-      Event::Participation.order_by_name_statement
-    ]
   end
 
   def filter_applications

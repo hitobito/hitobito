@@ -1,4 +1,4 @@
--#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -11,9 +11,9 @@
       = render(HeaderComponent.with_collection(@partials, step: @step))
   .row
     - if aside?
-      .col-lg
+      .col-lg-7.wizard-main
         = render(ContentComponent.with_collection(@partials, step: @step, form: @form))
-      .col-md
+      .col-lg-5
         = aside
     - elsif footer?
       .col

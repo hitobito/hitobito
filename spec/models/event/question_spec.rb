@@ -253,12 +253,10 @@ describe Event::Question do
 
   describe "role visibility" do
     describe "#visible_role_types" do
-      it "defaults a new question to the roles that today have show_details permission" do
+      it "defaults a new question to no roles" do
         question = described_class.new(question: "Test?", required: false)
 
-        expect(question.visible_role_types).to match_array(
-          [Event::Role::Cook.sti_name, Event::Role::Helper.sti_name]
-        )
+        expect(question.visible_role_types).to eq []
       end
 
       it "does not default an already persisted question with no configured roles" do
@@ -282,7 +280,7 @@ describe Event::Question do
     end
 
     describe "#visible_role_types=" do
-      subject(:question) { described_class.new(question: "Test?", required: false) }
+      subject(:question) { described_class.new(event: events(:top_course), question: "Test?", required: false) }
 
       it "ignores blank entries submitted alongside checked roles" do
         question.visible_role_types = ["", Event::Role::Cook.sti_name]

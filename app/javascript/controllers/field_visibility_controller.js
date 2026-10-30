@@ -15,6 +15,7 @@
  *   hideWhenPresent: Hide whenever the field has any non-empty value
  *   hideWhenData: Read a data attribute from the triggering element and hide when it is true
  *   clearContainerInputsOnHide: Clears the values of the inputs when container is hidden
+ *   disableContainerInputsOnHide: Disables the inputs while the container is hidden, so they are not submitted
  *
  */
 
@@ -32,6 +33,7 @@ export default class extends Controller {
     hideWhenPresent: { type: Boolean, default: false },
     hideWhenData: String,
     clearContainerInputsOnHide: { type: Boolean, default: false },
+    disableContainerInputsOnHide: { type: Boolean, default: false },
   };
 
   connect() {
@@ -64,11 +66,19 @@ export default class extends Controller {
 
   show() {
     this.containerTarget.classList.remove("hidden");
+    if (this.disableContainerInputsOnHideValue) this.setInputsDisabled(false);
   }
 
   hide() {
     this.containerTarget.classList.add("hidden");
     if (this.clearContainerInputsOnHideValue) this.clear();
+    if (this.disableContainerInputsOnHideValue) this.setInputsDisabled(true);
+  }
+
+  setInputsDisabled(disabled) {
+    this.containerTarget.querySelectorAll("input, select, textarea").forEach((input) => {
+      input.disabled = disabled;
+    });
   }
 
   clear() {

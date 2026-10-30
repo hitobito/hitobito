@@ -21,6 +21,13 @@ export default class extends NestedFormController {
     }
 
     Object.entries(attributes).forEach(([name, value]) => {
+      if (name === "visible_role_types") {
+        newFields.querySelectorAll('input[type="checkbox"][name*="[visible_role_types]"]').forEach((checkbox) => {
+          checkbox.checked = value.includes(checkbox.value)
+        })
+        return
+      }
+
       const field = newFields.querySelector(`[name*="[${name}]"]`)
       if (!field) return
       field.value = value

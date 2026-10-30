@@ -82,5 +82,35 @@ describe Event::QuestionTemplate do
         expect(derived_question.updated_at).to eq Time.zone.now
       end
     end
+
+    it "copies the visible role types" do
+      template.update!(event_type: Event::Course.sti_name)
+      template.question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+
+      expect(template.derive_question.visible_role_types).to eq [Event::Role::Cook.sti_name]
+    end
+
+    context "with stored role types not selectable for the event type" do
+      def store_visible_role_types(*role_classes)
+        role_classes.each do |role_class|
+          Event::QuestionVisibility.new(question: template.question, role_type: role_class.sti_name)
+            .save!(validate: false)
+        end
+        template.reload
+      end
+
+      it "copies none for templates of all event types" do
+        store_visible_role_types(Event::Role::Cook, Event::Role::Helper)
+
+        expect(template.derive_question.visible_role_types).to be_empty
+      end
+
+      it "copies only the selectable ones" do
+        template.update!(event_type: Event::Course.sti_name)
+        store_visible_role_types(Event::Role::Cook, Event::Role::Leader)
+
+        expect(template.derive_question.visible_role_types).to eq [Event::Role::Cook.sti_name]
+      end
+    end
   end
 end

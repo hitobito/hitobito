@@ -42,6 +42,19 @@ describe Event::QuestionTemplatesController do
   end
 
   describe "GET edit" do
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    it "enables only the role checkboxes of the template's event type" do
+      vegi_template.update!(event_type: Event::Course.sti_name)
+
+      get :edit, params: {group_id: group.id, id: vegi_template.id}
+
+      expect(dom).to have_field("event_question_template_question_attributes_visible_role_types_" \
+        "event_course_event_role_cook", disabled: false)
+      expect(dom).to have_field("event_question_template_question_attributes_visible_role_types_" \
+        "event_event_role_cook", disabled: true)
+    end
+
     it "raises access denied when question is not editable" do
       allow(Event::Question::Default).to receive(:template_editable).and_return(false)
 
@@ -67,6 +80,23 @@ describe Event::QuestionTemplatesController do
     it "creates a new template" do
       expect { post :create, params: params }.to change(Event::QuestionTemplate, :count).by(1)
       expect(response).to redirect_to(group_question_templates_path(group))
+    end
+
+    it "stores the visible role types of the template's event type" do
+      params[:event_question_template][:event_type] = Event::Course.sti_name
+      params[:event_question_template][:question_attributes][:visible_role_types] =
+        ["", Event::Role::Cook.sti_name]
+
+      post :create, params: params
+
+      expect(Event::QuestionTemplate.last.question.visible_role_types).to eq [Event::Role::Cook.sti_name]
+    end
+
+    it "rejects visible role types when the template applies to all event types" do
+      params[:event_question_template][:question_attributes][:visible_role_types] =
+        ["", Event::Role::Cook.sti_name]
+
+      expect { post :create, params: params }.not_to change(Event::QuestionTemplate, :count)
     end
   end
 

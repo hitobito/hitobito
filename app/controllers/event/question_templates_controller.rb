@@ -13,7 +13,7 @@ class Event::QuestionTemplatesController < SimpleCrudController
     {
       question_attributes: [
         :id, :type, :admin, :question, :choices, :multiple_choices, :required, :sensitive,
-        {choices_attributes: [:choice, :_destroy]}
+        {choices_attributes: [:choice, :_destroy], visible_role_types: []}
       ]
     }
   ]

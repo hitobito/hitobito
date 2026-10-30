@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -122,11 +122,25 @@ describe Event::ParticipationMailer do
     end
   end
 
+  def answer_question(text, answer)
+    question = event.questions.create!(question: text, required: false)
+    participation.answers.find_by!(question:).update!(answer:)
+  end
+
   describe "#notify_contact" do
     let(:recipient) { people(:bottom_member) }
     let(:mail) { Event::ParticipationMailer.notify_contact(participation, recipient) }
 
     subject { mail.body }
+
+    it "does not render application answers in event details" do
+      CustomContent.get(Event::ParticipationMailer::CONTENT_NOTIFICATION_PENDING)
+        .update!(body: "{participant-name} {event-name} {event-details}")
+      answer_question("Shoe size?", "42")
+
+      is_expected.to include("Eventus")
+      is_expected.not_to include("Shoe size?")
+    end
 
     it "renders the headers" do
       expect(mail.to).to eq(["bottom_member@example.com"])
@@ -182,6 +196,13 @@ describe Event::ParticipationMailer do
 
     it { is_expected.to match(/Hallo firsty, lasty/) }
     it { is_expected.to match(/Top Leader hat sich/) }
+
+    it "does not render application answers in event details" do
+      answer_question("Shoe size?", "42")
+
+      is_expected.to include("Eventus")
+      is_expected.not_to include("Shoe size?")
+    end
   end
 
   describe "#cancel" do

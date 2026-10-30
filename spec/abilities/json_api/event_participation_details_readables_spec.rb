@@ -70,8 +70,8 @@ describe JsonApi::EventParticipationDetailsReadables do
     end
 
     it "may read with participations_read_details" do
-      event_roles(:top_leader).update!(type: Event::Role::Helper.sti_name)
-      expect(Event::Role::Helper.permissions).to eq [:participations_read_details]
+      event_roles(:top_leader).update!(type: Event::Role::Cook.sti_name)
+      expect(Event::Role::Cook.permissions).to eq [:participations_read_details]
       expect(accessible_by(participant)).to match_array [participation, other]
     end
 

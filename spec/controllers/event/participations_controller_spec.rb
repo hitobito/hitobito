@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -276,6 +276,14 @@ describe Event::ParticipationsController do
         expect(assigns(:answers).map(&:question_id)).to eq [course.questions.first.id]
       end
 
+      it "renders only answers visible to the viewer's roles as json" do
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id},
+          format: :json
+
+        answers = JSON.parse(response.body)["linked"]["event_answers"]
+        expect(answers.pluck("answer")).to eq ["juhu"]
+      end
+
       it "assigns all answers to a viewer with full access (e.g. group admin)" do
         sign_in(people(:top_leader))
 
@@ -286,6 +294,18 @@ describe Event::ParticipationsController do
 
       it "always assigns all answers to the participant viewing their own participation" do
         sign_in(participation.person)
+
+        get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+        expect(assigns(:answers).size).to eq(2)
+      end
+
+      it "assigns all answers to a manager viewing the participation of their managed" do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
+        allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
+        manager = Fabricate(:person)
+        PeopleManager.create!(manager:, managed: participation.person)
+        sign_in(manager)
 
         get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
 
@@ -389,6 +409,49 @@ describe Event::ParticipationsController do
 
             expect(dom).to have_text("Allergies?")
             expect(dom).to have_text("Peanuts")
+          end
+        end
+
+        context "viewed by a role without show_details" do
+          let(:application_question) do
+            Fabricate(:event_question, event: course, admin: false, question: "Shoe size?")
+          end
+          let(:admin_question) do
+            Fabricate(:event_question, event: course, admin: true, question: "Allergies?")
+          end
+
+          before do
+            participation.answers.find_by!(question: application_question).update!(answer: "42")
+            participation.answers.find_by!(question: admin_question).update!(answer: "Peanuts")
+            participation.update!(additional_information: "Arrives late")
+
+            treasurer_participation = Fabricate(:event_participation, event: course)
+            Fabricate(Event::Role::Treasurer.sti_name, participation: treasurer_participation)
+            sign_in(treasurer_participation.person)
+          end
+
+          it "shows application and admin answers configured as visible to the role" do
+            treasurer = [Event::Role::Treasurer.sti_name]
+            application_question.update!(visible_role_types: treasurer)
+            admin_question.update!(visible_role_types: treasurer)
+
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_text("42")
+            expect(dom).to have_text("Peanuts")
+          end
+
+          it "shows no answers not configured as visible to the role" do
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_no_text("Shoe size?")
+            expect(dom).to have_no_text("Allergies?")
+          end
+
+          it "does not show the additional information" do
+            get :show, params: {group_id: group.id, event_id: course.id, id: participation.id}
+
+            expect(dom).to have_no_text("Arrives late")
           end
         end
       end
@@ -538,6 +601,28 @@ describe Event::ParticipationsController do
         expect(participation.answers.size).to eq(2)
         expect(participation.person).to eq(user)
         expect(assigns(:priority_2s)).to be_nil
+      end
+    end
+
+    context "for managed person" do
+      let(:event) { course }
+      let(:user) { Fabricate(:person) }
+      let(:managed) { people(:bottom_member) }
+      let!(:admin_question) { Fabricate(:event_question, event:, admin: true) }
+
+      before do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
+        allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
+        PeopleManager.create!(manager: user, managed:)
+        event.questions.first.update!(visible_role_types: [Event::Role::Cook.sti_name])
+      end
+
+      it "assigns all non-admin answers" do
+        get :new, params: {group_id: group.id, event_id: event.id,
+                           event_participation: {person_id: managed.id}}
+
+        expect(assigns(:participation).person).to eq(managed)
+        expect(assigns(:answers).map(&:question)).to match_array(event.questions - [admin_question])
       end
     end
 
@@ -1161,6 +1246,15 @@ describe Event::ParticipationsController do
         PeopleManager.create!(manager_id: people(:top_leader).id, managed_id: people(:bottom_member).id)
 
         expect(make_request(people(:top_leader), "", people(:bottom_member).id)).not_to be_valid
+      end
+
+      it "manager without event permissions sees the required answer to supply for their child" do
+        manager = Fabricate(:person)
+        PeopleManager.create!(manager:, managed: people(:bottom_member))
+
+        make_request(manager, "", people(:bottom_member).id)
+
+        expect(assigns(:answers).map(&:question).map(&:question)).to include("dummy")
       end
     end
   end

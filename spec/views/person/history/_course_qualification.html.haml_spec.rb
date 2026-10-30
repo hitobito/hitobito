@@ -39,4 +39,24 @@ describe "person/history/_course_qualification.html.haml" do
     expect(dom).not_to have_content "Bestanden"
     expect(dom).not_to have_css("i[title]")
   end
+
+  context "with comments disabled" do
+    before do
+      allow(FeatureGate).to receive(:enabled?).and_call_original
+      allow(FeatureGate).to receive(:enabled?).with("event.qualifications.comments").and_return(false)
+    end
+
+    it "shows failed without tooltip" do
+      participation.update_columns(qualified: false, qualification_comment: "Zu wenig Praxis")
+
+      expect(dom).to have_content "Nicht bestanden"
+      expect(dom).not_to have_css("i[title]")
+    end
+
+    it "shows failed if not assessed" do
+      participation.update_column(:qualified, nil)
+
+      expect(dom).to have_content "Nicht bestanden"
+    end
+  end
 end

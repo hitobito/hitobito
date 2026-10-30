@@ -283,6 +283,19 @@ describe Event::Participation do
         end
       end
     end
+
+    context "when required but comments are disabled" do
+      let(:required) { true }
+
+      before do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
+        allow(FeatureGate).to receive(:enabled?).with("event.qualifications.comments").and_return(false)
+      end
+
+      it "is valid without comment" do
+        expect(subject).to be_valid(:qualification)
+      end
+    end
   end
 
   context "uniqueness validation of participant" do

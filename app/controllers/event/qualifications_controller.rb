@@ -62,8 +62,12 @@ class Event::QualificationsController < ApplicationController
   end
 
   def permitted_params(participation_id)
-    params.dig(:qualifications, participation_id.to_s)
-      &.permit(:qualified, :qualification_comment)
+    if FeatureGate.enabled?("event.qualifications.comments")
+      params.dig(:qualifications, participation_id.to_s)
+        &.permit(:qualified, :qualification_comment)
+    else
+      {qualified: Array(params[:participation_ids]).include?(participation_id.to_s)}
+    end
   end
 
   def event

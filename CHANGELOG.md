@@ -2,6 +2,9 @@
 
 ## unreleased
 
+- Die Eventbeschreibung kann nun mit HTML formatiert werden (#1791)
+- JSON:API: Das Attribut `description` von Anlässen enthält neu den reinen Text der Beschreibung, die formatierte Beschreibung ist im neuen Attribut `description_html` verfügbar (#1791)
+- URLs und E-Mail-Adressen in formatierten Texten (Anlassbeschreibungen, Mailvorlagen, Hilfetexte, Briefe) werden automatisch verlinkt (#1791)
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 - Rechnungen können als CSV oder Excel mit einer Zeile pro Rechnungsposten exportiert werden (hitobito_florist#7)

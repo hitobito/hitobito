@@ -21,7 +21,12 @@ class EventResource < ApplicationResource
     attribute :type, :string
     attribute :kind_id, :integer, filterable: true
     attribute :name, :string
-    attribute :description, :string
+    attribute :description, :string do
+      @object.plain_text_description
+    end
+    attribute :description_html, :string do
+      @object.description
+    end
     attribute :application_conditions, :string
     attribute :motto, :string
     attribute :cost, :string

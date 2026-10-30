@@ -22,9 +22,9 @@ module Export::Ics
 
     def event_description(event)
       contact_lines = contact_lines(event)
-      return event.description if contact_lines.empty?
+      return event.plain_text_description if contact_lines.empty?
 
-      [event.description, "", *contact_lines, "", url(event)].compact.join("\n")
+      [event.plain_text_description, "", *contact_lines, "", url(event)].compact.join("\n")
     end
 
     def contact_lines(event)

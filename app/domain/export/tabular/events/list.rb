@@ -36,7 +36,7 @@ module Export::Tabular::Events
       labels[:group_names] = translate(:group_names)
       add_used_attribute_label(labels, :number)
       labels[:kind] = Event::Kind.model_name.human if attr_used?(:kind_id)
-      add_used_attribute_label(labels, :description)
+      labels[:plain_text_description] = human_attribute(:description) if attr_used?(:description)
       add_used_attribute_label(labels, :state)
       add_used_attribute_label(labels, :location)
     end

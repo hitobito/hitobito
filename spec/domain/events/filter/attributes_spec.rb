@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -77,6 +77,23 @@ describe Events::Filter::Attributes do
         it "returns people with matching attribute" do
           expect(entries).to match_array([@raclette, @fondue])
         end
+
+        it "filters in the database" do
+          expect { entries.to_a }.to make.db_queries.with(
+            "Event Load" => 1,
+            "Event::Translation Load" => 1,
+            "ActionText::RichText Load" => 1
+          )
+        end
+
+        context "with regex characters" do
+          let(:value) { "(mit" }
+
+          it "matches the value literally" do
+            grill = Fabricate(:event, groups: [group], description: "Grill (mit Salat)")
+            expect(entries).to match_array([grill])
+          end
+        end
       end
 
       context "not_match" do
@@ -94,6 +111,11 @@ describe Events::Filter::Attributes do
 
         it "returns people with blank attribute" do
           @raclette.update!(description: nil)
+          expect(entries).to match_array([@raclette])
+        end
+
+        it "returns events without rich text" do
+          ActionText::RichText.where(record: @raclette.translations.to_a).delete_all
           expect(entries).to match_array([@raclette])
         end
       end

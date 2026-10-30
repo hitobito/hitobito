@@ -50,33 +50,41 @@ module PaperTrail
 
     def attr_label(attr)
       if item_type.include?("Translation")
-        translation_label(attr)
+        translation_label(item, item_class, attr)
+      elsif item_type.include?("RichText") && item
+        translation_label(item.record, item.record_type.constantize, item.name.to_sym)
       else
-        (item_subtype&.safe_constantize || item_class).human_attribute_name(attr)
+        default_attr_label(attr)
       end
     end
 
-    def translation_label(attr) # rubocop:disable Metrics/CyclomaticComplexity
+    def default_attr_label(attr)
+      (item_subtype&.safe_constantize || item_class).human_attribute_name(attr)
+    end
+
+    def translation_label(record, translation_class, attr) # rubocop:disable Metrics/CyclomaticComplexity
       # globalized_model knows the sti model class to be able to load sti translations
       # as well as being able to load translations for translated attributes even if
       # the main_type is not the globalized_model.
       # It is nil if the record it translates has since been deleted, in which case we
       # fall back to the base translated class, losing sti-subtype-specific translations.
-      globalized_model = item&.globalized_model
+      globalized_model = record&.globalized_model
       klass = globalized_model&.class ||
-        item_class.reflect_on_association(:globalized_model).klass
+        translation_class.reflect_on_association(:globalized_model).klass
       attribute_label = klass.human_attribute_name(attr)
 
-      if item.nil?
+      if record.nil?
         attribute_label
       elsif globalized_model.nil? || globalized_model.is_a?(main_type.safe_constantize)
-        "#{attribute_label} (#{item})"
+        "#{attribute_label} (#{record})"
       else
-        "#{attribute_label} (#{item}) #{I18n.t("global.from")} #{globalized_model}"
+        "#{attribute_label} (#{record}) #{I18n.t("global.from")} #{globalized_model}"
       end
     end
 
     def normalize(attr, value) # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
+      value = value.to_plain_text if value.is_a?(ActionText::Content)
+
       if attr.to_s.end_with?("_id") && value.present?
         belongs_to_change_args(attr, value)
       elsif attr.to_s.end_with?("type") && value.present?

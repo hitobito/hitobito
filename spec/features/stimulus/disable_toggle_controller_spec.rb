@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
+#  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas
+#  https://github.com/hitobito/hitobito
 
 require "spec_helper"
 
@@ -91,5 +91,33 @@ describe "DisableToggle Stimulus Controller", js: true do
 
     check "Click 1 to enable button"
     expect(page).to have_button "Toggled", disabled: false
+  end
+
+  it "toggles multiple toggled and inverted targets" do
+    stub_form_with do
+      <<~HTML
+        <form data-controller="#{ctrl}">
+          <label for="#{ctrl}-checkbox">Click me to toggle</label>
+          <input type="checkbox" id="#{ctrl}-checkbox" name="#{ctrl}-checkbox" value="1" data-action="#{ctrl}#toggle"/>
+          <br/>
+          <input type="button" data-#{ctrl}-target="toggled" disabled="disabled" value="Toggled 1"/>
+          <input type="button" data-#{ctrl}-target="toggled" disabled="disabled" value="Toggled 2"/>
+          <input type="button" data-#{ctrl}-target="inverted" value="Inverted 1"/>
+          <input type="button" data-#{ctrl}-target="inverted" value="Inverted 2"/>
+        </form>
+      HTML
+    end
+
+    check "Click me to toggle"
+    expect(page).to have_button "Toggled 1", disabled: false
+    expect(page).to have_button "Toggled 2", disabled: false
+    expect(page).to have_button "Inverted 1", disabled: true
+    expect(page).to have_button "Inverted 2", disabled: true
+
+    uncheck "Click me to toggle"
+    expect(page).to have_button "Toggled 1", disabled: true
+    expect(page).to have_button "Toggled 2", disabled: true
+    expect(page).to have_button "Inverted 1", disabled: false
+    expect(page).to have_button "Inverted 2", disabled: false
   end
 end

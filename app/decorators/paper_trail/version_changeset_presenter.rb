@@ -54,8 +54,12 @@ module PaperTrail
       elsif item_type.include?("RichText") && item
         translation_label(item.record, item.record_type.constantize, item.name.to_sym)
       else
-        (item_subtype&.safe_constantize || item_class).human_attribute_name(attr)
+        default_attr_label(attr)
       end
+    end
+
+    def default_attr_label(attr)
+      (item_subtype&.safe_constantize || item_class).human_attribute_name(attr)
     end
 
     def translation_label(record, translation_class, attr) # rubocop:disable Metrics/CyclomaticComplexity

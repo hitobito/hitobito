@@ -116,7 +116,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
 
   def print
     load_answers
-    pdf = Export::Pdf::Participation.render(entry, current_user)
+    pdf = Export::Pdf::Participation.render(entry, current_ability)
     filename = Export::Pdf::Participation.filename(entry)
 
     send_data pdf, type: :pdf, disposition: "attachment", filename: filename

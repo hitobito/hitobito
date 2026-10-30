@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -1055,6 +1055,12 @@ describe EventAbility do
         other = Fabricate(:event_participation, event: event)
         Fabricate(Event::Role::Participant.name.to_sym, participation: other)
         is_expected.not_to be_able_to(:show_details, other)
+      end
+
+      it "may print other participation" do
+        other = Fabricate(:event_participation, event: event)
+        Fabricate(Event::Role::Participant.name.to_sym, participation: other)
+        is_expected.to be_able_to(:print, other)
       end
 
       it "may not show participation in other event" do

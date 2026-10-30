@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,8 +10,8 @@ class Event::ParticipationAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Event::Participation
 
   on(Event::Participation) do # rubocop:disable Metrics/BlockLength
-    permission(:any).may(:show).her_own_or_manager_or_for_participations_read_events
-    permission(:any).may(:show_details, :print)
+    permission(:any).may(:show, :print).her_own_or_manager_or_for_participations_read_events
+    permission(:any).may(:show_details)
       .her_own_or_manager_or_for_participations_read_details_events
     permission(:any).may(:create).her_own_if_application_possible
     permission(:any).may(:show_full, :update, :send_mails).for_participations_full_events

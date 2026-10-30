@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -36,7 +36,19 @@ module Export::Pdf::Participation
       end
 
       def phone_numbers
-        person.phone_numbers.where(label: %w[Privat Mobil])[0..2]
+        visible_phone_numbers.where(label: %w[Privat Mobil])[0..2]
+      end
+
+      def visible_phone_numbers
+        person.phone_numbers
+      end
+    end
+
+    class PublicPerson < Person
+      private
+
+      def visible_phone_numbers
+        super.where(public: true)
       end
     end
 
@@ -87,7 +99,7 @@ module Export::Pdf::Participation
           -> { text human_event_name, style: :bold })
       end
 
-      render_columns(-> { render_section(person_section) },
+      render_columns(-> { render_section(show_details? ? person_section : PublicPerson) },
         -> { render_section(Event) })
     end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,7 +9,7 @@ module Export::Pdf::Participation
   class Section
     include ActionView::Helpers::SanitizeHelper
 
-    attr_reader :pdf, :participation, :viewer
+    attr_reader :pdf, :participation
 
     class_attribute :model_class
 
@@ -20,16 +20,24 @@ module Export::Pdf::Participation
 
     delegate :event, :person, :application, to: :participation
 
-    def initialize(pdf, participation, viewer: nil)
+    def initialize(pdf, participation, ability: nil)
       @pdf = pdf
       @participation = participation
-      @viewer = viewer
+      @ability = ability
     end
 
     private
 
     def render_section(section_class)
-      section_class.new(pdf, participation).render
+      section_class.new(pdf, participation, ability:).render
+    end
+
+    def ability
+      @ability ||= Ability.new(person)
+    end
+
+    def show_details?
+      ability.can?(:show_details, participation)
     end
 
     def with_settings(opts = {})

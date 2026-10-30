@@ -571,6 +571,16 @@ describe Event::ParticipationsController do
         format: :pdf
       expect(response).to be_ok
     end
+
+    it "renders participation as pdf for an event role without show_details" do
+      treasurer_participation = Fabricate(:event_participation, event: course)
+      Fabricate(Event::Role::Treasurer.sti_name, participation: treasurer_participation)
+      sign_in(treasurer_participation.person)
+
+      get :print, params: {group_id: group.id, event_id: course.id, id: participation.id},
+        format: :pdf
+      expect(response).to be_ok
+    end
   end
 
   context "GET new" do

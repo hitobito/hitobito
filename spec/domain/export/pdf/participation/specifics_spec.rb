@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023-2024, Puzzle ITC. This file is part of
+#  Copyright (c) 2023-2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -89,14 +89,14 @@ describe Export::Pdf::Participation::Specifics do
     end
 
     it "shows the answer to the participant themself" do
-      described_class.new(pdf, participation, viewer: person).render
+      described_class.new(pdf, participation, ability: Ability.new(person)).render
       expect(text_with_position.flatten).to include("some answer")
     end
 
     it "shows the answer to a viewer with full access via other means" do
       viewer = people(:top_leader)
       allow(viewer).to receive(:event_role_types_for).with(event).and_return([])
-      described_class.new(pdf, participation, viewer: viewer).render
+      described_class.new(pdf, participation, ability: Ability.new(viewer)).render
 
       expect(text_with_position.flatten).to include("some answer")
     end
@@ -109,7 +109,7 @@ describe Export::Pdf::Participation::Specifics do
       end
 
       it "hides the answer from a cook" do
-        described_class.new(pdf, participation, viewer: cook).render
+        described_class.new(pdf, participation, ability: Ability.new(cook)).render
 
         expect(text_with_position.flatten).not_to include("some answer")
       end
@@ -118,9 +118,35 @@ describe Export::Pdf::Participation::Specifics do
         question.visible_role_types = [Event::Role::Cook.sti_name]
         question.save!
 
-        described_class.new(pdf, participation, viewer: cook).render
+        described_class.new(pdf, participation, ability: Ability.new(cook)).render
         expect(text_with_position.flatten).to include("some answer")
       end
+    end
+  end
+
+  describe "additional information" do
+    let(:treasurer) do
+      treasurer_participation = Fabricate(:event_participation, event: event)
+      Fabricate(Event::Role::Treasurer.sti_name, participation: treasurer_participation)
+      treasurer_participation.person
+    end
+
+    before { participation.update!(additional_information: "Allergisch auf Nüsse") }
+
+    it "is shown to a viewer with show_details" do
+      described_class.new(pdf, participation, ability: Ability.new(person)).render
+
+      expect(text_with_position.flatten).to include("Bemerkungen", "Allergisch auf Nüsse")
+    end
+
+    it "is hidden from a viewer without show_details, who still sees visible answers" do
+      question1.update!(visible_role_types: [Event::Role::Treasurer.sti_name])
+
+      described_class.new(pdf, participation, ability: Ability.new(treasurer)).render
+
+      texts = text_with_position.flatten
+      expect(texts).to include("answer b")
+      expect(texts).not_to include("answer a", "Bemerkungen", "Allergisch auf Nüsse")
     end
   end
 end

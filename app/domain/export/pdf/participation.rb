@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+# Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https://github.com/hitobito/hitobito.
@@ -8,10 +8,10 @@
 module Export::Pdf
   module Participation
     class Runner
-      def render(participation, viewer = participation.person)
+      def render(participation, ability)
         pdf = Export::Pdf::Document.new.pdf
         pdf.font_size 9
-        sections.each { |section| section.new(pdf, participation, viewer:).render }
+        sections.each { |section| section.new(pdf, participation, ability:).render }
         pdf.number_pages(I18n.t("event.participations.print.page_of_pages"),
           at: [0, 0],
           align: :right,
@@ -30,8 +30,8 @@ module Export::Pdf
 
     self.runner = Runner
 
-    def self.render(participation, viewer = participation.person)
-      runner.new.render(participation, viewer)
+    def self.render(participation, ability = Ability.new(participation.person))
+      runner.new.render(participation, ability)
     end
 
     def self.filename(participation)

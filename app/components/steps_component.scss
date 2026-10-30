@@ -1,6 +1,6 @@
 // frozen_string_literal: true
 //
-//  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+//  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 //  hitobito and licensed under the Affero General Public License version 3
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito_sac_cas.
@@ -43,5 +43,18 @@ ol.step-headers {
 
   &.active {
     display: block;
+  }
+}
+
+// Follows WizardFormBuilder.label_class, which the percentages in _form.scss do not know about.
+.wizard-main {
+  @include media-breakpoint-up(lg) {
+    .align-with-form {
+      margin-left: 33.333333% !important;
+    }
+
+    .labeled .align-with-form {
+      margin-left: 0 !important;
+    }
   }
 }

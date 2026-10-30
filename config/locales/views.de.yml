@@ -253,8 +253,7 @@ de:
   dropdown/people_login:
     button: "Login"
     send_login: Login schicken
-    activate_totp: Zwei-Faktor-Authentifizierung einrichten
-    reset_totp: Zwei-Faktor-Authentifizierung zurücksetzen
+    setup_totp: Zwei-Faktor-Authentifizierung einrichten
     disable_totp: Zwei-Faktor-Authentifizierung deaktivieren
     unblock_person: Login entsperren
 
@@ -2070,10 +2069,6 @@ de:
       remove_tags: Tags entfernen
       add_tags: Tags hinzufügen
       add_to_mailing_list: Zu Abo hinzufügen
-
-    totp_reset:
-      flashes:
-        success: Du wirst beim nächsten Login aufgefordert, Zwei-Faktor-Authentifizierung erneut einzurichten
 
     totp_disable:
       flashes:

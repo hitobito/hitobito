@@ -12,4 +12,4 @@ The left main navigation, search bar, parent group (sheet) and all person tabs e
 
 ## Permissions
 
-Only `:show, :update, :update_email, :primary_group, :totp_reset` are allowed on themselves.
+Only `:show, :update, :update_email, :primary_group, :totp_reset, :totp_disable` are allowed on themselves.

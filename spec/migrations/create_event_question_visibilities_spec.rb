@@ -17,12 +17,6 @@ RSpec.describe CreateEventQuestionVisibilities, type: :migration do
     (index > 0) ? versions[index - 1] : 0
   end
 
-  let(:expected_role_types) do
-    Event::Role.descendants
-      .select { |role_type| role_type.permissions.include?(:participations_read_details) }
-      .map(&:sti_name)
-  end
-
   before do
     ActiveRecord::Migration.verbose = false
     migration_context.down(previous_version)
@@ -43,35 +37,13 @@ RSpec.describe CreateEventQuestionVisibilities, type: :migration do
     ).rows.flatten
   end
 
-  it "backfills existing questions with the roles that today grant show_details" do
-    question = Fabricate(:event_question, event: events(:top_course))
+  it "grants no role access to existing questions" do
+    application_question = Fabricate(:event_question, event: events(:top_course))
+    admin_question = Fabricate(:event_question, event: events(:top_course), admin: true)
 
     migration_context.up(migration_version)
 
-    expect(backfilled_role_types(question)).to match_array(expected_role_types)
-  end
-
-  it "does not backfill roles without the participations_read_details permission" do
-    question = Fabricate(:event_question, event: events(:top_course))
-
-    migration_context.up(migration_version)
-
-    expect(backfilled_role_types(question)).not_to include(
-      Event::Role::Leader.sti_name,
-      Event::Role::AssistantLeader.sti_name,
-      Event::Role::Speaker.sti_name,
-      Event::Role::Treasurer.sti_name,
-      Event::Role::Participant.sti_name
-    )
-  end
-
-  it "backfills every existing question, not just newly created ones" do
-    question_1 = Fabricate(:event_question, event: events(:top_course))
-    question_2 = Fabricate(:event_question, event: events(:top_course))
-
-    migration_context.up(migration_version)
-
-    expect(backfilled_role_types(question_1)).to match_array(expected_role_types)
-    expect(backfilled_role_types(question_2)).to match_array(expected_role_types)
+    expect(backfilled_role_types(application_question)).to eq []
+    expect(backfilled_role_types(admin_question)).to eq []
   end
 end

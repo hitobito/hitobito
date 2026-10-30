@@ -23,6 +23,7 @@ class Event::ParticipationMailer < ApplicationMailer
 
   def confirmation(participation)
     @participation = participation
+    @include_answers = true
 
     filename = Export::Pdf::Participation.filename(participation)
     attachments[filename] = Export::Pdf::Participation.render(participation)
@@ -133,7 +134,7 @@ class Event::ParticipationMailer < ApplicationMailer
     infos << labeled(:description) { convert_newlines_to_breaks(event.description) }
     infos << labeled(:location) { convert_newlines_to_breaks(event.location) }
     infos << contact_details
-    infos << answers_details
+    infos << answers_details if @include_answers
     infos << additional_information_details
     infos << placeholder_participation_details
     join_lines(infos.compact, br_tag * 2)

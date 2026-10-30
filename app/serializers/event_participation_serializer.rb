@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -43,10 +43,21 @@ class EventParticipationSerializer < ApplicationSerializer
 
     map_properties :additional_information, :active, :qualified
 
-    entities :event_answers, item.answers, EventAnswerSerializer
+    entities :event_answers, visible_answers, EventAnswerSerializer
 
     person_template_link "#{type_name}.person"
 
     apply_extensions(:attrs)
+  end
+
+  private
+
+  def visible_answers
+    Event::Question::VisibleList.new(
+      event: item.event,
+      ability: h.current_ability,
+      participation: Draper.undecorate(item),
+      cache: context[:visible_list_cache] || {}
+    ).answers(item.answers)
   end
 end

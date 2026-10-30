@@ -241,4 +241,28 @@ describe "FieldVisibility Stimulus Controller", js: true do
     uncheck "Toggle me"
     expect(page).to have_field("Text Field", with: "", visible: false)
   end
+
+  it "disables inputs while container is hidden with disableContainerInputsOnHide" do
+    stub_form_with do
+      <<~HTML
+        <div data-controller="#{ctrl}"
+             data-#{ctrl}-observed-field-id-value="my-checkbox"
+             data-#{ctrl}-show-when-value="1"
+             data-#{ctrl}-disable-container-inputs-on-hide-value="true">
+          <label for="my-checkbox">Toggle me</label>
+          <input type="checkbox" id="my-checkbox" value="1">
+          <div data-#{ctrl}-target="container" class="hidden">
+            <label for="my-text">Text Field</label>
+            <input type="text" id="my-text" value="" disabled>
+          </div>
+        </div>
+      HTML
+    end
+
+    check "Toggle me"
+    expect(page).to have_field("Text Field", disabled: false)
+
+    uncheck "Toggle me"
+    expect(page).to have_field("Text Field", disabled: true, visible: false)
+  end
 end

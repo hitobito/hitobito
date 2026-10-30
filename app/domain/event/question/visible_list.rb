@@ -30,13 +30,32 @@ class Event::Question::VisibleList
 
   private
 
-  def own_participation?
-    participation && ability.user_context.user == participation.person
+  def own_or_managed_participation?
+    return @own_or_managed_participation if defined?(@own_or_managed_participation)
+
+    @own_or_managed_participation = participation.present? &&
+      viewer_and_manageds.include?(participation.person)
   end
 
   def visible?(question)
-    (own_participation? && !question.admin?) ||
-      question.visible_to?(role_types, full_access: full_access?)
+    service_token? ||
+      (own_or_managed_participation? && !question.admin?) ||
+      question.visible_to?(viewer_role_types, full_access: full_access?)
+  end
+
+  def viewer_role_types
+    return role_types unless own_or_managed_participation?
+
+    role_types | participation.roles.map(&:class)
+  end
+
+  def viewer_and_manageds
+    @cache[[:viewer_and_manageds, ability.user_context.user.id]] ||=
+      ability.user_context.user.and_manageds
+  end
+
+  def service_token?
+    ability.is_a?(TokenAbility)
   end
 
   def ordered_questions
@@ -45,10 +64,8 @@ class Event::Question::VisibleList
   end
 
   def role_types
-    @cache[[:role_types, event.id, ability.user_context.user.id]] ||= begin
-      user = ability.user_context.user
-      ([user] + user.manageds).flat_map { |person| person.event_role_types_for(event) }
-    end
+    @cache[[:role_types, event.id, ability.user_context.user.id]] ||=
+      ability.user_context.user.event_role_types_for(event)
   end
 
   def full_access?

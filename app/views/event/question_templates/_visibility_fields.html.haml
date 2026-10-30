@@ -1,0 +1,23 @@
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- toggle = { controller: 'field-visibility',
+             'field-visibility-observed-field-id-value': event_type_field_id,
+             'field-visibility-disable-container-inputs-on-hide-value': true }
+
+%div{data: toggle.merge('field-visibility-hide-when-present-value': true)}
+  %div{class: ('hidden' if entry.event_type.present?), data: { 'field-visibility-target': 'container' }}
+    = f.labeled(t('event.questions.visibility_fields.caption')) do
+      .controls.mt-2
+        = hidden_field_tag("#{f.object_name}[visible_role_types][]", nil,
+                           id: nil, disabled: entry.event_type.present?)
+        = t('.all_event_types_hint')
+
+- Event.all_types.each do |type|
+  - active = entry.event_type == type.sti_name
+  %div{data: toggle.merge('field-visibility-show-when-value': type.sti_name)}
+    %div{class: ('hidden' unless active), data: { 'field-visibility-target': 'container' }}
+      = render 'event/questions/visibility_fields', f:, event: type, disabled: !active, explain: true,
+                                                   id_scope: type.sti_name.underscore.tr('/', '_')

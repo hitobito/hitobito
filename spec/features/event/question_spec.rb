@@ -330,6 +330,20 @@ describe EventsController, js: true do
       expect(page).not_to have_field("Frage", with: "Vegetarian?")
     end
 
+    it "copies visible role types from default templates to a new event" do
+      question_templates[:vegetarian].question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+
+      visit new_group_event_path(groups(:top_layer).id)
+      fill_in :event_name, with: "Test Event"
+      click_on "Daten"
+      fill_in :event_dates_attributes_0_start_at_date, with: 10.days.from_now.strftime("%d.%m.%Y")
+      click_save
+      expect(page).to have_content "Anlass Test Event wurde erfolgreich erstellt."
+
+      question = Event::Question.find_by(event: Event.last, question: "Vegetarian?")
+      expect(question.visible_role_types).to eq [Event::Role::Cook.sti_name]
+    end
+
     it "saves translations from derived questions" do
       visit new_group_event_path(groups(:top_layer).id)
       fill_in :event_name, with: "Test Event"
@@ -379,6 +393,22 @@ describe EventsController, js: true do
         check "Obligatorisch"
         expect(page).to have_checked_field("Obligatorisch")
       end
+    end
+
+    it "ticks and persists the template's visible role types" do
+      question_templates[:course_only].question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_link I18n.t("event.participations.application_answers")
+      add_from_template
+
+      within(all(".fields[data-new-record='true']").last) do
+        expect(page).to have_checked_field("Küche")
+        expect(page).to have_unchecked_field("Helfende")
+      end
+
+      click_save
+      expect(page).to have_content("Kurs #{event.name} wurde erfolgreich aktualisiert.")
+      expect(Event::Question.last.visible_role_types).to eq [Event::Role::Cook.sti_name]
     end
 
     it "persists question with template attributes when submitted" do
@@ -451,6 +481,28 @@ describe EventsController, js: true do
       expect(question).to be_derived
       expect(question.template_id).to eq(question_templates[:admin_course_only].id)
       expect(question.admin).to be true
+    end
+  end
+
+  describe "adding a new admin question" do
+    let(:event) do
+      Fabricate(:course, groups: [groups(:top_layer)]).tap do |e|
+        e.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
+      end
+    end
+
+    before do
+      sign_in
+      visit edit_group_event_path(event.group_ids.first, event.id)
+      click_link I18n.t("events.form_tabs.admin_questions")
+      within("#admin_questions") { click_link I18n.t("global.associations.add") }
+    end
+
+    it "does not offer the participant role as visible" do
+      within(all(".fields[data-new-record='true']").last) do
+        expect(page).to have_field(Event::Role::Cook.label_plural, type: "checkbox")
+        expect(page).to have_no_field(Event::Role::Participant.label_plural, type: "checkbox")
+      end
     end
   end
 

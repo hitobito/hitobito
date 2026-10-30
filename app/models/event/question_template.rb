@@ -22,7 +22,7 @@
 #  index_event_question_templates_on_question_id  (question_id)
 #
 class Event::QuestionTemplate < ActiveRecord::Base
-  belongs_to :question, dependent: :destroy
+  belongs_to :question, dependent: :destroy, inverse_of: :question_template
   belongs_to :group
 
   has_many :derived_questions, class_name: "Event::Question", foreign_key: :template_id,
@@ -51,16 +51,14 @@ class Event::QuestionTemplate < ActiveRecord::Base
     attrs = question.attributes.excluding("id", "created_at", "updated_at")
     Event::Question.build(attrs).tap do |derived_question|
       derived_question.template_id = id
-
-      # copy translations from template question
-      [:question, :choices].each do |attribute|
-        template_translations = question.send(:"#{attribute}_translations")
-        derived_question.send(:"#{attribute}_translations=", question.globalize_locales
-                                                                     .map { [_1.to_s, nil] }
-                                                                     .to_h
-                                                                     .merge(template_translations))
-      end
+      derived_question.visible_role_types =
+        question.visible_role_types & question.selectable_role_types
+      copy_translations_to(derived_question)
     end
+  end
+
+  def event_class
+    Event.all_types.find { |type| type.sti_name == event_type }
   end
 
   def to_s
@@ -69,5 +67,17 @@ class Event::QuestionTemplate < ActiveRecord::Base
 
   def editable?
     question&.class&.template_editable
+  end
+
+  private
+
+  def copy_translations_to(derived_question)
+    [:question, :choices].each do |attribute|
+      template_translations = question.send(:"#{attribute}_translations")
+      derived_question.send(:"#{attribute}_translations=", question.globalize_locales
+                                                                   .map { [_1.to_s, nil] }
+                                                                   .to_h
+                                                                   .merge(template_translations))
+    end
   end
 end

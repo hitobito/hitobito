@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -16,14 +16,15 @@
                           folder: :people,
                           locals: { entry: entry.person, show_full: false }
 
-      = render 'answers',
-               answers: @answers.reject(&:admin?),
-               title: t('event.participations.application_answers')
+    = render 'answers',
+             answers: @answers.reject(&:admin?),
+             title: t('event.participations.application_answers')
 
-      = render 'answers',
-               answers: @answers.select(&:admin?),
-               title: t('event.participations.admin_answers')
+    = render 'answers',
+             answers: @answers.select(&:admin?),
+             title: t('event.participations.admin_answers')
 
+    - if can?(:show_details, entry)
       = section t('activerecord.attributes.event/participation.additional_information') do
         %p.multiline= entry.additional_information || '-'
 

@@ -42,6 +42,14 @@ describe Event::Question::VisibleList do
       expect(questions_seen_by(participation.person)).to eq [cook_question]
     end
 
+    it "returns all of the event's questions to a service token, even without full access" do
+      admin_question = Fabricate(:event_question, event:, admin: true)
+      ability = TokenAbility.new(service_tokens(:rejected_top_layer_token))
+
+      expect(described_class.new(event:, ability:).questions)
+        .to match_array([cook_question, unconfigured_question, admin_question])
+    end
+
     context "for a specific participation" do
       let(:participation) { Fabricate(:event_participation, event:) }
       let!(:admin_question) do
@@ -73,13 +81,53 @@ describe Event::Question::VisibleList do
         expect(questions).to eq [cook_question]
       end
 
-      it "considers event roles held by a managed person (Elternzugang)" do
-        Fabricate(Event::Role::Cook.sti_name, participation:)
-        manager = Fabricate(:person)
-        PeopleManager.create!(manager:, managed: participation.person)
+      context "as manager of the participant" do
+        let(:manager) { Fabricate(:person) }
 
-        questions = questions_seen_by(manager, participation)
-        expect(questions).to eq [cook_question]
+        before do
+          allow(FeatureGate).to receive(:enabled?).and_call_original
+          allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
+          PeopleManager.create!(manager:, managed: participation.person)
+        end
+
+        it "returns all non-admin questions" do
+          questions = questions_seen_by(manager, participation)
+          expect(questions).to match_array([cook_question, unconfigured_question])
+        end
+
+        it "returns all non-admin questions for a participation not yet saved" do
+          new_participation = event.participations.new(participant: Fabricate(:person))
+          new_participation.roles.build(type: Event::Role::Participant.sti_name)
+          PeopleManager.create!(manager:, managed: new_participation.person)
+
+          questions = questions_seen_by(manager, new_participation)
+          expect(questions).to match_array([cook_question, unconfigured_question])
+        end
+
+        it "includes the admin question if visible to the participants role" do
+          admin_question.update!(visible_role_types: [Event::Role::Cook.sti_name])
+          Fabricate(Event::Role::Cook.sti_name, participation:)
+          expect(questions_seen_by(manager, participation)).to include(admin_question)
+        end
+
+        it "does not apply the participants roles to other participations" do
+          Fabricate(Event::Role::Cook.sti_name, participation:)
+          other_participation = Fabricate(:event_participation, event:)
+
+          expect(questions_seen_by(manager, other_participation)).to be_empty
+        end
+
+        it "does not grant full access to other participations through a managed leader" do
+          Fabricate(Event::Role::Leader.sti_name, participation:)
+          other_participation = Fabricate(:event_participation, event:)
+
+          expect(questions_seen_by(manager, other_participation)).to be_empty
+        end
+
+        it "returns no questions with people managers disabled" do
+          allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(false)
+          expect(questions_seen_by(manager, participation)).to be_empty
+        end
       end
     end
 
@@ -120,6 +168,21 @@ describe Event::Question::VisibleList do
         expect { list.questions }.to make.db_queries.with(
           "Event::Question Load" => 0, "Event::QuestionVisibility Load" => 0
         )
+      end
+
+      it "reuses shared cache to avoid reloading the viewer's manageds for another participation" do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
+        allow(FeatureGate).to receive(:enabled?).with("people.people_managers").and_return(true)
+        manager = Fabricate(:person)
+        ability = Ability.new(manager)
+        cache = {}
+
+        expect(manager).to receive(:and_manageds).once.and_call_original
+
+        2.times do
+          participation = Fabricate(:event_participation, event:)
+          described_class.new(participation:, event:, ability:, cache:).questions
+        end
       end
 
       it "still resolves full_access? independently per participation, even when sharing a cache" do

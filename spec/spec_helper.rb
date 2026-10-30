@@ -130,6 +130,7 @@ RSpec.configure do |config|
   config.before do |example|
     ActionMailer::Base.deliveries = []
     Person.stamper = nil
+    Draper::ViewContext.clear!
 
     unless example.metadata[:with_truemail_validation]
       allow(Truemail).to receive(:valid?).and_return(true)

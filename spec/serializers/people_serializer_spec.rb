@@ -26,7 +26,6 @@ describe PeopleSerializer do
   subject { hash[:people].first }
 
   before { Fabricate(Group::BottomGroup::Member.name.to_sym, person: person, group: groups(:bottom_group_one_one)) }
-  before { Draper::ViewContext.clear! }
 
   it "has one entry" do
     expect(hash[:people].size).to eq(1)

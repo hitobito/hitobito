@@ -80,7 +80,7 @@ module PaperTrail
       if attr.to_s.end_with?("_id") && value.present?
         belongs_to_change_args(attr, value)
       elsif attr.to_s.end_with?("type") && value.present?
-        value.safe_constantize&.model_name&.human
+        value.safe_constantize&.model_name&.human || value
       elsif enum_translation(attr, value).present?
         enum_translation(attr, value)
       else

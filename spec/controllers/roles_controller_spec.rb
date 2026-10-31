@@ -389,7 +389,7 @@ describe RolesController do
       # rubocop:enable Layout/LineLength
     end
 
-    it "hard destroys and creates new role if type changes and role starts today" do
+    it "hard destroys and creates new role if type changes and role started today" do
       role.update_attribute(:start_on, Time.zone.today)
       expect do
         put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}
@@ -421,7 +421,7 @@ describe RolesController do
       expect(person.reload.primary_group).to eq group2
     end
 
-    it "hard destroys and creates new role if type and group changes and role starts today" do
+    it "hard destroys and creates new role if type and group changes and role started today" do
       role.update_attribute(:start_on, Time.zone.today)
       group2 = groups(:toppers)
       expect do
@@ -535,7 +535,7 @@ describe RolesController do
         # rubocop:enable Layout/LineLength
       end
 
-      it "hard destroys and creates new role if type changes and role starts today" do
+      it "hard destroys and creates new role if type changes and role started today" do
         role.update_attribute(:start_on, Time.zone.today)
         expect do
           put :update, params: {group_id: group.id, id: role.id, role: {type: Group::TopGroup::Leader.sti_name}}

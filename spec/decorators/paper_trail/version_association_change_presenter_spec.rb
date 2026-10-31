@@ -103,7 +103,7 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
       )
 
       is_expected.to eq("<div>Rolle <i>Group::SacCasKurskader::NonExistentRoleType</i> wurde hinzugefügt: " \
-                        "Rolle wurde auf <i></i> gesetzt.</div>")
+                        "Rolle wurde auf <i>Group::SacCasKurskader::NonExistentRoleType</i> gesetzt.</div>")
     end
 
     it "builds removed text" do

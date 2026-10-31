@@ -297,7 +297,7 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     ActiveRecord::Base.transaction do
       self.archived_at = Time.zone.now
       Role.where(group_id: id).tap do |roles|
-        roles.future.delete_all
+        roles.future.destroy_all
         roles.update_all(archived_at: archived_at)
       end
 

@@ -797,6 +797,18 @@ describe Group do
 
           expect(group).to be_archived
         end
+
+        it "creates a paper trail entry for hard deleted future roles", versioning: true do
+          future_role = Fabricate(group.role_types.first.sti_name.to_sym,
+            person: role.person,
+            group: group,
+            start_on: 1.day.from_now)
+
+          group.archive!
+
+          version = PaperTrail::Version.where(item_type: "Role", item_id: future_role.id).last
+          expect(version.event).to eq("destroy")
+        end
       end
 
       describe "mailing lists" do

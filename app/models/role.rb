@@ -208,10 +208,6 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     end
   end
 
-  def destroy!
-    destroy || _raise_record_not_destroyed
-  end
-
   def really_destroy!
     vanilla_destroy
   end

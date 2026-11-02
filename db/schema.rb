@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_10_26_095543) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -251,7 +251,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_26_095543) do
   create_table "event_answers", id: :serial, force: :cascade do |t|
     t.integer "participation_id", null: false
     t.integer "question_id", null: false
-    t.string "answer"
+    t.text "answer"
     t.index ["participation_id", "question_id"], name: "index_event_answers_on_participation_id_and_question_id", unique: true
   end
 
@@ -408,7 +408,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_26_095543) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "question"
-    t.string "choices"
+    t.text "choices"
     t.index ["event_question_id"], name: "index_event_question_translations_on_event_question_id"
     t.index ["locale"], name: "index_event_question_translations_on_locale"
   end

@@ -11,7 +11,7 @@
 #
 #  id                :integer          not null, primary key
 #  admin             :boolean          default(FALSE), not null
-#  choices           :string
+#  choices           :text
 #  multiple_choices  :boolean          default(FALSE), not null
 #  question          :text
 #  required          :boolean          default(FALSE), not null

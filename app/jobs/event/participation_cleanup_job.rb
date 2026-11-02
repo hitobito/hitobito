@@ -27,6 +27,10 @@ class Event::ParticipationCleanupJob < RecurringJob
   end
 
   def cutoff
-    Settings.event.participations.delete_additional_information_after_months.months.ago
+    ActiveSupport::Duration.parse(delete_additional_information_after_months).ago
+  end
+
+  def delete_additional_information_after_months
+    Settings.event.participations.delete_additional_information_after_months.to_s
   end
 end

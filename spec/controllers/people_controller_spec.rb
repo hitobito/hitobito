@@ -629,11 +629,13 @@ describe PeopleController do
               id: person.id,
               person: {
                 additional_addresses_attributes: {
-                  a1.id.to_s => {id: a1.id, housenumber: 3, uses_contactable_name: false, first_name: "",
+                  a1.id.to_s => {id: a1.id, housenumber: 3, label: "Rechnung",
+                                 uses_contactable_name: false, first_name: "",
                                  last_name: "updated name"},
                   a2.id.to_s => {id: a2.id, _destroy: true},
                   "998" => {
                     category_id: additional_address_other.id,
+                    label: "Privat",
                     street: "Langestrasse",
                     housenumber: 37,
                     zip_code: 8000,
@@ -645,9 +647,10 @@ describe PeopleController do
             }
           end.to change { a1.reload.housenumber }.from("1").to("3")
             .and change { a1.name }.from(person.to_s).to("updated name")
+            .and change { a1.label }.from(nil).to("Rechnung")
             .and not_change { AdditionalAddress.count }
 
-          expect(person.additional_addresses.where(category: additional_address_other)).to be_exist
+          expect(person.additional_addresses.find_by(category: additional_address_other).label).to eq("Privat")
           expect(person.additional_addresses.where(category: additional_address_work)).not_to be_exist
         end
 

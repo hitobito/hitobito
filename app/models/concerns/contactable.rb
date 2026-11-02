@@ -26,7 +26,7 @@ module Contactable
         :last_name,
         :organization,
         :organization_name,
-        :translated_label,
+        :label,
         :street,
         :housenumber,
         :zip_code,

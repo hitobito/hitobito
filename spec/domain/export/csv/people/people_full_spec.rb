@@ -92,7 +92,7 @@ describe Export::Tabular::People::PeopleFull do
         "Date de naissance",
         "Données supplémentaires",
         "Langue",
-        "Kanton",
+        "Canton",
         "Tags",
         "Adresse e-mail supplémentaire Privé",
         "Adresse e-mail supplémentaire Professionnel",

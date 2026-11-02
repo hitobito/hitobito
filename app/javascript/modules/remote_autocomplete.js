@@ -54,7 +54,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
             url.searchParams.set(queryKey, query);
             const source = await fetch(url);
             const data = await source.json();
-            if (data.at(-1).more_results !== undefined) {
+            if (data.at(-1) && data.at(-1).more_results !== undefined) {
               moreResults = data.at(-1).more_results;
               data.pop();
             }
@@ -83,7 +83,8 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
         tabSelect: true,
         element: (list, data) => {
           if (moreResults) {
-            const more = document.createElement("div");
+            const more = document.createElement("li");
+            more.id = "more_results"
             more.textContent = "...";
             list.appendChild(more);
           }

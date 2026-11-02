@@ -65,7 +65,7 @@ class Bounce < ApplicationRecord
         end
       end
 
-      bounce.increment!(:count)
+      bounce.persisted? ? bounce.increment!(:count) : bounce.increment(:count)
       # TODO: put Bounce-mail into log
       # Rails.logger.info "BOUNCE RECORDED: '#{email}' (count: #{bounce.count})"
 

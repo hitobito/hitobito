@@ -30,7 +30,8 @@
     }
   }
 
-  div {
+  li#more_results {
+    all: unset;
     border-bottom: 1px solid $border-color;
     padding: 5px;
   }

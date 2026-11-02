@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -11,14 +11,13 @@ class PersonAbility < AbilityDsl::Base
     class_side(:index_people_without_role).if_admin
 
     permission(:admin).may(:destroy).not_self
-    permission(:admin).may(:totp_reset).all
-    permission(:admin).may(:totp_disable).if_two_factor_authentication_not_enforced
+    permission(:admin).may(:totp_disable).not_self
 
     permission(:any).may(:security).herself
     permission(:any)
       .may(:index_received_invoices, :update_settings)
       .herself_unless_only_basic_permissions_roles
-    permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
+    permission(:any).may(:totp_reset).herself
 
     permission(:contact_data).may(:show).other_with_contact_data
     permission(:group_read_contact_data).may(:show).readable_in_same_group
@@ -63,7 +62,7 @@ class PersonAbility < AbilityDsl::Base
     permission(:layer_full).may(:update_email).if_permissions_in_all_capable_groups_or_layer
     permission(:layer_full).may(:create).all # restrictions are on Roles
     permission(:layer_full).may(:show).deleted_people_in_same_layer
-    permission(:layer_full).may(:totp_reset).in_same_layer
+    permission(:layer_full).may(:totp_disable).in_same_layer_except_self
 
     permission(:layer_and_below_read)
       .may(:show_full, :show_details, :history, :index_messages)
@@ -92,7 +91,7 @@ class PersonAbility < AbilityDsl::Base
       .if_permissions_in_all_capable_groups_or_layer_or_above
     permission(:layer_and_below_full).may(:create).all # restrictions are on Roles
     permission(:layer_and_below_full).may(:show).deleted_people_in_same_layer_or_below
-    permission(:layer_and_below_full).may(:totp_reset).in_same_layer_or_below
+    permission(:layer_and_below_full).may(:totp_disable).in_same_layer_or_below_except_self
 
     permission(:finance).may(:index_received_invoices).in_same_layer_or_below
     permission(:finance).may(:create_received_invoice).in_same_layer_or_below
@@ -110,7 +109,8 @@ class PersonAbility < AbilityDsl::Base
 
     # Managers have almost all base permissions on the managed person
     for_self_or_manageds do
-      permission(:any).may(:show, :update, :update_email, :primary_group, :totp_reset).herself
+      permission(:any).may(:show, :update, :update_email, :primary_group).herself
+      permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
 
       permission(:any)
         .may(:show_details, :show_full, :index_messages)
@@ -159,12 +159,16 @@ class PersonAbility < AbilityDsl::Base
     subject.roles.empty?
   end
 
-  def if_two_factor_authentication_not_enforced
-    !subject.two_factor_authentication_enforced?
+  def herself_if_two_factor_authentication_not_enforced
+    herself && !subject.two_factor_authentication_enforced?
   end
 
-  def herself_if_two_factor_authentication_not_enforced
-    herself && if_two_factor_authentication_not_enforced
+  def in_same_layer_except_self
+    not_self && in_same_layer
+  end
+
+  def in_same_layer_or_below_except_self
+    not_self && in_same_layer_or_below
   end
 
   def herself_unless_only_basic_permissions_roles

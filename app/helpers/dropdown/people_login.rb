@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright (c) 2022, hitobito AG. This file is part of
+# Copyright (c) 2022-2026, hitobito AG. This file is part of
 # hitobito and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
 # https ://github.com/hitobito/hitobito.
@@ -27,8 +27,7 @@ module Dropdown
     def init_items
       send_login
       update_password
-      activate_totp
-      reset_totp
+      setup_totp
       disable_totp
       unblock_person
     end
@@ -55,24 +54,17 @@ module Dropdown
       end
     end
 
-    def activate_totp
-      if @user == template.current_user && !@user.two_factor_authentication_registered?
-        add_item(translate(".activate_totp"),
-          template.new_users_second_factor_path(second_factor: "totp"))
-      end
-    end
-
-    def reset_totp
-      if @user.two_factor_authentication_registered? && template.can?(:totp_reset, @user)
-        add_item(translate(".reset_totp"),
-          template.totp_reset_group_person_path, method: :post)
+    def setup_totp
+      if @user == template.current_user && template.can?(:totp_reset, @user)
+        add_item(translate(".setup_totp"),
+          template.totp_reset_group_person_path(template.parent, @user), method: :post)
       end
     end
 
     def disable_totp
       if @user.two_factor_authentication_registered? && template.can?(:totp_disable, @user)
         add_item(translate(".disable_totp"),
-          template.totp_disable_group_person_path, method: :post)
+          template.totp_disable_group_person_path(template.parent, @user), method: :post)
       end
     end
 

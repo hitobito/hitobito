@@ -25,13 +25,18 @@ class People::CleanupJob < RecurringJob
   end
 
   def cutoff
-    Settings.people.cleanup_cutoff_duration.regarding_event_participations.months.ago
+    ActiveSupport::Duration.parse(cleanup_cutoff_duration.regarding_event_participations.to_s)
+  end
+
+  def cleanup_cutoff_duration
+    Settings.people.cleanup_cutoff_duration
   end
 
   def event_participation_in_cutoff?(person)
     Event.joins(:participations, :dates)
       .where(participations: {participant_id: person.id, participant_type: person.class.sti_name})
-      .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff", cutoff: cutoff)
+      .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff",
+        cutoff: cutoff.ago)
       .any?
   end
 

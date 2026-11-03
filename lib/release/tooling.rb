@@ -31,18 +31,20 @@ module Release
 
       begin
         yield
-      rescue => e
+      rescue StandardError, SystemExit => e
         if attempt >= max_attempts
           notify "Failed after #{max_attempts} attempts: #{e.message}"
           raise e
         end
 
         notify "Attempt #{attempt} failed: #{e.message}. Resetting to upstream and retrying..."
-        execute "git reset --hard @{u}" # @{u} is a special git ref for 'current-upstream-branch'
 
         sleep_time = 2**attempt
         notify "Waiting #{sleep_time} seconds before retry..."
         sleep(sleep_time)
+
+        execute "git fetch"
+        execute "git reset --hard @{u}" # @{u} is a special git ref for 'current-upstream-branch'
 
         attempt += 1
         retry

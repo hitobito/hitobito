@@ -43,7 +43,8 @@ module Release
         notify "Waiting #{sleep_time} seconds before retry..."
         sleep(sleep_time)
 
-        execute "git fetch"
+        execute "git tag -d #{@version}", allow_failure: true
+        execute "git fetch --tags --force"
         execute "git reset --hard @{u}" # @{u} is a special git ref for 'current-upstream-branch'
 
         attempt += 1

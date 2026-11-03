@@ -19,9 +19,9 @@ module Release
           notify @message
 
           in_dir("hitobito") do
-            break if existing_version_again?
-
             retry_with_reset do
+              next if existing_version_again?
+
               update_translations
               update_changelog
               update_version file: "VERSION"
@@ -31,9 +31,9 @@ module Release
 
           @all_wagons.each do |wagon|
             in_dir("hitobito_#{wagon}") do
-              break if existing_version_again?
-
               retry_with_reset do
+                next if existing_version_again?
+
                 update_translations
                 update_changelog
                 update_version file: "lib/hitobito_#{wagon}/version.rb"

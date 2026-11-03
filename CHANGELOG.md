@@ -3,6 +3,7 @@
 ## unreleased
 
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
+- In der JSON:API können Rollen neu mit `?filter[active][gt]`, `[gte]`, `[lt]` und `[lte]` nach Zeitraum gefiltert werden, z. B. um den Rollenverlauf einer Person abzurufen. Wie bisher werden nur Rollen von Personen ausgegeben, die zum heutigen Zeitpunkt lesbar sind (#4136)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 - Rechnungen können als CSV oder Excel mit einer Zeile pro Rechnungsposten exportiert werden (hitobito_florist#7)
 - Zusätzliche Adressen sind neu in allen Wagons aktiviert (#4471)

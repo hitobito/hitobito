@@ -103,7 +103,7 @@ fr:
           already_blocklisted: Cette personne figure déjà sur la liste d’exclusion.
           attributes:
             blocked_hash:
-              blank: kann nur berechnet werden, wenn eine Person gesucht oder Angaben erfasst werden
+              blank: ne peut être calculé que lorsqu'on recherche une personne ou que l'on saisit des informations
         contact_account_category:
           attributes:
             unique_per_contactable:

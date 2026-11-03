@@ -569,9 +569,9 @@ fr:
         not_qualified: Nicht bestanden
         not_assessed: Nicht beurteilt
         town: Wohnort
-        roles: Rolle
-        name: Name
-        comment: Kommentar
+        roles: Rôle
+        name: Nom
+        comment: Commentaire
       update:
         flash:
           success: Les qualifications ont été mises à jour.
@@ -582,7 +582,7 @@ fr:
         inherit_caption: Également disponible aux niveaux inférieurs.
       visibility_fields:
         all_event_types_hint:
-          Nur Leitungsrollen mit vollem Zugriff sehen die Antworten. Für weitere Rollen eine Anlassart wählen.
+          Seuls les rôles de responsable disposant d'un accès complet peuvent voir les réponses. Pour les autres rôles, sélectionnez un type d'événement.
 
     register:
       register:
@@ -637,9 +637,9 @@ fr:
       sensitive_caption: Les réponses seront supprimées %{cutoff} mois après la fin de l'événement.
       required_caption: Il faut répondre à cette question lors de l'inscription.
       visibility_fields:
-        caption: "Einsehbar für"
+        caption: "Visible pour"
       visibility_explanation:
-        Antworten sind für %{roles} immer einsehbar. Weiteren Rollen kann der Zugriff pro Frage gewährt werden.
+        Les réponses sont toujours visibles pour %{roles}. L'accès peut être accordé à d'autres rôles pour chaque question.
 
   assignments:
     attachment: "afficher les pièces jointes"
@@ -719,7 +719,7 @@ fr:
       explain_application_questions: Ici, tu peux demander des informations supplémentaires pour les inscriptions.
       explain_choices: "N'ajoutez pas de choix pour une réponse en texte libre."
       explain_admin_questions:
-        Hier kannst du weitere Angaben für Teilnehmende definieren, welche nur für die Anlassverwaltung verwendet werden.
+        Tu peux définir ici des informations supplémentaires concernant les participants, qui seront utilisées uniquement dans la gestion de l'événement.
       explain_contact_attrs:
         Tu peux choisir les coordonnées requises pour l'inscription.
       caption_applications_cancelable: Les participants peuvent se désinscrire eux-mêmes.
@@ -1060,8 +1060,8 @@ fr:
         inscribe: Inscription
         description: Ici, tu peux t'inscrire au groupe.
     confirm_deletion:
-      title: Willst du die Gruppe "%{group_name}" wirklich löschen?
-      text_field_label: "Gruppenname Eingabefeld"
+      title: Veux-tu vraiment supprimer le groupe «%{group_name}»?
+      text_field_label: "Champ de saisie «Nom du groupe»"
       warning_html: "<strong>Attention!</strong> Cette opération entraînera la suppression définitive de tous les rôles attribués à tous les membres de ce groupe. Elle ne peut pas être annulée..</strong>"
       confirmation_html: Veuillez saisir <strong>"%{group_name}"</strong> pour confirmer
       delete: "Supprimer définitivement des groupes et des rôles"

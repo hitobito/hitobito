@@ -58,7 +58,7 @@ class Bounce < ApplicationRecord
           bounce.mailing_list_ids << mailing_list_id
         end
       end
-      bounce.increment!(:count)
+      bounce.persisted? ? bounce.increment!(:count) : bounce.increment(:count)
       # TODO: put Bounce-mail into log
       # Rails.logger.info "BOUNCE RECORDED: '#{email}' (count: #{bounce.count})"
 

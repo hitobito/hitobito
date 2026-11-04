@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -76,6 +76,7 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
       first_name: "Prename",
       last_name: "Name",
       address_care_of: "CoAddress",
+      address_addition: "AddressAddition",
       street: "StreetName",
       town: "TownName"
     }.each do |attr, field|
@@ -85,6 +86,24 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
             data.entries.last[field] = field
           end
         end.to change { top_leader.reload.send(attr) }.to(field)
+      end
+    end
+
+    context "when address_addition is not sent to the post" do
+      let(:generator) { Synchronize::Addresses::SwissPost::Generator }
+
+      before do
+        allow(generator).to receive(:fields)
+          .and_return(generator.fields.merge(AddressAddition_in: nil))
+        top_leader.update!(address_addition: "Hinterhaus")
+      end
+
+      it "keeps address_addition" do
+        expect do
+          process_with do |data|
+            data.entries.last["AddressAddition"] = ""
+          end
+        end.not_to change { top_leader.reload.address_addition }
       end
     end
 

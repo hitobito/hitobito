@@ -13,6 +13,7 @@ class AdditionalAddressResource < ApplicationResource
   attribute :organization_name, :string
   attribute :organization, :boolean
   attribute :address_care_of, :string
+  attribute :address_addition, :string
   attribute :street, :string
   attribute :housenumber, :string
   attribute :postbox, :string

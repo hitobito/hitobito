@@ -267,6 +267,18 @@ describe Contactable::Address do
         TEXT
       end
 
+      it "prints address_addition after address_care_of" do
+        build_additional_address(**attrs, address_care_of: "c/o Finance",
+          address_addition: "Hinterhaus")
+        expect(text).to eq <<~TEXT
+          Top Leader
+          c/o Finance
+          Hinterhaus
+          Lagistrasse 12a
+          1080 Jamestown
+        TEXT
+      end
+
       it "does not print blank address_care_of line" do
         build_additional_address(**attrs, address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false)
         expect(text).to eq <<~TEXT
@@ -288,6 +300,7 @@ describe Contactable::Address do
           recipient_first_name: person.first_name,
           recipient_last_name: person.last_name,
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "345",
           recipient_street: "Greatstreet",
           recipient_postbox: nil,
@@ -303,6 +316,7 @@ describe Contactable::Address do
           last_name: "Foo Bar",
           uses_contactable_name: false,
           address_care_of: "Office",
+          address_addition: "Hinterhaus",
           street: "Lagistrasse",
           housenumber: "12a",
           postbox: "Postfach",
@@ -316,6 +330,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "Foo Bar",
           recipient_address_care_of: "Office",
+          recipient_address_addition: "Hinterhaus",
           recipient_housenumber: "12a",
           recipient_postbox: "Postfach",
           recipient_street: "Lagistrasse",
@@ -348,6 +363,7 @@ describe Contactable::Address do
           recipient_first_name: "Jane",
           recipient_last_name: "Smith",
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "345",
           recipient_street: "Greatstreet",
           recipient_postbox: nil,
@@ -375,6 +391,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "Office Address",
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "99",
           recipient_street: "Officestrasse",
           recipient_postbox: nil,
@@ -403,6 +420,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "",
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "99",
           recipient_street: "Officestrasse",
           recipient_postbox: nil,
@@ -580,6 +598,18 @@ describe Contactable::Address do
         TEXT
       end
 
+      it "prints address_addition after address_care_of" do
+        build_additional_address(**attrs, address_care_of: "c/o Finance",
+          address_addition: "Hinterhaus")
+        expect(text).to eq <<~TEXT
+          TopGroup
+          c/o Finance
+          Hinterhaus
+          Lagistrasse 12a
+          1080 Jamestown
+        TEXT
+      end
+
       it "does not print blank address_care_of line" do
         build_additional_address(**attrs, address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false)
         expect(text).to eq <<~TEXT
@@ -601,6 +631,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "TopGroup",
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "345",
           recipient_street: "Greatstreet",
           recipient_postbox: nil,
@@ -616,6 +647,7 @@ describe Contactable::Address do
           last_name: "Foo Bar",
           uses_contactable_name: false,
           address_care_of: "Office",
+          address_addition: "Hinterhaus",
           street: "Lagistrasse",
           housenumber: "12a",
           postbox: "Postfach",
@@ -629,6 +661,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "Foo Bar",
           recipient_address_care_of: "Office",
+          recipient_address_addition: "Hinterhaus",
           recipient_housenumber: "12a",
           recipient_postbox: "Postfach",
           recipient_street: "Lagistrasse",

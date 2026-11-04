@@ -11,8 +11,8 @@ class Event::ContactDetailsResource < ApplicationResource
   self.readable_class = EventReadables
   self.acceptable_scopes += %w[events]
 
-  ADDRESS_ATTRS = [:address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
-    :country].freeze
+  ADDRESS_ATTRS = [:address_care_of, :address_addition, :street, :housenumber, :postbox,
+    :zip_code, :town, :country].freeze
   CONTACT_ACCOUNTS = [:additional_addresses, :additional_emails, :phone_numbers,
     :social_accounts].freeze
 

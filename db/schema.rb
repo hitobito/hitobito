@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_04_124244) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -71,6 +71,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
     t.string "organization_name"
     t.boolean "organization", default: false, null: false
     t.bigint "category_id", null: false
+    t.string "address_addition"
     t.index ["category_id"], name: "index_additional_addresses_on_category_id"
     t.index ["contactable_id", "contactable_type"], name: "index_additional_addresses_on_contactable_where_invoices_true", unique: true, where: "(invoices = true)"
     t.index ["contactable_type", "contactable_id"], name: "index_additional_addresses_on_contactable"
@@ -301,6 +302,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
     t.string "language"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "address_addition"
     t.index ["main_applicant_id"], name: "index_event_guests_on_main_applicant_id"
   end
 
@@ -578,6 +580,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
     t.string "address_care_of"
     t.string "postbox"
     t.string "language", default: "de", null: false
+    t.string "address_addition"
     t.index ["layer_group_id"], name: "index_groups_on_layer_group_id"
     t.index ["lft", "rgt"], name: "index_groups_on_lft_and_rgt"
     t.index ["parent_id"], name: "index_groups_on_parent_id"
@@ -805,6 +808,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
     t.string "recipient_last_name"
     t.date "cancelled_at"
     t.date "original_due_at"
+    t.string "recipient_address_addition"
     t.index ["esr_number"], name: "index_invoices_on_esr_number"
     t.index ["group_id"], name: "index_invoices_on_group_id"
     t.index ["invoice_run_id"], name: "index_invoices_on_invoice_run_id"
@@ -1211,6 +1215,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
     t.string "postbox"
     t.integer "unfinished_job_observations_count", default: 0, null: false
     t.string "canton"
+    t.string "address_addition"
     t.index ["authentication_token"], name: "index_people_on_authentication_token"
     t.index ["confirmation_token"], name: "index_people_on_confirmation_token", unique: true
     t.index ["email"], name: "index_people_on_email", unique: true

@@ -50,6 +50,13 @@ describe ContactableDecorator do
     expect(@group.complete_address).to eq "<p>foostreet 3<br />4242 footown</p>"
   end
 
+  it "#complete_address renders address_addition after address_care_of" do
+    @group.address_care_of = "c/o Backoffice"
+    @group.address_addition = "Hinterhaus"
+    expect(@group.complete_address)
+      .to eq "<p>c/o Backoffice<br />Hinterhaus<br />foostreet 3<br />4242 footown</p>"
+  end
+
   describe "#primary_email" do
     it "renders primary email as mailto link" do
       expect(@group.primary_email).to eq '<p><a href="mailto:foo@foobar.com">foo@foobar.com</a></p>'

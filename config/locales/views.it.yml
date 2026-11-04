@@ -563,8 +563,8 @@ it:
     qualifications:
       index:
         save: Aggiornare le qualifiche
-        qualified: Bestanden
-        not_qualified: Nicht bestanden
+        qualified: Superato
+        not_qualified: Non superato
         not_assessed: Nicht beurteilt
         town: Wohnort
         roles: Rolle
@@ -1789,12 +1789,12 @@ it:
       index:
         future_roles_title: "Ruoli futuri"
         inactive_roles_title: "Ruoli inattivi"
-        qualified: "Passato"
+        qualified: "Superato"
         not_qualified: "Non superato"
         training_days:
           one: "%{count} Giornata di formazione"
           many: "%{count} Giornate di formazione"
-          other: "%{count} Giornate di formazione"
+          other: "%{count} Giorni di formazione"
     family:
       fields:
         is_in_family_with: "È parte della famiglia di"

@@ -11,6 +11,7 @@
 #
 #  id                                   :integer          not null, primary key
 #  additional_information               :text
+#  address_addition                     :string
 #  address_care_of                      :string
 #  authentication_token                 :string
 #  birthday                             :date
@@ -88,8 +89,8 @@
 class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   PUBLIC_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     :id, :first_name, :last_name, :nickname, :company_name, :company,
-    :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
-    :canton, :gender, :birthday, :language, :primary_group_id
+    :email, :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code,
+    :town, :country, :canton, :gender, :birthday, :language, :primary_group_id
   ]
 
   INTERNAL_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
@@ -115,8 +116,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   FILTER_ATTRS = [ # rubocop:disable Style/MutableConstant meant to be extended in wagons
     [:id, :integer], :first_name, :last_name, :nickname,
-    :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town,
-    [:country, :country_select], [:canton, :i18n_enum], [:gender, :gender_select],
+    :email, :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code,
+    :town, [:country, :country_select], [:canton, :i18n_enum], [:gender, :gender_select],
     [:years, :integer], :birthday
   ]
 
@@ -142,7 +143,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     .to_hash
     .merge(Settings.application.additional_languages&.to_hash || {})
 
-  ADDRESS_ATTRS = %w[address_care_of street housenumber postbox zip_code town country]
+  ADDRESS_ATTRS = %w[address_care_of address_addition street housenumber postbox zip_code town
+    country]
   # rubocop:enable Style/MutableConstant meant to be extended in wagons
 
   include UsedAttributes
@@ -156,6 +158,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     last_name
     first_name
     address_care_of
+    address_addition
     street
     housenumber
     postbox

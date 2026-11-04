@@ -37,7 +37,8 @@ describe Export::Tabular::People::TableDisplays do
 
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
-        :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+        :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code, :town,
+        :country,
         :layer_group, :roles,
         :additional_email_private, :additional_email_work, :additional_email_invoices, :additional_email_other,
         :phone_number_mobile, :phone_number_landline, :phone_number_work, :phone_number_other]
@@ -149,7 +150,8 @@ describe Export::Tabular::People::TableDisplays do
 
     its(:attributes) do
       should == [:first_name, :last_name, :nickname, :company_name, :company, :email,
-        :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+        :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code, :town,
+        :country,
         :layer_group, :roles,
         :additional_email_private, :additional_email_work, :additional_email_invoices, :additional_email_other,
         :phone_number_mobile, :phone_number_landline, :phone_number_work, :phone_number_other]

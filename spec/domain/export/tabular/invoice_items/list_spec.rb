@@ -19,7 +19,8 @@ describe Export::Tabular::InvoiceItems::List do
       :title, :sequence_number, :state, :esr_number, :description,
       :recipient_email, :recipient_address, :sent_at, :due_at,
       :recipient_company_name, :recipient_name, :recipient_first_name, :recipient_last_name,
-      :recipient_address_care_of, :recipient_street, :recipient_housenumber,
+      :recipient_address_care_of, :recipient_address_addition, :recipient_street,
+      :recipient_housenumber,
       :recipient_postbox, :recipient_zip_code, :recipient_town, :recipient_country,
       :payee_name, :payee_street, :payee_housenumber, :payee_zip_code, :payee_town,
       :payee_country

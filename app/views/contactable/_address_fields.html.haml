@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -8,6 +8,7 @@
     %div.alert.alert-warning.updates-household-address= t('.updates_household_address')
 
   = f.labeled_input_field(:address_care_of, autocomplete: :off)
+  = f.labeled_input_field(:address_addition, autocomplete: :off)
   = f.labeled(:street, Person.human_attribute_name(:street), class: 'd-flex') do
     %div.col-9
       = f.input_field(:street, data: { provide: 'entity', updater: 'AddressTypeahead.update', url: addresses_query_url })

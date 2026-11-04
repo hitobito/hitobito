@@ -38,6 +38,7 @@ describe Export::Tabular::Groups::List do
       "c/o-Adresse",
       "Postfach",
       "Sprache",
+      "Adressergänzung",
       "Telefonnummern",
       "Anzahl Mitglieder",
       "Social Media"

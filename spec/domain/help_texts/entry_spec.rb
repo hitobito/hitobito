@@ -41,14 +41,14 @@ describe HelpTexts::Entry do
 
     it "#fields with label holds namespaced field name and translation" do
       field, label = subject.labeled_list(:field).first
-      expect(field).to eq "field.remove_picture"
-      expect(label).to eq "Aktuelles Foto entfernen"
+      expect(field).to eq "field.address_addition"
+      expect(label).to eq "Adressergänzung"
     end
 
     it "#fields with label holds namespaced field name and translation" do
       field, label = subject.labeled_list(:field).first
-      expect(field).to eq "field.remove_picture"
-      expect(label).to eq "Aktuelles Foto entfernen"
+      expect(field).to eq "field.address_addition"
+      expect(label).to eq "Adressergänzung"
     end
 
     it "#fields with label filters based on existing fields" do
@@ -97,8 +97,8 @@ describe HelpTexts::Entry do
 
         expect(fields.label).to eq "Felder"
         expect(fields.list).to have_at_least(10).items
-        expect(fields.list.first[0]).to eq "field.remove_picture"
-        expect(fields.list.first[1]).to eq "Aktuelles Foto entfernen"
+        expect(fields.list.first[0]).to eq "field.address_addition"
+        expect(fields.list.first[1]).to eq "Adressergänzung"
       end
     end
 

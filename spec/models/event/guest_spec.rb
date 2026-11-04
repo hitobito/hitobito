@@ -29,6 +29,14 @@ describe Event::Guest do
     end
   end
 
+  describe "#to_person" do
+    it "copies address_care_of and address_addition" do
+      guest.assign_attributes(address_care_of: "c/o Muster", address_addition: "Hinterhaus")
+      expect(guest.to_person).to have_attributes(address_care_of: "c/o Muster",
+        address_addition: "Hinterhaus")
+    end
+  end
+
   describe "#language" do
     it "is valid with a defined language" do
       guest.language = "de"

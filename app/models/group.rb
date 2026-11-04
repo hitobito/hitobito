@@ -10,6 +10,7 @@
 # Table name: groups
 #
 #  id                                      :integer          not null, primary key
+#  address_addition                        :string
 #  address_care_of                         :string
 #  archived_at                             :datetime
 #  country                                 :string
@@ -100,8 +101,8 @@ class Group < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   self.used_attributes = [
     :name, :short_name, :email, :contact_id, :text_message_username,
     :text_message_password, :text_message_provider, :text_message_originator,
-    :letter_address_position, :address_care_of, :street, :housenumber,
-    :postbox, :zip_code, :town, :country, :description
+    :letter_address_position, :address_care_of, :address_addition, :street,
+    :housenumber, :postbox, :zip_code, :town, :country, :description
   ]
 
   FeatureGate.if("groups.nextcloud") do

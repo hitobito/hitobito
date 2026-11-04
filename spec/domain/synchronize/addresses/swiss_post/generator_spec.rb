@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -29,6 +29,11 @@ describe Synchronize::Addresses::SwissPost::Generator do
     expect(result.entries).to have(2).items
     expect(result[0]["Prename_in"]).to eq(bottom_member.first_name)
     expect(result[1]["Prename_in"]).to eq(top_leader.first_name)
+  end
+
+  it "populates AddressAddition_in from address_addition" do
+    bottom_member.update!(address_addition: "Hinterhaus")
+    expect(result[0]["AddressAddition_in"]).to eq "Hinterhaus"
   end
 
   it "populates fields accordingly" do

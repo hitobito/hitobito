@@ -14,7 +14,8 @@ describe Export::Tabular::People::PeopleFull do
 
   its(:attributes) do
     expected = [:id, :first_name, :last_name, :nickname, :company_name, :company, :email,
-      :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+      :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code, :town,
+      :country,
       :layer_group, :roles, :gender, :birthday, :additional_information, :language, :canton, :tags,
       :additional_email_private, :additional_email_work, :additional_email_invoices, :additional_email_other,
       :phone_number_mobile, :phone_number_landline, :phone_number_work, :phone_number_other,

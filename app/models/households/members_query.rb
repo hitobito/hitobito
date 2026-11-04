@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Households::MembersQuery
-  SAME_ADDRESS_IGNORED_ATTRS = [:country, :address_care_of].freeze
+  SAME_ADDRESS_IGNORED_ATTRS = [:country, :address_care_of, :address_addition].freeze
 
   def initialize(current_user, person_id, writables_scope = nil)
     @current_user = current_user

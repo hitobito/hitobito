@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,6 +21,7 @@ describe Export::Tabular::People::Households do
         :salutation,
         :name,
         :address_care_of,
+        :address_addition,
         :street,
         :housenumber,
         :postbox,
@@ -36,6 +37,7 @@ describe Export::Tabular::People::Households do
         "Anrede",
         "Name",
         "c/o-Adresse",
+        "Adressergänzung",
         "Strasse",
         "Hausnummer",
         "Postfach",
@@ -50,25 +52,29 @@ describe Export::Tabular::People::Households do
   it "accepts non household people" do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq [nil, "Top Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown", nil, "Top"]
+    expect(data[0]).to eq [nil, "Top Leader", nil, nil, "Greatstreet", "345", nil, "3456", "Greattown", nil,
+      "Top"]
   end
 
   it "accepts a list of non household people" do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq [nil, "Top Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown", nil, "Top"]
+    expect(data[0]).to eq [nil, "Top Leader", nil, nil, "Greatstreet", "345", nil, "3456", "Greattown", nil,
+      "Top"]
   end
 
   it "accepts single person array" do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq [nil, "Top Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown", nil, "Top"]
+    expect(data[0]).to eq [nil, "Top Leader", nil, nil, "Greatstreet", "345", nil, "3456", "Greattown", nil,
+      "Top"]
   end
 
   it "accepts a list of a single person" do
     data = households([leader]).data_rows.to_a
     expect(data).to have(1).item
-    expect(data[0]).to eq [nil, "Top Leader", nil, "Greatstreet", "345", nil, "3456", "Greattown", nil, "Top"]
+    expect(data[0]).to eq [nil, "Top Leader", nil, nil, "Greatstreet", "345", nil, "3456", "Greattown", nil,
+      "Top"]
   end
 
   it "aggregates household people, uses first person's address" do
@@ -77,6 +83,6 @@ describe Export::Tabular::People::Households do
     data = households([leader, member]).data_rows.to_a
     expect(data).to have(1).item
     expect(data[0].shift(2)).to eq([nil, "Bottom Member, Top Leader"]).or eq [nil, "Top Leader, Bottom Member"]
-    expect(data[0][..6]).to eq [nil, "Greatstreet", "345", nil, "3456", "Greattown", "Schweiz"]
+    expect(data[0][..7]).to eq [nil, nil, "Greatstreet", "345", nil, "3456", "Greattown", "Schweiz"]
   end
 end

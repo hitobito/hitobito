@@ -635,6 +635,7 @@ describe Person do
     expect(attrs[:company_name]).to eq(label: "Firmenname", type: :string)
     expect(attrs[:email]).to eq(label: "Haupt-E-Mail", type: :string)
     expect(attrs[:address_care_of]).to eq(label: "c/o-Adresse", type: :string)
+    expect(attrs[:address_addition]).to eq(label: "Adressergänzung", type: :string)
     expect(attrs[:street]).to eq(label: "Strasse", type: :string)
     expect(attrs[:housenumber]).to eq(label: "Hausnummer", type: :string)
     expect(attrs[:postbox]).to eq(label: "Postfach", type: :string)

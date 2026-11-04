@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
 class OidcClaimSetup
   NAME_ATTRS = %w[first_name last_name nickname] +
-    %w[address address_care_of street housenumber postbox zip_code town country]
+    %w[address address_care_of address_addition street housenumber postbox zip_code town country]
   NAME_ATTRS.freeze
 
   def run

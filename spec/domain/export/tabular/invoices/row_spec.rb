@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2019, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -48,6 +48,7 @@ describe Export::Tabular::Invoices::Row do
        "recipient_first_name" => "Top",
        "recipient_last_name" => "Leader",
        "recipient_address_care_of" => nil,
+       "recipient_address_addition" => nil,
        "recipient_street" => "Greatstreet",
        "recipient_housenumber" => "345",
        "recipient_postbox" => nil,

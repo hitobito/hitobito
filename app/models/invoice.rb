@@ -99,7 +99,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   belongs_to :creator, class_name: "Person"
   belongs_to :invoice_run, optional: true
 
-  has_many :invoice_items, dependent: :destroy
+  has_many :invoice_items, -> { order(:id) }, dependent: :destroy, inverse_of: :invoice
   has_many :payments, dependent: :destroy
   has_many :payment_reminders, dependent: :destroy
 

@@ -34,6 +34,7 @@ class InvoiceItem < ActiveRecord::Base
   class_attribute :type_mappings
 
   self.ignored_columns += [FullTextSearchable::SEARCH_COLUMN]
+  self.list_alphabetically = false
 
   self.type_mappings = {}
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -18,6 +18,12 @@ describe InvoiceMailer do
   its(:to) { should == [invoice.recipient.email] }
   its(:reply_to) { should == [sender.email] }
   its(:subject) { should =~ /Rechnung \d+-\d+ von Bottom One/ }
+
+  it "loads invoice items and their translations once" do
+    expect { mail.body }.to make.db_queries.with(
+      "InvoiceItem Load" => 1, "InvoiceItem::Translation Load" => 1
+    )
+  end
 
   it "renders body if invoice.recipient is missing" do
     invoice.update(recipient: nil, recipient_email: "test@example.com")

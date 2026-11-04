@@ -5,7 +5,7 @@
 
 desc "Add column annotations to active records"
 task :annotate do
-  sh "RAILS_ENV=test annotate -p before -e tests"
+  sh "WAGONS='' RAILS_ENV=test annotaterb models"
 end
 
 namespace :erd do

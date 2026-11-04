@@ -1,4 +1,4 @@
-#  Copyright (c) 2025, Hitobito AG. This file is part of
+#  Copyright (c) 2025-2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,7 +14,7 @@ describe "event/participation_contact_datas/_address_fields.html.haml" do
     allow(view).to receive(:f).and_return(StandardFormBuilder.new(:entry, participation_contact_data, view, {}))
   end
 
-  [:address_care_of, :postbox, :zip_code, :town, :country].each do |attribute|
+  [:address_care_of, :address_addition, :postbox, :zip_code, :town, :country].each do |attribute|
     it "does not render input with id entry_#{attribute} when attribute is hidden" do
       event.update!(hidden_contact_attrs: [attribute])
       render locals: {entry: participation_contact_data, event:, group:}

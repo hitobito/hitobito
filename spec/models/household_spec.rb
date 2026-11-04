@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -273,6 +273,7 @@ describe Household do
       household.add(other_person)
 
       expected_attrs = {address_care_of: nil,
+                        address_addition: nil,
                         street: "Loriweg",
                         housenumber: "42",
                         postbox: nil,
@@ -291,6 +292,7 @@ describe Household do
       household.save!
 
       expected_attrs = {address_care_of: nil,
+                        address_addition: nil,
                         street: "Loriweg",
                         housenumber: "42",
                         postbox: nil,

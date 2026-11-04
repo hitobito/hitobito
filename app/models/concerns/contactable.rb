@@ -14,7 +14,8 @@ module Contactable
 
   # rubocop:disable Style/MutableConstant extension point
   ACCESSIBLE_ATTRS = [
-    :email, :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country, {
+    :email, :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code,
+    :town, :country, {
       phone_numbers_attributes: [:id, :number, :category_id, :label, :public, :_destroy],
       social_accounts_attributes: [:id, :name, :category_id, :label, :public, :_destroy],
       additional_emails_attributes: [:id, :email, :category_id, :label, :public, :mailings,
@@ -33,6 +34,7 @@ module Contactable
         :town,
         :country,
         :address_care_of,
+        :address_addition,
         :postbox,
         :uses_contactable_name,
         :public,
@@ -87,6 +89,7 @@ module Contactable
   def correct_common_autocomplete_issues
     self.postbox = nil if likely_autocompleted?(postbox)
     self.address_care_of = nil if likely_autocompleted?(address_care_of)
+    self.address_addition = nil if likely_autocompleted?(address_addition)
   end
 
   def likely_autocompleted?(value)

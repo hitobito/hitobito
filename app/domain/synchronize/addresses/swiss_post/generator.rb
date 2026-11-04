@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -14,7 +14,7 @@ module Synchronize::Addresses::SwissPost
       Prename2_in: nil,
       Name_in: :last_name,
       MaidenName_in: nil,
-      AddressAddition_in: nil,
+      AddressAddition_in: :address_addition,
       CoAddress_in: :address_care_of,
       StreetName_in: :street,
       HouseNo_in: :housenumber,

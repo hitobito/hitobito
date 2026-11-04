@@ -529,6 +529,7 @@ de:
         country: Land
         postbox: Postfach
         address_care_of: c/o-Adresse
+        address_addition: Adressergänzung
         public: Öffentlich
 
       additional_addresses:
@@ -609,6 +610,7 @@ de:
         password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort
         address_care_of: c/o-Adresse
+        address_addition: Adressergänzung
         address: Adresse
         street: Strasse
         housenumber: Hausnummer
@@ -710,6 +712,7 @@ de:
         email: Haupt-E-Mail
         address: Adresse
         address_care_of: c/o-Adresse
+        address_addition: Adressergänzung
         street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
@@ -815,6 +818,7 @@ de:
         company_name: Firmenname
         email: Haupt-E-Mail
         address_care_of: c/o-Adresse
+        address_addition: Adressergänzung
         street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
@@ -838,6 +842,7 @@ de:
         company_name: Firmenname
         email: Haupt-E-Mail
         address_care_of: c/o-Adresse
+        address_addition: Adressergänzung
         street: Strasse
         housenumber: Hausnummer
         postbox: Postfach
@@ -1342,7 +1347,8 @@ de:
         recipient_name: Name
         recipient_first_name: Vorname
         recipient_last_name: Nachname
-        recipient_address_care_of: zusätz. Adresszeile
+        recipient_address_care_of: c/o-Adresse
+        recipient_address_addition: Adressergänzung
         recipient_postbox: Postfach
         recipient_country: Land
         recipient_street: Strasse

@@ -12,8 +12,8 @@ module Export::Tabular::People
 
     def person_attributes
       [:first_name, :last_name, :nickname, :company_name, :company, :email,
-        :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country, :layer_group,
-        :roles]
+        :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code, :town,
+        :country, :layer_group, :roles]
     end
 
     def association_attributes

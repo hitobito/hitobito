@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte Schweiz. This file is part ofcontactable
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -38,11 +38,12 @@ class Contactable::Address
   end
 
   # Used to populate invoices#recipient_* fields, may be overridden in wagons
-  def invoice_recipient_address_attributes
+  def invoice_recipient_address_attributes # rubocop:disable Metrics/MethodLength
     with_invoice_addressable do
       recipient_first_name, recipient_last_name = recipient_name_parts
       {
         recipient_address_care_of: address_care_of,
+        recipient_address_addition: address_addition,
         recipient_company_name: company? ? company_name : nil,
         recipient_first_name: recipient_first_name,
         recipient_last_name: recipient_last_name,
@@ -86,8 +87,8 @@ class Contactable::Address
 
   attr_reader :contactable, :addressable
 
-  delegate :address, :address_care_of, :postbox, :street, :housenumber, :zip_code, :town, :country,
-    :name, :country_label, :ignored_country?, to: :addressable
+  delegate :address, :address_care_of, :address_addition, :postbox, :street, :housenumber,
+    :zip_code, :town, :country, :name, :country_label, :ignored_country?, to: :addressable
   delegate :additional_addresses, to: :contactable
 
   def company? = addressable.try(:company?)
@@ -126,6 +127,7 @@ class Contactable::Address
   def full_address(country_as: :country)
     [
       address_care_of.to_s.strip.presence,
+      address_addition.to_s.strip.presence,
       address.to_s.strip,
       postbox.to_s.strip.presence,
       zip_code_with_town,

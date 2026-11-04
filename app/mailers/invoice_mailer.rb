@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -23,6 +23,8 @@ class InvoiceMailer < ApplicationMailer
   def notification(invoice, sender)
     @sender = sender
     @invoice = invoice
+    ActiveRecord::Associations::Preloader.new(records: [invoice],
+      associations: {invoice_items: :translations}).call
 
     attachments[invoice.filename] = generate_pdf
 

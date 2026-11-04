@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Hitobito AG. This file is part of
+#  Copyright (c) 2021-2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -174,6 +174,15 @@ describe Invoice do
     invoice.invoice_items.create!(name: "pens", unit_cost: 1.5)
     invoice.recalculate
     expect(invoice.total).to eq(1.5)
+  end
+
+  it "#invoice_items are ordered by creation, also when preloaded" do
+    invoice = Invoice.create!(group: group, title: :title, recipient: person)
+    zebra = invoice.invoice_items.create!(name: "zebra", unit_cost: 1)
+    apple = invoice.invoice_items.create!(name: "apple", unit_cost: 1)
+
+    expect(invoice.reload.invoice_items).to eq [zebra, apple]
+    expect(Invoice.preload(:invoice_items).find(invoice.id).invoice_items).to eq [zebra, apple]
   end
 
   it "#to_s returns total amount" do

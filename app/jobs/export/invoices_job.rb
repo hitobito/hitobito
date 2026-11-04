@@ -19,7 +19,8 @@ class Export::InvoicesJob < Export::ExportBaseJob
   end
 
   def entries
-    Invoice.find_in_ordered_batches(@invoice_ids)
+    Invoice.find_in_ordered_batches(@invoice_ids,
+      scope: Invoice.includes(invoice_items: :translations))
   end
 
   def data

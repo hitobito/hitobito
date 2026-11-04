@@ -37,6 +37,19 @@ describe Export::InvoicesJob do
       end
       subject.perform
     end
+
+    it "loads invoice items and their translations once per batch" do
+      invoice_ids.each do |id|
+        2.times { Fabricate(:invoice_item, invoice_id: id) }
+      end
+      job = described_class.new(format, user.id, invoice_ids,
+        filename: "rechnungen", articles: true, payment_slip: true, reminders: true)
+      job.enqueue!
+
+      expect { job.perform }.to make.db_queries.with(
+        "InvoiceItem Load" => 1, "InvoiceItem::Translation Load" => 1
+      )
+    end
   end
 
   context "creates a CSV export, it" do

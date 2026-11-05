@@ -47,8 +47,10 @@ class Person::QueryController < ApplicationController
 
   def serialized_people(people)
     serialized_people = people.take(limit).collect { |p| p.public_send(serializer) }
-    serialized_people.push({more_results: people.count > limit})
-    serialized_people
+    {
+      data: serialized_people,
+      more_results: people.size > limit
+    }
   end
 
   include Searchable

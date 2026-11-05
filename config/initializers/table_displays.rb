@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2024, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2022-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,7 +10,8 @@ Rails.application.config.to_prepare do
   public_person_attrs = (
     Person::PUBLIC_ATTRS -
     [:first_name, :last_name, :nickname, :picture] -
-    [:zip_code, :town, :address, :street, :housenumber, :address_care_of, :postbox, :primary_group_id] -
+    [:zip_code, :town, :address, :street, :housenumber, :address_care_of, :address_addition,
+      :postbox, :primary_group_id] -
     show_details_person_attrs -
     Person::INTERNAL_ATTRS
   ) & Person.used_attributes

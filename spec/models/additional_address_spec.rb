@@ -214,6 +214,12 @@ describe AdditionalAddress do
       expect(address.to_s).to eq "Top Leader, c/o Backoffice, Langestrasse 37, 8000 Zürich"
     end
 
+    it "renders address_addition after address_care_of" do
+      address.address_addition = "Hinterhaus"
+      expect(address.to_s)
+        .to eq "Top Leader, c/o Backoffice, Hinterhaus, Langestrasse 37, 8000 Zürich"
+    end
+
     it "renders postbox instead of town and zip_code" do
       address.postbox = "Postfach 1234"
       expect(address.to_s).to eq "Top Leader, c/o Backoffice, Langestrasse 37, Postfach 1234, 8000 Zürich"

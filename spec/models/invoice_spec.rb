@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Hitobito AG. This file is part of
+#  Copyright (c) 2021-2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -129,7 +129,7 @@ describe Invoice do
 
   it "#save sets recipient and related fields, keeps empty fields" do
     person.update!(zip_code: 3003, country: "CH", company: true, company_name: "Top ITC", address_care_of: "Office",
-      postbox: "Postfach")
+      address_addition: "Hinterhaus", postbox: "Postfach")
 
     invoice = create_invoice
     expect(invoice.recipient).to eq person
@@ -138,6 +138,7 @@ describe Invoice do
     expect(invoice.recipient_company_name).to eq "Top ITC"
     expect(invoice.recipient_name).to eq "Top Leader"
     expect(invoice.recipient_address_care_of).to eq "Office"
+    expect(invoice.recipient_address_addition).to eq "Hinterhaus"
     expect(invoice.recipient_street).to eq "Greatstreet"
     expect(invoice.recipient_housenumber).to eq "345"
     expect(invoice.recipient_postbox).to eq "Postfach"

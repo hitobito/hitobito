@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -23,7 +23,8 @@ describe Export::Tabular::Invoices::List do
       "MwSt.", "Rechnungsbetrag", "Bezahlt",
       "Kostenstellen", "Konten", "Zahlungseingänge",
       "Empfänger Firmenname", "Empfänger Name", "Empfänger Vorname", "Empfänger Nachname",
-      "Empfänger zusätz. Adresszeile", "Empfänger Strasse", "Empfänger Hausnummer", "Empfänger Postfach",
+      "Empfänger c/o-Adresse", "Empfänger Adressergänzung", "Empfänger Strasse", "Empfänger Hausnummer",
+      "Empfänger Postfach",
       "Empfänger PLZ", "Empfänger Ort", "Empfänger Land", "Zahlungsempfänger Name", "Zahlungsempfänger Strasse",
       "Zahlungsempfänger Hausnummer", "Zahlungsempfänger PLZ", "Zahlungsempfänger Ort",
       "Zahlungsempfänger Land"
@@ -54,7 +55,7 @@ describe Export::Tabular::Invoices::List do
     its(["Empfänger Name"]) { should == invoices(:invoice).recipient_name }
     its(["Empfänger Vorname"]) { should == invoices(:invoice).recipient_first_name }
     its(["Empfänger Nachname"]) { should == invoices(:invoice).recipient_last_name }
-    its(["Empfänger zusätz. Adresszeile"]) { should == invoices(:invoice).recipient_address_care_of }
+    its(["Empfänger c/o-Adresse"]) { should == invoices(:invoice).recipient_address_care_of }
     its(["Empfänger Strasse"]) { should == invoices(:invoice).recipient_street }
     its(["Empfänger Hausnummer"]) { should == invoices(:invoice).recipient_housenumber }
     its(["Empfänger Postfach"]) { should == invoices(:invoice).recipient_postbox }
@@ -90,7 +91,7 @@ describe Export::Tabular::Invoices::List do
     its(["Empfänger Firmenname"]) { should == invoice.recipient_company_name }
     its(["Empfänger Vorname"]) { should == invoice.recipient_first_name }
     its(["Empfänger Nachname"]) { should == invoice.recipient_last_name }
-    its(["Empfänger zusätz. Adresszeile"]) { should == invoice.recipient_address_care_of }
+    its(["Empfänger c/o-Adresse"]) { should == invoice.recipient_address_care_of }
     its(["Empfänger Strasse"]) { should == invoice.recipient_street }
     its(["Empfänger Hausnummer"]) { should == invoice.recipient_housenumber }
     its(["Empfänger Postfach"]) { should == invoice.recipient_postbox }

@@ -35,6 +35,7 @@
 #  payment_purpose              :text
 #  payment_slip                 :string           default("ch_es"), not null
 #  pp_post                      :string
+#  recipient_address_addition   :string
 #  recipient_address_care_of    :string
 #  recipient_company_name       :string
 #  recipient_country            :string
@@ -320,6 +321,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def recipient_address_values_without_name
     [
       recipient_address_care_of,
+      recipient_address_addition,
       recipient_street_with_housenumber,
       recipient_postbox,
       recipient_town_with_zip_code,

@@ -10,6 +10,7 @@
 # Table name: additional_addresses
 #
 #  id                    :bigint           not null, primary key
+#  address_addition      :string
 #  address_care_of       :string
 #  contactable_type      :string
 #  country               :string           not null
@@ -73,6 +74,7 @@ class AdditionalAddress < ApplicationRecord
     [
       name,
       address_care_of,
+      address_addition,
       street_with_number,
       postbox.presence,
       town_with_zipcode,

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2021-2026, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -40,7 +40,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
   end
 
   it "renders logo from settings and qr images" do
-    expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(3).times
+    expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(4).times
     subject.render
   end
 

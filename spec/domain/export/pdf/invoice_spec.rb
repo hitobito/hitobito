@@ -1163,6 +1163,19 @@ describe Export::Pdf::Invoice do
       end
     end
 
+    it "renders qrcode at 46mm with swiss cross at 7mm in its center" do
+      square_images = image_positions.select { |image| image[:width] == image[:height] }
+      expect(square_images).to have(2).items
+
+      size = ->(image) { image[:displayed_width] / image[:width] }
+      qrcode, cross = square_images.sort_by(&size).reverse
+
+      expect(size.call(qrcode)).to be_within(0.01).of(46.mm)
+      expect(size.call(cross)).to be_within(0.01).of(7.mm)
+      expect(cross[:x] - qrcode[:x]).to be_within(0.01).of((46.mm - 7.mm) / 2)
+      expect(cross[:y] - qrcode[:y]).to be_within(0.01).of((46.mm - 7.mm) / 2)
+    end
+
     it "does not render blank amount" do
       invoice.total = 0
       invoice_text = [

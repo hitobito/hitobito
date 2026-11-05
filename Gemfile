@@ -59,7 +59,6 @@ gem "magiclabs-userstamp", require: "userstamp"
 gem "mail" # add mail here to have it loaded
 gem "matrix" # required but removed from stlib since ruby 3.2
 gem "mime-types"
-gem "mini_magick"
 gem "net-sftp"
 gem "net-ssh"
 gem "nokogiri"

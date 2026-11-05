@@ -30,7 +30,7 @@ module UploadDisplayHelper
     if upload_exists?(model, name)
       model.send(name.to_sym).then do |pic|
         if size
-          # variant passes to mini_magick or vips, I assume mini_magick here
+          # processed by vips, see config.active_storage.variant_processor
           pic.variant(resize_to_limit: extract_image_dimensions(size))
         else
           pic

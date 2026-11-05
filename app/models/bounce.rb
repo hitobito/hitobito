@@ -46,11 +46,17 @@ class Bounce < ApplicationRecord
   before_validation :evaluate_blocking
 
   class << self
-    def record(email, mailing_list_id: nil)
+    def setup(email)
       sanitized_email = normalize_email(email)
       return if application_domain?(sanitized_email.split("@").last)
 
-      bounce = find_or_initialize_by(email: sanitized_email)
+      find_or_initialize_by(email: sanitized_email)
+    end
+
+    def record(email, mailing_list_id: nil)
+      bounce = setup(email)
+      return if bounce.nil?
+
       if mailing_list_id.present?
         bounce.mailing_list_ids ||= []
 
@@ -58,6 +64,7 @@ class Bounce < ApplicationRecord
           bounce.mailing_list_ids << mailing_list_id
         end
       end
+
       bounce.increment!(:count)
       # TODO: put Bounce-mail into log
       # Rails.logger.info "BOUNCE RECORDED: '#{email}' (count: #{bounce.count})"
@@ -100,7 +107,7 @@ class Bounce < ApplicationRecord
     now = DateTime.current
     update_attribute(:blocked_at, now)
 
-    now
+    blocked_at
   end
 
   def blocked?

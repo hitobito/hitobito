@@ -1186,6 +1186,7 @@ fr:
               admin: Gestion des paramètres valables dans toute l'application (p.ex. types de cours, format des étiquettes).
               layer_and_below_full: Ecriture / lecture à ce niveau et aux niveaux subordonnés. Création d'évènements et d'abonnements à ce niveau.
               layer_and_below_read: 'Lecture à ce niveau et aux niveaux inférieurs. '
+              layer_and_below_read_details: Lesen auf dieser Ebene und allen darunter liegenden Ebenen, ohne vollständige Historie der Personen.
               layer_full: Ecriture / lecture à ce niveau. Création d'évènements et d'abonnements à ce niveau.
               layer_read: 'Lecture à ce niveau. '
               group_and_below_full: Lecture et rédaction dans le groupe et dans tous les sous-groupes (sans niveaux). Y compris la création d'événements et d'abonnements.
@@ -1193,6 +1194,7 @@ fr:
               group_full: Ecriture / lecture au niveau du groupe. Création d'évènements et d'abonnements au niveau du groupe.
               group_read: Lecture au niveau du groupe.
               contact_data: Lecture des données de contact de toutes les autres personnes avec des droits de données de contact.
+              group_read_contact_data: Lesen der Kontaktdaten aller Personen in der Gruppe.
               qualify: Saisie de qualifications pour les personnes à ce niveau et aux niveaux inférieurs.
               approve_applications: Confirmation des inscriptions aux cours pour les personnes de ce niveau.
               finance: Création et gestion de factures

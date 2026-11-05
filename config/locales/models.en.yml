@@ -1101,6 +1101,7 @@ en:
               admin: Administration of application-wide settings such as types of courses or label formats.
               layer_and_below_full: All reading and writing at this level and all lower levels. Creating events and subscriptions at this level.
               layer_and_below_read: 'All reading at this level and all lower levels. '
+              layer_and_below_read_details: Lesen auf dieser Ebene und allen darunter liegenden Ebenen, ohne vollständige Historie der Personen.
               layer_full: All reading and writing at this level. Creating events and subscriptions at this level.
               layer_read: All reading at this level.
               group_and_below_full: Reading and writing at this group and all lower groups (without layers). Includes creating events and subscriptions.
@@ -1108,6 +1109,7 @@ en:
               group_full: Reading and writing at this group. Creating events and subscriptions at this group.
               group_read: Reading at this group.
               contact_data: Read the contact details of all other people with contact data authorization.
+              group_read_contact_data: Lesen der Kontaktdaten aller Personen in der Gruppe.
               qualify: Creating qualifications for people at this level and all lower levels.
               approve_applications: Confirmation of course registrations for people at this level.
               finance: Create and manage invoices

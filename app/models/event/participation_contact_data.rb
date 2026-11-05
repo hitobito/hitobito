@@ -87,6 +87,10 @@ class Event::ParticipationContactData
       event.class.mandatory_contact_attrs
   end
 
+  def mark_as_required?(_attr)
+    false
+  end
+
   def possible_contact_associations
     Event.possible_contact_associations
   end

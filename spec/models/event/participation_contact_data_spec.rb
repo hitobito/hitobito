@@ -69,6 +69,14 @@ describe Event::ParticipationContactData do
     end
   end
 
+  context "required marks" do
+    it "ignores required marks of the person" do
+      person.define_singleton_method(:mark_as_required?) { |_attr| true }
+
+      expect(participation_contact_data(attributes).mark_as_required?(:birthday)).to eq(false)
+    end
+  end
+
   context "update person data" do
     it "updates person attributes" do
       contact_data = participation_contact_data(attributes)

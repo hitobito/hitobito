@@ -130,9 +130,15 @@ describe Person do
 
   context "birthday year validation" do
     it "is valid with a 4-digit year" do
-      person = Person.new(last_name: "Foo", birthday: Date.new(9999, 12, 31))
+      person = Person.new(last_name: "Foo", birthday: Date.new(1999, 12, 31))
 
       expect(person).to be_valid
+    end
+
+    it "is invalid with a future date" do
+      person = Person.new(last_name: "Foo", birthday: Date.tomorrow)
+
+      expect(person).not_to be_valid
     end
 
     it "is valid with the minimum allowed year 1900" do

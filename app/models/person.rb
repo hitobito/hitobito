@@ -642,7 +642,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   def assert_not_blocklisted
     return unless FeatureGate.enabled?("people.blocklist")
 
-    errors.add(:base, :blocklisted) if Person::BlocklistDetector.new(self).blocklisted?
+    entry = Person::BlocklistDetector.new(self).blocklist_entry
+    errors.add(:base, :blocklisted, reference: entry.id) if entry
   end
 
   # Destroy all related roles before destroying this person.

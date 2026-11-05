@@ -104,6 +104,36 @@ describe Role do
     end
   end
 
+  context "blocklist" do
+    let(:person) { people(:bottom_member) }
+    let!(:entry) { BlocklistEntry.create!(person_id: person.id) }
+    let(:role) do
+      Fabricate.build(Group::BottomLayer::Leader.sti_name, group: groups(:bottom_layer_one), person: person)
+    end
+
+    it "may not be created for blocklisted person" do
+      expect(role).not_to be_valid
+      expect(role.errors[:base]).to eq [
+        "Diese Rolle konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer " \
+        "#{entry.id} an die Administrator*innen deiner Organisation."
+      ]
+    end
+
+    it "may be created for blocklisted person if feature is disabled" do
+      allow(FeatureGate).to receive(:enabled?).and_call_original
+      allow(FeatureGate).to receive(:enabled?).with("people.blocklist").and_return(false)
+
+      expect(role).to be_valid
+    end
+
+    it "may still be updated for blocklisted person" do
+      existing = roles(:bottom_member)
+      existing.label = "Foo"
+
+      expect(existing).to be_valid
+    end
+  end
+
   context "scopes" do
     let(:role) { roles(:top_leader) }
 

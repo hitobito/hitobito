@@ -22,9 +22,10 @@ describe "BlocklistEntries", js: true do
     expect do
       all(:button, "Speichern").last.click
       expect(page).to have_content "Die Person wurde auf die Ausschlussliste gesetzt."
-    end.to change { BlocklistEntry.count }.by(1)
+    end.to change { BlocklistEntry.count }.by(2)
 
     expect(page).to have_link("Maximilian Blockus", href: person_path(person))
     expect(Person.new(first_name: "Maximilian", last_name: "Blockus", birthday: "1980-01-15")).not_to be_valid
+    expect(Person.new(first_name: "Maximilian", last_name: "Blockus")).not_to be_valid
   end
 end

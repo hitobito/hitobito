@@ -4,11 +4,11 @@
 -#  https://github.com/hitobito/hitobito.
 
 = entry_form do |f|
-  %p= t('.explanation', attributes: blocklist_hash_attrs_sentence)
+  %p= blocklist_explanation
 
   = f.labeled_person_field(:person, help: t('.person_help'))
 
   %p= t('.manual_entry')
 
   = f.fields_for(:manual_person, entry.manual_person || Person.new) do |fields|
-    = fields.labeled_input_fields(*Person::BlocklistDetector.hash_attrs)
+    = fields.labeled_input_fields(*Person::BlocklistDetector.all_hash_attrs)

@@ -53,11 +53,9 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
               document.getElementById(input.id).dataset.param || "q";
             url.searchParams.set(queryKey, query);
             const source = await fetch(url);
-            const data = await source.json();
-            if (data.at(-1) && data.at(-1).more_results !== undefined) {
-              moreResults = data.at(-1).more_results;
-              data.pop();
-            }
+            const json = await source.json();
+            const data = json.data;
+            moreResults = json.more_results;
             input.classList.remove("input-loading");
             var noResultsMessage =
               autoCompleteInput.input.dataset.noResultsMessage;

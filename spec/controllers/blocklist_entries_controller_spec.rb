@@ -28,9 +28,9 @@ describe BlocklistEntriesController do
         post :create, params: {blocklist_entry: {manual_person_attributes: {first_name: "Max",
                                                                             last_name: "Mustermann",
                                                                             birthday: "15.01.1980"}}}
-      end.to change { BlocklistEntry.count }.by(1)
+      end.to change { BlocklistEntry.count }.by(2)
 
-      created = BlocklistEntry.last
+      created = BlocklistEntry.find_by!(hashed_attrs: %w[first_name last_name birthday])
       expect(created.blocked_hash).to eq Digest::MD5.hexdigest(".max.mustermann.1980-01-15 00:00:00")
       expect(created.creator).to eq user
       expect(response).to redirect_to(blocklist_entries_path(returning: true))
@@ -65,6 +65,8 @@ describe BlocklistEntriesController do
 
         expect(response.body).to include(entry.blocked_hash)
         expect(response.body).to include(user.to_s)
+        expect(response.body).to include("Vorname, Nachname")
+        expect(Capybara.string(response.body).find("table tbody tr td:first-child")).to have_text(entry.id)
       end
 
       it "GET #new renders form" do
@@ -73,7 +75,7 @@ describe BlocklistEntriesController do
         expect(response.body).to include("blocklist_entry[person_id]")
         expect(response.body).to include("blocklist_entry[manual_person_attributes][birthday]")
         expect(page_buttons_count).to eq 2
-        expect(response.body).to include("Hash über Vorname, Nachname und Geburtstag.")
+        expect(response.body).to include("Hashes über Vorname und Nachname, jeweils mit und ohne Geburtstag.")
       end
 
       it "POST #create rerenders form with errors" do

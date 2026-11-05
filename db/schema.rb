@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_04_163451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -135,7 +135,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_02_134824) do
     t.string "blocked_hash", null: false
     t.bigint "creator_id"
     t.datetime "created_at", null: false
-    t.index ["blocked_hash"], name: "index_blocklist_entries_on_blocked_hash", unique: true
+    t.text "hashed_attrs", null: false
+    t.index ["blocked_hash", "hashed_attrs"], name: "index_blocklist_entries_on_blocked_hash_and_hashed_attrs", unique: true
     t.index ["creator_id"], name: "index_blocklist_entries_on_creator_id"
   end
 

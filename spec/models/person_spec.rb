@@ -94,7 +94,7 @@ describe Person do
   end
 
   context "blocklist" do
-    before do
+    let!(:entry) do
       BlocklistEntry.create!(manual_person_attributes: {first_name: "Max", last_name: "Mustermann",
                                                         birthday: "1980-01-15"})
     end
@@ -103,7 +103,16 @@ describe Person do
 
     it "may not be created when blocklisted" do
       expect(person).not_to be_valid
-      expect(person.errors[:base]).to eq ["Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden."]
+      expect(person.errors[:base]).to eq [
+        "Diese Person konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer " \
+        "#{entry.id} an die Administrator*innen deiner Organisation."
+      ]
+    end
+
+    it "may not be created when blocklisted without optional birthday" do
+      person.birthday = nil
+
+      expect(person).not_to be_valid
     end
 
     it "may be created when blocklisted with another birthday" do

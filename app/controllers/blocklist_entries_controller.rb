@@ -9,7 +9,7 @@ class BlocklistEntriesController < SimpleCrudController
   private
 
   def permitted_attrs
-    [:person_id, manual_person_attributes: Person::BlocklistDetector.hash_attrs]
+    [:person_id, manual_person_attributes: Person::BlocklistDetector.all_hash_attrs]
   end
 
   def list_entries

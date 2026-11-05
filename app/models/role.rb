@@ -119,6 +119,7 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     if: -> { start_on.present? }
 
   validate :assert_type_is_allowed_for_group, on: :create
+  validate :assert_person_not_blocklisted, on: :create, if: -> { person&.persisted? }
 
   ### CALLBACKS
 
@@ -307,6 +308,13 @@ class Role < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
     when Symbol then method(setting).call
     when Proc then setting.call(self)
     end
+  end
+
+  def assert_person_not_blocklisted
+    return unless FeatureGate.enabled?("people.blocklist")
+
+    entry = Person::BlocklistDetector.new(person).blocklist_entry
+    errors.add(:base, :blocklisted, reference: entry.id) if entry
   end
 
   def assert_type_is_allowed_for_group

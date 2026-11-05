@@ -228,9 +228,9 @@ RSpec.describe Bounce do
       end.to change { bounced.reload.blocked? }.from(false).to(true)
     end
 
-    it "returns the timestamp of blocking" do
+    it "returns the time of blocking" do
       expect do
-        expect(bounced.block!).to be_a DateTime
+        expect(bounced.block!).to be_a ActiveSupport::TimeWithZone
       end.to change { bounced.reload.blocked_at }.from(nil)
     end
 

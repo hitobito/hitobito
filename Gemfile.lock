@@ -923,7 +923,6 @@ DEPENDENCIES
   mail
   matrix
   mime-types
-  mini_magick
   net-sftp
   net-ssh
   nokogiri

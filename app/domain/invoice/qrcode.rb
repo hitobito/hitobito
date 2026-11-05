@@ -1,18 +1,9 @@
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::Qrcode
-  SWISS_CROSS_EDGE_SIDE_PX = 166
-  SWISS_CROSS_EDGE_SIDE_MM = 7
-
-  # The edge length of the qrcode inclusive its white border.
-  QR_CODE_EDGE_SIDE_MM = 42 + 13
-  QR_CODE_EDGE_SIDE_PX = SWISS_CROSS_EDGE_SIDE_PX / SWISS_CROSS_EDGE_SIDE_MM * QR_CODE_EDGE_SIDE_MM
-  QR_CROSS_X = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
-  QR_CROSS_Y = (QR_CODE_EDGE_SIDE_PX / 2) - SWISS_CROSS_EDGE_SIDE_PX / 2
-
   def initialize(invoice)
     @invoice = invoice
     @deprecations = Deprecations.new(invoice)

@@ -9,10 +9,11 @@ class PersonReadables < GroupBasedReadables
 
   attr_reader :group, :roles_readable_for
 
-  def initialize(user, group = nil, include_ended_roles: false)
+  def initialize(user, group = nil, include_ended_roles: false, include_minimized: false)
     super(user)
 
     @group = group
+    @include_minimized = include_minimized
     @roles_join = include_ended_roles ? [roles_with_ended_readable: :group] : [roles: :group]
 
     if @group.nil?
@@ -24,18 +25,22 @@ class PersonReadables < GroupBasedReadables
 
   private
 
-  attr_reader :roles_join
+  attr_reader :roles_join, :include_minimized
 
   def accessible_people
-    return Person.only_public_data if user.root?
+    return base_scope if user.root?
 
-    scope = Person.only_public_data.where(accessible_conditions.to_a).distinct
+    scope = base_scope.where(accessible_conditions.to_a).distinct
     scope = scope.joins(roles_join).where(groups: {deleted_at: nil}) if has_group_based_conditions?
     scope
   end
 
+  def base_scope
+    include_minimized ? Person.only_public_data : Person.only_public_data.not_minimized
+  end
+
   def group_accessible_people
-    group_people = Person.only_public_data.joins(roles_join).where(groups: {id: group.id})
+    group_people = base_scope.joins(roles_join).where(groups: {id: group.id})
 
     if read_permission_for_this_group? || group_read_contact_data_in_this_group?
       can :index, Person, group_people

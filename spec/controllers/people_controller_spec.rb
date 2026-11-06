@@ -111,6 +111,36 @@ describe PeopleController do
           expect(assigns(:people).collect(&:id)).to match_array([@tg_extern].collect(&:id))
         end
 
+        it "excludes a minimized member by default" do
+          top_leader.update_columns(minimized_at: Time.zone.now)
+          get :index, params: {group_id: group}
+
+          expect(assigns(:people).collect(&:id)).to match_array([@tg_member].collect(&:id))
+        end
+
+        context "rendering" do
+          render_views
+
+          it "includes a minimized member unlinked when filtering by deleted role" do
+            # @tg_member keeps their active Member role (so they stay baseline accessible) and
+            # additionally gets a now-ended Leader role, which is what the filter looks for.
+            ended_role = Fabricate(Group::TopGroup::Leader.name.to_sym,
+              group: group, person: @tg_member, start_on: 1.year.ago)
+            ended_role.update!(end_on: 1.day.ago)
+            @tg_member.update_columns(minimized_at: Time.zone.now)
+
+            get :index, params: {
+              group_id: group,
+              filters: {role: {role_type_ids: Group::TopGroup::Leader.type_id.to_s, kind: "deleted"}}
+            }
+
+            expect(response).to have_http_status(:ok)
+            expect(assigns(:people).collect(&:id)).to eq([@tg_member.id])
+            expect(response.body)
+              .not_to match(/href="#{Regexp.escape(group_person_path(group, @tg_member))}"/)
+          end
+        end
+
         it "loads selected roles of a group when types given" do
           get :index,
             params: {

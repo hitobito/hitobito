@@ -24,6 +24,13 @@ describe Person::QueryController do
         expect(response.body).to match(/Pascal/)
         expect(response.body).to match(/Opassum/)
       end
+
+      it "does not query minimized people" do
+        Fabricate(:person, first_name: "Pascal", minimized_at: Time.zone.now)
+        get :index, params: {q: "pas"}
+
+        expect(response.body).to_not match(/Pascal/)
+      end
     end
 
     context "as bottom_member" do

@@ -92,6 +92,13 @@ describe SearchStrategies::PersonSearch do
         expect(result).to include(@no_role)
       end
 
+      it "does not find minimized people without any roles" do
+        @no_role.update_columns(minimized_at: Time.zone.now)
+        result = search_class(@no_role.last_name[0..5]).search
+
+        expect(result).not_to include(@no_role)
+      end
+
       it "does not find inaccessible person with deleted role" do
         result = search_class(@bg_member_with_deleted.last_name[0..5]).search
 
@@ -128,6 +135,13 @@ describe SearchStrategies::PersonSearch do
         result = search_class(@deleted_leader.last_name[0..5]).search
 
         expect(result).to include(@deleted_leader)
+      end
+
+      it "does not find minimized deleted people" do
+        @deleted_leader.update_columns(minimized_at: Time.zone.now)
+        result = search_class(@deleted_leader.last_name[0..5]).search
+
+        expect(result).not_to include(@deleted_leader)
       end
     end
 

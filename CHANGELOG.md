@@ -22,6 +22,7 @@
 - Das Löschen einer Rolle hängt neu ausschliesslich vom Startdatum ab und wird auch bei Hard-Delete im Log protokolliert (#4260)
 - Der Navigationspunkt "Rechnungen" öffnet das Rechnungsmenü der nächstgelegenen Ebene mit Finanzberechtigung der aktuellen Gruppe resp. der Hauptgruppe (#4510)
 - Personen mit mehreren Rollen mit Berechtigung "layer_and_below_finance" sehen im Rechnungsmenü alle entsprechenden Ebenen (#4510)
+- Minimierte Personen werden neu in Personenlisten, der Suche und Auswahlfeldern ausgeblendet; ihre Profilseite ist nicht mehr zugänglich (#4624)
 
 ## Version 2.10
 

@@ -31,6 +31,12 @@ describe Group::DeletedPeople do
         it "finds those people" do
           expect(Group::DeletedPeople.deleted_for(group).first).to eq(person)
         end
+
+        it "does not find minimized people" do
+          person.update_columns(minimized_at: Time.zone.now)
+
+          expect(Group::DeletedPeople.deleted_for(group)).to be_empty
+        end
         it "doesn't find people with new role" do
           Group::TopLayer::TopAdmin.create(person: person, group: group)
 

@@ -693,4 +693,34 @@ describe PersonReadables do
       expect(Person.accessible_by(PersonDetailsReadables.new(user))).not_to include(other)
     end
   end
+
+  describe "minimized people" do
+    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+    let(:user) { role.person.reload }
+    let(:minimized) do
+      Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)).person.tap do |p|
+        p.update_columns(minimized_at: Time.zone.now)
+      end
+    end
+
+    it "excludes minimized people from the global accessible scope" do
+      expect(Person.accessible_by(PersonReadables.new(user))).not_to include(minimized)
+    end
+
+    it "excludes minimized people from a group-scoped accessible scope" do
+      accessibles = Person.accessible_by(PersonReadables.new(user, groups(:top_group)))
+      expect(accessibles).not_to include(minimized)
+    end
+
+    it "includes minimized people when include_minimized is true" do
+      accessibles = Person.accessible_by(PersonReadables.new(user, include_minimized: true))
+      expect(accessibles).to include(minimized)
+    end
+
+    it "excludes minimized people for root unless include_minimized is true" do
+      expect(Person.accessible_by(PersonReadables.new(people(:root)))).not_to include(minimized)
+      accessibles = Person.accessible_by(PersonReadables.new(people(:root), include_minimized: true))
+      expect(accessibles).to include(minimized)
+    end
+  end
 end

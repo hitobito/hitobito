@@ -20,6 +20,29 @@ describe Person::Filter::List do
       expect(list.entries.to_a).to have(1).items
       expect(list.entries.collect(&:id)).to eq [person.id]
     end
+
+    it "empty filter excludes a minimized member" do
+      person.update_columns(minimized_at: Time.zone.now)
+
+      expect(list.entries.to_a).to be_empty
+    end
+
+    context "filtered by deleted role" do
+      let(:filter) do
+        PeopleFilter.new(name: "deleted").to_params.merge({
+          filters: {role: {role_type_ids: Group::TopGroup::Leader.type_id.to_s, kind: "deleted"}}
+        })
+      end
+
+      before do
+        roles(:top_leader).update!(end_on: 1.day.ago)
+        person.update_columns(minimized_at: Time.zone.now)
+      end
+
+      it "includes the minimized person" do
+        expect(list.entries.collect(&:id)).to eq [person.id]
+      end
+    end
   end
 
   context "group with 23 people" do

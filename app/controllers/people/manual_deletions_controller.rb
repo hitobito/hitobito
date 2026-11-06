@@ -78,7 +78,10 @@ class People::ManualDeletionsController < ApplicationController
   end
 
   def entry
-    @entry ||= Group::DeletedPeople.deleted_for(group).find(params[:person_id]) # performance?
+    # include_minimized: already-minimized people must still be found here, since
+    # ensure_minimizable_rules and the minimize action handle that case explicitly.
+    @entry ||= Group::DeletedPeople.deleted_for(group, include_minimized: true)
+      .find(params[:person_id]) # performance?
   end
 
   def group

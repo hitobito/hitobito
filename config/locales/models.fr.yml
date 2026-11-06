@@ -169,7 +169,7 @@ fr:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Veuillez saisir votre nom'
-          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
+          blocklisted: Diese Person konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           readonly: ": Tu n'as pas les droits d'écriture pour toutes les personnes du foyer. Sors %{name} du foyer pour ajuster l'adresse."
           attributes:
             base:
@@ -241,6 +241,7 @@ fr:
             end_on:
               must_be_later_than_start_on: ne peut pas être antérieur au début de la période comptable
         role:
+          blocklisted: Diese Rolle konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           attributes:
             end_on:
               must_be_later_than_start_on: ne peut pas être avant "de"
@@ -664,8 +665,10 @@ fr:
         read_at: Lu le
 
       blocklist_entry:
+        id: Referenznummer
         person: Personne
         blocked_hash: Hash
+        hashed_attrs: Angaben im Hash
         creator: Créé par
         created_at: Créé à
 

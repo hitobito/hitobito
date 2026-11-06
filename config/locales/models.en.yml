@@ -167,7 +167,7 @@ en:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Please enter a name'
-          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
+          blocklisted: Diese Person konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
           attributes:
             base:
@@ -237,6 +237,7 @@ en:
             end_on:
               must_be_later_than_start_on: cannot be before the start of the accounting period
         role:
+          blocklisted: Diese Rolle konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           attributes:
             end_on:
               must_be_later_than_start_on: cannot be before From
@@ -579,8 +580,10 @@ en:
         read_at: read at
 
       blocklist_entry:
+        id: Referenznummer
         person: Person
         blocked_hash: Hash
+        hashed_attrs: Angaben im Hash
         creator: Erstellt von
         created_at: Erstellt am
 

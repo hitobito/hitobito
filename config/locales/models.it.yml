@@ -169,7 +169,7 @@ it:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Inserire un nome'
-          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
+          blocklisted: Diese Person konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             base:
@@ -240,6 +240,7 @@ it:
             end_on:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
+          blocklisted: Diese Rolle konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           attributes:
             end_on:
               must_be_later_than_start_on: non può essere prima di "de"
@@ -663,8 +664,10 @@ it:
         read_at: Letto il
 
       blocklist_entry:
+        id: Referenznummer
         person: Persona
         blocked_hash: Hash
+        hashed_attrs: Angaben im Hash
         creator: Erstellt von
         created_at: Erstellt am
 

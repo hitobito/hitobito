@@ -1,6 +1,6 @@
 #  frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Wanderwege. This file is part of
 #  hitobito_sww and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sww.
@@ -46,6 +46,9 @@ describe SocialAccountResource, type: :resource do
         expect(data.id).to eq(social_account.id)
         expect(data.label).to eq "Webseite"
       end
+
+      it_behaves_like "contact account resource",
+        fabricator: :social_account, category_fixture: :social_account_person_facebook
     end
   end
 end

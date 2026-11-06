@@ -1,6 +1,6 @@
 #  frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Wanderwege. This file is part of
 #  hitobito_sww and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sww.
@@ -39,6 +39,9 @@ describe AdditionalEmailResource, type: :resource do
         expect(data.email).to eq additional_email.email
         expect(data.public).to eq additional_email.public
       end
+
+      it_behaves_like "contact account resource",
+        fabricator: :additional_email, category_fixture: :additional_email_person_private
     end
   end
 end

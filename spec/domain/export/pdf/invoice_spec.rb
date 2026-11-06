@@ -1182,13 +1182,26 @@ describe Export::Pdf::Invoice do
       expect(cross[:y] - qrcode[:y]).to be_within(0.01).of((46.mm - 7.mm) / 2)
     end
 
-    it "renders qrcode as image mask" do
+    it "renders qrcode as image mask painting the dark modules" do
       reader = PDF::Reader.new(StringIO.new(pdf))
-      masks = reader.page(1).xobjects.values.map(&:hash).select { |image| image[:ImageMask] }
-
+      masks = reader.page(1).xobjects.values.select { |image| image.hash[:ImageMask] }
       expect(masks).to have(1).item
-      expect(masks.first.slice(:Width, :Height, :BitsPerComponent))
+
+      mask = masks.first
+      expect(mask.hash.slice(:Width, :Height, :BitsPerComponent))
         .to eq(Width: 65, Height: 65, BitsPerComponent: 1)
+      expect(mask.hash.keys).not_to include(:ColorSpace, :Decode)
+
+      modules = RQRCode::QRCode.new(invoice.qrcode.payload, level: :m).qrcode.modules
+      rows = modules.map { |row| row.map { |dark| dark ? "#" : "." }.join }
+      quiet_zone = ["." * 65] * 4
+      expected = quiet_zone + rows.map { |row| "....#{row}...." } + quiet_zone
+
+      samples = ChunkyPNG::Canvas.decode_png_pixelstream(Zlib::Inflate.inflate(mask.data), 65, 65,
+        ChunkyPNG::COLOR_GRAYSCALE, 1, ChunkyPNG::INTERLACING_NONE, nil, nil)
+      # mask samples of 0 (black) are painted
+      painted = samples.pixels.map { |pixel| (pixel == ChunkyPNG::Color::BLACK) ? "#" : "." }
+      expect(painted.each_slice(65).map(&:join)).to eq expected
     end
 
     it "does not render blank amount" do

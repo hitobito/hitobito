@@ -930,6 +930,12 @@ describe Export::Pdf::Invoice do
     described_class.render(invoice, articles: true, payment_slip: true)
   end
 
+  it "compresses page contents" do
+    reader = PDF::Reader.new(StringIO.new(pdf))
+    filters = reader.pages.map { |page| reader.objects.deref(page.page_object[:Contents]).hash[:Filter] }
+    expect(filters).to all(eq [:FlateDecode])
+  end
+
   it "renders empty invoice articles" do
     described_class.render(invoice, articles: true)
   end

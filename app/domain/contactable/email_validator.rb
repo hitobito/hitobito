@@ -7,33 +7,40 @@
 
 module Contactable
   class EmailValidator
+    def initialize(block: false)
+      @block = block
+    end
+
     def validate_people
       Person.all.includes(:additional_emails).find_each do |p|
-        if invalid?(p.email)
-          tag_invalid!(p, p.email)
-        end
-        validate_additional_emails(p)
+        validate_emails(p, p.email, kind: :primary)
+        validate_emails(p, *p.additional_emails.map(&:email), kind: :additional)
       end
     end
 
     private
 
-    def validate_additional_emails(person)
-      additional_emails = person.additional_emails.pluck(:email)
-      invalid_emails = additional_emails.select do |a|
-        invalid?(a)
-      end
-
-      if invalid_emails.present?
-        tag_invalid!(person, invalid_emails.join(" "), :additional)
-      end
+    def validate_emails(person, *emails, kind:)
+      invalid_emails = emails.select { invalid?(_1) }
+      tag_and_block!(person, *invalid_emails, kind:) if invalid_emails.present?
     end
 
     def invalid?(email)
       email.present? && !Truemail.valid?(email)
     end
 
-    def tag_invalid!(person, invalid_email, kind = :primary)
+    def tag_and_block!(person, *invalid_emails, kind:)
+      block_invalid!(*invalid_emails)
+      tag_invalid!(person, invalid_emails.join(" "), kind)
+    end
+
+    def block_invalid!(*invalid_emails)
+      return unless @block && FeatureGate.enabled?("email.bounces")
+
+      invalid_emails.each { Bounce.setup(_1)&.block! }
+    end
+
+    def tag_invalid!(person, invalid_email, kind)
       InvalidEmailTagger.new(person, invalid_email, kind).tag!
     end
   end

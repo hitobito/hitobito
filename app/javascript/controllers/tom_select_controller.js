@@ -128,7 +128,7 @@ export default class extends Controller {
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
-        callback(json);
+        callback(Array.isArray(json) ? json : json.data);
       })
       .catch(() => {
         callback();

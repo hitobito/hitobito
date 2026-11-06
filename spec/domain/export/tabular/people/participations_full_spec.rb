@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,6 +19,17 @@ describe Export::Tabular::People::ParticipationsFull do
 
   context "participation_additional_information" do
     its([:participation_additional_information]) { should eq "Bemerkungen" }
+  end
+
+  context "guest" do
+    let(:guest) { Fabricate(:event_guest, phone_number: "+41 79 765 43 21") }
+    let(:participation) { Fabricate(:event_participation, participant: guest, event: events(:top_course)) }
+
+    it "exports the phone number as mobile number" do
+      row = people_list.data_rows.first
+
+      expect(row[people_list.attributes.index(:phone_number_mobile)]).to eq "+41 79 765 43 21"
+    end
   end
 
   context "questions" do

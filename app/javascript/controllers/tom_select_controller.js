@@ -104,6 +104,7 @@ export default class extends Controller {
       plugins: multiple ? ["remove_button"] : undefined,
       create: false,
       load: this.urlValue ? this.#load.bind(this) : undefined,
+      onLoad: this.#onLoad.bind(this),
       maxOptions: this.maxOptionsValue,
       render: {
         no_results: this.#renderNoResults.bind(this),
@@ -128,11 +129,22 @@ export default class extends Controller {
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
-        callback(Array.isArray(json) ? json : json.data);
+        if (Array.isArray(json)) {
+          callback(json);
+        } else {
+          this.moreResults = json.more_results;
+          callback(json.data);
+        }
       })
       .catch(() => {
         callback();
       });
+  }
+
+  #onLoad(options, optgroup) {
+    if (this.moreResults){
+      this.tom.addOption({id: 0, label: this.moreResults, disabled: true})
+    }
   }
 
   #clearInput() {

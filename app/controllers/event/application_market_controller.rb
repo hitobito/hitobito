@@ -86,7 +86,7 @@ class Event::ApplicationMarketController < ApplicationController
           ELSE 99
         END
       SQL
-      Event::Participation.order_by_name_statement
+      "event_participations.created_at"
     ]
   end
 

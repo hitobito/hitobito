@@ -1182,6 +1182,15 @@ describe Export::Pdf::Invoice do
       expect(cross[:y] - qrcode[:y]).to be_within(0.01).of((46.mm - 7.mm) / 2)
     end
 
+    it "renders qrcode as image mask" do
+      reader = PDF::Reader.new(StringIO.new(pdf))
+      masks = reader.page(1).xobjects.values.map(&:hash).select { |image| image[:ImageMask] }
+
+      expect(masks).to have(1).item
+      expect(masks.first.slice(:Width, :Height, :BitsPerComponent))
+        .to eq(Width: 65, Height: 65, BitsPerComponent: 1)
+    end
+
     it "does not render blank amount" do
       invoice.total = 0
       invoice_text = [

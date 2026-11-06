@@ -24,6 +24,7 @@ module Export::Pdf::Invoice
 
     QR_CODE_SIZE = 46.mm
     SWISS_CROSS_SIZE = 7.mm
+    CENTERED = {position: :center, vposition: :center}.freeze
 
     # Renders the QR payment slip according to the Swiss QR Bill standard v2.3
     # (in force since 21 November 2025).
@@ -118,13 +119,17 @@ module Export::Pdf::Invoice
 
     def payment_qrcode
       padded_bounding_box(0.6, width: 60.mm, pad_right: true) do
-        centered_image StringIO.new(invoice.qrcode.png), QR_CODE_SIZE
-        centered_image invoice.qrcode.swiss_cross, SWISS_CROSS_SIZE
+        float { qrcode_image_mask }
+        float { image invoice.qrcode.swiss_cross, width: SWISS_CROSS_SIZE, **CENTERED }
       end
     end
 
-    def centered_image(file, size)
-      float { image file, width: size, position: :center, vposition: :center }
+    # Image masks are scaled without interpolation, the code stays sharp at low resolutions
+    def qrcode_image_mask
+      image_obj, info = pdf.build_image_object(StringIO.new(invoice.qrcode.png))
+      image_obj.data.delete(:ColorSpace)
+      image_obj.data[:ImageMask] = true
+      pdf.embed_image(image_obj, info, width: QR_CODE_SIZE, **CENTERED)
     end
 
     def render_payment_amount

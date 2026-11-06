@@ -12,9 +12,9 @@ describe People::CleanupFinder do
 
   let(:cutoff_durations) { Settings.people.cleanup_cutoff_duration }
 
-  let(:sign_in_cutoff_time) { cutoff_durations.regarding_current_sign_in_at.months.ago }
-  let(:role_cutoff_date) { cutoff_durations.regarding_roles.months.ago.to_date }
-  let(:participation_cutoff_time) { cutoff_durations.regarding_participations.months.ago }
+  let(:sign_in_cutoff_time) { ActiveSupport::Duration.parse(cutoff_durations.regarding_current_sign_in_at).ago }
+  let(:role_cutoff_date) { ActiveSupport::Duration.parse(cutoff_durations.regarding_roles).ago.to_date }
+  let(:participation_cutoff_time) { ActiveSupport::Duration.parse(cutoff_durations.regarding_participations).ago }
 
   let(:future_event) do
     Fabricate(:event, dates: [Event::Date.new(start_at: 10.days.from_now)])
@@ -111,7 +111,7 @@ describe People::CleanupFinder do
       end
 
       before do
-        expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_roles).and_return(9)
+        expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_roles).and_return("P9M")
       end
 
       context "with people_manageds" do
@@ -123,7 +123,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at outside cutoff duration" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
           end
 
           it "does not find them" do
@@ -151,7 +151,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at nil" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
 
             people.each { |p| p.update!(current_sign_in_at: nil) }
           end
@@ -163,7 +163,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at inside cutoff duration" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
             people.each { |p| p.update!(current_sign_in_at: 11.months.ago) }
           end
 
@@ -176,7 +176,7 @@ describe People::CleanupFinder do
       context "without people_manageds" do
         context "with current_sign_in_at outside cutoff duration" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
             people.each { |p| p.update!(current_sign_in_at: 13.months.ago) }
           end
 
@@ -205,7 +205,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at nil" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
 
             people.each { |p| p.update!(current_sign_in_at: nil) }
           end
@@ -217,7 +217,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at inside cutoff duration" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
             people.each { |p| p.update!(current_sign_in_at: 11.months.ago) }
           end
 
@@ -239,7 +239,7 @@ describe People::CleanupFinder do
       end
 
       before do
-        expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_roles).and_return(12)
+        expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_roles).and_return("P12M")
       end
 
       context "with people_manageds" do
@@ -251,7 +251,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at outside cutoff duration" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
             people.each { |p| p.update!(current_sign_in_at: 13.months.ago) }
           end
 
@@ -284,7 +284,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at nil" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
 
             people.each { |p| p.update!(current_sign_in_at: nil) }
           end
@@ -296,7 +296,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at inside cutoff duration" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
             people.each { |p| p.update!(current_sign_in_at: 11.months.ago) }
           end
 
@@ -309,7 +309,7 @@ describe People::CleanupFinder do
       context "without people_manageds" do
         context "with current_sign_in_at outside cutoff duration" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
             people.each { |p| p.update!(current_sign_in_at: 13.months.ago) }
           end
 
@@ -342,7 +342,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at nil" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
 
             people.each { |p| p.update!(current_sign_in_at: nil) }
           end
@@ -354,7 +354,7 @@ describe People::CleanupFinder do
 
         context "with current_sign_in_at inside cutoff duration" do
           before do
-            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return(12)
+            expect(Settings.people.cleanup_cutoff_duration).to receive(:regarding_current_sign_in_at).and_return("P12M")
             people.each { |p| p.update!(current_sign_in_at: 11.months.ago) }
           end
 

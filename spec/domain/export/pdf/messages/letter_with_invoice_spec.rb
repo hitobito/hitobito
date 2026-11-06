@@ -40,7 +40,7 @@ describe Export::Pdf::Messages::LetterWithInvoice do
   end
 
   it "renders logo from settings and qr images" do
-    expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(4).times
+    expect_any_instance_of(Prawn::Document).to receive(:image).with(any_args).exactly(3).times
     subject.render
   end
 

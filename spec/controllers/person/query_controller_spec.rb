@@ -24,6 +24,24 @@ describe Person::QueryController do
         expect(response.body).to match(/Pascal/)
         expect(response.body).to match(/Opassum/)
       end
+
+      it "returns more results hint if there are more than 10 people" do
+        11.times { Fabricate(:person, first_name: "Pascal") }
+        get :index, params: {q: "pas"}
+
+        json = JSON.parse(response.body)
+        expect(json["data"].size).to eq(10)
+        expect(json["more_results"]).to eq("Suche einschränken")
+      end
+
+      it "returns no more results hint if there are not more than 10 people" do
+        Fabricate(:person, first_name: "Pascal")
+        get :index, params: {q: "pas"}
+
+        json = JSON.parse(response.body)
+        expect(json["data"].size).to eq(1)
+        expect(json).not_to have_key("more_results")
+      end
     end
 
     context "as bottom_member" do

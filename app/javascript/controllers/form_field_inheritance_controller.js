@@ -60,6 +60,10 @@ export default class extends Controller {
 
     if(input.type == 'checkbox') {
       input.checked = (/true/).test(value)
+    } else if(input.tagName == 'TRIX-EDITOR') {
+      input.editor.loadHTML('');
+      input.editor.setSelectedRange([0, 0]);
+      input.editor.insertString(value);
     } else {
       input.value = value;
       input.dispatchEvent(new Event('input'));

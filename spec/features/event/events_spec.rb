@@ -135,13 +135,29 @@ describe "Events", js: true do
 
     it "fills default description if empty" do
       select "SLK (Scharleiterkurs)", from: "event_kind_id"
-      expect(find("#event_description").value).to eq event.kind.general_information
+      expect(find("#event_description").value).to have_content event.kind.general_information
+    end
+
+    it "fills description with the kind's text as plain text" do
+      event_kinds(:slk).update!(general_information: "Erste Zeile <b>x</b> & y\nZweite Zeile")
+      visit form_path
+      select "SLK (Scharleiterkurs)", from: "event_kind_id"
+      expect(find("#event_description").value)
+        .to eq "<div>Erste Zeile &lt;b&gt;x&lt;/b&gt; &amp; y<br>Zweite Zeile</div>"
+    end
+
+    it "replaces description with the kind's text on override" do
+      event_kinds(:slk).update!(general_information: "Erste Zeile\nZweite Zeile")
+      visit form_path
+      select "SLK (Scharleiterkurs)", from: "event_kind_id"
+      click_link "Werte übernehmen"
+      expect(find("#event_description").value).to eq "<div>Erste Zeile<br>Zweite Zeile</div>"
     end
 
     it "does not fill textarea" do
-      fill_in "event_description", with: prefill_description
+      find("trix-editor").click.set prefill_description
       select "SLK (Scharleiterkurs)", from: "event_kind_id"
-      expect(find("#event_description").value).to eq prefill_description
+      expect(find("#event_description").value).to have_content prefill_description
     end
   end
 

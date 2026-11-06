@@ -1,4 +1,4 @@
-#  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -60,7 +60,8 @@ describe EventListSerializer do
 
   context "event properties" do
     it "includes all keys" do
-      keys = [:name, :description, :motto, :cost, :maximum_participants, :participant_count,
+      keys = [:name, :description, :description_html, :motto, :cost, :maximum_participants,
+        :participant_count,
         :location, :application_opening_at, :application_closing_at, :application_conditions,
         :state, :teamer_count, :external_application_link, :links]
 

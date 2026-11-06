@@ -1,4 +1,4 @@
-#  Copyright (c) 2025, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -39,6 +39,7 @@ class Event::Guest < ActiveRecord::Base
   delegate :to_s, :gender_label, to: :to_person
 
   GUEST_SPECIFIC_ATTRIBUTES = [:id, :phone_number, :main_applicant_id]
+  PHONE_NUMBER_CATEGORY_KEY = "mobile"
 
   include AgeCalculatable
   include I18nEnums
@@ -55,12 +56,22 @@ class Event::Guest < ActiveRecord::Base
   def to_person
     Person.new(person_attributes).tap do |person|
       if phone_number?
-        person.phone_numbers.build(number: phone_number)
+        person.phone_numbers.build(number: phone_number, category: self.class.phone_number_category)
       end
     end
   end
 
   class << self
+    def phone_number_category
+      return @phone_number_category if defined?(@phone_number_category)
+
+      @phone_number_category = ContactAccountCategory.includes(:translations).find_by(
+        contact_account_type: PhoneNumber.sti_name,
+        contactable_type: Person.sti_name,
+        key: PHONE_NUMBER_CATEGORY_KEY
+      )
+    end
+
     def order_by_name_statement
       Arel.sql(
         <<~SQL.squish

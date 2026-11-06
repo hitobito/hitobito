@@ -46,6 +46,30 @@ describe Event::Guest do
     end
   end
 
+  describe "#to_person" do
+    let(:guest) { Event::Guest.new(first_name: "Gaby", phone_number: "+41 79 123 45 67") }
+
+    it "builds the phone number as mobile number" do
+      phone_number = guest.to_person.phone_numbers.first
+
+      expect(phone_number.number).to eq "+41 79 123 45 67"
+      expect(phone_number.category).to eq contact_account_categories(:phone_number_person_mobile)
+    end
+
+    it "builds no phone number if guest has none" do
+      guest.phone_number = nil
+
+      expect(guest.to_person.phone_numbers).to be_empty
+    end
+
+    it "does not query the phone number category for every guest" do
+      guest.to_person
+      other_guests = Array.new(3) { Event::Guest.new(phone_number: "+41 79 000 00 00") }
+
+      expect { other_guests.each(&:to_person) }.not_to make.db_queries
+    end
+  end
+
   context "#years" do
     before { travel_to Time.zone.local(2021, 5, 24) }
 

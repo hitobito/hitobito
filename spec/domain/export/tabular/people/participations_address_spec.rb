@@ -34,5 +34,14 @@ describe Export::Tabular::People::ParticipationsAddress do
       expect(attribute_labels[:phone_number_landline]).to eq "Telefonnummer Festnetz"
       expect(row(0)[attributes.index(:phone_number_landline)]).to eq "+41 79 123 45 67"
     end
+
+    context "of guests" do
+      let(:guest) { Fabricate(:event_guest, phone_number: "+41 79 765 43 21") }
+      let(:participation) { Fabricate(:event_participation, participant: guest, event: events(:top_course)) }
+
+      it "exports the phone number as mobile number" do
+        expect(row(0)[attributes.index(:phone_number_mobile)]).to eq "+41 79 765 43 21"
+      end
+    end
   end
 end

@@ -394,6 +394,12 @@ describe Person::Filter::Role do
           expect(filter({}).entries).to have(1).item
         end
 
+        it "finds ended role even if person is minimized" do
+          role.update!(end_on: 1.week.ago)
+          person.update_columns(minimized_at: Time.zone.now)
+          expect(filter({}).entries).to have(1).item
+        end
+
         it "does not find role if no other role is active" do
           person.roles.select { |r| r.id != role.id }.each(&:destroy!)
           role.update!(end_on: 1.week.ago)
@@ -670,6 +676,12 @@ describe Person::Filter::Role do
 
         it "does find active role when searching with earlier range" do
           start_on = role.start_on
+          expect(entries(start_at: start_on - 1.year, finish_at: start_on - 1.day)).to have(1).item
+        end
+
+        it "finds a minimized person when searching with earlier range" do
+          start_on = role.start_on
+          role.person.update_columns(minimized_at: Time.zone.now)
           expect(entries(start_at: start_on - 1.year, finish_at: start_on - 1.day)).to have(1).item
         end
 

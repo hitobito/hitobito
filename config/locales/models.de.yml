@@ -598,6 +598,7 @@ de:
         first_name: Vorname
         last_name: Nachname
         name: Name
+        minimized_placeholder: "(inaktive Person)"
         company_name: Firmenname
         company: Firma
         nickname: Übername

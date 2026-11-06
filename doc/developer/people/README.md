@@ -8,3 +8,4 @@
 * [Locations](locations.md)
 * [AddressSync](address_sync.md)
 * [Blocklist](blocklist.md)
+* [Minimization](minimization.md)

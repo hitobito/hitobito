@@ -24,6 +24,10 @@ class Person::Filter::Chain < Filter::Chain
     first_custom_roles_join || {roles: :group}
   end
 
+  def includes_minimized?
+    filters.any?(&:includes_minimized?)
+  end
+
   private
 
   def first_custom_roles_join

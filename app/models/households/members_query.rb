@@ -12,7 +12,7 @@ class Households::MembersQuery
     @current_user = current_user
     @person = current_user if person_id.blank? || current_user.id == person_id
     @person ||= Person.find(person_id)
-    @writables_scope = writables_scope || Person.only_public_data
+    @writables_scope = writables_scope || Person.only_public_data.not_minimized
   end
 
   def scope

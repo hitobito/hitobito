@@ -27,6 +27,15 @@ describe Person::QueryHouseholdController do
     expect(response.body).to match(/Pascal/)
   end
 
+  it "does not find a minimized person even if writable" do
+    sign_in(people(:top_leader))
+    person = Fabricate(:person, first_name: "Pascal")
+    Fabricate(Group::TopGroup::Member.name.to_s, person: person, group: top_group)
+    person.update_columns(minimized_at: Time.zone.now)
+    get :index, params: {q: "pas", person_id: bottom_member.id}
+    expect(response.body).not_to match(/Pascal/)
+  end
+
   it "finds person if it has the same address" do
     sign_in(people(:bottom_member))
     person = Fabricate(:person, first_name: "Pascal", street: "Greatstreet", housenumber: 345,

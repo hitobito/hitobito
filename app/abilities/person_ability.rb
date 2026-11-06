@@ -135,6 +135,8 @@ class PersonAbility < AbilityDsl::Base
       .non_restricted_in_same_layer_or_visible_below_except_self
 
     class_side(:lookup_manageds).if_any_writing_permissions
+
+    general.not_minimized
   end
 
   def if_any_writing_permissions
@@ -153,6 +155,10 @@ class PersonAbility < AbilityDsl::Base
 
   def not_self
     subject.id != user.id
+  end
+
+  def not_minimized
+    permission == :admin || !subject.minimized?
   end
 
   def people_without_roles

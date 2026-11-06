@@ -219,6 +219,18 @@ describe Export::Tabular::People::TableDisplays do
       expect(people_list.data_rows.first[idx]).to eq "+41 79 000 00 00"
     end
 
+    context "with guest" do
+      let(:participation) do
+        Fabricate(:event_participation, event: events(:top_course),
+          participant: Fabricate(:event_guest, phone_number: "+41 79 765 43 21"))
+      end
+
+      it "exports the phone number as mobile number" do
+        idx = people_list.attributes.index(:phone_number_mobile)
+        expect(people_list.data_rows.first[idx]).to eq "+41 79 765 43 21"
+      end
+    end
+
     it "does exclude attribute if exclude_attr of certain column is true" do
       table_display.selected = [:event_question_1]
       # rubocop:todo Layout/LineLength

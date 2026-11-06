@@ -15,6 +15,10 @@
 - Die Anmeldebestätigung (PDF), die Teilnahme-Detailseite, Teilnahme-Mails und der Kalender-Export (iCal) zeigen von der Kontaktperson nur die in den Anzeigeoptionen gewählten Angaben (hitobito_sww#376)
 - JSON:API: Anlässe können mit `include=contact_details` die Angaben der Kontaktperson laden, die in den Anzeigeoptionen gewählt sind (hitobito_sww#376)
 - Eventvorlagen können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (#4259)
+- Das Löschen einer Rolle hängt neu ausschliesslich vom Startdatum ab und wird auch bei Hard-Delete im Log protokolliert (#4260)
+
+## Version 2.10
+
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)

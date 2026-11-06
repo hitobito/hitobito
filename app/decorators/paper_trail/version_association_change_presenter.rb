@@ -17,7 +17,7 @@ module PaperTrail
 
     def render
       h.content_tag(:div) do
-        changeset = (event == "update") ? changeset_list : nil
+        changeset = %w[create update].include?(event) ? changeset_list : nil
 
         text = association_change_text(changeset)
 

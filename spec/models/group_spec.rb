@@ -527,17 +527,17 @@ describe Group do
         expect { top_group.destroy }.to change { Group.deleted.count }.by(1)
       end
 
-      it "soft destroys role if role is old enough to archive" do
-        top_leader.update_columns(created_at: 1.year.ago, start_on: 1.year.ago)
+      it "soft destroys role if role started in the past" do
+        top_leader.update_columns(start_on: 1.year.ago)
         expect { top_group.destroy }.to change { Role.ended.count }.by(1)
       end
     end
 
     context "role assignments" do
       it "terminates own roles" do
-        _role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group)
+        _role = Fabricate(Group::BottomGroup::Member.name.to_s, group: bottom_group, start_on: Time.zone.today)
         _deleted_ids = bottom_group.roles.collect(&:id)
-        # role is deleted permanantly as it is less than Settings.role.minimum_days_to_archive old
+        # role is deleted permanently as it starts today, not in the past
         expect { bottom_group.destroy }.to change { Role.with_inactive.count }.by(-1)
       end
     end
@@ -796,6 +796,18 @@ describe Group do
           end.to change { group.roles.with_inactive.future.count }.by(-1)
 
           expect(group).to be_archived
+        end
+
+        it "creates a paper trail entry for hard deleted future roles", versioning: true do
+          future_role = Fabricate(group.role_types.first.sti_name.to_sym,
+            person: role.person,
+            group: group,
+            start_on: 1.day.from_now)
+
+          group.archive!
+
+          version = PaperTrail::Version.where(item_type: "Role", item_id: future_role.id).last
+          expect(version.event).to eq("destroy")
         end
       end
 

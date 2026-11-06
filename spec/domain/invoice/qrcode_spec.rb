@@ -32,10 +32,13 @@ describe Invoice::Qrcode do
   describe :png do
     let(:png) { invoice.qrcode.png }
 
-    it "has one pixel per module including the quiet zone" do
+    it "has one pixel per module without quiet zone" do
       image = ChunkyPNG::Image.from_blob(png)
-      expect(image.dimension.height).to eq 65
-      expect(image.dimension.width).to eq 65
+      rows = image.pixels.each_slice(image.width).map do |row|
+        row.map { |pixel| (pixel == ChunkyPNG::Color::BLACK) ? "#" : "." }.join
+      end
+      modules = RQRCode::QRCode.new(invoice.qrcode.payload, level: :m).to_s(dark: "#", light: ".")
+      expect(rows.join("\n")).to eq modules
     end
 
     it "is a 1-bit grayscale image" do

@@ -104,7 +104,7 @@ class Invoice::Qrcode
 
   def png
     RQRCode::QRCode.new(payload, level: :m)
-      .as_png(module_px_size: 1)
+      .as_png(module_px_size: 1, border_modules: 0)
       .to_blob(color_mode: ChunkyPNG::COLOR_GRAYSCALE, bit_depth: 1)
   end
 

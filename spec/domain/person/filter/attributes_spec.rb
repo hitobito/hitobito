@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Schweizer Blasmusikverband. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Blasmusikverband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -94,6 +94,14 @@ describe Person::Filter::Attributes do
               expect(entries.size).to be_zero
             end
           end
+
+          context "with different case" do
+            let(:value) { "TEST1" }
+
+            it "ignores the case" do
+              expect(entries).to eq([@tg_member1])
+            end
+          end
         end
 
         context "match" do
@@ -106,6 +114,14 @@ describe Person::Filter::Attributes do
             expect(entries).to include(@tg_member2)
             expect(entries).to include(@tg_member3)
           end
+
+          context "with different case" do
+            let(:value) { "TEST" }
+
+            it "ignores the case" do
+              expect(entries).to include(@tg_member1, @tg_member2, @tg_member3)
+            end
+          end
         end
 
         context "not_match" do
@@ -117,6 +133,20 @@ describe Person::Filter::Attributes do
             expect(entries).not_to include(@tg_member1)
             expect(entries).not_to include(@tg_member2)
             expect(entries).to include(@tg_member3)
+          end
+
+          it "returns people without value" do
+            @tg_member3.update!(last_name: nil)
+            expect(entries).to include(@tg_member3)
+          end
+
+          context "with different case" do
+            let(:value) { "SAM" }
+
+            it "ignores the case" do
+              expect(entries).not_to include(@tg_member1, @tg_member2)
+              expect(entries).to include(@tg_member3)
+            end
           end
         end
 
@@ -390,6 +420,17 @@ describe Person::Filter::Attributes do
             expect(entries.size).to be_zero
           end
         end
+
+        context "with different case" do
+          let(:value) { "VERY COOL" }
+
+          it "ignores the case" do
+            allow_any_instance_of(Person).to receive(:coolness_factor) do |person|
+              (person.first_name == "test1") ? "very cool" : "boring"
+            end
+            expect(entries).to eq([@tg_member1])
+          end
+        end
       end
 
       context "match" do
@@ -400,6 +441,17 @@ describe Person::Filter::Attributes do
           expect(entries.size).to eq(2)
           expect(entries).to include(@tg_member1)
           expect(entries).to include(@tg_member3)
+        end
+
+        context "with different case" do
+          let(:value) { "COOL" }
+
+          it "ignores the case" do
+            allow_any_instance_of(Person).to receive(:coolness_factor) do |person|
+              (person.first_name == "test1") ? "very cool" : "boring"
+            end
+            expect(entries).to eq([@tg_member1])
+          end
         end
       end
 

@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- In Personen-, Abo- und Anlassfiltern unterscheiden "ist genau", "enthält" und "enthält nicht" keine Gross- und Kleinschreibung mehr, "enthält nicht" findet neu auch Einträge ohne Wert im Feld. Bei Abos mit Personenfilter kann sich dadurch die Empfängerliste ändern
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 - Rechnungen können als CSV oder Excel mit einer Zeile pro Rechnungsposten exportiert werden (hitobito_florist#7)

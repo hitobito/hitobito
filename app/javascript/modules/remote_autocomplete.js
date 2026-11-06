@@ -54,7 +54,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
             url.searchParams.set(queryKey, query);
             const source = await fetch(url);
             const json = await source.json();
-            const data = json.data;
+            const data = Array.isArray(json) ? json : json.data;
             moreResults = json.more_results;
             input.classList.remove("input-loading");
             var noResultsMessage =
@@ -83,7 +83,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
           if (moreResults) {
             const more = document.createElement("li");
             more.id = "more_results"
-            more.textContent = "...";
+            more.textContent = moreResults;
             list.appendChild(more);
           }
         },

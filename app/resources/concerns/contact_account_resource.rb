@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,6 +22,9 @@ module ContactAccountResource
 
     attribute :contactable_id, :integer
     attribute :contactable_type, :string
+
+    extra_attribute(:category_name, :string) { @object.category&.name }
+    on_extra_attribute(:category_name) { |scope| scope.includes(category: :translations) }
   end
 
   def authorize_create(model)

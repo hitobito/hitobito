@@ -14,6 +14,7 @@
 - Die Personennummer wird neu auf der Person angezeigt und ist im Export "Alle Angaben" enthalten (hitobito_zss#8)
 - Die Anmeldebestätigung (PDF), die Teilnahme-Detailseite, Teilnahme-Mails und der Kalender-Export (iCal) zeigen von der Kontaktperson nur die in den Anzeigeoptionen gewählten Angaben (hitobito_sww#376)
 - JSON:API: Anlässe können mit `include=contact_details` die Angaben der Kontaktperson laden, die in den Anzeigeoptionen gewählt sind (hitobito_sww#376)
+- JSON:API: Kontaktkonten (Telefonnummern, E-Mail-Adressen, Adressen, Social Accounts) können das übersetzte `category_name`-Attribut ihrer Kategorie über `extra_fields` abrufen, z. B. `extra_fields[phone_numbers]=category_name`
 - Eventvorlagen können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (#4259)
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)

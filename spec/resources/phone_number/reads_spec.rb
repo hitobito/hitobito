@@ -1,6 +1,6 @@
 #  frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Wanderwege. This file is part of
 #  hitobito_sww and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sww.
@@ -39,6 +39,9 @@ describe PhoneNumberResource, type: :resource do
         expect(data.number).to eq phone_number.number
         expect(data.public).to eq phone_number.public
       end
+
+      it_behaves_like "contact account resource",
+        fabricator: :phone_number, category_fixture: :phone_number_person_mobile
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -111,6 +111,23 @@ RSpec.describe "people#index", type: :request do
       expect(response.status).to eq(200), response.body
       expect(d.map(&:id)).not_to include(other.id)
       expect(json["included"].to_a.pluck("id")).not_to include(phone_number.id.to_s)
+    end
+
+    describe "contact account category_name" do
+      let(:params) do
+        {include: "phone_numbers", extra_fields: {phone_numbers: "category_name"}}
+      end
+      let!(:phone_number) do
+        Fabricate(:phone_number, contactable: people(:top_leader),
+          category: contact_account_categories(:phone_number_person_mobile))
+      end
+
+      it "returns the translated category name" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        node = included("phone_numbers").find { |n| n.id == phone_number.id }
+        expect(node[:category_name]).to eq(phone_number.category.name)
+      end
     end
   end
 end

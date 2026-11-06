@@ -48,6 +48,10 @@ describe "assets rake tasks" do
     tmp.join("tmp", "wagon_manifests", composition)
   end
 
+  def yarn_env(composition)
+    {"WAGON_MANIFEST_DIR" => manifest_dir(composition).to_s}
+  end
+
   def manifest(composition, name)
     JSON.parse(manifest_dir(composition).join(name).read)
   end
@@ -81,9 +85,9 @@ describe "assets rake tasks" do
     it "runs yarn in the core directory" do
       Rake::Task["assets:build"].invoke
 
-      expect(rake_dsl).to have_received(:sh).with("yarn", "install", chdir: tmp.to_s)
-      expect(rake_dsl).to have_received(:sh).with("yarn", "build:css", chdir: tmp.to_s)
-      expect(rake_dsl).to have_received(:sh).with("yarn", "build", chdir: tmp.to_s)
+      expect(rake_dsl).to have_received(:sh).with(yarn_env("core"), "yarn", "install", chdir: tmp.to_s)
+      expect(rake_dsl).to have_received(:sh).with(yarn_env("core"), "yarn", "build:css", chdir: tmp.to_s)
+      expect(rake_dsl).to have_received(:sh).with(yarn_env("core"), "yarn", "build", chdir: tmp.to_s)
     end
 
     it "honours the skip flags" do
@@ -92,7 +96,7 @@ describe "assets rake tasks" do
       end
 
       expect(rake_dsl).to have_received(:sh).once
-      expect(rake_dsl).to have_received(:sh).with("yarn", "build", chdir: tmp.to_s)
+      expect(rake_dsl).to have_received(:sh).with(yarn_env("core"), "yarn", "build", chdir: tmp.to_s)
     end
   end
 
@@ -104,7 +108,7 @@ describe "assets rake tasks" do
 
       expect(ENV["WAGON_MANIFEST_DIR"]).to eq manifest_dir("core").to_s
       expect(manifest("core", "js.json")["wagons"]).to be_empty
-      expect(rake_dsl).to have_received(:sh).with("yarn", "build", chdir: tmp.to_s)
+      expect(rake_dsl).to have_received(:sh).with(yarn_env("core"), "yarn", "build", chdir: tmp.to_s)
     end
 
     context "in a wagon" do
@@ -114,7 +118,7 @@ describe "assets rake tasks" do
         Rake::Task["app:assets:build_for_test"].invoke
 
         expect(ENV["WAGON_MANIFEST_DIR"]).to eq manifest_dir("pbs").to_s
-        expect(rake_dsl).to have_received(:sh).with("yarn", "build", chdir: tmp.to_s)
+        expect(rake_dsl).to have_received(:sh).with(yarn_env("pbs"), "yarn", "build", chdir: tmp.to_s)
       end
     end
 
@@ -122,7 +126,7 @@ describe "assets rake tasks" do
       Rake::Task["db:test:prepare"].invoke
 
       expect(ENV["WAGON_MANIFEST_DIR"]).to eq manifest_dir("core").to_s
-      expect(rake_dsl).to have_received(:sh).with("yarn", "build", chdir: tmp.to_s)
+      expect(rake_dsl).to have_received(:sh).with(yarn_env("core"), "yarn", "build", chdir: tmp.to_s)
     end
 
     context "in a wagon" do
@@ -132,7 +136,7 @@ describe "assets rake tasks" do
         Rake::Task["app:db:test:prepare"].invoke
 
         expect(ENV["WAGON_MANIFEST_DIR"]).to eq manifest_dir("pbs").to_s
-        expect(rake_dsl).to have_received(:sh).with("yarn", "build", chdir: tmp.to_s)
+        expect(rake_dsl).to have_received(:sh).with(yarn_env("pbs"), "yarn", "build", chdir: tmp.to_s)
       end
     end
   end
@@ -141,7 +145,7 @@ describe "assets rake tasks" do
     it "builds the assets first" do
       Rake::Task["assets:precompile"].invoke
 
-      expect(rake_dsl).to have_received(:sh).with("yarn", "build", chdir: tmp.to_s)
+      expect(rake_dsl).to have_received(:sh).with(yarn_env("core"), "yarn", "build", chdir: tmp.to_s)
     end
   end
 

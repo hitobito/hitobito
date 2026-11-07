@@ -2014,4 +2014,42 @@ describe PersonAbility do
       is_expected.to be_able_to(:security, role.person)
     end
   end
+
+  context "minimized person" do
+    context :layer_and_below_full do
+      let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
+      before { Group::TopGroup::Leader.permissions = [:layer_and_below_full] }
+
+      after do
+        Group::TopGroup::Leader.permissions =
+          [:admin, :finance, :layer_and_below_full, :contact_data, :impersonation]
+      end
+
+      it "may not show or update a minimized person despite otherwise sufficient permissions" do
+        minimized = Fabricate(Group::BottomLayer::Member.name.to_sym,
+          group: groups(:bottom_layer_one)).person
+        minimized.update_columns(minimized_at: Time.zone.now)
+
+        is_expected.not_to be_able_to(:show, minimized)
+        is_expected.not_to be_able_to(:update, minimized)
+      end
+    end
+
+    it "may not be shown or updated by herself" do
+      minimized = Fabricate(:person, minimized_at: Time.zone.now)
+      minimized_ability = Ability.new(minimized)
+
+      expect(minimized_ability).not_to be_able_to(:show, minimized)
+      expect(minimized_ability).not_to be_able_to(:update, minimized)
+    end
+
+    it "is still shown and manageable by root" do
+      minimized = Fabricate(:person, minimized_at: Time.zone.now)
+      root_ability = Ability.new(people(:root))
+
+      expect(root_ability).to be_able_to(:show, minimized)
+      expect(root_ability).to be_able_to(:update, minimized)
+    end
+  end
 end

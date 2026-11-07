@@ -13,9 +13,10 @@ class PersonLayerWritables < GroupBasedFetchables
   self.above_layer_permissions = [:layer_and_below_full]
 
   # keep arguments compatible with PersonReadables
-  def initialize(user, _group = nil, scope: Person.only_public_data, include_ended_roles: false)
+  def initialize(user, _group = nil, scope: Person.only_public_data, include_ended_roles: false,
+    include_minimized: false)
     super(user)
-    @scope = scope
+    @scope = include_minimized ? scope : scope.not_minimized
     can(:index, Person, accessible_people { |_| true })
   end
 

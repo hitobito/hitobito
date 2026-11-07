@@ -8,7 +8,8 @@
   %li.nav-item= link_to(t('.email'), '#email', data: { bs_toggle: 'tab' }, class: 'nav-link')
   %li.nav-item= link_to(MessageTemplate.model_name.human(count: 2), '#templates', data: { bs_toggle: 'tab' }, class: 'nav-link')
   %li.nav-item= link_to(PaymentReminder.model_name.human(count: 2), '#reminders', data: { bs_toggle: 'tab' }, class: 'nav-link')
-  %li.nav-item= link_to(PaymentProviderConfig.model_name.human(count: 2), '#payment_provider_configs', data: { bs_toggle: 'tab' }, class: 'nav-link')
+  - if Settings.payment_providers.present?
+    %li.nav-item= link_to(PaymentProviderConfig.model_name.human(count: 2), '#payment_provider_configs', data: { bs_toggle: 'tab' }, class: 'nav-link')
   %li.nav-item= link_to(t('.layout'), '#layout', data: { bs_toggle: 'tab' }, class: 'nav-link')
 
   = render_extensions :form_tabs

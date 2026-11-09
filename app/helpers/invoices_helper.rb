@@ -86,11 +86,11 @@ module InvoicesHelper
     Dropdown::Invoices::Evaluation.new(self, params, :download).export
   end
 
-  def invoices_print_dropdown
+  def invoices_print_dropdown(invoice = nil)
     if parent.is_a?(InvoiceRun) && Message::LetterWithInvoice.exists?(invoice_run: parent)
       Dropdown::LetterWithInvoice.new(self, :print).print
     else
-      Dropdown::Invoices.new(self, :print).print
+      Dropdown::Invoices.new(self, :print, invoice: invoice).print
     end
   end
 

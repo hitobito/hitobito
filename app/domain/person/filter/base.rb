@@ -16,7 +16,7 @@ class Person::Filter::Base < Filter::Base
     nil
   end
 
-  def includes_minimized?
+  def include_minimized?
     false
   end
 

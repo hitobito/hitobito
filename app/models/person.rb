@@ -392,10 +392,8 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     def only_public_data
       # minimized_at is not part of PUBLIC_ATTRS (never exposed via JSON/OIDC/exports), but is
       # still selected here so Person#minimized? and the PersonAbility checks that rely on it
-      # keep working on records fetched through this scope. :id is moved to the end: when a
-      # caller does `.distinct.count` with no column, ActiveRecord aliases the last selected
-      # column to count it, so that column must never be nullable.
-      attrs = (PUBLIC_ATTRS + [:minimized_at] - [:id]) + [:id]
+      # keep working on records fetched through this scope.
+      attrs = [:minimized_at] + PUBLIC_ATTRS
       select(attrs.collect { |a| "people.#{a}" })
     end
 
@@ -476,6 +474,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def minimized?
+    # has_attribute? guards against :minimized_at missing from a custom select
     has_attribute?(:minimized_at) && minimized_at?
   end
 

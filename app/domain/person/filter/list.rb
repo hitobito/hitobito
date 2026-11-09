@@ -31,7 +31,7 @@ class Person::Filter::List < Filter::List
       user,
       (group_range? ? @group : nil),
       include_ended_roles: chain.include_ended_roles?,
-      include_minimized: chain.includes_minimized?
+      include_minimized: chain.include_minimized?
     )
     Person.accessible_by(ability).select(:contact_data_visible)
   end

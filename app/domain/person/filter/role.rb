@@ -72,7 +72,7 @@ class Person::Filter::Role < Person::Filter::Base
     args[:kind].present?
   end
 
-  def includes_minimized?
+  def include_minimized?
     %w[deleted inactive inactive_but_existing].include?(args[:kind])
   end
 

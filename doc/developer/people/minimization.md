@@ -2,35 +2,41 @@
 
 ## Overview
 
-Minimizing a person (`People::Minimizer`) is the archive-friendly alternative to deleting
-them: it keeps selected fields, their id and historical event participations around while 
-redacting the rest of their data. `Person#minimized_at` is set when this happens, 
-and cleared automatically as soon as the person gets a new role again
-(`Role#reset_person_minimized_at`, `Event::Participation#reset_person_minimized_at`) 
-— there is no separate "reactivate" action.
+`People::Minimizer` minimizes a person. This is a softer alternative to deleting a person: it
+keeps some fields, the person's id, and their event participations, and clears the rest of the
+data.
 
-A minimized person is hidden everywhere people are listed, searched or picked (group member
-lists, "Without Roles", global search, person-picker typeaheads, households, mailing list
-recipients) via the `Person.not_minimized` scope, and their profile becomes inaccessible via
-`PersonAbility`'s `general.not_minimized` condition, which denies every action (including `:show`)
-on a minimized person regardless of the acting user's permissions.
+`Person#minimized_at` records when a person was minimized. A new role clears it automatically
+(`Role#reset_person_minimized_at`, `Event::Participation#reset_person_minimized_at`). There is no
+separate "reactivate" action.
 
-The one deliberate exception is the personal filter on the people index: filtering by a past role
-(`kind` `deleted`, `inactive` or `inactive_but_existing`) still surfaces minimized people, so admins
-can find them when browsing by role history. `Person::Filter::Role#includes_minimized?` drives this,
-and `Person::Filter::List` passes it through as `include_minimized:` to `PersonReadables`.
+The `Person.not_minimized` scope hides a minimized person from group member lists, "Without
+Roles", global search, person-picker typeaheads, households, and mailing list recipients.
+`PersonAbility`'s `general.not_minimized` condition blocks every action on a minimized person,
+including `:show`, no matter the acting user's permissions. So a minimized person's profile is not
+accessible.
 
-Event participation lists are a second, narrower exception: they keep listing a minimized
-participant (that data has its own retention requirement) but never link to their profile, and
-`Person#to_s` falls back to a translated placeholder ("(inaktive Person)") when every name field is
-blank.
+One filter is an exception: the people index can filter by a past role (`kind` `deleted`,
+`inactive`, or `inactive_but_existing`). This filter still shows minimized people, so admins can
+find them by role history. `Person::Filter::Role#include_minimized?` controls this, and
+`Person::Filter::List` passes the result to `PersonReadables` as `include_minimized:`.
 
-Statistics, role-based counts, exports and `Event::ParticipationFilter` are deliberately left
-alone — minimized people still count there, only lists/search/selection hide them.
+Event participation lists are a second exception. They still list a minimized participant,
+because that data has its own retention requirement, but they never link to the person's profile.
+When all name fields are blank, `Person#to_s` shows a translated placeholder
+("(inaktive Person)") instead.
+
+Statistics, role-based counts, exports, and `Event::ParticipationFilter` ignore minimization on
+purpose: minimized people still count there, only lists, search, and selection hide them.
 
 ## Customizing
 
-The core only decides *that* minimized people are hidden from person-facing lists and *that* their
-profile is blocked — it never decides what actually gets cleared. Each wagon decides that for
-itself by overriding `minimize` in its own `People::Minimizer` extension (reopened the same way
-other core classes are, see [Wagons](../common/wagons.md)).
+The core decides two things: minimized people are hidden from person-facing lists, and their
+profile is blocked. The core does not decide what data gets cleared.
+
+Each wagon decides that for itself: override `minimize` in your own `People::Minimizer`
+extension, the same way you reopen other core classes (see [Wagons](../common/wagons.md)).
+
+When a wagon view links to a person, wrap the link in `link_to_if(can?(:show, person), ...)`.
+`can?(:show, person)` is false for a minimized person, so this hides the link instead of pointing
+at a blocked profile.

@@ -47,25 +47,6 @@
       "note": "No SQL Injection possible here, because no user data is handled"
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 122,
-      "fingerprint": "98b26f60d776fd41ee6f088c833725145be9aac2d7c5b33780241c273622db42",
-      "check_name": "EOLRails",
-      "message": "Support for Rails 8.0.5.1 ends on 2026-11-07",
-      "file": "Gemfile.lock",
-      "line": 574,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "Medium",
-      "cwe_id": [
-        1104
-      ],
-      "note": "Ticket exists, see https://github.com/hitobito/hitobito/issues/4415"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "3a4aa5477a1a1e079bb24001f19c237f1075d2c547f3f814dcef0fa113de2d23",
@@ -214,6 +195,25 @@
       "note": "only used internally"
     },
     {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "568facaa18e3cdffca18a46d64fb6e479b45888a2ca369db36d1de79611fa72f",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 8.0.5.1 ended on 2026-11-07",
+      "file": "Gemfile.local.lock",
+      "line": 577,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "5edf6ee8a7fefec9dabcf24c14538da019fcf06e4d8e92a52672919027aece7c",
@@ -289,7 +289,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/controllers/event/participations_controller.rb",
-      "line": 245,
+      "line": 247,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"CASE id\\n#{*ids.map.with_index do\n \"WHEN #{id} THEN #{index}\"\n end}\\nEND\")",
       "render_path": null,
@@ -312,7 +312,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/event/participation.rb",
-      "line": 118,
+      "line": 122,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "Arel.sql(\"CASE event_participations.participant_type\\n  WHEN 'Person' THEN #{Person.order_by_name_statement}\\n  WHEN 'Event::Guest' THEN #{Event::Guest.order_by_name_statement}\\n  ELSE ''\\nEND\\n\".squish)",
       "render_path": null,
@@ -373,25 +373,6 @@
         89
       ],
       "note": "All input values are ensured to be integer and thus not dangerous"
-    },
-    {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 121,
-      "fingerprint": "edf687f759ec9765bd5db185dbc615c80af77d6e7e19386fc42934e7a80307af",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 3.2.6 ended on 2026-03-31",
-      "file": ".ruby-version",
-      "line": 1,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        1104
-      ],
-      "note": "Ticket exists and is planned for this quarter, see https://github.com/hitobito/hitobito/issues/3689"
     },
     {
       "warning_type": "SQL Injection",

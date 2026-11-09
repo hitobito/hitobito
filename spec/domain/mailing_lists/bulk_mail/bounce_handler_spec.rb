@@ -238,60 +238,68 @@ describe MailingLists::BulkMail::BounceHandler do
       codes = ["Iiih, Mehl!", "550 No such user"]
       expect(bounce_handler.analyze_diagnostic_codes(codes)).to eq :block
     end
-  end
 
-  describe "#analyze_diagnostic_code can return" do
     it "matches case insensitively" do
       expect(bounce_handler.analyze_diagnostic_code("550 no such user")).to eq :block
       expect(bounce_handler.analyze_diagnostic_code("550 NO SUCH USER")).to eq :block
     end
+  end
 
+  describe "#analyze_diagnostic_code can return" do
     it "block" do
-      expect(bounce_handler.analyze_diagnostic_code("550 No such user")).to eq :block
-      expect(bounce_handler.analyze_diagnostic_code("550 5.1.1 <testing@example.com>... User unknown")).to eq :block
+      [
+        "550 No such user",
+        "550 5.1.1 <testing@example.com>... User unknown",
+        "550-5.1.1 user unknown 550 5.1.1 Unknown recipient.",
+        "550 5.1.1 [R5] Unknown recipient (a6574d87-d7a2-11f1-b2df-4232c2145059)"
+      ].each do |code|
+        expect(bounce_handler.analyze_diagnostic_code(code)).to eq :block
+      end
     end
 
     it "continue" do
-      expect(bounce_handler.analyze_diagnostic_code(
-        "550 5.1.1 MXIN505 mailbox   testing@example.com    is full"
-      )).to eq :continue
-      expect(bounce_handler.analyze_diagnostic_code(
-        "550 5.1.1 MXIN505 mailbox testing@example.com is full"
-      )).to eq :continue
-      expect(bounce_handler.analyze_diagnostic_code("550 5.7.1 message content rejected")).to eq :continue
-      expect(bounce_handler.analyze_diagnostic_code(
-        "552-Requested mail action aborted: exceeded storage allocation 552-Quota exceeded. 552 For explanation visit https://postmaster.gmx.net/en/case?c=r1503"
-      )).to eq :continue
-      expect(bounce_handler.analyze_diagnostic_code("552 5.2.2 <.+@.+>: user is over quota")).to eq :continue
-      expect(
-        bounce_handler.analyze_diagnostic_code("550-Callout verification failed: 550 552 5.2.2 <.+@.+> Quota exceeded")
-      ).to eq :continue
+      [
+        "550 5.1.1 MXIN505 mailbox   testing@example.com    is full",
+        "550 5.1.1 MXIN505 mailbox testing@example.com is full",
+        "550 5.7.1 message content rejected",
+        "552-Requested mail action aborted: exceeded storage allocation 552-Quota exceeded. 552 For explanation visit https://postmaster.gmx.net/en/case?c=r1503",
+        "552 5.2.2 <.+@.+>: user is over quota",
+        "550-Callout verification failed: 550 552 5.2.2 <.+@.+> Quota exceeded",
+        "Message expired, connection timed out",
+        "550 5.4.316 Message expired, connection refused"
+      ].each do |code|
+        expect(bounce_handler.analyze_diagnostic_code(code)).to eq :continue
+      end
     end
 
     it "register" do
-      expect(bounce_handler.analyze_diagnostic_code("550 Unrouteable address")).to eq :register
-      expect(bounce_handler.analyze_diagnostic_code(
-        "554 30 Sorry, your message to   testing@example.com   cannot be delivered. This mailbox is disabled"
-      )).to eq :register
-      expect(bounce_handler.analyze_diagnostic_code(
+      [
+        "550 Unrouteable address",
+        "554 30 Sorry, your message to   testing@example.com   cannot be delivered. This mailbox is disabled",
         "554 30 Sorry, your message to testing@example.com cannot be delivered. This mailbox is disabled"
-      )).to eq :register
+      ].each do |code|
+        expect(bounce_handler.analyze_diagnostic_code(code)).to eq :register
+      end
     end
 
     it "internal_error" do
-      expect(bounce_handler.analyze_diagnostic_code(
+      [
         "550-5.7.1 [42] Messages with multiple addresses in From: header are 550-5.7.1 not accepted. " \
-        "For more information, go to 550-5.7.1"
-      )).to eq :internal_error
-
-      expect(bounce_handler.analyze_diagnostic_code("550 From contains invalid characters.")).to eq :internal_error
+        "For more information, go to 550-5.7.1",
+        "550 From contains invalid characters."
+      ].each do |code|
+        expect(bounce_handler.analyze_diagnostic_code(code)).to eq :internal_error
+      end
     end
 
     it "unknown" do
-      expect(bounce_handler.analyze_diagnostic_code(
-        "Dit is jetzt peinlich... Ick will die Mail für <matze@example.com> nich, jeh ma wech mit dem"
-      )).to eq :unknown
-      expect(bounce_handler.analyze_diagnostic_code("Iiih, Mehl!")).to eq :unknown
+      [
+        "Dit is jetzt peinlich... Ick will die Mail für <matze@example.com> nich, jeh ma wech mit dem",
+        "Iiih, Mehl!",
+        "Message expired, connection reset"
+      ].each do |code|
+        expect(bounce_handler.analyze_diagnostic_code(code)).to eq :unknown
+      end
     end
   end
 end

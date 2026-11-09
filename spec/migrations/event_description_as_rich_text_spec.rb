@@ -39,4 +39,43 @@ RSpec.describe EventDescriptionAsRichText, type: :migration do
       expect(rich_text_attributes(" \n")).to be_nil
     end
   end
+
+  describe "#down" do
+    let(:event) { events(:top_event) }
+    let!(:event_without_description) { Fabricate(:event) }
+
+    def description_of(event)
+      ActiveRecord::Base.connection.select_value(
+        "SELECT description FROM event_translations WHERE event_id = #{event.id}"
+      )
+    end
+
+    before do
+      ActiveRecord::Migration.verbose = false
+      event.update!(description: "<div>Erste <strong>Zeile</strong><br>Zweite Zeile</div>")
+      migration.migrate(:down)
+    end
+
+    after do
+      ActiveRecord::Migration.verbose = true
+      ActiveRecord::Base.connection.schema_cache.clear!
+      Event::Translation.reset_column_information
+    end
+
+    it "writes the plain text into the description of the translation" do
+      expect(description_of(event)).to eq("Erste Zeile\nZweite Zeile")
+    end
+
+    it "leaves translations without description empty" do
+      expect(description_of(event_without_description)).to be_nil
+    end
+
+    it "removes the event descriptions" do
+      expect(ActionText::RichText.where(record_type: "Event::Translation")).not_to exist
+    end
+
+    it "keeps other rich texts" do
+      expect(ActionText::RichText.where(id: action_text_rich_texts(:login_de_body).id)).to exist
+    end
+  end
 end

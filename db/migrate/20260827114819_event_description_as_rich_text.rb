@@ -15,18 +15,18 @@ class EventDescriptionAsRichText < ActiveRecord::Migration[8.0]
 
   def down
     add_column :event_translations, :description, :text
-    ActionText::RichText
-      .where(record_type: "Event::Translation", name: "description").find_each do |action_text|
-      PaperTrail.request(enabled: false) do
-        translation = action_text.record
-        if action_text.body.present? && translation.present?
-          translation.update_column(
-            :description, action_text.body.to_plain_text
-          )
-        end
-        action_text.destroy!
-      end
-    end
+    execute(<<~SQL)
+      UPDATE event_translations
+      SET description = action_text_rich_texts.plain_text_body
+      FROM action_text_rich_texts
+      WHERE action_text_rich_texts.record_type = 'Event::Translation'
+        AND action_text_rich_texts.name = 'description'
+        AND action_text_rich_texts.record_id = event_translations.id
+    SQL
+    execute(<<~SQL)
+      DELETE FROM action_text_rich_texts
+      WHERE record_type = 'Event::Translation' AND name = 'description'
+    SQL
   end
 
   private

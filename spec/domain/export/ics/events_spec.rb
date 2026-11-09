@@ -49,11 +49,12 @@ describe Export::Ics::Events do
     let(:contact) { people(:top_leader) }
 
     before do
+      event.update!(description: "<div>Erste <strong>Zeile</strong><br>Zweite Zeile</div>")
       allow(event).to receive(:contact).and_return(contact)
     end
 
     it do
-      is_expected.to include(event.plain_text_description)
+      is_expected.to include("Erste Zeile\nZweite Zeile")
       is_expected.to include(contact.person_name)
       is_expected.to include(contact.email)
       url = Rails.application.routes.url_helpers.group_event_url(group_id: event.groups.first.id, id: event.id,
@@ -86,7 +87,7 @@ describe Export::Ics::Events do
       it "includes no contact attributes when none of them is visible" do
         event.visible_contact_attributes = %w[address]
 
-        is_expected.to eq(event.plain_text_description)
+        is_expected.to eq("Erste Zeile\nZweite Zeile")
       end
     end
   end

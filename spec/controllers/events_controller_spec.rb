@@ -403,6 +403,8 @@ describe EventsController do
       end
 
       it "ignores plain_text_description param" do
+        event.update!(description: "<div>Beschreibung</div>")
+
         put :update, params: {
           group_id: group.id,
           id: event.id,
@@ -410,6 +412,7 @@ describe EventsController do
         }
 
         expect(event.reload.name).to eq "testevent"
+        expect(event.plain_text_description).to eq "Beschreibung"
       end
 
       it "creates, updates and destroys questions" do

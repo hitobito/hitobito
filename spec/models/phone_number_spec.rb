@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -31,6 +31,47 @@ describe PhoneNumber do
       a1 = Fabricate.build(:phone_number, number: "0441234567")
       expect(a1.valid?).to eq(true)
       expect(a1.number).to eq("+41 44 123 45 67")
+    end
+  end
+
+  context "category scopes" do
+    let(:person) { people(:top_leader) }
+    let!(:mobile) do
+      Fabricate(:phone_number, contactable: person,
+        category: contact_account_categories(:phone_number_person_mobile))
+    end
+    let!(:landline) do
+      Fabricate(:phone_number, contactable: person,
+        category: contact_account_categories(:phone_number_person_landline))
+    end
+    let!(:work) do
+      Fabricate(:phone_number, contactable: person,
+        category: contact_account_categories(:phone_number_person_work))
+    end
+
+    it ".home finds numbers by home_category_keys" do
+      expect(person.phone_numbers.home).to eq [landline]
+    end
+
+    it ".mobile finds numbers by mobile_category_keys" do
+      expect(person.phone_numbers.mobile).to eq [mobile]
+    end
+
+    it ".home follows a configured home_category_keys" do
+      allow(PhoneNumber).to receive(:home_category_keys).and_return(%w[landline work])
+
+      expect(person.phone_numbers.home).to match_array [landline, work]
+    end
+
+    it "#home? and #mobile? match the same categories as the scopes" do
+      expect([mobile, landline, work].map { |n| [n.home?, n.mobile?] })
+        .to eq [[false, true], [true, false], [false, false]]
+    end
+
+    it "#home? follows a configured home_category_keys" do
+      allow(PhoneNumber).to receive(:home_category_keys).and_return(%w[landline work])
+
+      expect(work).to be_home
     end
   end
 

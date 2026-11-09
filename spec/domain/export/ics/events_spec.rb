@@ -70,9 +70,17 @@ describe Export::Ics::Events do
       it "includes only the visible contact attributes" do
         event.visible_contact_attributes = %w[phone_number]
 
-        is_expected.to include("showme: +41 44 123 45 67")
+        is_expected.to include("Andere (showme): +41 44 123 45 67")
         is_expected.not_to include(contact.person_name)
         is_expected.not_to include(contact.email)
+      end
+
+      it "labels a phone number without label by its category only" do
+        event.visible_contact_attributes = %w[phone_number]
+        contact.phone_numbers.create!(number: "+41 79 123 45 67", public: true,
+          category: contact_account_categories(:phone_number_person_mobile))
+
+        is_expected.to include("Mobil: +41 79 123 45 67")
       end
 
       it "includes no contact attributes when none of them is visible" do

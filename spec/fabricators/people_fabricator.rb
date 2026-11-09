@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -32,7 +32,10 @@ Fabricator(:person_with_address_and_phone, from: :person_with_address) do
 end
 
 Fabricator(:person_with_phone, from: :person) do
-  phone_numbers { [Fabricate(:phone_number, label: "Mobil")] }
+  phone_numbers do
+    [Fabricate(:phone_number,
+      category_id: ActiveRecord::FixtureSet.identify(:phone_number_person_mobile))]
+  end
 end
 
 Fabricator(:company, from: :person) do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023-2024, Puzzle ITC. This file is part of
+#  Copyright (c) 2023-2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -25,7 +25,12 @@ describe Export::Pdf::Participation::PersonAndEvent do
   let(:person) do
     Fabricate(
       :person_with_address,
-      phone_numbers: [Fabricate.build(:phone_number, label: "Mobil")],
+      phone_numbers: [
+        Fabricate.build(:phone_number,
+          category: contact_account_categories(:phone_number_person_mobile)),
+        Fabricate.build(:phone_number,
+          category: contact_account_categories(:phone_number_person_work))
+      ],
       company_name: Faker::Company.name,
       email: "dude@example.com"
     )
@@ -41,7 +46,7 @@ describe Export::Pdf::Participation::PersonAndEvent do
       [57, 751, person.person_name],
       [57, 738, person.address],
       [57, 726, "#{person.zip_code} #{person.town}"],
-      [57, 704, person.phone_numbers.first.to_s],
+      [57, 704, person.phone_numbers.mobile.first.to_s],
       [57, 692, person.email],
       [301, 751, event.name],
       [301, 728, event.number],

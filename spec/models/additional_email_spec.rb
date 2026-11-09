@@ -88,4 +88,20 @@ describe AdditionalEmail do
       expect(version.main).to eq(person)
     end
   end
+
+  describe ".with_category_key" do
+    let(:person) { people(:top_leader) }
+    let!(:work_email) do
+      Fabricate(:additional_email, contactable: person,
+        category: contact_account_categories(:additional_email_person_work))
+    end
+    let!(:private_email) do
+      Fabricate(:additional_email, contactable: person,
+        category: contact_account_categories(:additional_email_person_private))
+    end
+
+    it "finds emails by category key" do
+      expect(person.additional_emails.with_category_key(:work)).to eq [work_email]
+    end
+  end
 end

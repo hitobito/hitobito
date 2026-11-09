@@ -27,7 +27,7 @@ module NavigationHelper
      if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) }},
 
     {label: :invoices,
-     url: :first_group_invoices_or_root_path,
+     url: :closest_group_invoices_or_root_path,
      icon_name: "money-bill-alt",
      if: ->(_) { can?(:index, Invoice) },
      active_for: %w[invoices
@@ -167,7 +167,7 @@ module NavigationHelper
       Array(inactive_for).none? { |p| request.path =~ %r{/#{p}/?} })
   end
 
-  def first_group_invoices_or_root_path
+  def closest_group_invoices_or_root_path
     finance_layer_ids = current_ability.user_finance_layer_ids
     return root_path if finance_layer_ids.blank?
 

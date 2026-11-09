@@ -21,7 +21,7 @@ module Export::Pdf
       private
 
       def build_pdf(options)
-        pdf = Export::Pdf::Document.new(margin: MARGIN).pdf
+        pdf = Export::Pdf::Document.new(margin: MARGIN, compress: true).pdf
         customize(pdf)
 
         invoice_count = @invoices.count

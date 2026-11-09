@@ -86,18 +86,19 @@ email:
         - "550 Recipient address does not exist"
         - "552 5.2.2 <.+@.+>: Recipient address rejected: Address does not exist"
         - "550 Mailbox not found"
+        - "550 sorry, user unknown"
+        - '550 5\.1\.1 (\[R\d+\] )?Unknown recipient'
+        - "Recipient email is no longer valid"
+        - "sorry, no mailbox by that name"
       continue:
         - "554 5.7.1 Spam message rejected"
         - '550 5.1.1 MXIN505 mailbox\s+.+@.+\s+is full'
-        - "552 5.2.2 Mailbox is full"
+        - "Mailbox has exceeded the limit"
         - "550 5.7.1 message content rejected"
         - "554 5.7.1 Message cannot be accepted, spam rejection"
         - "552-5.2.2 The recipient's inbox is out of storage space and inactive."
         - "550 High probability of spam"
         - "554 Your email is considered spam"
-        - "quota exceeded"
-        - "mailbox full"
-        - "over quota"
         - "452-4.2.2 The recipient's inbox is out of storage space"
         - "550 MXIN505 mailbox"
         - "550 Mailbox is full / Blocks limit exceeded / Inode limit exceeded"
@@ -118,7 +119,7 @@ email:
         - "X-Postfix; Message delivery failed"
         - "X-Postfix; Server certificate not trusted"
         - "X-Postfix; Spam message rejected"
-        - "Message expired, connection timed out"
+        - 'Message expired, connection (timed out|refused)'
         - '421 \d\.\d\.\d'
         - "Too many concurrent SMTP connections"
         - "451 4.7.1 Try again later"
@@ -132,6 +133,12 @@ email:
         - "554 5.7.0 Reject, id=.+ - spam"
         - "OUTSCATTER - Marked as spam by sending server"
         - "550 5.7.1 Command rejected"
+        - "Rejected by spam filter"
+        - "Email flagged as Spam"
+        - "Content indicates SPAM"
+        - "quota exceeded"
+        - "mailbox (is )?full"
+        - "over quota"
       register:
         - "550 Unrouteable address"
         - "550-Requested action not taken: mailbox unavailable"
@@ -161,6 +168,9 @@ email:
         - "550 account locked"
         - "SMTPUTF8 is required, but was not offered by host"
         - '554 5.7.1 Access denied'
+        - "Address is not configured to receive emails"
+        - "user disabled; cannot receive new mail"
+        - "not permitted to relay"
       internal_error:
         - "554-Transaction failed 554-Reject due to policy restrictions. 554 For explanation visit https://postmaster.gmx.net/en/case?c=r0735"
         - "554-Transaction failed 554-Reject due to policy restrictions. 554 For explanation visit https://postmaster.gmx.net/en/case?c=r0710"
@@ -182,3 +192,5 @@ email:
         - "Email account is sending too much emails"
         - "reputation ratelimit in effect"
         - "very low reputation of the sending IP"
+        - "Message lacks SPF/DKIM/DMARC Auth Records"
+        - "Failed sender authentication"

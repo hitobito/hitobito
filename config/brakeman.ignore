@@ -195,25 +195,6 @@
       "note": "only used internally"
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 120,
-      "fingerprint": "568facaa18e3cdffca18a46d64fb6e479b45888a2ca369db36d1de79611fa72f",
-      "check_name": "EOLRails",
-      "message": "Support for Rails 8.0.5.1 ended on 2026-11-07",
-      "file": "Gemfile.local.lock",
-      "line": 577,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        1104
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "5edf6ee8a7fefec9dabcf24c14538da019fcf06e4d8e92a52672919027aece7c",
@@ -373,6 +354,25 @@
         89
       ],
       "note": "All input values are ensured to be integer and thus not dangerous"
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 8.0.5.1 ended on 2026-11-07",
+      "file": "Gemfile.lock",
+      "line": 572,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ],
+      "note": "Ignoring that for now"
     },
     {
       "warning_type": "SQL Injection",

@@ -43,6 +43,9 @@ describe AdditionalAddressResource, type: :resource do
         expect(data.organization).to eq true
         expect(data.organization_name).to eq "Acme Corp"
       end
+
+      it_behaves_like "contact account resource",
+        fabricator: :additional_address, category_fixture: :additional_address_person_work
     end
   end
 end

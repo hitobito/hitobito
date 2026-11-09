@@ -83,7 +83,7 @@ module PaperTrail
     end
 
     def normalize(attr, value) # rubocop:todo Metrics/CyclomaticComplexity, Metrics/AbcSize
-      value = value.to_plain_text if value.is_a?(ActionText::Content)
+      value = rich_text_plain_text(value) if item_class == ActionText::RichText
 
       if attr.to_s.end_with?("_id") && value.present?
         belongs_to_change_args(attr, value)
@@ -124,6 +124,11 @@ module PaperTrail
       else
         value
       end
+    end
+
+    def rich_text_plain_text(value)
+      value = ActionText::Content.new(value) if value.is_a?(String)
+      value&.to_plain_text
     end
 
     def item_class = @item_class ||= version.item_type.constantize

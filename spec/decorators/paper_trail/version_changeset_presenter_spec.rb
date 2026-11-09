@@ -179,4 +179,11 @@ describe PaperTrail::VersionChangesetPresenter, :draper_with_helpers, versioning
     expect(string).to eq("Beschreibung (de) Von Top Course wurde von " \
       "<i>Erste Zeile\nZweite &lt;Zeile&gt;</i> auf <i>Neue Zeile\nNoch eine</i> geändert.")
   end
+
+  it "shows rich text html strings as plain text" do
+    version.update!(item: events(:top_course).description)
+    string = presenter.attribute_change(:body, "<div>Alte <strong>Zeile</strong></div>", nil)
+
+    expect(string).to eq("Beschreibung (de) Von Top Course <i>Alte Zeile</i> wurde gelöscht.")
+  end
 end

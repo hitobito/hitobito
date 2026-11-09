@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #
-#  Copyright (c) 2022, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2022-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -32,13 +32,23 @@ describe People::TotpDisableController do
       expect(bottom_member.two_fa_secret).to eq("")
     end
 
-    it "does not disable totp of bottom_member when forced" do
-      expect(bottom_member.roles.first.class)
+    it "disables totp of bottom_member when enforced" do
+      allow_any_instance_of(bottom_member.roles.first.class)
+        .to receive(:two_factor_authentication_enforced)
+        .and_return(true)
+
+      post :create, params: {group_id: bottom_layer.id, id: bottom_member.id}
+
+      expect(bottom_member.reload.two_factor_authentication).to be_nil
+    end
+
+    it "does not disable own totp when enforced" do
+      allow_any_instance_of(Group::TopGroup::Leader)
         .to receive(:two_factor_authentication_enforced)
         .and_return(true)
 
       expect do
-        post :create, params: {group_id: bottom_layer.id, id: bottom_member.id}
+        post :create, params: {group_id: groups(:top_group).id, id: top_leader.id}
       end.to raise_error(CanCan::AccessDenied)
     end
   end

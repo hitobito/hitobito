@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2025, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -1863,54 +1863,73 @@ describe PersonAbility do
   end
 
   context :totp_reset do
+    let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+
+    it "can reset herself" do
+      is_expected.to be_able_to(:totp_reset, person)
+    end
+
+    it "can reset herself when enforced" do
+      allow(person).to receive(:two_factor_authentication_enforced?).and_return(true)
+      is_expected.to be_able_to(:totp_reset, person)
+    end
+
+    it "can not reset other person" do
+      is_expected.to_not be_able_to(:totp_reset, people(:bottom_member))
+    end
+
+    it "can not reset managed person" do
+      managed = Fabricate(:person)
+      PeopleManager.create!(managed: managed, manager: person)
+      is_expected.to_not be_able_to(:totp_reset, managed)
+    end
+  end
+
+  context :totp_disable do
+    def enforce_totp(person)
+      allow(person).to receive(:two_factor_authentication_enforced?).and_return(true)
+    end
+
     context "as admin" do
       let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
 
-      it "can reset other person" do
-        is_expected.to be_able_to(:totp_reset, people(:bottom_member))
+      it "can disable other person" do
+        is_expected.to be_able_to(:totp_disable, people(:bottom_member))
       end
-    end
 
-    context "as non admin" do
-      let(:role) { Fabricate(Group::BottomLayer::Member.name.to_sym, group: groups(:bottom_layer_one)) }
-
-      it "can not reset other person" do
-        is_expected.to_not be_able_to(:totp_reset, people(:bottom_member))
+      it "can disable other person when enforced" do
+        enforce_totp(people(:bottom_member))
+        is_expected.to be_able_to(:totp_disable, people(:bottom_member))
       end
-    end
 
-    context "layer and below full" do
-      let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+      it "can disable herself" do
+        is_expected.to be_able_to(:totp_disable, person)
+      end
 
-      it "can reset other person" do
-        is_expected.to be_able_to(:totp_reset, people(:bottom_member))
+      it "can not disable herself when enforced" do
+        enforce_totp(person)
+        is_expected.to_not be_able_to(:totp_disable, person)
       end
     end
 
     context "layer full" do
       let(:role) { Fabricate(Group::TopGroup::LocalGuide.name.to_sym, group: groups(:top_group)) }
-
-      it "can reset other person" do
-        Fabricate(Group::TopGroup::Member.name.to_sym, person: people(:bottom_member), group: groups(:top_group))
-        is_expected.to be_able_to(:totp_reset, people(:bottom_member))
+      let(:other) do
+        Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group)).person
       end
-    end
-  end
 
-  context :totp_disable do
-    context "as admin" do
-      let(:role) { Fabricate(Group::TopGroup::Leader.name.to_sym, group: groups(:top_group)) }
+      it "can disable other person in same layer when enforced" do
+        enforce_totp(other)
+        is_expected.to be_able_to(:totp_disable, other)
+      end
 
-      it "can not disable other person when forced" do
-        expect(people(:bottom_member).roles.first.class)
-          .to receive(:two_factor_authentication_enforced)
-          .and_return(true)
-
+      it "can not disable other person in layer below" do
         is_expected.to_not be_able_to(:totp_disable, people(:bottom_member))
       end
 
-      it "can disable other person" do
-        is_expected.to be_able_to(:totp_disable, people(:bottom_member))
+      it "can not disable herself when enforced" do
+        enforce_totp(person)
+        is_expected.to_not be_able_to(:totp_disable, person)
       end
     end
 
@@ -1919,6 +1938,23 @@ describe PersonAbility do
 
       it "can not disable other person" do
         is_expected.to_not be_able_to(:totp_disable, people(:bottom_member))
+      end
+
+      it "can disable herself" do
+        is_expected.to be_able_to(:totp_disable, person)
+      end
+    end
+
+    context "as manager" do
+      let(:role) { roles(:bottom_member) }
+      let(:managed) do
+        Fabricate(:person).tap { |p| PeopleManager.create!(managed: p, manager: person) }
+      end
+
+      before { managed }
+
+      it "can disable managed person" do
+        is_expected.to be_able_to(:totp_disable, managed)
       end
     end
   end

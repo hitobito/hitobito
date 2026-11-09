@@ -29,7 +29,7 @@ module Export::Pdf::Messages
       options = @options.merge(cursors: cursors)
       if invoice.qr?
         Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render
-      else
+      elsif !invoice.no_ps?
         Export::Pdf::Invoice::PaymentSlip.new(pdf, invoice, options).render
       end
     end

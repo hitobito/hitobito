@@ -30,9 +30,6 @@ class PhoneNumber < ActiveRecord::Base
   class_attribute :home_category_keys, default: %w[landline].freeze
   class_attribute :mobile_category_keys, default: %w[mobile].freeze
 
-  scope :with_category_key, ->(keys) {
-    joins(:category).where(contact_account_categories: {key: keys})
-  }
   scope :home, -> { with_category_key(home_category_keys) }
   scope :mobile, -> { with_category_key(mobile_category_keys) }
 

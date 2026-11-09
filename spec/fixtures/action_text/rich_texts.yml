@@ -42,7 +42,7 @@ bulk_mail_with_failed_de_body:
   Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>{failed-recipients}
   <br/><br/>
   '
-  plain_text_body: 'Deine Mail an {mail-to} wurde verschickt:\n\n Betreff: {mail-subject}\n Zeit: {delivered-at}\n Empfänger: {total-succeeded-recipients}/{total-recipients}\n\n Folgende Empfänger konnten nicht zugestellt werden:\n\n{failed-recipients} '
+  plain_text_body: 'Deine Mail an {mail-to} wurde verschickt:\n\n Betreff: {mail-subject}\n Zeit: {delivered-at}\n Empfänger: {total-succeeded-recipients}/{total-recipients}\n\n Folgende Empfänger konnten nicht zugestellt werden:\n\n{failed-recipients}\n\n '
 
 content_invoice_notification_body:
   record: content_invoice_notification (CustomContent::Translation)
@@ -55,7 +55,7 @@ content_invoice_notification_body:
    {invoice-total}<br/><br/>
    {payment-information}<br/><br/>
   '
-  plain_text_body: 'Hallo {recipient-name}\n\n Rechnung von:\n\n Absender: {group-address}\n\n \n\n {invoice-items}\n\n {invoice-total}\n\n {payment-information}'
+  plain_text_body: 'Hallo {recipient-name} Rechnung von: Absender: {group-address}\n\n \n\n {invoice-items}\n\n {invoice-total}\n\n {payment-information}\n\n'
 
 person_add_request_person_body:
   record: person_add_request_person (CustomContent::Translation)
@@ -90,7 +90,7 @@ person_add_request_approved_body:
    {person-name} wurde zu {request-body} hinzugefügt.<br/><br/>
    {approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>
    {approver-roles}<br/><br/>'
-  plain_text_body: 'Hallo {recipient-name}\n\n {approver-name} hat deine Anfrage für {person-name} freigegeben.\n\n {person-name} wurde zu {request-body} hinzugefügt.\n\n {approver-name} hat folgende schreibberechtigten Rollen: \n\n {approver-roles}'
+  plain_text_body: 'Hallo {recipient-name}\n\n {approver-name} hat deine Anfrage für {person-name} freigegeben.\n\n {person-name} wurde zu {request-body} hinzugefügt.\n\n {approver-name} hat folgende schreibberechtigten Rollen: \n\n {approver-roles}\n\n'
 
 person_add_request_rejected_body:
   record: person_add_request_rejected (CustomContent::Translation)
@@ -100,7 +100,7 @@ person_add_request_rejected_body:
     {person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>
     {rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>
     {rejecter-roles}<br/><br/>'
-  plain_text_body: 'Hallo {recipient-name}\n\n {rejecter-name} hat deine Anfrage für {person-name} abgelehnt.\n\n {person-name} wird nicht zu {request-body} hinzugefügt.\n\n {rejecter-name} hat folgende schreibberechtigten Rollen: \n\n {rejecter-roles}'
+  plain_text_body: 'Hallo {recipient-name}\n\n {rejecter-name} hat deine Anfrage für {person-name} abgelehnt.\n\n {person-name} wird nicht zu {request-body} hinzugefügt.\n\n {rejecter-name} hat folgende schreibberechtigten Rollen: \n\n {rejecter-roles}\n\n'
 
 address_validation_checks_body:
   record: address_validation_checks (CustomContent::Translation)
@@ -185,7 +185,7 @@ content_user_password_override_body:
     Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>
     Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\"
     ein neues Passwort anfordern
-  plain_text_body: 'Hallo {recipient-name}, \n{taker-name} hat auf [#{Settings.application.name}] das Passwort deines Accounts zurückgesetzt.\nDies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. \nIm Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\" nein neues Passwort anfordern'
+  plain_text_body: 'Hallo {recipient-name}, \n{taker-name} hat auf [#{Settings.application.name}] das Passwort deines Accounts zurückgesetzt. Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. \nIm Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\" nein neues Passwort anfordern'
 
 content_inactivity_block_warning_body:
   record: content_inactivity_block_warning (CustomContent::Translation)
@@ -193,7 +193,7 @@ content_inactivity_block_warning_body:
   body: |
     Hallo {recipient-name}, <br/>
     TBD auf [#{Settings.application.name}]
-  plain_text_body: 'Hallo {recipient-name}, \n\nTBD auf [#{Settings.application.name}]'
+  plain_text_body: 'Hallo {recipient-name}, \nTBD auf [#{Settings.application.name}]'
 
 top_course_de_description:
   record: top_course_de (Event::Translation)

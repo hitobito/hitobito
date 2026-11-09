@@ -68,6 +68,15 @@ describe Events::Filter::Attributes do
             expect(entries.size).to be_zero
           end
         end
+
+        context "with formatted description" do
+          let(:value) { "Fondue Abend" }
+
+          it "compares the plain text" do
+            @fondue.update!(description: "<div><strong>Fondue</strong> Abend</div>")
+            expect(entries).to match_array([@fondue])
+          end
+        end
       end
 
       context "match" do
@@ -84,6 +93,15 @@ describe Events::Filter::Attributes do
             "Event::Translation Load" => 1,
             "ActionText::RichText Load" => 1
           )
+        end
+
+        context "with html tag name" do
+          let(:value) { "strong" }
+
+          it "ignores the formatting" do
+            @fondue.update!(description: "<div><strong>Fondue</strong> Abend</div>")
+            expect(entries).to be_empty
+          end
         end
 
         context "with regex characters" do

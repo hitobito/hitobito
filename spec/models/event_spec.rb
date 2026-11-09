@@ -495,6 +495,13 @@ describe Event do
       is_expected.to be_valid
     end
 
+    it "is invalid with attachments in description" do
+      subject.description = "<div>Some content</div>" \
+        '<action-text-attachment sgid="invalid" content-type="image/png"></action-text-attachment>'
+      is_expected.not_to be_valid
+      expect(subject.errors[:description]).to include(I18n.t("errors.messages.attachments_not_allowed"))
+    end
+
     it "tells whether a contact attribute is visible" do
       subject.visible_contact_attributes = ["name"]
       expect(subject.contact_attribute_visible?(:name)).to eq true
@@ -1314,12 +1321,17 @@ describe Event do
         expect(event.finish_at).to eq Time.zone.local(2001, 3, 1)
       end
     end
+  end
 
-    context "plain_text_description" do
-      it "returns the plain text version of the description" do
-        event.update(description: "Description:<h1>Header</h1><strong>Bold</strong> <em>Italic</em>")
-        expect(event.plain_text_description).to eq("Description:Header\n\nBold Italic")
-      end
+  describe "#plain_text_description" do
+    it "returns the plain text version of the description" do
+      event.update(description: "Description:<h1>Header</h1><strong>Bold</strong> <em>Italic</em>")
+      expect(event.plain_text_description).to eq("Description:Header\n\nBold Italic")
+    end
+
+    it "is nil without description" do
+      event.update!(description: nil)
+      expect(event.plain_text_description).to be_nil
     end
   end
 

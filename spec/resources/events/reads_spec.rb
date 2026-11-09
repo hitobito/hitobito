@@ -60,6 +60,13 @@ describe EventResource, type: :resource do
         expect(attributes["description"]).to eq("Erste Zeile\nfett")
         expect(attributes["description_html"]).to include("<div>Erste Zeile<br><strong>fett</strong></div>")
       end
+
+      it "is nil without description" do
+        render
+        attributes = jsonapi_data[0].attributes
+        expect(attributes["description"]).to be_nil
+        expect(attributes["description_html"]).to be_nil
+      end
     end
 
     describe "external_application_link" do

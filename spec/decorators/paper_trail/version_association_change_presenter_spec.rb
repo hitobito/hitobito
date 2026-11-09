@@ -283,6 +283,17 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     end
   end
 
+  context "event description" do
+    let(:version) { PaperTrail::Version.where(item_type: "ActionText::RichText").order(:created_at, :id).last }
+
+    it "builds update text with plain text values" do
+      events(:top_course).update!(description: "<div>Neue <strong>Beschreibung</strong></div>")
+
+      is_expected.to eq("<div>Beschreibung (de) wurde von " \
+        "<i>Some kind of course, it seems</i> auf <i>Neue Beschreibung</i> geändert.</div>")
+    end
+  end
+
   def update
     person.update!(town: "Bern", zip_code: "3007")
   end

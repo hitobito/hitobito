@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2021-2026, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -10,15 +10,21 @@ require "spec_helper"
 describe Messages::TextMessageDispatch do
   let(:message) { messages(:sms) }
   let(:top_leader) { people(:top_leader) }
-  let!(:mobile1) { Fabricate(:phone_number, contactable: top_leader, label: "Mobil") }
-  let!(:mobile2) { Fabricate(:phone_number, contactable: top_leader, label: "Mobil") }
-  let!(:fixnet) { Fabricate(:phone_number, contactable: top_leader, label: "Festnetz") }
+  let(:bottom_member) { people(:bottom_member) }
+  let(:mobile_category) { contact_account_categories(:phone_number_person_mobile) }
+  let!(:mobile1) { Fabricate(:phone_number, contactable: top_leader, category: mobile_category) }
+  let!(:mobile2) { Fabricate(:phone_number, contactable: bottom_member, category: mobile_category) }
+  let!(:fixnet) do
+    Fabricate(:phone_number, contactable: top_leader,
+      category: contact_account_categories(:phone_number_person_landline))
+  end
 
   let(:dispatch) { described_class.new(message) }
   let(:client_double) { double(:client) }
 
   before do
     Subscription.create!(mailing_list: mailing_lists(:leaders), subscriber: top_leader)
+    Subscription.create!(mailing_list: mailing_lists(:leaders), subscriber: bottom_member)
     allow(dispatch).to receive(:client).and_return(client_double)
   end
 
@@ -117,7 +123,7 @@ describe Messages::TextMessageDispatch do
       expect(recipient1.person_id).to eq(top_leader.id)
       recipient2 = message.message_recipients.find_by(phone_number: mobile2.number)
       expect(recipient2.state).to eq("pending")
-      expect(recipient1.person_id).to eq(top_leader.id)
+      expect(recipient2.person_id).to eq(bottom_member.id)
     end
 
     it "does not create any more recipient entries if already present" do

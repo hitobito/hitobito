@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Die Mitte. This file is part of
+#  Copyright (c) 2012-2026, Die Mitte. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -64,7 +64,8 @@ describe :messages, js: true do
     before do
       Subscription.create!(mailing_list: list, subscriber: groups(:top_group), role_types: [Group::TopGroup::Leader])
       3.times do
-        person = Fabricate(:phone_number, label: "Mobil").contactable
+        person = Fabricate(:phone_number,
+          category: contact_account_categories(:phone_number_person_mobile)).contactable
         Group::TopGroup::Leader.create!(group: groups(:top_group), person: person)
       end
     end

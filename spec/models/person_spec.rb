@@ -945,6 +945,17 @@ describe Person do
     end
   end
 
+  describe "with_mobile scope" do
+    it "lists people with a phone number of a mobile category" do
+      Fabricate(:phone_number, contactable: people(:top_leader),
+        category: contact_account_categories(:phone_number_person_mobile))
+      Fabricate(:phone_number, contactable: people(:bottom_member),
+        category: contact_account_categories(:phone_number_person_landline))
+
+      expect(Person.with_mobile).to eq [people(:top_leader)]
+    end
+  end
+
   describe "with_address scope" do
     let(:top_leader) { people(:top_leader) }
 

@@ -360,7 +360,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
       .where("(last_name IS NOT NULL AND last_name <> '') OR " \
           "(company_name IS NOT NULL AND company_name <> '')")
   }
-  scope :with_mobile, -> { joins(:phone_numbers).where(phone_numbers: {label: "Mobil"}) }
+  scope :with_mobile, -> { joins(:phone_numbers).merge(PhoneNumber.mobile) }
   scope :preload_picture, -> { includes(picture_attachment: :blob) }
 
   scope :preload_roles_unscoped, -> { extending(PreloadRolesUnscoped) }

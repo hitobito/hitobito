@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,6 +26,15 @@ class PhoneNumber < ActiveRecord::Base
   self.ignored_columns += [FullTextSearchable::SEARCH_COLUMN]
 
   self.value_attr = :number
+
+  class_attribute :home_category_keys, default: %w[landline].freeze
+  class_attribute :mobile_category_keys, default: %w[mobile].freeze
+
+  scope :with_category_key, ->(keys) {
+    joins(:category).where(contact_account_categories: {key: keys})
+  }
+  scope :home, -> { with_category_key(home_category_keys) }
+  scope :mobile, -> { with_category_key(mobile_category_keys) }
 
   before_validation :format_number
 

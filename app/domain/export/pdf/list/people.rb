@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -29,8 +29,8 @@ module Export::Pdf::List
         person.person_name(:list),
         address(person),
         person.email,
-        phone_numbers(person, %w[Privat]),
-        phone_numbers(person, %w[Mobil])
+        home_phone_numbers(person),
+        mobile_phone_numbers(person)
       ]
     end
 
@@ -38,8 +38,16 @@ module Export::Pdf::List
       "#{person.address}, #{person.zip_code} #{person.town}"
     end
 
-    def phone_numbers(person, labels)
-      person.phone_numbers.where(label: labels).map { |phone| phone.number }.join("\n")
+    def home_phone_numbers(person)
+      phone_number_lines(person.phone_numbers.home)
+    end
+
+    def mobile_phone_numbers(person)
+      phone_number_lines(person.phone_numbers.mobile)
+    end
+
+    def phone_number_lines(phone_numbers)
+      phone_numbers.map(&:number).join("\n")
     end
 
     def table(data)

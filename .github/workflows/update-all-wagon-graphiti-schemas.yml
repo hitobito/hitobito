@@ -55,7 +55,7 @@ jobs:
 
   update-wagon-graphiti-schemas:
     name: 'Update ${{ matrix.wagon.name }} wagon graphiti schema'
-    runs-on: 'ubuntu-latest'
+    runs-on: 'ubuntu-24.04'
     needs: [find-wagons]
     strategy:
       fail-fast: false

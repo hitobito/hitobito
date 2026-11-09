@@ -1,3 +1,5 @@
+# plain_text_body is computed from body when the fixtures are loaded.
+
 login_de_body:
   record: login_de (CustomContent::Translation)
   name: body
@@ -7,19 +9,16 @@ login_de_body:
   Unter dem folgenden Link kannst du
   dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>
   Bis bald!<br/><br/>{sender-name}'
-  plain_text_body: 'Hallo {recipient-name}\n\n Willkommen bei <%= Settings.application.name %>! Unter dem folgenden Link kannst du dein Login Passwort setzen:\n\n{login-url}\n\n Bis bald!\n\n{sender-name}'
 
 login_fr_body:
   record: login_fr (CustomContent::Translation)
   name: body
-  body: 'Salut {recipient-name}, voici ta site login: {login-url}'
-  plain_text_body: 'Salut {recipient-name}, voici ta site login: {login-url}'
+  body: "Salut {recipient-name}, voici ta site login: {login-url}"
 
 notes_body:
   record: notes (CustomContent::Translation)
   name: body
   body: Bla bla bla bla
-  plain_text_body: Bla bla bla bla
 
 bulk_mail_success_de_body:
   record: bulk_mail_success_de (CustomContent::Translation)
@@ -29,7 +28,6 @@ bulk_mail_success_de_body:
   Betreff: {mail-subject}<br/>
   Zeit: {delivered-at}<br/>
   Empfänger: {total-recipients}<br/><br/>'
-  plain_text_body: 'Deine Mail an {mail-to} wurde verschickt:\n\n Betreff: {mail-subject}\n Zeit: {delivered-at}\n Empfänger: {total-recipients}\n\n'
 
 bulk_mail_with_failed_de_body:
   record: bulk_mail_with_failed_de (CustomContent::Translation)
@@ -42,7 +40,6 @@ bulk_mail_with_failed_de_body:
   Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>{failed-recipients}
   <br/><br/>
   '
-  plain_text_body: 'Deine Mail an {mail-to} wurde verschickt:\n\n Betreff: {mail-subject}\n Zeit: {delivered-at}\n Empfänger: {total-succeeded-recipients}/{total-recipients}\n\n Folgende Empfänger konnten nicht zugestellt werden:\n\n{failed-recipients}\n\n '
 
 content_invoice_notification_body:
   record: content_invoice_notification (CustomContent::Translation)
@@ -55,7 +52,6 @@ content_invoice_notification_body:
    {invoice-total}<br/><br/>
    {payment-information}<br/><br/>
   '
-  plain_text_body: 'Hallo {recipient-name} Rechnung von: Absender: {group-address}\n\n \n\n {invoice-items}\n\n {invoice-total}\n\n {payment-information}\n\n'
 
 person_add_request_person_body:
   record: person_add_request_person (CustomContent::Translation)
@@ -68,7 +64,6 @@ person_add_request_person_body:
     Bitte bestätige oder verwerfe diese Anfrage:<br><br/>
     {answer-request-url}
   '
-  plain_text_body: 'Hallo {recipient-name}\n\n {requester-name} möchte dich hier hinzufügen: \n\n {request-body}\n\n {requester-name} hat folgende schreibberechtigten Rollen: \n\n {requester-roles}\n\n Bitte bestätige oder verwerfe diese Anfrage:\n\n {answer-request-url}'
 
 person_add_request_responsibles_body:
   record: person_add_request_responsibles (CustomContent::Translation)
@@ -80,7 +75,6 @@ person_add_request_responsibles_body:
     {requester-roles}<br/><br/>
     Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>
     {answer-request-url}'
-  plain_text_body: 'Hallo {recipient-names}\n\n {requester-name} möchte {person-name} hier hinzufügen: \n\n {request-body}\n\n {requester-name} hat folgende schreibberechtigten Rollen: \n\n {requester-roles}\n\n Bitte bestätige oder verwerfe diese Anfrage:\n\n {answer-request-url}'
 
 person_add_request_approved_body:
   record: person_add_request_approved (CustomContent::Translation)
@@ -90,7 +84,6 @@ person_add_request_approved_body:
    {person-name} wurde zu {request-body} hinzugefügt.<br/><br/>
    {approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>
    {approver-roles}<br/><br/>'
-  plain_text_body: 'Hallo {recipient-name}\n\n {approver-name} hat deine Anfrage für {person-name} freigegeben.\n\n {person-name} wurde zu {request-body} hinzugefügt.\n\n {approver-name} hat folgende schreibberechtigten Rollen: \n\n {approver-roles}\n\n'
 
 person_add_request_rejected_body:
   record: person_add_request_rejected (CustomContent::Translation)
@@ -100,62 +93,52 @@ person_add_request_rejected_body:
     {person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>
     {rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>
     {rejecter-roles}<br/><br/>'
-  plain_text_body: 'Hallo {recipient-name}\n\n {rejecter-name} hat deine Anfrage für {person-name} abgelehnt.\n\n {person-name} wird nicht zu {request-body} hinzugefügt.\n\n {rejecter-name} hat folgende schreibberechtigten Rollen: \n\n {rejecter-roles}\n\n'
 
 address_validation_checks_body:
   record: address_validation_checks (CustomContent::Translation)
   name: body
   body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'
-  plain_text_body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'
 
 assignment_assignee_notification_body:
   record: assignment_assignee_notification (CustomContent::Translation)
   name: body
   body: 'Sie haben einen neuen Druckauftrag: {assignment-title} erhalten. Login Sie sich bitte ein, um diesen einzusehen.'
-  plain_text_body: 'Sie haben einen neuen Druckauftrag: {assignment-title} erhalten. Login Sie sich bitte ein, um diesen einzusehen.'
 
 self_registration_notification_body:
   record: self_registration_notification (CustomContent::Translation)
   name: body
   body: 'Die Person {person-name} hat sich auf der Gruppe {group-name} per Selbstregistrierung angemeldet:<br/><br/>{person-url}'
-  plain_text_body: 'Die Person {person-name} hat sich auf der Gruppe {group-name} per Selbstregistrierung angemeldet:\n\n{person-url}'
 
 
 people_action_index_de_body:
   record: people_action_index_de (HelpText::Translation)
   name: body
   body: 'test'
-  plain_text_body: 'test'
 
 person_field_name_de_body:
   record: person_field_name_de (HelpText::Translation)
   name: body
   body: 'test'
-  plain_text_body: 'test'
 
 event_field_name_de_body:
   record: event_field_name_de (HelpText::Translation)
   name: body
   body: 'base'
-  plain_text_body: 'base'
 
 course_field_name_de_body:
   record: course_field_name_de (HelpText::Translation)
   name: body
   body: 'inherited'
-  plain_text_body: 'inherited'
 
 participations_action_index_de_body:
   record: participations_action_index_de (HelpText::Translation)
   name: body
   body: 'test'
-  plain_text_body: 'test'
 
 events_action_index_de_body:
   record: events_action_index_de (HelpText::Translation)
   name: body
   body: 'test'
-  plain_text_body: 'test'
 
 letter_body:
   record: letter (Message)
@@ -165,7 +148,6 @@ letter_body:
     Wir laden <strong>dich</strong> ein!
     <br/><br/>
     Bis bald
-  plain_text_body: 'Hallo\n\nWir laden dich ein!\n\nBis bald'
 letter_invoice:
   record: with_invoice (Message)
   name: body
@@ -174,7 +156,6 @@ letter_invoice:
     Dein <strong>Mitgliedsbeitrag</strong> ist fällig!
     <br/><br/>
     Bis bald
-  plain_text_body: 'Hallo\n\nDein Mitgliedsbeitrag ist fällig!\n\nBis bald'
 
 content_user_password_override_body:
   record: content_user_password_override (CustomContent::Translation)
@@ -185,7 +166,6 @@ content_user_password_override_body:
     Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>
     Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\"
     ein neues Passwort anfordern
-  plain_text_body: 'Hallo {recipient-name}, \n{taker-name} hat auf [#{Settings.application.name}] das Passwort deines Accounts zurückgesetzt. Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. \nIm Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\" nein neues Passwort anfordern'
 
 content_inactivity_block_warning_body:
   record: content_inactivity_block_warning (CustomContent::Translation)
@@ -193,16 +173,13 @@ content_inactivity_block_warning_body:
   body: |
     Hallo {recipient-name}, <br/>
     TBD auf [#{Settings.application.name}]
-  plain_text_body: 'Hallo {recipient-name}, \nTBD auf [#{Settings.application.name}]'
 
 top_course_de_description:
   record: top_course_de (Event::Translation)
   name: description
   body: Some kind of course, it seems
-  plain_text_body: 'Some kind of course, it seems'
 
 template_de_description:
   record: template_de (Event::Translation)
   name: description
   body: Some kind of course, it seems
-  plain_text_body: 'Some kind of course, it seems'

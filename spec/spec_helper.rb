@@ -298,6 +298,8 @@ module ActiveRecordFixture
   def initialize(fixture, model_class)
     if model_class == Person
       fixture["confirmed_at"] = 1.day.ago unless fixture.key?("confirmed_at")
+    elsif model_class == ActionText::RichText
+      fixture["plain_text_body"] = ActionText::Content.new(fixture["body"].to_s).to_plain_text.presence
     end
 
     super

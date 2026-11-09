@@ -238,17 +238,24 @@ describe MailingLists::BulkMail::BounceHandler do
       codes = ["Iiih, Mehl!", "550 No such user"]
       expect(bounce_handler.analyze_diagnostic_codes(codes)).to eq :block
     end
-  end
 
-  describe "#analyze_diagnostic_code can return" do
     it "matches case insensitively" do
       expect(bounce_handler.analyze_diagnostic_code("550 no such user")).to eq :block
       expect(bounce_handler.analyze_diagnostic_code("550 NO SUCH USER")).to eq :block
     end
 
+  end
+
+  describe "#analyze_diagnostic_code can return" do
     it "block" do
       expect(bounce_handler.analyze_diagnostic_code("550 No such user")).to eq :block
       expect(bounce_handler.analyze_diagnostic_code("550 5.1.1 <testing@example.com>... User unknown")).to eq :block
+      expect(bounce_handler.analyze_diagnostic_code(
+        "550-5.1.1 user unknown 550 5.1.1 Unknown recipient."
+      )).to eq :block
+      expect(bounce_handler.analyze_diagnostic_code(
+        "550 5.1.1 [R5] Unknown recipient (a6574d87-d7a2-11f1-b2df-4232c2145059)"
+      )).to eq :block
     end
 
     it "continue" do
@@ -266,6 +273,8 @@ describe MailingLists::BulkMail::BounceHandler do
       expect(
         bounce_handler.analyze_diagnostic_code("550-Callout verification failed: 550 552 5.2.2 <.+@.+> Quota exceeded")
       ).to eq :continue
+      expect(bounce_handler.analyze_diagnostic_code("Message expired, connection timed out")).to eq :continue
+      expect(bounce_handler.analyze_diagnostic_code("550 5.4.316 Message expired, connection refused")).to eq :continue
     end
 
     it "register" do
@@ -292,6 +301,7 @@ describe MailingLists::BulkMail::BounceHandler do
         "Dit is jetzt peinlich... Ick will die Mail für <matze@example.com> nich, jeh ma wech mit dem"
       )).to eq :unknown
       expect(bounce_handler.analyze_diagnostic_code("Iiih, Mehl!")).to eq :unknown
+      expect(bounce_handler.analyze_diagnostic_code("Message expired, connection reset")).to eq :unknown
     end
   end
 end

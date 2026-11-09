@@ -112,8 +112,8 @@ describe ActionText::RichText do
     allow(rich_text).to receive(:respond_to?).and_call_original
     allow(rich_text).to receive(:respond_to?).with(:plain_text_body=).and_return(false)
 
-    rich_text.save!
-
     expect(rich_text).not_to receive(:plain_text_body=)
+
+    rich_text.save!
   end
 end

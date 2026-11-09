@@ -89,7 +89,7 @@ describe SubscriptionsController do
 
     it "renders email addresses with additional_email matching preferred_labels instead of subscriber email" do
       e1 = Fabricate(:additional_email, contactable: @person_subscription.subscriber, label: :preferred)
-      mailing_list.update(preferred_labels: %w[preferred])
+      mailing_list.update_column(:preferred_labels, %w[preferred])
       get :index, params: {group_id: group.id, mailing_list_id: mailing_list.id}, format: :email
       expect(@response.body.split(",")).to match_array([people(:bottom_member).email, e1.email])
     end

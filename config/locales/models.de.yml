@@ -149,6 +149,8 @@ de:
             mail_name_not_allowed:
             additional_sender:
               invalid: "muss Mailadressen vom Format abcd@ee.ch oder *@ee.ch enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
+            preferred_labels:
+              unknown: "'%{label}' ist keine gültige Kategorie"
         message/letter_with_invoice:
           attributes:
             base:

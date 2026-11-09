@@ -35,15 +35,16 @@ describe Export::Pdf::List do
   end
 
   context "with phone numbers" do
-    def phone_number(number, category_key)
-      Fabricate(:phone_number, contactable: top_leader, number:,
-        category: contact_account_categories(:"phone_number_person_#{category_key}"))
+    def fabricate_phone_number(category_key, number = nil, contactable: top_leader)
+      category = contact_account_categories(:"phone_number_person_#{category_key}")
+      attrs = {contactable:, number:, category:}.compact
+      Fabricate(:phone_number, **attrs)
     end
 
     before do
-      phone_number("+41 44 111 11 11", :landline)
-      phone_number("+41 79 222 22 22", :mobile)
-      phone_number("+41 31 333 33 33", :work)
+      fabricate_phone_number(:landline, "+41 44 111 11 11")
+      fabricate_phone_number(:mobile, "+41 79 222 22 22")
+      fabricate_phone_number(:work, "+41 31 333 33 33")
     end
 
     def x_position(text)
@@ -58,8 +59,7 @@ describe Export::Pdf::List do
 
     it "loads the phone numbers of all people at once" do
       contactables = Person.where(id: [top_leader.id, people(:bottom_member).id])
-      Fabricate(:phone_number, contactable: people(:bottom_member),
-        category: contact_account_categories(:phone_number_person_mobile))
+      fabricate_phone_number(:mobile, contactable: people(:bottom_member))
 
       expect { described_class.render(contactables, group.name) }
         .to make.db_queries.with("PhoneNumber Load" => 1, "ContactAccountCategory Load" => 1)

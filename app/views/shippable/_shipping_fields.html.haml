@@ -3,11 +3,13 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-= f.labeled_collection_select :shipping_method, entry.class.shipping_method_labels, :first, :last
-= f.labeled(:pp_post) do
-  .input-group.input-group-sm
-    %span.input-group-text
-      = 'P.P.'
-    = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
-    %span.input-group-text
-      = 'Post CH AG'
+- if entry.shippable?(:shipping_method)
+  = f.labeled_collection_select :shipping_method, entry.class.shipping_method_labels, :first, :last
+- if entry.shippable?(:pp_post)
+  = f.labeled(:pp_post) do
+    .input-group.input-group-sm
+      %span.input-group-text
+        = 'P.P.'
+      = f.input_field :pp_post, :placeholder => 'CH-3030 Bern'
+      %span.input-group-text
+        = 'Post CH AG'

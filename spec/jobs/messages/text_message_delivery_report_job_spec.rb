@@ -10,7 +10,10 @@ require "spec_helper"
 describe Messages::TextMessageDeliveryReportJob do
   let(:message) { messages(:sms) }
   let(:top_leader) { people(:top_leader) }
-  let!(:mobile) { Fabricate(:phone_number, contactable: top_leader, label: "Mobil") }
+  let!(:mobile) do
+    Fabricate(:phone_number, contactable: top_leader,
+      category: contact_account_categories(:phone_number_person_mobile))
+  end
   let(:ok_report) { {status: :ok, status_message: ""} }
   let(:failed_report) { {status: :failed, status_message: ""} }
   let(:ok_delivery_reports) do

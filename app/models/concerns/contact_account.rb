@@ -15,6 +15,10 @@ module ContactAccount
     belongs_to :category, class_name: "ContactAccountCategory"
     validates :category, presence: true
 
+    scope :with_category_key, ->(keys) {
+      joins(:category).where(contact_account_categories: {key: keys})
+    }
+
     validate :assert_category_unique_per_contactable, if: -> { category&.unique_per_contactable? }
     after_commit :reset_contactable_association_cache, on: :create,
       if: -> { category&.unique_per_contactable? }

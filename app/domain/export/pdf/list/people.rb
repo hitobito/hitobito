@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -6,6 +6,7 @@
 module Export::Pdf::List
   class People < Section
     def render
+      preload_phone_numbers
       bounding_box([bounds.left, bounds.top], width: bounds.width, height: bounds.height - 5.mm) do
         move_down_line 40; # first page has a header
         table(contactables.map { |p| person_row(p) }.unshift(table_header))
@@ -26,20 +27,43 @@ module Export::Pdf::List
 
     def person_row(person)
       [
-        person.person_name(:list),
+        name(person),
         address(person),
         person.email,
-        phone_numbers(person, %w[Privat]),
-        phone_numbers(person, %w[Mobil])
+        home_phone_numbers(person),
+        mobile_phone_numbers(person)
       ]
+    end
+
+    def name(person)
+      person.person_name(:list)
     end
 
     def address(person)
       "#{person.address}, #{person.zip_code} #{person.town}"
     end
 
-    def phone_numbers(person, labels)
-      person.phone_numbers.where(label: labels).map { |phone| phone.number }.join("\n")
+    def preload_phone_numbers
+      ActiveRecord::Associations::Preloader.new(
+        records: phone_number_owners, associations: {phone_numbers: :category}
+      ).call
+    end
+
+    # Override when the contactables are not the owners of the phone numbers.
+    def phone_number_owners
+      contactables.to_a
+    end
+
+    def home_phone_numbers(person)
+      phone_number_lines(person.phone_numbers.select(&:home?))
+    end
+
+    def mobile_phone_numbers(person)
+      phone_number_lines(person.phone_numbers.select(&:mobile?))
+    end
+
+    def phone_number_lines(phone_numbers)
+      phone_numbers.map(&:number).join("\n")
     end
 
     def table(data)

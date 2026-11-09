@@ -43,7 +43,13 @@ module Export::Ics
     end
 
     def public_phone_numbers(contact)
-      contact.phone_numbers.select(&:public).map { |pn| "#{pn.label}: #{pn.number}" }
+      contact.phone_numbers.includes(:category).select(&:public)
+        .map { |pn| "#{phone_number_label(pn)}: #{pn.number}" }
+    end
+
+    def phone_number_label(phone_number)
+      category = phone_number.category.to_s
+      phone_number.label.present? ? "#{category} (#{phone_number.label})" : category
     end
 
     def url(event)

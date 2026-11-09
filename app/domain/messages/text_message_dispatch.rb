@@ -52,9 +52,7 @@ module Messages
     end
 
     def recipient_numbers
-      PhoneNumber.where(label: "Mobil", # get from settings
-        contactable_type: Person.sti_name,
-        contactable_id: person_ids)
+      PhoneNumber.mobile.where(contactable_type: Person.sti_name, contactable_id: person_ids)
     end
 
     def recipient_attrs(phone_nr, state)

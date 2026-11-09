@@ -55,5 +55,14 @@ describe Export::Pdf::List do
       expect(x_position("+41 79 222 22 22")).to eq x_position("Mobil")
       expect(subject.strings).not_to include("+41 31 333 33 33")
     end
+
+    it "loads the phone numbers of all people at once" do
+      contactables = Person.where(id: [top_leader.id, people(:bottom_member).id])
+      Fabricate(:phone_number, contactable: people(:bottom_member),
+        category: contact_account_categories(:phone_number_person_mobile))
+
+      expect { described_class.render(contactables, group.name) }
+        .to make.db_queries.with("PhoneNumber Load" => 1, "ContactAccountCategory Load" => 1)
+    end
   end
 end

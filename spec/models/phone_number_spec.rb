@@ -62,6 +62,17 @@ describe PhoneNumber do
 
       expect(person.phone_numbers.home).to match_array [landline, work]
     end
+
+    it "#home? and #mobile? match the same categories as the scopes" do
+      expect([mobile, landline, work].map { |n| [n.home?, n.mobile?] })
+        .to eq [[false, true], [true, false], [false, false]]
+    end
+
+    it "#home? follows a configured home_category_keys" do
+      allow(PhoneNumber).to receive(:home_category_keys).and_return(%w[landline work])
+
+      expect(work).to be_home
+    end
   end
 
   context "paper trails", versioning: true do

@@ -6,6 +6,7 @@
 module Export::Pdf::List
   class People < Section
     def render
+      preload_phone_numbers
       bounding_box([bounds.left, bounds.top], width: bounds.width, height: bounds.height - 5.mm) do
         move_down_line 40; # first page has a header
         table(contactables.map { |p| person_row(p) }.unshift(table_header))
@@ -38,12 +39,23 @@ module Export::Pdf::List
       "#{person.address}, #{person.zip_code} #{person.town}"
     end
 
+    def preload_phone_numbers
+      ActiveRecord::Associations::Preloader.new(
+        records: phone_number_owners, associations: {phone_numbers: :category}
+      ).call
+    end
+
+    # Override when the contactables are not the owners of the phone numbers.
+    def phone_number_owners
+      contactables.to_a
+    end
+
     def home_phone_numbers(person)
-      phone_number_lines(person.phone_numbers.home)
+      phone_number_lines(person.phone_numbers.select(&:home?))
     end
 
     def mobile_phone_numbers(person)
-      phone_number_lines(person.phone_numbers.mobile)
+      phone_number_lines(person.phone_numbers.select(&:mobile?))
     end
 
     def phone_number_lines(phone_numbers)

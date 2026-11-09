@@ -42,6 +42,14 @@ class PhoneNumber < ActiveRecord::Base
 
   validates_by_schema
 
+  def home?
+    home_category_keys.include?(category&.key)
+  end
+
+  def mobile?
+    mobile_category_keys.include?(category&.key)
+  end
+
   private
 
   def format_number

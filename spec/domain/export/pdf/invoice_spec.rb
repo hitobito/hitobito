@@ -930,6 +930,12 @@ describe Export::Pdf::Invoice do
     described_class.render(invoice, articles: true, payment_slip: true)
   end
 
+  it "compresses page contents" do
+    reader = PDF::Reader.new(StringIO.new(pdf))
+    filters = reader.pages.map { |page| reader.objects.deref(page.page_object[:Contents]).hash[:Filter] }
+    expect(filters).to all(eq [:FlateDecode])
+  end
+
   it "renders empty invoice articles" do
     described_class.render(invoice, articles: true)
   end
@@ -1118,6 +1124,9 @@ describe Export::Pdf::Invoice do
     end
 
     let(:pdf) { described_class.render(invoice, payment_slip: true) }
+    let(:qrcode_size) { 46.mm }
+    let(:swiss_cross_size) { 7.mm }
+    let(:rounding_tolerance) { 0.01 }
 
     subject { PDF::Inspector::Text.analyze(pdf) }
 
@@ -1161,6 +1170,72 @@ describe Export::Pdf::Invoice do
       invoice_text.each_with_index do |text, i|
         expect(text_with_position[i]).to eq(text)
       end
+    end
+
+    it "renders qrcode at 46mm with swiss cross at 7mm in its center" do
+      square_images = image_positions.select { |image| image[:width] == image[:height] }
+      expect(square_images).to have(2).items
+
+      size = ->(image) { image[:displayed_width] / image[:width] }
+      qrcode, cross = square_images.sort_by(&size).reverse
+
+      expect(size.call(qrcode)).to be_within(rounding_tolerance).of(qrcode_size)
+      expect(size.call(cross)).to be_within(rounding_tolerance).of(swiss_cross_size)
+
+      centered_offset = (qrcode_size - swiss_cross_size) / 2
+      expect(cross[:x] - qrcode[:x]).to be_within(rounding_tolerance).of(centered_offset)
+      expect(cross[:y] - qrcode[:y]).to be_within(rounding_tolerance).of(centered_offset)
+    end
+
+    def qrcode_mask
+      page = PDF::Reader.new(StringIO.new(pdf)).page(1)
+      label, mask = page.xobjects.find { |_, image| image.hash[:ImageMask] }
+      painted = painted_pixels(mask)
+      displayed_width, displayed_height = displayed_size(page, label)
+      {painted:,
+       module_width: displayed_width / painted.first.size,
+       module_height: displayed_height / painted.size}
+    end
+
+    def displayed_size(page, image_label)
+      matrix = page.raw_content[%r{((?:\S+\s+){6})cm\s+/#{image_label} Do}, 1]
+      width, _, _, height, _x, _y = matrix.split.map(&:to_f)
+      [width, height]
+    end
+
+    def painted_pixels(mask)
+      width, height, bit_depth = mask.hash.values_at(:Width, :Height, :BitsPerComponent)
+      palette = transparent_color = nil
+      samples = ChunkyPNG::Canvas.decode_png_pixelstream(Zlib::Inflate.inflate(mask.data),
+        width, height, ChunkyPNG::COLOR_GRAYSCALE, bit_depth, ChunkyPNG::INTERLACING_NONE,
+        palette, transparent_color)
+      # mask samples of 0 (black) are painted
+      samples.pixels.map { |pixel| pixel == ChunkyPNG::Color::BLACK }.each_slice(width).to_a
+    end
+
+    def as_text(pixels)
+      pixels.map { |row| row.map { |dark| dark ? "#" : "." }.join }.join("\n")
+    end
+
+    it "renders qrcode as image mask painting the dark modules" do
+      reader = PDF::Reader.new(StringIO.new(pdf))
+      masks = reader.page(1).xobjects.values.select { |image| image.hash[:ImageMask] }
+      expect(masks).to have(1).item
+      expect(masks.first.hash[:BitsPerComponent]).to eq 1
+      expect(masks.first.hash.keys).not_to include(:ColorSpace, :Decode)
+
+      modules = RQRCode::QRCode.new(invoice.qrcode.payload, level: :m).to_s(dark: "#", light: ".")
+      expect(as_text(qrcode_mask[:painted])).to eq modules
+    end
+
+    it "renders dark qrcode modules at 46mm without quiet zone" do
+      mask = qrcode_mask
+      dark_span = ->(lines) { (lines.index(&:any?)..lines.rindex(&:any?)).size }
+      dark_width = dark_span.call(mask[:painted].transpose) * mask[:module_width]
+      dark_height = dark_span.call(mask[:painted]) * mask[:module_height]
+
+      expect(dark_width).to be_within(rounding_tolerance).of(qrcode_size)
+      expect(dark_height).to be_within(rounding_tolerance).of(qrcode_size)
     end
 
     it "does not render blank amount" do

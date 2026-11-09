@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,6 +21,10 @@ module Export::Pdf::Invoice
     FONT_FAMILY = "LiberationSans"
 
     HEIGHT_WITHOUT_MARGIN = HEIGHT - MARGIN
+
+    QR_CODE_SIZE = 46.mm
+    SWISS_CROSS_SIZE = 7.mm
+    CENTERED = {position: :center, vposition: :center}.freeze
 
     # Renders the QR payment slip according to the Swiss QR Bill standard v2.3
     # (in force since 21 November 2025).
@@ -115,10 +119,17 @@ module Export::Pdf::Invoice
 
     def payment_qrcode
       padded_bounding_box(0.6, width: 60.mm, pad_right: true) do
-        invoice.qrcode.generate do |path|
-          image path, fit: [46.mm, 46.mm], position: :center, vposition: :center
-        end
+        float { qrcode_image_mask }
+        float { image invoice.qrcode.swiss_cross, width: SWISS_CROSS_SIZE, **CENTERED }
       end
+    end
+
+    # Image masks are scaled without interpolation, the code stays sharp at low resolutions
+    def qrcode_image_mask
+      image_obj, info = pdf.build_image_object(StringIO.new(invoice.qrcode.png))
+      image_obj.data.delete(:ColorSpace)
+      image_obj.data[:ImageMask] = true
+      pdf.embed_image(image_obj, info, width: QR_CODE_SIZE, **CENTERED)
     end
 
     def render_payment_amount

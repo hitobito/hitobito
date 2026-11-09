@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2020, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -29,13 +29,22 @@ describe Invoice::Qrcode do
     )
   end
 
-  describe :generate do
-    it "generates image" do
-      invoice.qrcode.generate do |file|
-        image = ChunkyPNG::Image.from_file(file)
-        expect(image.dimension.height).to eq 390
-        expect(image.dimension.width).to eq 390
+  describe :png do
+    let(:png) { invoice.qrcode.png }
+
+    it "has one pixel per module without quiet zone" do
+      image = ChunkyPNG::Image.from_blob(png)
+      rows = image.pixels.each_slice(image.width).map do |row|
+        row.map { |pixel| (pixel == ChunkyPNG::Color::BLACK) ? "#" : "." }.join
       end
+      modules = RQRCode::QRCode.new(invoice.qrcode.payload, level: :m).to_s(dark: "#", light: ".")
+      expect(rows.join("\n")).to eq modules
+    end
+
+    it "is a 1-bit grayscale image" do
+      header = ChunkyPNG::Datastream.from_blob(png).header_chunk
+      expect(header.color).to eq ChunkyPNG::COLOR_GRAYSCALE
+      expect(header.depth).to eq 1
     end
   end
 

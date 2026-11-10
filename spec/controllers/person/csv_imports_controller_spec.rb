@@ -108,6 +108,142 @@ describe Person::CsvImportsController do
       end
     end
 
+    context "csv data matches existing person" do
+      render_views
+
+      let(:group) { groups(:bottom_layer_one) }
+      let(:role_type) { "Group::BottomLayer::Member" }
+      let(:headers) { %w[Vorname Nachname Uebername Ort Geburtstag Angaben Telefon Mobile Tags] }
+      let(:field_mappings) do
+        {Vorname: "first_name", Nachname: "last_name", Uebername: "nickname", Ort: "town",
+         Geburtstag: "birthday", Angaben: "additional_information",
+         Telefon: "phone_number_work", Mobile: "phone_number_mobile", Tags: "tags"}
+      end
+      let(:update_behaviour) { "keep" }
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      def cell(attr)
+        index = dom.all("thead th").map { |th| th.text.strip }.index(Person.human_attribute_name(attr))
+        dom.all("tbody tr td")[index].text.strip
+      end
+
+      def preview
+        post :preview, params: required_params.merge(field_mappings: field_mappings,
+          update_behaviour: update_behaviour)
+      end
+
+      before { sign_in(user) }
+
+      context "with stored data" do
+        let(:data) { generate_csv(headers, ["Top", "Leader", "Topi", "Bern", "", "", "", "", "csv-tag"]) }
+
+        before do
+          people(:top_leader).update!(birthday: "1.4.1970", tag_list: "secret-tag")
+          people(:top_leader).phone_numbers.create!(number: "+41 79 123 45 67",
+            category: contact_account_categories(:phone_number_person_work))
+          people(:top_leader).phone_numbers.create!(number: "+41 79 765 43 21", public: false,
+            category: contact_account_categories(:phone_number_person_mobile))
+        end
+
+        context "when the user has no show permission on the person" do
+          let(:user) { Fabricate(Group::BottomLayer::LocalGuide.name, group: group).person }
+
+          it "shows imported values and hides stored values" do
+            preview
+
+            expect(dom).to have_css("tbody tr i.fa-sync-alt")
+            expect(cell(:nickname)).to eq "Topi"
+            expect(cell(:town)).to eq "fehlende Berechtigung"
+            expect(cell(:birthday)).to eq "fehlende Berechtigung"
+            expect(cell(:additional_information)).to eq "fehlende Berechtigung"
+            expect(cell(:tags)).to eq "csv-tag"
+            expect(response.body).not_to include("Greattown", "01.04.1970", "bla bla", "79 123 45 67",
+              "79 765 43 21", "secret-tag")
+          end
+
+          context "with override behaviour" do
+            let(:update_behaviour) { "override" }
+
+            it "shows imported values" do
+              preview
+
+              expect(cell(:town)).to eq "Bern"
+              expect(cell(:birthday)).to be_blank
+              expect(cell(:additional_information)).to be_blank
+              expect(response.body).not_to include("Greattown", "01.04.1970", "bla bla", "79 123 45 67",
+                "79 765 43 21", "secret-tag")
+            end
+          end
+
+          it "marks person add request" do
+            groups(:top_layer).update_column(:require_person_add_requests, true)
+
+            preview
+
+            expect(dom).to have_css("tbody tr i.fa-question")
+          end
+        end
+
+        context "when the user has show permission on the person" do
+          let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: group).person }
+
+          it "shows stored values like person lists" do
+            preview
+
+            expect(cell(:town)).to eq "Greattown"
+            expect(cell(:birthday)).to eq "fehlende Berechtigung"
+            expect(cell(:additional_information)).to eq "fehlende Berechtigung"
+            expect(cell(:tags)).to eq "csv-tag"
+            expect(response.body).to include("79 123 45 67")
+            expect(response.body).not_to include("01.04.1970", "bla bla", "79 765 43 21", "secret-tag")
+          end
+        end
+      end
+
+      context "with rows matching multiple people" do
+        let(:user) { Fabricate(Group::BottomLayer::LocalGuide.name, group: group).person }
+        let(:update_behaviour) { "override" }
+        let(:other) do
+          Fabricate(Group::TopGroup::Member.name, group: groups(:top_group),
+            person: Fabricate(:person, email: "other@example.com")).person
+        end
+        let(:field_mappings) do
+          {Vorname: "first_name", Nachname: "last_name", Email: "email", Telefon: "phone_number_work"}
+        end
+        let(:data) do
+          generate_csv(%w[Vorname Nachname Email Telefon],
+            ["Top", "Leader", other.email, "+41 11 111 11 11"],
+            ["Top", "Leader", other.email, ""])
+        end
+
+        before do
+          [people(:top_leader), other].each_with_index do |person, i|
+            person.phone_numbers.create!(number: "+41 79 000 00 0#{i}",
+              category: contact_account_categories(:phone_number_person_work))
+          end
+        end
+
+        it "shows only the imported values of each row" do
+          preview
+
+          expect(dom).to have_css("tbody tr i.fa-exclamation-triangle", count: 2)
+          expect(dom).to have_css("tbody td", text: "+41 11 111 11 11", count: 1)
+          expect(response.body).not_to include("+41 79 000 00 00", "+41 79 000 00 01")
+        end
+      end
+
+      context "when the user has show_full permission on the person" do
+        let(:user) { Fabricate(Group::BottomLayer::LocalGuide.name, group: group).person }
+        let(:data) { generate_csv(headers, ["Bottom", "Member", "", "", "", "", "", "", ""]) }
+
+        it "shows stored values" do
+          preview
+
+          expect(cell(:town)).to eq "Greattown"
+        end
+      end
+    end
+
     context "id mapping" do
       let(:data) { generate_csv(%w[ID Vorname], [Person.maximum(:id) + 1000, "foo"]) }
       let(:field_mappings) { {ID: "id", Vorname: "first_name"} }

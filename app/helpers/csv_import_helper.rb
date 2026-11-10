@@ -38,23 +38,85 @@ module CsvImportHelper
     end
   end
 
-  def csv_import_contact_account_value(p, key)
+  def csv_import_attr_value(person, attr)
+    if csv_import_people_of(person).any? { |p| p.imported_attributes.key?(attr) }
+      format_attr(person, attr)
+    else
+      csv_import_stored_attr_value(person, attr)
+    end
+  end
+
+  def csv_import_contact_account_value(person, key)
+    contact = csv_import_contact_account(person, key)
+    contact.value if contact && csv_import_contact_account_visible?(person, contact)
+  end
+
+  def csv_import_tag_values(person)
+    return person.tag_list.to_s if can?(:show_tags, csv_import_stored_person(person))
+
+    ActsAsTaggableOn::TagList.new(csv_import_people_of(person).flat_map(&:tags), parse: true).to_s
+  end
+
+  def csv_import_role_value(person, attr)
+    role = person.roles.find { |r| r.group_id == group.id && r.type == @role_type.to_s }
+    if role.new_record? || can?(:show, csv_import_stored_person(person))
+      f(role.send(attr))
+    else
+      t("global.not_allowed")
+    end
+  end
+
+  private
+
+  def csv_import_people_of(person)
+    @csv_import_people ||=
+      importer.people.each_with_object({}.compare_by_identity) do |import_person, people|
+        (people[import_person.person] ||= []) << import_person
+      end
+    @csv_import_people.fetch(person)
+  end
+
+  # Permissions must not take the roles into account that are added by the import.
+  def csv_import_stored_person(person)
+    return person if person.new_record?
+
+    @csv_import_stored_people ||= Person
+      .where(id: importer.people.map(&:person).select(&:persisted?).map(&:id))
+      .preload_groups
+      .index_by(&:id)
+    @csv_import_stored_people.fetch(person.id)
+  end
+
+  def csv_import_stored_attr_value(person, attr)
+    column = csv_import_column_class(attr).new(current_ability, model_class: Person)
+    column.value_for(csv_import_stored_person(person), attr) do |target, target_attr|
+      format_attr(target, target_attr)
+    end
+  end
+
+  def csv_import_column_class(attr)
+    registered = TableDisplay.table_display_columns.to_h.dig(Person.to_s, attr.to_s)
+    return registered if registered
+
+    if TableDisplays::People::ALWAYS_SHOWN_ATTRS.include?(attr.to_sym)
+      TableDisplays::PublicColumn
+    else
+      TableDisplays::ShowFullColumn
+    end
+  end
+
+  def csv_import_contact_account(person, key)
     [AdditionalEmail, PhoneNumber, SocialAccount].each do |model|
       category = Import::ContactAccountFields.new(model).category_for(key)
-      next unless category
-
-      contact = p.send(model.table_name).find { |c| c.category_id == category.id }
-      return contact&.value
+      return person.send(model.table_name).find { |c| c.category_id == category.id } if category
     end
     nil
   end
 
-  def csv_import_tag_values(p)
-    p.tag_list.to_s
-  end
-
-  def csv_import_role_value(p, attr)
-    value = p.roles.find { |r| r.type == @role_type.to_s }.send(attr)
-    f(value)
+  def csv_import_contact_account_visible?(person, contact)
+    stored_person = csv_import_stored_person(person)
+    csv_import_people_of(person).any? { |p| p.imported_accounts.include?(contact) } ||
+      can?(:show_details, stored_person) ||
+      (contact.public? && can?(:show, stored_person))
   end
 end

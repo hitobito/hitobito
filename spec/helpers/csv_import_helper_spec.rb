@@ -65,21 +65,85 @@ describe CsvImportHelper do
         email: "arbeit@example.com")
       p
     end
+    let(:user) { person }
+    let(:current_ability) { Ability.new(user) }
+    let(:row) { {email: person.email} }
+    let(:importer) do
+      Import::PersonImporter.new([row], groups(:top_group), Group::TopGroup::Member)
+        .tap { |importer| importer.user_ability = current_ability }
+    end
+    let(:entry) { importer.people.first.person }
+
+    def can?(action, subject) = current_ability.can?(action, subject)
 
     it "returns email value" do
-      expect(csv_import_contact_account_value(person, "additional_email_work")).to eq "arbeit@example.com"
+      expect(csv_import_contact_account_value(entry, "additional_email_work")).to eq "arbeit@example.com"
     end
 
     it "returns social account value" do
-      expect(csv_import_contact_account_value(person, "social_account_facebook")).to eq "foo"
+      expect(csv_import_contact_account_value(entry, "social_account_facebook")).to eq "foo"
     end
 
     it "returns nil for non existing social account value" do
-      expect(csv_import_contact_account_value(person, "social_account_x_twitter")).to be_nil
+      expect(csv_import_contact_account_value(entry, "social_account_x_twitter")).to be_nil
     end
 
     it "returns phone number" do
-      expect(csv_import_contact_account_value(person, "phone_number_landline")).to eq "+41 44 123 45 67"
+      expect(csv_import_contact_account_value(entry, "phone_number_landline")).to eq "+41 44 123 45 67"
+    end
+
+    context "for user without show permission on the person" do
+      let(:user) { Fabricate(:person) }
+      let(:row) { {email: person.email, phone_number_mobile: "+41 77 987 65 43"} }
+
+      it "returns nil for stored value" do
+        expect(csv_import_contact_account_value(entry, "phone_number_landline")).to be_nil
+      end
+
+      it "returns imported value" do
+        expect(csv_import_contact_account_value(entry, "phone_number_mobile")).to eq "+41 77 987 65 43"
+      end
+    end
+  end
+
+  context "#csv_import_attr_value" do
+    include FormatHelper
+    include ColumnHelper
+
+    let(:group) { groups(:bottom_layer_one) }
+    let(:user) { Fabricate(Group::BottomLayer::LocalGuide.name, group: group).person }
+    let(:current_ability) { Ability.new(user) }
+    let(:row) { {first_name: "Top", last_name: "Leader"} }
+    let(:importer) do
+      Import::PersonImporter.new([row], group, Group::BottomLayer::Member)
+        .tap { |importer| importer.user_ability = current_ability }
+    end
+    let(:entry) { importer.people.first.person }
+
+    context "with id mapped" do
+      let(:row) { {id: people(:top_leader).id.to_s, first_name: "Top"} }
+
+      it "returns id for user without show permission on the person" do
+        expect(csv_import_attr_value(entry, "id")).to eq format_attr(people(:top_leader), :id)
+      end
+    end
+
+    context "for user with show permission on the person" do
+      let(:user) { Fabricate(Group::BottomLayer::Leader.name, group: group).person }
+
+      it "returns stored value of person list column" do
+        expect(csv_import_attr_value(entry, "town")).to eq "Greattown"
+      end
+
+      it "returns no stored value of unregistered attribute" do
+        expect(csv_import_attr_value(entry, "additional_information")).to eq "fehlende Berechtigung"
+      end
+
+      it "returns no stored value of unregistered public attribute" do
+        stub_const("Person::PUBLIC_ATTRS", Person::PUBLIC_ATTRS + [:additional_information])
+
+        expect(csv_import_attr_value(entry, "additional_information")).to eq "fehlende Berechtigung"
+      end
     end
   end
 end

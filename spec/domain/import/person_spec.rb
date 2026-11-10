@@ -355,4 +355,61 @@ describe Import::Person do
       expect(import_people.fifth.human_errors).to start_with "Haupt-E-Mail ist bereits vergeben"
     end
   end
+
+  context "imported values" do
+    let(:person) do
+      Fabricate(:person, first_name: "Peter", nickname: nil).tap do |p|
+        p.phone_numbers.create!(number: "+41 44 123 45 67",
+          category: contact_account_categories(:phone_number_person_landline))
+      end
+    end
+    let(:data) do
+      {first_name: "foo", nickname: "Pete",
+       phone_number_landline: "+41 44 765 43 21", phone_number_mobile: "+41 77 456 78 90"}
+    end
+    let(:import_person) { Import::Person.new(person, data.with_indifferent_access, override: override) }
+
+    before { import_person.populate }
+
+    context "with keep behaviour" do
+      let(:override) { false }
+
+      it "contains only attributes blank in the database" do
+        expect(import_person.imported_attributes.keys).to eq %w[nickname]
+      end
+
+      it "contains only new contact accounts" do
+        expect(import_person.imported_accounts.map(&:number)).to eq ["+41 77 456 78 90"]
+      end
+
+      context "with id mapped" do
+        let(:data) { {id: person.id.to_s, first_name: "foo", nickname: "Pete"} }
+
+        it "contains id" do
+          expect(import_person.imported_attributes.keys).to eq %w[id nickname]
+        end
+      end
+    end
+
+    context "with override behaviour" do
+      let(:override) { true }
+
+      it "contains all attributes" do
+        expect(import_person.imported_attributes.keys).to eq %w[first_name nickname]
+      end
+
+      it "contains all contact accounts" do
+        expect(import_person.imported_accounts.map(&:number)).to match_array ["+41 44 765 43 21", "+41 77 456 78 90"]
+      end
+    end
+
+    context "for new person" do
+      let(:person) { Person.new }
+      let(:override) { false }
+
+      it "contains all attributes" do
+        expect(import_person.imported_attributes.keys).to eq %w[first_name nickname]
+      end
+    end
+  end
 end

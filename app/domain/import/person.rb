@@ -8,7 +8,8 @@ module Import
     delegate :save, :new_record?, :persisted?, to: :person
 
     attr_reader :person, :attributes, :override, :can_manage_tags, :role,
-      :phone_numbers, :social_accounts, :additional_emails, :tags
+      :phone_numbers, :social_accounts, :additional_emails, :tags,
+      :imported_attributes, :imported_accounts
 
     ROLE_ATTRIBUTES = %w[start_on end_on]
 
@@ -105,6 +106,7 @@ module Import
 
     def prepare(attributes)
       @attributes = attributes
+      @imported_accounts = []
       @additional_emails = extract_contact_fields(AdditionalEmail)
       @phone_numbers = extract_contact_fields(PhoneNumber)
       @social_accounts = extract_contact_fields(SocialAccount)
@@ -112,21 +114,23 @@ module Import
     end
 
     def assign_attributes
-      person.attributes =
+      @imported_attributes =
         if override || person.new_record?
           attributes
         else
-          attributes.select { |key, _v| person.attributes[key].blank? }
+          attributes.select { |key, _v| key == "id" || person.attributes[key].blank? }
         end
+      person.attributes = imported_attributes
     end
 
     def assign_accounts(accounts, association)
       accounts.each do |imported|
         existing = association.detect { |a| a.category_id == imported[:category_id] }
-        if existing
-          existing.attributes = imported if override
-        else
-          association.build(imported)
+        if existing.nil?
+          imported_accounts << association.build(imported)
+        elsif override
+          existing.attributes = imported
+          imported_accounts << existing
         end
       end
     end

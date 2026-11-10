@@ -37,8 +37,8 @@ describe "event/participations/_attrs.html.haml" do
 
     context "with PeopleManager assigned" do
       let!(:manager) do
-        Fabricate(:person).tap do |manager|
-          Fabricate(:phone_number, contactable: manager, number: "+41 44 123 45 57", label: "Privat")
+        phone_number = Fabricate.build(:phone_number, contactable: nil, number: "+41 44 123 45 57")
+        Fabricate(:person, phone_numbers: [phone_number]).tap do |manager|
           participation.person.managers << manager
         end
       end
@@ -49,7 +49,7 @@ describe "event/participations/_attrs.html.haml" do
         expect(dom).to have_text PeopleManager.model_name.human(count: 2)
         expect(dom).to have_text manager.to_s
         expect(dom).to have_text manager.email
-        expect(dom).to have_text manager.phone_numbers.first
+        expect(dom).to have_text "+41 44 123 45 57"
       end
     end
   end

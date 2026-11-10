@@ -42,7 +42,7 @@ describe Export::SubscriptionsJob do
     it "and saves it" do
       lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
-      expect(lines[0]).to match(/Name;c\/o-Adresse;Adressergänzung;Strasse;.*/)
+      expect(lines[0]).to match(/Name;c\/o-Adresse;Adresszusatz;Strasse;.*/)
     end
 
     context "with selection" do

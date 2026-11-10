@@ -37,7 +37,7 @@ describe Export::Tabular::People::Households do
         "Anrede",
         "Name",
         "c/o-Adresse",
-        "Adressergänzung",
+        "Adresszusatz",
         "Strasse",
         "Hausnummer",
         "Postfach",

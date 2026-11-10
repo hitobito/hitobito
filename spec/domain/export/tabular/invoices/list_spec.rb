@@ -68,7 +68,7 @@ describe Export::Tabular::Invoices::List do
       "Empfänger Vorname",
       "Empfänger Nachname",
       "Empfänger c/o-Adresse",
-      "Empfänger Adressergänzung",
+      "Empfänger Adresszusatz",
       "Empfänger Strasse",
       "Empfänger Hausnummer",
       "Empfänger Postfach",

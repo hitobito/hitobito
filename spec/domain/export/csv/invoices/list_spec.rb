@@ -23,7 +23,7 @@ describe Export::Tabular::Invoices::List do
       "MwSt.", "Rechnungsbetrag", "Bezahlt",
       "Kostenstellen", "Konten", "Zahlungseingänge",
       "Empfänger Firmenname", "Empfänger Name", "Empfänger Vorname", "Empfänger Nachname",
-      "Empfänger c/o-Adresse", "Empfänger Adressergänzung", "Empfänger Strasse", "Empfänger Hausnummer",
+      "Empfänger c/o-Adresse", "Empfänger Adresszusatz", "Empfänger Strasse", "Empfänger Hausnummer",
       "Empfänger Postfach",
       "Empfänger PLZ", "Empfänger Ort", "Empfänger Land", "Zahlungsempfänger Name", "Zahlungsempfänger Strasse",
       "Zahlungsempfänger Hausnummer", "Zahlungsempfänger PLZ", "Zahlungsempfänger Ort",

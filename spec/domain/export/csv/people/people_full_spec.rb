@@ -40,7 +40,7 @@ describe Export::Tabular::People::PeopleFull do
     it "has correct headers" do
       expected = [
         "Personennummer", "Vorname", "Nachname", "Übername", "Firmenname", "Firma", "Haupt-E-Mail",
-        "c/o-Adresse", "Adressergänzung", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
+        "c/o-Adresse", "Adresszusatz", "Strasse", "Hausnummer", "Postfach", "PLZ", "Ort", "Land",
         "Hauptebene", "Rollen",
         "Geschlecht", "Geburtstag", "Zusätzliche Angaben", "Sprache", "Kanton", "Tags",
         "Weitere E-Mail Privat", "Weitere E-Mail Arbeit", "Weitere E-Mail Rechnungsadresse", "Weitere E-Mail Andere",
@@ -80,7 +80,7 @@ describe Export::Tabular::People::PeopleFull do
         "Entreprise",
         "Adresse e-mail principale",
         "c/o-Adresse",
-        "Adressergänzung",
+        "Adresszusatz",
         "Rue",
         "Numéro de la maison",
         "Case postale",

@@ -27,7 +27,7 @@ module NavigationHelper
      if: ->(_) { Group.course_types.present? && can?(:list_available, Event::Course) }},
 
     {label: :invoices,
-     url: :first_group_invoices_or_root_path,
+     url: :closest_group_invoices_or_root_path,
      icon_name: "money-bill-alt",
      if: ->(_) { can?(:index, Invoice) },
      active_for: %w[invoices
@@ -167,9 +167,19 @@ module NavigationHelper
       Array(inactive_for).none? { |p| request.path =~ %r{/#{p}/?} })
   end
 
-  def first_group_invoices_or_root_path
-    return root_path if current_ability.user_finance_layer_ids.blank?
+  def closest_group_invoices_or_root_path
+    finance_layer_ids = current_ability.user_finance_layer_ids
+    return root_path if finance_layer_ids.blank?
 
-    group_invoices_path(current_ability.user_finance_layer_ids.first)
+    layer_id = closest_finance_layer_id(@group, finance_layer_ids) ||
+      closest_finance_layer_id(current_user.primary_group, finance_layer_ids) ||
+      Group.where(id: finance_layer_ids).order(:lft).pick(:id)
+    group_invoices_path(layer_id)
+  end
+
+  def closest_finance_layer_id(group, finance_layer_ids)
+    return unless group&.persisted?
+
+    group.self_and_ancestors.where(id: finance_layer_ids).reorder(lft: :desc).pick(:id)
   end
 end

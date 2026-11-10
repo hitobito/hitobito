@@ -22,15 +22,20 @@ module Export::Tabular::Groups
     self.row_class = Export::Tabular::Groups::Row
 
     def attributes
-      attrs = model_class.column_names + [:phone_numbers, :member_count, :social_accounts]
-      (address_addition_after_care_of(attrs) - EXCLUDED_ATTRS).collect(&:to_sym)
+      (group_attributes + other_columns + [:phone_numbers, :member_count, :social_accounts]) -
+        EXCLUDED_ATTRS.map(&:to_sym)
     end
 
     private
 
-    def address_addition_after_care_of(attrs)
-      attrs -= ["address_addition"]
-      attrs.insert(attrs.index("address_care_of") + 1, "address_addition")
+    def group_attributes
+      [:id, :parent_id, :name, :short_name, :type, :email,
+        :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code, :town,
+        :country, :updated_at, :layer_group_id, :description, :nextcloud_url, :language]
+    end
+
+    def other_columns
+      model_class.column_names.map(&:to_sym) - group_attributes
     end
   end
 end

@@ -27,7 +27,7 @@ describe Export::Tabular::Groups::List do
       "Gruppentyp",
       "Haupt-E-Mail",
       "c/o-Adresse",
-      "Adressergänzung",
+      "Adresszusatz",
       "Strasse",
       "Hausnummer",
       "Postfach",

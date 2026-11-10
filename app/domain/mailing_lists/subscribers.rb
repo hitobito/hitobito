@@ -34,7 +34,7 @@ class MailingLists::Subscribers
 
   def people_as_configured(use_people_subscriptions: !(opt_in? && subscribable_for_configured?))
     filter_chain.filter(
-      people_scope.merge(unfiltered_people_as_configured(use_people_subscriptions:))
+      people_scope.not_minimized.merge(unfiltered_people_as_configured(use_people_subscriptions:))
     )
   end
 

@@ -16,6 +16,10 @@ class Person::Filter::Base < Filter::Base
     nil
   end
 
+  def include_minimized?
+    false
+  end
+
   private
 
   def id_list(key)

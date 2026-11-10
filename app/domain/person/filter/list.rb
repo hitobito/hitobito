@@ -30,7 +30,8 @@ class Person::Filter::List < Filter::List
     ability = accessibles_class.new(
       user,
       (group_range? ? @group : nil),
-      include_ended_roles: chain.include_ended_roles?
+      include_ended_roles: chain.include_ended_roles?,
+      include_minimized: chain.include_minimized?
     )
     Person.accessible_by(ability).select(:contact_data_visible)
   end

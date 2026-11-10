@@ -8,13 +8,14 @@
 
 class Group::DeletedPeople
   class << self
-    def deleted_for(layer_group, person_joins = nil)
+    def deleted_for(layer_group, person_joins = nil, include_minimized: false)
       subquery = new(person_joins)
         .roles_of_deleted_people
         .joins(:group)
         .where(groups: {layer_group_id: Array(layer_group).map(&:id)})
         .distinct
-      Person.where(id: subquery.select(:person_id))
+      scope = include_minimized ? Person : Person.not_minimized
+      scope.where(id: subquery.select(:person_id))
     end
 
     def group_for_deleted(person)

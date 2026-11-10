@@ -32,8 +32,8 @@
       .profil= image_tag(upload_url(p, :picture, variant: :thumb, default: :profil), size: '32x32')
     - sortable_grouped_person_attr(t, last_name: true, first_name: true, nickname: true) do |p|
       %strong
-        -# Any person listed can be shown
-        = link_to(p.to_s(:list),
+        = link_to_if(can?(:show, p),
+                  p.to_s(:list),
                   @person_filter.multiple_groups ? group_person_path(p.default_group_id, p) : group_person_path(@group, p))
         %br/
         = muted p.additional_name

@@ -34,7 +34,7 @@ class Person::QueryController < ApplicationController
   end
 
   def scope
-    Person.only_public_data
+    Person.only_public_data.not_minimized
   end
 
   def authorize_action

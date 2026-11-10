@@ -772,6 +772,29 @@ describe Person do
         end
       end
     end
+
+    context "minimized" do
+      it "returns full name if a name field is still present" do
+        person = Fabricate.build(:person, minimized_at: Time.zone.now,
+          first_name: "John", last_name: nil, nickname: nil, company_name: nil)
+
+        expect(person.to_s).to eq("John")
+      end
+
+      it "returns placeholder if all name fields are blank" do
+        person = Fabricate.build(:person, minimized_at: Time.zone.now,
+          first_name: nil, last_name: nil, nickname: nil, company_name: nil)
+
+        expect(person.to_s).to eq("(inaktive Person)")
+      end
+
+      it "returns company name even if person names are blank" do
+        person = Fabricate.build(:person, minimized_at: Time.zone.now, company: true,
+          first_name: nil, last_name: nil, nickname: nil, company_name: "FooCorp")
+
+        expect(person.to_s).to eq("FooCorp")
+      end
+    end
   end
 
   describe "e-mail validation" do
@@ -1158,6 +1181,44 @@ describe Person do
     end
   end
 
+  describe "#minimized?" do
+    it "returns true if minimized_at is present" do
+      person = Fabricate.build(:person, minimized_at: Time.zone.now)
+      expect(person.minimized?).to be_truthy
+    end
+
+    it "returns false if minimized_at is blank" do
+      person = Fabricate.build(:person, minimized_at: nil)
+      expect(person.minimized?).to be_falsey
+    end
+  end
+
+  describe ".not_minimized scope" do
+    it "excludes minimized people" do
+      minimized = Fabricate(:person, minimized_at: Time.zone.now)
+      not_minimized = Fabricate(:person)
+
+      expect(Person.not_minimized).to include(not_minimized)
+      expect(Person.not_minimized).not_to include(minimized)
+    end
+  end
+
+  describe "name validation when minimized" do
+    it "is invalid without any name when not minimized" do
+      person = Fabricate.build(:person, first_name: nil, last_name: nil, nickname: nil)
+
+      expect(person).not_to be_valid
+      expect(person.errors[:base]).to include("Bitte geben Sie einen Namen ein")
+    end
+
+    it "is valid without any name when minimized" do
+      person = Fabricate.build(:person, minimized_at: Time.zone.now,
+        first_name: nil, last_name: nil, nickname: nil)
+
+      expect(person).to be_valid
+    end
+  end
+
   describe "after update" do
     let(:person) { people(:top_leader) }
 
@@ -1233,6 +1294,13 @@ describe Person do
 
       expect(other_person.reload.street).to eq "newstreet"
       expect(child.reload.street).to eq "newstreet"
+    end
+
+    it "excludes minimized household members" do
+      other_person.update_columns(minimized_at: Time.zone.now)
+
+      expect(person.household_people).not_to include(other_person)
+      expect(person.household_people).to include(child)
     end
   end
 

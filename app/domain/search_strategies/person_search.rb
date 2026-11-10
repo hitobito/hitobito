@@ -35,7 +35,7 @@ module SearchStrategies
     def people_without_role
       return unless ability.can?(:index_people_without_role, Person)
 
-      Person.where(
+      Person.not_minimized.where(
         <<-SQL,
           NOT EXISTS (
             SELECT * FROM roles

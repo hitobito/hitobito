@@ -40,6 +40,12 @@ describe MailingLists::Subscribers do
         expect(subject).to eq [bottom_member]
       end
 
+      it "excludes minimized person" do
+        create_subscription(bottom_layer_one, false, Group::BottomLayer::Member.sti_name)
+        bottom_member.update_columns(minimized_at: Time.zone.now)
+        expect(subject).to be_empty
+      end
+
       context "roles" do
         let(:role) { roles(:bottom_member) }
 

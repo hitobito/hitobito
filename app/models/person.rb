@@ -365,6 +365,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   scope :preload_roles_unscoped, -> { extending(PreloadRolesUnscoped) }
   scope :preload_roles, ->(roles_scope) { preload_roles_unscoped.roles_scope(roles_scope) }
+  scope :not_minimized, -> { where(minimized_at: nil) }
 
   ### CLASS METHODS
 
@@ -389,7 +390,11 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
 
     def only_public_data
-      select(PUBLIC_ATTRS.collect { |a| "people.#{a}" })
+      # minimized_at is not part of PUBLIC_ATTRS (never exposed via JSON/OIDC/exports), but is
+      # still selected here so Person#minimized? and the PersonAbility checks that rely on it
+      # keep working on records fetched through this scope.
+      attrs = [:minimized_at] + PUBLIC_ATTRS
+      select(attrs.collect { |a| "people.#{a}" })
     end
 
     def contact_data_visible
@@ -459,11 +464,18 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def to_s(format = :default)
+    return minimized_placeholder if minimized? && all_name_fields_blank?
+
     if company? && company_name.present?
       company_name
     else
       person_name(format)
     end
+  end
+
+  def minimized?
+    # has_attribute? guards against :minimized_at missing from a custom select
+    has_attribute?(:minimized_at) && minimized_at?
   end
 
   def person_name(format = :default)
@@ -487,8 +499,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def household_people
     Person
+      .not_minimized
       .where(id: household_people_ids).or(
-        Person.where.not(household_key: nil).where(household_key: household_key)
+        Person.not_minimized.where.not(household_key: nil).where(household_key: household_key)
       )
       .where.not(id: id)
       .includes(:groups)
@@ -634,9 +647,19 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   end
 
   def assert_has_any_name
+    return if minimized?
+
     if !company? && first_name.blank? && last_name.blank? && nickname.blank?
       errors.add(:base, :name_missing)
     end
+  end
+
+  def all_name_fields_blank?
+    first_name.blank? && last_name.blank? && nickname.blank? && company_name.blank?
+  end
+
+  def minimized_placeholder
+    I18n.t("activerecord.attributes.person.minimized_placeholder")
   end
 
   def assert_not_blocklisted

@@ -26,6 +26,11 @@ describe Export::Tabular::Groups::List do
       "Kurzname",
       "Gruppentyp",
       "Haupt-E-Mail",
+      "c/o-Adresse",
+      "Adressergänzung",
+      "Strasse",
+      "Hausnummer",
+      "Postfach",
       "PLZ",
       "Ort",
       "Land",
@@ -33,11 +38,6 @@ describe Export::Tabular::Groups::List do
       "Ebene",
       "Beschreibung",
       "Link zu Nextcloud",
-      "Strasse",
-      "Hausnummer",
-      "c/o-Adresse",
-      "Adressergänzung",
-      "Postfach",
       "Sprache",
       "Telefonnummern",
       "Anzahl Mitglieder",
@@ -46,6 +46,13 @@ describe Export::Tabular::Groups::List do
 
     should match_array expected
     should eq expected
+  end
+
+  it "exports columns added by wagons before the computed attributes" do
+    allow(Group).to receive(:column_names).and_return(Group.column_names + ["wagon_column"])
+
+    expect(Export::Tabular::Groups::List.new([]).attributes.last(4))
+      .to eq [:wagon_column, :phone_numbers, :member_count, :social_accounts]
   end
 
   it "has 4 items" do

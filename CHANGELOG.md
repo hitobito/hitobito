@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.11
 
 - PDF-Exporte von Rechnungen und Briefen mit Rechnung benötigen deutlich weniger Arbeitsspeicher (#4337)
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)

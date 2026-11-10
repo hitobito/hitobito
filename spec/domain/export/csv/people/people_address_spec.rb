@@ -53,9 +53,9 @@ describe Export::Tabular::People::PeopleAddress do
       before do
         Fabricate(Group::BottomGroup::Member.name.to_s, group: groups(:bottom_group_one_one), person: person)
         person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
-          number: "+41 44 123 45 67")
+          number: "+41 44 123 45 67", public: true)
         person.additional_emails.create!(category: contact_account_categories(:additional_email_person_work),
-          email: "vater@example.com")
+          email: "vater@example.com", public: true)
         person.additional_emails.create!(category: contact_account_categories(:additional_email_person_private),
           email: "mutter@example.com", public: false)
       end

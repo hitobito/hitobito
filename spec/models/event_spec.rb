@@ -1335,6 +1335,23 @@ describe Event do
     end
   end
 
+  describe "#description" do
+    let(:event) { events(:top_event) }
+
+    it "is stored on update" do
+      event.update!(description: "<div>Neu</div>")
+      expect(event.reload.plain_text_description).to eq "Neu"
+    end
+
+    it "stores no rich text on update without description" do
+      expect { event.update!(name: "Neuer Name") }.not_to change { ActionText::RichText.count }
+    end
+
+    it "stores no rich text on create without description" do
+      expect { Fabricate(:event, description: nil) }.not_to change { ActionText::RichText.count }
+    end
+  end
+
   def set_start_finish(event, start_at)
     start_at = Time.zone.parse(start_at)
     event.dates.create!(start_at: start_at, finish_at: start_at + 5.days)

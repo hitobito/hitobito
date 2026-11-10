@@ -93,13 +93,10 @@ module Globalized
       end
 
       after_update do
-        columns.each do |col|
-          translations.each do |translation|
-            translation.send(col).save if translation.send(col).changed?
-          end
-        end
+        translations.each(&:save_rich_texts)
       end
-      translation_class.include globalized_rich_text_module(columns)
+      translation_class.include Globalized::RichTextTranslation
+      translation_class.has_rich_texts(*columns)
     end
 
     def list
@@ -129,20 +126,6 @@ module Globalized
 
     def translated_label_column
       "#{translations_table_name}.#{translated_attribute_names.first}"
-    end
-
-    def globalized_rich_text_module(columns)
-      Module.new do
-        extend ActiveSupport::Concern
-
-        included do
-          columns.each do |col|
-            has_rich_text col.to_sym
-          end
-
-          default_scope { includes(*columns.map { |col| :"rich_text_#{col}" }) }
-        end
-      end
     end
   end
 

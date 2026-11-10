@@ -70,6 +70,18 @@ describe EventListSerializer do
       end
     end
 
+    it "includes description as plain text and html" do
+      events(:top_event).update!(description: "<div>Erste <strong>Zeile</strong></div>")
+
+      expect(subject[:description]).to eq "Erste Zeile"
+      expect(subject[:description_html]).to include "<div>Erste <strong>Zeile</strong></div>"
+    end
+
+    it "includes no description without description" do
+      expect(subject[:description]).to be_nil
+      expect(subject[:description_html]).to be_nil
+    end
+
     it "includes dates properties" do
       keys = [:id, :label, :start_at, :finish_at, :location]
       keys.each do |key|

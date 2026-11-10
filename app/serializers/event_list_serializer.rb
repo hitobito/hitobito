@@ -71,7 +71,7 @@ class EventListSerializer < ApplicationSerializer
     property :external_application_link, h.group_public_event_url(item.groups.first, item.id)
 
     property :description, item.plain_text_description
-    property :description_html, item.description.to_s
+    property :description_html, item.description&.to_s
 
     entity :kind, item.kind, EventKindSerializer if item.object.class.method_defined?(:kind)
 

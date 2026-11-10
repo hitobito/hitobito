@@ -169,7 +169,7 @@ it:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Inserire un nome'
-          blocklisted: Diese Person konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
+          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             base:
@@ -240,7 +240,6 @@ it:
             end_on:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
-          blocklisted: Diese Rolle konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           attributes:
             end_on:
               must_be_later_than_start_on: non può essere prima di "de"
@@ -664,10 +663,8 @@ it:
         read_at: Letto il
 
       blocklist_entry:
-        id: Referenznummer
         person: Persona
         blocked_hash: Hash
-        hashed_attrs: Angaben im Hash
         creator: Erstellt von
         created_at: Erstellt am
 
@@ -1188,7 +1185,6 @@ it:
               admin: Amministrazione delle impostazioni relative alle applicazioni come tipi di corso o formati delle etichette.
               layer_and_below_full: Leggere e scrivere tutto su questo livello e su tutti i livelli inferiori. Creare eventi e abbonamenti su questo livello.
               layer_and_below_read: Leggere tutto su questo livello e su tutti i livelli inferiori.
-              layer_and_below_read_details: Lesen auf dieser Ebene und allen darunter liegenden Ebenen, ohne vollständige Historie der Personen.
               layer_full: Leggere e scrivere tutto su questo livello. Creare eventi e abbonamenti su questo livello.
               layer_read: Leggere tutto su questo livello.
               group_and_below_full: 'Leggere e scrivere sul gruppo e su tutti i gruppi sottostanti (senza livelli). Compresa la realizzazione di eventi e abbonamenti.  '
@@ -1196,7 +1192,6 @@ it:
               group_full: Leggere e scrivere su questo gruppo. Creare eventi e abbonamenti su questo gruppo.
               group_read: Leggere su questo gruppo.
               contact_data: Leggere i dati di contatto di tutte le altre persone con diritto di accesso ai dati di contatto.
-              group_read_contact_data: Lesen der Kontaktdaten aller Personen in der Gruppe.
               qualify: Creare le qualifiche per le persone su questo livello e su quelli inferiori.
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
               finance: Emettere e amministrare fatture

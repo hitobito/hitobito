@@ -652,9 +652,6 @@ fr:
       explanation: >-
           Personen auf der Ausschlussliste können nicht mehr in hitobito erfasst werden.
           Gespeichert wird nur ein Hash über %{attributes}.
-      explanation_optional: >-
-          Personen auf der Ausschlussliste können nicht mehr in hitobito erfasst werden.
-          Gespeichert werden nur Hashes über %{attributes}, jeweils mit und ohne %{optional_attributes}.
       person_help: Bestehende oder gelöschte Person suchen. Die Angaben unten werden dann ignoriert.
       manual_entry: Oder Angaben manuell erfassen
     create:

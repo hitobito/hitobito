@@ -29,6 +29,34 @@ describe Oauth::AccessTokenCleanupJob do
         expect { job.perform }.to change { Oauth::AccessToken.count }.by(-1)
       end
     end
+
+    context "with refresh token lifetime on application" do
+      before { application.update!(refresh_token_lifetime_days: 180) }
+
+      it "keeps token refreshable for the configured lifetime" do
+        travel_to(179.days.from_now.noon) do
+          expect { job.perform }.not_to change { Oauth::AccessToken.count }
+        end
+      end
+
+      it "removes token after the configured lifetime" do
+        travel_to(181.days.from_now.noon) do
+          expect { job.perform }.to change { Oauth::AccessToken.count }.by(-1)
+        end
+      end
+
+      it "keeps applying the default lifetime to other applications" do
+        other_token = Fabricate(:access_token, application: Fabricate(:application, scopes:),
+          scopes:, resource_owner_id:)
+
+        travel_to(9.days.from_now.noon) do
+          job.perform
+        end
+
+        expect(Oauth::AccessToken.all).to eq [token]
+        expect { other_token.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   describe "revoked token behaviour" do

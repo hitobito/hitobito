@@ -112,8 +112,10 @@ An example response could be (formatted here for readability):
 #### Using a refresh token to acquire a new access token
 
 The access token response also included a refresh_token.
-While the access token expires after 2 hours, the refresh token is valid for 7 days.
-The refresh token can be used once in order to get a new access token and refresh token, as follows:
+While the access token expires after 2 hours, the refresh token is valid for 7 days after it was
+issued. This lifetime can be changed per OAuth application. The refresh token returns a new access
+token and refresh token. It stays valid until the new access token is first used against hitobito,
+so a request whose response got lost may be repeated:
 
 
 ```bash
@@ -128,7 +130,7 @@ curl -X POST \
 
 * `grant_type` For this type of request we use the value `refresh_token`
 * `client_id` and `client_secret` Same as above for the access token request
-* `refresh_token` Must be a valid, unused refresh_token
+* `refresh_token` Must be a valid refresh_token
 
 The response will contain the access token and a new refresh token (formatted here for readability):
 ```json

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2019-2024, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2019-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -9,18 +9,19 @@
 #
 # Table name: oauth_applications
 #
-#  id                   :integer          not null, primary key
-#  additional_audiences :string
-#  confidential         :boolean          default(TRUE), not null
-#  description          :text
-#  name                 :string           not null
-#  redirect_uri         :text             not null
-#  scopes               :string           default(""), not null
-#  secret               :string           not null
-#  skip_consent_screen  :boolean          default(FALSE)
-#  uid                  :string           not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
+#  id                          :integer          not null, primary key
+#  additional_audiences        :string
+#  confidential                :boolean          default(TRUE), not null
+#  description                 :text
+#  name                        :string           not null
+#  redirect_uri                :text             not null
+#  refresh_token_lifetime_days :integer
+#  scopes                      :string           default(""), not null
+#  secret                      :string           not null
+#  skip_consent_screen         :boolean          default(FALSE)
+#  uid                         :string           not null
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
 #
 # Indexes
 #
@@ -38,6 +39,8 @@ module Oauth
     end
     validates :logo, dimension: {width: {max: 8_000}, height: {max: 8_000}},
       content_type: ["image/jpeg", "image/gif", "image/png"]
+    validates :refresh_token_lifetime_days, numericality: {only_integer: true, greater_than: 0},
+      allow_nil: true
 
     scope :list, -> { order(:name) }
 
@@ -45,8 +48,16 @@ module Oauth
       I18n.t("doorkeeper.scopes.#{key}")
     end
 
+    def self.default_refresh_token_lifetime
+      Settings.oidc.refresh_token_expires_in.seconds
+    end
+
     def to_s
       name
+    end
+
+    def refresh_token_lifetime
+      refresh_token_lifetime_days&.days || self.class.default_refresh_token_lifetime
     end
 
     def jwt_audiences

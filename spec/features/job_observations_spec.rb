@@ -30,12 +30,14 @@ describe :job_observations, js: true do
       expect(page).not_to have_content("Other user job")
       expect(page).to have_css(".fas.fa-circle-notch", count: 1)
 
+      expect_turbo_streams_connected
       enqueue_job_by_current_and_other_user(Test::SuccessfulObservableJob)
 
       expect(page).to have_content("Current user job", count: 2)
       expect(page).not_to have_content("Other user job")
       expect(page).to have_css(".fas.fa-circle-notch", count: 2)
 
+      expect_turbo_streams_connected
       expect(Delayed::Worker.new.work_off).to eql([4, 0])
 
       expect(page).to have_content("Current user job", count: 2)
@@ -54,6 +56,7 @@ describe :job_observations, js: true do
     expect(page).not_to have_content("Current user job")
     expect(page).not_to have_content("Other user job")
 
+    expect_turbo_streams_connected
     expect(Delayed::Worker.new.work_off).to eql([2, 0])
 
     expect(page).to have_content("Job erfolgreich abgeschlossen", count: 1)
@@ -71,6 +74,7 @@ describe :job_observations, js: true do
     expect(page).not_to have_content("Current user job")
     expect(page).not_to have_content("Other user job")
 
+    expect_turbo_streams_connected
     expect(Delayed::Worker.new.work_off).to eql([0, 2])
 
     expect(page).to have_content("Fehler bei Jobausführung aufgetreten", count: 1)
@@ -94,6 +98,7 @@ describe :job_observations, js: true do
       expect(page).to have_content("First job", count: 2)
       expect(page).not_to have_content("Letzte")
 
+      expect_turbo_streams_connected
       delayed_job = job_class.new.enqueue!
       JobObservation.where(delayed_job:).update!(job_class: "SecondJob")
 
@@ -107,6 +112,7 @@ describe :job_observations, js: true do
       expect(page).not_to have_content("Second job")
       expect(page).to have_content("Erste")
 
+      expect_turbo_streams_connected
       delayed_job = job_class.new.enqueue!
       JobObservation.where(delayed_job:).update!(job_class: "SecondJob")
 
@@ -136,16 +142,19 @@ describe :job_observations, js: true do
 
     expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
 
+    expect_turbo_streams_connected
     in_progress_job = Test::SuccessfulObservableJob.new
     enqueued_in_progress_job = in_progress_job.enqueue!
     in_progress_job.job_observation.report_in_progress!
 
     expect(page).to have_css("#job-observations-link-with-badge .badge", text: 2)
 
+    expect_turbo_streams_connected
     run_enqueued_job(enqueued_job)
 
     expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
 
+    expect_turbo_streams_connected
     run_enqueued_job(enqueued_in_progress_job)
 
     expect(page).to have_css("#job-observations-link-with-badge")
@@ -192,6 +201,11 @@ describe :job_observations, js: true do
     allow(Auth).to receive(:current_person).and_return(top_leader)
   end
 
+  def expect_turbo_streams_connected
+    expect(page.document).to have_css("turbo-cable-stream-source", visible: false)
+    expect(page.document).not_to have_css("turbo-cable-stream-source:not([connected])", visible: false)
+  end
+
   context "export jobs" do
     around do |example|
       clear_downloads
@@ -212,6 +226,7 @@ describe :job_observations, js: true do
       expect(page).to have_css("turbo-cable-stream-source", visible: false, count: 1)
       expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
 
+      expect_turbo_streams_connected
       expect(Delayed::Worker.new.work_off).to eql([1, 0])
 
       wait_for_download

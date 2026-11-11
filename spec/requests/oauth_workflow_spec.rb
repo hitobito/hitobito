@@ -141,6 +141,72 @@ describe "OauthWorkflow" do
       expect(json["token_type"]).to eq "Bearer"
       expect(json["expires_in"]).to eq 2.hours.to_i
     end
+
+    def obtain_tokens
+      grant = @app.access_grants.create!(resource_owner_id: user.id, expires_in: 10, redirect_uri:,
+        scopes: "email")
+      post oauth_token_path,
+        params: {client_id: @app.uid, client_secret: @app.secret, redirect_uri:,
+                 code: grant.token, grant_type: "authorization_code"}
+      json
+    end
+
+    def refresh_with(refresh_token)
+      post oauth_token_path,
+        params: {client_id: @app.uid, client_secret: @app.secret, refresh_token:,
+                 grant_type: "refresh_token"}
+    end
+
+    def use_access_token(access_token)
+      get oauth_profile_path, headers: {"Authorization" => "Bearer #{access_token}"}
+      expect(response).to have_http_status(:ok)
+    end
+
+    shared_examples "refresh token revocation" do
+      it "accepts the old refresh token again as long as the new access token is unused" do
+        old_refresh_token = obtain_tokens["refresh_token"]
+        refresh_with(old_refresh_token)
+        expect(response).to have_http_status(:ok)
+
+        refresh_with(old_refresh_token)
+        expect(response).to have_http_status(:ok)
+        expect(json["access_token"]).to be_present
+      end
+
+      it "rejects the old refresh token once the new access token has been used" do
+        old_refresh_token = obtain_tokens["refresh_token"]
+        refresh_with(old_refresh_token)
+        new_tokens = json
+
+        use_access_token(new_tokens["access_token"])
+
+        refresh_with(old_refresh_token)
+        expect(response).to have_http_status(:bad_request)
+        expect(json["error"]).to eq "invalid_grant"
+
+        refresh_with(new_tokens["refresh_token"])
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    it_behaves_like "refresh token revocation"
+
+    context "with jwt" do
+      let(:key) { OpenSSL::PKey::RSA.generate(2048) }
+
+      before do
+        allow(Settings.oidc).to receive(:signing_key).and_return(key.to_s.lines)
+        allow(Doorkeeper::JWT.configuration).to receive(:secret_key).and_return(key.to_s)
+        allow(Doorkeeper.config).to receive(:access_token_generator).and_return("::Doorkeeper::JWT")
+      end
+
+      it "issues jwt access tokens" do
+        refresh_with(obtain_tokens["refresh_token"])
+        expect(jwt_decode(json["access_token"])["sub"]).to eq user.id
+      end
+
+      it_behaves_like "refresh token revocation"
+    end
   end
 
   context "using token" do

@@ -35,7 +35,8 @@ describe EventResource, type: :resource do
         :external_application_link,
         :participations_visible,
         :type,
-        :updated_at
+        :updated_at,
+        :tag_list
       ]
     end
 
@@ -49,6 +50,16 @@ describe EventResource, type: :resource do
       expect(data.id).to eq(event.id)
       expect(data.jsonapi_type).to eq("events")
       expect(data.attributes["type"]).to be_blank
+    end
+
+    it "includes tag_list" do
+      event.tag_list = ["zeta", "alpha"]
+      event.save!
+
+      render
+
+      data = jsonapi_data[0]
+      expect(data.tag_list).to eq(["alpha", "zeta"])
     end
 
     describe "external_application_link" do

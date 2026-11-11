@@ -30,8 +30,7 @@ class DocumentationReader
     html = Commonmarker.to_html(markdown,
       plugins: {syntax_highlighter: nil},
       options: {
-        render: {gemojis: true},
-        extensions: {table: true}
+        extension: {table: true, shortcodes: true, header_ids: nil}
       })
     style_tables(html)
     html += source_link

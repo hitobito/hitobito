@@ -24,6 +24,7 @@ jobs:
       - name: 'Remove the label if present'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
         run: |
           if gh pr view "$PR" --json labels --jq '.labels[].name' | grep -qx 'run-wagon-tests!'; then

@@ -149,9 +149,9 @@ people:
   cleanup_job:
     enabled: false
   cleanup_cutoff_duration:
-    regarding_current_sign_in_at: 1000 # months
-    regarding_roles: 1000 # months
-    regarding_event_participations: 120 # months
+    regarding_current_sign_in_at: P1000M # months
+    regarding_roles: P1000M # months
+    regarding_event_participations: P120M # months
   inactivity_block:
     # durations must be specified in ISO_8601 format.
     # see https://en.wikipedia.org/wiki/ISO_8601#Durations
@@ -192,7 +192,7 @@ event:
     max_file_size: 10 # MB
   globally_visible_by_default: true # previous behaviour
   participations:
-    delete_additional_information_after_months: 1200
+    delete_additional_information_after_months: P1200M
   qualifications:
     comments:
       enabled: true

@@ -39,4 +39,10 @@ class MailingListResource < ApplicationResource
   end
 
   belongs_to :group, resource: GroupResource, writable: false
+
+  has_many :subscribers, resource: PersonResource, writable: false, single: true do
+    # Needed because Person does not have a mailing_list_id foreign key.
+    # Skipping graphiti's assignment logic is okay as long as we only allow single
+    assign do; end
+  end
 end

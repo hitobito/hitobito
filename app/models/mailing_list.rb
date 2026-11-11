@@ -144,6 +144,10 @@ class MailingList < ActiveRecord::Base
     MailingLists::Subscribers.new(self).subscribed?(person)
   end
 
+  def subscribers
+    people(Person)
+  end
+
   def people(people_scope = Person.only_public_data)
     MailingLists::Subscribers.new(self, people_scope).people
   end

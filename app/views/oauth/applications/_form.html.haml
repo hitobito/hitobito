@@ -20,6 +20,9 @@
 
   = f.labeled_boolean_field :skip_consent_screen, caption: t('.skip_consent_screen_explanation')
 
+  = f.labeled_input_field :refresh_token_lifetime_days,
+    help: t('.help_refresh_token_lifetime_days', default_days: Oauth::Application.default_refresh_token_lifetime.in_days.to_i)
+
   = field_set_tag do
     = f.labeled :logo, class: 'mt-1' do
       = f.file_field :logo, type: :file, accept: Settings.application.image_upload.content_types.join(','), class: 'form-control form-control-sm'

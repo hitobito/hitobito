@@ -2,6 +2,7 @@
 
 ## Version 2.11
 
+- OAuth-Applikationen können eine eigene Gültigkeitsdauer für Refresh Tokens erhalten, z. B. damit Logins in Mobile-Apps länger gültig bleiben (hitobito_sac_cas#2755)
 - PDF-Exporte von Rechnungen und Briefen mit Rechnung benötigen deutlich weniger Arbeitsspeicher (#4337)
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)

@@ -75,7 +75,7 @@ describe MailRelay::Lists do
 
     context "with matching preferred_labels" do
       before do
-        list.update(preferred_labels: %w[preferred1 preferred2])
+        list.update_column(:preferred_labels, %w[preferred1 preferred2])
       end
 
       let!(:e1) { Fabricate(:additional_email, contactable: ind, label: "preferred1") }
@@ -86,7 +86,7 @@ describe MailRelay::Lists do
 
     context "without matching preferred_labels" do
       before do
-        list.update(preferred_labels: %w[preferred1 preferred2])
+        list.update_column(:preferred_labels, %w[preferred1 preferred2])
       end
 
       let!(:e1) { Fabricate(:additional_email, contactable: ind, label: "preferreda", mailings: false) }

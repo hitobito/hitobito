@@ -66,6 +66,7 @@ class MailingList < ActiveRecord::Base
     allow_blank: true
   validates :description, length: {allow_nil: true, maximum: (2**16) - 1}
   validate :assert_mail_name_is_not_protected
+  validate :assert_preferred_labels_are_known
   validates :additional_sender,
     allow_blank: true,
     format: /\A *(([a-z][a-z0-9\-\_\.]*|\*)@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,} *(,|;|\Z) *)+\Z/
@@ -99,6 +100,10 @@ class MailingList < ActiveRecord::Base
 
   i18n_enum :subscribable_for, SUBSCRIBABLE_FORS, scopes: true
   i18n_enum :subscribable_mode, SUBSCRIBABLE_MODES, scopes: true
+
+  def self.preferred_label_categories
+    ContactAccountCategory.for("AdditionalEmail", "Person")
+  end
 
   def to_s(_format = :default)
     name
@@ -202,6 +207,12 @@ class MailingList < ActiveRecord::Base
         errors.add(:mail_name, :not_allowed, mail_name: mail_name)
       end
     end
+  end
+
+  def assert_preferred_labels_are_known
+    known = self.class.preferred_label_categories.map(&:key)
+    newly_added = preferred_labels - known - preferred_labels_was.to_a
+    newly_added.each { |label| errors.add(:preferred_labels, :unknown, label: label) }
   end
 
   def application_retriever_name

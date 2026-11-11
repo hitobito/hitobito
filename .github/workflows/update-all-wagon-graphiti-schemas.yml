@@ -88,6 +88,7 @@ jobs:
 
           if [ -n "$PR_NUMBER" ]; then
             echo "Found PR #$PR_NUMBER"
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
             echo "CORE_REFERENCE=hitobito/hitobito#$PR_NUMBER" >> $GITHUB_ENV
           else
             echo "No PR found for $BRANCH_NAME, referencing the branch instead"
@@ -190,9 +191,18 @@ jobs:
             exit 0
           fi
 
+          BODY_FILE="$RUNNER_TEMP/pr-body.md"
+          echo "Automated schema update triggered by the 'Update Wagon Graphiti Schemas' workflow of $CORE_REFERENCE." > "$BODY_FILE"
+
+          if [ -n "$PR_NUMBER" ]; then
+            gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json closingIssuesReferences \
+              --jq '.closingIssuesReferences[] | "Fixes \(.repository.owner.login)/\(.repository.name)#\(.number)"' \
+              >> "$BODY_FILE"
+          fi
+
           gh pr create \
             --repo "$WAGON_OWNER/$WAGON_REPO" \
             --base "master" \
             --head "$BRANCH_NAME" \
             --title "Update Graphiti schema ($CORE_REFERENCE)" \
-            --body "Automated schema update triggered by the 'Update Wagon Graphiti Schemas' workflow of $CORE_REFERENCE."
+            --body-file "$BODY_FILE"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_11_04_163451) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_11_121259) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1033,6 +1033,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_04_163451) do
     t.boolean "skip_consent_screen", default: false
     t.string "additional_audiences"
     t.text "description"
+    t.integer "refresh_token_lifetime_days"
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 

@@ -53,4 +53,30 @@ describe Oauth::ApplicationsController do
       end
     end
   end
+
+  describe "refresh token lifetime" do
+    render_views
+
+    let!(:application) do
+      Oauth::Application.create!(name: "ExistingApp", redirect_uri: "urn:ietf:wg:oauth:2.0:oob")
+    end
+
+    it "PATCH#update saves refresh token lifetime" do
+      patch :update,
+        params: {id: application.id, oauth_application: {refresh_token_lifetime_days: 180}}
+      expect(application.reload.refresh_token_lifetime_days).to eq 180
+    end
+
+    it "GET#edit renders field with default lifetime as help" do
+      get :edit, params: {id: application.id}
+      expect(response.body).to include("oauth_application[refresh_token_lifetime_days]")
+      expect(response.body).to include("Standard von 7 Tagen")
+    end
+
+    it "GET#show renders refresh token lifetime" do
+      application.update!(refresh_token_lifetime_days: 180)
+      get :show, params: {id: application.id}
+      expect(response.body).to include("Gültigkeit Refresh Token (Tage)")
+    end
+  end
 end

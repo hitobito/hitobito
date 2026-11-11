@@ -23,6 +23,7 @@
 - Der Navigationspunkt "Rechnungen" öffnet das Rechnungsmenü der nächstgelegenen Ebene mit Finanzberechtigung der aktuellen Gruppe resp. der Hauptgruppe (#4510)
 - Personen mit mehreren Rollen mit Berechtigung "layer_and_below_finance" sehen im Rechnungsmenü alle entsprechenden Ebenen (#4510)
 - Minimierte Personen werden neu in Personenlisten, der Suche und Auswahlfeldern ausgeblendet; ihre Profilseite ist nicht mehr zugänglich (#4624)
+- OAuth-Applikationen können eine eigene Gültigkeitsdauer für Refresh Tokens erhalten, z. B. damit Logins in Mobile-Apps länger gültig bleiben (hitobito_sac_cas#2755)
 
 ## Version 2.10
 

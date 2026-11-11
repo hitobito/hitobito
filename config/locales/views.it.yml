@@ -2275,6 +2275,10 @@ it:
           (gruppi, eventi e abbonamenti; nessuna altra persona ).
       only_visible_from_above: Questo ruolo è visibile solo alle persone di questo livello, non per quelle ad un livello superiore.
 
+    end:
+      title: Beenden
+      confirm: Willst du diese Rolle wirklich beenden?
+
   roles/terminations:
     global:
       title: Uscita
@@ -2501,6 +2505,9 @@ it:
         create: "La richiesta d'accesso per <i>%{label}</i> è stata inviata."
         update: "La richiesta d'accesso per <i>%{label}</i> è stata aggiornata: %{changeset}"
         destroy: "La richiesta d'accesso per <i>%{label}</i> è stata evasa."
+
+      role:
+        create: "%{model} <i>%{label}</i> wurde hinzugefügt: %{changeset}"
 
       deleted_person: "Persona cancellata"
       people_manager:

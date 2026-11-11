@@ -680,6 +680,7 @@ it:
         first_name: Nome
         last_name: Cognome
         name: Nome
+        minimized_placeholder: "(inaktive Person)"
         company_name: Nome della ditta
         company: Ditta
         nickname: Soprannome

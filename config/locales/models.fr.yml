@@ -681,6 +681,7 @@ fr:
         first_name: Prénom
         last_name: Nom
         name: Nom
+        minimized_placeholder: "(inaktive Person)"
         company_name: Nom de l'entreprise
         company: Entreprise
         nickname: Surnom

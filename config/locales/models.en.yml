@@ -596,6 +596,7 @@ en:
         first_name: First name
         last_name: Last name
         name: Name
+        minimized_placeholder: "(inaktive Person)"
         company_name: Company name
         company: Company
         nickname: Nickname

@@ -2221,6 +2221,10 @@ en:
           events and subscriptions; no other people).
       only_visible_from_above: This role is visible only to people in this level, not by people from higher layers.
 
+    end:
+      title: Beenden
+      confirm: Willst du diese Rolle wirklich beenden?
+
   roles/terminations:
     global:
       title: Austritt
@@ -2445,6 +2449,9 @@ en:
         create: "Access for <i>%{label}</i> requested."
         update: "Update of request for <i>%{label}</i>: %{changeset}"
         destroy: "Request for <i>%{label}</i> has been answered."
+
+      role:
+        create: "%{model} <i>%{label}</i> wurde hinzugefügt: %{changeset}"
 
       deleted_person: "Deleted person"
       people_manager:

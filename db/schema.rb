@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_11_11_121259) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_12_102539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1137,7 +1137,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_11_121259) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "title"
-    t.string "text"
+    t.text "text"
     t.integer "level"
     t.boolean "show_invoice_description", default: true, null: false
     t.index ["invoice_id"], name: "index_payment_reminders_on_invoice_id"

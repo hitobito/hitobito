@@ -1034,6 +1034,7 @@ de_DE:
         description: Beschreibung
         additional_audiences: Weitere Audiences
         skip_consent_screen: Einwilligung überspringen
+        refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:
         number: Nummer

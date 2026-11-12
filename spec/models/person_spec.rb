@@ -1368,6 +1368,34 @@ describe Person do
       expect { person.update!(nickname: "nick") }.not_to change { person.tags.reload.count }
     end
 
+    context "with fields not sent to swiss post" do
+      before do
+        allow(Synchronize::Addresses::SwissPost::Generator).to receive(:fields).and_return(
+          Synchronize::Addresses::SwissPost::Generator.fields
+            .merge(AddressAddition_in: nil, CountryCode_in: nil)
+        )
+      end
+
+      it "does not remove excluded tags when such a field changes" do
+        expect { person.update!(address_addition: "Hinterhaus") }
+          .not_to change { person.tags.reload.count }
+      end
+
+      it "removes excluded tags when postbox changes" do
+        expect { person.update!(postbox: "Postfach 12") }
+          .to change { person.tags.reload.count }.by(-1)
+      end
+
+      it "removes excluded tags when country changes" do
+        expect { person.update!(country: "LI") }.to change { person.tags.reload.count }.by(-1)
+      end
+    end
+
+    it "removes excluded tags when address_addition changes and is sent to swiss post" do
+      expect { person.update!(address_addition: "Hinterhaus") }
+        .to change { person.tags.reload.count }.by(-1)
+    end
+
     it "does not remove excluded tags when address_sync feature is disabled" do
       allow(FeatureGate).to receive(:enabled?).with("address_sync").and_return(false)
 

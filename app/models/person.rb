@@ -154,6 +154,9 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # Configure which Person attributes can be used to identify a person for login.
   class_attribute :devise_login_id_attrs, default: [:email]
 
+  # Relevant even if not sent: the post returns the postbox, the country may restrict who is synced
+  ADDRESS_SYNC_FIELDS_RELEVANT_UNSENT = %w[postbox country].freeze
+
   class_attribute :address_sync_relevant_fields, default: %w[
     last_name
     first_name
@@ -629,7 +632,14 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   def address_sync_fields_changed?
     FeatureGate.enabled?("address_sync") &&
-      (address_sync_relevant_fields & saved_changes.keys).any?
+      (synced_address_fields & saved_changes.keys).any?
+  end
+
+  def synced_address_fields
+    address_sync_relevant_fields.select do |field|
+      field.to_s.in?(ADDRESS_SYNC_FIELDS_RELEVANT_UNSENT) ||
+        Synchronize::Addresses::SwissPost::Generator.sends?(field.to_sym)
+    end
   end
 
   def remove_address_sync_excluded_tags

@@ -36,6 +36,19 @@ describe Synchronize::Addresses::SwissPost::Generator do
     expect(result[0]["AddressAddition_in"]).to eq "Hinterhaus"
   end
 
+  describe ".sends?" do
+    it "is true for attributes mapped to a swiss post field" do
+      expect(described_class.sends?(:address_addition)).to eq true
+    end
+
+    it "is false for attributes not mapped to a swiss post field" do
+      allow(described_class).to receive(:fields)
+        .and_return(described_class.fields.merge(AddressAddition_in: nil))
+
+      expect(described_class.sends?(:address_addition)).to eq false
+    end
+  end
+
   it "populates fields accordingly" do
     expect(result[0].to_h.symbolize_keys).to eq(
       {

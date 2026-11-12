@@ -34,10 +34,10 @@ describe Person::AddRequestMailer do
     its(:sender) { should =~ /#{requester.email.tr("@", "=")}/ }
     its(:subject) { should == "Freigabe deiner Personendaten" }
     its(:body) { should =~ /Hallo #{person.first_name}/ }
-    its(:body) { should =~ /#{requester.full_name} möchte dich/ }
+    its(:body) { should =~ /#{requester.person_name} möchte dich/ }
     its(:body) { should =~ /Bottom Layer Bottom One/ }
     its(:body) { should =~ /test.host\/groups\/#{group.id}/ }
-    its(:body) { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
+    its(:body) { should =~ /#{requester.person_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body) { should =~ /Leader in Bottom One/ }
     its(:body) do
       should =~ /test.host\/people\/#{person.id}\?body_id=#{group.id}&body_type=Group/
@@ -70,11 +70,11 @@ describe Person::AddRequestMailer do
     its(:sender) { should =~ /#{requester.email.tr("@", "=")}/ }
     its(:subject) { should == "Freigabe Personendaten" }
     its(:body) { should =~ /Hallo #{leader.greeting_name}, #{leader2.greeting_name}/ }
-    its(:body) { should =~ /#{requester.full_name} möchte #{person.full_name}/ }
+    its(:body) { should =~ /#{requester.person_name} möchte #{person.person_name}/ }
     its(:body) { should =~ /Bottom Layer Bottom One/ }
     its(:body) { should have_css "a", text: "Bottom Layer Bottom One" }
     its(:body) { should =~ /test.host\/groups\/#{group.id}/ }
-    its(:body) { should =~ /#{requester.full_name} hat folgende schreibberechtigten Rollen:/ }
+    its(:body) { should =~ /#{requester.person_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body) { should =~ /Leader in Bottom One/ }
     its(:body) { should have_css "a", text: "Anfrage beantworten" }
     its(:body) do
@@ -96,9 +96,9 @@ describe Person::AddRequestMailer do
       its(:subject) { should == "Freigabe der Personendaten akzeptiert" }
       its(:body) { should =~ /Hallo #{requester.greeting_name}/ }
       its(:body) do
-        should =~ /#{leader.full_name} hat deine Anfrage für #{person.full_name} freigegeben/
+        should =~ /#{leader.person_name} hat deine Anfrage für #{person.person_name} freigegeben/
       end
-      its(:body) { should =~ /#{leader.full_name} hat folgende schreibberechtigten Rollen:/ }
+      its(:body) { should =~ /#{leader.person_name} hat folgende schreibberechtigten Rollen:/ }
       its(:body) { should =~ /Leader in Bottom Two/ }
       its(:body) { should have_css "a", text: "Bottom Layer Bottom One" }
     end
@@ -113,9 +113,9 @@ describe Person::AddRequestMailer do
       its(:subject) { should == "Freigabe der Personendaten akzeptiert" }
       its(:body) { should =~ /Hallo #{requester.greeting_name}/ }
       its(:body) do
-        should =~ /#{person.full_name} hat deine Anfrage für #{person.full_name} freigegeben/
+        should =~ /#{person.person_name} hat deine Anfrage für #{person.person_name} freigegeben/
       end
-      its(:body) { should =~ /#{person.full_name} hat folgende schreibberechtigten Rollen:/ }
+      its(:body) { should =~ /#{person.person_name} hat folgende schreibberechtigten Rollen:/ }
       its(:body) { should have_css "a", text: "Bottom Layer Bottom One" }
     end
   end
@@ -134,9 +134,9 @@ describe Person::AddRequestMailer do
     its(:subject) { should == "Freigabe der Personendaten abgelehnt" }
     its(:body) { should =~ /Hallo #{requester.greeting_name}/ }
     its(:body) do
-      should =~ /#{leader.full_name} hat deine Anfrage für #{person.full_name} abgelehnt/
+      should =~ /#{leader.person_name} hat deine Anfrage für #{person.person_name} abgelehnt/
     end
-    its(:body) { should =~ /#{leader.full_name} hat folgende schreibberechtigten Rollen:/ }
+    its(:body) { should =~ /#{leader.person_name} hat folgende schreibberechtigten Rollen:/ }
     its(:body) { should =~ /Leader in Bottom Two/ }
     its(:body) { should have_css "a", text: "Bottom Layer Bottom One" }
   end

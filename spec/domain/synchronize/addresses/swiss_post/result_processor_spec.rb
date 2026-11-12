@@ -98,12 +98,20 @@ describe Synchronize::Addresses::SwissPost::ResultProcessor do
         top_leader.update!(address_addition: "Hinterhaus")
       end
 
-      it "keeps address_addition" do
+      it "keeps address_addition if the post returns none" do
         expect do
           process_with do |data|
             data.entries.last["AddressAddition"] = ""
           end
         end.not_to change { top_leader.reload.address_addition }
+      end
+
+      it "assigns address_addition if the post returns one" do
+        expect do
+          process_with do |data|
+            data.entries.last["AddressAddition"] = "Chalet Edelweiss"
+          end
+        end.to change { top_leader.reload.address_addition }.to("Chalet Edelweiss")
       end
     end
 

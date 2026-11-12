@@ -74,7 +74,7 @@ module Synchronize::Addresses::SwissPost
       person.first_name = read_first_name(row)
       person.last_name = read_last_name(row)
       person.address_care_of = read_address_care_of(row)
-      person.address_addition = read_address_addition(row) if address_addition_synced?
+      person.address_addition = read_address_addition(row) if assign_address_addition?(row)
       person.street = read_street(row)
       person.housenumber = read_housenumber(row)
       person.postbox = read_postbox(row)
@@ -90,7 +90,9 @@ module Synchronize::Addresses::SwissPost
 
     def read_address_addition(row) = row["AddressAddition"]
 
-    def address_addition_synced? = Generator.sends?(:address_addition)
+    def assign_address_addition?(row)
+      Generator.sends?(:address_addition) || read_address_addition(row).present?
+    end
 
     def read_street(row) = row["StreetName"]
 

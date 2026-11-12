@@ -1601,6 +1601,7 @@ de_DE:
         help_native_redirect_uris: Ein Eintrag pro Zeile. Für lokale Tests <code class='bg-light'>%{native_redirect_uri}</code> verwenden.
         help_additional_audiences: Zusätzliche Einträge für den <code class='bg-light'>aud</code> Key im JWT Access Token.
         skip_consent_screen_explanation: Applikation ist verbandsintern und vertrauenswürdig, Consent Screen überspringen
+        help_refresh_token_lifetime_days: Solange bleibt ein Login gültig, wenn die Applikation nicht genutzt wird. Leer lassen für den Standard von %{default_days} Tagen.
       attrs:
         profile_endpoint_help:
           Profile Informationen der angemeldeten Person können über diesen Endpoint bezogen werden. Dabei muss das Access Token im Authorization Header übergeben werden. Der gewünschte Scope kann als X-Scope Header übergeben werden.

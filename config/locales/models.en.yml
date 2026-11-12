@@ -1030,6 +1030,7 @@ en:
         description: Description
         additional_audiences: Further audiences
         skip_consent_screen: Skip consent
+        refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:
         number: Number

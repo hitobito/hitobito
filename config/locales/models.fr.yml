@@ -1115,6 +1115,7 @@ fr:
         description: Description
         additional_audiences: Autres audiences
         skip_consent_screen: Sauter le consentement
+        refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:
         number: Numéro

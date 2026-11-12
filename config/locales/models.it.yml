@@ -1114,6 +1114,7 @@ it:
         description: Descrizione
         additional_audiences: Altri destinatari
         skip_consent_screen: Salta il consenso
+        refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:
         number: Numero

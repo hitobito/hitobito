@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2024, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2026, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -278,7 +278,7 @@ describe Export::Pdf::Messages::Letter do
         [71, 654, "Anton Abraham, Zora Zaugg"],
         [71, 644, housemate1.address],
         [71, 634, "#{housemate1.zip_code} #{housemate1.town}"],
-        [71, 625, housemate1.country],
+        [71, 625, housemate1.country_label.upcase],
         [71, 531, "Information"],
         [71, 502, "Hallo"],
         [71, 483, "Wir laden "],
@@ -399,13 +399,13 @@ describe Export::Pdf::Messages::Letter do
           [71, 654, "Anton Abraham, Zora Zaugg"],
           [71, 644, housemate1.address],
           [71, 634, "#{housemate1.zip_code} #{housemate1.town}"],
-          [71, 625, housemate1.country],
+          [71, 625, housemate1.country_label.upcase],
           [71, 531, "Brief"],
           [71, 502, "Hallo"],
           [71, 654, "Bettina Büttel, Carlo Colorado"],
           [71, 644, housemate3.address],
           [71, 634, "#{housemate3.zip_code} #{housemate3.town}"],
-          [71, 625, housemate3.country],
+          [71, 625, housemate3.country_label.upcase],
           [71, 531, "Brief"],
           [71, 502, "Hallo"],
           [71, 654, "Bottom Member"],
@@ -416,7 +416,7 @@ describe Export::Pdf::Messages::Letter do
           [71, 654, "Dominik Dachs"],
           [71, 644, single_person.address],
           [71, 634, "#{single_person.zip_code} #{single_person.town}"],
-          [71, 625, single_person.country],
+          [71, 625, single_person.country_label.upcase],
           [71, 531, "Brief"],
           [71, 502, "Hallo"]
         ]
@@ -431,7 +431,7 @@ describe Export::Pdf::Messages::Letter do
           [71, 644, "Colorado, Zora Zaugg"],
           [71, 634, housemate1.address],
           [71, 625, "#{housemate1.zip_code} #{housemate1.town}"],
-          [71, 615, housemate1.country],
+          [71, 615, housemate1.country_label.upcase],
           [71, 531, "Brief"],
           [71, 502, "Hallo"],
           [71, 654, "Bottom Member"],
@@ -447,7 +447,7 @@ describe Export::Pdf::Messages::Letter do
           [71, 654, "Dominik Dachs"],
           [71, 644, single_person.address],
           [71, 634, "#{single_person.zip_code} #{single_person.town}"],
-          [71, 625, single_person.country],
+          [71, 625, single_person.country_label.upcase],
           [71, 531, "Brief"],
           [71, 502, "Hallo"]
         ]

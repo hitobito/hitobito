@@ -7,6 +7,8 @@
 - JSON:API: Das Attribut `description` von Anlässen enthält neu den reinen Text der Beschreibung, die formatierte Beschreibung ist im neuen Attribut `description_html` verfügbar (#1791)
 - URLs und E-Mail-Adressen in formatierten Texten (Anlassbeschreibungen, Mailvorlagen, Hilfetexte, Briefe) werden automatisch verlinkt (#1791)
 - Neues Adressfeld "Adresszusatz" hinzugefügt, es wird nun zwischen c/o-Adresse und Adresszusatz unterschieden (hitobito_sww#292)
+- Gedruckte Adressen auf Briefen, Etiketten, Rechnungen und Ausweisen mit mehr als 6 Zeilen werden gekürzt: c/o-Adresse und Adresszusatz kommen auf eine Zeile, ist ein Postfach vorhanden, entfallen Strasse und Hausnummer, auf Etiketten zuletzt der Übername (hitobito_sww#292)
+- Auf gedruckten Auslandsadressen steht das Land ausgeschrieben in Grossbuchstaben auf der letzten Zeile, wie es der Weltpostverein verlangt (hitobito_sww#292)
 - PDF-Exporte von Rechnungen und Briefen mit Rechnung benötigen deutlich weniger Arbeitsspeicher (#4337)
 - Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)

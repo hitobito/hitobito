@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -51,6 +51,28 @@ describe "event/participations/_attrs.html.haml" do
         expect(dom).to have_text manager.email
         expect(dom).to have_text "+41 44 123 45 57"
       end
+    end
+  end
+
+  context "birthday" do
+    let(:event) do
+      EventDecorator.decorate(Fabricate(:course, groups: [groups(:top_layer)],
+        participations_visible: true))
+    end
+
+    before { participation.person.update!(birthday: Date.new(1990, 3, 14)) }
+
+    it "is shown to user allowed to show details" do
+      login_as(people(:top_leader))
+
+      expect(dom).to have_text "14.03.1990"
+    end
+
+    it "is hidden from other participant" do
+      other = Fabricate(:event_participation, event: event).person
+      login_as(other)
+
+      expect(dom).not_to have_text "14.03.1990"
     end
   end
 

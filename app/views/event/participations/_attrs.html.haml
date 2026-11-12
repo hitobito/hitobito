@@ -7,7 +7,11 @@
   %article.col-lg
     = render 'people/contact_data', person: entry.person, only_public: cannot?(:show_details, entry)
 
-    = render_attrs(entry.person, :layer_group, :birthday, :gender)
+    = render_attrs_group do
+      = labeled_attr(entry.person, :layer_group)
+      - if can?(:show_details, entry)
+        = labeled_attr(entry.person, :birthday)
+      = labeled_attr(entry.person, :gender)
 
     - if can?(:show_details, entry)
       = render 'application_details'

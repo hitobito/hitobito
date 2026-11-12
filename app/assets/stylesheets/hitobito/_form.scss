@@ -10,6 +10,16 @@
   margin-bottom: $v-space;
 }
 
+// Bootstrap's grid gives every direct .row child `width: 100%; flex-shrink: 0`.
+// Combined with the offset-* margin-left used to indent the bottom/top button
+// toolbar, that adds up to more than 100% of the row and overflows horizontally.
+// Allow the toolbar to shrink so its margin is accounted for.
+.row > .bottom,
+.row > .top {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
 .btn {
   color: $blue-dark;
 

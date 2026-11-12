@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2024, CVP Schweiz. This file is part of
+#  Copyright (c) 2020-2026, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -61,7 +61,7 @@ class Export::Pdf::Messages::Letter
 
     def render_address(recipient, width: address_box_width, height: address_box_height)
       bounding_box([0, cursor], width: width, height: height) do
-        text recipient.address
+        text Export::Pdf::LineTruncator.new(pdf, width).truncate(recipient.address)
       end
     end
 

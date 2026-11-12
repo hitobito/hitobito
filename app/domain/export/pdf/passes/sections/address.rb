@@ -38,7 +38,7 @@ module Export::Pdf::Passes::Sections
         width: ADDRESS_BOX.first, height: ADDRESS_BOX.second
       ) do
         render_sender_address
-        @pdf.text person_address, size: RECIPIENT_FONT_SIZE, leading: 2
+        @pdf.text truncated_person_address, size: RECIPIENT_FONT_SIZE, leading: 2
       end
     end
 
@@ -59,6 +59,11 @@ module Export::Pdf::Passes::Sections
 
     def person_address
       Contactable::Address.new(@pass_decorator.person).for_letter
+    end
+
+    def truncated_person_address
+      Export::Pdf::LineTruncator.new(@pdf, ADDRESS_BOX.first, size: RECIPIENT_FONT_SIZE)
+        .truncate(person_address)
     end
 
     def sender_address

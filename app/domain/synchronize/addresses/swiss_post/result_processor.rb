@@ -90,7 +90,7 @@ module Synchronize::Addresses::SwissPost
 
     def read_address_addition(row) = row["AddressAddition"]
 
-    def address_addition_synced? = Generator.fields.value?(:address_addition)
+    def address_addition_synced? = Generator.sends?(:address_addition)
 
     def read_street(row) = row["StreetName"]
 

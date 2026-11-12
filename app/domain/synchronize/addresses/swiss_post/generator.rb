@@ -44,6 +44,8 @@ module Synchronize::Addresses::SwissPost
 
     HOUSENUMBER_REGEX = /(\d+)\s?([a-zA-Z]+)?/
 
+    def self.sends?(attribute) = fields.value?(attribute)
+
     def initialize(scope, invalid_tag)
       @scope = scope
       @invalid_tag = invalid_tag

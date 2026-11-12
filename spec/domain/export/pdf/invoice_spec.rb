@@ -1049,6 +1049,15 @@ describe Export::Pdf::Invoice do
       invoice.update(address: "My∙Address")
       expect { described_class.render(invoice, articles: true) }.not_to raise_error
     end
+
+    it "reduces recipient address to 6 lines" do
+      invoice.update!(recipient_company_name: "Puzzle", recipient_address_care_of: "c/o Meier",
+        recipient_address_addition: "Chalet", recipient_postbox: "Postfach", recipient_country: "DE")
+
+      strings = PDF::Inspector::Text.analyze(described_class.render(invoice, articles: true)).strings
+      expect(strings).to include("Puzzle", "Top Leader", "c/o Meier, Chalet", "Postfach", "DEUTSCHLAND")
+      expect(strings).not_to include("Greatstreet 345")
+    end
   end
 
   context "codeline" do

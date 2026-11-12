@@ -8,6 +8,15 @@ describe PaymentReminder do
   let(:draft) { invoices(:invoice) }
   let(:sent) { invoices(:sent) }
 
+  it "stores reminder texts of any length" do
+    expect(PaymentReminder.columns_hash["text"].type).to eq :text
+    reminder = Fabricate.build(:payment_reminder, invoice: sent, due_at: sent.due_at + 2.weeks)
+    reminder.text = ("BEZAHLEN BITTE JETZT." * 50)
+
+    expect(reminder.text.length).to be > 1000
+    expect(reminder).to be_valid
+  end
+
   it "creating a payment_reminder updates invoice" do
     due_at = sent.due_at + 2.weeks
     expect do

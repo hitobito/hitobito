@@ -69,6 +69,9 @@ import { Controller } from "@hotwired/stimulus";
       data: { controller: "tom-select", tom_select_max_options_value: 42 }
  */
 export default class extends Controller {
+
+
+
   static values = {
     url: String,
     label: { type: String, default: "label" },
@@ -100,6 +103,7 @@ export default class extends Controller {
       valueField: "id",
       labelField: this.labelValue,
       searchField: this.labelValue,
+      sortField:[{field:'$order'},{field:'$score'}],
       optgroupField: this.optgroupFieldValue,
       plugins: multiple ? ["remove_button"] : undefined,
       create: false,
@@ -128,11 +132,23 @@ export default class extends Controller {
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
-        callback(json);
+        this.tom.removeOption("more_results");
+        if (Array.isArray(json)) {
+          callback(json);
+        } else if (json.more_results) {
+          this.moreResultsQuery = query;
+          callback([...json.data, this.#moreResultsOption(json.more_results)]);
+        } else {
+          callback(json.data);
+        }
       })
       .catch(() => {
         callback();
       });
+  }
+
+  #moreResultsOption(hint) {
+    return { id: "more_results", [this.labelValue]: hint, disabled: true };
   }
 
   #clearInput() {
@@ -145,6 +161,9 @@ export default class extends Controller {
   }
 
   #renderOption(data, escape) {
+    if (data.id === "more_results") {
+      return `<div class="muted small">${escape(data[this.labelValue])}</div>`;
+    }
     let label = `<div>${escape(data[this.labelValue])}</div>`;
     if (data.description) {
       const desc = `<div class="muted small">${escape(data.description)}</div>`;

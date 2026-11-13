@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Bei der Personnensuche wird nun ... als Indikator angezeigt, dass mehr als 10 Personnen gefunden wurden (#1797) 
 - Upgrade auf Rails 8.1 (#4415)
 - Die Eventbeschreibung kann nun mit HTMl formatiert werden (#1791)
 - JSON:API: Das Attribut `description` von Anlässen enthält neu den reinen Text der Beschreibung, die formatierte Beschreibung ist im neuen Attribut `description_html` verfügbar (#1791)

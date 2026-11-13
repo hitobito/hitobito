@@ -91,6 +91,10 @@ class ApplicationResource < Graphiti::Resource
     attributes.each do |attr|
       model.errors.add(attr, message, message: I18n.t("#{i18n_scope}.#{attr}.#{message}"))
     end
+    raise_validation_error!(model)
+  end
+
+  def raise_validation_error!(model)
     raise Graphiti::Errors::ValidationError.new(
       Graphiti::Util::ValidationResponse.new(model, nil)
     )

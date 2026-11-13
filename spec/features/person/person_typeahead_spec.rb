@@ -68,7 +68,7 @@ describe "Person Autocomplete", js: true do
       visit new_group_role_path(group, role: {type: "Group::TopGroup::Leader"})
 
       fill_in "Person", with: "Pas"
-      expect(find('ul[role="listbox"] li#more_results')).to have_content "Suche einschränken"
+      expect(find('ul[role="listbox"] li#more_results')).to have_content "Weitere Treffer vorhanden, Suche verfeinern"
     end
   end
 end

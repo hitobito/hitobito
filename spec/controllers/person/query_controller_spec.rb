@@ -37,7 +37,7 @@ describe Person::QueryController do
 
         json = JSON.parse(response.body)
         expect(json["data"].size).to eq(10)
-        expect(json["more_results"]).to eq("Suche einschränken")
+        expect(json["more_results"]).to eq("Weitere Treffer vorhanden, Suche verfeinern")
       end
 
       it "returns no more results hint if there are not more than 10 people" do

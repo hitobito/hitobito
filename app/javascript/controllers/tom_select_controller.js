@@ -69,6 +69,9 @@ import { Controller } from "@hotwired/stimulus";
       data: { controller: "tom-select", tom_select_max_options_value: 42 }
  */
 export default class extends Controller {
+
+
+
   static values = {
     url: String,
     label: { type: String, default: "label" },
@@ -100,11 +103,11 @@ export default class extends Controller {
       valueField: "id",
       labelField: this.labelValue,
       searchField: this.labelValue,
+      sortField:[{field:'$order'},{field:'$score'}],
       optgroupField: this.optgroupFieldValue,
       plugins: multiple ? ["remove_button"] : undefined,
       create: false,
       load: this.urlValue ? this.#load.bind(this) : undefined,
-      onLoad: this.#onLoad.bind(this),
       maxOptions: this.maxOptionsValue,
       render: {
         no_results: this.#renderNoResults.bind(this),
@@ -129,10 +132,13 @@ export default class extends Controller {
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
+        this.tom.removeOption("more_results");
         if (Array.isArray(json)) {
           callback(json);
+        } else if (json.more_results) {
+          this.moreResultsQuery = query;
+          callback([...json.data, this.#moreResultsOption(json.more_results)]);
         } else {
-          this.moreResults = json.more_results;
           callback(json.data);
         }
       })
@@ -141,10 +147,8 @@ export default class extends Controller {
       });
   }
 
-  #onLoad(options, optgroup) {
-    if (this.moreResults){
-      this.tom.addOption({id: 0, label: this.moreResults, disabled: true})
-    }
+  #moreResultsOption(hint) {
+    return { id: "more_results", [this.labelValue]: hint, disabled: true };
   }
 
   #clearInput() {
@@ -157,6 +161,9 @@ export default class extends Controller {
   }
 
   #renderOption(data, escape) {
+    if (data.id === "more_results") {
+      return `<div class="muted small">${escape(data[this.labelValue])}</div>`;
+    }
     let label = `<div>${escape(data[this.labelValue])}</div>`;
     if (data.description) {
       const desc = `<div class="muted small">${escape(data.description)}</div>`;

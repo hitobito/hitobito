@@ -45,19 +45,20 @@ See [Testing](./common/testing.md).
 
 ### Avoid changes in Gemfile.lock due to local wagon configuration
 
-Copy `Gemfile` and `Gemfile.lock` to `Gemfile.local` and `Gemfile.local.lock` in order to avoid
-changes in `Gemfile.lock` when wagons are configured in the local `Wagonfile`.
+Wagons configured in the local `Wagonfile` are written into `Gemfile.lock`, leaving unwanted changes
+in the working tree. To avoid this, set `BUNDLE_GEMFILE=Gemfile.local` and bundler uses
+`Gemfile.local.lock` instead. The catch: the two lockfiles can drift apart, and a working local
+lockfile hides a broken `Gemfile.lock`, which is the one CI uses.
 
-Set the environment variable `BUNDLE_GEMFILE=Gemfile.local` to use the alternate gemfile.
+So when adding or updating gems, unset `BUNDLE_GEMFILE` and `WAGONS`, e.g.
+`env -u BUNDLE_GEMFILE WAGONS= bundle update <gem> --conservative`, and commit `Gemfile.lock`.
 
-When adding or updating gems, remember to adjust the original `Gemfile` and make sure that
-no local wagon configuration leaks into the updated `Gemfile.lock` when committing.
-
-The `./bin/active_wagon` script automates that process for you if the environment variable
-`BUNDLE_GEMFILE` is defined.
+`./bin/active_wagon` then links `Gemfile.local` to `Gemfile` and copies `Gemfile.lock` to
+`Gemfile.local.lock` in the core and the active wagons, so the local lockfiles start from the
+committed ones again.
 
 To ignore the `Gemfile.local` and `Gemfile.local.lock` files in all wagons you can add them to
-your global gitgnore `~/.gitignore`.
+your global gitignore `~/.gitignore`.
 
 ### Adjusting git blame ignores
 

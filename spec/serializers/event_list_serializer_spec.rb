@@ -1,4 +1,4 @@
-#  Copyright (c) 2018, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -60,13 +60,26 @@ describe EventListSerializer do
 
   context "event properties" do
     it "includes all keys" do
-      keys = [:name, :description, :motto, :cost, :maximum_participants, :participant_count,
+      keys = [:name, :description, :description_html, :motto, :cost, :maximum_participants,
+        :participant_count,
         :location, :application_opening_at, :application_closing_at, :application_conditions,
         :state, :teamer_count, :external_application_link, :links]
 
       keys.each do |key|
         is_expected.to have_key(key)
       end
+    end
+
+    it "includes description as plain text and html" do
+      events(:top_event).update!(description: "<div>Erste <strong>Zeile</strong></div>")
+
+      expect(subject[:description]).to eq "Erste Zeile"
+      expect(subject[:description_html]).to include "<div>Erste <strong>Zeile</strong></div>"
+    end
+
+    it "includes no description without description" do
+      expect(subject[:description]).to be_nil
+      expect(subject[:description_html]).to be_nil
     end
 
     it "includes dates properties" do

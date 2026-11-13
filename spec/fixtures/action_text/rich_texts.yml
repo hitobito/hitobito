@@ -1,3 +1,5 @@
+# plain_text_body is computed from body when the fixtures are loaded.
+
 login_de_body:
   record: login_de (CustomContent::Translation)
   name: body
@@ -170,4 +172,14 @@ content_inactivity_block_warning_body:
   name: body
   body: |
     Hallo {recipient-name}, <br/>
-    TBD auf [#{Settings.application.name}] 
+    TBD auf [#{Settings.application.name}]
+
+top_course_de_description:
+  record: top_course_de (Event::Translation)
+  name: description
+  body: Some kind of course, it seems
+
+template_de_description:
+  record: template_de (Event::Translation)
+  name: description
+  body: Some kind of course, it seems

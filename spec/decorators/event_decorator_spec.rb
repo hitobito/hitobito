@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -146,6 +146,19 @@ describe EventDecorator, :draper_with_helpers do
       its(:issued_qualifications_info_for_participants) do
         should == ""
       end
+    end
+  end
+
+  describe "#description_short" do
+    it "truncates the plain text" do
+      event.update!(description: "<div><strong>#{"Lorem ipsum " * 10}</strong></div>")
+      expect(subject.description_short)
+        .to eq "Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ips..."
+    end
+
+    it "is nil without description" do
+      event.update!(description: nil)
+      expect(subject.description_short).to be_nil
     end
   end
 

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -46,8 +46,14 @@ describe Export::Tabular::Events::Row do
     it { expect(row.fetch(:state)).to eq "some state" }
     it { expect(row.fetch(:number)).to eq "123" }
     it { expect(row.fetch(:location)).to eq "somewhere" }
-    it { expect(row.fetch(:description)).to eq "some description" }
+    it { expect(row.fetch(:plain_text_description)).to eq "some description" }
     it { expect(row.fetch(:group_names)).to eq "TopGroup" }
+
+    context "with formatted description" do
+      before { course.update!(description: "<div>Erste <strong>Zeile</strong><br>Zweite Zeile</div>") }
+
+      it { expect(row.fetch(:plain_text_description)).to eq "Erste Zeile\nZweite Zeile" }
+    end
   end
 
   context "contact person" do

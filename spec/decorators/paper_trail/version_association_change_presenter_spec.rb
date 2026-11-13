@@ -283,6 +283,30 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     end
   end
 
+  context "event description" do
+    let(:version) { PaperTrail::Version.where(item_type: "ActionText::RichText").order(:created_at, :id).last }
+
+    it "builds update text with plain text values" do
+      events(:top_course).update!(description: "<div>Neue <strong>Beschreibung</strong></div>")
+
+      is_expected.to eq("<div>Beschreibung (de) wurde von " \
+        "<i>Some kind of course, it seems</i> auf <i>Neue Beschreibung</i> geändert.</div>")
+    end
+
+    it "builds create text for the first description" do
+      events(:top_event).update!(description: "<div>Neue <strong>Beschreibung</strong></div>")
+
+      is_expected.to eq("<div>Beschreibung (de) wurde auf <i>Neue Beschreibung</i> gesetzt.</div>")
+    end
+
+    it "builds text for the removed description" do
+      events(:top_course).update!(description: "<div>Alte <strong>Beschreibung</strong></div>")
+      events(:top_course).update!(description: nil)
+
+      is_expected.to eq("<div>Beschreibung (de) <i>Alte Beschreibung</i> wurde gelöscht.</div>")
+    end
+  end
+
   def update
     person.update!(town: "Bern", zip_code: "3007")
   end

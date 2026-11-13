@@ -130,6 +130,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     new_role.attributes = permitted_params(@type)
     new_role.person_id = entry.person_id
     new_role.group_id = @group.id
+    new_role.start_on = [Time.zone.today, entry.start_on].max
     new_role
   end
 

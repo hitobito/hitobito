@@ -28,6 +28,7 @@
 - Personen mit mehreren Rollen mit Berechtigung "layer_and_below_finance" sehen im Rechnungsmenü alle entsprechenden Ebenen (#4510)
 - Minimierte Personen werden neu in Personenlisten, der Suche und Auswahlfeldern ausgeblendet; ihre Profilseite ist nicht mehr zugänglich (#4624)
 - OAuth-Applikationen können eine eigene Gültigkeitsdauer für Refresh Tokens erhalten, z. B. damit Logins in Mobile-Apps länger gültig bleiben (hitobito_sac_cas#2755)
+- JSON:API: Rollen können mit einem beliebigen `start_on` erstellt und über `end_on` zu einem Stichtag beendet werden. Das Setzen von `end_on` erfordert die Berechtigung, die Rolle zu löschen (hitobito_bdp#65)
 
 ## Version 2.10
 

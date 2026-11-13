@@ -37,5 +37,30 @@ describe "roles#create", type: :request do
         }.to change { person.roles.count }.by(1)
       end
     end
+
+    describe "backdated create" do
+      let(:payload) {
+        {
+          data: {
+            type: "roles",
+            attributes: {
+              group_id: group.id,
+              person_id: person.id,
+              type: Group::TopGroup::Member.sti_name,
+              start_on: 2.months.ago.to_date.to_s
+            }
+          }
+        }
+      }
+
+      it "creates the resource with the given start_on" do
+        expect {
+          make_request
+          expect(response.status).to eq(201), response.body
+        }.to change { person.roles.count }.by(1)
+
+        expect(Role.with_inactive.last.start_on).to eq 2.months.ago.to_date
+      end
+    end
   end
 end

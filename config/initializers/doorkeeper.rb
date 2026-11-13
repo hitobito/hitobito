@@ -254,4 +254,9 @@ Rails.application.config.to_prepare do
     Doorkeeper.configuration.scopes.add(:nextcloud)
     Doorkeeper.configuration.optional_scopes.add(:nextcloud)
   end
+
+  FeatureGate.if("people.people_managers.api") do
+    Doorkeeper.configuration.scopes.add(:managed_people)
+    Doorkeeper.configuration.optional_scopes.add(:managed_people)
+  end
 end

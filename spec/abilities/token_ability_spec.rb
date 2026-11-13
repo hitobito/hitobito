@@ -615,6 +615,42 @@ describe TokenAbility do
     end
   end
 
+  describe :people_managers do
+    let(:managed) { people(:top_leader) }
+    let(:people_manager) { PeopleManager.new(managed: managed, manager: Fabricate(:person)) }
+
+    context "with write permission and people scope" do
+      let(:token) { service_tokens(:permitted_top_layer_token) }
+
+      it "may create and destroy the relation" do
+        is_expected.to be_able_to(:create_manager, people_manager)
+        is_expected.to be_able_to(:create_managed, people_manager)
+        is_expected.to be_able_to(:destroy_manager, people_manager)
+        is_expected.to be_able_to(:destroy_managed, people_manager)
+      end
+    end
+
+    context "without write permission" do
+      let(:token) do
+        service_tokens(:permitted_top_layer_token).tap { |t| t.update!(permission: :layer_and_below_read) }
+      end
+
+      it "may not create nor destroy the relation" do
+        is_expected.not_to be_able_to(:create_manager, people_manager)
+        is_expected.not_to be_able_to(:destroy_manager, people_manager)
+      end
+    end
+
+    context "without people scope" do
+      let(:token) { service_tokens(:permitted_top_layer_token).tap { |t| t.update!(people: false) } }
+
+      it "may not create nor destroy the relation" do
+        is_expected.not_to be_able_to(:create_manager, people_manager)
+        is_expected.not_to be_able_to(:destroy_manager, people_manager)
+      end
+    end
+  end
+
   describe :qualifications do
     let(:token) { Fabricate(:service_token, layer: groups(:top_layer)) }
 

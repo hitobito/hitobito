@@ -77,6 +77,11 @@ class PersonResource < ApplicationResource
 
   has_many :event_participations, resource: Event::ParticipationResource, writable: false
 
+  FeatureGate.if "people.people_managers.api" do
+    has_many :people_managers, resource: PeopleManagerResource
+    has_many :people_manageds, resource: PeopleManagerResource
+  end
+
   filter :updated_at, :datetime
 
   private

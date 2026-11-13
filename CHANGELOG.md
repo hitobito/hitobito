@@ -21,7 +21,7 @@
 - Die Anmeldebestätigung (PDF), die Teilnahme-Detailseite, Teilnahme-Mails und der Kalender-Export (iCal) zeigen von der Kontaktperson nur die in den Anzeigeoptionen gewählten Angaben (hitobito_sww#376)
 - JSON:API: Anlässe können mit `include=contact_details` die Angaben der Kontaktperson laden, die in den Anzeigeoptionen gewählt sind (hitobito_sww#376)
 - JSON:API: Kontaktkonten (Telefonnummern, E-Mail-Adressen, Adressen, Social Accounts) können das übersetzte `category_name`-Attribut ihrer Kategorie über `extra_fields` abrufen, z. B. `extra_fields[phone_numbers]=category_name`
-- Auf der Teilnahme-Detailseite ist das Geburtsdatum nur noch mit Berechtigung für die Teilnahmedetails sichtbar, analog zur Teilnehmerliste (hitobito_sac_cas#2598)
+- Auf der Teilnahme-Detailseite sind Geburtsdatum und Geschlecht nur noch mit Berechtigung für die Teilnahmedetails sichtbar, analog zur Teilnehmerliste (hitobito_sac_cas#2598)
 - Eventvorlagen können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (#4259)
 - Das Löschen einer Rolle hängt neu ausschliesslich vom Startdatum ab und wird auch bei Hard-Delete im Log protokolliert (#4260)
 - Der Navigationspunkt "Rechnungen" öffnet das Rechnungsmenü der nächstgelegenen Ebene mit Finanzberechtigung der aktuellen Gruppe resp. der Hauptgruppe (#4510)

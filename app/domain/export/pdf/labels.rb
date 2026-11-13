@@ -5,6 +5,8 @@
 
 module Export::Pdf
   class Labels
+    MIN_FONT_SIZE = 5
+
     attr_reader :format, :category_key
 
     def initialize(format, category_key: nil)
@@ -47,7 +49,6 @@ module Export::Pdf
       Export::Tabular::People::HouseholdRow.new(contactable).name
     end
 
-    # print with automatic line wrap
     def print_address_in_bounding_box(pdf, address, pos) # rubocop:todo Metrics/AbcSize
       pdf.bounding_box(pos,
         width: format.width.mm - min_border,
@@ -71,7 +72,15 @@ module Export::Pdf
         print_pp_post(pdf, [left, top])
         top -= 7.mm
       end
-      pdf.text_box(address, at: [left, top], overflow: :shrink_to_fit)
+      size = fitting_font_size(pdf, address.lines.size, top - pdf.bounds.bottom)
+      truncator = Export::Pdf::LineTruncator.new(pdf, pdf.bounds.right - left, size:)
+      pdf.text_box(truncator.truncate(address), at: [left, top], size:)
+    end
+
+    def fitting_font_size(pdf, line_count, height)
+      format.font_size.step(MIN_FONT_SIZE, -0.5).find do |size|
+        line_count * pdf.font.height_at(size) <= height
+      end || MIN_FONT_SIZE
     end
 
     def household_address(contactable, name)

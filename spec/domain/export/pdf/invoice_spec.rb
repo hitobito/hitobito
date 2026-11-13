@@ -1049,6 +1049,27 @@ describe Export::Pdf::Invoice do
       invoice.update(address: "My∙Address")
       expect { described_class.render(invoice, articles: true) }.not_to raise_error
     end
+
+    it "reduces recipient address to 6 lines" do
+      invoice.update!(recipient_company_name: "Puzzle", recipient_address_care_of: "c/o Meier",
+        recipient_address_addition: "Chalet", recipient_postbox: "Postfach", recipient_country: "DE")
+
+      strings = PDF::Inspector::Text.analyze(described_class.render(invoice, articles: true)).strings
+      expect(strings).to include("Puzzle", "Top Leader", "c/o Meier, Chalet", "Postfach", "DEUTSCHLAND")
+      expect(strings).not_to include("Greatstreet 345")
+    end
+
+    it "cuts recipient address lines exceeding the address box" do
+      long_line = "c/o Treuhandbüro Meier & Partner GmbH, Chalet Edelweiss"
+      invoice.update!(recipient_address_care_of: long_line)
+
+      strings = PDF::Inspector::Text.analyze(described_class.render(invoice, articles: true)).strings
+      care_of_line = strings.find { |string| string.start_with?("c/o") }
+      expect(care_of_line).not_to eq long_line
+      expect(long_line).to start_with(care_of_line)
+      expect(strings).to include("Greatstreet 345")
+      expect(strings.index("Greatstreet 345")).to eq strings.index(care_of_line) + 1
+    end
   end
 
   context "codeline" do

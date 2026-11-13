@@ -27,6 +27,7 @@ describe PersonResource, type: :resource do
         :email,
         :address,
         :address_care_of,
+        :address_addition,
         :street,
         :housenumber,
         :postbox,

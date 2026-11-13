@@ -21,7 +21,7 @@ module Export::Pdf::Invoice
       @receiver_address_data ||= if invoice.recipient_address_values.empty?
         deprecated_receiver_address_data
       else
-        invoice.recipient_address_values
+        invoice.printed_recipient_address.lines
       end.map { |v| [v] }
     end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022-2024, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,7 +14,7 @@ describe JsonApi::PeopleController, type: [:request] do
 
   let(:person_attrs) do
     %w[first_name last_name nickname company_name company email
-      address_care_of street housenumber postbox zip_code town country
+      address_care_of address_addition street housenumber postbox zip_code town country
       gender birthday]
   end
 

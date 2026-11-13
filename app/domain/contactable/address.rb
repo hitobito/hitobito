@@ -12,7 +12,7 @@ class Contactable::Address
   end
 
   def for_letter
-    (contactable_and_company_name + full_address).compact.join("\n")
+    printed_address(contactable_and_company_name).lines.join("\n")
   end
 
   def for_letter_with_invoice
@@ -20,29 +20,22 @@ class Contactable::Address
   end
 
   def for_household_letter(members)
-    [combine_household_names(members), full_address].compact.join("\n")
+    printed_address([combine_household_names(members)], salutation: nil).lines.join("\n")
   end
 
   def for_pdf_label(name, nickname = false)
-    names = if addressable.is_a?(AdditionalAddress)
-      [(company_name if company? && company_name?), full_name].uniq
-    else
-      [
-        (company_name if print_company?(name)),
-        (contactable.nickname if print_nickname?(nickname)),
-        name.presence
-      ]
-    end
-
-    (names + full_address(country_as: :country_label)).compact.join("\n")
+    address = printed_address(label_names(name, nickname))
+    address = printed_address(label_names(name, false)) unless address.fits?
+    address.lines.join("\n")
   end
 
   # Used to populate invoices#recipient_* fields, may be overridden in wagons
-  def invoice_recipient_address_attributes
+  def invoice_recipient_address_attributes # rubocop:disable Metrics/MethodLength
     with_invoice_addressable do
       recipient_first_name, recipient_last_name = recipient_name_parts
       {
         recipient_address_care_of: address_care_of,
+        recipient_address_addition: address_addition,
         recipient_company_name: company? ? company_name : nil,
         recipient_first_name: recipient_first_name,
         recipient_last_name: recipient_last_name,
@@ -86,8 +79,8 @@ class Contactable::Address
 
   attr_reader :contactable, :addressable
 
-  delegate :address, :address_care_of, :postbox, :street, :housenumber, :zip_code, :town, :country,
-    :name, :country_label, :ignored_country?, to: :addressable
+  delegate :address_care_of, :address_addition, :postbox, :street, :housenumber,
+    :zip_code, :town, :country, :name, to: :addressable
   delegate :additional_addresses, to: :contactable
 
   def company? = addressable.try(:company?)
@@ -123,19 +116,37 @@ class Contactable::Address
     members.map(&:full_name).compact.join(", ")
   end
 
-  def full_address(country_as: :country)
-    [
-      address_care_of.to_s.strip.presence,
-      address.to_s.strip,
-      postbox.to_s.strip.presence,
-      zip_code_with_town,
-      country_string(country_as)
-    ].compact
+  def full_address = printed_address([], salutation: nil).all_lines
+
+  # Printed above the names on letters and labels, may be overridden in wagons
+  def printed_salutation = nil
+
+  def printed_address(names, salutation: printed_salutation)
+    PostalAddress::Printed.new(
+      salutation:,
+      names:,
+      care_of: address_care_of,
+      addition: address_addition,
+      street:,
+      housenumber:,
+      postbox:,
+      zip_code:,
+      town:,
+      country:
+    )
   end
 
-  def zip_code_with_town = [zip_code, town].compact.join(" ").squish
-
-  def country_string(country_as) = ignored_country? ? "" : addressable.send(country_as)
+  def label_names(name, nickname)
+    if addressable.is_a?(AdditionalAddress)
+      [(company_name if company? && company_name?), full_name].uniq
+    else
+      [
+        (company_name if print_company?(name)),
+        (contactable.nickname if print_nickname?(nickname)),
+        name.presence
+      ]
+    end
+  end
 
   def default_country
     Settings.countries.prioritized.first

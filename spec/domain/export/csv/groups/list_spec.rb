@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -26,6 +26,11 @@ describe Export::Tabular::Groups::List do
       "Kurzname",
       "Gruppentyp",
       "Haupt-E-Mail",
+      "c/o-Adresse",
+      "Adresszusatz",
+      "Strasse",
+      "Hausnummer",
+      "Postfach",
       "PLZ",
       "Ort",
       "Land",
@@ -33,10 +38,6 @@ describe Export::Tabular::Groups::List do
       "Ebene",
       "Beschreibung",
       "Link zu Nextcloud",
-      "Strasse",
-      "Hausnummer",
-      "c/o-Adresse",
-      "Postfach",
       "Sprache",
       "Telefonnummern",
       "Anzahl Mitglieder",
@@ -45,6 +46,13 @@ describe Export::Tabular::Groups::List do
 
     should match_array expected
     should eq expected
+  end
+
+  it "exports columns added by wagons before the computed attributes" do
+    allow(Group).to receive(:column_names).and_return(Group.column_names + ["wagon_column"])
+
+    expect(Export::Tabular::Groups::List.new([]).attributes.last(4))
+      .to eq [:wagon_column, :phone_numbers, :member_count, :social_accounts]
   end
 
   it "has 4 items" do

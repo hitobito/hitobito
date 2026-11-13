@@ -51,6 +51,17 @@ describe Export::Pdf::Passes::Sections::Address do
       expect(texts).to include("3000 Bern")
     end
 
+    it "cuts address lines exceeding the address box instead of wrapping them" do
+      long_line = "c/o Treuhandbüro Meier & Partner GmbH, Chalet Edelweiss"
+      person.update!(address_care_of: long_line)
+
+      texts = analyzer.strings
+      care_of_line = texts.find { |text| text.start_with?("c/o") }
+      expect(care_of_line).not_to eq long_line
+      expect(long_line).to start_with(care_of_line)
+      expect(texts.index("Hauptstrasse 42")).to eq texts.index(care_of_line) + 1
+    end
+
     context "when group has address" do
       before do
         group.update!(street: "Bahnhofstr.", housenumber: "1", zip_code: "3000", town: "Bern")

@@ -20,43 +20,31 @@ describe Contactable::Address do
     let(:person) { people(:top_leader) }
     let(:contactable) { person }
 
-    shared_examples "common address behaviour" do |country_label:, postbox:, company:,
+    shared_examples "common address behaviour" do |postbox:, company:,
       uses_additional_address_name: true, label_handling: true|
       context "common" do
         it "renders name, text and town with zip code" do
-          expect(text).to eq <<~TEXT
+          expect(text).to eq <<~TEXT.chomp
             Top Leader
             Greatstreet 345
             3456 Greattown
           TEXT
         end
 
-        if country_label
-          it "country is rendered using country label" do
-            person.country = "DE"
-            expect(text).to eq <<~TEXT.chomp
-              Top Leader
-              Greatstreet 345
-              3456 Greattown
-              Deutschland
-            TEXT
-          end
-        else
-          it "country is rendered using country TLD" do
-            person.country = "DE"
-            expect(text).to eq <<~TEXT.chomp
-              Top Leader
-              Greatstreet 345
-              3456 Greattown
-              DE
-            TEXT
-          end
+        it "country is rendered as upper case name" do
+          person.country = "DE"
+          expect(text).to eq <<~TEXT.chomp
+            Top Leader
+            Greatstreet 345
+            3456 Greattown
+            DEUTSCHLAND
+          TEXT
         end
 
         if postbox
           it "postbox is rendered after street and number" do
             person.postbox = "Postfach 10"
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               Top Leader
               Greatstreet 345
               Postfach 10
@@ -66,7 +54,7 @@ describe Contactable::Address do
         else
           it "postbox is ignored" do
             person.postbox = "Postfach 10"
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               Top Leader
               Greatstreet 345
               3456 Greattown
@@ -77,7 +65,7 @@ describe Contactable::Address do
         describe "company name" do
           it "ignores company_name when company flag is missing" do
             person.company_name = "Company LTD"
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               Top Leader
               Greatstreet 345
               3456 Greattown
@@ -86,7 +74,7 @@ describe Contactable::Address do
 
           it "ignores company flag when company_name is missing" do
             person.company = true
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               Top Leader
               Greatstreet 345
               3456 Greattown
@@ -97,7 +85,7 @@ describe Contactable::Address do
             it "replaces name with company name when company_name and company flag are present" do
               person.company = true
               person.company_name = "Company LTD"
-              expect(text).to eq <<~TEXT
+              expect(text).to eq <<~TEXT.chomp
                 Company LTD
                 Greatstreet 345
                 3456 Greattown
@@ -107,7 +95,7 @@ describe Contactable::Address do
             it "places company name on top of name when company_name and company flag are present" do
               person.company = true
               person.company_name = "Company LTD"
-              expect(text).to eq <<~TEXT
+              expect(text).to eq <<~TEXT.chomp
                 Company LTD
                 Top Leader
                 Greatstreet 345
@@ -117,7 +105,7 @@ describe Contactable::Address do
             it "ignores company name when company_name and company flag are present but name is identical" do
               person.company = true
               person.company_name = "Top Leader"
-              expect(text).to eq <<~TEXT
+              expect(text).to eq <<~TEXT.chomp
                 Top Leader
                 Greatstreet 345
                 3456 Greattown
@@ -127,7 +115,7 @@ describe Contactable::Address do
             it "ignores company name when company_name and company flag are present" do
               person.company = true
               person.company_name = "Company LTD"
-              expect(text).to eq <<~TEXT
+              expect(text).to eq <<~TEXT.chomp
                 Top Leader
                 Greatstreet 345
                 3456 Greattown
@@ -143,7 +131,7 @@ describe Contactable::Address do
           let(:category_key) { category.key }
 
           it "renders from person if not defined" do
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               Top Leader
               Greatstreet 345
               3456 Greattown
@@ -154,7 +142,7 @@ describe Contactable::Address do
             build_additional_address(category:, street: "Lagistrasse", housenumber: "12a",
               zip_code: 1080, town: "Jamestown")
 
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               Top Leader
               Lagistrasse 12a
               1080 Jamestown
@@ -165,7 +153,7 @@ describe Contactable::Address do
             it "reads first and last name if set" do
               build_additional_address(category:, street: "Lagistrasse", housenumber: "12a",
                 zip_code: 1080, town: "Jamestown", first_name: "Foo", last_name: "Bar", uses_contactable_name: false)
-              expect(text).to eq <<~TEXT
+              expect(text).to eq <<~TEXT.chomp
                 Foo Bar
                 Lagistrasse 12a
                 1080 Jamestown
@@ -176,7 +164,7 @@ describe Contactable::Address do
               build_additional_address(category:, street: "Lagistrasse", housenumber: "12a",
                 zip_code: 1080, town: "Jamestown", organization: true, organization_name: "Acme Corp",
                 first_name: "Jane", last_name: "Doe", uses_contactable_name: false)
-              expect(text).to eq <<~TEXT
+              expect(text).to eq <<~TEXT.chomp
                 Acme Corp
                 Jane Doe
                 Lagistrasse 12a
@@ -188,7 +176,7 @@ describe Contactable::Address do
               build_additional_address(category:, street: "Lagistrasse", housenumber: "12a",
                 zip_code: 1080, town: "Jamestown", organization: true, organization_name: "Acme Corp",
                 uses_contactable_name: false)
-              expect(text).to eq <<~TEXT
+              expect(text).to eq <<~TEXT.chomp
                 Acme Corp
                 Lagistrasse 12a
                 1080 Jamestown
@@ -202,7 +190,7 @@ describe Contactable::Address do
     describe "#for_letter" do
       subject(:text) { address.for_letter }
 
-      it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :adds
+      it_behaves_like "common address behaviour", postbox: true, company: :adds
     end
 
     describe "#for_household_letter" do
@@ -214,7 +202,7 @@ describe Contactable::Address do
         let(:members) { [people(:top_leader), people(:bottom_member)] }
 
         it "renders names, text and town with zip code" do
-          expect(text).to eq <<~TEXT
+          expect(text).to eq <<~TEXT.chomp
             Top Leader, Bottom Member
             Greatstreet 345
             3456 Greattown
@@ -222,7 +210,7 @@ describe Contactable::Address do
         end
       end
 
-      it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :ignored,
+      it_behaves_like "common address behaviour", postbox: true, company: :ignored,
         uses_additional_address_name: false
     end
 
@@ -234,12 +222,12 @@ describe Contactable::Address do
          category: contact_account_categories(:additional_address_person_invoices)}
       }
 
-      it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :adds,
+      it_behaves_like "common address behaviour", postbox: true, company: :adds,
         label_handling: false
 
       it "uses invoice address if additional address with used_for_invoices category exists" do
         build_additional_address(**attrs)
-        expect(text).to eq <<~TEXT
+        expect(text).to eq <<~TEXT.chomp
           Top Leader
           Lagistrasse 12a
           1080 Jamestown
@@ -248,7 +236,7 @@ describe Contactable::Address do
 
       it "uses address_care_of from additional address" do
         build_additional_address(**attrs, address_care_of: "c/o Finance")
-        expect(text).to eq <<~TEXT
+        expect(text).to eq <<~TEXT.chomp
           Top Leader
           c/o Finance
           Lagistrasse 12a
@@ -259,7 +247,7 @@ describe Contactable::Address do
       it "uses address_care_of from additional address" do
         build_additional_address(**attrs, address_care_of: "c/o Finance", last_name: "Foo Bar",
           uses_contactable_name: false)
-        expect(text).to eq <<~TEXT
+        expect(text).to eq <<~TEXT.chomp
           Foo Bar
           c/o Finance
           Lagistrasse 12a
@@ -267,9 +255,21 @@ describe Contactable::Address do
         TEXT
       end
 
+      it "prints address_addition after address_care_of" do
+        build_additional_address(**attrs, address_care_of: "c/o Finance",
+          address_addition: "Hinterhaus")
+        expect(text).to eq <<~TEXT.chomp
+          Top Leader
+          c/o Finance
+          Hinterhaus
+          Lagistrasse 12a
+          1080 Jamestown
+        TEXT
+      end
+
       it "does not print blank address_care_of line" do
         build_additional_address(**attrs, address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false)
-        expect(text).to eq <<~TEXT
+        expect(text).to eq <<~TEXT.chomp
           Foo Bar
           Lagistrasse 12a
           1080 Jamestown
@@ -288,6 +288,7 @@ describe Contactable::Address do
           recipient_first_name: person.first_name,
           recipient_last_name: person.last_name,
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "345",
           recipient_street: "Greatstreet",
           recipient_postbox: nil,
@@ -303,6 +304,7 @@ describe Contactable::Address do
           last_name: "Foo Bar",
           uses_contactable_name: false,
           address_care_of: "Office",
+          address_addition: "Hinterhaus",
           street: "Lagistrasse",
           housenumber: "12a",
           postbox: "Postfach",
@@ -316,6 +318,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "Foo Bar",
           recipient_address_care_of: "Office",
+          recipient_address_addition: "Hinterhaus",
           recipient_housenumber: "12a",
           recipient_postbox: "Postfach",
           recipient_street: "Lagistrasse",
@@ -348,6 +351,7 @@ describe Contactable::Address do
           recipient_first_name: "Jane",
           recipient_last_name: "Smith",
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "345",
           recipient_street: "Greatstreet",
           recipient_postbox: nil,
@@ -375,6 +379,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "Office Address",
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "99",
           recipient_street: "Officestrasse",
           recipient_postbox: nil,
@@ -403,6 +408,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "",
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "99",
           recipient_street: "Officestrasse",
           recipient_postbox: nil,
@@ -417,7 +423,7 @@ describe Contactable::Address do
       def text(name: person.to_s, nickname: false) = address.for_pdf_label(name, nickname)
 
       it "renders only address and town with zip code when passing nil name" do
-        expect(text(name: nil)).to eq <<~TEXT
+        expect(text(name: nil)).to eq <<~TEXT.chomp
           Greatstreet 345
           3456 Greattown
         TEXT
@@ -425,14 +431,67 @@ describe Contactable::Address do
 
       it "renders nickname if set and passed" do
         person.nickname = "Toppy"
-        expect(text(name: nil, nickname: true)).to eq <<~TEXT
+        expect(text(name: nil, nickname: true)).to eq <<~TEXT.chomp
           Toppy
           Greatstreet 345
           3456 Greattown
         TEXT
       end
 
-      it_behaves_like "common address behaviour", country_label: true, postbox: true, company: :replaces
+      it_behaves_like "common address behaviour", postbox: true, company: :replaces
+    end
+
+    describe "line limit" do
+      before do
+        person.assign_attributes(company: true, company_name: "Puzzle", nickname: "Toppy",
+          address_care_of: "c/o Treuhand Meier", address_addition: "Chalet Edelweiss",
+          postbox: "Postfach", country: "DE")
+      end
+
+      it "reduces letter address to 6 lines" do
+        expect(address.for_letter).to eq <<~TEXT.chomp
+          Puzzle
+          Top Leader
+          c/o Treuhand Meier, Chalet Edelweiss
+          Postfach
+          3456 Greattown
+          DEUTSCHLAND
+        TEXT
+      end
+
+      it "reduces household letter address to 6 lines" do
+        text = address.for_household_letter([person, people(:bottom_member)])
+        expect(text).to eq <<~TEXT.chomp
+          Top Leader, Bottom Member
+          c/o Treuhand Meier, Chalet Edelweiss
+          Greatstreet 345
+          Postfach
+          3456 Greattown
+          DEUTSCHLAND
+        TEXT
+      end
+
+      it "keeps nickname on label if 6 lines are reached without omitting it" do
+        expect(address.for_pdf_label(person.to_s, true)).to eq <<~TEXT.chomp
+          Toppy
+          Puzzle
+          c/o Treuhand Meier, Chalet Edelweiss
+          Postfach
+          3456 Greattown
+          DEUTSCHLAND
+        TEXT
+      end
+
+      it "omits nickname on label as last resort" do
+        expect(address.for_pdf_label("Top Leader", true)).to eq <<~TEXT.chomp
+          Puzzle
+          Top Leader
+          c/o Treuhand Meier, Chalet Edelweiss
+          Postfach
+          3456 Greattown
+          DEUTSCHLAND
+        TEXT
+      end
     end
   end
 
@@ -445,43 +504,31 @@ describe Contactable::Address do
         .slice(:address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country))
     end
 
-    shared_examples "common address behaviour" do |country_label:, postbox:, company:,
+    shared_examples "common address behaviour" do |postbox:, company:,
       uses_additional_address_name: true, label_handling: true|
       context "common" do
         it "renders name, text and town with zip code" do
-          expect(text).to eq <<~TEXT
+          expect(text).to eq <<~TEXT.chomp
             TopGroup
             Greatstreet 345
             3456 Greattown
           TEXT
         end
 
-        if country_label
-          it "country is rendered using country label" do
-            group.country = "DE"
-            expect(text).to eq <<~TEXT.chomp
-              TopGroup
-              Greatstreet 345
-              3456 Greattown
-              Deutschland
-            TEXT
-          end
-        else
-          it "country is rendered using country TLD" do
-            group.country = "DE"
-            expect(text).to eq <<~TEXT.chomp
-              TopGroup
-              Greatstreet 345
-              3456 Greattown
-              DE
-            TEXT
-          end
+        it "country is rendered as upper case name" do
+          group.country = "DE"
+          expect(text).to eq <<~TEXT.chomp
+            TopGroup
+            Greatstreet 345
+            3456 Greattown
+            DEUTSCHLAND
+          TEXT
         end
 
         if postbox
           it "postbox is rendered after street and number" do
             group.postbox = "Postfach 10"
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               TopGroup
               Greatstreet 345
               Postfach 10
@@ -491,7 +538,7 @@ describe Contactable::Address do
         else
           it "postbox is ignored" do
             group.postbox = "Postfach 10"
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               TopGroup
               Greatstreet 345
               3456 Greattown
@@ -506,7 +553,7 @@ describe Contactable::Address do
           let(:category_key) { category.key }
 
           it "renders from group if not defined" do
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               TopGroup
               Greatstreet 345
               3456 Greattown
@@ -517,7 +564,7 @@ describe Contactable::Address do
             build_additional_address(category:, street: "Lagistrasse", housenumber: "12a",
               zip_code: 1080, town: "Jamestown")
 
-            expect(text).to eq <<~TEXT
+            expect(text).to eq <<~TEXT.chomp
               TopGroup
               Lagistrasse 12a
               1080 Jamestown
@@ -528,7 +575,7 @@ describe Contactable::Address do
             it "reads additional name if set" do
               build_additional_address(category:, street: "Lagistrasse", housenumber: "12a",
                 zip_code: 1080, town: "Jamestown", last_name: "Foo Bar", uses_contactable_name: false)
-              expect(text).to eq <<~TEXT
+              expect(text).to eq <<~TEXT.chomp
                 Foo Bar
                 Lagistrasse 12a
                 1080 Jamestown
@@ -547,12 +594,12 @@ describe Contactable::Address do
          category: contact_account_categories(:additional_address_group_invoices)}
       }
 
-      it_behaves_like "common address behaviour", country_label: false, postbox: true, company: :adds,
+      it_behaves_like "common address behaviour", postbox: true, company: :adds,
         label_handling: false
 
       it "uses invoice address if additional address with used_for_invoices category exists" do
         build_additional_address(**attrs)
-        expect(text).to eq <<~TEXT
+        expect(text).to eq <<~TEXT.chomp
           TopGroup
           Lagistrasse 12a
           1080 Jamestown
@@ -561,7 +608,7 @@ describe Contactable::Address do
 
       it "uses address_care_of from additional address" do
         build_additional_address(**attrs, address_care_of: "c/o Finance")
-        expect(text).to eq <<~TEXT
+        expect(text).to eq <<~TEXT.chomp
           TopGroup
           c/o Finance
           Lagistrasse 12a
@@ -572,7 +619,7 @@ describe Contactable::Address do
       it "uses address_care_of from additional address" do
         build_additional_address(**attrs, address_care_of: "c/o Finance", last_name: "Foo Bar",
           uses_contactable_name: false)
-        expect(text).to eq <<~TEXT
+        expect(text).to eq <<~TEXT.chomp
           Foo Bar
           c/o Finance
           Lagistrasse 12a
@@ -580,9 +627,21 @@ describe Contactable::Address do
         TEXT
       end
 
+      it "prints address_addition after address_care_of" do
+        build_additional_address(**attrs, address_care_of: "c/o Finance",
+          address_addition: "Hinterhaus")
+        expect(text).to eq <<~TEXT.chomp
+          TopGroup
+          c/o Finance
+          Hinterhaus
+          Lagistrasse 12a
+          1080 Jamestown
+        TEXT
+      end
+
       it "does not print blank address_care_of line" do
         build_additional_address(**attrs, address_care_of: "", last_name: "Foo Bar", uses_contactable_name: false)
-        expect(text).to eq <<~TEXT
+        expect(text).to eq <<~TEXT.chomp
           Foo Bar
           Lagistrasse 12a
           1080 Jamestown
@@ -601,6 +660,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "TopGroup",
           recipient_address_care_of: nil,
+          recipient_address_addition: nil,
           recipient_housenumber: "345",
           recipient_street: "Greatstreet",
           recipient_postbox: nil,
@@ -616,6 +676,7 @@ describe Contactable::Address do
           last_name: "Foo Bar",
           uses_contactable_name: false,
           address_care_of: "Office",
+          address_addition: "Hinterhaus",
           street: "Lagistrasse",
           housenumber: "12a",
           postbox: "Postfach",
@@ -629,6 +690,7 @@ describe Contactable::Address do
           recipient_first_name: "",
           recipient_last_name: "Foo Bar",
           recipient_address_care_of: "Office",
+          recipient_address_addition: "Hinterhaus",
           recipient_housenumber: "12a",
           recipient_postbox: "Postfach",
           recipient_street: "Lagistrasse",

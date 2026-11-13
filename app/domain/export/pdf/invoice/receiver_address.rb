@@ -16,9 +16,16 @@ module Export::Pdf::Invoice
             render_shipping_info(invoice, width: address_box_width)
             pdf.move_down 4.mm
           end
-          table(receiver_address_data, cell_style: {borders: [], padding: [0, 0, 0, 0]})
+          table(truncated_receiver_address_data, cell_style: {borders: [], padding: [0, 0, 0, 0]})
         end
       end
+    end
+
+    private
+
+    def truncated_receiver_address_data
+      truncator = Export::Pdf::LineTruncator.new(pdf, address_box_width)
+      receiver_address_data.map { |cells| cells.map { |line| truncator.truncate(line) } }
     end
   end
 end

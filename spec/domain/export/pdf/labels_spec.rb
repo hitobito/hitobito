@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -36,6 +36,35 @@ describe Export::Pdf::Labels do
     it "ignores pp_post if not given" do
       label_format.update!(pp_post: "  ")
       expect(subject.strings.join(" ")).not_to include("Post CH AG")
+    end
+  end
+
+  context "with lines exceeding the label width" do
+    let(:long_line) { "c/o Treuhandbüro Meier & Partner GmbH, Chalet Edelweiss" }
+
+    before { top_leader.update!(address_care_of: long_line) }
+
+    it "cuts them instead of wrapping them" do
+      lines = subject.strings
+      expect(lines.size).to eq 4
+      expect(lines.second).not_to eq long_line
+      expect(long_line).to start_with(lines.second)
+    end
+  end
+
+  context "font size" do
+    let(:font_sizes) { subject.font_settings.pluck(:size).uniq }
+
+    it "uses font size of label format if all lines fit" do
+      expect(font_sizes).to eq [label_format.font_size]
+    end
+
+    it "reduces font size until all lines fit" do
+      top_leader.update!(address_care_of: "c/o Meier", address_addition: "Hinterhaus",
+        postbox: "Postfach 10")
+
+      expect(subject.strings.size).to eq 6
+      expect(font_sizes.max).to be < label_format.font_size
     end
   end
 

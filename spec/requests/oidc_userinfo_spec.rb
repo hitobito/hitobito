@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2024, Aargauer OL-Verband. This file is part of
+#  Copyright (c) 2020-2026, Aargauer OL-Verband. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -69,6 +69,7 @@ RSpec.describe "GET oauth/userinfo", type: :request do
         company: false,
         email: "bottom_member@example.com",
         address_care_of: nil,
+        address_addition: nil,
         street: "Greatstreet",
         housenumber: "345",
         postbox: nil,

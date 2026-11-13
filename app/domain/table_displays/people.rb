@@ -8,6 +8,6 @@
 module TableDisplays
   module People
     ALWAYS_SHOWN_ATTRS = [:first_name, :last_name, :nickname, :street, :housenumber,
-      :address_care_of, :postbox, :zip_code, :town].freeze
+      :address_care_of, :address_addition, :postbox, :zip_code, :town].freeze
   end
 end

@@ -10,8 +10,7 @@
     = render_attrs_group do
       = labeled_attr(entry.person, :layer_group)
       - if can?(:show_details, entry)
-        = labeled_attr(entry.person, :birthday)
-      = labeled_attr(entry.person, :gender)
+        = labeled_attrs(entry.person, :birthday, :gender)
 
     - if can?(:show_details, entry)
       = render 'application_details'

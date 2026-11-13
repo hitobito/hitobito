@@ -1616,6 +1616,11 @@ de:
             unwritable_attribute: kann nicht geändert werden
           type:
             unwritable_attribute: kann nicht geändert werden
+        people_manager_resource:
+          manager_id:
+            blank: muss ausgefüllt werden
+          managed_id:
+            blank: muss ausgefüllt werden
         qualification_resource:
           person_id:
             blank: muss ausgefüllt werden
@@ -1639,6 +1644,7 @@ de:
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast
       mailing_lists: Lesen aller Abos, auf die du Zugriff hast
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
+      managed_people: Lesen der ID und des Anzeigenamens deiner Kinder
       register_people: Erstellen von Personen via Selbstregistrierung
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 

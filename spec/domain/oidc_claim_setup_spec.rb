@@ -98,4 +98,33 @@ describe OidcClaimSetup do
       end
     end
   end
+
+  describe "managed_people" do
+    let(:scope) { :managed_people }
+    let(:managed) { people(:bottom_member) }
+
+    around do |example|
+      original = Settings.people.people_managers.api.enabled
+      Settings.people.people_managers.api.enabled = true
+      OidcClaimSetup.new.run
+      example.run
+      Settings.people.people_managers.api.enabled = original
+    end
+
+    before { PeopleManager.create!(manager: owner, managed: managed) }
+
+    it "contains only the managed_people key" do
+      expect(claim_keys).to eq %w[managed_people]
+    end
+
+    it "contains id and display name of the people the owner manages" do
+      expect(claims[:managed_people]).to eq [{id: managed.id, name: managed.to_s}]
+    end
+
+    it "does not contain the owner's own managers" do
+      PeopleManager.create!(manager: Fabricate(:person), managed: owner)
+
+      expect(claims[:managed_people]).to eq [{id: managed.id, name: managed.to_s}]
+    end
+  end
 end

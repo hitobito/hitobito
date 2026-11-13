@@ -7,3 +7,9 @@ Graphiti.configure do |config|
   config.pagination_links = true
   config.schema_path = Rails.root.join('spec/support/graphiti/schema.json')
 end
+
+Rails.application.config.after_initialize do
+  if FeatureGate.disabled?("people.people_managers.api")
+    Graphiti.resources.delete(PeopleManagerResource)
+  end
+end

@@ -582,7 +582,7 @@ describe RolesController do
       delete :destroy, params: {group_id: group.id, id: role.id}
 
       expect(flash[:notice]).to eq notice
-      is_expected.to redirect_to(person_path(person))
+      is_expected.to redirect_to(person_path(person, format: :html))
     end
 
     it "hard destroys future role" do
@@ -590,7 +590,7 @@ describe RolesController do
       delete :destroy, params: {group_id: group.id, id: role.id}
 
       expect(flash[:notice]).to eq hard_destroy_notice
-      is_expected.to redirect_to(person_path(person))
+      is_expected.to redirect_to(person_path(person, format: :html))
     end
 
     it "sets new primary group and shows warning if more than one group is remaining" do
@@ -609,7 +609,7 @@ describe RolesController do
       delete :destroy, params: {group_id: group.id, id: role.id}
 
       expect(flash[:alert]).to eq "Hauptgruppe auf <i>#{group2}</i> geändert."
-      is_expected.to redirect_to(person_path(person))
+      is_expected.to redirect_to(person_path(person, format: :html))
       expect(person.reload.primary_group).to eq group2
     end
 
@@ -627,7 +627,7 @@ describe RolesController do
       delete :destroy, params: {group_id: group.id, id: role.id}
 
       expect(flash[:alert]).to be_nil
-      is_expected.to redirect_to(person_path(person))
+      is_expected.to redirect_to(person_path(person, format: :html))
       expect(person.reload.primary_group).to eq group2
     end
 
@@ -646,7 +646,7 @@ describe RolesController do
       delete :destroy, params: {group_id: group.id, id: role.id}
 
       expect(flash[:alert]).to be_nil
-      is_expected.to redirect_to(person_path(person))
+      is_expected.to redirect_to(person_path(person, format: :html))
       expect(person.reload.primary_group).to eq group
     end
 
@@ -665,7 +665,7 @@ describe RolesController do
       delete :destroy, params: {group_id: group.id, id: role.id}
 
       expect(flash[:alert]).to be_nil
-      is_expected.to redirect_to(person_path(person))
+      is_expected.to redirect_to(person_path(person, format: :html))
       expect(person.primary_group).to eq group2
     end
 

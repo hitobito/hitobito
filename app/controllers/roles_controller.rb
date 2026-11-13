@@ -51,7 +51,11 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
 
   def destroy
     super do |format|
-      location = can?(:show, entry.person) ? person_path(entry.person_id) : group_path(parent)
+      location = if can?(:show, entry.person)
+        person_path(entry.person_id, format: :html)
+      else
+        group_path(parent)
+      end
       format.html { redirect_to(location) }
     end
   end

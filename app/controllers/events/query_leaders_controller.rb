@@ -16,10 +16,10 @@ class Events::QueryLeadersController < Person::QueryController
 
   def scope
     super
-      .joins(event_participations: :roles)
-      .where(event_participations: {event_id: accessible_event_ids},
-        event_roles: {type: leader_roles.map(&:sti_name)})
-      .distinct
+     # .joins(event_participations: :roles)
+      #.where(event_participations: {event_id: accessible_event_ids},
+       # event_roles: {type: leader_roles.map(&:sti_name)})
+      #.distinct
   end
 
   def accessible_event_ids

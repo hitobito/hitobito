@@ -16,19 +16,20 @@ Applications must be registered with allowed callback URLs and allowed scopes (s
 #### Scopes
 Different external applications need different types of data about their users. Scopes are used to define what information an external application can request and access.
 
-| Scope           | Available user data / functionality       |
-| --------------- | ----------------------------------------- |
-| `email`         | id, email                                 |
-| `name`          | id, email, firstname, lastname, nickname  |
-| `with_roles`    | All the profile data, roles within groups |
-| `openid`        | OIDC identity token (userinfo endpoint)   |
-| `api`           | All REST APIs                             |
-| `events`        | event API endpoints                       |
-| `groups`        | group API endpoints                       |
-| `people`        | people API endpoints                      |
-| `invoices`      | invoice API endpoints                     |
-| `mailing_lists` | mailing list API endpoints                |
-| `nextcloud`     | nextcloud groups based on user's roles    |
+| Scope            | Available user data / functionality                                      |
+| ---------------- | ------------------------------------------------------------------------ |
+| `email`          | id, email                                                                |
+| `name`           | id, email, firstname, lastname, nickname                                 |
+| `with_roles`     | All the profile data, roles within groups                                |
+| `openid`         | OIDC identity token (userinfo endpoint)                                  |
+| `api`            | All REST APIs                                                            |
+| `events`         | event API endpoints                                                      |
+| `groups`         | group API endpoints                                                      |
+| `people`         | people API endpoints                                                     |
+| `invoices`       | invoice API endpoints                                                    |
+| `mailing_lists`  | mailing list API endpoints                                               |
+| `nextcloud`      | nextcloud groups based on user's roles                                   |
+| `managed_people` | id and display name of the people the user manages (e.g. their children) |
 
 The scope `with_roles` contains most of the profile information, including the fields of the name scope. Multiple scopes can be combined in a single authorization request.
 

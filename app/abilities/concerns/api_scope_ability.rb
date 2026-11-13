@@ -12,7 +12,8 @@ module ApiScopeAbility
     Role: [:groups, :people],
     "Event::Kind": :events,
     "Event::KindCategory": :events,
-    InvoiceItem: :invoices
+    InvoiceItem: :invoices,
+    PeopleManager: :people
   }.with_indifferent_access
 
   private
@@ -41,7 +42,8 @@ module ApiScopeAbility
     case action.to_sym
     when :show, :show_full, :show_details, :index, :list_available, :read
       true
-    when :create, :update, :update_email, :destroy, :manage
+    when :create, :update, :update_email, :destroy, :manage,
+      :create_manager, :create_managed, :destroy_manager, :destroy_managed
       write_permission?
     end
   end

@@ -314,6 +314,44 @@ describe PersonResource, type: :resource do
       end
     end
 
+    describe "people_managers" do
+      let!(:people_manager1) { PeopleManager.create!(manager: Fabricate(:person), managed: person) }
+      let!(:people_manager2) { PeopleManager.create!(manager: Fabricate(:person), managed: person) }
+
+      before { params[:include] = "people_managers" }
+
+      it "it works" do
+        render
+        people_managers = d[0].sideload(:people_managers)
+        expect(people_managers).to have(2).items
+        expect(people_managers.map(&:id)).to match_array [people_manager1.id, people_manager2.id]
+      end
+
+      it "exposes none when the api feature gate is disabled" do
+        allow(FeatureGate).to receive(:enabled?).and_call_original
+        allow(FeatureGate).to receive(:enabled?).with("people.people_managers.api").and_return(false)
+
+        render
+        expect(d[0].sideload(:people_managers)).to be_empty
+      end
+    end
+
+    describe "people_manageds" do
+      let(:managed1) { Fabricate(Group::BottomLayer::Member.name, group: bottom_layer_one).person }
+      let(:managed2) { Fabricate(Group::BottomLayer::Member.name, group: bottom_layer_one).person }
+      let!(:people_manager1) { PeopleManager.create!(manager: person, managed: managed1) }
+      let!(:people_manager2) { PeopleManager.create!(manager: person, managed: managed2) }
+
+      before { params[:include] = "people_manageds" }
+
+      it "it works" do
+        render
+        people_manageds = d[0].sideload(:people_manageds)
+        expect(people_manageds).to have(2).items
+        expect(people_manageds.map(&:id)).to match_array [people_manager1.id, people_manager2.id]
+      end
+    end
+
     describe "primary_group" do
       before { params[:include] = "primary_group" }
 

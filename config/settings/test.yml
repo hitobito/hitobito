@@ -44,3 +44,6 @@ invoices:
 people:
   blocklist:
     enabled: true
+  people_managers:
+    api:
+      enabled: true

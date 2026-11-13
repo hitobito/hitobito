@@ -102,11 +102,13 @@ class RoleListsController < CrudController
   end
 
   def role_list
-    @role_list ||= begin
-      role_list_params = params.dup
-      role_list_params[:ids] = all_filtered_or_listed_people.unscope(:order).pluck(:id).join(",")
+    @role_list ||= build_role_list
+  end
 
-      Role::List.new(current_ability, role_list_params)
-    end
+  def build_role_list
+    role_list_params = params.dup
+    role_list_params[:ids] = all_filtered_or_listed_people.unscope(:order).pluck(:id).join(",")
+
+    Role::List.new(current_ability, role_list_params)
   end
 end

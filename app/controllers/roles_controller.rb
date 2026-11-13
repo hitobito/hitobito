@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -118,11 +118,7 @@ class RolesController < CrudController # rubocop:disable Metrics/ClassLength
     @new_role = build_new_type
     authorize!(:create, @new_role)
 
-    Role.transaction do
-      entry.destroy
-      @new_role.save || raise(ActiveRecord::Rollback)
-      true
-    end
+    Roles::TypeChange.new(entry, @new_role).call
   end
 
   def build_new_type

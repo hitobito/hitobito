@@ -2974,6 +2974,90 @@
       }
     },
     {
+      "name": "PeopleManagerResource",
+      "type": "people_managers",
+      "graphql_entrypoint": "peopleManagers",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "manager_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "managed_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {},
+        "manager_id": {},
+        "managed_id": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "manager_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "managed_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "manager": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "managed": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "Person::NameResource",
       "type": "person-name",
       "graphql_entrypoint": "names",
@@ -3535,6 +3619,16 @@
           "type": "has_many",
           "description": null,
           "resource": "Event::ParticipationResource"
+        },
+        "people_managers": {
+          "type": "has_many",
+          "description": null,
+          "resource": "PeopleManagerResource"
+        },
+        "people_manageds": {
+          "type": "has_many",
+          "description": null,
+          "resource": "PeopleManagerResource"
         }
       },
       "stats": {

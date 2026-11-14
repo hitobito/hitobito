@@ -14,6 +14,7 @@ class OidcClaimSetup
     add_name_scope_claims
     add_role_scope_claims
     add_nextcloud_scope_claims
+    add_managed_people_scope_claims
   end
 
   private
@@ -41,6 +42,14 @@ class OidcClaimSetup
 
       add_claim(:groups, scope: :nextcloud, responses: responses) do |owner|
         owner.roles.map(&:nextcloud_group).uniq.compact.sort.map(&:to_h)
+      end
+    end
+  end
+
+  def add_managed_people_scope_claims
+    FeatureGate.if("people.people_managers.api") do
+      add_claim(:managed_people, scope: :managed_people) do |owner|
+        owner.manageds.map { |person| {id: person.id, name: person.to_s} }
       end
     end
   end

@@ -594,5 +594,133 @@ describe PersonResource, type: :resource do
         end
       end
     end
+
+    describe "people_managers" do
+      describe "create" do
+        let!(:managed) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person }
+        let!(:manager) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person }
+
+        let(:payload) do
+          {
+            id: managed.id.to_s,
+            data: {
+              type: "people",
+              id: managed.id.to_s,
+              attributes: {},
+              relationships: {
+                people_managers: {
+                  data: {
+                    type: "people_managers",
+                    "temp-id": "asdf",
+                    method: "create"
+                  }
+                }
+              }
+            },
+            included: [
+              {
+                type: "people_managers",
+                "temp-id": "asdf",
+                attributes: {
+                  manager_id: manager.id
+                }
+              }
+            ]
+          }
+        end
+
+        let(:instance) { PersonResource.find(payload) }
+
+        it "works" do
+          expect {
+            expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
+          }.to change { PeopleManager.count }.by(1)
+
+          people_manager = PeopleManager.last
+          expect(people_manager.manager).to eq manager
+          expect(people_manager.managed).to eq managed
+        end
+      end
+
+      describe "destroy" do
+        let!(:managed) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person }
+        let!(:people_manager) { PeopleManager.create!(manager: Fabricate(:person), managed: managed) }
+
+        let(:payload) do
+          {
+            id: managed.id.to_s,
+            data: {
+              type: "people",
+              id: managed.id.to_s,
+              relationships: {
+                people_managers: {
+                  data: {
+                    type: "people_managers",
+                    id: people_manager.id.to_s,
+                    method: "destroy"
+                  }
+                }
+              }
+            }
+          }
+        end
+
+        let(:instance) { PersonResource.find(payload) }
+
+        it "works" do
+          expect {
+            expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
+          }.to change { PeopleManager.count }.by(-1)
+        end
+      end
+    end
+
+    describe "people_manageds" do
+      describe "create" do
+        let!(:manager) { Fabricate(Group::BottomLayer::Leader.to_s, group: groups(:bottom_layer_one)).person }
+        let!(:managed) { Fabricate(Group::BottomLayer::Member.to_s, group: groups(:bottom_layer_one)).person }
+
+        let(:payload) do
+          {
+            id: manager.id.to_s,
+            data: {
+              type: "people",
+              id: manager.id.to_s,
+              attributes: {},
+              relationships: {
+                people_manageds: {
+                  data: {
+                    type: "people_managers",
+                    "temp-id": "asdf",
+                    method: "create"
+                  }
+                }
+              }
+            },
+            included: [
+              {
+                type: "people_managers",
+                "temp-id": "asdf",
+                attributes: {
+                  managed_id: managed.id
+                }
+              }
+            ]
+          }
+        end
+
+        let(:instance) { PersonResource.find(payload) }
+
+        it "works" do
+          expect {
+            expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
+          }.to change { PeopleManager.count }.by(1)
+
+          people_manager = PeopleManager.last
+          expect(people_manager.manager).to eq manager
+          expect(people_manager.managed).to eq managed
+        end
+      end
+    end
   end
 end

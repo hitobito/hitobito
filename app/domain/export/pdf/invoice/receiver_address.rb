@@ -12,7 +12,7 @@ module Export::Pdf::Invoice
       float do
         offset_cursor_from_top 5.1.cm
         bounding_box(address_position(invoice.letter_address_position), width: address_box_width) do
-          unless shipping_info_empty?(invoice)
+          if invoice.shipping_info?
             render_shipping_info(invoice, width: address_box_width)
             pdf.move_down 4.mm
           end

@@ -15,14 +15,10 @@ module Export::Pdf::ShippingInfoRenderers
 
   def render_shipping_info(shippable, width:)
     pdf.font(SHIPPING_INFO_FONT) do
-      render_shipping_info_post_logo(width) unless shippable.own?
+      render_shipping_info_post_logo(width) unless shippable.effective_shipping_method == "own"
       render_shipping_info_text(shippable, width)
-      render_shipping_info_line(width) unless shipping_info_empty?(shippable)
+      render_shipping_info_line(width) if shippable.shipping_info?
     end
-  end
-
-  def shipping_info_empty?(shippable)
-    shippable.own? && shippable.pp_post.to_s.strip.blank?
   end
 
   private
@@ -32,8 +28,8 @@ module Export::Pdf::ShippingInfoRenderers
   end
 
   def render_shipping_info_text(shippable, width)
-    shipping_method_text, text_height = SHIPPING_METHODS[shippable.shipping_method.to_sym]
-    text_box("#{shipping_method_text}<font size='8'>#{shippable.pp_post}</font>",
+    shipping_method_text, text_height = SHIPPING_METHODS[shippable.effective_shipping_method.to_sym]
+    text_box("#{shipping_method_text}<font size='8'>#{shippable.effective_pp_post}</font>",
       inline_format: true, overflow: :truncate, single_line: true,
       width: width, at: [0, cursor + text_height])
   end

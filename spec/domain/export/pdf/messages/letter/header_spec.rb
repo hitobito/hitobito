@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021-2024, CVP Schweiz. This file is part of
+#  Copyright (c) 2021-2026, CVP Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -318,6 +318,18 @@ describe Export::Pdf::Messages::Letter::Header do
         shipping_info_with_position_right.each do |shipping_info|
           expect(text_with_position).to include(shipping_info)
         end
+      end
+    end
+
+    context "with disabled shippable attributes" do
+      before { allow(Message::Letter).to receive(:shippable_attributes).and_return([]) }
+
+      it "is not present" do
+        subject.render(recipient)
+
+        expect(text_with_position.map(&:last)).not_to include(
+          "P.P.", "Post CH AG", "CH-3030 Bern, Belpstrasse 37"
+        )
       end
     end
   end

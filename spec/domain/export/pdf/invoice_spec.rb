@@ -1449,5 +1449,13 @@ describe Export::Pdf::Invoice do
       expect(text_with_position).to include([57, 675, "Top Leader"])
       expect(text_with_position).to include([347, 685, "Rechnungsnummer:"])
     end
+
+    it "renders neither pp row nor post header if the shippable attributes are disabled" do
+      invoice.update!(pp_post: "CH-3000", shipping_method: :priority)
+      allow(Invoice).to receive(:shippable_attributes).and_return([])
+
+      texts = text_with_position.map(&:last)
+      expect(texts).not_to include("Post CH AG", "P.P.", "CH-3000")
+    end
   end
 end

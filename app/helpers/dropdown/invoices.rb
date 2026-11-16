@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -47,7 +47,11 @@ module Dropdown
     end
 
     def payment_slip_relevant?
-      @invoice.nil? || !@invoice.no_ps?
+      if @invoice
+        !@invoice.no_ps?
+      else
+        InvoiceConfig.payment_slips.any? { |payment_slip| payment_slip != "no_ps" }
+      end
     end
 
     def label_links

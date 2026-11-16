@@ -14,11 +14,8 @@ describe MailingListsController, js: true do
   before { sign_in(user) }
 
   def select_preferred_label(name)
-    10.times do
-      find("#mailing_list_preferred_labels-ts-control").click
-      break if page.has_css?(".ts-dropdown-content .option", text: name, wait: 0.5)
-    end
-    find(".ts-dropdown-content .option", text: name).click
+    fill_in "mailing_list_preferred_labels-ts-control", with: name
+    find(".ts-dropdown .option", text: name).click
   end
 
   context "index" do

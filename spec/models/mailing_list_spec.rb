@@ -16,8 +16,8 @@ describe MailingList do
     end
 
     it "sorts array and removes duplicates" do
-      list.update(preferred_labels: %w[foo bar bar baz])
-      expect(list.reload.preferred_labels).to eq %w[bar baz foo]
+      list.update(preferred_labels: %w[work other other private])
+      expect(list.reload.preferred_labels).to eq %w[other private work]
     end
 
     it "ignores blank values" do
@@ -26,18 +26,38 @@ describe MailingList do
     end
 
     it "strips whitespaces blank values" do
-      list.update(preferred_labels: [" test "])
-      expect(list.reload.preferred_labels).to eq ["test"]
+      list.update(preferred_labels: [" work "])
+      expect(list.reload.preferred_labels).to eq ["work"]
+    end
+
+    it "rejects a value that is not a known category" do
+      list.update(preferred_labels: %w[work some_custom_label])
+      expect(list.reload.preferred_labels).to eq []
+      expect(list.errors[:preferred_labels]).to be_present
+    end
+
+    it "keeps an already stored value that is not a known category" do
+      list.update_column(:preferred_labels, %w[some_custom_label])
+      list.update(preferred_labels: %w[some_custom_label work])
+      expect(list.reload.preferred_labels).to eq %w[some_custom_label work]
     end
   end
 
   describe "labels" do
     it "includes main if set" do
       expect(list.labels).to eq []
-      list.update(preferred_labels: %w[foo])
-      expect(list.reload.labels).to eq %w[foo]
+      list.update(preferred_labels: %w[work])
+      expect(list.reload.labels).to eq %w[work]
       list.update(main_email: true)
-      expect(list.reload.labels).to eq %w[foo _main]
+      expect(list.reload.labels).to eq %w[work _main]
+    end
+  end
+
+  describe ".preferred_label_categories" do
+    it "returns the AdditionalEmail categories available for Person" do
+      expect(MailingList.preferred_label_categories.map(&:key)).to match_array(
+        %w[private work invoices other]
+      )
     end
   end
 

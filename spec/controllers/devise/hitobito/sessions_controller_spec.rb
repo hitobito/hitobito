@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -20,6 +20,77 @@ describe Devise::Hitobito::SessionsController do
     its(:type) { should eq "Group::BottomGroup::Member" }
     specify "person has only single role" do
       expect(person.roles.size).to eq 1
+    end
+  end
+
+  context "#new" do
+    render_views
+
+    let!(:application) do
+      Oauth::Application.create!(name: "MyApp", uid: "my-app-uid", redirect_uri: "urn:ietf:wg:oauth:2.0:oob")
+    end
+    let(:page) { Capybara.string(response.body) }
+
+    before do
+      request.env["devise.mapping"] = Devise.mappings[:person]
+      session["person_return_to"] = "/oauth/authorize?client_id=my-app-uid&response_type=code"
+    end
+
+    it "does not check remember me" do
+      get :new, params: {oauth: true}
+      expect(page).to have_unchecked_field("person_remember_me")
+    end
+
+    it "shows oauth application info" do
+      get :new, params: {oauth: true}
+      expect(page).to have_content("Bitte melde dich an, um weiter zu MyApp zu gelangen.")
+    end
+
+    context "with oauth application preselecting remember me" do
+      before { application.update!(preselect_remember_me: true) }
+
+      it "checks remember me" do
+        get :new, params: {oauth: true}
+        expect(page).to have_checked_field("person_remember_me")
+      end
+
+      it "keeps remember me unchecked if submitted unchecked" do
+        get :new, params: {oauth: true, person: {login_identity: "foo", remember_me: "0"}}
+        expect(page).to have_unchecked_field("person_remember_me")
+      end
+
+      it "does not check remember me without oauth param" do
+        get :new
+        expect(page).to have_unchecked_field("person_remember_me")
+      end
+    end
+
+    it "does not check remember me for unknown client_id" do
+      session["person_return_to"] = "/oauth/authorize?client_id=unknown"
+      get :new, params: {oauth: true}
+      expect(page).to have_unchecked_field("person_remember_me")
+    end
+
+    [
+      "/oauth/authorize",
+      "/oauth/authorize?client_id%5Ba%5D=my-app-uid",
+      "/oauth/authorize?client_id%5B%5D=my-app-uid",
+      "/oauth/authorize?client_id=my-app-uid&client_id%5B%5D=def",
+      "/oauth/authorize?client_id=my-app-uid&a=%25zz%",
+      "http://[invalid"
+    ].each do |return_to|
+      it "renders without oauth application info for stored location #{return_to}" do
+        session["person_return_to"] = return_to
+        get :new, params: {oauth: true}
+        expect(page).to have_content("Bitte melde dich an, um weiter zu gelangen.")
+        expect(page).not_to have_content("MyApp")
+      end
+    end
+
+    it "does not check remember me without stored location" do
+      session.delete("person_return_to")
+      get :new, params: {oauth: true}
+      expect(page).to have_unchecked_field("person_remember_me")
     end
   end
 

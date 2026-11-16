@@ -14,6 +14,7 @@
 #  confidential                :boolean          default(TRUE), not null
 #  description                 :text
 #  name                        :string           not null
+#  preselect_remember_me       :boolean          default(FALSE), not null
 #  redirect_uri                :text             not null
 #  refresh_token_lifetime_days :integer
 #  scopes                      :string           default(""), not null

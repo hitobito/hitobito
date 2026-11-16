@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Pro OAuth-Applikation kann eingestellt werden, dass "Angemeldet bleiben" beim Login vorausgewählt ist (hitobito_sac_cas#2664)
 - JSON:API: Verwalter\*in/Kind-Beziehungen können bei Personen über `people_managers` und `people_manageds` erstellt, gelöscht und inkludiert werden; der neue OIDC-Scope `managed_people` liefert ID und Anzeigename der eigenen Kinder (hitobito_bdp#63)
 - Upgrade auf Rails 8.1 (#4415)
 - Die Eventbeschreibung kann nun mit HTMl formatiert werden (#1791)

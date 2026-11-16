@@ -54,6 +54,29 @@ describe Oauth::ApplicationsController do
     end
   end
 
+  describe "preselect remember me" do
+    render_views
+
+    let!(:application) do
+      Oauth::Application.create!(name: "ExistingApp", redirect_uri: "urn:ietf:wg:oauth:2.0:oob")
+    end
+
+    it "PATCH#update saves preselect remember me" do
+      patch :update, params: {id: application.id, oauth_application: {preselect_remember_me: "1"}}
+      expect(application.reload.preselect_remember_me).to eq true
+    end
+
+    it "GET#edit renders field" do
+      get :edit, params: {id: application.id}
+      expect(response.body).to include("oauth_application[preselect_remember_me]")
+    end
+
+    it "GET#show renders preselect remember me" do
+      get :show, params: {id: application.id}
+      expect(Capybara.string(response.body)).to have_content("'Angemeldet bleiben' automatisch anwählen")
+    end
+  end
+
   describe "refresh token lifetime" do
     render_views
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,6 +21,14 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
 
   before_action :configure_permitted_parameters
   after_action :reset_inactivity_block_warning_sent_at, only: [:create]
+
+  helper_method :oauth_application
+
+  def new
+    super do |resource|
+      resource.remember_me = true if preselect_remember_me?
+    end
+  end
 
   def create
     super do |resource|
@@ -92,8 +100,30 @@ class Devise::Hitobito::SessionsController < Devise::SessionsController
     !Settings.auth&.skip_2fa && resource.is_a?(Person) && resource.second_factor_required?
   end
 
+  def oauth_request?
+    params["oauth"] == "true"
+  end
+
+  def oauth_application
+    return @oauth_application if defined?(@oauth_application)
+
+    client_id = oauth_client_id if oauth_request?
+    @oauth_application = client_id && Oauth::Application.find_by(uid: client_id)
+  end
+
+  def oauth_client_id
+    query = URI.parse(session["person_return_to"].to_s).query
+    Rack::Utils.parse_nested_query(query)["client_id"].to_s.presence
+  rescue URI::InvalidURIError, Rack::BadRequest
+    nil
+  end
+
+  def preselect_remember_me?
+    oauth_application&.preselect_remember_me? && !sign_in_params.key?(:remember_me)
+  end
+
   def devise_layout
-    if params["oauth"] == "true"
+    if oauth_request?
       "oauth"
     else
       "application"

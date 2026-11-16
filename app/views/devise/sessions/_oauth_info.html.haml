@@ -1,20 +1,16 @@
--#  Copyright (c) 2021, Pfadibewegung Schweiz. This file is part of
+-#  Copyright (c) 2021-2026, Pfadibewegung Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-- uid = session['person_return_to']&.gsub(/.*client_id=([^&]*).*/, '\1')
-- if uid.present?
-  - oauth_app = Oauth::Application.find_by(uid: uid)
-
 - title t('.sign_in', name: Settings.application.name)
 
 .fields-separation
-  = render "oauth_logo", oauth_app: oauth_app
+  = render "oauth_logo", oauth_app: oauth_application
 
   %p
-    - if oauth_app.present?
-      = t('.info', oauth_app: oauth_app&.name)
+    - if oauth_application.present?
+      = t('.info', oauth_app: oauth_application.name)
     - else
       = t('.no_oauth_app_info')
   %hr

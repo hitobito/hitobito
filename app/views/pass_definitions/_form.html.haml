@@ -1,0 +1,23 @@
+-#  Copyright (c) 2025, Puzzle ITC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+= entry_form do |f|
+  = f.labeled_input_fields(:name, :description)
+
+  - if Passes::TemplateRegistry.available_keys.size > 1
+    = f.labeled(:template_key) do
+      = f.select(:template_key,
+                 Passes::TemplateRegistry.available_keys.map { |k| [k.titleize, k] },
+                 { include_blank: false },
+                 class: "form-select")
+
+  = f.labeled(:background_color) do
+    .d-flex.align-items-center.gap-2
+      = f.color_field(:background_color, class: "form-control form-control-color")
+      = f.text_field(:background_color,
+                     class: "form-control",
+                     style: "max-width: 8em",
+                     pattern: "#[0-9a-fA-F]{6}",
+                     placeholder: "#0066cc")

@@ -33,4 +33,16 @@ describe "invoices/_form.html.haml" do
       "ABO-NEWS - Abonnement der Mitgliederzeitschrift"
     ])
   end
+
+  it "renders the shipping fields" do
+    expect(dom).to have_select("invoice_shipping_method")
+    expect(dom).to have_field("invoice_pp_post")
+  end
+
+  it "does not render disabled shipping fields" do
+    allow(Invoice).to receive(:shippable_attributes).and_return([:pp_post])
+
+    expect(dom).not_to have_select("invoice_shipping_method")
+    expect(dom).to have_field("invoice_pp_post")
+  end
 end

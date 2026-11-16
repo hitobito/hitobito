@@ -3,9 +3,9 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-- if entry.shippable?(:shipping_method)
+- if entry.shippable_attribute?(:shipping_method)
   = f.labeled_collection_select :shipping_method, entry.class.shipping_method_labels, :first, :last
-- if entry.shippable?(:pp_post)
+- if entry.shippable_attribute?(:pp_post)
   = f.labeled(:pp_post) do
     .input-group.input-group-sm
       %span.input-group-text

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -39,6 +39,22 @@ describe "invoices/_attrs.html.haml" do
       invoice.update!(invoice_run:)
       expect(payment_form["action"]).to eq group_invoice_payments_path(group, invoice)
       expect(payment_form.find("a.cancel")["href"]).to eq group_invoice_run_invoice_path(group, invoice_run, invoice)
+    end
+  end
+
+  describe "shipping infos" do
+    before { invoice.update!(shipping_method: :normal, pp_post: "CH-3030 Bern") }
+
+    it "renders shipping method and pp post" do
+      expect(dom).to have_content "CH-3030 Bern"
+      expect(dom).to have_content "B-Post"
+    end
+
+    it "does not render disabled shipping attributes" do
+      allow(Invoice).to receive(:shippable_attributes).and_return([])
+
+      expect(dom).not_to have_content "CH-3030 Bern"
+      expect(dom).not_to have_content "B-Post"
     end
   end
 end

@@ -7,16 +7,28 @@ module Shippable
   extend ActiveSupport::Concern
 
   SHIPPING_METHODS = %w[own normal priority].freeze
-  ATTRIBUTES = %i[shipping_method pp_post].freeze
+  SHIPPABLE_ATTRIBUTES = %i[shipping_method pp_post].freeze
 
   included do
     i18n_enum :shipping_method, SHIPPING_METHODS, scopes: true, queries: true,
       i18n_prefix: "activerecord.attributes.message/letter.shipping_methods"
 
-    class_attribute :shippable_attributes, default: ATTRIBUTES
+    class_attribute :shippable_attributes, default: SHIPPABLE_ATTRIBUTES
   end
 
-  def shippable?(attribute)
+  def shippable_attribute?(attribute)
     shippable_attributes.include?(attribute)
+  end
+
+  def effective_shipping_method
+    shippable_attribute?(:shipping_method) ? shipping_method : "own"
+  end
+
+  def effective_pp_post
+    pp_post if shippable_attribute?(:pp_post)
+  end
+
+  def shipping_info?
+    effective_shipping_method != "own" || effective_pp_post.to_s.strip.present?
   end
 end

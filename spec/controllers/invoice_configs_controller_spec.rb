@@ -101,6 +101,36 @@ describe InvoiceConfigsController do
       expect(raiffeisen_configs.size).to eq(1)
       expect(raiffeisen_configs.first.legacy_25_ebics).to eq(true)
     end
+
+    describe "rendering view" do
+      render_views
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      it "shows payment slip selection and payment provider tab" do
+        get :edit, params: {group_id: group.id, id: entry.id}
+
+        expect(dom).to have_select("invoice_config_payment_slip")
+        expect(dom).to have_link("Zahlungsschnittstellen", href: "#payment_provider_configs")
+        expect(dom).to have_css("#payment_provider_configs")
+      end
+
+      it "hides payment slip selection if only one payment slip is available" do
+        allow(InvoiceConfig).to receive(:payment_slips).and_return(%w[no_ps])
+
+        get :edit, params: {group_id: group.id, id: entry.id}
+
+        expect(dom).not_to have_select("invoice_config_payment_slip")
+      end
+
+      it "hides payment provider tab if no payment providers are configured" do
+        allow(Settings).to receive(:payment_providers).and_return([])
+
+        get :edit, params: {group_id: group.id, id: entry.id}
+
+        expect(dom).not_to have_link("Zahlungsschnittstellen", href: "#payment_provider_configs")
+        expect(dom).not_to have_css("#payment_provider_configs")
+      end
+    end
   end
 
   context "PATCH update" do

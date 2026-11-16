@@ -2,6 +2,7 @@
 
 ## Version 2.11
 
+- Bei der Personnensuche wird nun `Weitere Treffer vorhanden, Suche verfeinern` als Indikator angezeigt, dass mehr als 10 Personnen gefunden wurden (#1797) 
 - Bei der Personnensuche wird nun ... als Indikator angezeigt, dass mehr als 10 Personnen gefunden wurden (#1797) 
 - Die Zeichen % und _ in Suchbegriffen werden wörtlich gesucht statt als Platzhalter verwendet
 - Pro OAuth-Applikation kann eingestellt werden, dass "Angemeldet bleiben" beim Login vorausgewählt ist (hitobito_sac_cas#2664)

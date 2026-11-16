@@ -31,7 +31,7 @@ describe Person::QueryController do
         expect(response.body).to_not match(/Pascal/)
       end
 
-      it "returns more results hint if there are more than 10 people" do
+      it "returns more results translation if there are more than 10 people" do
         11.times { Fabricate(:person, first_name: "Pascal") }
         get :index, params: {q: "pas"}
 
@@ -40,7 +40,7 @@ describe Person::QueryController do
         expect(json["more_results"]).to eq("Weitere Treffer vorhanden, Suche verfeinern")
       end
 
-      it "returns no more results hint if there are not more than 10 people" do
+      it "returns no more results translation if there are not more than 10 people" do
         Fabricate(:person, first_name: "Pascal")
         get :index, params: {q: "pas"}
 

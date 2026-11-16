@@ -26,7 +26,7 @@ describe HouseholdsController, js: true do
     end.to change { household.reload.members.count }.by(1)
   end
 
-  it "shows more results hint if there are more than 10 people" do
+  it "shows more results translation if there are more than 10 people" do
     11.times do
       Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group),
         person: Fabricate(:person, first_name: "Pascal"))

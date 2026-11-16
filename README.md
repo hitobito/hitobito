@@ -25,6 +25,10 @@ This is where you also find some [Deployment Instructions](doc/operator/01_deplo
 
 More information about [interfaces, api, oauth and oidc](doc/developer/README.md#interfaces) is also avaible.
 
+## One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Hitobito/)
+
 ## Architecture
 
 The architecture documentation in German can be found in [doc/architecture](doc/architecture).

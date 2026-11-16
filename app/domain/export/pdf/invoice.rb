@@ -52,8 +52,7 @@ module Export::Pdf
           when "qr"
             payment_slip_qr_class.new(pdf, invoice, section_options).render
             @metadata[:pages_with_payment_slip] += [pdf.page_count]
-          when "no_ps"
-            # nothing to render, the invoice has no payment slip
+          when "no_ps" then nil
           else
             PaymentSlip.new(pdf, invoice, section_options).render
           end

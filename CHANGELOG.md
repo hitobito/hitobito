@@ -31,6 +31,7 @@
 - Minimierte Personen werden neu in Personenlisten, der Suche und Auswahlfeldern ausgeblendet; ihre Profilseite ist nicht mehr zugänglich (#4624)
 - OAuth-Applikationen können eine eigene Gültigkeitsdauer für Refresh Tokens erhalten, z. B. damit Logins in Mobile-Apps länger gültig bleiben (hitobito_sac_cas#2755)
 - JSON:API: Rollen können mit einem beliebigen `start_on` erstellt und über `end_on` zu einem Stichtag beendet werden. Das Setzen von `end_on` erfordert die Berechtigung, die Rolle zu löschen (hitobito_bdp#65)
+- Rechnungen ohne Einzahlungsschein enthalten im PDF keine Felder des alten Einzahlungsscheins mehr, und die Druckoptionen für den Einzahlungsschein entfallen (hitobito_pfadi_de#87)
 
 ## Version 2.10
 

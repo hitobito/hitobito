@@ -94,6 +94,8 @@ class ApplicationResource < Graphiti::Resource
     raise_validation_error!(model)
   end
 
+  private
+
   def raise_validation_error!(model)
     raise Graphiti::Errors::ValidationError.new(
       Graphiti::Util::ValidationResponse.new(model, nil)

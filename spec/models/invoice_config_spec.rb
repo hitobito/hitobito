@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Hitobito AG. This file is part of
+#  Copyright (c) 2021-2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,6 +22,27 @@ describe InvoiceConfig do
       expect(subject.errors.attribute_names).to eq [
         :payee_name, :payee_zip_code, :payee_town, :iban
       ]
+    end
+  end
+
+  describe "payment_slip" do
+    it "defaults to qr" do
+      expect(InvoiceConfig.new.payment_slip).to eq "qr"
+    end
+
+    context "restricted to no payment slip" do
+      before { allow(InvoiceConfig).to receive(:payment_slips).and_return(%w[no_ps]) }
+
+      it "defaults to no_ps" do
+        expect(InvoiceConfig.new.payment_slip).to eq "no_ps"
+      end
+
+      it "rejects qr" do
+        invoice_config.payment_slip = "qr"
+
+        expect(invoice_config).not_to be_valid
+        expect(invoice_config.errors.attribute_names).to include :payment_slip
+      end
     end
   end
 

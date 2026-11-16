@@ -87,7 +87,7 @@ export default class extends Controller {
   connect() {
     this.tom = new TomSelect(`#${this.element.id}`, this.#getOptions());
     this.tom.on("item_add", this.#clearInput.bind(this));
-    this.moreResultsHints = {};
+    this.moreResultsTranslations = {};
     this.tom.on("type", this.#updateMoreResultsOption.bind(this));
     if (this.element.autofocus) {
       this.tom.focus();
@@ -137,7 +137,7 @@ export default class extends Controller {
         if (Array.isArray(json)) {
           callback(json);
         } else if (json.more_results) {
-          this.moreResultsHints[query] = json.more_results;
+          this.moreResultsTranslations[query] = json.more_results;
           callback([this.#moreResultsOption(json.more_results), ...json.data])
         } else {
           callback(json.data);
@@ -153,14 +153,14 @@ export default class extends Controller {
     return (option) => (option.id === MORE_RESULTS_ID ? 1 : score(option));
   }
 
-  #moreResultsOption(hint) {
-    return { id: MORE_RESULTS_ID, [this.labelValue]: hint, disabled: true };
+  #moreResultsOption(translation) {
+    return { id: MORE_RESULTS_ID, [this.labelValue]: translation, disabled: true };
   }
 
   #updateMoreResultsOption(query) {
     this.tom.removeOption(MORE_RESULTS_ID);
-    const hint = this.moreResultsHints[query];
-    if (hint) this.tom.addOption(this.#moreResultsOption(hint));
+    const translation = this.moreResultsTranslations[query];
+    if (translation) this.tom.addOption(this.#moreResultsOption(translation));
     this.tom.refreshOptions(false);
   }
 

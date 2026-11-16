@@ -50,6 +50,47 @@ describe RoleResource, type: :resource do
       end
     end
 
+    context "with dates" do
+      it "creates a backdated role" do
+        payload[:data][:attributes][:start_on] = 2.months.ago.to_date.to_s
+
+        expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
+        expect(Role.with_inactive.last.start_on).to eq 2.months.ago.to_date
+      end
+
+      it "creates a future role which is not active yet" do
+        payload[:data][:attributes][:start_on] = 2.months.from_now.to_date.to_s
+
+        expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
+        new_role = Role.with_inactive.last
+        expect(new_role.start_on).to eq 2.months.from_now.to_date
+        expect(new_role).to be_future
+        expect(new_role).not_to be_active
+      end
+
+      it "creates a role without start_on" do
+        payload[:data][:attributes][:start_on] = nil
+
+        expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
+        expect(Role.with_inactive.last.start_on).to be_nil
+      end
+
+      it "creates a role ending at a given date" do
+        payload[:data][:attributes][:end_on] = Date.current.end_of_year.to_s
+
+        expect(instance.save).to eq(true), instance.errors.full_messages.to_sentence
+        expect(Role.with_inactive.last.end_on).to eq Date.current.end_of_year
+      end
+
+      it "rejects end_on before start_on" do
+        payload[:data][:attributes][:start_on] = Date.current.to_s
+        payload[:data][:attributes][:end_on] = Date.yesterday.to_s
+
+        expect(instance.save).to eq(false)
+        expect(instance.errors[:end_on]).to be_present
+      end
+    end
+
     context "other user" do
       let(:ability) { Ability.new(people(:bottom_member)) }
 
@@ -142,6 +183,61 @@ describe RoleResource, type: :resource do
         expect {
           expect(instance.update_attributes).to eq(true)
         }.to raise_error(Graphiti::Errors::RecordNotFound)
+      end
+    end
+
+    describe "dates" do
+      let(:role) { roles(:bottom_member) }
+      let(:person) { people(:top_leader) }
+
+      it "may end the role at a given date" do
+        payload[:data][:attributes] = {end_on: Date.current.end_of_year.to_s}
+
+        expect {
+          expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
+        }.to change { role.reload.end_on }.to(Date.current.end_of_year)
+      end
+
+      it "may end the role retroactively" do
+        payload[:data][:attributes] = {end_on: Date.yesterday.to_s}
+
+        expect {
+          expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
+        }.to change { Role.with_inactive.find(role.id).end_on }.to(Date.yesterday)
+      end
+
+      it "may set start_on" do
+        payload[:data][:attributes] = {start_on: 2.months.ago.to_date.to_s}
+
+        expect {
+          expect(instance.update_attributes).to eq(true), instance.errors.full_messages.to_sentence
+        }.to change { role.reload.start_on }.to(2.months.ago.to_date)
+      end
+
+      it "rejects end_on before start_on" do
+        payload[:data][:attributes] = {start_on: Date.current.to_s, end_on: Date.yesterday.to_s}
+
+        expect(instance.update_attributes).to eq(false)
+        expect(instance.errors[:end_on]).to be_present
+      end
+
+      context "on a role which may not be destroyed" do
+        let(:role) { roles(:top_leader) }
+        let(:person) { role.person }
+
+        it "rejects end_on" do
+          payload[:data][:attributes] = {end_on: Date.current.end_of_year.to_s}
+
+          expect { instance.update_attributes }.to raise_error(CanCan::AccessDenied)
+        end
+
+        it "may still set start_on" do
+          payload[:data][:attributes] = {start_on: 2.months.ago.to_date.to_s}
+
+          expect {
+            expect(instance.update_attributes).to eq(true)
+          }.to change { role.reload.start_on }.to(2.months.ago.to_date)
+        end
       end
     end
 

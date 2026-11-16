@@ -35,5 +35,27 @@ describe "roles#update", type: :request do
         }.to change { role.reload.label }.to("Bobby")
       end
     end
+
+    describe "ending the role" do
+      let(:role) { roles(:bottom_member) }
+      let(:payload) {
+        {
+          data: {
+            id: role.id.to_s,
+            type: "roles",
+            attributes: {
+              end_on: Date.current.end_of_year.to_s
+            }
+          }
+        }
+      }
+
+      it "sets end_on" do
+        expect {
+          make_request
+          expect(response.status).to eq(200), response.body
+        }.to change { role.reload.end_on }.to(Date.current.end_of_year)
+      end
+    end
   end
 end

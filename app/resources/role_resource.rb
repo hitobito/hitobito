@@ -14,8 +14,6 @@ class RoleResource < ApplicationResource
   with_options writable: false do
     attribute :created_at, :datetime
     attribute :updated_at, :datetime
-    attribute :start_on, :date
-    attribute :end_on, :date
     attribute(:name, :string, filterable: false, sortable: false) do
       @object.class.model_name.human
     end
@@ -25,6 +23,8 @@ class RoleResource < ApplicationResource
   attribute :group_id, :integer
   attribute :type, :string
   attribute :label, :string
+  attribute :start_on, :date
+  attribute :end_on, :date
 
   filter :active, :date, single: true, only: [:eq] do
     eq do |scope, value|
@@ -53,6 +53,12 @@ class RoleResource < ApplicationResource
   def authorize_create(model)
     invalid_request!(:group_id, :blank) if model.group_id.blank?
     super
+  end
+
+  def authorize_update(model)
+    super do |ability, model_from_db|
+      ability.authorize!(:destroy, model_from_db) if model.changes.key?("end_on")
+    end
   end
 
   def raise_when_changing_readonly_attr(model)

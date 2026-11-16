@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,6 +24,17 @@ describe HouseholdsController, js: true do
       click_on "Speichern"
       expect(page).to have_text "Haushalt wurde erfolgreich aktualisiert."
     end.to change { household.reload.members.count }.by(1)
+  end
+
+  it "shows more results hint if there are more than 10 people" do
+    11.times do
+      Fabricate(Group::TopGroup::Member.name.to_sym, group: groups(:top_group),
+        person: Fabricate(:person, first_name: "Pascal"))
+    end
+    visit edit_group_person_household_path(groups(:top_group).id, person.id)
+    find("#household_add-ts-control").send_keys("Pas")
+    expect(page).to have_css(".ts-dropdown .option", text: "Pascal", count: 10)
+    expect(page).to have_css(".ts-dropdown .option", text: "Weitere Treffer vorhanden, Suche verfeinern")
   end
 
   it "can navigate to a person from the household" do

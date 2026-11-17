@@ -94,17 +94,27 @@ describe Contactables::InvoicesController do
       context "group invoices" do
         let!(:group_invoice) { Fabricate(:invoice, group: groups(:top_layer), recipient: group) }
 
-        it "may index but not see invoice originating from other layer" do
+        it "may see invoice to own finance layer originating from other layer" do
           get :index, params: {group_id: group.id}
-          expect(assigns(:invoices)).to be_empty
+          expect(assigns(:invoices)).to match_array([group_invoice])
         end
 
-        context "with finance permission in originating layer" do
-          before do
-            Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: acting_user)
+        it "may see invoice to group in own finance layer originating from other layer" do
+          subgroup = groups(:bottom_group_one_one)
+          subgroup_invoice = Fabricate(:invoice, group: groups(:top_layer), recipient: subgroup)
+
+          get :index, params: {group_id: subgroup.id}
+          expect(assigns(:invoices)).to match_array([subgroup_invoice])
+        end
+
+        context "with finance permission only in layer above" do
+          let(:acting_user) do
+            Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)).person
           end
 
-          it "may index" do
+          it "may index but not see invoice originating from sibling layer" do
+            Fabricate(:invoice, group: groups(:bottom_layer_two), recipient: group)
+
             get :index, params: {group_id: group.id}
             expect(assigns(:invoices)).to match_array([group_invoice])
           end
@@ -178,6 +188,10 @@ describe Contactables::InvoicesController do
     let!(:person_invoice) { Fabricate(:invoice, group: groups(:bottom_layer_one), recipient:) }
     let(:person_params) { {group_id: groups(:top_group).id, person_id: recipient.id} }
 
+    let(:recipient_group) { groups(:bottom_layer_one) }
+    let(:recipient_group_finance) { people(:bottom_member) }
+    let!(:group_invoice) { Fabricate(:invoice, group: groups(:top_layer), recipient: recipient_group) }
+
     before { manager.manageds << recipient }
 
     shared_examples "reads received invoice" do
@@ -201,6 +215,14 @@ describe Contactables::InvoicesController do
       let(:user) { manager }
       let(:params) { person_params }
       let(:invoice) { person_invoice }
+
+      it_behaves_like "reads received invoice"
+    end
+
+    context "as finance person of recipient group's layer" do
+      let(:user) { recipient_group_finance }
+      let(:params) { {group_id: recipient_group.id} }
+      let(:invoice) { group_invoice }
 
       it_behaves_like "reads received invoice"
     end

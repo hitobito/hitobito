@@ -30,11 +30,17 @@ class Contactables::InvoicesController < ListController
 
   def all_received_invoices_visible?
     !FeatureGate.enabled?("invoices.filter_by_finance_layer") ||
-      recipient_self_or_managed?
+      recipient_self_or_managed? ||
+      recipient_in_finance_layer?
   end
 
   def recipient_self_or_managed?
     recipient == current_person || current_person.manageds.include?(recipient)
+  end
+
+  def recipient_in_finance_layer?
+    recipient.is_a?(Group) &&
+      current_ability.user_finance_layer_ids.include?(recipient.layer_group_id)
   end
 
   def recipient

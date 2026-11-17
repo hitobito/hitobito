@@ -20,7 +20,7 @@ wagon_name=${2-'no wagon selected'}
 
 # useful variables
 core_bin_dir="$(readlink -f "$(dirname "$0")")"        # bin-directory of hitobito (-core)
-core_dir="$(readlink -f "$(dirname "$core_bin_dir")")" # directory of hitobito (-core)
+# core_dir="$(readlink -f "$(dirname "$core_bin_dir")")" # directory of hitobito (-core)
 
 # helpers
 function require_wagon_name() {
@@ -367,6 +367,7 @@ create)
 
   new_wagon_dir="../hitobito_$wagon_name"
 
+  mkdir -p "$new_wagon_dir"
   mv -nfv vendor/wagons/$wagon_name/* "$new_wagon_dir"
   mv -nfv vendor/wagons/$wagon_name/.{ruby-version,rubocop.yml,gitignore} "$new_wagon_dir"
   rm -rf vendor/
@@ -394,7 +395,7 @@ create)
   $EDITOR lib/tasks/license.rake
   $EDITOR COPYING
   $EDITOR AUTHORS
-  $EDITOR hitobito_${wagon_name}.gemspec
+  $EDITOR "hitobito_${wagon_name}.gemspec"
 
   git add .
   git commit -m "Add License and Copyright Info"
@@ -415,8 +416,13 @@ create)
   git commit -m "Link AI agent instructions to the core"
   popd
 
+  echo
   echo "Wagon has been created in ${new_wagon_dir}. The License has been inserted."
   echo "Next Steps would be to add the structure, adapt the design and such..."
+  echo
+  echo "The structure can be parsed and generate from the wagon with"
+  echo "    rake app:hitobito:parse_structure[structure.txt]"
+  echo
   ;;
 
 # TODO: needs to work from a wagon

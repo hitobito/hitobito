@@ -177,6 +177,8 @@ namespace :hitobito do
     else
       puts(*parser.errors)
       puts
+      puts(parser.inspect)
+      puts
       raise "Inputfile seems invalid."
     end
 
@@ -214,9 +216,13 @@ namespace :hitobito do
 
           rake app:hitobito:roles:update_readme
 
-        works as intended. Take a lookt at
+        works as intended. Take a look at
 
           #{file.dirname.glob("app/models/*/group.rb").first}
+
+        Then, look at all generated files. These mostly cover
+        what could be extracted automatically. It is not the
+        whole story, it is the beginning of the first chapter.
 
         Have fun.
       MSG

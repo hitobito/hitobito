@@ -143,8 +143,9 @@ class StructureParser
   class Role
     attr_accessor :group, :name
 
-    def initialize(name, permissions, class_name)
+    def initialize(name, permissions, class_name, two_factor = nil)
       @name = name
+      @two_factor = two_factor.to_s.strip == "2FA"
       @permissions = parse_permissions(permissions)
 
       if class_name.present?
@@ -164,14 +165,24 @@ class StructureParser
       @permissions.any?
     end
 
+    def two_factor?
+      @two_factor
+    end
+
     def inspect
       to_s.inspect
     end
 
     def to_s
       group_text = "in group #{group.name}" if group
+      two_factor_text = "and 2FA" if @two_factor
 
-      "Role #{@name} with #{@permissions.inspect} #{group_text}".strip
+      [
+        "Role #{@name}",
+        "with #{@permissions.inspect}",
+        group_text,
+        two_factor_text
+      ].compact.join(" ")
     end
 
     def class_name
@@ -237,10 +248,10 @@ class StructureParser
         @current_group = group
         @result[@current_layer][group] ||= []
       # rubocop:todo Layout/LineLength
-      when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (.*):\s+(\[.*\])(\s+--\s+\(?(.*)\)?)?$/ # role
+      when /^#{@shiftwidth * 2}#{Regexp.escape(@list_marker)} (?<name>.*):\s+(?<tfa>2FA )?(?<perms>\[.*\])(\s+--\s+\(?(?<class>.*)\)?)?$/ # role
         # rubocop:enable Layout/LineLength
         match = Regexp.last_match
-        role = Role.new(match[1], match[2], match[4])
+        role = Role.new(match[:name], match[:perms], match[:class], match[:tfa])
 
         @current_group.roles << role
         @result[@current_layer][@current_group] << role
@@ -326,6 +337,7 @@ class StructureParser
     <<-CODE
   class #{role.class_name} < ::Role
     #{"self.permissions = [#{role.permissions}]" if role.permissions?}
+    #{"self.two_factor_authentication_enforced = true" if role.two_factor?}
   end
     CODE
   end

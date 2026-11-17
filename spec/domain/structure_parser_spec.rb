@@ -115,6 +115,40 @@ describe StructureParser do
     end
   end
 
+  context 'can handle 2FA in "first pass"-parsing, which' do
+    subject do
+      described_class.new(
+        structure.lines.take(3).join("\n").sub("Administrator/-in: [", "Administrator/-in: 2FA ["),
+        common_indent: 0,
+        shiftwidth: 4
+      )
+    end
+
+    before { subject.first_pass }
+
+    it "can be read" do
+      expect(subject.result).to_not be_nil
+    end
+
+    it do
+      expect(subject.result).to be_a Hash
+    end
+
+    it "has 2FA in the source" do
+      expect(subject.instance_variable_get(:@structure)).to match(/2FA/)
+    end
+
+    it "has the expected structure" do
+      expect(subject.result.inspect).to eql({
+        "Layer Dachverband with 1 subgroup(s)" => {
+          "Group Dachverband with 1 role(s)" => [
+            "Role Administrator/-in with [:admin, :layer_and_below_full, :impersonation] and 2FA"
+          ]
+        }
+      }.inspect)
+    end
+  end
+
   context 'has a result after simple "two pass"-parsing' do
     subject do
       described_class.new(

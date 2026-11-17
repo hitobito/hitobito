@@ -150,6 +150,9 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   ].freeze
 
   scope :standalone, -> { where(invoice_run_id: nil) }
+  scope :issued_by_layers, ->(layer_ids) {
+    joins(:group).where(groups: {layer_group_id: layer_ids})
+  }
   scope :from_standalone_invoice_run, -> {
     where(invoice_run_id: InvoiceRun.standalone.select(:id))
   }

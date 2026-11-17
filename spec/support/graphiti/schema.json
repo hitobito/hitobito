@@ -72,6 +72,12 @@
           "writable": true,
           "description": null
         },
+        "address_addition": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "street": {
           "type": "string",
           "readable": true,
@@ -128,6 +134,7 @@
         "organization_name": {},
         "organization": {},
         "address_care_of": {},
+        "address_addition": {},
         "street": {},
         "housenumber": {},
         "postbox": {},
@@ -259,6 +266,21 @@
           "single": true
         },
         "address_care_of": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "address_addition": {
           "type": "string",
           "operators": [
             "eq",
@@ -607,6 +629,12 @@
           "description": null
         },
         "address_care_of": {
+          "type": "string",
+          "readable": "guarded",
+          "writable": false,
+          "description": null
+        },
+        "address_addition": {
           "type": "string",
           "readable": "guarded",
           "writable": false,
@@ -1145,6 +1173,12 @@
           "description": null
         },
         "address_care_of": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "address_addition": {
           "type": "string",
           "readable": true,
           "writable": false,
@@ -3088,6 +3122,12 @@
           "writable": true,
           "description": null
         },
+        "address_addition": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "street": {
           "type": "string",
           "readable": true,
@@ -3183,6 +3223,7 @@
         "company": {},
         "email": {},
         "address_care_of": {},
+        "address_addition": {},
         "street": {},
         "housenumber": {},
         "postbox": {},
@@ -3292,6 +3333,21 @@
           ]
         },
         "address_care_of": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "address_addition": {
           "type": "string",
           "operators": [
             "eq",

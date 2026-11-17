@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Wanderwege. This file is part of hitobito and licensed under the
+#  Copyright (c) 2025-2026, Schweizer Wanderwege. This file is part of hitobito and licensed under the
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
@@ -13,6 +13,7 @@ class Wizards::Steps::NewEventGuestContactDataForm < Wizards::Step
   attribute :company_name, :string
   attribute :email, :string
   attribute :address_care_of, :string
+  attribute :address_addition, :string
   attribute :street, :string
   attribute :housenumber, :string
   attribute :postbox, :string

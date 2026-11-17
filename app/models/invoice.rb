@@ -35,6 +35,7 @@
 #  payment_purpose              :text
 #  payment_slip                 :string           default("ch_es"), not null
 #  pp_post                      :string
+#  recipient_address_addition   :string
 #  recipient_address_care_of    :string
 #  recipient_company_name       :string
 #  recipient_country            :string
@@ -320,11 +321,27 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def recipient_address_values_without_name
     [
       recipient_address_care_of,
+      recipient_address_addition,
       recipient_street_with_housenumber,
       recipient_postbox,
       recipient_town_with_zip_code,
-      ((recipient_country == Settings.countries.prioritized.first) ? nil : recipient_country)
+      foreign_recipient_country
     ].uniq.compact_blank
+  end
+
+  def printed_recipient_address
+    PostalAddress::Printed.new(
+      salutation: printed_recipient_salutation,
+      names: [recipient_company_name, recipient_name].uniq,
+      care_of: recipient_address_care_of,
+      addition: recipient_address_addition,
+      street: recipient_street,
+      housenumber: recipient_housenumber,
+      postbox: recipient_postbox,
+      zip_code: recipient_zip_code,
+      town: recipient_town,
+      country: recipient_country
+    )
   end
 
   def recipient_street_with_housenumber
@@ -360,6 +377,13 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   end
 
   private
+
+  # Printed above the recipient names, may be overridden in wagons
+  def printed_recipient_salutation = nil
+
+  def foreign_recipient_country
+    recipient_country unless recipient_country == Settings.countries.prioritized.first
+  end
 
   # on index we join aggregated payments
   def joined_payments?

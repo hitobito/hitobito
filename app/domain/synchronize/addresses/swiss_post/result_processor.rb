@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -70,10 +70,11 @@ module Synchronize::Addresses::SwissPost
     end
 
     # necessary for extensions in wagons
-    def assign_attributes(person, row)
+    def assign_attributes(person, row) # rubocop:disable Metrics/AbcSize
       person.first_name = read_first_name(row)
       person.last_name = read_last_name(row)
       person.address_care_of = read_address_care_of(row)
+      person.address_addition = read_address_addition(row) if assign_address_addition?(row)
       person.street = read_street(row)
       person.housenumber = read_housenumber(row)
       person.postbox = read_postbox(row)
@@ -86,6 +87,12 @@ module Synchronize::Addresses::SwissPost
     def read_last_name(row) = row["Name"]
 
     def read_address_care_of(row) = row["CoAddress"]
+
+    def read_address_addition(row) = row["AddressAddition"]
+
+    def assign_address_addition?(row)
+      Generator.sends?(:address_addition) || read_address_addition(row).present?
+    end
 
     def read_street(row) = row["StreetName"]
 

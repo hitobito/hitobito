@@ -43,7 +43,7 @@ describe Export::EventParticipationsExportJob do
 
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
-      expect(lines[0].split(";").count).to match(23)
+      expect(lines[0].split(";").count).to match(24)
     end
   end
 
@@ -59,7 +59,7 @@ describe Export::EventParticipationsExportJob do
       expect(lines[0]).to match(/Personennummer;Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/;Bemerkungen.*/)
 
-      expect(lines[0].split(";").count).to match(42)
+      expect(lines[0].split(";").count).to match(43)
     end
 
     it "shows the correct timestamps on the participation instances" do
@@ -103,9 +103,9 @@ describe Export::EventParticipationsExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;Übername;Firmenname;.*/)
       expect(lines[0]).to match(/Hauptebene.*/)
-      expect(lines[0].split(";").count).to match(24)
+      expect(lines[0].split(";").count).to match(25)
       # rubocop:todo Layout/LineLength
-      expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;;;;;;;;;Bottom One\n"
+      expect(lines[1]).to eq "Bottom;Member;;;nein;bottom_member@example.com;;;Greatstreet;345;;3456;Greattown;Schweiz;Bottom One;Member Bottom One;;;;;;;;;Bottom One\n"
       # rubocop:enable Layout/LineLength
     end
   end
@@ -122,7 +122,7 @@ describe Export::EventParticipationsExportJob do
 
       lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(2)
-      expect(lines[0]).to match(/Anrede;Name;c\/o-Adresse;Strasse;Hausnummer;Postfach;PLZ;.*/)
+      expect(lines[0]).to match(/Anrede;Name;c\/o-Adresse;Adresszusatz;Strasse;Hausnummer;Postfach;PLZ;.*/)
       expect(lines[1]).to match(/Bottom und Other Member.*/).or match(/Other und Bottom Member.*/)
     end
   end

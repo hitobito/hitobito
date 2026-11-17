@@ -8,6 +8,7 @@
 # Table name: event_guests
 #
 #  id                :bigint           not null, primary key
+#  address_addition  :string
 #  address_care_of   :string
 #  birthday          :date
 #  company           :boolean

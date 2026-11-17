@@ -1,4 +1,4 @@
-#  Copyright (c) 2025, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -14,8 +14,8 @@ module Event::ContactAttrs
     self.mandatory_contact_attrs = [:email, :first_name, :last_name]
 
     self.possible_contact_attrs = [:first_name, :last_name, :nickname, :email,
-      :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
-      :gender, :birthday, :phone_numbers, :language]
+      :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code, :town,
+      :country, :gender, :birthday, :phone_numbers, :language]
 
     FeatureGate.if("address.company") do
       # if company feature is enabled, insert company_name before email

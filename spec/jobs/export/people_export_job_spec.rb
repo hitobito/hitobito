@@ -41,7 +41,7 @@ describe Export::PeopleExportJob do
       lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Vorname;Nachname;.*/)
-      expect(lines[0].split(";").count).to match(23)
+      expect(lines[0].split(";").count).to match(24)
     end
 
     context "household" do
@@ -107,7 +107,7 @@ describe Export::PeopleExportJob do
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Personennummer;Vorname;Nachname;.*/)
       expect(lines[0]).to match(/Zusätzliche Angaben;.*/)
-      expect(lines[0].split(";").count).to match(37)
+      expect(lines[0].split(";").count).to match(38)
     end
 
     context ", except if missing permissions to do so, it" do
@@ -123,7 +123,7 @@ describe Export::PeopleExportJob do
         expect(lines.size).to eq(1)
         expect(lines[0]).to match(/Vorname;Nachname;.*/)
         expect(lines[0]).not_to match(/Zusätzliche Angaben;.*/)
-        expect(lines[0].split(";").count).to match(23)
+        expect(lines[0].split(";").count).to match(24)
       end
     end
   end

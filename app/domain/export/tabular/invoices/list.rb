@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -12,10 +12,10 @@ module Export::Tabular::Invoices
     CUSTOM_METHODS = %w[cost_centers accounts payments]
 
     ADDRESS_ATTRS = %w[recipient_company_name recipient_name recipient_first_name
-      recipient_last_name recipient_address_care_of recipient_street recipient_housenumber
-      recipient_postbox recipient_zip_code recipient_town recipient_country
-      payee_name payee_street payee_housenumber payee_zip_code payee_town
-      payee_country]
+      recipient_last_name recipient_address_care_of recipient_address_addition
+      recipient_street recipient_housenumber recipient_postbox recipient_zip_code
+      recipient_town recipient_country payee_name payee_street payee_housenumber payee_zip_code
+      payee_town payee_country]
 
     self.model_class = Invoice
     self.row_class = Export::Tabular::Invoices::Row
@@ -33,6 +33,8 @@ module Export::Tabular::Invoices
     def recipient_last_name_label = recipient_label(:last_name)
 
     def recipient_address_care_of_label = recipient_label(:address_care_of)
+
+    def recipient_address_addition_label = recipient_label(:address_addition)
 
     def recipient_street_label = recipient_label(:street)
 

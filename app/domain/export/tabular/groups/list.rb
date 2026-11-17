@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2014-2024, Pfadibewegung Schweiz. This file is part of
+#  Copyright (c) 2014-2026, Pfadibewegung Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -22,8 +22,20 @@ module Export::Tabular::Groups
     self.row_class = Export::Tabular::Groups::Row
 
     def attributes
-      attrs = model_class.column_names + [:phone_numbers, :member_count, :social_accounts]
-      (attrs - EXCLUDED_ATTRS).collect(&:to_sym)
+      (group_attributes + other_columns + [:phone_numbers, :member_count, :social_accounts]) -
+        EXCLUDED_ATTRS.map(&:to_sym)
+    end
+
+    private
+
+    def group_attributes
+      [:id, :parent_id, :name, :short_name, :type, :email,
+        :address_care_of, :address_addition, :street, :housenumber, :postbox, :zip_code, :town,
+        :country, :updated_at, :layer_group_id, :description, :nextcloud_url, :language]
+    end
+
+    def other_columns
+      model_class.column_names.map(&:to_sym) - group_attributes
     end
   end
 end

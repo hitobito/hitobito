@@ -83,7 +83,7 @@ describe "events/_form.html.haml" do
   end
 
   describe "checkboxes" do
-    let(:additional_emails) { dom.find("#contact_attrs .row:nth-of-type(17)") }
+    let(:additional_emails) { dom.find("#contact_attrs .row:nth-of-type(18)") }
 
     it "does use set name attribute on associations" do
       render

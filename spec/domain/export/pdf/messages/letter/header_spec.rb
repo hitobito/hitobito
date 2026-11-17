@@ -334,6 +334,23 @@ describe Export::Pdf::Messages::Letter::Header do
     end
   end
 
+  describe "receiver address" do
+    let(:long_line) { "c/o Treuhandbüro Meier & Partner GmbH, Chalet Edelweiss" }
+    let(:recipient) do
+      MessageRecipient.new(message: letter, person: top_leader,
+        address: "Top Leader\n#{long_line}\n3011 Bern")
+    end
+
+    it "cuts lines exceeding the address box instead of wrapping them" do
+      subject.render(recipient)
+
+      lines = text_with_position_without_shipping_info.map(&:last)
+      expect(lines.size).to eq 3
+      expect(lines.second).not_to eq long_line
+      expect(long_line).to start_with(lines.second)
+    end
+  end
+
   private
 
   def text_with_position_without_shipping_info

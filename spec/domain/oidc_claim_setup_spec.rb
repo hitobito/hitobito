@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
@@ -27,8 +27,8 @@ describe OidcClaimSetup do
     let(:scope) { :name }
 
     it "includes person name attributes" do
-      expect(claim_keys).to match_array %w[first_name last_name nickname address address_care_of street housenumber
-        postbox zip_code town country given_name family_name]
+      expect(claim_keys).to match_array %w[first_name last_name nickname address address_care_of
+        address_addition street housenumber postbox zip_code town country given_name family_name]
     end
   end
 
@@ -49,6 +49,7 @@ describe OidcClaimSetup do
         company
         email
         address_care_of
+        address_addition
         street
         housenumber
         postbox

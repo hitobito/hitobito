@@ -16,10 +16,11 @@ module ContactableDecorator
     content_tag(:strong, to_s)
   end
 
-  def complete_address # rubocop:disable Metrics/AbcSize
+  def complete_address # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
     html = "".html_safe
 
     html << address_care_of << br if address_care_of?
+    html << address_addition << br if address_addition?
     html << model.address << br if model.address.present?
     html << postbox << br if postbox?
     html << zip_code.to_s if zip_code?

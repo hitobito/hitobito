@@ -1120,6 +1120,7 @@ it:
         description: Descrizione
         additional_audiences: Altri destinatari
         skip_consent_screen: Salta il consenso
+        preselect_remember_me: "'Angemeldet bleiben' automatisch anwählen"
         refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:

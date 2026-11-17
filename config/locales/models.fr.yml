@@ -1121,6 +1121,7 @@ fr:
         description: Description
         additional_audiences: Autres audiences
         skip_consent_screen: Sauter le consentement
+        preselect_remember_me: "'Angemeldet bleiben' automatisch anwählen"
         refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:

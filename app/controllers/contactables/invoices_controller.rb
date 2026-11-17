@@ -6,8 +6,7 @@
 class Contactables::InvoicesController < ListController
   self.sort_mappings = {
     last_payment_at: Invoice.order_by_payment_statement,
-    amount_paid: Invoice.order_by_amount_paid_statement,
-    recipient: "people.order_name ASC"
+    amount_paid: Invoice.order_by_amount_paid_statement
   }
   self.search_columns = [:title, :sequence_number]
 
@@ -46,10 +45,6 @@ class Contactables::InvoicesController < ListController
   def contactable
     @contactable ||= parent
   end
-
-  def recipient_table_name = contactable.class.table_name
-
-  def recipient_type = contactable.class.sti_name
 
   def parent_scope = parent.received_invoices.with_aggregated_payments
 

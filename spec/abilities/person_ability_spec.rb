@@ -38,6 +38,30 @@ describe PersonAbility do
     it "may index messages" do
       is_expected.to be_able_to(:index_messages, managed)
     end
+
+    context "without finance permission" do
+      let(:role) { Fabricate(Group::TopGroup::Member.sti_name.to_sym, group: groups(:top_group)) }
+
+      it "may index received invoices of managed without roles" do
+        is_expected.to be_able_to(:index_received_invoices, managed)
+      end
+
+      it "may index received invoices of managed with roles" do
+        Fabricate(Group::BottomLayer::Member.sti_name.to_sym, group: groups(:bottom_layer_one),
+          person: managed)
+        is_expected.to be_able_to(:index_received_invoices, managed.reload)
+      end
+
+      it "may not index received invoices of managed with only basic permissions roles" do
+        Fabricate(Group::BottomLayer::BasicPermissionsOnly.sti_name.to_sym,
+          group: groups(:bottom_layer_one), person: managed)
+        is_expected.not_to be_able_to(:index_received_invoices, managed.reload)
+      end
+
+      it "may not index received invoices of other people" do
+        is_expected.not_to be_able_to(:index_received_invoices, Fabricate(:person))
+      end
+    end
   end
 
   context :layer_and_below_full do

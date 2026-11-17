@@ -140,6 +140,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :one_week, -> { where(invoices: {due_at: ...1.week.ago.to_date}) }
   scope :one_month, -> { where(invoices: {due_at: ...1.month.ago.to_date}) }
   scope :visible, -> { where.not(state: :cancelled) }
+  scope :received, -> { where.not(state: :draft).where.not(state: :cancelled, issued_at: nil) }
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
   scope :with_recipients, -> { extending(PreloadRecipients) }
 

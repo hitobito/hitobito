@@ -10,6 +10,13 @@ describe Contactables::InvoicesController do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
 
+  before { invoices(:invoice).update_columns(state: "issued", issued_at: Time.zone.today) }
+
+  def issued_invoice(**attrs)
+    Fabricate(:invoice, state: :issued, issued_at: Time.zone.today,
+      invoice_items: [Fabricate.build(:invoice_item)], **attrs)
+  end
+
   context "bottom member" do
     it "may not index top_leader's invoices if we have no finance permission in layer" do
       sign_in(bottom_member)
@@ -41,7 +48,7 @@ describe Contactables::InvoicesController do
     end
 
     it "may not show group invoice" do
-      group_invoice = Fabricate(:invoice, group: groups(:bottom_layer_one), recipient: group)
+      group_invoice = issued_invoice(group: groups(:bottom_layer_one), recipient: group)
       sign_in(bottom_member)
       expect do
         get :show, params: {group_id: group.id, id: group_invoice.id}
@@ -115,7 +122,7 @@ describe Contactables::InvoicesController do
       end
 
       context "group invoices" do
-        let!(:group_invoice) { Fabricate(:invoice, group: groups(:top_layer), recipient: group) }
+        let!(:group_invoice) { issued_invoice(group: groups(:top_layer), recipient: group) }
 
         it "may see invoice to own finance layer originating from other layer" do
           get :index, params: {group_id: group.id}
@@ -124,7 +131,7 @@ describe Contactables::InvoicesController do
 
         it "may see invoice to group in own finance layer originating from other layer" do
           subgroup = groups(:bottom_group_one_one)
-          subgroup_invoice = Fabricate(:invoice, group: groups(:top_layer), recipient: subgroup)
+          subgroup_invoice = issued_invoice(group: groups(:top_layer), recipient: subgroup)
 
           get :index, params: {group_id: subgroup.id}
           expect(assigns(:invoices)).to match_array([subgroup_invoice])
@@ -136,7 +143,7 @@ describe Contactables::InvoicesController do
           end
 
           it "may index but not see invoice originating from sibling layer" do
-            Fabricate(:invoice, group: groups(:bottom_layer_two), recipient: group)
+            issued_invoice(group: groups(:bottom_layer_two), recipient: group)
 
             get :index, params: {group_id: group.id}
             expect(assigns(:invoices)).to match_array([group_invoice])
@@ -208,12 +215,12 @@ describe Contactables::InvoicesController do
   context "as recipient" do
     let(:recipient) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)).person }
     let(:manager) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)).person }
-    let!(:person_invoice) { Fabricate(:invoice, group: groups(:bottom_layer_one), recipient:) }
+    let!(:person_invoice) { issued_invoice(group: groups(:bottom_layer_one), recipient:) }
     let(:person_params) { {group_id: groups(:top_group).id, person_id: recipient.id} }
 
     let(:recipient_group) { groups(:bottom_layer_one) }
     let(:recipient_group_finance) { people(:bottom_member) }
-    let!(:group_invoice) { Fabricate(:invoice, group: groups(:top_layer), recipient: recipient_group) }
+    let!(:group_invoice) { issued_invoice(group: groups(:top_layer), recipient: recipient_group) }
 
     before { manager.manageds << recipient }
 
@@ -271,6 +278,43 @@ describe Contactables::InvoicesController do
       expect(response).to be_successful
     end
 
+    context "with invoice states" do
+      before { sign_in(recipient) }
+
+      it "does not show draft invoices" do
+        draft = Fabricate(:invoice, group: groups(:bottom_layer_one), recipient:)
+
+        get :index, params: person_params
+        expect(assigns(:invoices)).not_to include(draft)
+        expect do
+          get :show, params: person_params.merge(id: draft.id)
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "shows cancelled invoices which were issued before" do
+        person_invoice.update_columns(state: "cancelled")
+
+        get :index, params: person_params.merge(state: "cancelled")
+        expect(assigns(:invoices)).to eq [person_invoice]
+      end
+
+      it "does not show cancelled invoices which were never issued" do
+        person_invoice.update_columns(state: "cancelled", issued_at: nil)
+
+        get :index, params: person_params.merge(state: "cancelled")
+        expect(assigns(:invoices)).to be_empty
+      end
+    end
+
+    it "finance person of recipient group's layer does not see draft invoices" do
+      draft = Fabricate(:invoice, group: groups(:top_layer), recipient: recipient_group)
+      sign_in(recipient_group_finance)
+
+      get :index, params: {group_id: recipient_group.id}
+      expect(assigns(:invoices)).to eq [group_invoice]
+      expect(assigns(:invoices)).not_to include(draft)
+    end
+
     it "recipient person may not open invoice received by someone else" do
       sign_in(recipient)
 
@@ -280,7 +324,7 @@ describe Contactables::InvoicesController do
     end
 
     it "finance person of layer above may not open group invoice from sibling layer" do
-      sibling_invoice = Fabricate(:invoice, group: groups(:bottom_layer_two), recipient: recipient_group)
+      sibling_invoice = issued_invoice(group: groups(:bottom_layer_two), recipient: recipient_group)
       sign_in(Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)).person)
 
       expect do

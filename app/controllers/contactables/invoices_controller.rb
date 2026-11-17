@@ -53,7 +53,7 @@ class Contactables::InvoicesController < ListController
   end
 
   def model_scope
-    scope = super.preload(:group)
+    scope = super.received.preload(:group)
     return scope if all_received_invoices_visible?
 
     scope.issued_by_layers(current_ability.user_finance_layer_ids)

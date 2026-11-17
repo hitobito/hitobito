@@ -3,6 +3,7 @@
 ## unreleased
 
 - Empfangene Rechnungen können von den Empfängern, deren Verwaltenden sowie bei Gruppen von Personen mit Finanzberechtigung auf deren Ebene eingesehen und als PDF heruntergeladen werden (#4661)
+- Im Rechnungstab von Gruppen und Personen werden keine Rechnungsentwürfe mehr angezeigt (#4661)
 - Im Rechnungstab von Gruppen und Personen werden keine Rechnungen anderer Empfänger mit derselben ID mehr angezeigt
 - Pro OAuth-Applikation kann eingestellt werden, dass "Angemeldet bleiben" beim Login vorausgewählt ist (hitobito_sac_cas#2664)
 - JSON:API: Verwalter\*in/Kind-Beziehungen können bei Personen über `people_managers` und `people_manageds` erstellt, gelöscht und inkludiert werden; der neue OIDC-Scope `managed_people` liefert ID und Anzeigename der eigenen Kinder (hitobito_bdp#63)

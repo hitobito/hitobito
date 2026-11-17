@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, CVP Schweiz. This file is part of
+#  Copyright (c) 2012-2026, CVP Schweiz. This file is part of
 #  hitobito_cvp and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,7 +21,7 @@
 #  salutation            :string
 #  send_to_households    :boolean          default(FALSE), not null
 #  sent_at               :datetime
-#  shipping_method       :string           default("own")
+#  shipping_method       :string           default("own"), not null
 #  state                 :string           default("draft")
 #  subject               :string(998)
 #  success_count         :integer          default(0)

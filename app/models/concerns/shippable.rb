@@ -10,8 +10,9 @@ module Shippable
   SHIPPABLE_ATTRIBUTES = %i[shipping_method pp_post].freeze
 
   included do
-    i18n_enum :shipping_method, SHIPPING_METHODS, scopes: true, queries: true,
+    i18n_enum :shipping_method, SHIPPING_METHODS, scopes: true, queries: true, validations: false,
       i18n_prefix: "activerecord.attributes.message/letter.shipping_methods"
+    validates :shipping_method, inclusion: {in: SHIPPING_METHODS}
 
     class_attribute :shippable_attributes, default: SHIPPABLE_ATTRIBUTES
   end

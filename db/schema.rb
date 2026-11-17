@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_11_16_075832) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_17_110244) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -746,7 +746,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_16_075832) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "period_invoice_template_id"
-    t.string "shipping_method", default: "own"
+    t.string "shipping_method", default: "own", null: false
     t.string "pp_post"
     t.index ["creator_id"], name: "index_invoice_runs_on_creator_id"
     t.index ["group_id"], name: "index_invoice_runs_on_group_id"
@@ -800,7 +800,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_16_075832) do
     t.string "recipient_address_care_of"
     t.string "recipient_postbox"
     t.string "recipient_type"
-    t.string "shipping_method", default: "own"
+    t.string "shipping_method", default: "own", null: false
     t.string "pp_post"
     t.string "recipient_first_name"
     t.string "recipient_last_name"
@@ -958,7 +958,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_16_075832) do
     t.text "text"
     t.string "salutation"
     t.string "pp_post"
-    t.string "shipping_method", default: "own"
+    t.string "shipping_method", default: "own", null: false
     t.boolean "send_to_households", default: false, null: false
     t.boolean "donation_confirmation", default: false, null: false
     t.text "raw_source"

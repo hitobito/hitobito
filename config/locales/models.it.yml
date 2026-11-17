@@ -613,6 +613,7 @@ it:
         country: Nazione
         postbox: Casella postale
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         public: Pubblico
 
       additional_addresses:
@@ -693,6 +694,7 @@ it:
         password_confirmation: Confermare la password
         current_password: Vecchia password
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         address: Indirizzo
         street: Strada
         housenumber: Numero civico
@@ -794,6 +796,7 @@ it:
         email: Email principale
         address: Indirizzo
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -899,6 +902,7 @@ it:
         company_name: Nome della ditta
         email: Email principale
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -922,6 +926,7 @@ it:
         company_name: Nome della ditta
         email: Email principale
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -1430,7 +1435,8 @@ it:
         recipient_name: Nome
         recipient_first_name: Nome
         recipient_last_name: Cognome
-        recipient_address_care_of: Indirizzo c/o
+        recipient_address_care_of: c/o-Adresse
+        recipient_address_addition: Adresszusatz
         recipient_postbox: Casella postale
         recipient_country: Nazione
         recipient_street: Strada

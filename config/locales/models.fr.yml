@@ -614,6 +614,7 @@ fr:
         country: Pays
         postbox: Case postale
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         public: Public
 
       additional_addresses:
@@ -694,6 +695,7 @@ fr:
         password_confirmation: Confirmation du mot de passe
         current_password: Ancien mot de passe
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         address: Adresse
         street: Rue
         housenumber: Numéro de la maison
@@ -795,6 +797,7 @@ fr:
         email: Adresse e-mail principale
         address: Adresse
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -900,6 +903,7 @@ fr:
         company_name: Nom de l'entreprise
         email: Adresse e-mail principale
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -923,6 +927,7 @@ fr:
         company_name: Nom de l'entreprise
         email: Adresse e-mail principale
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Rue
         housenumber: Numéro de la maison
         postbox: Case postale
@@ -1431,7 +1436,8 @@ fr:
         recipient_name: Nom
         recipient_first_name: Prénom
         recipient_last_name: Nom
-        recipient_address_care_of: Adresse c/o
+        recipient_address_care_of: c/o-Adresse
+        recipient_address_addition: Adresszusatz
         recipient_postbox: Case postale
         recipient_country: Pays
         recipient_street: Rue

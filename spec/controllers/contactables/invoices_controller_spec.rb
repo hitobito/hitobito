@@ -171,4 +171,38 @@ describe Contactables::InvoicesController do
       end
     end
   end
+
+  context "as recipient" do
+    let(:recipient) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)).person }
+    let(:manager) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)).person }
+    let!(:person_invoice) { Fabricate(:invoice, group: groups(:bottom_layer_one), recipient:) }
+    let(:person_params) { {group_id: groups(:top_group).id, person_id: recipient.id} }
+
+    before { manager.manageds << recipient }
+
+    shared_examples "reads received invoice" do
+      before { sign_in(user) }
+
+      it "sees received invoice" do
+        get :index, params: params
+        expect(assigns(:invoices)).to include(invoice)
+      end
+    end
+
+    context "as recipient person" do
+      let(:user) { recipient }
+      let(:params) { person_params }
+      let(:invoice) { person_invoice }
+
+      it_behaves_like "reads received invoice"
+    end
+
+    context "as manager of recipient person" do
+      let(:user) { manager }
+      let(:params) { person_params }
+      let(:invoice) { person_invoice }
+
+      it_behaves_like "reads received invoice"
+    end
+  end
 end

@@ -31,6 +31,15 @@ describe Shippable do
     end
   end
 
+  [nil, ""].each do |blank|
+    it "rejects #{blank.inspect} as shipping method" do
+      letter.shipping_method = blank
+
+      expect(letter).not_to be_valid
+      expect(letter.errors.attribute_names).to include :shipping_method
+    end
+  end
+
   context "without shippable attributes" do
     before { allow(Message::Letter).to receive(:shippable_attributes).and_return([]) }
 

@@ -50,7 +50,7 @@
 #  reference                    :string           not null
 #  sent_at                      :date
 #  sequence_number              :string           not null
-#  shipping_method              :string           default("own")
+#  shipping_method              :string           default("own"), not null
 #  state                        :string           default("draft"), not null
 #  title                        :string           not null
 #  total                        :decimal(12, 2)

@@ -20,7 +20,7 @@
 #  recipients_paid            :integer          default(0), not null
 #  recipients_processed       :integer          default(0), not null
 #  recipients_total           :integer          default(0), not null
-#  shipping_method            :string           default("own")
+#  shipping_method            :string           default("own"), not null
 #  title                      :string
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null

@@ -1094,4 +1094,15 @@ describe Group do
       expect(group.reload.zip_code).to eq "W2 1HQ"
     end
   end
+
+  describe "#received_invoices" do
+    let(:group) { groups(:bottom_layer_one) }
+
+    it "does not contain invoices of a person with the same id" do
+      group_invoice = Fabricate(:invoice, group: groups(:top_layer), recipient: group)
+      Fabricate(:invoice, group: groups(:top_layer), recipient: Fabricate(:person, id: group.id))
+
+      expect(group.received_invoices).to eq [group_invoice]
+    end
+  end
 end

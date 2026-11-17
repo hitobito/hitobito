@@ -15,9 +15,7 @@ class PersonAbility < AbilityDsl::Base
     permission(:admin).may(:totp_disable).if_two_factor_authentication_not_enforced
 
     permission(:any).may(:security).herself
-    permission(:any)
-      .may(:index_received_invoices, :update_settings)
-      .herself_unless_only_basic_permissions_roles
+    permission(:any).may(:update_settings).herself_unless_only_basic_permissions_roles
     permission(:any).may(:totp_disable).herself_if_two_factor_authentication_not_enforced
 
     permission(:contact_data).may(:show).other_with_contact_data
@@ -109,7 +107,7 @@ class PersonAbility < AbilityDsl::Base
         .herself
 
       permission(:any)
-        .may(:history, :log)
+        .may(:history, :log, :index_received_invoices)
         .herself_unless_only_basic_permissions_roles
 
       class_side(:create_households).if_any_writing_permission_or_any_manageds

@@ -131,6 +131,7 @@ Hitobito::Application.routes.draw do
       resource :invoice_config, only: [:edit, :show, :update]
 
       get "received_invoices" => "contactables/invoices#index"
+      get "received_invoices/:id" => "contactables/invoices#show", as: :received_invoice
 
       resources :payment_provider_configs, only: [] do
         member do
@@ -187,6 +188,7 @@ Hitobito::Application.routes.draw do
         end
 
         get "received_invoices" => "contactables/invoices#index"
+        get "received_invoices/:id" => "contactables/invoices#show", as: :received_invoice
 
         resources :notes, only: [:create, :destroy]
         resources :qualifications, only: [:new, :create, :destroy]

@@ -4,57 +4,86 @@
 #  https://github.com/hitobito/hitobito.
 
 class Contactables::InvoicesController < ListController
+  include ExportableRedirect
+
   self.sort_mappings = {
     last_payment_at: Invoice.order_by_payment_statement,
-    amount_paid: Invoice.order_by_amount_paid_statement,
-    recipient: "people.order_name ASC"
+    amount_paid: Invoice.order_by_amount_paid_statement
   }
   self.search_columns = [:title, :sequence_number]
 
   self.nesting = Group
   self.optional_nesting = Person
 
-  helper_method :filter_params
+  skip_authorize_resource
+  before_action :authorize_class
+  before_action :entry, only: :show
+
+  helper_method :filter_params, :entry, :received_invoice_path
+
+  def show
+    respond_to do |format|
+      format.html
+      format.pdf { render_pdf }
+    end
+  end
 
   private
+
+  def entry
+    @invoice ||= model_scope.find(params[:id]).decorate
+  end
+
+  def render_pdf
+    Export::InvoicesJob.new(:pdf, exporting_person_id, [entry.id],
+      {articles: true, payment_slip: true, reminders: true, filename: entry.filename(nil)}).enqueue!
+    redirect_after_enqueued_export(received_invoice_path(entry))
+  end
+
+  def received_invoice_path(invoice, **options)
+    if recipient.is_a?(Person)
+      group_person_received_invoice_path(group, recipient, invoice, **options)
+    else
+      group_received_invoice_path(recipient, invoice, **options)
+    end
+  end
 
   def list_entries
     Invoice::Filter.new(params).apply(super.page(params[:page]).per(50))
   end
 
   def model_scope
-    scope = filter_by_finance_layer? ? filter_by_finance_layer(super) : super
+    scope = super.received.preload(:group)
+    return scope if all_received_invoices_visible?
 
-    scope.preload(:group)
+    scope.issued_by_layers(current_ability.user_finance_layer_ids)
   end
 
-  def filter_by_finance_layer?
-    FeatureGate.enabled?("invoices.filter_by_finance_layer") &&
-      !self_or_managed?
+  def all_received_invoices_visible?
+    !FeatureGate.enabled?("invoices.filter_by_finance_layer") ||
+      recipient_self_or_managed? ||
+      recipient_in_finance_layer?
   end
 
-  def self_or_managed?
-    contactable == current_person || current_person.manageds.include?(contactable)
+  def recipient_self_or_managed?
+    recipient == current_person || current_person.manageds.include?(recipient)
   end
 
-  def filter_by_finance_layer(scope)
-    scope
-      .joins(group: :layer_group)
-      .where(layer_group: {id: current_ability.user_finance_layer_ids})
+  def recipient_in_finance_layer?
+    recipient.is_a?(Group) &&
+      current_ability.user_finance_layer_ids.include?(recipient.layer_group_id)
   end
 
-  def contactable
-    @contactable ||= parent
+  def recipient
+    @recipient ||= parent
   end
 
-  def recipient_table_name = contactable.class.table_name
+  def group = parents.first
 
-  def recipient_type = contactable.class.sti_name
-
-  def parent_scope = parent.received_invoices.with_aggregated_payments
+  def parent_scope = recipient.received_invoices.with_aggregated_payments
 
   def authorize_class
-    authorize!(:index_received_invoices, contactable)
+    authorize!(:index_received_invoices, recipient)
   end
 
   def filter_params

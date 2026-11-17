@@ -10,6 +10,13 @@ describe Contactables::InvoicesController do
   let(:top_leader) { people(:top_leader) }
   let(:bottom_member) { people(:bottom_member) }
 
+  before { invoices(:invoice).update_columns(state: "issued", issued_at: Time.zone.today) }
+
+  def issued_invoice(**attrs)
+    Fabricate(:invoice, state: :issued, issued_at: Time.zone.today,
+      invoice_items: [Fabricate.build(:invoice_item)], **attrs)
+  end
+
   context "bottom member" do
     it "may not index top_leader's invoices if we have no finance permission in layer" do
       sign_in(bottom_member)
@@ -22,6 +29,29 @@ describe Contactables::InvoicesController do
       sign_in(bottom_member)
       expect do
         get :index, params: {group_id: group.id}
+      end.to raise_error(CanCan::AccessDenied)
+    end
+
+    it "may not show top_leader's invoice although issued by own layer" do
+      sign_in(bottom_member)
+      expect do
+        get :show, params: {group_id: group.id, person_id: top_leader.id, id: invoices(:invoice).id}
+      end.to raise_error(CanCan::AccessDenied)
+    end
+
+    it "may not download top_leader's invoice as pdf" do
+      sign_in(bottom_member)
+      expect do
+        get :show, params: {group_id: group.id, person_id: top_leader.id, id: invoices(:invoice).id,
+                            format: :pdf}
+      end.to raise_error(CanCan::AccessDenied)
+    end
+
+    it "may not show group invoice" do
+      group_invoice = issued_invoice(group: groups(:bottom_layer_one), recipient: group)
+      sign_in(bottom_member)
+      expect do
+        get :show, params: {group_id: group.id, id: group_invoice.id}
       end.to raise_error(CanCan::AccessDenied)
     end
   end
@@ -92,19 +122,29 @@ describe Contactables::InvoicesController do
       end
 
       context "group invoices" do
-        let!(:group_invoice) { Fabricate(:invoice, group: groups(:top_layer), recipient: group) }
+        let!(:group_invoice) { issued_invoice(group: groups(:top_layer), recipient: group) }
 
-        it "may index but not see invoice originating from other layer" do
+        it "may see invoice to own finance layer originating from other layer" do
           get :index, params: {group_id: group.id}
-          expect(assigns(:invoices)).to be_empty
+          expect(assigns(:invoices)).to match_array([group_invoice])
         end
 
-        context "with finance permission in originating layer" do
-          before do
-            Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group), person: acting_user)
+        it "may see invoice to group in own finance layer originating from other layer" do
+          subgroup = groups(:bottom_group_one_one)
+          subgroup_invoice = issued_invoice(group: groups(:top_layer), recipient: subgroup)
+
+          get :index, params: {group_id: subgroup.id}
+          expect(assigns(:invoices)).to match_array([subgroup_invoice])
+        end
+
+        context "with finance permission only in layer above" do
+          let(:acting_user) do
+            Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)).person
           end
 
-          it "may index" do
+          it "may index but not see invoice originating from sibling layer" do
+            issued_invoice(group: groups(:bottom_layer_two), recipient: group)
+
             get :index, params: {group_id: group.id}
             expect(assigns(:invoices)).to match_array([group_invoice])
           end
@@ -168,6 +208,147 @@ describe Contactables::InvoicesController do
           expect(response).to be_successful
           expect(assigns(:invoices)).to match_array invoices(:invoice, :sent)
         end
+      end
+    end
+  end
+
+  context "as recipient" do
+    let(:recipient) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)).person }
+    let(:manager) { Fabricate(Group::TopGroup::Member.sti_name, group: groups(:top_group)).person }
+    let!(:person_invoice) { issued_invoice(group: groups(:bottom_layer_one), recipient:) }
+    let(:person_params) { {group_id: groups(:top_group).id, person_id: recipient.id} }
+
+    let(:recipient_group) { groups(:bottom_layer_one) }
+    let(:recipient_group_finance) { people(:bottom_member) }
+    let!(:group_invoice) { issued_invoice(group: groups(:top_layer), recipient: recipient_group) }
+
+    before { manager.manageds << recipient }
+
+    shared_examples "reads received invoice" do
+      before { sign_in(user) }
+
+      it "sees received invoice" do
+        get :index, params: params
+        expect(assigns(:invoices)).to include(invoice)
+      end
+
+      it "opens received invoice read-only" do
+        get :show, params: params.merge(id: invoice.id)
+        expect(response).to be_successful
+        expect(Ability.new(user)).not_to be_able_to(:update, invoice)
+      end
+
+      it "downloads received invoice as pdf" do
+        expect do
+          get :show, params: params.merge(id: invoice.id, format: :pdf)
+        end.to change { Delayed::Job.where("handler LIKE '%Export::InvoicesJob%'").count }.by(1)
+        expect(response).to be_redirect
+      end
+    end
+
+    context "as recipient person" do
+      let(:user) { recipient }
+      let(:params) { person_params }
+      let(:invoice) { person_invoice }
+
+      it_behaves_like "reads received invoice"
+    end
+
+    context "as manager of recipient person" do
+      let(:user) { manager }
+      let(:params) { person_params }
+      let(:invoice) { person_invoice }
+
+      it_behaves_like "reads received invoice"
+    end
+
+    context "as finance person of recipient group's layer" do
+      let(:user) { recipient_group_finance }
+      let(:params) { {group_id: recipient_group.id} }
+      let(:invoice) { group_invoice }
+
+      it_behaves_like "reads received invoice"
+    end
+
+    it "manager of person without roles opens received invoice" do
+      recipient.roles.destroy_all
+      sign_in(manager)
+
+      get :show, params: person_params.merge(id: person_invoice.id)
+      expect(response).to be_successful
+    end
+
+    context "with invoice states" do
+      before { sign_in(recipient) }
+
+      it "does not show draft invoices" do
+        draft = Fabricate(:invoice, group: groups(:bottom_layer_one), recipient:)
+
+        get :index, params: person_params
+        expect(assigns(:invoices)).not_to include(draft)
+        expect do
+          get :show, params: person_params.merge(id: draft.id)
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "shows cancelled invoices which were issued before" do
+        person_invoice.update_columns(state: "cancelled")
+
+        get :index, params: person_params.merge(state: "cancelled")
+        expect(assigns(:invoices)).to eq [person_invoice]
+      end
+
+      it "does not show cancelled invoices which were never issued" do
+        person_invoice.update_columns(state: "cancelled", issued_at: nil)
+
+        get :index, params: person_params.merge(state: "cancelled")
+        expect(assigns(:invoices)).to be_empty
+      end
+    end
+
+    it "finance person of recipient group's layer does not see draft invoices" do
+      draft = Fabricate(:invoice, group: groups(:top_layer), recipient: recipient_group)
+      sign_in(recipient_group_finance)
+
+      get :index, params: {group_id: recipient_group.id}
+      expect(assigns(:invoices)).to eq [group_invoice]
+      expect(assigns(:invoices)).not_to include(draft)
+    end
+
+    it "recipient person may not open invoice received by someone else" do
+      sign_in(recipient)
+
+      expect do
+        get :show, params: person_params.merge(id: invoices(:invoice).id)
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "finance person of layer above may not open group invoice from sibling layer" do
+      sibling_invoice = issued_invoice(group: groups(:bottom_layer_two), recipient: recipient_group)
+      sign_in(Fabricate(Group::TopGroup::Leader.sti_name, group: groups(:top_group)).person)
+
+      expect do
+        get :show, params: {group_id: recipient_group.id, id: sibling_invoice.id}
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    context "rendering views" do
+      render_views
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      before { sign_in(recipient) }
+
+      it "links to read-only invoice in list" do
+        get :index, params: person_params
+        expect(dom).to have_link(person_invoice.title,
+          href: group_person_received_invoice_path(groups(:top_group), recipient, person_invoice))
+      end
+
+      it "renders invoice without write actions" do
+        get :show, params: person_params.merge(id: person_invoice.id)
+        expect(dom).to have_css("h1", text: person_invoice.title)
+        expect(dom).to have_link("Drucken")
+        expect(dom).not_to have_link("Bearbeiten")
       end
     end
   end

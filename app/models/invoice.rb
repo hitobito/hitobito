@@ -140,6 +140,7 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   scope :one_week, -> { where(invoices: {due_at: ...1.week.ago.to_date}) }
   scope :one_month, -> { where(invoices: {due_at: ...1.month.ago.to_date}) }
   scope :visible, -> { where.not(state: :cancelled) }
+  scope :received, -> { where.not(state: :draft).where.not(state: :cancelled, issued_at: nil) }
   scope :remindable, -> { where(state: STATES_REMINDABLE) }
   scope :with_recipients, -> { extending(PreloadRecipients) }
 
@@ -150,6 +151,9 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   ].freeze
 
   scope :standalone, -> { where(invoice_run_id: nil) }
+  scope :issued_by_layers, ->(layer_ids) {
+    joins(:group).where(groups: {layer_group_id: layer_ids})
+  }
   scope :from_standalone_invoice_run, -> {
     where(invoice_run_id: InvoiceRun.standalone.select(:id))
   }

@@ -150,6 +150,8 @@ it:
             mail_name_not_allowed:
             additional_sender:
               invalid: "deve contenere indirizzi e-mail nel formato abcd@ee.ch o *@ee.ch. In caso di più indirizzi, questi vanno separati con ',' o ';'"
+            preferred_labels:
+              unknown: "'%{label}' ist keine gültige Kategorie"
         message/letter_with_invoice:
           attributes:
             base:
@@ -1273,7 +1275,7 @@ it:
         mail_address_link: Mailinglist
         subscribers_may_post: Gli abbonati possono scrivere sulla mailing list.
         additional_sender: Mittente supplementare
-        preferred_labels: Etichetta e-mail preferita
+        preferred_labels: Bevorzugte E-Mail-Kategorien
         main_email: Spedizione all'e-mail principale
         mailchimp_api_key: 'MailChimp chiave API'
         mailchimp_list_id: 'MailChimp Lista ID'
@@ -1701,6 +1703,11 @@ it:
             unwritable_attribute: Non può essere modificato
           type:
             unwritable_attribute: Non può essere modificato
+        people_manager_resource:
+          manager_id:
+            blank: muss ausgefüllt werden
+          managed_id:
+            blank: muss ausgefüllt werden
         qualification_resource:
           person_id:
             blank: deve essere compilato
@@ -1724,6 +1731,7 @@ it:
       invoices: Leggere tutte le fatture a cui hai accesso
       mailing_lists: Leggere tutti gli abbonamenti a cui hai accesso
       nextcloud: Leggi i tuoi gruppi Nextcloud e il tuo nome visualizzato
+      managed_people: Lesen der ID und des Anzeigenamens deiner Kinder
       register_people: Creazione di profili tramite registrazione autonoma
       qualifications: Leggere, creare ed eliminare tutte le qualifiche a cui hai accesso
 

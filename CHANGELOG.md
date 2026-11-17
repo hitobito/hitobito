@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Im Rechnungstab von Gruppen und Personen werden keine Rechnungen anderer Empfänger mit derselben ID mehr angezeigt
 - Die Zeichen % und _ in Suchbegriffen werden wörtlich gesucht statt als Platzhalter verwendet
 - Pro OAuth-Applikation kann eingestellt werden, dass "Angemeldet bleiben" beim Login vorausgewählt ist (hitobito_sac_cas#2664)
 - JSON:API: Verwalter\*in/Kind-Beziehungen können bei Personen über `people_managers` und `people_manageds` erstellt, gelöscht und inkludiert werden; der neue OIDC-Scope `managed_people` liefert ID und Anzeigename der eigenen Kinder (hitobito_bdp#63)

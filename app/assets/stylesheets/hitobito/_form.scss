@@ -10,6 +10,12 @@
   margin-bottom: $v-space;
 }
 
+.row > .bottom,
+.row > .top {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
 .btn {
   color: $blue-dark;
 

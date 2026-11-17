@@ -21,7 +21,7 @@
               = f.inline_radio_button(:subscribable_mode, key, entry.subscribable_mode_label(key))
     = tab_content(:email) do
       %fieldset
-        = f.labeled(:mail_name, class: 'd-flex') do
+        = f.labeled(:mail_name) do
           .col
             .input-group.input-group-sm
               = f.input_field(:mail_name)

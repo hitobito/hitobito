@@ -180,6 +180,12 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :validatable,
     :confirmable
 
+  # Devise 5 reads this setting from the resource class in
+  # Devise::RegistrationsController, which we use without :registerable.
+  def self.sign_in_after_change_password
+    Devise.sign_in_after_change_password
+  end
+
   include Groups
   include Contactable
   include DateYearValidatable

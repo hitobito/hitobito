@@ -103,7 +103,7 @@ describe Wallets::PassSynchronizer do
         before { allow(installation).to receive(:wallet_type).and_return("unknown") }
 
         it "raises an error" do
-          expect { synchronizer.sync! }.to raise_error(NoMethodError, /undefined method `sync_unknown!'/)
+          expect { synchronizer.sync! }.to raise_error(NoMethodError, /undefined method 'sync_unknown!'/)
         end
       end
 

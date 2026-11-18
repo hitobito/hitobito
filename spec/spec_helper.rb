@@ -288,9 +288,9 @@ Capybara.javascript_driver = :chrome
 
 Devise::Test::ControllerHelpers.prepend(Module.new do
   # Make sure the email address is confirmed before logging in
-  def sign_in(resource, deprecated = nil, scope: nil, confirm: true)
+  def sign_in(resource, scope: nil, confirm: true)
     resource.confirm if confirm
-    super(resource, deprecated, scope: scope)
+    super(resource, scope: scope)
   end
 end)
 

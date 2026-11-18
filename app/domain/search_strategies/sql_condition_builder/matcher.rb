@@ -35,7 +35,7 @@ class SearchStrategies::SqlConditionBuilder
     end
 
     def quoted_word
-      Arel::Nodes::Quoted.new("%#{@word}%")
+      Arel::Nodes::Quoted.new("%#{ActiveRecord::Base.sanitize_sql_like(@word)}%")
     end
   end
 end

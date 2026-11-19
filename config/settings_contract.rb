@@ -17,12 +17,26 @@ class SettingsContract < Dry::Validation::Contract
         required(:warn_after).maybe(:string)
         required(:block_after).maybe(:string)
       end
+      required(:cleanup_cutoff_duration).schema do
+        required(:regarding_current_sign_in_at).maybe(:string)
+        required(:regarding_roles).maybe(:string)
+        required(:regarding_event_participations).maybe(:string)
+      end
+    end
+    required(:event).schema do
+      required(:participations).schema do
+        required(:delete_additional_information_after_months).maybe(:string)
+      end
     end
   end
 
   [
     'people.inactivity_block.warn_after',
-    'people.inactivity_block.block_after'
+    'people.inactivity_block.block_after',
+    'people.cleanup_cutoff_duration.regarding_current_sign_in_at',
+    'people.cleanup_cutoff_duration.regarding_roles',
+    'people.cleanup_cutoff_duration.regarding_event_participations',
+    'event.participations.delete_additional_information_after_months'
   ].each do |path|
     rule(path) do
       next if values[path].nil? || valid_iso8601_duration?(values[path])

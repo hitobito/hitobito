@@ -38,6 +38,13 @@ describe JsonApi::GroupTypesController, type: [:request] do
       expect(json["included"].pluck("type").uniq).to eq(["role_types"])
     end
 
+    it "does not support where_exists" do
+      jsonapi_get "/api/group_types", params: {where_exists: "role_types"}
+
+      expect(response).to have_http_status(400)
+      expect(response.body).to include("Unsupported include parameter")
+    end
+
     it "returns localized labels" do
       jsonapi_get "/api/group_types", params: {locale: :fr}
 

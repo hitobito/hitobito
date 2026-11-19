@@ -57,6 +57,102 @@ RSpec.describe "people#index", type: :request do
       end
     end
 
+    describe "where_exists" do
+      let(:params) { {where_exists: "roles", filter: {roles: {type: "Group::BottomLayer::Member"}}} }
+
+      it "returns only the people having a matching role" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([people(:bottom_member).id])
+      end
+    end
+
+    describe "where_exists with several relationships" do
+      let(:params) { {where_exists: "roles,phone_numbers"} }
+
+      it "returns only the people matching all of them" do
+        Fabricate(:phone_number, contactable: people(:top_leader))
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([people(:top_leader).id])
+      end
+    end
+
+    describe "where_exists reaching deeper than include" do
+      let(:params) do
+        {include: "roles",
+         where_exists: "roles.group",
+         filter: {"roles.group.id" => groups(:bottom_layer_one).id}}
+      end
+
+      it "restricts the people and still includes the roles" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([people(:bottom_member).id])
+        expect(json["included"].pluck("type").uniq).to eq(["roles"])
+      end
+    end
+
+    describe "include reaching deeper than where_exists" do
+      let(:params) do
+        {include: "roles.group",
+         where_exists: "roles",
+         filter: {roles: {type: "Group::BottomLayer::Member"}}}
+      end
+
+      it "restricts the people and includes both levels" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d.map(&:id)).to eq([people(:bottom_member).id])
+        expect(json["included"].pluck("type").uniq).to match_array(%w[roles groups])
+      end
+    end
+
+    describe "where_exists with the same resource via two paths" do
+      let(:params) do
+        {where_exists: "primary_group,roles.group",
+         filter: {"primary_group.id" => groups(:top_group).id,
+                  "roles.group.id" => groups(:bottom_layer_one).id}}
+      end
+
+      it "applies each filter only to its own path" do
+        make_request
+        expect(response.status).to eq(200), response.body
+        expect(d).to be_empty
+      end
+
+      context "with a person matching both paths" do
+        before do
+          Fabricate(Group::BottomLayer::Member.sti_name, person: people(:top_leader),
+            group: groups(:bottom_layer_one))
+        end
+
+        it "returns that person" do
+          make_request
+          expect(response.status).to eq(200), response.body
+          expect(d.map(&:id)).to eq([people(:top_leader).id])
+        end
+      end
+    end
+
+    describe "where_exists with an unknown relationship" do
+      let(:params) { {where_exists: "bogus"} }
+
+      it "reports 400 instead of server error" do
+        make_request
+        expect(response.status).to eq(400), response.body
+      end
+    end
+
+    describe "where_exists on a relationship without database association" do
+      let(:params) { {where_exists: "layer_group"} }
+
+      it "reports 400 instead of server error" do
+        make_request
+        expect(response.status).to eq(400), response.body
+      end
+    end
+
     describe "nil filtering" do
       before do
         people(:top_leader).update!(nickname: "Toppy")

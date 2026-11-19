@@ -20,7 +20,7 @@ describe Event::ParticipationCleanupJob do
 
   context "with last event date inside cutoff duration" do
     before do
-      expect(Settings.event.participations).to receive(:delete_additional_information_after_months).and_return(3)
+      expect(Settings.event.participations).to receive(:delete_additional_information_after_months).and_return("P3M")
       Event::Date.where(event_id: participations.map(&:event_id)).update_all(finish_at: 2.months.ago)
     end
 
@@ -39,7 +39,7 @@ describe Event::ParticipationCleanupJob do
 
   context "with last event date outside cutoff duration" do
     before do
-      expect(Settings.event.participations).to receive(:delete_additional_information_after_months).and_return(3)
+      expect(Settings.event.participations).to receive(:delete_additional_information_after_months).and_return("P3M")
       Event::Date.where(event_id: participations.map(&:event_id)).update_all(finish_at: 4.months.ago)
     end
 

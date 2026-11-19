@@ -14,6 +14,17 @@ describe SettingsContract do
         inactivity_block: {
           warn_after: "P1Y",
           block_after: "P1Y"
+        },
+        cleanup_cutoff_duration: {
+          regarding_current_sign_in_at: "P1Y",
+          regarding_roles: "P1Y",
+          regarding_event_participations: "P1Y"
+        }
+      },
+      event: {
+        participations: {
+          delete_additional_information_after_months: "P1Y",
+          delete_answers_after_months: "P1Y"
         }
       }
     }
@@ -25,28 +36,45 @@ describe SettingsContract do
     it { is_expected.to be_success }
   end
 
-  context "people.inactivity_block" do
-    it "accepts nil values" do
-      settings[:people][:inactivity_block][:warn_after] = nil
-      settings[:people][:inactivity_block][:block_after] = nil
+  it "accepts nil values" do
+    set_all_settings_to(nil)
 
-      is_expected.to be_success
-    end
+    is_expected.to be_success
+  end
 
-    context "with invalid settings" do
-      before do
-        settings[:people][:inactivity_block][:warn_after] = "invalid"
-        settings[:people][:inactivity_block][:block_after] = 12345
-      end
+  context "with invalid data types" do
+    before { set_all_settings_to(12345) }
 
-      it { is_expected.not_to be_success }
+    it { is_expected.not_to be_success }
 
-      it "has the correct error message" do
-        expect(subject.errors[:people][:inactivity_block][:warn_after])
-          .to include("must be a valid ISO8601 duration string")
-        expect(subject.errors[:people][:inactivity_block][:block_after])
-          .to include("must be a string")
+    it "has the correct error message" do
+      subject.errors.all? do |error|
+        expect(error.to_s).to include("must be a string")
       end
     end
   end
+
+  context "with invalid format" do
+    before { set_all_settings_to("12345") }
+
+    it { is_expected.not_to be_success }
+
+    it "has the correct error message" do
+      subject.errors.all? do |error|
+        expect(error.to_s).to include("must be a valid ISO8601 duration string")
+      end
+    end
+  end
+
+  # rubocop:disable Metrics/AbcSize
+  def set_all_settings_to(value)
+    settings[:people][:inactivity_block][:warn_after] = value
+    settings[:people][:inactivity_block][:block_after] = value
+    settings[:people][:cleanup_cutoff_duration][:regarding_current_sign_in_at] = value
+    settings[:people][:cleanup_cutoff_duration][:regarding_roles] = value
+    settings[:people][:cleanup_cutoff_duration][:regarding_event_participations] = value
+    settings[:event][:participations][:delete_additional_information_after_months] = value
+    settings[:event][:participations][:delete_answers_after_months] = value
+  end
+  # rubocop:enable Metrics/AbcSize
 end

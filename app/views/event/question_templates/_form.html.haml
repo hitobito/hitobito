@@ -16,8 +16,7 @@
       = ff.labeled_input_field(:required, caption: t('event.questions.required_caption'))
 
     - if Settings.event.participations.manual_sensitive_option
-      - delete_answers_after_months = Settings.event.participations.delete_answers_after_months
-      = ff.labeled_input_field(:sensitive, caption: t('event.questions.sensitive_caption', cutoff: delete_answers_after_months))
+      = ff.labeled_input_field(:sensitive, caption: sensitive_answers_caption)
 
     = f.labeled_collection_select :event_type, Event.all_types.map { [_1.label, _1.sti_name] }, :last, :first, { include_blank: I18n.t('global.all') }
     = render 'visibility_fields', f: ff, event_type_field_id: f.field_id(:event_type)

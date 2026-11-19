@@ -45,7 +45,7 @@ class People::CleanupFinder
 
   def with_roles_outside_cutoff(scope)
     roles_outside_cutoff = Role.with_inactive
-      .having("MAX(roles.end_on) <= ?", last_role_ended_on)
+      .having("MAX(roles.end_on) <= ?", last_role_ended_on.ago)
       .group("person_id")
       .select(:person_id)
 
@@ -58,7 +58,7 @@ class People::CleanupFinder
 
   def with_current_sign_in_at_outside_cutoff(scope)
     scope.where("people.current_sign_in_at <= ? OR people.current_sign_in_at IS NULL",
-      current_sign_in_at)
+      current_sign_in_at.ago)
   end
 
   def without_people_managers(scope)
@@ -76,7 +76,7 @@ class People::CleanupFinder
   end
 
   def last_role_ended_on
-    Settings.people.cleanup_cutoff_duration.regarding_roles.months.ago.to_date
+    ActiveSupport::Duration.parse(cleanup_cutoff_duration.regarding_roles.to_s)
   end
 
   def not_participating_in_future_events
@@ -90,6 +90,10 @@ class People::CleanupFinder
   end
 
   def current_sign_in_at
-    Settings.people.cleanup_cutoff_duration.regarding_current_sign_in_at.months.ago
+    ActiveSupport::Duration.parse(cleanup_cutoff_duration.regarding_current_sign_in_at.to_s)
+  end
+
+  def cleanup_cutoff_duration
+    Settings.people.cleanup_cutoff_duration
   end
 end

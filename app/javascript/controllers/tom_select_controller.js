@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+// Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 // hitobito and licensed under the Affero General Public License version 3
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
@@ -68,6 +68,8 @@ import { Controller } from "@hotwired/stimulus";
     select_content_tag :my_select, options_for_select(@options),
       data: { controller: "tom-select", tom_select_max_options_value: 42 }
  */
+const MORE_RESULTS_ID = "more_results";
+
 export default class extends Controller {
   static values = {
     url: String,
@@ -85,6 +87,8 @@ export default class extends Controller {
   connect() {
     this.tom = new TomSelect(`#${this.element.id}`, this.#getOptions());
     this.tom.on("item_add", this.#clearInput.bind(this));
+    this.moreResultsTranslations = {};
+    this.tom.on("type", this.#updateMoreResultsOption.bind(this));
     if (this.element.autofocus) {
       this.tom.focus();
     }
@@ -100,6 +104,8 @@ export default class extends Controller {
       valueField: "id",
       labelField: this.labelValue,
       searchField: this.labelValue,
+      sortField: [{ field: "$order" }, { field: "$score" }],
+      score: this.#score.bind(this),
       optgroupField: this.optgroupFieldValue,
       plugins: multiple ? ["remove_button"] : undefined,
       create: false,
@@ -128,11 +134,34 @@ export default class extends Controller {
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
-        callback(json);
+        if (Array.isArray(json)) {
+          callback(json);
+        } else if (json.more_results) {
+          this.moreResultsTranslations[query] = json.more_results;
+          callback([this.#moreResultsOption(json.more_results), ...json.data])
+        } else {
+          callback(json.data);
+        }
       })
       .catch(() => {
         callback();
       });
+  }
+
+  #score(query) {
+    const score = this.tom.getScoreFunction(query);
+    return (option) => (option.id === MORE_RESULTS_ID ? 1 : score(option));
+  }
+
+  #moreResultsOption(translation) {
+    return { id: MORE_RESULTS_ID, [this.labelValue]: translation, disabled: true };
+  }
+
+  #updateMoreResultsOption(query) {
+    this.tom.removeOption(MORE_RESULTS_ID);
+    const translation = this.moreResultsTranslations[query];
+    if (translation) this.tom.addOption(this.#moreResultsOption(translation));
+    this.tom.refreshOptions(false);
   }
 
   #clearInput() {
@@ -145,6 +174,9 @@ export default class extends Controller {
   }
 
   #renderOption(data, escape) {
+    if (data.id === MORE_RESULTS_ID) {
+      return `<div class="muted small">${escape(data[this.labelValue])}</div>`;
+    }
     let label = `<div>${escape(data[this.labelValue])}</div>`;
     if (data.description) {
       const desc = `<div class="muted small">${escape(data.description)}</div>`;

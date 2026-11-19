@@ -34,6 +34,7 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
     input.setAttribute("autocomplete", "off");
     const submit = Boolean(input.dataset.submit);
     const isQuickSearch = input.id === QUICKSEARCH_ID;
+    let moreResults = false;
 
     let autoCompleteInput = new autoComplete({
       selector: `#${input.id}`,
@@ -52,8 +53,9 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
               document.getElementById(input.id).dataset.param || "q";
             url.searchParams.set(queryKey, query);
             const source = await fetch(url);
-            const data = await source.json();
-
+            const json = await source.json();
+            const data = Array.isArray(json) ? json : json.data;
+            moreResults = json.more_results;
             input.classList.remove("input-loading");
             var noResultsMessage =
               autoCompleteInput.input.dataset.noResultsMessage;
@@ -77,6 +79,14 @@ import { mark } from "@tarekraafat/autocomplete.js/src/helpers/io";
         noResults: false,
         maxResults: 15,
         tabSelect: true,
+        element: (list, data) => {
+          if (moreResults) {
+            const more = document.createElement("li");
+            more.id = "more_results"
+            more.textContent = moreResults;
+            list.appendChild(more);
+          }
+        },
       },
       resultItem: {
         highlight: true,

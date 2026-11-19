@@ -24,9 +24,9 @@ describe Event::ParticipationCleanupAnswersJob do
   end
 
   context "with cutoff" do
-    let(:cutoff) { 3 }
+    let(:cutoff) { "P3M" }
     let(:start_at) { event.dates.first.start_at }
-    let(:cutoff_date) { start_at + cutoff.months }
+    let(:cutoff_date) { start_at + 3.months }
 
     before do
       allow(Settings.event.participations)

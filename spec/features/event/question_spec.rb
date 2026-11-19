@@ -151,7 +151,7 @@ describe EventsController, js: true do
     end
 
     before do
-      Settings.event.participations.delete_answers_after_months = 6
+      Settings.event.participations.delete_answers_after_months = "P6M"
       Settings.event.participations.manual_sensitive_option = true
       Event::Question.delete_all
       sign_in

@@ -29,8 +29,8 @@ class Event::ParticipationCleanupAnswersJob < RecurringJob
   end
 
   def cutoff
-    Settings.event.participations.delete_answers_after_months.then do |number|
-      number.months.ago if number
+    Settings.event.participations.delete_answers_after_months.then do |duration|
+      ActiveSupport::Duration.parse(duration.to_s).ago if duration
     end
   end
 end

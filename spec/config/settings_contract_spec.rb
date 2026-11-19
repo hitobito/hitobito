@@ -23,7 +23,8 @@ describe SettingsContract do
       },
       event: {
         participations: {
-          delete_additional_information_after_months: "P1Y"
+          delete_additional_information_after_months: "P1Y",
+          delete_answers_after_months: "P1Y"
         }
       }
     }
@@ -73,6 +74,7 @@ describe SettingsContract do
     settings[:people][:cleanup_cutoff_duration][:regarding_roles] = value
     settings[:people][:cleanup_cutoff_duration][:regarding_event_participations] = value
     settings[:event][:participations][:delete_additional_information_after_months] = value
+    settings[:event][:participations][:delete_answers_after_months] = value
   end
   # rubocop:enable Metrics/AbcSize
 end

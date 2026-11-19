@@ -26,6 +26,7 @@ class SettingsContract < Dry::Validation::Contract
     required(:event).schema do
       required(:participations).schema do
         required(:delete_additional_information_after_months).maybe(:string)
+        optional(:delete_answers_after_months).maybe(:string)
       end
     end
   end
@@ -36,7 +37,8 @@ class SettingsContract < Dry::Validation::Contract
     'people.cleanup_cutoff_duration.regarding_current_sign_in_at',
     'people.cleanup_cutoff_duration.regarding_roles',
     'people.cleanup_cutoff_duration.regarding_event_participations',
-    'event.participations.delete_additional_information_after_months'
+    'event.participations.delete_additional_information_after_months',
+    'event.participations.delete_answers_after_months'
   ].each do |path|
     rule(path) do
       next if values[path].nil? || valid_iso8601_duration?(values[path])

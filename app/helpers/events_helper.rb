@@ -26,6 +26,13 @@ module EventsHelper
     end
   end
 
+  def sensitive_answers_caption
+    cutoff = Settings.event.participations.delete_answers_after_months.then do |duration|
+      ActiveSupport::Duration.parse(duration.to_s).in_months.round if duration
+    end
+    t("event.questions.sensitive_caption", cutoff: cutoff)
+  end
+
   def event_user_application_possible?(event, person = current_user)
     participation = event.participations.new
     participation.person = person

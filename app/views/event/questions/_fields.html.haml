@@ -15,8 +15,7 @@
 = f.labeled_input_field(:required, caption: t('event.questions.required_caption'))
 
 - if Settings.event.participations.manual_sensitive_option
-  - delete_answers_after_months = Settings.event.participations.delete_answers_after_months
-  = f.labeled_input_field(:sensitive, caption: t('event.questions.sensitive_caption', cutoff: delete_answers_after_months))
+  = f.labeled_input_field(:sensitive, caption: sensitive_answers_caption)
 
 = render 'event/questions/visibility_fields', f: f, event: entry
 

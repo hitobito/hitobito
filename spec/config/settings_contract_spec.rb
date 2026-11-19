@@ -36,13 +36,13 @@ describe SettingsContract do
   end
 
   it "accepts nil values" do
-    set_settings(nil)
+    set_all_settings_to(nil)
 
     is_expected.to be_success
   end
 
   context "with invalid data types" do
-    before { set_settings(12345) }
+    before { set_all_settings_to(12345) }
 
     it { is_expected.not_to be_success }
 
@@ -54,7 +54,7 @@ describe SettingsContract do
   end
 
   context "with invalid format" do
-    before { set_settings("12345") }
+    before { set_all_settings_to("12345") }
 
     it { is_expected.not_to be_success }
 
@@ -66,7 +66,7 @@ describe SettingsContract do
   end
 
   # rubocop:disable Metrics/AbcSize
-  def set_settings_to(value)
+  def set_all_settings_to(value)
     settings[:people][:inactivity_block][:warn_after] = value
     settings[:people][:inactivity_block][:block_after] = value
     settings[:people][:cleanup_cutoff_duration][:regarding_current_sign_in_at] = value

@@ -148,6 +148,8 @@ en:
             mail_name_not_allowed:
             additional_sender:
               invalid: "must contain mail addresses of the format abcd@ee.ch or *@ee.ch. Multiple addresses must be separated with ',' or ';'."
+            preferred_labels:
+              unknown: "'%{label}' ist keine gültige Kategorie"
         message/letter_with_invoice:
           attributes:
             base:
@@ -167,7 +169,7 @@ en:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Please enter a name'
-          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
+          blocklisted: Diese Person konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           readonly: "You do not have write access to all persons in the household. Remove %{name} from the household to adjust the address."
           attributes:
             base:
@@ -237,6 +239,7 @@ en:
             end_on:
               must_be_later_than_start_on: cannot be before the start of the accounting period
         role:
+          blocklisted: Diese Rolle konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           attributes:
             end_on:
               must_be_later_than_start_on: cannot be before From
@@ -526,6 +529,7 @@ en:
         country: Country
         postbox: P.O. Box
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         public: Public
 
       additional_addresses:
@@ -579,8 +583,10 @@ en:
         read_at: read at
 
       blocklist_entry:
+        id: Referenznummer
         person: Person
         blocked_hash: Hash
+        hashed_attrs: Angaben im Hash
         creator: Erstellt von
         created_at: Erstellt am
 
@@ -593,6 +599,7 @@ en:
         first_name: First name
         last_name: Last name
         name: Name
+        minimized_placeholder: "(inaktive Person)"
         company_name: Company name
         company: Company
         nickname: Nickname
@@ -603,6 +610,7 @@ en:
         password_confirmation: Password confirmation
         current_password: Old password
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         address: Address
         street: Street
         housenumber: House number
@@ -704,6 +712,7 @@ en:
         email: Main e-mail
         address: Address
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Street
         housenumber: House number
         postbox: P.O. Box
@@ -809,6 +818,7 @@ en:
         company_name: Company name
         email: Main e-mail
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Street
         housenumber: House number
         postbox: P.O. Box
@@ -832,6 +842,7 @@ en:
         company_name: Company name
         email: Main e-mail
         address_care_of: c/o-Adresse
+        address_addition: Adresszusatz
         street: Street
         housenumber: House number
         postbox: P.O. Box
@@ -1030,6 +1041,7 @@ en:
         description: Description
         additional_audiences: Further audiences
         skip_consent_screen: Skip consent
+        preselect_remember_me: "'Angemeldet bleiben' automatisch anwählen"
         refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:
@@ -1102,6 +1114,7 @@ en:
               admin: Administration of application-wide settings such as types of courses or label formats.
               layer_and_below_full: All reading and writing at this level and all lower levels. Creating events and subscriptions at this level.
               layer_and_below_read: 'All reading at this level and all lower levels. '
+              layer_and_below_read_details: Lesen auf dieser Ebene und allen darunter liegenden Ebenen, ohne vollständige Historie der Personen.
               layer_full: All reading and writing at this level. Creating events and subscriptions at this level.
               layer_read: All reading at this level.
               group_and_below_full: Reading and writing at this group and all lower groups (without layers). Includes creating events and subscriptions.
@@ -1109,6 +1122,7 @@ en:
               group_full: Reading and writing at this group. Creating events and subscriptions at this group.
               group_read: Reading at this group.
               contact_data: Read the contact details of all other people with contact data authorization.
+              group_read_contact_data: Lesen der Kontaktdaten aller Personen in der Gruppe.
               qualify: Creating qualifications for people at this level and all lower levels.
               approve_applications: Confirmation of course registrations for people at this level.
               finance: Create and manage invoices
@@ -1179,7 +1193,7 @@ en:
         mail_address_link: Mailing list
         subscribers_may_post: Subscribers may write to the mailing list
         additional_sender: Additional sender
-        preferred_labels: Preferred e-mail labels
+        preferred_labels: Bevorzugte E-Mail-Kategorien
         main_email: Shipping to main e-mail
         mailchimp_api_key: 'MailChimp API-Key'
         mailchimp_list_id: 'MailChimp list-ID'
@@ -1331,7 +1345,8 @@ en:
         recipient_name: Name
         recipient_first_name: Vorname
         recipient_last_name: Nachname
-        recipient_address_care_of: c/o address
+        recipient_address_care_of: c/o-Adresse
+        recipient_address_addition: Adresszusatz
         recipient_postbox: P.O. Box
         recipient_country: Country
         recipient_street: Street
@@ -1605,6 +1620,11 @@ en:
             unwritable_attribute: can't be changed
           type:
             unwritable_attribute: can't be changed
+        people_manager_resource:
+          manager_id:
+            blank: muss ausgefüllt werden
+          managed_id:
+            blank: muss ausgefüllt werden
         qualification_resource:
           person_id:
             blank: muss ausgefüllt werden
@@ -1628,6 +1648,7 @@ en:
       invoices: Read all invoices that you have access to
       mailing_lists: Read all subscriptions to which you have access
       nextcloud: Reading your Nextcloud groups and your display name
+      managed_people: Lesen der ID und des Anzeigenamens deiner Kinder
       register_people: Erstellen von Personen via Selbstregistrierung
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 

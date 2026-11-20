@@ -150,8 +150,6 @@ it:
             mail_name_not_allowed:
             additional_sender:
               invalid: "deve contenere indirizzi e-mail nel formato abcd@ee.ch o *@ee.ch. In caso di più indirizzi, questi vanno separati con ',' o ';'"
-            preferred_labels:
-              unknown: "'%{label}' ist keine gültige Kategorie"
         message/letter_with_invoice:
           attributes:
             base:
@@ -171,7 +169,7 @@ it:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Inserire un nome'
-          blocklisted: Diese Person konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
+          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
           readonly: "Non hai diritto di scrittura per tutte le persone del nucleo famigliare. Elimina %{name} dal nucleo famigliare per cambiare l'indirizzo."
           attributes:
             base:
@@ -242,7 +240,6 @@ it:
             end_on:
               must_be_later_than_start_on: non può essere precedente all'inizio del periodo contabile
         role:
-          blocklisted: Diese Rolle konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           attributes:
             end_on:
               must_be_later_than_start_on: non può essere prima di "de"
@@ -613,7 +610,6 @@ it:
         country: Nazione
         postbox: Casella postale
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         public: Pubblico
 
       additional_addresses:
@@ -667,10 +663,8 @@ it:
         read_at: Letto il
 
       blocklist_entry:
-        id: Referenznummer
         person: Persona
         blocked_hash: Hash
-        hashed_attrs: Angaben im Hash
         creator: Erstellt von
         created_at: Erstellt am
 
@@ -683,7 +677,6 @@ it:
         first_name: Nome
         last_name: Cognome
         name: Nome
-        minimized_placeholder: "(inaktive Person)"
         company_name: Nome della ditta
         company: Ditta
         nickname: Soprannome
@@ -694,7 +687,6 @@ it:
         password_confirmation: Confermare la password
         current_password: Vecchia password
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         address: Indirizzo
         street: Strada
         housenumber: Numero civico
@@ -796,7 +788,6 @@ it:
         email: Email principale
         address: Indirizzo
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -902,7 +893,6 @@ it:
         company_name: Nome della ditta
         email: Email principale
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -926,7 +916,6 @@ it:
         company_name: Nome della ditta
         email: Email principale
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         street: Strada
         housenumber: Numero civico
         postbox: Casella postale
@@ -1125,7 +1114,6 @@ it:
         description: Descrizione
         additional_audiences: Altri destinatari
         skip_consent_screen: Salta il consenso
-        preselect_remember_me: "'Angemeldet bleiben' automatisch anwählen"
         refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:
@@ -1198,7 +1186,6 @@ it:
               admin: Amministrazione delle impostazioni relative alle applicazioni come tipi di corso o formati delle etichette.
               layer_and_below_full: Leggere e scrivere tutto su questo livello e su tutti i livelli inferiori. Creare eventi e abbonamenti su questo livello.
               layer_and_below_read: Leggere tutto su questo livello e su tutti i livelli inferiori.
-              layer_and_below_read_details: Lesen auf dieser Ebene und allen darunter liegenden Ebenen, ohne vollständige Historie der Personen.
               layer_full: Leggere e scrivere tutto su questo livello. Creare eventi e abbonamenti su questo livello.
               layer_read: Leggere tutto su questo livello.
               group_and_below_full: 'Leggere e scrivere sul gruppo e su tutti i gruppi sottostanti (senza livelli). Compresa la realizzazione di eventi e abbonamenti.  '
@@ -1206,7 +1193,6 @@ it:
               group_full: Leggere e scrivere su questo gruppo. Creare eventi e abbonamenti su questo gruppo.
               group_read: Leggere su questo gruppo.
               contact_data: Leggere i dati di contatto di tutte le altre persone con diritto di accesso ai dati di contatto.
-              group_read_contact_data: Lesen der Kontaktdaten aller Personen in der Gruppe.
               qualify: Creare le qualifiche per le persone su questo livello e su quelli inferiori.
               approve_applications: Confermare le iscrizioni ai corse per le persone su questo livello.
               finance: Emettere e amministrare fatture
@@ -1281,7 +1267,7 @@ it:
         mail_address_link: Mailinglist
         subscribers_may_post: Gli abbonati possono scrivere sulla mailing list.
         additional_sender: Mittente supplementare
-        preferred_labels: Bevorzugte E-Mail-Kategorien
+        preferred_labels: Etichetta e-mail preferita
         main_email: Spedizione all'e-mail principale
         mailchimp_api_key: 'MailChimp chiave API'
         mailchimp_list_id: 'MailChimp Lista ID'
@@ -1435,8 +1421,7 @@ it:
         recipient_name: Nome
         recipient_first_name: Nome
         recipient_last_name: Cognome
-        recipient_address_care_of: c/o-Adresse
-        recipient_address_addition: Adresszusatz
+        recipient_address_care_of: Indirizzo c/o
         recipient_postbox: Casella postale
         recipient_country: Nazione
         recipient_street: Strada
@@ -1710,11 +1695,6 @@ it:
             unwritable_attribute: Non può essere modificato
           type:
             unwritable_attribute: Non può essere modificato
-        people_manager_resource:
-          manager_id:
-            blank: muss ausgefüllt werden
-          managed_id:
-            blank: muss ausgefüllt werden
         qualification_resource:
           person_id:
             blank: deve essere compilato
@@ -1738,7 +1718,6 @@ it:
       invoices: Leggere tutte le fatture a cui hai accesso
       mailing_lists: Leggere tutti gli abbonamenti a cui hai accesso
       nextcloud: Leggi i tuoi gruppi Nextcloud e il tuo nome visualizzato
-      managed_people: Lesen der ID und des Anzeigenamens deiner Kinder
       register_people: Creazione di profili tramite registrazione autonoma
       qualifications: Leggere, creare ed eliminare tutte le qualifiche a cui hai accesso
 

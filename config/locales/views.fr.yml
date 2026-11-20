@@ -261,10 +261,8 @@ fr:
     print: "Imprimer"
     labels: "Etiquettes"
     full: "Facture avec bulletin de versement"
-    full_without_payment_slip: "Rechnung"
     esr_only: "bulletin de versement séparé"
     original_invoice: "Facture originale avec bulletin de versement"
-    original_invoice_without_payment_slip: "Originalrechnung"
     articles_only: "Facture séparée"
     csv: "CSV"
     xlsx: "Excel"
@@ -654,9 +652,6 @@ fr:
       explanation: >-
           Personen auf der Ausschlussliste können nicht mehr in hitobito erfasst werden.
           Gespeichert wird nur ein Hash über %{attributes}.
-      explanation_optional: >-
-          Personen auf der Ausschlussliste können nicht mehr in hitobito erfasst werden.
-          Gespeichert werden nur Hashes über %{attributes}, jeweils mit und ohne %{optional_attributes}.
       person_help: Bestehende oder gelöschte Person suchen. Die Angaben unten werden dann ignoriert.
       manual_entry: Oder Angaben manuell erfassen
     create:
@@ -1443,7 +1438,7 @@ fr:
       caption_subscribers_may_post: "Les abonnés peuvent écrire à la liste de diffusion"
       caption_anyone_may_post: "Tous les expéditeurs peuvent écrire à la liste de diffusion."
       caption_delivery_report: "Envoyer l'e-mail avec confirmation à l'expéditeur"
-      help_preferred_labels: "E-Mails werden falls vorhanden, nur an E-Mailadressen mit einer dieser Kategorien verschickt. Dabei werden auch E-Mail Adressen verwendet, die nicht als Versand-Adresse markiert sind."
+      help_preferred_labels: "Si disponibles, les e-mails ne sont envoyés qu'aux adresses e-mails avec cette désignation. Ce faisant, les adresses e-mail qui ne sont pas marquées comme adresses d'envoi seront également utilisées."
       help_mailchimp_sync: "Les personnes abonnées peuvent être exportées vers la liste MailChimp. Cette action écrase la liste MailChimp et les contacts actuels sont effacés."
     form_tabs:
       general: Général
@@ -2278,10 +2273,6 @@ fr:
           (groupes, événements et abonnements; pas d'autres personnes).
       only_visible_from_above: Ce rôle n'est visible que pour les personnes du même niveau, pas pour les personnes d'un niveau supérieur.
 
-    end:
-      title: Beenden
-      confirm: Willst du diese Rolle wirklich beenden?
-
   roles/terminations:
     global:
       title: Sortie
@@ -2508,9 +2499,6 @@ fr:
         create: "La demande d'accès pour <i>%{label}</i> a été établie."
         update: "La demande d'accès pour <i>%{label}</i> a été actualisée: %{changeset}"
         destroy: "Il y a eu une réponse pour la demande d'accès de <i>%{label}</i>."
-
-      role:
-        create: "%{model} <i>%{label}</i> wurde hinzugefügt: %{changeset}"
 
       deleted_person: "Personne supprimée"
       people_manager:

@@ -148,8 +148,6 @@ de_DE:
             mail_name_not_allowed:
             additional_sender:
               invalid: "muss Mailadressen vom Format abcd@ee.de oder *@ee.de enthalten. Mehrere Adressen müssen mit ',' oder ';' abgetrennt werden."
-            preferred_labels:
-              unknown: "'%{label}' ist keine gültige Kategorie"
         message/letter_with_invoice:
           attributes:
             base:
@@ -169,7 +167,7 @@ de_DE:
               blank: Es muss mindestens ein Rollentyp gewählt werden
         person:
           name_missing: 'Bitte geben Sie einen Namen ein'
-          blocklisted: Diese Person konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
+          blocklisted: Diese Person ist auf der Ausschlussliste und kann nicht erfasst werden.
           readonly: ": Du hast nicht auf alle Personen aus dem Haushalt Schreibrechte. Entferne %{name} aus dem Haushalt, um die Adresse anzupassen."
           attributes:
             base:
@@ -239,7 +237,6 @@ de_DE:
             end_on:
               must_be_later_than_start_on: kann nicht vor Rechnungsperiode Start sein
         role:
-          blocklisted: Diese Rolle konnte nicht erstellt werden. Bitte wende dich mit der Referenznummer %{reference} an die Administrator*innen deiner Organisation.
           attributes:
             end_on:
               must_be_later_than_start_on: kann nicht vor Von sein
@@ -529,7 +526,6 @@ de_DE:
         country: Land
         postbox: Postfach
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         public: Öffentlich
 
       additional_addresses:
@@ -583,10 +579,8 @@ de_DE:
         read_at: Gelesen am
 
       blocklist_entry:
-        id: Referenznummer
         person: Person
         blocked_hash: Hash
-        hashed_attrs: Angaben im Hash
         creator: Erstellt von
         created_at: Erstellt am
 
@@ -599,7 +593,6 @@ de_DE:
         first_name: Vorname
         last_name: Nachname
         name: Name
-        minimized_placeholder: "(inaktive Person)"
         company_name: Firmenname
         company: Firma
         nickname: Spitzname
@@ -610,7 +603,6 @@ de_DE:
         password_confirmation: Passwort Bestätigung
         current_password: Altes Passwort
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         address: Adresse
         street: Straße
         housenumber: Hausnummer
@@ -712,7 +704,6 @@ de_DE:
         email: Haupt-E-Mail
         address: Adresse
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach
@@ -818,7 +809,6 @@ de_DE:
         company_name: Firmenname
         email: Haupt-E-Mail
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach
@@ -842,7 +832,6 @@ de_DE:
         company_name: Firmenname
         email: Haupt-E-Mail
         address_care_of: c/o-Adresse
-        address_addition: Adresszusatz
         street: Straße
         housenumber: Hausnummer
         postbox: Postfach
@@ -1041,7 +1030,6 @@ de_DE:
         description: Beschreibung
         additional_audiences: Weitere Audiences
         skip_consent_screen: Einwilligung überspringen
-        preselect_remember_me: "'Angemeldet bleiben' automatisch anwählen"
         refresh_token_lifetime_days: Gültigkeit Refresh Token (Tage)
 
       phone_number:
@@ -1114,7 +1102,6 @@ de_DE:
               admin: Administration von applikationsweiten Einstellungen wie Kursarten oder Etikettenformate.
               layer_and_below_full: Alles Lesen und Schreiben auf dieser Ebene und allen darunter liegenden Ebenen. Erstellen von Veranstaltungen und Abos auf dieser Ebene.
               layer_and_below_read: Alles Lesen auf dieser Ebene und allen darunter liegenden Ebenen.
-              layer_and_below_read_details: Lesen auf dieser Ebene und allen darunter liegenden Ebenen, ohne vollständige Historie der Personen.
               layer_full: Alles Lesen und Schreiben auf dieser Ebene. Erstellen von Veranstaltungen und Abos auf dieser Ebene.
               layer_read: Alles Lesen auf dieser Ebene.
               group_and_below_full: Lesen und Schreiben auf der Gruppe und allen darunter liegenden Gruppen (ohne Ebenen). Inkl. Erstellen von Veranstaltungen und Abos.
@@ -1122,7 +1109,6 @@ de_DE:
               group_full: Lesen und Schreiben auf der Gruppe. Erstellen von Veranstaltungen und Abos auf der Gruppe.
               group_read: Lesen auf der Gruppe.
               contact_data: Lesen der Kontaktdaten aller anderen Personen mit Kontaktdatenberechtigung.
-              group_read_contact_data: Lesen der Kontaktdaten aller Personen in der Gruppe.
               qualify: Erstellen von Qualifikationen für Personen auf dieser Ebene und allen darunter liegenden Ebenen.
               approve_applications: Bestätigen der Kursanmeldungen für Personen dieser Ebene.
               finance: Erstellen und Verwalten von Rechnungen.
@@ -1193,7 +1179,7 @@ de_DE:
         mail_address_link: Mailingliste
         subscribers_may_post: Abonnenten dürfen auf die Mailingliste schreiben
         additional_sender: Zusätzlicher Absender
-        preferred_labels: Bevorzugte E-Mail-Kategorien
+        preferred_labels: Bevorzugte E-Mail-Labels
         main_email: Versand an Haupt E-Mail
         mailchimp_api_key: 'MailChimp API-Schlüssel'
         mailchimp_list_id: 'MailChimp Listen-ID'
@@ -1345,8 +1331,7 @@ de_DE:
         recipient_name: Name
         recipient_first_name: Vorname
         recipient_last_name: Nachname
-        recipient_address_care_of: c/o-Adresse
-        recipient_address_addition: Adresszusatz
+        recipient_address_care_of: zusätz. Adresszeile
         recipient_postbox: Postfach
         recipient_country: Land
         recipient_street: Straße
@@ -1620,11 +1605,6 @@ de_DE:
             unwritable_attribute: kann nicht geändert werden
           type:
             unwritable_attribute: kann nicht geändert werden
-        people_manager_resource:
-          manager_id:
-            blank: muss ausgefüllt werden
-          managed_id:
-            blank: muss ausgefüllt werden
         qualification_resource:
           person_id:
             blank: muss ausgefüllt werden
@@ -1648,7 +1628,6 @@ de_DE:
       invoices: Lesen aller Rechnungen, auf die du Zugriff hast
       mailing_lists: Lesen aller Abos, auf die du Zugriff hast
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
-      managed_people: Lesen der ID und des Anzeigenamens deiner Kinder
       register_people: Erstellen von Personen via Selbstregistrierung
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 

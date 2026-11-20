@@ -145,6 +145,30 @@ describe InvoiceRun do
       .and change(subject, :recipients_total).from(0).to(2)
   end
 
+  describe "validations" do
+    subject(:run) do
+      InvoiceRun.new(group: group, title: "title", recipient_source: list, invoice: Invoice.new)
+    end
+
+    it "is valid with valid invoice items" do
+      run.invoice.invoice_items.build(name: "pens", unit_cost: 1, count: 2)
+      expect(run).to be_valid
+    end
+
+    it "is invalid with invalid invoice items" do
+      run.invoice.invoice_items.build(name: "pens", unit_cost: nil, count: nil)
+      run.invoice.invoice_items.build(name: "pencils", unit_cost: 1, count: nil)
+      run.validate
+      expect(run.errors.full_messages)
+        .to eq ["Preis muss ausgefüllt werden", "Anzahl muss ausgefüllt werden"]
+    end
+
+    it "does not validate dynamic invoice items" do
+      run.invoice.invoice_items << Invoice::RoleCountItem.new(name: "roles", count: nil)
+      expect(run).to be_valid
+    end
+  end
+
   it "#to_s returns title" do
     subject.title = "A big invoice"
     expect(subject.to_s).to eq "A big invoice"

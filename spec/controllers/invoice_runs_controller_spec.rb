@@ -223,6 +223,17 @@ describe InvoiceRunsController do
       expect(flash[:notice]).to include "Rechnung <i>Title</i> wurde erstellt."
     end
 
+    it "POST#create does not create invoices if invoice item has no count" do
+      attrs = invoice_attrs.deep_merge(invoice_items_attributes: {"1" => {count: ""}})
+      expect do
+        post :create, params: {group_id: group.id, ids: person.id, invoice_run:
+          {title: "Title", invoice: attrs}}
+      end.not_to change { group.issued_invoices.count }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(assigns(:invoice_run).errors.full_messages).to eq ["Anzahl muss ausgefüllt werden"]
+    end
+
     it "POST#create sets creator_id to current_user" do
       expect do
         post :create,

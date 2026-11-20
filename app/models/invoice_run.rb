@@ -59,6 +59,7 @@ class InvoiceRun < ActiveRecord::Base
 
   validates :title, presence: true
   validates :recipient_source_type, inclusion: {in: RECIPIENT_TYPES}
+  validate :assert_invoice_item_counts, if: :invoice
   # TODO validate recipient_source_id so that no arbitrary changes can be made
 
   scope :list, -> { order(:created_at) }
@@ -122,5 +123,14 @@ class InvoiceRun < ActiveRecord::Base
 
   def invoice_config
     group.layer_group.invoice_config
+  end
+
+  private
+
+  def assert_invoice_item_counts
+    item = invoice.invoice_items.find { |item| !item.dynamic && item.count.nil? }
+    return unless item
+
+    errors.import(ActiveModel::Error.new(item, :count, :blank), attribute: :"invoice_items.count")
   end
 end

@@ -85,7 +85,7 @@ class Invoice::BatchCreate
   # and adds them to the invoice.
   def add_invoice_items(invoice, recipient)
     invoice.invoice_items = invoice_run.invoice.invoice_items.map do |template_item|
-      item = invoice.invoice_items.build(template_item.attributes)
+      item = invoice.invoice_items.build(template_item.attributes.compact_blank)
       item.invoice = invoice
       set_dynamic_cost_parameters(item, recipient)
       item if item.recalculate.valid?

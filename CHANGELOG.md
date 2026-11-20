@@ -2,6 +2,7 @@
 
 ## Version 2.11
 
+- Rechnungen werden auch für Empfänger\*innen erstellt, in deren Sprache die Rechnungsposten nicht übersetzt sind. Es wird die vorhandene Übersetzung verwendet (#4667)
 - Empfangene Rechnungen können von den Empfängern, deren Verwaltenden sowie bei Gruppen von Personen mit Finanzberechtigung auf deren Ebene eingesehen und als PDF heruntergeladen werden, Rechnungsentwürfe werden dort nicht mehr angezeigt (#4661)
 - Personen mit Finanzberechtigung sehen im Rechnungstab der Gruppen ihrer Ebene auch Rechnungen, die von anderen Ebenen ausgestellt wurden (#4661)
 - OAuth-Applikationen können eine eigene Gültigkeitsdauer für Refresh Tokens erhalten, z. B. damit Logins in Mobile-Apps länger gültig bleiben (hitobito_sac_cas#2755)

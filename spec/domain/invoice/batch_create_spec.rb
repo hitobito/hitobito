@@ -88,6 +88,17 @@ describe Invoice::BatchCreate do
       }])
     end
 
+    it "falls back to available translation for untranslated item name" do
+      person.update!(language: :fr)
+      run = InvoiceRun.create!(recipient_source: mailing_list, group: group, title: "title")
+      allow(run).to receive(:recipients).and_return([person])
+      run.invoice = Fabricate.build(:invoice, group: group)
+      run.invoice.invoice_items.build(name: "pens", name_fr: "", unit_cost: 1.5)
+
+      expect { Invoice::BatchCreate.call(run, person) }.to change { group.issued_invoices.count }.by(1)
+      expect(run.invoices.first.invoice_items.first.name_fr).to eq "pens"
+    end
+
     it "creates invoices for people in group distinct people regardless of role count" do
       group = groups(:bottom_layer_one)
       group.issued_invoices.destroy_all

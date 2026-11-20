@@ -22,6 +22,10 @@ module Export::Tabular::People
       entry.country_label
     end
 
+    def canton
+      entry.canton&.upcase
+    end
+
     def gender
       entry.gender_label
     end

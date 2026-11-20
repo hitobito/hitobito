@@ -70,6 +70,11 @@ describe Export::Tabular::People::PeopleFull do
       expect(people_list.data_rows.to_a.first[subject.keys.index(:id)]).to eq person.id
     end
 
+    it "exports the canton in uppercase" do
+      person.update_columns(country: "CH", canton: "gr")
+      expect(people_list.data_rows.to_a.first[subject.keys.index(:canton)]).to eq "GR"
+    end
+
     it "includes non-public contact accounts in full export" do
       person.phone_numbers.create!(category: contact_account_categories(:phone_number_person_mobile),
         number: "0791234000", public: false)

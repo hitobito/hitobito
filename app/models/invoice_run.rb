@@ -59,6 +59,7 @@ class InvoiceRun < ActiveRecord::Base
 
   validates :title, presence: true
   validates :recipient_source_type, inclusion: {in: RECIPIENT_TYPES}
+  validate :assert_valid_invoice_items, if: :invoice
   # TODO validate recipient_source_id so that no arbitrary changes can be made
 
   scope :list, -> { order(:created_at) }
@@ -122,5 +123,15 @@ class InvoiceRun < ActiveRecord::Base
 
   def invoice_config
     group.layer_group.invoice_config
+  end
+
+  private
+
+  def assert_valid_invoice_items
+    item_errors = invoice.invoice_items.reject(&:dynamic).flat_map do |item|
+      item.validate
+      item.errors.map { |error| [:"invoice_items.#{error.attribute}", error.message] }
+    end
+    item_errors.uniq.each { |attribute, message| errors.add(attribute, message) }
   end
 end

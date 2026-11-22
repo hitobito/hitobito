@@ -20,7 +20,8 @@ module I18nSettable
         super(value)
 
         normalized = value.to_s.strip.downcase
-        possible_values.each do |v|
+        values = possible_values.respond_to?(:call) ? possible_values.call : possible_values
+        values.each do |v|
           translated = I18n.t("#{i18n_prefix}.#{v.presence || "_nil"}")
           super(v) if translated.downcase == normalized
         end

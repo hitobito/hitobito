@@ -69,13 +69,9 @@ module InvoiceRuns
     end
 
     def filter_params
-      return {} if params[:filter].blank?
+      return {} unless params[:filter].is_a?(ActionController::Parameters)
 
-      @filter_params ||= case params[:filter]
-      when String then JSON.parse(params[:filter])
-      when ActionController::Parameters then params[:filter].to_unsafe_hash
-      else {}
-      end
+      @filter_params ||= params[:filter].to_unsafe_hash
     end
 
     # Use current group when no group_id from filter params is passed

@@ -126,6 +126,27 @@ describe InvoiceRunsController do
       expect(response).to be_successful
       expect(assigns(:invoice_run)).to have(1).recipients(person)
     end
+
+    context "with invalid params" do
+      render_views
+
+      let(:form) do
+        Capybara::Node::Simple.new(response.body).find("form[action='#{group_invoice_run_path(group)}']")
+      end
+
+      it "keeps filter params as hash in rerendered form" do
+        post :create, params: {
+          group_id: group.id,
+          invoice_run: {title: ""},
+          filter: {group_id: group.id, range: "deep", filters: {role: {role_type_ids: "1-2"}}}
+        }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(form).to have_field("filter[group_id]", type: :hidden, with: group.id.to_s)
+        expect(form).to have_field("filter[range]", type: :hidden, with: "deep")
+        expect(form).to have_field("filter[filters][role][role_type_ids]", type: :hidden, with: "1-2")
+      end
+    end
   end
 
   context "sheet title" do

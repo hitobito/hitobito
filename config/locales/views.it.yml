@@ -722,7 +722,7 @@ it:
       explain_application_questions: Qui potete richiedere ulteriori informazioni per la registrazione.
       explain_choices: "Non aggiungere opzioni per una risposta a testo libero."
       explain_admin_questions:
-        Hier kannst du weitere Angaben für Teilnehmende definieren, welche nur für die Anlassverwaltung verwendet werden.
+        Puoi definire qui ulteriori informazioni sui partecipanti, che verranno utilizzate esclusivamente nella gestione dell'evento.
       explain_contact_attrs:
         Qui puoi scegliere quali dati di contatto devono essere chiesti al momento dell'iscrizione.
       caption_applications_cancelable: I partecipanti si possono disiscrivere personalmente.

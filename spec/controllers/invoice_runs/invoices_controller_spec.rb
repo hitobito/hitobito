@@ -114,6 +114,15 @@ describe InvoiceRuns::InvoicesController do
           expect(dom).to have_field("to", with: "31.12.2025")
         end
 
+        it "renders title of invoice run whose mailing list was deleted" do
+          list = Fabricate(:mailing_list, group:)
+          invoice_run = InvoiceRun.create!(title: "Run of deleted list", group:, recipient_source: list)
+          list.destroy!
+
+          get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
+          expect(dom).to have_css("h1", text: "Run of deleted list")
+        end
+
         it "does not render invoice type checkboxes" do
           get :index, params: {group_id: group.id, invoice_run_id: invoice_run.id}
           Invoice::TYPE_SCOPES.each do |type|

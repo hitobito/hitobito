@@ -29,7 +29,7 @@ class MessageAbility < AbilityDsl::Base
   end
 
   def in_layer_or_below
-    permission_in_layers?(subject.group.layer_hierarchy.collect(&:id))
+    subject.group.present? && permission_in_layers?(subject.group.layer_hierarchy.collect(&:id))
   end
 
   def in_layer_or_below_if_active

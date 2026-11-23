@@ -8,7 +8,7 @@
              data: { group: group_path(group) }) do |f|
 
   = hidden_field_tag "ids", params[:ids]
-  = hidden_field_tag "filter", params[:filter] ? params[:filter].to_json : nil
+  = hidden_query_fields(filter: params[:filter].to_unsafe_h) if params[:filter].present?
 
   - if entry.recipient_source
     = f.hidden_field :recipient_source_id

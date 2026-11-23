@@ -6,8 +6,7 @@
 class Contactables::InvoicesController < ListController
   self.sort_mappings = {
     last_payment_at: Invoice.order_by_payment_statement,
-    amount_paid: Invoice.order_by_amount_paid_statement,
-    recipient: "people.order_name ASC"
+    amount_paid: Invoice.order_by_amount_paid_statement
   }
   self.search_columns = [:title, :sequence_number]
 
@@ -23,38 +22,35 @@ class Contactables::InvoicesController < ListController
   end
 
   def model_scope
-    scope = filter_by_finance_layer? ? filter_by_finance_layer(super) : super
+    scope = super.preload(:group)
+    return scope if all_received_invoices_visible?
 
-    scope.preload(:group)
+    scope.issued_by_layers(current_ability.user_finance_layer_ids)
   end
 
-  def filter_by_finance_layer?
-    FeatureGate.enabled?("invoices.filter_by_finance_layer") &&
-      !self_or_managed?
+  def all_received_invoices_visible?
+    !FeatureGate.enabled?("invoices.filter_by_finance_layer") ||
+      recipient_self_or_managed? ||
+      recipient_in_finance_layer?
   end
 
-  def self_or_managed?
-    contactable == current_person || current_person.manageds.include?(contactable)
+  def recipient_self_or_managed?
+    recipient == current_person || current_person.manageds.include?(recipient)
   end
 
-  def filter_by_finance_layer(scope)
-    scope
-      .joins(group: :layer_group)
-      .where(layer_group: {id: current_ability.user_finance_layer_ids})
+  def recipient_in_finance_layer?
+    recipient.is_a?(Group) &&
+      current_ability.user_finance_layer_ids.include?(recipient.layer_group_id)
   end
 
-  def contactable
-    @contactable ||= parent
+  def recipient
+    @recipient ||= parent
   end
 
-  def recipient_table_name = contactable.class.table_name
-
-  def recipient_type = contactable.class.sti_name
-
-  def parent_scope = parent.received_invoices.with_aggregated_payments
+  def parent_scope = recipient.received_invoices.with_aggregated_payments
 
   def authorize_class
-    authorize!(:index_received_invoices, contactable)
+    authorize!(:index_received_invoices, recipient)
   end
 
   def filter_params

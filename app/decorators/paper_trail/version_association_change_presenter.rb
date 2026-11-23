@@ -72,7 +72,7 @@ module PaperTrail
       I18n.t("version.association_change.#{item_class.name.underscore}.#{event}.#{key}",
         default: :"version.association_change.#{event}",
         model: item_class.model_name.human,
-        label: label || "(#{I18n.t("version.association_change.deleted_person")})",
+        label: label || deleted_person_label,
         changeset: changeset)
     end
 
@@ -121,6 +121,7 @@ module PaperTrail
 
     def label_with_fallback(item)
       return I18n.t("global.unknown") unless item
+      return deleted_person_label if item.is_a?(Event::Participation) && item.person.nil?
 
       if item.respond_to?(:translation_class)
         label_method(item_class.find_by(id: item_id))
@@ -128,6 +129,8 @@ module PaperTrail
         label_method(item)
       end
     end
+
+    def deleted_person_label = "(#{I18n.t("version.association_change.deleted_person")})"
 
     def label_method(object)
       if object.method(:to_s).arity != 0

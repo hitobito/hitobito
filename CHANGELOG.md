@@ -4,7 +4,6 @@
 
 - OAuth-Applikationen können eine eigene Gültigkeitsdauer für Refresh Tokens erhalten, z. B. damit Logins in Mobile-Apps länger gültig bleiben (hitobito_sac_cas#2755)
 - PDF-Exporte von Rechnungen und Briefen mit Rechnung benötigen deutlich weniger Arbeitsspeicher (#4337)
-- Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Gruppen können neu nur noch nach Eingabe des Gruppennamens gelöscht werden, um versehentliches Löschen zu verhindern (#1976)
 - Rechnungen können als CSV oder Excel mit einer Zeile pro Rechnungsposten exportiert werden (hitobito_florist#7)
 - Zusätzliche Adressen sind neu in allen Wagons aktiviert (#4471)
@@ -19,8 +18,17 @@
 - JSON:API: Kontaktkonten (Telefonnummern, E-Mail-Adressen, Adressen, Social Accounts) können das übersetzte `category_name`-Attribut ihrer Kategorie über `extra_fields` abrufen, z. B. `extra_fields[phone_numbers]=category_name`
 - Eventvorlagen können neu pro Ebene über das Bearbeiten Dropdown der Gruppe verwaltet werden (#4259)
 - Kanton kann auf Personen erfasst werden und ist in der Personen- und Abo-Filterung verfügbar (hitobito_oeku#12)
+- Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
+- Berechtigungen der API-Keys werden nun richtig angezeigt, das Token nur noch auf der Detail Seite (#3029)
+- Bei der Vergabe von Kurs-Qualifikationen kann pro Person zwischen «Bestanden», «Nicht bestanden» und «Nicht beurteilt» gewählt und ein Kommentar erfasst werden. Der Kommentar ist in der Personen-Historie als Tooltip sichtbar (hitobito_sac_cas#2646)
+- Die Verifikationsseite von Ausweisen wird in der Browsersprache angezeigt und die Sprache kann gewechselt werden (hitobito_sac_cas#2677)
+- Die JSON:API stellt die verfügbaren Rollen- und Gruppentypen der Instanz zur Verfügung, ohne Authentisierung
+- E-Mail-Adressen mit aufeinanderfolgenden Punkten oder einem Punkt vor dem @ sind ungültig
+
+## Version 2.10
+
+- Neu können EBICS 3.0 Zahlungsschnittstellen konfiguriert werden (#1516)
 - Browser Auto-fill wird im Personen- und Gruppen-Formular deaktiviert (#4445)
-- Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
 - Anlass E-Mails verwenden die E-Mail der Kontaktperson als Reply-To (opt-in) (#2881)
 - Rechnungen können nach Herkunft (Einzel, Rechnungslauf, Sammelrechnung) gefiltert werden (sww#296)
 - Rechnungen können auch für Empfänger ohne Strasse/Postfach erstellt werden (sww#349)
@@ -28,17 +36,8 @@
 - Die Länge von Mahnungstexten ist nicht mehr begrenzt (sww#414)
 - Für die Schwyzer Kantonalbank SZKB wurde eine Ebics Zahlungsschnittstelle hinzugefügt (#4400)
 - Zusätzliche Adressen erhalten dieselben Namensfelder (Vorname, Nachname, Firma/Firmenname) wie die Hauptadresse und sind neu auch im JSON:API verfügbar (#4411)
-- Vordefinierte Kategorien für weiter E-Mails, Adressen, Telefonnummern und Social Accounts (#4359)
-- Berechtigungen der API-Keys werden nun richtig angezeigt, das Token nur noch auf der Detail Seite (#3029)
-- Bei der Vergabe von Kurs-Qualifikationen kann pro Person zwischen «Bestanden», «Nicht bestanden» und «Nicht beurteilt» gewählt und ein Kommentar erfasst werden. Der Kommentar ist in der Personen-Historie als Tooltip sichtbar (hitobito_sac_cas#2646)
-- Die Verifikationsseite von Ausweisen wird in der Browsersprache angezeigt und die Sprache kann gewechselt werden (hitobito_sac_cas#2677)
-- Die JSON:API stellt die verfügbaren Rollen- und Gruppentypen der Instanz zur Verfügung, ohne Authentisierung
 - Pro Frage kann neu festgelegt werden, welche Rollen des Anlass/Kurses die Antworten sehen dürfen, auch auf Vorlagen für Anmeldeangaben. Die Hauptleitung sieht immer alle Antworten, für weitere Rollen sind neue Fragen standardmässig nicht einsehbar. Die Mails an die Kontaktperson und die Anmelde-Freigabe enthalten keine Antworten mehr, und Helfer*innen sehen keine Anmeldeangaben anderer Teilnehmender mehr (#4046)
 - Admins können für Personen Dokumente hochladen und mit Labels versehen. Die Dokumente sind nur für die Person selber und für Admins sichtbar (#4201)
-- E-Mail-Adressen mit aufeinanderfolgenden Punkten oder einem Punkt vor dem @ sind ungültig
-
-## Version 2.10
-
 - Umgebungsspezifische Meta Tags können über die Settings konfigurativ hinzugefügt werden (#4405)
 - Status und Fortschritt von Jobs sind nun auf einer neuen Ansicht, der Jobübersicht, genau nachverfolgbar. Ausserdem können nun Dateien, welche von Export-Jobs generiert wurden, über diese Ansicht beliebig oft erneut heruntergeladen werden. Zusätzlich erhält man beim erfolgreichen oder fehlerhaften Abschluss eines Jobs eine Benachrichtigung (Toast) (#4020)
 - Auch für bereits bezahlte oder überbezahlte Rechnungen können neu noch weitere Korrekturzahlungen erfasst werden (#4240)

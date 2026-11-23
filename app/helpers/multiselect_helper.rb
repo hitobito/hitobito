@@ -6,10 +6,7 @@
 module MultiselectHelper
   # for forms that do not submit via url, e.g. method get
   def hidden_list_filter_fields
-    safe_join(list_filter_params.to_query.split("&").map do |pair|
-      name, value = pair.split("=", 2).map { |part| CGI.unescape(part) }
-      hidden_field_tag(name, value, id: nil)
-    end)
+    hidden_query_fields(list_filter_params)
   end
 
   def extended_all_checkbox(scope)

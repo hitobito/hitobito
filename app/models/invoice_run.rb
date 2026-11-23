@@ -97,7 +97,7 @@ class InvoiceRun < ActiveRecord::Base
   end
 
   def recipient_source_label
-    return unless recipient_source_type == MailingList.sti_name
+    return unless recipient_source.is_a?(MailingList)
 
     "#{recipient_source} (#{recipient_source.model_name.human})"
   end

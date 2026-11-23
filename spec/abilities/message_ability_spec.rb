@@ -41,6 +41,14 @@ describe MessageAbility do
       end
     end
 
+    context "without mailing list" do
+      let(:message) { Message::Letter.new }
+
+      it "may not show message" do
+        is_expected.not_to be_able_to(:show, message)
+      end
+    end
+
     context "in group in same layer" do
       let(:group) { groups(:top_layer) }
 

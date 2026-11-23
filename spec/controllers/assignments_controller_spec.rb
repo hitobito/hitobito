@@ -40,6 +40,21 @@ describe AssignmentsController do
       expect(assignment.read_at).to_not be_nil
     end
 
+    context "with views" do
+      render_views
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      it "hides attachment button if mailing list of letter was deleted" do
+        assignment.attachment.assignments = [assignment]
+        assignment.attachment.update_columns(mailing_list_id: nil)
+
+        get :show, params: nesting.merge(id: assignment.id)
+
+        expect(response).to be_successful
+        expect(dom).not_to have_link(I18n.t("assignments.attachment"))
+      end
+    end
+
     it "can not show assignment if attachment not readable" do
       sign_in(different_member)
 

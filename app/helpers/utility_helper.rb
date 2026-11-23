@@ -60,4 +60,12 @@ module UtilityHelper
       [attr, "#{attr}_id"]
     end
   end
+
+  # Renders a (nested) hash as hidden fields, so it is submitted with the same structure.
+  def hidden_query_fields(hash)
+    safe_join(hash.to_query.split("&").map do |pair|
+      name, value = pair.split("=", 2).map { |part| CGI.unescape(part) }
+      hidden_field_tag(name, value, id: nil)
+    end)
+  end
 end

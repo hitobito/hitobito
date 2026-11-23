@@ -6,12 +6,4 @@
 
 = render 'payment_form' if @payment
 
-.invoice
-  = render 'summary'
-  = render 'infos'
-  = render 'invoice_items'
-
-%br
-%p
-  %b= entry.payment_information
-%p= entry.description
+= render 'invoices/details'

@@ -11,7 +11,7 @@ module People
 
     private
 
-    def label = "#{model.class.model_name.human}(#{model.id})"
+    def label = "#{model.class.model_name.human}(#{model.persisted? ? model.id : model})"
 
     def errors = model.errors.full_messages.join(", ")
   end
@@ -68,23 +68,35 @@ module People
         # do not merge invalid contactables
         next if existing.present? || !c.valid?
 
-        dup = c.dup
-        dup.contactable = @target
-        move_to_other_category(dup) if category_taken?(dup)
-        dup.save!
+        copy_contactable_to_target(c)
       end
     end
 
-    def category_taken?(contact_account)
-      !contact_account.valid? && contact_account.errors.of_kind?(:category, :already_assigned)
+    def copy_contactable_to_target(contact_account)
+      copy = copy_for_target(contact_account)
+      return copy.save! if copy.valid?
+
+      if copy.errors.of_kind?(:category, :already_assigned)
+        fallback = copy_in_other_category(copy)
+        return fallback.save! if fallback.valid?
+
+        copy.errors.merge!(fallback.errors)
+      end
+      validation_errors << ValidationError.new(copy)
     end
 
-    def move_to_other_category(contact_account)
-      contact_account.label = contact_account.category_label
-      contact_account.category = ContactAccountCategory.other.find_by!(
-        contact_account_type: contact_account.category.contact_account_type,
-        contactable_type: contact_account.category.contactable_type
-      )
+    def copy_for_target(contact_account)
+      contact_account.dup.tap { |copy| copy.contactable = @target }
+    end
+
+    def copy_in_other_category(copy)
+      copy_for_target(copy).tap do |fallback|
+        fallback.label = copy.category_label
+        fallback.category = ContactAccountCategory.other.find_by!(
+          contact_account_type: copy.category.contact_account_type,
+          contactable_type: copy.category.contactable_type
+        )
+      end
     end
 
     def merge_roles

@@ -82,7 +82,8 @@ class TaggableController < ApplicationController
     name = tag_name
     return if name.blank?
 
-    tag = ActsAsTaggableOn::Tag.find_or_initialize_by(name: name.strip.gsub(/\s*:\s*/, ":"))
+    name = name.strip.gsub(/\s*:\s*/, ":")
+    tag = ActsAsTaggableOn::Tag.named(name).first_or_initialize(name:)
     if tag.new_record?
       authorize!(:create_tags, entry)
       tag.save!

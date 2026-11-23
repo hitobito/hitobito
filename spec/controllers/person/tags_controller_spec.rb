@@ -101,6 +101,19 @@ describe Person::TagsController do
       expect(bottom_member.tags.first.name).to eq("lorem")
     end
 
+    it "assigns existing tag differing only in case" do
+      ActsAsTaggableOn::Tag.create!(name: "lorem")
+
+      post :create, params: {
+        group_id: bottom_member.groups.first.id,
+        person_id: bottom_member.id,
+        acts_as_taggable_on_tag: {name: "Lorem"}
+      }
+
+      expect(bottom_member.tags.count).to eq(1)
+      expect(bottom_member.tags.first.name).to eq("lorem")
+    end
+
     it "tag with space in between is not the same as tag without spaces" do
       ActsAsTaggableOn::Tagging.create!(
         taggable: bottom_member,

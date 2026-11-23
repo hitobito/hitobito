@@ -122,9 +122,27 @@ runs:
         token: ${{ inputs.github_token }}
         path: "hitobito"
 
-    - name: "Set up Ruby"
+    - name: "Install mise"
+      uses: jdx/mise-action@v5
+      with:
+        install: false
+        cache: false
+        env: false
+        add_shims_to_path: false
+
+    - name: "Read tool versions from mise.toml"
+      id: toolVersions
+      run: |
+        mise trust mise.toml
+        echo "ruby=$(mise tool ruby --requested)" >> "$GITHUB_OUTPUT"
+        echo "node=$(mise tool node --requested)" >> "$GITHUB_OUTPUT"
+      working-directory: hitobito
+      shell: bash
+
+    - name: "Set up Ruby ${{ steps.toolVersions.outputs.ruby }}"
       uses: ruby/setup-ruby@v1
       with:
+        ruby-version: ${{ steps.toolVersions.outputs.ruby }}
         working-directory: hitobito
 
     - name: 'Configure Bundler'
@@ -133,10 +151,10 @@ runs:
       working-directory: hitobito
       shell: bash
 
-    - name: "Set up Node"
+    - name: "Set up Node ${{ steps.toolVersions.outputs.node }}"
       uses: actions/setup-node@v6
       with:
-        node-version: "22"
+        node-version: ${{ steps.toolVersions.outputs.node }}
 
     - name: "Setup OS"
       run: |

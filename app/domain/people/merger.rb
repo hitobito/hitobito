@@ -70,8 +70,21 @@ module People
 
         dup = c.dup
         dup.contactable = @target
+        move_to_other_category(dup) if category_taken?(dup)
         dup.save!
       end
+    end
+
+    def category_taken?(contact_account)
+      !contact_account.valid? && contact_account.errors.of_kind?(:category, :already_assigned)
+    end
+
+    def move_to_other_category(contact_account)
+      contact_account.label = contact_account.category_label
+      contact_account.category = ContactAccountCategory.other.find_by!(
+        contact_account_type: contact_account.category.contact_account_type,
+        contactable_type: contact_account.category.contactable_type
+      )
     end
 
     def merge_roles

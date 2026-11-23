@@ -500,6 +500,33 @@ describe People::Merger do
       expect(Person.where(id: duplicate.id)).not_to exist
     end
 
+    it "merges phone number into other category if target already has one in its unique category" do
+      landline = contact_account_categories(:phone_number_person_landline)
+      Fabricate(:phone_number, contactable: duplicate, number: "+41 31 111 11 11",
+        category: landline, label: "Eltern")
+      Fabricate(:phone_number, contactable: person, number: "+41 31 222 22 22", category: landline)
+
+      merger.merge!
+
+      merged = person.phone_numbers.reload.find_by(number: "+41 31 111 11 11")
+      expect(merged.category).to eq contact_account_categories(:phone_number_person_other)
+      expect(merged.label).to eq "Festnetz, Eltern"
+      expect(person.phone_numbers.where(category: landline).pluck(:number))
+        .to eq ["+41 31 222 22 22"]
+    end
+
+    it "merges social account into other category if target already has one in its unique category" do
+      facebook = contact_account_categories(:social_account_person_facebook)
+      Fabricate(:social_account, contactable: duplicate, name: "duplicate.fb", category: facebook)
+      Fabricate(:social_account, contactable: person, name: "person.fb", category: facebook)
+
+      merger.merge!
+
+      merged = person.social_accounts.reload.find_by(name: "duplicate.fb")
+      expect(merged.category).to eq contact_account_categories(:social_account_person_other)
+      expect(merged.label).to eq "Facebook"
+    end
+
     it "merges social accounts" do
       Fabricate(:social_account, contactable: duplicate)
       Fabricate(:social_account, contactable: duplicate, name: "john.member", label: "Telegram")

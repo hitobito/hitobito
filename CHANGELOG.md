@@ -2,6 +2,7 @@
 
 ## unreleased
 
+- Personen mit Finanzberechtigung sehen im Rechnungstab der Gruppen ihrer Ebene auch Rechnungen, die von anderen Ebenen ausgestellt wurden (#4661)
 - Im Rechnungstab von Gruppen und Personen werden keine Rechnungen anderer Empfänger mit derselben ID mehr angezeigt
 - Die Zeichen % und _ in Suchbegriffen werden wörtlich gesucht statt als Platzhalter verwendet
 - Pro OAuth-Applikation kann eingestellt werden, dass "Angemeldet bleiben" beim Login vorausgewählt ist (hitobito_sac_cas#2664)

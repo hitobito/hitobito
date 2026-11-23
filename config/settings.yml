@@ -295,7 +295,8 @@ hitobito_log:
 invoices:
   filter_by_finance_layer:
     # When enabled, the receiver invoices on a person's invoice tab are filtered
-    # to only show invoices from finance layers the current user has access to.
+    # to only show invoices from finance layers the current user has access to,
+    # except for oneself, managed people and groups in the user's finance layers.
     # When disabled, the pre-#4277 behavior is used and all invoices are shown.
     enabled: true
   ebics:

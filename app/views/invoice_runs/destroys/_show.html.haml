@@ -22,7 +22,10 @@
 
               - if @message.present?
                 = t('.message_info')
-                = link_to(@message.to_s, group_mailing_list_message_path(@message.group, @message.mailing_list, @message))
+                - if @message.mailing_list
+                  = link_to(@message.to_s, group_mailing_list_message_path(@message.group, @message.mailing_list, @message))
+                - else
+                  = @message.to_s
             - else
               - if @non_draft_invoice_present
                 = t('.non_draft_info')

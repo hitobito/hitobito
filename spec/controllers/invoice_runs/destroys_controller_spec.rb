@@ -26,6 +26,21 @@ describe InvoiceRuns::DestroysController do
 
   before { sign_in(user) }
 
+  context "GET#show" do
+    render_views
+    let(:user) { people(:top_leader) }
+    let(:letter) { messages(:with_invoice) }
+
+    it "shows letter of deleted mailing list without link" do
+      letter.update_columns(mailing_list_id: nil, invoice_run_id: invoice_run.id)
+
+      get :show, params: params, format: :js, xhr: true
+
+      expect(response.body).to include(letter.subject)
+      expect(response.body).not_to include("/messages/#{letter.id}")
+    end
+  end
+
   context "DELETE#destroy" do
     context "without finance permission" do
       let(:user) { Fabricate(Group::TopLayer::TopAdmin.sti_name.to_sym, group: layer).person }

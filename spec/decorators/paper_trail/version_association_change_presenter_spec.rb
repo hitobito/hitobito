@@ -283,6 +283,25 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     end
   end
 
+  context "participation of a deleted person without item_label" do
+    let(:version) do
+      PaperTrail::Version.where(item_type: Event::Participation.sti_name, event: "update").last
+    end
+
+    before do
+      allow_any_instance_of(PaperTrail::Version).to receive(:item_label).and_return(nil)
+    end
+
+    it "builds update text with deleted person label" do
+      participation = Fabricate(:event_participation, event: events(:top_event))
+      participation.update!(additional_information: "Vegi")
+      participation.person.destroy!
+
+      is_expected.to eq("<div>Teilnahme <i>(Gelöschte Person)</i> wurde aktualisiert: " \
+        "Bemerkungen wurde auf <i>Vegi</i> gesetzt.</div>")
+    end
+  end
+
   context "event description" do
     let(:version) { PaperTrail::Version.where(item_type: "ActionText::RichText").order(:created_at, :id).last }
 

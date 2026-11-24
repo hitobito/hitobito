@@ -88,8 +88,7 @@ class Setup
   def environment(wagon = nil)
     specifics = if wagon
       <<~BASH
-        #{"PATH_add ../hitobito/bin" if wagon}
-        PATH_add bin
+        PATH_add ../hitobito/bin
         export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
         export RAILS_TMPDIR=../hitobito_#{primary_wagon}/tmp
         export SPRING_APPLICATION_ID=hit_#{primary_wagon}

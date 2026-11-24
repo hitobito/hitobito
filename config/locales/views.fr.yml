@@ -1269,6 +1269,7 @@ fr:
         title: Supprimer une série de facture
         non_draft_info: 'La série de facture contient au moins une facture qui n''a ni le statut "Brouillon" ni le statut "Annulé". La facture collective ne peut donc pas être supprimée.'
         confirm_delete: Voulez-vous vraiment supprimer ce cycle de facturation ?
+        message_info: 'Der Brief, mit dem dieser Rechnungslauf erstellt wurde, bleibt bestehen:'
     form:
       invoice_articles:
         variable_donation:

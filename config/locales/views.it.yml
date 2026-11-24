@@ -1267,6 +1267,7 @@ it:
         title: Cancellare fattura collettiva
         non_draft_info: 'La fattura collettiva contiene almeno una fattura che non ha lo stato “Bozza” né “Annullata”. Pertanto, la fattura collettiva non può essere cancellata.'
         confirm_delete: Vuoi davvero eliminare questa fattura collettiva?
+        message_info: 'Der Brief, mit dem dieser Rechnungslauf erstellt wurde, bleibt bestehen:'
     form:
       invoice_articles:
         variable_donation:

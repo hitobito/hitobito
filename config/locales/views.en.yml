@@ -1254,6 +1254,7 @@ en:
         title: Delete billing run
         non_draft_info: 'The invoice run contains at least one invoice that does not have the status ‘Draft’ or ‘Cancelled’. Therefore, the invoice run cannot be deleted.'
         confirm_delete: Are you sure you want to delete this billing run?
+        message_info: 'Der Brief, mit dem dieser Rechnungslauf erstellt wurde, bleibt bestehen:'
     form:
       invoice_articles:
         variable_donation:

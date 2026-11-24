@@ -821,6 +821,12 @@
           "writable": false,
           "description": null
         },
+        "external_applications": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "external_application_link": {
           "type": "string",
           "readable": true,
@@ -960,6 +966,13 @@
         },
         "after_or_on": {
           "type": "date",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "application_open": {
+          "type": "boolean",
           "operators": [
             "eq"
           ],
@@ -1823,6 +1836,12 @@
           "writable": false,
           "description": null
         },
+        "external_applications": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "external_application_link": {
           "type": "string",
           "readable": true,
@@ -1914,6 +1933,13 @@
         },
         "after_or_on": {
           "type": "date",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "application_open": {
+          "type": "boolean",
           "operators": [
             "eq"
           ],

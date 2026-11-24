@@ -34,6 +34,7 @@ class EventResource < ApplicationResource
     attribute :application_opening_at, :date
     attribute :application_closing_at, :date
     attribute :application_contact_id, :integer
+    attribute :external_applications, :boolean
     attribute :external_application_link, :string do
       next unless @object.external_applications?
 
@@ -77,6 +78,13 @@ class EventResource < ApplicationResource
 
   filter :after_or_on, :date, single: true, only: [:eq] do
     eq { |scope, date| scope.after_or_on(date) }
+  end
+
+  filter :application_open, :boolean, single: true, only: [:eq] do
+    eq do |scope, open|
+      open_ids = Event.where(external_applications: true).application_period_open.select(:id)
+      open ? scope.where(id: open_ids) : scope.where.not(id: open_ids)
+    end
   end
 
   filter :kind_category_id, :integer, only: [:eq] do

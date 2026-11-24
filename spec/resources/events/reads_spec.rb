@@ -108,6 +108,54 @@ describe EventResource, type: :resource do
       expect(d[0].sideload(:participations)).to be_present
     end
 
+    describe "questions" do
+      let(:questions) { d[0].sideload(:questions) }
+
+      before do
+        params[:filter] = {id: {eq: event.id}}
+        params[:include] = "questions"
+      end
+
+      it "includes application questions with their choices" do
+        question = Fabricate(:event_question, event:, question: "Essen?", choices: "Vegi,Fleisch",
+          multiple_choices: true, required: true)
+        render
+
+        expect(questions.map(&:id)).to eq [question.id]
+        expect(questions[0].jsonapi_type).to eq "event_questions"
+        expect(questions[0].attributes.except("id", "jsonapi_type")).to eq(
+          "event_id" => event.id,
+          "question" => "Essen?",
+          "choices" => %w[Vegi Fleisch],
+          "multiple_choices" => true,
+          "required" => true
+        )
+      end
+
+      it "returns no choices for free text questions" do
+        Fabricate(:event_question, event:, question: "Allergien?")
+        render
+
+        expect(questions[0].choices).to eq []
+      end
+
+      it "excludes admin questions" do
+        Fabricate(:event_question, event:, question: "Intern?", admin: true)
+        render
+
+        expect(questions).to be_empty
+      end
+
+      it "returns question and choices in the current locale" do
+        Fabricate(:event_question, event:, question: "Essen?", choices: "Ja,Nein",
+          question_fr: "Repas?", choices_fr: "Oui,Non")
+        I18n.with_locale(:fr) { render }
+
+        expect(questions[0].question).to eq "Repas?"
+        expect(questions[0].choices).to eq %w[Oui Non]
+      end
+    end
+
     describe "contact_details" do
       let(:contact) do
         Fabricate(:person, first_name: "Kurt", last_name: "Kontakt", email: "kurt@example.com",

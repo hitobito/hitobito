@@ -53,6 +53,7 @@ class EventResource < ApplicationResource
   belongs_to :kind, resource: Event::KindResource, writable: false
   has_many :dates, resource: Event::DateResource, writable: false
   has_many :participations, resource: Event::ParticipationResource, writable: false
+  has_many :questions, resource: Event::QuestionResource, writable: false
 
   filter :type, only: [:eq] do
     eq do |scope, types|

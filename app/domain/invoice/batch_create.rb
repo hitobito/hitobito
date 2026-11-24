@@ -67,9 +67,10 @@ class Invoice::BatchCreate
       invoice_attrs = invoice.attributes.merge(run_texts).merge(
         creator_id: invoice_run.creator_id,
         invoice_run_id: invoice_run.id,
+        group: invoice_run.group,
         recipient: recipient
       )
-      invoice = invoice_run.group.issued_invoices.build(invoice_attrs)
+      invoice = Invoice.new(invoice_attrs)
       add_invoice_items(invoice, recipient)
       save_invoice(invoice)
     end

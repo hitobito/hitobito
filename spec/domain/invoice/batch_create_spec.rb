@@ -37,6 +37,21 @@ describe Invoice::BatchCreate do
       expect(run.amount_paid).to eq 0
     end
 
+    it "does not keep the created invoices in memory" do
+      Subscription.create!(mailing_list: mailing_list,
+        subscriber: group,
+        role_types: [Group::TopGroup::Leader])
+
+      run = InvoiceRun.create!(recipient_source: mailing_list, group: group, title: :title)
+      invoice = Fabricate.build(:invoice, title: "invoice", group: group)
+      invoice.invoice_items.build(name: "pens", unit_cost: 1.5)
+      run.invoice = invoice
+
+      Invoice::BatchCreate.new(run, person).call
+
+      expect(run.group.issued_invoices.target).to be_empty
+    end
+
     it "creates invoices in recipient language" do
       Subscription.create!(mailing_list: mailing_list,
         subscriber: group,

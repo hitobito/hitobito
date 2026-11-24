@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2020-2024, Puzzle ITC. This file is part of
+#  Copyright (c) 2020-2026, Puzzle ITC. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -40,7 +40,7 @@ module Release
     end
 
     def update_translations
-      return unless translations_configured?
+      return unless translations_configured? && on_translations_branch?
 
       notify "Pulling translation from transifex"
       # The mode sourceastranslation replaces missing translations
@@ -54,7 +54,7 @@ module Release
     end
 
     def upload_translation_sources
-      return unless translations_configured?
+      return unless translations_configured? && on_translations_branch?
 
       notify "Push sources to transifex"
       execute "tx push -s"
@@ -64,6 +64,14 @@ module Release
       execute_check "test -f .tx/config",
         success: "Transifex is configured",
         failure: "Transifex seems not configured"
+    end
+
+    def on_translations_branch?
+      translations_branch = ENV.fetch("TRANSLATIONS_BRANCH", "master")
+
+      execute_check "test \"$(git rev-parse --abbrev-ref HEAD)\" = \"#{translations_branch}\"",
+        success: "Translations are synced on #{translations_branch}",
+        failure: "Translations are only synced on #{translations_branch}, skipping"
     end
 
     def translations_changed?

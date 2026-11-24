@@ -151,6 +151,7 @@ jobs:
         env:
           NEXT_VERSION: ${{ needs.version.outputs.version }}
           RELEASE_STAGE: ${{ inputs.stage }}
+          TRANSLATIONS_BRANCH: ${{ vars.INTEGRATION_DEPLOY_BRANCH || 'master' }}
           DRY_RUN: ${{ needs.settings.outputs.dry_run }}
         run: |
           echo "Preparing $NEXT_VERSION for $RELEASE_STAGE $DRY_RUN"

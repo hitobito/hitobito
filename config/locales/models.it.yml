@@ -302,7 +302,7 @@ it:
         many: Partecipanti
         other: Partecipanti
       event/application:
-        one: iscrizione
+        one: Iscrizione
         many: Iscrizioni
         other: Iscrizioni
       event/attachment:
@@ -342,9 +342,9 @@ it:
         many: Helfende
         other: Helfende
       event/role/participant:
-        one: Teilnehmer/-in
-        many: Teilnehmende
-        other: Teilnehmende
+        one: Partecipante
+        many: Partecipante
+        other: Partecipante
       event/role/treasurer:
         one: Cassiere
         many: Cassiere
@@ -855,8 +855,8 @@ it:
         contact: Persona di contatto
         creator_id: Ersteller
         notify_contact_on_participations: Avvisare della nuova registrazione via e-mail la persona di contatto
-        maximum_participants: Maximale Teilnehmendenzahl
-        minimum_participants: Minimale Teilnehmendenzahl
+        maximum_participants: Numero massimo di partecipanti
+        minimum_participants: Numero minimo di partecipanti
         contact_id: Persona di contatto
         description: Descrizione
         location: Luogo / Indirizzo

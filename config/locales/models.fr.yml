@@ -856,8 +856,8 @@ fr:
         contact: 'Personne de contact '
         creator_id: Crée par
         notify_contact_on_participations: Notifier la personne de contact par e-mail de toute nouvelle inscription.
-        maximum_participants: Nombre maximal de participants
-        minimum_participants: Nombre minimal de participants
+        maximum_participants: Nombre maximal de participant·e·s
+        minimum_participants: Nombre minimal de participant·e·s
         contact_id: 'Personne de contact '
         description: Description
         location: Lieu / Adresse

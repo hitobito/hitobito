@@ -11,7 +11,7 @@ require "pathname"
 
 # Allows switching wagons quickly (depends on https://direnv.net/)
 class Setup
-  USED_RUBY_VERSION = "3.3.13"
+  USED_RUBY_VERSION = "4.0.10"
   USED_NODE_VERSION = "22.23.4"
   USED_YARN_VERSION = "1.22.19"
 
@@ -88,8 +88,7 @@ class Setup
   def environment(wagon = nil)
     specifics = if wagon
       <<~BASH
-        #{"PATH_add ../hitobito/bin" if wagon}
-        PATH_add bin
+        PATH_add ../hitobito/bin
         export RAILS_TEST_DB_NAME=hit_#{primary_wagon}_test
         export RAILS_TMPDIR=../hitobito_#{primary_wagon}/tmp
         export SPRING_APPLICATION_ID=hit_#{primary_wagon}

@@ -33,6 +33,7 @@ describe EventResource, type: :resource do
         :location,
         :maximum_participants,
         :motto,
+        :external_applications,
         :external_application_link,
         :participations_visible,
         :type,
@@ -326,6 +327,36 @@ describe EventResource, type: :resource do
         render
         expect(jsonapi_data).to have(1).item
         expect(jsonapi_data[0].id).to eq event.id
+      end
+    end
+
+    describe "by application_open" do
+      before do
+        Event.update_all(external_applications: false)
+        event.update_columns(external_applications: true, application_opening_at: Date.yesterday,
+          application_closing_at: Date.tomorrow)
+        course.update_columns(external_applications: true, application_opening_at: nil,
+          application_closing_at: Date.yesterday)
+      end
+
+      it "returns events with external applications in their application period" do
+        params[:filter] = {application_open: true}
+        render
+        expect(jsonapi_data.map(&:id)).to eq [event.id]
+      end
+
+      it "returns all other events if false" do
+        params[:filter] = {application_open: false}
+        render
+        expect(jsonapi_data.map(&:id)).to include(course.id)
+        expect(jsonapi_data.map(&:id)).not_to include(event.id)
+      end
+
+      it "excludes events without external applications" do
+        event.update_columns(external_applications: false)
+        params[:filter] = {application_open: true}
+        render
+        expect(jsonapi_data).to be_empty
       end
     end
   end

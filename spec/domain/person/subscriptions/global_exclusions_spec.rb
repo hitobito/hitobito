@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -47,5 +47,14 @@ describe Person::Subscriptions::GlobalExclusions do
     members.update(filter_chain: {language: {allowed_values: :fr}})
     leaders.update(filter_chain: {attributes: {"123": {key: "gender", constraint: "equal", value: "w"}}})
     expect(exclusions).to match_array [leaders, members]
+  end
+
+  context "without person id" do
+    subject(:exclusions) { described_class.new(nil).excluding_mailing_list_ids }
+
+    it "includes all lists with a filter" do
+      leaders.update(filter_chain: {language: {allowed_values: :de}})
+      expect(exclusions).to eq [leaders]
+    end
   end
 end

@@ -11,7 +11,7 @@ describe "event/participation_contact_datas/_fields.html.haml" do
   let(:event) { Fabricate(:event, hidden_contact_attrs: []).decorate }
   let(:group) { Fabricate(:group, type: "Group::TopLayer").decorate }
   let(:participation_contact_data) { Event::ParticipationContactData.new(event, people(:top_leader), {}) }
-  let(:form_builder) { StandardFormBuilder.new(:entry, participation_contact_data, view, {}) }
+  let(:form_builder) { StandardFormBuilder.new(:entry, participation_contact_data, view, {builder: StandardFormBuilder}) }
 
   before do
     assign(:policy_finder, Group::PrivacyPolicyFinder.for(group: group))

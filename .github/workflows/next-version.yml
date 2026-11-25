@@ -32,10 +32,18 @@ jobs:
 
     steps:
       - name: "Checkout composition"
+        if: ${{ !contains(fromJSON('["patch", "regular"]'), inputs.release_type) }}
         uses: actions/checkout@v6
         with:
           repository: ${{ inputs.composition_repo }}
           ref: ${{ inputs.composition_ref }}
+
+      - name: "Checkout hitobito core"
+        if: ${{ contains(fromJSON('["patch", "regular"]'), inputs.release_type) }}
+        uses: actions/checkout@v6
+        with:
+          repository: hitobito/hitobito
+          ref: master
 
       - name: "Set up Ruby"
         uses: ruby/setup-ruby@v1
@@ -52,6 +60,7 @@ jobs:
           git fetch --tags
 
       - name: 'Install helper-script'
+        if: ${{ !contains(fromJSON('["patch", "regular"]'), inputs.release_type) }}
         env:
           VERSION_SOURCE: "https://raw.githubusercontent.com/hitobito/hitobito/master/bin/version"
         run: |

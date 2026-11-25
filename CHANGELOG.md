@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## unreleased
+## Version 2.11
 
 - Rechnungen werden auch für Empfänger\*innen erstellt, in deren Sprache die Rechnungsposten nicht übersetzt sind. Es wird die vorhandene Übersetzung verwendet (#4667)
 - Empfangene Rechnungen können von den Empfängern, deren Verwaltenden sowie bei Gruppen von Personen mit Finanzberechtigung auf deren Ebene eingesehen und als PDF heruntergeladen werden, Rechnungsentwürfe werden dort nicht mehr angezeigt (#4661)

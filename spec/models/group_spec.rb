@@ -627,6 +627,33 @@ describe Group do
     end
   end
 
+  describe "parent validation" do
+    let(:group) { Group::TopGroup.new(name: "g", parent: parent) }
+
+    it "top_layer must be valid" do
+      expect(groups(:top_layer)).to be_valid
+    end
+
+    context "with parent" do
+      let(:parent) { groups(:top_layer) }
+
+      it "is valid" do
+        expect(group.root?).to be false
+        expect(group).to be_valid
+      end
+    end
+
+    context "without parent" do
+      let(:parent) { nil }
+
+      it "is invalid" do
+        # It would be a root, but that is illegal
+        expect(group.root?).to be true
+        expect(group).not_to be_valid
+      end
+    end
+  end
+
   context :self_registration do
     let(:group) { groups(:bottom_group_one_one) }
 
@@ -1020,7 +1047,7 @@ describe Group do
   end
 
   context "addable_child_types" do
-    let(:group) { Fabricate(Group::BottomLayer.name) }
+    let(:group) { Fabricate(Group::BottomLayer.name, parent: groups(:top_layer)) }
 
     context "when no children exist" do
       it "returns possible_children" do

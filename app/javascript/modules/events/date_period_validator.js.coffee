@@ -42,9 +42,9 @@ class app.DatePeriodValidator
      dateField.closest('.control-group')]
 
   _clearErrors: () ->
-    @_startAtFields[3].removeClass('error')
-    @_finishAtFields[3].removeClass('error')
-    $('.help-inline', @_fields).remove()
+    @_startAtFields[0].removeClass('is-invalid')
+    @_finishAtFields[0].removeClass('is-invalid')
+    $('.form-text.text-danger', @_fields).remove()
 
   _parseDate: (fields) ->
     if fields[0].val().trim()
@@ -61,9 +61,8 @@ class app.DatePeriodValidator
       @_addError(message, fields)
 
   _addError: (message, fields) ->
-    lastField = if fields[2].length > 0 then fields[2] else fields[0].parent()
-    $('<span class="help-inline">' + message + '</span>').insertAfter(lastField)
-    fields[3].addClass('error')
+    fields[0].addClass('is-invalid')
+    $('<span class="form-text text-danger">' + message + '</span>').insertAfter(fields[3])
 
 
 

@@ -28,6 +28,9 @@
     - if entry.kind_class == Event::Kind
       = field_inheritance_values(@kinds, { description: :general_information })
 
+  - unless entry.allow_multiple_dates
+    = render 'date_fields', f: f
+
   = f.labeled_input_fields(*entry.used_attributes(:motto, :cost))
 
   - entry.used?(:contact_id) do

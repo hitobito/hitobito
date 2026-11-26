@@ -16,7 +16,7 @@
       = render 'general_fields', f: f
       = render 'group_fields', f: f
 
-    - if entry.uses_form_tabs
+    - if entry.uses_form_tabs && entry.allow_multiple_dates
       #dates.tab-pane
         = render 'date_fields', f: f
 

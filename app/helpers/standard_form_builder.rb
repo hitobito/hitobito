@@ -255,9 +255,8 @@ class StandardFormBuilder < ActionView::Helpers::FormBuilder
     add_css_class(html_options, FORM_CONTROL_WITH_WIDTH)
     add_css_class(html_options, "is-invalid") if errors_on?(attr)
 
-    content_tag(:div, class: "d-flex align-items-center") do
-      content_tag(:div, class: 'col-7 col-md-7
-                                col-lg-5 me-1') { date_field("#{attr}_date") } +
+    content_tag(:div, class: "d-flex align-items-center control-group") do
+      content_tag(:div, date_field("#{attr}_date"), class: "col-7 col-md-7 col-lg-5 me-1") +
         hours_select("#{attr}_hour") +
         content_tag(:div) { ":" } +
         minutes_select("#{attr}_min")

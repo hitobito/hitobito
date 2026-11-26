@@ -6,7 +6,7 @@
 = f.labeled_string_field(:label)
 = f.labeled_string_field(:location)
 = f.labeled_datetime_field(:start_at)
-= f.labeled_datetime_field(:finish_at)
+= f.labeled_datetime_field(:finish_at, help_inline: t('events.form.times_are_optional'))
 
 .controls.align-with-form
   = link_to(ta(:remove), "javascript:void(0)", class: "remove_nested_fields", data: { action: "nested-form#remove" })

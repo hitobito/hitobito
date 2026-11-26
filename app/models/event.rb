@@ -102,6 +102,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     :supports_invitations,
     :uses_form_tabs,
     :filterable_attrs,
+    :allow_multiple_dates,
     :manually_sendable_participant_mails,
     :manually_sendable_leader_mails
 
@@ -141,6 +142,9 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
 
   self.filterable_attrs = [:name, :description, :location,
     :application_opening_at, :application_closing_at]
+
+  # Are multiple dates possible for this event type
+  self.allow_multiple_dates = true
 
   self.manually_sendable_participant_mails = [
     Event::ParticipationMailer::CONTENT_CONFIRMATION

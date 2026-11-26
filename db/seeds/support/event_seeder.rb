@@ -82,8 +82,10 @@ class EventSeeder
   end
 
   def seed_dates(event, date)
-    rand(3).times do
-      date = seed_date(event, "Vorweekend", date, 10, 3)
+    if event.allow_multiple_dates
+      rand(3).times do
+        date = seed_date(event, "Vorweekend", date, 10, 3)
+      end
     end
     seed_date(event, event.class.label, date, 20, 14)
   end

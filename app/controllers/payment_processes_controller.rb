@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -23,7 +23,7 @@ class PaymentProcessesController < ApplicationController
       flash.now[:alert] = processor.alert
       render :show
     elsif processor && params[:data]
-      Invoice::PaymentProcessJob.new(data).enqueue!
+      Invoice::PaymentProcessJob.new(data, group.layer_group_id).enqueue!
       redirect_to group_invoices_path(group),
         notice: t("payment_processes.job_enqueued")
     elsif @parsing_error
@@ -45,7 +45,7 @@ class PaymentProcessesController < ApplicationController
   alias_method :parent, :group
 
   def processor
-    @processor ||= Invoice::PaymentProcessor.new(data)
+    @processor ||= Invoice::PaymentProcessor.new(data, group.layer_group)
   rescue => e
     @parsing_error = e
     nil

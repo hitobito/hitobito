@@ -14,15 +14,17 @@ class PaymentDecorator < ApplicationDecorator
 
   def status = model.status_label
 
-  def invoice_amount = model.invoice.decorate.total
+  def invoice_amount = model.invoice&.decorate&.total
 
-  def invoice_due_at = model.invoice.due_at
+  def invoice_due_at = model.invoice&.due_at
 
-  def invoice_status = model.invoice.state_label
+  def invoice_status = model.invoice&.state_label
 
   def format_currency(amount)
     helpers.number_to_currency(amount, {unit: currency, format: "%n %u"})
   end
 
-  def currency = model.invoice.decorate.currency
+  def currency
+    model.invoice ? model.invoice.decorate.currency : model.layer_group&.invoice_config&.currency
+  end
 end

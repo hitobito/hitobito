@@ -1,4 +1,4 @@
-#  Copyright (c) 2018, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -50,6 +50,15 @@ describe PaymentProcessesController do
       post :create, params: {group_id: group.id, data: xmlfile.read}
     end.to change { Delayed::Job.where("handler ILIKE '%Invoice::PaymentProcessJob%'").count }.by(1)
     expect(response).to redirect_to group_invoices_path(group)
+  end
+
+  it "POST#create with data assigns layer to payments without invoice" do
+    post :create, params: {group_id: group.id, data: xmlfile.read}
+
+    Delayed::Job.last.payload_object.perform
+    payments = Payment.where(invoice_id: nil)
+    expect(payments).to have(5).items
+    expect(payments.map(&:layer_group)).to all(eq group)
   end
 
   private

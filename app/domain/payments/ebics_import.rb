@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Die Mitte Schweiz. This file is part of
+#  Copyright (c) 2021-2026, Die Mitte Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -37,7 +37,7 @@ class Payments::EbicsImport
   end
 
   def payments_from_xml(xml) # rubocop:todo Metrics/CyclomaticComplexity
-    Invoice::PaymentProcessor.new(xml).payments.map do |payment|
+    Invoice::PaymentProcessor.new(xml, layer_group).payments.map do |payment|
       if payment.invoice.present?
         payment.status = :ebics_imported
 
@@ -57,6 +57,10 @@ class Payments::EbicsImport
   end
 
   def in_payment_provider_config_layer?(group)
-    group == @payment_provider_config.invoice_config.group
+    group == layer_group
+  end
+
+  def layer_group
+    @payment_provider_config.invoice_config.group
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_11_12_102539) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_26_070027) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -1151,7 +1151,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_11_12_102539) do
     t.string "transaction_identifier"
     t.string "status"
     t.text "transaction_xml"
+    t.integer "layer_group_id"
     t.index ["invoice_id"], name: "index_payments_on_invoice_id"
+    t.index ["layer_group_id"], name: "index_payments_on_layer_group_id"
     t.index ["transaction_identifier"], name: "index_payments_on_transaction_identifier", unique: true
   end
 

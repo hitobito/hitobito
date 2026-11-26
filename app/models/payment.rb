@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -17,16 +17,19 @@
 #  transaction_identifier :string
 #  transaction_xml        :text
 #  invoice_id             :integer
+#  layer_group_id         :integer
 #
 # Indexes
 #
 #  index_payments_on_invoice_id              (invoice_id)
+#  index_payments_on_layer_group_id          (layer_group_id)
 #  index_payments_on_transaction_identifier  (transaction_identifier) UNIQUE
 #
 class Payment < ActiveRecord::Base
   include I18nEnums
 
   belongs_to :invoice, optional: true
+  belongs_to :layer_group, class_name: "Group", optional: true
 
   validate :no_duplicate_transaction_identifier
 
@@ -34,11 +37,12 @@ class Payment < ActiveRecord::Base
   accepts_nested_attributes_for :payee
 
   before_validation :set_received_at
+  before_validation :set_layer_group, if: :invoice
   after_create :update_invoice, if: :invoice
 
   scope :list, -> { order(Arel.sql("(SELECT MAX(received_at) FROM payments) DESC")) }
-  scope :unassigned, -> { unscope(where: :invoice_id).where(invoice_id: nil) }
-  scope :of_layer, ->(layer) { where(invoice: Invoice.where(group: layer)) }
+  scope :unassigned, -> { where(invoice_id: nil) }
+  scope :of_layer, ->(layer) { where(layer_group: layer.root? ? [layer, nil] : layer) }
 
   STATES = %w[ebics_imported xml_imported manually_created without_invoice].freeze
   i18n_enum :status, STATES, scopes: true
@@ -48,10 +52,6 @@ class Payment < ActiveRecord::Base
   attr_accessor :legacy_transaction_identifier
 
   validates_by_schema
-
-  def group
-    invoice.group
-  end
 
   def settles?
     invoice && invoice.amount_open(without: id) == amount
@@ -97,6 +97,10 @@ class Payment < ActiveRecord::Base
 
   def set_received_at
     self.received_at ||= Time.zone.today
+  end
+
+  def set_layer_group
+    self.layer_group_id = invoice.group.layer_group_id
   end
 
   # Checks for duplicate payments using both the current and the legacy transaction identifier.

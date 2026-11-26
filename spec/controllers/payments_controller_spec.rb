@@ -100,6 +100,14 @@ describe PaymentsController do
       expect(assigns(:payments)).to match_array(unassigned_payments)
     end
 
+    it "lists no payments without invoice of other layers" do
+      Fabricate(:payment, invoice: nil, layer_group: groups(:bottom_layer_two), received_at: Time.zone.today)
+
+      get :index, params: {group_id: group.id, format: :html, status: :without_invoice}
+
+      expect(assigns(:payments)).to be_empty
+    end
+
     it "lists payments in daterange" do
       daterange_payments = payments.sample(3).each { _1.update!(received_at: 1.year.ago) }
 
@@ -140,6 +148,14 @@ describe PaymentsController do
 
         expect(dom).to have_select("status")
         expect(dom).to have_select("status", with_options: [second_label])
+      end
+
+      it "renders payments without invoice" do
+        payments.first.update!(invoice_id: nil)
+
+        get :index, params: {group_id: group.id, status: :without_invoice}
+
+        expect(dom).to have_css("table tbody tr", count: 1)
       end
 
       it "renders date range with default values for the current year" do

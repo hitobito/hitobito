@@ -4,14 +4,15 @@
 #  https://github.com/hitobito/hitobito.
 
 class Invoice::PaymentProcessJob < BaseJob
-  self.parameters = [:data]
+  self.parameters = [:data, :layer_group_id]
 
-  def initialize(data)
+  def initialize(data, layer_group_id)
     super()
     @data = data
+    @layer_group_id = layer_group_id
   end
 
   def perform
-    Invoice::PaymentProcessor.new(@data).process
+    Invoice::PaymentProcessor.new(@data, Group.find_by(id: @layer_group_id)).process
   end
 end

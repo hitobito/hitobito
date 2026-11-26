@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, CEVI ZH SH GL. This file is part of
+#  Copyright (c) 2022-2026, CEVI ZH SH GL. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -156,6 +156,7 @@ describe Invoice::PaymentProcessor do
     expect(parser.notice).to eq "Es wurde eine gültige Zahlung ohne dazugehörige Rechnung erkannt."
     expect(parser.alert).to be_nil
     expect(payment.reference).to be_nil
+    expect(payment.layer_group).to eq invoice.group
   end
 
   it "invalid and valid payments set alert and notice" do
@@ -174,7 +175,7 @@ describe Invoice::PaymentProcessor do
 
   it "does not create duplicate payments when re-importing with UETR after legacy import" do
     # First: process the payments from a file without the UETR attributes
-    Invoice::PaymentProcessor.new(read("camt.054_version_001.04")).process
+    Invoice::PaymentProcessor.new(read("camt.054_version_001.04"), invoice.group).process
     expect(Payment.count).to eq(5)
 
     expect do
@@ -186,7 +187,7 @@ describe Invoice::PaymentProcessor do
   private
 
   def parser(file = "camt.054_version_001.08")
-    @parser ||= Invoice::PaymentProcessor.new(read(file))
+    @parser ||= Invoice::PaymentProcessor.new(read(file), invoice.group)
   end
 
   def read(name)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2018-2022, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2018-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -19,8 +19,9 @@ class Invoice::PaymentProcessor
 
   ESR_FIELD = "AcctSvcrRef"
 
-  def initialize(xml)
+  def initialize(xml, layer_group)
     @xml = xml
+    @layer_group = layer_group
     @data = parse(xml)
   rescue StandardError => e
     raise ProcessError.new(e, xml)
@@ -97,6 +98,7 @@ class Invoice::PaymentProcessor
       esr_number: reference(statement),
       received_at: received_at(net_entry, statement),
       invoice: invoice(statement),
+      layer_group: @layer_group,
       transaction_identifier: transaction_identifier(net_entry, statement),
       # `legacy_transaction_identifier` is passed for backwards compatibility of duplicate
       # detection: payments already stored with a legacy identifier must still be recognised

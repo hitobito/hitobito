@@ -34,7 +34,7 @@ class InvoiceAbility < AbilityDsl::Base
   end
 
   on(Payment) do
-    permission(:finance).may(:create).in_layer
+    permission(:finance).may(:create).in_invoice_layer
   end
 
   on(PeriodInvoiceTemplate) do
@@ -52,6 +52,10 @@ class InvoiceAbility < AbilityDsl::Base
 
   def in_layer(group = subject.group)
     user_finance_layer_ids.include?(group.layer_group_id)
+  end
+
+  def in_invoice_layer
+    in_layer(subject.invoice.group)
   end
 
   def in_layer_with_recipient_source

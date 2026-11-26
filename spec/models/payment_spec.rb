@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2021, Hitobito AG. This file is part of
+#  Copyright (c) 2021-2026, Hitobito AG. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -83,5 +83,27 @@ describe Payment do
     payment = Payment.new(amount: 10, transaction_identifier: "unique-uetr-123")
     expect(payment).not_to be_valid
     expect(payment.errors[:transaction_identifier]).to be_present
+  end
+
+  it "takes layer of invoice group" do
+    invoice.update_columns(group_id: groups(:bottom_group_one_one).id)
+    payment = Payment.create!(amount: 10, invoice: invoice, layer_group: groups(:top_layer))
+    expect(payment.layer_group).to eq groups(:bottom_layer_one)
+  end
+
+  describe ".of_layer" do
+    let(:layer) { groups(:bottom_layer_one) }
+    let!(:assigned) { Fabricate(:payment, invoice: invoice) }
+    let!(:unassigned) { Fabricate(:payment, invoice: nil, layer_group: layer) }
+    let!(:unassigned_other_layer) { Fabricate(:payment, invoice: nil, layer_group: groups(:bottom_layer_two)) }
+    let!(:unassigned_without_group) { Fabricate(:payment, invoice: nil, layer_group: nil) }
+
+    it "contains assigned and unassigned payments of layer" do
+      expect(Payment.of_layer(layer)).to match_array [assigned, unassigned]
+    end
+
+    it "contains unassigned payments without layer in root layer" do
+      expect(Payment.of_layer(groups(:top_layer))).to eq [unassigned_without_group]
+    end
   end
 end

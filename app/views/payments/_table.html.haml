@@ -14,9 +14,10 @@
   - t.col(check_box_tag(:all, 0, false, { data: :multiselect })) do |i|
     - check_box_tag('ids[]', i.id, false, data: { multiselect: true })
   - t.col(Invoice.human_attribute_name(:title)) do |payment|
-    %strong= link_to payment.invoice.title, invoice_link(payment.invoice)
-  - t.col(Invoice.human_attribute_name(:recipient)) { |payment| payment.invoice.recipient.to_s }
-  - t.col(Invoice.human_attribute_name(:sequence_number)) { |payment| payment.invoice.sequence_number }
+    - if payment.invoice
+      %strong= link_to payment.invoice.title, invoice_link(payment.invoice)
+  - t.col(Invoice.human_attribute_name(:recipient)) { |payment| payment.invoice&.recipient.to_s }
+  - t.col(Invoice.human_attribute_name(:sequence_number)) { |payment| payment.invoice&.sequence_number }
   - t.col(t.sort_header(:invoice_amount, Invoice.human_attribute_name(:total)), class: 'right') { |p| p.decorate.invoice_amount }
   - t.col(t.sort_header(:amount), class: 'right') { |p| p.decorate.amount }
   - t.col(t.sort_header(:invoice_due_at, Invoice.human_attribute_name(:due_at))) { |p| f(p.decorate.invoice_due_at) }

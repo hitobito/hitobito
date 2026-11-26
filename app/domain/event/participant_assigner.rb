@@ -21,6 +21,19 @@ class Event::ParticipantAssigner
     !moving? || !(applied_to?(target_event) || participant_of?(current_event))
   end
 
+  def assign_directly?
+    target_event.places_available? &&
+      target_event.attr_used?(:automatic_assignment) && target_event.automatic_assignment?
+  end
+
+  # Returns whether the place was handled here, including its confirmation.
+  def assign_directly(wanted = assign_directly?)
+    return false unless wanted && target_event.supports_applications?
+
+    add_participant if createable?
+    true
+  end
+
   def add_participant
     Event::Participation.transaction do
       if moving?

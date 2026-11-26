@@ -834,12 +834,6 @@ label.required::after {
   ) !important;
 }
 
-#custom_content_body,
-#help_text_body,
-#invoice_config_custom_content_attributes_body {
-  min-height: 5em !important;
-}
-
 #invoice_items_fields ~ div > p > div > div {
   display: flex;
 }

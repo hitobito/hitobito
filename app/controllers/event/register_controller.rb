@@ -43,8 +43,6 @@ class Event::RegisterController < ApplicationController
 
   def register
     if save_entry
-      set_privacy_policy_acceptance if privacy_policy_needed_and_accepted?
-
       sign_in(:person, entry.person)
       flash[:notice] = registered_notice
       redirect_to return_path || new_group_event_participation_path(group, event)
@@ -58,7 +56,12 @@ class Event::RegisterController < ApplicationController
 
   # NOTE: Wagon Hook - insieme
   def save_entry
-    entry.valid? && privacy_policy_accepted? && entry.save
+    person_creator.save
+  end
+
+  def person_creator
+    @person_creator ||= Event::Registration::PersonCreator.new(event: event, group: group,
+      contact_data: entry, privacy_policy_accepted: true?(privacy_policy_param))
   end
 
   def registered_notice

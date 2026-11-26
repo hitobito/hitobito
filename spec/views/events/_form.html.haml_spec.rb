@@ -121,4 +121,31 @@ describe "events/_form.html.haml" do
       end
     end
   end
+
+  describe "dates" do
+    it "renders dates tab with label and location" do
+      render
+      expect(dom).to have_link "Daten", href: "#dates"
+      expect(dom).to have_css "#dates input[name$='[label]']"
+      expect(dom).to have_css "#dates input[name$='[location]']"
+    end
+
+    context "without multiple dates" do
+      before { allow(event).to receive(:allow_multiple_dates).and_return(false) }
+
+      it "renders start and finish of first date in general tab" do
+        render
+        expect(dom).not_to have_link "Daten", href: "#dates"
+        expect(dom).not_to have_css "#dates"
+
+        fields = dom.find("#general .date-period-validated")
+        expect(fields).to have_field "event_dates_attributes_0_id",
+          type: :hidden, with: event.dates.first.id.to_s
+        expect(fields).to have_css "input[name='event[dates_attributes][0][start_at_date]']"
+        expect(fields).to have_css "input[name='event[dates_attributes][0][finish_at_date]']"
+        expect(fields).not_to have_css "input[name$='[label]']"
+        expect(fields).not_to have_css "input[name$='[location]']"
+      end
+    end
+  end
 end

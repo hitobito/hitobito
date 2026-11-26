@@ -12,7 +12,12 @@
                 data: { start_at_invalid_message: start_at_invalid_message,
                         finish_at_invalid_message: finish_at_invalid_message,
                         before_message: before_message } do
-  %p= t('events.form.times_are_optional')
-  = f.nested_fields_for :dates, 'event/dates/fields'
+  - if entry.allow_multiple_dates
+    .mb-4
+      = f.nested_fields_for :dates, 'event/dates/fields'
+  - else
+    = f.fields_for :dates, entry.dates.first || entry.dates.build do |df|
+      = df.labeled_datetime_field(:start_at)
+      = df.labeled_datetime_field(:finish_at, help_inline: t('events.form.times_are_optional'))
 
   = render_extensions 'date_fields', locals: { f: f }

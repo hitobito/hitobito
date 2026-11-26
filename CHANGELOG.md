@@ -2,6 +2,7 @@
 
 ## Version 2.11
 
+- Die Zahlungsliste einer Ebene und deren Export sind nur noch mit Finanzberechtigung auf dieser Ebene zugänglich
 - Rechnungen werden auch für Empfänger\*innen erstellt, in deren Sprache die Rechnungsposten nicht übersetzt sind. Es wird die vorhandene Übersetzung verwendet (#4667)
 - Empfangene Rechnungen können von den Empfängern, deren Verwaltenden sowie bei Gruppen von Personen mit Finanzberechtigung auf deren Ebene eingesehen und als PDF heruntergeladen werden, Rechnungsentwürfe werden dort nicht mehr angezeigt (#4661)
 - Im Rechnungstab von Gruppen und Personen werden keine Rechnungen anderer Empfänger mit derselben ID mehr angezeigt

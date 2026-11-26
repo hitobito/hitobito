@@ -385,26 +385,18 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
     sanitize(label, tags: %w[i])
   end
 
+  def participant_assigner
+    @participant_assigner ||= Event::ParticipantAssigner.new(event, entry)
+  end
+
   def process_created_participation
-    if event.supports_applications? && directly_assign_place?
-      directly_assign_place
-    else
-      # A confirmation email when adding someone else gets sent automatically
-      # when assigning a place. In the other case, send one explicitely.
-      # No confirmation email for participants applying for themselves.
-      send_confirmation_email
-    end
+    send_confirmation_email unless participant_assigner.assign_directly(directly_assign_place?)
     send_notification_email
   end
 
+  # NOTE: Wagon Hook - insieme
   def directly_assign_place?
-    event.places_available? &&
-      (event.attr_used?(:automatic_assignment) && event.automatic_assignment?)
-  end
-
-  def directly_assign_place
-    assigner = Event::ParticipantAssigner.new(event, @participation)
-    assigner.add_participant if assigner.createable?
+    participant_assigner.assign_directly?
   end
 
   def send_confirmation_email

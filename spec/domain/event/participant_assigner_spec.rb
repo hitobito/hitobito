@@ -27,6 +27,59 @@ describe Event::ParticipantAssigner do
 
   subject { Event::ParticipantAssigner.new(event, participation) }
 
+  describe "#assign_directly?" do
+    it "is true with automatic assignment and places available" do
+      course.update!(maximum_participants: 2, automatic_assignment: true)
+
+      expect(subject).to be_assign_directly
+    end
+
+    it "is false without automatic assignment" do
+      expect(subject).not_to be_assign_directly
+    end
+
+    it "decides with the counts of the given event" do
+      course.update!(maximum_participants: 1, automatic_assignment: true)
+      assigner = subject
+      course.participant_count = 1
+
+      expect(assigner).not_to be_assign_directly
+    end
+  end
+
+  describe "#assign_directly" do
+    before do
+      participation.update!(active: false)
+      course.update!(maximum_participants: 2, automatic_assignment: true)
+    end
+
+    it "adds the participant" do
+      expect(subject.assign_directly).to be true
+      expect(participation.reload).to be_active
+    end
+
+    it "does not assign without automatic assignment" do
+      course.update!(automatic_assignment: false)
+
+      expect(subject.assign_directly).to be false
+      expect(participation.reload).not_to be_active
+    end
+
+    it "assigns without automatic assignment if the caller wants it" do
+      course.update!(automatic_assignment: false)
+
+      expect(subject.assign_directly(true)).to be true
+      expect(participation.reload).to be_active
+    end
+
+    it "does nothing for events without applications" do
+      event = Fabricate(:event, groups: [groups(:top_layer)])
+
+      expect(described_class.new(event, participation).assign_directly).to be false
+      expect(participation.reload).not_to be_active
+    end
+  end
+
   describe "#add_participant" do
     before do
       participation.active = false

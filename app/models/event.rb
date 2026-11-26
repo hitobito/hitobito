@@ -65,12 +65,7 @@
 #  index_events_on_kind_id              (kind_id)
 #  index_events_on_shared_access_token  (shared_access_token)
 #
-class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
-  has_paper_trail meta: {main_id: ->(e) { e.id },
-                         main_type: sti_name},
-    skip: [:id, :shared_access_token, :applicant_count, :participant_count,
-      :teamer_count, :updated_at, :updater_id, :type]
-
+class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
   # This statement is required because these classes would not be loaded correctly otherwise.
   # The price we pay for using classes as namespace.
   require_dependency "event/date"
@@ -79,13 +74,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   require_dependency "event/application_decorator"
   require_dependency "event/role_decorator"
   require_dependency "event/role_ability"
-
-  class_attribute :manually_sendable_participant_mails
-  class_attribute :manually_sendable_leader_mails
-  self.manually_sendable_participant_mails = [
-    Event::ParticipationMailer::CONTENT_CONFIRMATION
-  ].freeze
-  self.manually_sendable_leader_mails = manually_sendable_participant_mails
 
   ALLOWED_VISIBLE_CONTACT_ATTRIBUTES = %w[
     picture
@@ -104,41 +92,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   include Globalized
   include UsedAttributes
 
-  # To prevent issues of having paper trail versions when we don't want/need them, we add all
-  # translated attributes to the skip list and create own paper trail versions on the
-  # translation classes
-  # Resync paper trail skip options after another translated attribute
-  # may have been added to a wagon
-  def self.translates(...)
-    super
-
-    paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
-                                    globalize_attribute_names.map(&:to_s))
-  end
-
-  translates :application_conditions, :name, :signature_confirmation_text
-
-  translates_rich_text :description
-
-  translation_class.class_eval do
-    has_paper_trail meta: {
-      main_id: ->(t) { t.event_id },
-      main_type: Event.sti_name
-    }
-
-    def paper_trail_rich_text_meta
-      {main_id: event_id, main_type: Event.sti_name, item_label: globalized_model.to_s}
-    end
-
-    # This is used to display in log what language record actually changed. Currently those
-    # values are just the strings from settings.yml, so the log does not display translated
-    # language names
-    def to_s
-      locale.to_s
-    end
-  end
-
-  ### ATTRIBUTES
+  ### CLASS ATTRIBUTES
 
   class_attribute :used_attributes,
     :role_types,
@@ -148,7 +102,8 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     :supports_invitations,
     :uses_form_tabs,
     :filterable_attrs,
-    :translation_class
+    :manually_sendable_participant_mails,
+    :manually_sendable_leader_mails
 
   # All attributes actually used (and mass-assignable) by the respective STI type.
   self.used_attributes = [:name, :motto, :cost, :maximum_participants, :contact_id,
@@ -187,10 +142,65 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
   self.filterable_attrs = [:name, :description, :location,
     :application_opening_at, :application_closing_at]
 
-  self.translation_class = Event::Translation
+  self.manually_sendable_participant_mails = [
+    Event::ParticipationMailer::CONTENT_CONFIRMATION
+  ].freeze
+  self.manually_sendable_leader_mails = manually_sendable_participant_mails
+
+  ### PLUGINS
+
+  acts_as_taggable
 
   model_stamper
   stampable stamper_class_name: :person, deleter: false
+
+  has_paper_trail meta: {main_id: ->(e) { e.id },
+                         main_type: sti_name},
+    skip: [:id, :shared_access_token, :applicant_count, :participant_count,
+      :teamer_count, :updated_at, :updater_id, :type]
+
+  # To prevent issues of having paper trail versions when we don't want/need them, we add all
+  # translated attributes to the skip list and create own paper trail versions on the
+  # translation classes
+  # Resync paper trail skip options after another translated attribute
+  # may have been added to a wagon
+  def self.translates(...)
+    super
+
+    paper_trail_options[:skip] |= (translated_attribute_names.map(&:to_s) +
+                                    globalize_attribute_names.map(&:to_s))
+  end
+
+  translates :name, :application_conditions, :signature_confirmation_text
+
+  translates_rich_text :description
+
+  translation_class.class_eval do
+    has_paper_trail meta: {
+      main_id: ->(t) { t.event_id },
+      main_type: Event.sti_name
+    }
+
+    def paper_trail_rich_text_meta
+      {main_id: event_id, main_type: Event.sti_name, item_label: globalized_model.to_s}
+    end
+
+    # This is used to display in log what language record actually changed. Currently those
+    # values are just the strings from settings.yml, so the log does not display translated
+    # language names
+    def to_s
+      locale.to_s
+    end
+  end
+
+  # Set static translations class to be used for all event types
+  class_attribute :translation_class, default: Event::Translation
+
+  ### SERIALIZED ATTRIBUTES
+
+  serialize :visible_contact_attributes, type: Array, coder: NilArrayCoder
+  serialize :required_contact_attrs, type: Array, coder: NilArrayCoder
+  serialize :hidden_contact_attrs, type: Array, coder: NilArrayCoder
 
   ### ASSOCIATIONS
 
@@ -226,8 +236,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
     class_name: "Person::AddRequest::Event",
     dependent: :destroy
 
-  acts_as_taggable
-
   ### VALIDATIONS
 
   # canceled_reason is used as enum in hitobito_sac_cas.
@@ -261,11 +269,6 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   accepts_nested_attributes_for :dates, :application_questions, :admin_questions,
     allow_destroy: true
-
-  ### SERIALIZED ATTRIBUTES
-  serialize :visible_contact_attributes, type: Array, coder: NilArrayCoder
-  serialize :required_contact_attrs, type: Array, coder: NilArrayCoder
-  serialize :hidden_contact_attrs, type: Array, coder: NilArrayCoder
 
   ### SCOPES
 

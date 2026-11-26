@@ -66,6 +66,10 @@ class PaymentsController < CrudController
 
   private
 
+  def authorize_class
+    authorize!(:index_issued_invoices, group)
+  end
+
   def render_tabular_entries_in_background(format)
     render_tabular_in_background(format, :payment_export)
     redirect_after_enqueued_export(return_path)

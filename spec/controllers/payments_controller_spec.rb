@@ -86,6 +86,12 @@ describe PaymentsController do
       expect(assigns(:payments)).to match_array(payments)
     end
 
+    it "denies listing payments of layer without finance permission" do
+      expect do
+        get :index, params: {group_id: groups(:bottom_layer_two).id, format: :html}
+      end.to raise_error(CanCan::AccessDenied)
+    end
+
     it "lists payments without invoice" do
       unassigned_payments = payments.sample(3).each { _1.update!(invoice_id: nil) }
 

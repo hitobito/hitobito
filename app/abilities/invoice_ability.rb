@@ -35,7 +35,6 @@ class InvoiceAbility < AbilityDsl::Base
 
   on(Payment) do
     permission(:finance).may(:create).in_layer
-    permission(:finance).may(:index).in_layer
   end
 
   on(PeriodInvoiceTemplate) do

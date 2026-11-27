@@ -21,6 +21,9 @@ class TokenAbility < Ability
     super(token.dynamic_user)
 
     can :register_people, Group, id: registerable_groups if can_register_people?
+    if can_register_event_participations?
+      can :register_participations, Event, groups: {id: registerable_groups_scope.pluck(:id)}
+    end
 
     # Mailing lists can only be read by normal users with _full permission, see #964.
     # For service tokens however, it would be unintuitive to require write permission
@@ -52,6 +55,9 @@ class TokenAbility < Ability
   def write_permission? = token.permission =~ /_full$/
 
   def can_register_people? = write_permission? && acceptable?(:register_people)
+
+  def can_register_event_participations? =
+    write_permission? && acceptable?(:register_event_participations)
 
   def registerable_groups
     registerable_groups_scope.self_registration_active.pluck(:id)

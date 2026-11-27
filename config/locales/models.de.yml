@@ -1571,6 +1571,7 @@ de:
         last_access: Letzter Zugriff
         people: Personen
         register_people: Neue Personen registrieren (braucht Schreibrechte)
+        register_event_participations: Personen an Anlässen anmelden (braucht Schreibrechte)
         groups: Gruppen
         events: Anlässe
         invoices: Rechnungen
@@ -1655,6 +1656,7 @@ de:
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
       managed_people: Lesen der ID und des Anzeigenamens deiner Kinder
       register_people: Erstellen von Personen via Selbstregistrierung
+      register_event_participations: Anmelden von Personen an Anlässen mit externer Anmeldung
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:

@@ -278,7 +278,7 @@ describe Export::Pdf::Messages::Letter do
         [71, 654, "Anton Abraham, Zora Zaugg"],
         [71, 644, housemate1.address],
         [71, 634, "#{housemate1.zip_code} #{housemate1.town}"],
-        [71, 625, housemate1.country_label.upcase],
+        [71, 625, Country.new(housemate1.country).postal_name],
         [71, 531, "Information"],
         [71, 502, "Hallo"],
         [71, 483, "Wir laden "],
@@ -359,19 +359,19 @@ describe Export::Pdf::Messages::Letter do
 
     context "household addresses" do
       let(:housemate1) do
-        Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "HM", zip_code: "7151")
+        Fabricate(:person_with_address, first_name: "Anton", last_name: "Abraham", country: "AU", zip_code: "7151")
       end
       let(:housemate2) do
-        Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "HM", zip_code: "7151")
+        Fabricate(:person_with_address, first_name: "Zora", last_name: "Zaugg", country: "AU", zip_code: "7151")
       end
       let(:housemate3) do
-        Fabricate(:person_with_address, first_name: "Bettina", last_name: "Büttel", country: "HM", zip_code: "7151")
+        Fabricate(:person_with_address, first_name: "Bettina", last_name: "Büttel", country: "AU", zip_code: "7151")
       end
       let(:housemate4) do
-        Fabricate(:person_with_address, first_name: "Carlo", last_name: "Colorado", country: "HM", zip_code: "7151")
+        Fabricate(:person_with_address, first_name: "Carlo", last_name: "Colorado", country: "AU", zip_code: "7151")
       end
       let(:other_housemate) do
-        Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: "HM", zip_code: "7151")
+        Fabricate(:person_with_address, first_name: "Altra", last_name: "Mates", country: "AU", zip_code: "7151")
       end
       let(:top_leader) { people(:top_leader) }
       let(:bottom_member) { people(:bottom_member) }
@@ -402,13 +402,13 @@ describe Export::Pdf::Messages::Letter do
           [71, 654, "Anton Abraham, Zora Zaugg"],
           [71, 644, housemate1.address],
           [71, 634, "#{housemate1.zip_code} #{housemate1.town}"],
-          [71, 625, housemate1.country_label.upcase],
+          [71, 625, Country.new(housemate1.country).postal_name],
           [71, 531, "Brief"],
           [71, 502, "Hallo"],
           [71, 654, "Bettina Büttel, Carlo Colorado"],
           [71, 644, housemate3.address],
           [71, 634, "#{housemate3.zip_code} #{housemate3.town}"],
-          [71, 625, housemate3.country_label.upcase],
+          [71, 625, Country.new(housemate3.country).postal_name],
           [71, 531, "Brief"],
           [71, 502, "Hallo"],
           [71, 654, "Bottom Member"],
@@ -419,7 +419,7 @@ describe Export::Pdf::Messages::Letter do
           [71, 654, "Dominik Dachs"],
           [71, 644, single_person.address],
           [71, 634, "#{single_person.zip_code} #{single_person.town}"],
-          [71, 625, single_person.country_label.upcase],
+          [71, 625, Country.new(single_person.country).postal_name],
           [71, 531, "Brief"],
           [71, 502, "Hallo"]
         ]
@@ -433,7 +433,7 @@ describe Export::Pdf::Messages::Letter do
           [71, 654, "Anton Abraham, Bettina Büttel, Carlo Col"],
           [71, 644, housemate1.address],
           [71, 634, "#{housemate1.zip_code} #{housemate1.town}"],
-          [71, 625, housemate1.country_label.upcase],
+          [71, 625, Country.new(housemate1.country).postal_name],
           [71, 531, "Brief"],
           [71, 502, "Hallo"],
           [71, 654, "Bottom Member"],
@@ -449,7 +449,7 @@ describe Export::Pdf::Messages::Letter do
           [71, 654, "Dominik Dachs"],
           [71, 644, single_person.address],
           [71, 634, "#{single_person.zip_code} #{single_person.town}"],
-          [71, 625, single_person.country_label.upcase],
+          [71, 625, Country.new(single_person.country).postal_name],
           [71, 531, "Brief"],
           [71, 502, "Hallo"]
         ]

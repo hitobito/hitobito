@@ -46,6 +46,10 @@ de:
         other: Haushalte
 
     attributes:
+      event/api_registration:
+        answers: Antworten
+        phone_number: Telefonnummer
+        privacy_policy_accepted: Datenschutzerklärung
       roles/termination:
         terminate_on: Austrittsdatum
       household:
@@ -58,6 +62,14 @@ de:
         blank: "muss ausgefüllt werden"
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
       models:
+        event/api_registration:
+          not_allowed: ist für diesen Anlass nicht vorgesehen
+          unknown_question: enthalten die unbekannte Frage %{question_id}
+          duplicate_question: enthalten die Frage %{question_id} mehrfach
+          invalid_answer: "zur Frage «%{question}» sind ungültig"
+          required: "zur Frage «%{question}» fehlen"
+          event_not_open: Für diesen Anlass ist zurzeit keine Anmeldung möglich
+          event_full: Dieser Anlass ist ausgebucht
         event/participation_contact_datas/managed:
           attributes:
             base:
@@ -1571,6 +1583,7 @@ de:
         last_access: Letzter Zugriff
         people: Personen
         register_people: Neue Personen registrieren (braucht Schreibrechte)
+        register_event_participations: Personen an Anlässen anmelden (braucht Schreibrechte)
         groups: Gruppen
         events: Anlässe
         invoices: Rechnungen
@@ -1655,6 +1668,7 @@ de:
       nextcloud: Lesen deiner Nextcloud-Gruppen und deines Anzeigenamens
       managed_people: Lesen der ID und des Anzeigenamens deiner Kinder
       register_people: Erstellen von Personen via Selbstregistrierung
+      register_event_participations: Anmelden von Personen an Anlässen mit externer Anmeldung
       qualifications: Lesen, Erstellen und Löschen aller Qualifikationen auf die du Zugriff hast
 
   errors:

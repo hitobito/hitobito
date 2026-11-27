@@ -502,7 +502,12 @@ Hitobito::Application.routes.draw do
         resources :self_registrations, only: [:create]
       end
     end
-    resources :events, only: [:index, :show]
+    resources :events, only: [:index, :show] do
+      member do
+        resources :registrations, controller: :event_registrations, as: :event_registrations,
+          only: [:create]
+      end
+    end
     resources :event_kinds, module: :event, controller: :kinds, only: [:index, :show]
     resources :event_kind_categories, module: :event, controller: :kind_categories,
       only: [:index, :show]

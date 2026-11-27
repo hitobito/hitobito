@@ -663,4 +663,49 @@ describe TokenAbility do
       is_expected.to be_able_to(:index, Qualification)
     end
   end
+
+  describe :register_participations do
+    let(:token) { service_tokens(:permitted_top_layer_token) }
+    let(:top_event) { events(:top_event) }
+    let(:bottom_event) { Fabricate(:event, groups: [groups(:bottom_layer_one)]) }
+
+    context "authorized with layer_and_below_full" do
+      before { token.update!(register_event_participations: true, permission: :layer_and_below_full) }
+
+      it "may register participations for events in token layer" do
+        is_expected.to be_able_to(:register_participations, top_event)
+      end
+
+      it "may register participations for events in layer below" do
+        is_expected.to be_able_to(:register_participations, bottom_event)
+      end
+
+      it "may not register participations for events in layer above" do
+        token.update!(layer_group_id: groups(:bottom_layer_one).id)
+        is_expected.not_to be_able_to(:register_participations, top_event)
+      end
+    end
+
+    context "authorized with layer_full" do
+      before { token.update!(register_event_participations: true, permission: :layer_full) }
+
+      it "may register participations for events in token layer" do
+        is_expected.to be_able_to(:register_participations, top_event)
+      end
+
+      it "may not register participations for events in layer below" do
+        is_expected.not_to be_able_to(:register_participations, bottom_event)
+      end
+    end
+
+    it "may not register participations without register_event_participations scope" do
+      token.update!(register_event_participations: false, permission: :layer_and_below_full)
+      is_expected.not_to be_able_to(:register_participations, top_event)
+    end
+
+    it "may not register participations without _full permission" do
+      token.update!(register_event_participations: true, permission: :layer_and_below_read)
+      is_expected.not_to be_able_to(:register_participations, top_event)
+    end
+  end
 end

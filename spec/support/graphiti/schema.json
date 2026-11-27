@@ -1783,6 +1783,157 @@
       }
     },
     {
+      "name": "EventRegistrationResource",
+      "type": "event_registrations",
+      "graphql_entrypoint": "eventRegistrations",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "uuid",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "first_name": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "last_name": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "nickname": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "company_name": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "email": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "address_care_of": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "address_addition": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "street": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "housenumber": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "postbox": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "zip_code": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "town": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "country": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "gender": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "birthday": {
+          "type": "date",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "phone_number": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "language": {
+          "type": "string",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "answers": {
+          "type": "array",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "privacy_policy_accepted": {
+          "type": "boolean",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "send_confirmation": {
+          "type": "boolean",
+          "readable": false,
+          "writable": true,
+          "description": null
+        },
+        "registration_status": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {}
+      },
+      "filters": {},
+      "relationships": {},
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "EventResource",
       "type": "events",
       "graphql_entrypoint": "events",
@@ -4671,6 +4822,13 @@
         },
         "show": {
           "resource": "Event::ParticipationResource"
+        }
+      }
+    },
+    "/api/events/1/registrations": {
+      "actions": {
+        "create": {
+          "resource": "EventRegistrationResource"
         }
       }
     },

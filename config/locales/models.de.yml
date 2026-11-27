@@ -46,6 +46,10 @@ de:
         other: Haushalte
 
     attributes:
+      event/api_registration:
+        answers: Antworten
+        phone_number: Telefonnummer
+        privacy_policy_accepted: Datenschutzerklärung
       roles/termination:
         terminate_on: Austrittsdatum
       household:
@@ -64,6 +68,8 @@ de:
           duplicate_question: enthalten die Frage %{question_id} mehrfach
           invalid_answer: "zur Frage «%{question}» sind ungültig"
           required: "zur Frage «%{question}» fehlen"
+          event_not_open: Für diesen Anlass ist zurzeit keine Anmeldung möglich
+          event_full: Dieser Anlass ist ausgebucht
         event/participation_contact_datas/managed:
           attributes:
             base:

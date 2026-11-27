@@ -79,22 +79,23 @@ describe Person::HistoryController, type: :controller do
       event2 = Fabricate(:event, groups: [groups(:top_layer)])
       [course1, event1, event2].each do |event|
         Fabricate(:event_role,
-          # rubocop:todo Layout/LineLength
-          participation: Fabricate(:event_participation, participant: people(:top_leader), event: event), type: "Event::Role::Leader")
-        # rubocop:enable Layout/LineLength
+          type: "Event::Role::Leader",
+          participation: Fabricate(:event_participation,
+            participant: people(:top_leader),
+            event: event))
       end
 
       get :index, params: {group_id: top_group.id, id: top_leader.id}
 
       events = dom.find("#events")
 
-      expect(events).to have_selector("h2", text: "Kurse")
-      course_headers = events.all("thead tr").first
-      expect(course_headers.all("th").map(&:text)).to eq(["Name / Gruppe", "Rolle", "Daten", "Qualifikation"])
-
       expect(events).to have_selector("h2", text: "Anlässe")
-      event_headers = events.all("thead tr").last
+      event_headers = events.all("thead tr").first
       expect(event_headers.all("th").map(&:text)).to eq(["Name / Gruppe", "Rolle", "Daten", ""])
+
+      expect(events).to have_selector("h2", text: "Kurse")
+      course_headers = events.all("thead tr").last
+      expect(course_headers.all("th").map(&:text)).to eq(["Name / Gruppe", "Rolle", "Daten", "Qualifikation"])
 
       expect(events.all("tr td a").size).to eq 6
     end

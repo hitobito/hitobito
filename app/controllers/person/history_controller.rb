@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Person::HistoryController < ApplicationController
+  class_attribute :event_type_order, default: [Event, Event::Course]
+
   before_action :authorize_action
 
   decorates :group, :person
@@ -34,8 +36,9 @@ class Person::HistoryController < ApplicationController
 
   def participations_by_event_type
     fetch_participations
-      .group_by { |p| p.event.class.label_plural }
-      .each { |_kind, entries| entries.collect! { |e| Event::ParticipationDecorator.new(e) } }
+      .group_by { |p| p.event.class }
+      .sort_by { |klass, _| [event_type_order.index(klass) || 99, klass.label_plural] }
+      .to_h { |klass, participations| [klass.label_plural, participations.map(&:decorate)] }
   end
 
   def entry

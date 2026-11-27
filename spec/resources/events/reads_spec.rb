@@ -32,6 +32,11 @@ describe EventResource, type: :resource do
         :kind_id,
         :location,
         :maximum_participants,
+        :required_contact_attrs,
+        :hidden_contact_attrs,
+        :places_available,
+        :waiting_list_available,
+        :external_application_possible,
         :motto,
         :external_applications,
         :external_application_link,
@@ -67,6 +72,44 @@ describe EventResource, type: :resource do
         attributes = jsonapi_data[0].attributes
         expect(attributes["description"]).to be_nil
         expect(attributes["description_html"]).to be_nil
+      end
+    end
+
+    describe "privacy_policies" do
+      before do
+        file = Rails.root.join("spec", "fixtures", "files", "images", "logo.png")
+        policy = ActiveStorage::Blob.create_and_upload!(io: File.open(file, "rb"),
+          filename: "policy.png", content_type: "image/png").signed_id
+        groups(:top_layer).update!(privacy_policy: policy, privacy_policy_title: "Datenschutz")
+        allow(context).to receive(:rails_storage_proxy_url) { |blob| "/active_storage/#{blob.filename}" }
+      end
+
+      it "are only rendered on request" do
+        render
+        expect(jsonapi_data[0].attributes).not_to have_key("privacy_policies")
+      end
+
+      it "lists the policies of the event's layer hierarchy" do
+        params[:extra_fields] = {events: "privacy_policies"}
+        render
+
+        policies = jsonapi_data[0].attributes["privacy_policies"]
+        expect(policies).to match [include(
+          "group_id" => groups(:top_layer).id,
+          "title" => "Datenschutz",
+          "url" => "/active_storage/policy.png"
+        )]
+      end
+    end
+
+    describe "contact attributes" do
+      it "lists mandatory and event specific required attributes" do
+        event.update!(required_contact_attrs: %w[street town], hidden_contact_attrs: %w[nickname])
+        render
+
+        attributes = jsonapi_data[0].attributes
+        expect(attributes["required_contact_attrs"]).to eq %w[email first_name last_name street town]
+        expect(attributes["hidden_contact_attrs"]).to eq %w[nickname]
       end
     end
 

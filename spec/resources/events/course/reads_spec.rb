@@ -11,6 +11,48 @@ describe Event::CourseResource, type: :resource do
   include Rails.application.routes.url_helpers
   let(:course) { events(:top_course) }
 
+  describe "availability" do
+    before { params[:filter] = {id: {eq: course.id}} }
+
+    it "reports free places" do
+      course.update_columns(maximum_participants: 2, participant_count: 1, waiting_list: false)
+      render
+      expect(jsonapi_data[0].attributes).to include("places_available" => true,
+        "waiting_list_available" => false)
+    end
+
+    it "reports a full course with waiting list" do
+      course.update_columns(maximum_participants: 1, participant_count: 1, waiting_list: true)
+      render
+      expect(jsonapi_data[0].attributes).to include("places_available" => false,
+        "waiting_list_available" => true)
+    end
+
+    context "external application" do
+      before do
+        course.update_columns(external_applications: true, application_opening_at: nil,
+          application_closing_at: nil, maximum_participants: nil)
+      end
+
+      it "is possible for an open course" do
+        render
+        expect(jsonapi_data[0].attributes["external_application_possible"]).to be true
+      end
+
+      it "is not possible without external applications" do
+        course.update_columns(external_applications: false)
+        render
+        expect(jsonapi_data[0].attributes["external_application_possible"]).to be false
+      end
+
+      it "follows the rules of the event type" do
+        allow_any_instance_of(Event::Course).to receive(:application_possible?).and_return(false)
+        render
+        expect(jsonapi_data[0].attributes["external_application_possible"]).to be false
+      end
+    end
+  end
+
   describe "serialization" do
     before do
       params[:filter] = {id: {eq: course.id}}
@@ -34,6 +76,11 @@ describe Event::CourseResource, type: :resource do
         :kind_id,
         :location,
         :maximum_participants,
+        :required_contact_attrs,
+        :hidden_contact_attrs,
+        :places_available,
+        :waiting_list_available,
+        :external_application_possible,
         :minimum_participants,
         :motto,
         :name,

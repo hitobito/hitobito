@@ -2,6 +2,9 @@
 
 ## Version 2.11
 
+- JSON:API: Anlässe liefern neu `external_application_possible`, `places_available` und `waiting_list_available`, damit Anmeldeformulare vorab anzeigen können, ob eine externe Anmeldung möglich oder der Anlass ausgebucht ist (#4700)
+- JSON:API: Anlässe liefern über `extra_fields[events]=privacy_policies` die Datenschutzerklärungen, welche bei einer Anmeldung akzeptiert werden müssen (#4700)
+- JSON:API: Anlässe enthalten neu die Attribute `required_contact_attrs` (inklusive der immer verlangten Angaben) und `hidden_contact_attrs` (#4700)
 - JSON:API: Anlässe können mit `filter[application_open]` auf jene eingeschränkt werden, bei denen eine externe Anmeldung aktuell möglich ist; neues Attribut `external_applications` (#4699)
 - JSON:API: Die Anmeldefragen eines Anlasses können über `include=questions` mitgeladen werden, mit Fragetext und Auswahlmöglichkeiten in der angefragten Sprache (#4699)
 - Die Zahlungsliste einer Ebene und deren Export sind nur noch mit Finanzberechtigung auf dieser Ebene zugänglich

@@ -434,10 +434,10 @@ describe Synchronize::Mailchimp::Synchronizator do
 
         allow(client).to receive(:fetch_members).and_return([member(top_leader)])
         expect(client).to receive(:fetch_segments).thrice.and_return(segments(tags))
-        expect(client).to receive(:update_segments).with([
+        expect(client).to receive(:update_segments).with(match_array([
           [0, {members_to_add: ["top_leader@example.com"], members_to_remove: []}],
           [1, {members_to_add: ["top_leader@example.com"], members_to_remove: []}]
-        ])
+        ]))
         sync.perform
       end
 

@@ -1,6 +1,6 @@
 # Hitobito Changelog
 
-## Version 2.11
+## unreleased
 
 - Die Zahlungsliste einer Ebene und deren Export sind nur noch mit Finanzberechtigung auf dieser Ebene zugänglich
 - Zahlungen ohne Rechnung werden der Ebene zugeordnet, die sie importiert hat, und nur noch dort in der Zahlungsliste und im Export angezeigt. Früher importierte Zahlungen ohne Rechnung erscheinen auf der obersten Ebene (#4684)

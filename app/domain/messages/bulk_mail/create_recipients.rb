@@ -56,7 +56,7 @@ module Messages
       end
 
       def addresses(people, labels)
-        Messages::BulkMail::AddressList.new(people, labels).entries
+        MailRelay::AddressList.new(people, labels).person_emails
       end
     end
   end

@@ -29,7 +29,7 @@ describe Messages::BulkMailDispatch do
   context "#run" do
     context "without recipients" do
       it "creates recipient entries with state pending" do
-        expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries).and_return(address_list)
+        expect(MailRelay::AddressList).to receive_message_chain(:new, :person_emails).and_return(address_list)
 
         expect do
           result = dispatch.run
@@ -55,8 +55,8 @@ describe Messages::BulkMailDispatch do
       end
 
       it "creates recipient with state failed when email invalid" do
-        expect(Messages::BulkMail::AddressList).to receive_message_chain(:new,
-          :entries).and_return([{person_id: top_leader.id, email: "invalid.com"}])
+        expect(MailRelay::AddressList).to receive_message_chain(:new,
+          :person_emails).and_return([{person_id: top_leader.id, email: "invalid.com"}])
 
         expect do
           result = dispatch.run

@@ -221,4 +221,28 @@ describe InvoiceRunsController, js: true do
     # Verify total (75.00 * 1 * 1.077 + 8.50 * 12 * 1.025 = 80.775 + 104.55 = 185.325, rounded to 185.35)
     expect(invoice.total).to eq 185.35
   end
+
+  it "creates invoice run with prices including vat" do
+    group.invoice_config.update_columns(prices_include_vat: true)
+    InvoiceArticle.create!(group: group, number: "MEM-001", name: "Adult Membership",
+      unit_cost: 75.00, vat_rate: 7.7)
+
+    visit new_group_invoice_run_path(group, invoice_run: {
+      recipient_source_id: list.id,
+      recipient_source_type: "MailingList"
+    })
+    fill_in "Titel", with: "Annual Fees 2026"
+    select "MEM-001 - Adult Membership", from: "invoice_item_article"
+
+    within all("#invoice_items_fields .fields").first do
+      expect(page).to have_field("Preis inkl. MWSt.", with: "80.78")
+      fill_in "Anzahl", with: "2"
+    end
+    expect(page).to have_css("#calculated", text: "161.55")
+
+    first(:button, "Speichern").click
+
+    expect(page).to have_text "Rechnung Annual Fees 2026 wurde"
+    expect(InvoiceRun.last.invoices.first.invoice_items.first.unit_cost).to eq 75.00
+  end
 end

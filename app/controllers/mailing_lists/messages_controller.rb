@@ -8,6 +8,7 @@
 class MailingLists::MessagesController < CrudController
   include RenderMessagesExports
   include YearBasedPaging
+  include VatInclusivePrices
 
   PERMITTED_TEXT_MESSAGE_ATTRS = [:text] # rubocop:disable Style/MutableConstant meant to be extended
   PERMITTED_LETTER_ATTRS = [:subject, :body, :salutation, :send_to_households, # rubocop:disable Style/MutableConstant meant to be extended
@@ -90,6 +91,8 @@ class MailingLists::MessagesController < CrudController
     message
   end
 
+  def group = parent.group
+
   def preview?
     true?(params[:preview])
   end
@@ -107,6 +110,7 @@ class MailingLists::MessagesController < CrudController
           index, :dynamic_cost_parameters)
         attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
       end
+      convert_unit_costs_to_net(permitted.dig(:invoice_attributes, :invoice_items_attributes))
     end
   end
 

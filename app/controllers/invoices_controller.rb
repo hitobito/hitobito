@@ -7,6 +7,7 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   include Api::JsonPaging
   include RenderMessagesExports
   include ExportableRedirect
+  include VatInclusivePrices
 
   decorates :invoice
 
@@ -120,7 +121,9 @@ class InvoicesController < CrudController # rubocop:disable Metrics/ClassLength
   end
 
   def permitted_params
-    super.merge(creator_id: current_user.id)
+    super.merge(creator_id: current_user.id).tap do |permitted|
+      convert_unit_costs_to_net(permitted[:invoice_items_attributes])
+    end
   end
 
   def recipient_type_param = model_params.try(:[], :recipient_type).presence

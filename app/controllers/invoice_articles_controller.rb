@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class InvoiceArticlesController < SimpleCrudController
+  include VatInclusivePrices
+
   respond_to :json, only: [:show]
 
   self.nesting = Group
@@ -16,7 +18,17 @@ class InvoiceArticlesController < SimpleCrudController
     description: "invoice_article_translations.description"
   }
 
+  def show
+    render json: entry.as_json.merge("unit_cost" => helpers.displayed_unit_cost(entry))
+  end
+
   private
+
+  def group = parent
+
+  def permitted_params
+    super.tap { |permitted| convert_unit_cost_to_net(permitted) }
+  end
 
   def authorize_class
     authorize!(:index_issued_invoices, parent)

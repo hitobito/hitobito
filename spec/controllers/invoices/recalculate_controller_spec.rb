@@ -1,4 +1,4 @@
-#  Copyright (c) 2017, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2017-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -43,6 +43,28 @@ describe Invoices::RecalculateController do
         get :new, xhr: true, params: {group_id: group.id}
         expect(response).to have_http_status(403)
       end
+    end
+  end
+
+  context "with prices including vat" do
+    let(:user) { people(:bottom_member) }
+
+    before { group.invoice_config.update_columns(prices_include_vat: true) }
+
+    it "calculates totals from unit cost including vat" do
+      get :new, xhr: true, params: {group_id: group.id, invoice: {invoice_items_attributes: {
+        "0" => {name: "pen", unit_cost: "10.81", vat_rate: "8.1", count: "2"}
+      }}}
+
+      expect(controller.send(:entry).invoice_items.first.unit_cost).to eq 10.0
+    end
+
+    it "calculates totals of invoice run from unit cost including vat" do
+      get :new, xhr: true, params: {group_id: group.id, invoice_run: {invoice: {invoice_items_attributes: {
+        "0" => {name: "pen", unit_cost: "10.81", vat_rate: "8.1", count: "2"}
+      }}}}
+
+      expect(controller.send(:entry).invoice_items.first.unit_cost).to eq 10.0
     end
   end
 end

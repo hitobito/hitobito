@@ -593,6 +593,32 @@ describe InvoicesController do
     end
   end
 
+  context "with prices including vat" do
+    render_views
+
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    before { group.invoice_config.update_columns(prices_include_vat: true) }
+
+    it "GET#edit shows unit cost of invoice items including vat" do
+      get :edit, params: {group_id: group.id, id: invoice.id}
+
+      expect(dom).to have_css "input[name$='[unit_cost]'][value='1.62']"
+      expect(dom).to have_css "input[placeholder='Preis inkl. MWSt.']"
+    end
+
+    it "POST#create stores unit cost of invoice items without vat" do
+      post :create, params: {group_id: group.id, invoice: {
+        title: "vat", recipient_type: "Person", recipient_id: person.id,
+        invoice_items_attributes: {"1" => {name: "pen", unit_cost: "10.81", vat_rate: "8.1", count: "2"}}
+      }}
+
+      item = Invoice.find_by(title: "vat").invoice_items.first
+      expect(item.unit_cost).to eq 10.0
+      expect(item.cost).to eq 20.0
+    end
+  end
+
   it "POST#create allows to set translated invoice item names" do
     expect do
       post :create, params: {group_id: group.id, invoice: {

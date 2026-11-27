@@ -56,9 +56,9 @@ class SelfRegistrationResource < ApplicationResource
   end
 
   def check_privacy_policy_accepted(model)
-    return if model.privacy_policy_accepted?
     policy_finder = Group::PrivacyPolicyFinder.for(group: group, person: model)
-    return unless policy_finder.acceptance_needed?
+    return if policy_finder.accepted?(model.privacy_policy_accepted?)
+
     validation_error!(model, :privacy_policy_accepted, :must_be_accepted)
   end
 

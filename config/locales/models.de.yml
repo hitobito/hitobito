@@ -60,6 +60,10 @@ de:
       models:
         event/api_registration:
           not_allowed: ist für diesen Anlass nicht vorgesehen
+          unknown_question: enthalten die unbekannte Frage %{question_id}
+          duplicate_question: enthalten die Frage %{question_id} mehrfach
+          invalid_answer: "zur Frage «%{question}» sind ungültig"
+          required: "zur Frage «%{question}» fehlen"
         event/participation_contact_datas/managed:
           attributes:
             base:

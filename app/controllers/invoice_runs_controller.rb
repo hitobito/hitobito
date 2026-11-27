@@ -3,8 +3,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class InvoiceRunsController < CrudController
+class InvoiceRunsController < CrudController # rubocop:disable Metrics/ClassLength
   include YearBasedPaging
+  include VatInclusivePrices
 
   LIMIT_CREATE = 100
 
@@ -198,6 +199,7 @@ class InvoiceRunsController < CrudController
           index, :dynamic_cost_parameters)
         attrs[:dynamic_cost_parameters] = parameters&.to_unsafe_hash || {}
       end
+      convert_unit_costs_to_net(permitted.dig(:invoice, :invoice_items_attributes))
     end
   end
 

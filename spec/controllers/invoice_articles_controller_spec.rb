@@ -107,4 +107,39 @@ describe InvoiceArticlesController do
     post :create, params: {group_id: group.id, invoice_article: {number: "1", name: "a"}}
     expect(response).to redirect_to(group_invoice_articles_path(group, returning: true))
   end
+
+  context "with prices including vat" do
+    render_views
+
+    let(:article) { invoice_articles(:beitrag) }
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    before { group.invoice_config.update_columns(prices_include_vat: true) }
+
+    it "GET#show renders unit cost including vat as json" do
+      get :show, params: {group_id: group.id, id: article.id}, format: :json
+
+      expect(response.parsed_body).to include("unit_cost" => "10.8", "vat_rate" => "8.0")
+    end
+
+    it "GET#index shows unit cost including vat" do
+      get :index, params: {group_id: group.id}
+
+      expect(dom).to have_css "th", text: "Preis inkl. MWSt."
+      expect(dom).to have_css "td", text: "CHF 10.80"
+    end
+
+    it "GET#edit shows unit cost including vat" do
+      get :edit, params: {group_id: group.id, id: article.id}
+
+      expect(dom).to have_field "Preis inkl. MWSt.", with: "10.80"
+    end
+
+    it "PATCH#update stores unit cost without vat" do
+      patch :update, params: {group_id: group.id, id: article.id,
+                              invoice_article: {unit_cost: "21.62", vat_rate: "8.1"}}
+
+      expect(article.reload.unit_cost).to eq 20.0
+    end
+  end
 end

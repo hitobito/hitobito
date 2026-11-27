@@ -12,6 +12,7 @@ describe "invoices/_form.html.haml" do
       parent: group,
       group: group,
       cancel_url: "",
+      prices_include_vat?: false,
       model_class: Invoice,
       entry: invoice.decorate,
       path_args: [group, invoice]

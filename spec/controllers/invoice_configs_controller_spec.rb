@@ -146,6 +146,12 @@ describe InvoiceConfigsController do
       end.to change { entry.reload.payment_reminder_configs.size }.by(3)
     end
 
+    it "enables prices including vat" do
+      expect do
+        patch :update, params: {group_id: group.id, invoice_config: {prices_include_vat: "1"}}
+      end.to change { entry.reload.prices_include_vat }.from(false).to(true)
+    end
+
     it "creates a payment provider config but does not setup ebics if required values are not present" do
       attrs = {0 => {payment_provider: "raiffeisen"}}
 

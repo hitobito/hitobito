@@ -1396,12 +1396,14 @@ de:
         description: Beschreibung
         category: Kategorie
         unit_cost: Preis
+        unit_cost_incl_vat: Preis inkl. MWSt.
         vat_rate: MwSt.
         cost_center: Kostenstelle
         account: Konto
 
       invoice_config:
         currency: Währung
+        prices_include_vat: Preise inkl. MWSt.
         payment_information: Zahlungsinformation
         address: Absender Adresse
         account_number: Kontonummer
@@ -1443,6 +1445,7 @@ de:
         description: Beschreibung
         vat_rate: MwSt.
         unit_cost: Preis
+        unit_cost_incl_vat: Preis inkl. MWSt.
         count: Anzahl
         cost: Betrag
         cost_center: Kostenstelle
@@ -1547,6 +1550,7 @@ de:
       period_invoice_template/item:
         name: Name
         unit_cost: Preis
+        unit_cost_incl_vat: Preis inkl. MWSt.
         cost_center: Kostenstelle
         account: Konto
         vat_rate: MwSt.

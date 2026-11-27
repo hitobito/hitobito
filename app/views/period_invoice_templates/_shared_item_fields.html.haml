@@ -8,7 +8,7 @@
   = f.input_field :name, placeholder: placeholder(:name, suffix: "*"), class: "mw-md-90ch"
 .d-flex.flex-row.gap-2.mb-2
   .input-group.input-group-sm
-    = f.input_field :unit_cost, name: f.object_name + "[dynamic_cost_parameters][unit_cost]", value: number_to_currency(f.object.unit_cost, format: "%n", delimiter: ""), placeholder: placeholder(:unit_cost, suffix: "*"), class: "text-end"
+    = f.input_field :unit_cost, name: f.object_name + "[dynamic_cost_parameters][unit_cost]", value: number_to_currency(displayed_unit_cost(f.object), format: "%n", delimiter: ""), placeholder: placeholder(unit_cost_attr, suffix: "*"), class: "text-end"
     .input-group-text= entry.group.invoice_config.currency
   .input-group.input-group-sm
     = f.input_field :vat_rate, placeholder: placeholder(:vat_rate), class: "text-end mw-md-90ch"

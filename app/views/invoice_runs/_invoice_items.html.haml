@@ -1,4 +1,4 @@
--#  Copyright (c) 2012-2017, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
@@ -23,6 +23,6 @@
         %span.col-2=ff.input_field(attr, placeholder: InvoiceItem.human_attribute_name(attr))
   - else
     %div.col-1
-      = f.input_field(:unit_cost, data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:unit_cost))
+      = f.input_field(:unit_cost, value: number_with_precision(displayed_unit_cost(f.object)), data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(unit_cost_attr))
     %div.col-1
       = f.input_field(:count, data: { recalculate: true }, placeholder: InvoiceItem.human_attribute_name(:count))

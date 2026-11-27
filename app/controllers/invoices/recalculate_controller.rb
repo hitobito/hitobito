@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2022, Schweizer Wanderwege. This file is part of
+#  Copyright (c) 2022-2026, Schweizer Wanderwege. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Invoices::RecalculateController < ApplicationController
+  include VatInclusivePrices
+
   respond_to :js
   before_action :authorize_action
   helper_method :entry
@@ -35,6 +37,7 @@ class Invoices::RecalculateController < ApplicationController
     # rubocop:enable Layout/LineLength
 
     permitted_params[:invoice_items_attributes]&.each_value { |item| item.delete("id") }
+    convert_unit_costs_to_net(permitted_params[:invoice_items_attributes])
 
     permitted_params
   end

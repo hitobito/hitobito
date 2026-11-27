@@ -18,6 +18,7 @@ describe "invoice_runs/_form.html.haml" do
       parent: group,
       group: group,
       cancel_url: "",
+      prices_include_vat?: false,
       model_class: InvoiceRun,
       entry: invoice_run,
       path_args: [group, invoice_run]

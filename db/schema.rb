@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_26_070027) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_27_155512) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -686,6 +686,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_26_070027) do
     t.string "payee_zip_code"
     t.string "payee_town"
     t.string "payee_country", default: "CH"
+    t.boolean "prices_include_vat", default: false, null: false
     t.index ["group_id"], name: "index_invoice_configs_on_group_id", unique: true
   end
 

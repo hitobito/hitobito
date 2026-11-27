@@ -539,6 +539,15 @@ describe InvoiceRunsController do
         expect(response).to redirect_to group_invoice_run_invoices_path(group, invoice_run, returning: true)
       end
     end
+
+    it "POST#create stores unit cost of invoice items without vat" do
+      group.invoice_config.update_columns(prices_include_vat: true)
+      attrs = invoice_attrs.deep_merge(invoice_items_attributes: {"1" => {unit_cost: "10.81", vat_rate: "8.1"}})
+
+      post :create, params: {group_id: group.id, ids: person.id, invoice_run: {title: "Title", invoice: attrs}}
+
+      expect(InvoiceRun.last.invoices.first.invoice_items.find_by(name: "item1").unit_cost).to eq 10.0
+    end
   end
 
   def invoice_attrs

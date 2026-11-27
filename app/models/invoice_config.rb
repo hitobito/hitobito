@@ -30,6 +30,7 @@
 #  payee_zip_code                   :string
 #  payment_information              :text
 #  payment_slip                     :string           default("qr"), not null
+#  prices_include_vat               :boolean          default(FALSE), not null
 #  reference_prefix                 :integer
 #  sender_name                      :string
 #  sequence_number                  :integer          default(1), not null

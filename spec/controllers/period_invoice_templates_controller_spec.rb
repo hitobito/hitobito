@@ -168,6 +168,36 @@ describe PeriodInvoiceTemplatesController do
       expect(entry.recipient_source.active_at).to eq start
       expect(entry.recipient_source.parent_id).to eq Group.root.id
     end
+
+    context "with prices including vat" do
+      render_views
+
+      let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      before { Group.root.invoice_config.update_columns(prices_include_vat: true) }
+
+      it "GET#edit shows unit cost including vat" do
+        period_invoice_template.items.first.update!(vat_rate: 8.1,
+          dynamic_cost_parameters: {unit_cost: "10", role_types: [Group::BottomLayer::LocalGuide.name]})
+
+        get :edit, params: {group_id: Group.root.id, id: period_invoice_template.id}
+
+        expect(dom).to have_css "input[name$='[dynamic_cost_parameters][unit_cost]'][value='10.81']"
+        expect(dom).to have_css "input[placeholder='Preis inkl. MWSt.*']"
+      end
+
+      it "PUT#update stores unit cost without vat" do
+        item = period_invoice_template.items.first
+
+        put :update, params: {group_id: Group.root.id, id: period_invoice_template.id,
+                              period_invoice_template: {items_attributes: {"0" => {
+                                id: item.id, vat_rate: "8.1",
+                                dynamic_cost_parameters: {unit_cost: "10.81", role_types: item.role_types}
+                              }}}}
+
+        expect(item.reload.unit_cost).to eq 10.0
+      end
+    end
   end
 
   context "feature gate disabled" do

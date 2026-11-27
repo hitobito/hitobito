@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class PeriodInvoiceTemplatesController < CrudController
+  include VatInclusivePrices
+
   self.nesting = Group
 
   helper_method :group, :placeholder
@@ -45,6 +47,14 @@ class PeriodInvoiceTemplatesController < CrudController
   def build_entry
     return super unless params[:source_id]
     group.period_invoice_templates.find(params[:source_id]).duplicate
+  end
+
+  def permitted_params
+    super.tap do |permitted|
+      permitted[:items_attributes]&.each_value do |attrs|
+        convert_unit_cost_to_net(attrs[:dynamic_cost_parameters], attrs[:vat_rate])
+      end
+    end
   end
 
   def placeholder(attr, suffix: nil)

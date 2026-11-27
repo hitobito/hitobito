@@ -1240,6 +1240,7 @@ de:
     general_fields:
       payment: "Einzahlung für"
       payment_information_help: "Wird in jeder Rechnung aufgeführt, kann pro Rechnung angepasst werden"
+      prices_include_vat_caption: "Preise von Rechnungsposten, Rechnungsartikeln und Sammelrechnungen inkl. MWSt. erfassen"
       deprecated_payee_help: "Alter Zahlungsempfänger vor Umstellung auf neues QR-Rechnungsformat"
       address_help: "Erscheint auf dem Brief als Absenderadresse"
       payee_help: "Erscheint auf dem Einzahlungsschein"

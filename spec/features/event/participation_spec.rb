@@ -214,6 +214,34 @@ describe :event_participation, js: true do
     end
   end
 
+  context "when adding someone else to a full course with waiting list" do
+    let(:person) { people(:root) }
+    let(:event) do
+      Fabricate(:course, application_opening_at: 5.days.ago, groups: [group],
+        maximum_participants: 1, waiting_list: true)
+    end
+
+    before do
+      participation = Fabricate(:event_participation, event:, participant: people(:bottom_member),
+        active: true)
+      Fabricate(Event::Course::Role::Participant.name.to_sym, participation:)
+      event.refresh_participant_counts!
+    end
+
+    it "lists the person as participant, not on the waiting list" do
+      pending "the application stays on the waiting list (#4694)"
+
+      visit new_group_event_participation_path(group, event, for_someone_else: true)
+      fill_in "Person", with: "Top Leader"
+      find('ul[role="listbox"] li[role="option"]', text: "Top Leader").click
+      click_on "Anmelden"
+      expect(page).to have_content "Teilnahme von Top Leader in Eventus wurde erfolgreich erstellt."
+
+      expect(event.participations.find_by(participant: people(:top_leader))).to be_active
+      expect(page).not_to have_content "Auf Warteliste"
+    end
+  end
+
   context "additional_information, which is used for dietary info in some wagons" do
     let(:person) { Fabricate(:person) }
     let(:person2) { Fabricate(:person) }

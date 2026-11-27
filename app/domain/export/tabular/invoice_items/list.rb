@@ -10,7 +10,10 @@ module Export::Tabular::InvoiceItems
     ITEM_ATTRS = %w[name account cost_center count unit_cost cost vat_rate vat total].freeze
 
     INVOICE_ATTRS = (Export::Tabular::Invoices::List::INCLUDED_ATTRS -
-      %w[cost vat total amount_paid]).freeze
+      %w[cost vat total amount_paid]).flat_map do |attr|
+      insert_before = {recipient_email: "recipient_id", sent_at: "issued_at"}
+      [insert_before[attr.to_sym], attr].compact
+    end.freeze
 
     ADDRESS_ATTRS = Export::Tabular::Invoices::List::ADDRESS_ATTRS.freeze
 
@@ -18,6 +21,9 @@ module Export::Tabular::InvoiceItems
 
     self.model_class = InvoiceItem
     self.row_class = Export::Tabular::InvoiceItems::Row
+    self.styled_attrs = {
+      date: [:issued_at, :sent_at, :due_at]
+    }
 
     def attributes
       (ITEM_ATTRS + INVOICE_ATTRS + ADDRESS_ATTRS).collect(&:to_sym)

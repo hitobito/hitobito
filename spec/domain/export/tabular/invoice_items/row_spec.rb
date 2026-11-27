@@ -35,6 +35,14 @@ describe Export::Tabular::InvoiceItems::Row do
     expect(row.fetch(:payee_name)).to eq "Hitobito AG"
   end
 
+  it "takes the recipient id and the invoice dates from the invoice" do
+    invoice.update_columns(issued_at: Date.new(2026, 1, 15), sent_at: Date.new(2026, 1, 16))
+
+    expect(row.fetch(:recipient_id)).to eq people(:top_leader).id
+    expect(row.fetch(:issued_at)).to eq "15.01.2026"
+    expect(row.fetch(:sent_at)).to eq "16.01.2026"
+  end
+
   it "prefers the description of the invoice over the one of the item" do
     invoice.update!(description: "Invoice description")
     item.update!(description: "Item description")

@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-class AddLayerGroupToPayments < ActiveRecord::Migration[8.1]
+class AddLayerGroupToPayments < ActiveRecord::Migration[8.0]
   def up
     add_reference :payments, :layer_group, type: :integer, index: true, foreign_key: false
 

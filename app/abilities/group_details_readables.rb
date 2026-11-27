@@ -11,7 +11,10 @@ class GroupDetailsReadables < GroupReadables
   def accessible_groups
     return Group.all if user.root?
 
-    super.where(accessible_conditions.to_a).distinct
+    conditions = accessible_conditions
+    return Group.none if conditions.blank?
+
+    super.where(conditions.to_a).distinct
   end
 
   def accessible_conditions

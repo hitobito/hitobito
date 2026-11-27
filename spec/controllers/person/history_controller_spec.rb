@@ -60,10 +60,10 @@ describe Person::HistoryController do
           start_at: 1.week.from_now)
 
         get :index, params: {group_id: groups(:top_group).id, id: top_leader.id}
-        expect(body).to have_css "h2.mt-4", text: "Qualifikationen"
-        expect(body).to have_css "tbody td strong", text: sl_leader.to_s
+        expect(body).to have_css "h2.mt-4", text: "Aktuelle Qualifikationen"
+        expect(body).to have_css "tbody td", text: sl_leader.to_s
+        expect(body).to have_css "h2.mt-4", text: "Vergangene Qualifikationen"
         expect(body).to have_css "tbody td", text: gl.to_s
-        expect(body).not_to have_css "tbody td strong", text: gl.to_s
       end
 
       it "includes open trainings days" do

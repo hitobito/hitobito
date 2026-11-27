@@ -38,6 +38,24 @@ RSpec.describe "events#show", type: :request do
       end
     end
 
+    describe "privacy_policies" do
+      let(:params) { {extra_fields: {events: "privacy_policies"}} }
+
+      it "links policies that are accessible without login" do
+        groups(:top_layer).privacy_policy.attach(io: StringIO.new("%PDF-1.4 Datenschutz"),
+          filename: "datenschutz.pdf", content_type: "application/pdf")
+
+        make_request
+
+        expect(response.status).to eq(200), response.body
+        url = json["data"]["attributes"]["privacy_policies"].first["url"]
+        reset!
+        get url
+        expect(response.status).to eq 200
+        expect(response.body).to eq "%PDF-1.4 Datenschutz"
+      end
+    end
+
     describe "questions" do
       let(:params) { {include: "questions"} }
 

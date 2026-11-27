@@ -147,6 +147,18 @@ describe Invoice do
     expect(invoice.recipient_country).to eq "CH"
   end
 
+  it "#recipient_address_values omits domestic country" do
+    person.update!(country: "CH")
+
+    expect(create_invoice.recipient_address_values).to eq ["Top Leader", "Greatstreet 345", "3456 Greattown"]
+  end
+
+  it "#recipient_address_values shows foreign country name" do
+    person.update!(country: "DE", zip_code: "10115")
+
+    expect(create_invoice.recipient_address_values.last).to eq "DEUTSCHLAND"
+  end
+
   it "#save prefers additional email with used_for_invoices category over recipient email" do
     category = contact_account_categories(:additional_email_person_invoices)
     person.additional_emails.create!(email: "invoices@example.com", category: category)

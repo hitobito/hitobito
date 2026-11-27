@@ -386,7 +386,10 @@ class Invoice < ActiveRecord::Base # rubocop:todo Metrics/ClassLength
   def printed_recipient_salutation = nil
 
   def foreign_recipient_country
-    recipient_country unless recipient_country == Settings.countries.prioritized.first
+    domestic = Settings.countries.prioritized.first
+    return if recipient_country.blank? || recipient_country == domestic
+
+    Country.new(recipient_country).postal_name
   end
 
   # on index we join aggregated payments

@@ -24,4 +24,23 @@ describe Country do
       expect(country.name).to eq "XX"
     end
   end
+
+  context "#postal_name" do
+    it "uses the official language of neighbouring countries" do
+      expect(%w[DE AT FR IT LI].map { |code| Country.new(code).postal_name })
+        .to eq %w[DEUTSCHLAND ÖSTERREICH FRANCE ITALIA LIECHTENSTEIN]
+    end
+
+    it "uses english for other countries" do
+      expect(Country.new("ES").postal_name).to eq "SPAIN"
+    end
+
+    it "does not depend on the current locale" do
+      I18n.with_locale(:fr) { expect(Country.new("DE").postal_name).to eq "DEUTSCHLAND" }
+    end
+
+    it "returns country code if country is not found" do
+      expect(Country.new("XX").postal_name).to eq "XX"
+    end
+  end
 end

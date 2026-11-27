@@ -17,7 +17,7 @@
 # Addressing rules of the Universal Postal Union ("Postal Addressing Systems",
 # https://www.upu.int/UPU/media/upu/documents/PostCode/AddressElementsFormattingAnInternationalAdressEn.pdf):
 # - the country of destination is printed on the last line, in capital letters, in the
-#   language of the dispatching country or an internationally recognized language
+#   language of the destination for neighbouring countries, otherwise in English
 PostalAddress::Printed = Data.define(:salutation, :names, :care_of, :addition, :street,
   :housenumber, :postbox, :zip_code, :town, :country) do
   def initialize(salutation: nil, **)
@@ -46,7 +46,7 @@ PostalAddress::Printed = Data.define(:salutation, :names, :care_of, :addition, :
   def zip_town = join_present(zip_code, town)
 
   def country_line
-    Countries.label(country).upcase unless country.blank? || domestic?
+    Country.new(country).postal_name unless country.blank? || domestic?
   end
 
   def exceeds_max_lines? = all_lines.size > PostalAddress::Printed::MAX_LINES

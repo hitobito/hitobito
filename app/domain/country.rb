@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito
 
 class Country
+  SWISS_NEIGHBOURS = %w[AT DE FR IT LI].freeze
+
   attr_reader :country_code
 
   def initialize(country_code)
@@ -19,5 +21,17 @@ class Country
     @country.translations[locale.to_s] ||
       @country.common_name ||
       @country.iso_short_name
+  end
+
+  def postal_name
+    name(postal_locale).upcase
+  end
+
+  private
+
+  def postal_locale
+    return :en unless SWISS_NEIGHBOURS.include?(@country&.alpha2)
+
+    @country.languages_official.first
   end
 end

@@ -9,7 +9,10 @@
 
 .accordion-item
   .accordion-header
-    %a.accordion-button.p-2.bg-white.text-black{ href: "##{id}", data: { bs_toggle: :collapse } }
+    %a.accordion-button.p-2.bg-white.text-black{ href: "##{id}",
+                                                 class: ("collapsed" unless open),
+                                                 data: { bs_toggle: :collapse },
+                                                 aria: { expanded: open.present?.to_s, controls: id } }
       = caption
 
   .accordion-collapse.collapse{ id: id, class: open ? "show" : nil }

@@ -1,12 +1,15 @@
 - id = type.to_s.pluralize
 - caption ||= t("people_filters.#{type}.title")
-- open_class = "show" if entry.filter_chain[type.to_sym].present?
+- open = entry.filter_chain[type.to_sym].present?
 
 .accordion-item
   .accordion-header
-    %a.accordion-button.p-2.bg-white.text-black{ href: "##{id}", data: { bs_toggle: :collapse } }
+    %a.accordion-button.p-2.bg-white.text-black{ href: "##{id}",
+                                                 class: ("collapsed" unless open),
+                                                 data: { bs_toggle: :collapse },
+                                                 aria: { expanded: open.to_s, controls: id } }
       = caption
 
-  .accordion-collapse.collapse{ id: id, class: open_class }
+  .accordion-collapse.collapse{ id: id, class: ("show" if open) }
     .accordion-body
       = yield

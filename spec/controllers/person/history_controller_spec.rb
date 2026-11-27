@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -41,6 +41,57 @@ describe Person::HistoryController do
       end
     end
 
+    context "sections" do
+      render_views
+
+      let(:body) { Capybara::Node::Simple.new(response.body) }
+      let(:person) { Fabricate(:person) }
+
+      def fabricate_roles(count, **attrs)
+        count.times do
+          Fabricate(Group::BottomGroup::Leader.name.to_sym,
+            group: groups(:bottom_group_one_one), person: person, **attrs)
+        end
+      end
+
+      def fabricate_roles_in_three_sections(active:)
+        fabricate_roles(active)
+        fabricate_roles(1, start_on: 10.days.from_now)
+        fabricate_roles(1, start_on: 3.years.ago, end_on: 2.years.ago)
+      end
+
+      def get_index
+        get :index, params: {group_id: groups(:bottom_group_one_one).id, id: person.id}
+      end
+
+      it "expands all sections with up to ten entries" do
+        fabricate_roles_in_three_sections(active: 8)
+        get_index
+
+        expect(body).to have_css "section.history-section", count: 3
+        expect(body).to have_css "section.history-section .collapse.show", count: 3
+        expect(body).to have_css "section.history-section button[aria-expanded='true']", count: 3
+      end
+
+      it "expands all sections with more than ten entries in two sections" do
+        fabricate_roles(10)
+        fabricate_roles(1, start_on: 10.days.from_now)
+        get_index
+
+        expect(body).to have_css "section.history-section", count: 2
+        expect(body).to have_css "section.history-section .collapse.show", count: 2
+      end
+
+      it "collapses all sections with more than ten entries in three sections" do
+        fabricate_roles_in_three_sections(active: 9)
+        get_index
+
+        expect(body).to have_css "section.history-section .collapse:not(.show)", count: 3
+        expect(body).to have_css "section.history-section button.collapsed[aria-expanded='false']",
+          count: 3
+      end
+    end
+
     context "qualifications" do
       render_views
 
@@ -50,7 +101,7 @@ describe Person::HistoryController do
 
       it "does not render qualifications if no qualifications exist" do
         get :index, params: {group_id: groups(:top_group).id, id: top_leader.id}
-        expect(body).not_to have_css "h2.mt-4", text: "Qualifikationen"
+        expect(body).not_to have_css "h2", text: "Qualifikationen"
       end
 
       it "lists and marks first qualifications of kind" do
@@ -60,10 +111,10 @@ describe Person::HistoryController do
           start_at: 1.week.from_now)
 
         get :index, params: {group_id: groups(:top_group).id, id: top_leader.id}
-        expect(body).to have_css "h2.mt-4", text: "Qualifikationen"
-        expect(body).to have_css "tbody td strong", text: sl_leader.to_s
-        expect(body).to have_css "tbody td", text: gl.to_s
-        expect(body).not_to have_css "tbody td strong", text: gl.to_s
+        expect(body).to have_css "#current_qualifications h2", text: "Aktuelle Qualifikationen"
+        expect(body).to have_css "#current_qualifications tbody td", text: sl_leader.to_s
+        expect(body).to have_css "#expired_qualifications h2", text: "Vergangene Qualifikationen"
+        expect(body).to have_css "#expired_qualifications tbody td", text: gl.to_s
       end
 
       it "includes open trainings days" do

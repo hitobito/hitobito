@@ -1,18 +1,21 @@
--#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 -#  hitobito and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
 = render_extensions :index_notice
 
-= render 'roles_table', title: Role.model_name.human(count: 2), roles: @roles
-= render 'roles_table', title: t('.future_roles_title'), roles: @future_roles
-= render 'roles_table', title: t('.inactive_roles_title'), roles: @ended_or_archived_roles
+= render 'roles_table', id: 'roles', title: Role.model_name.human(count: 2), roles: @roles
+= render 'roles_table', id: 'future_roles', title: t('.future_roles_title'), roles: @future_roles
+= render 'roles_table', id: 'inactive_roles', title: t('.inactive_roles_title'),
+  roles: @ended_or_archived_roles
 
 = render_extensions :history_members_form
 
 = render 'events'
 
-= render 'qualifications', qualifications: @qualifications
+= render_extensions :additional_events
+
+= render 'qualifications'
 
 = render_extensions :additional_information

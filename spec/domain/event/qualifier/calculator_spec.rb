@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
@@ -86,6 +86,21 @@ describe Event::Qualifier::Calculator do
         add_course(training_days: 0.5, start_at: begin_of_period - 1.day,
           finish_at: begin_of_period)
         expect(gl_records).to be_present
+      end
+
+      context "with exact period" do
+        let(:end_date) { Date.new(2024, 6, 15) }
+        let(:calculator) { described_class.new(@courses, end_date, exact_period: true) }
+
+        it "ignores course before relevant period" do
+          add_course(training_days: 0.5, start_at: Date.new(2023, 6, 14))
+          expect(gl_records).to be_nil
+        end
+
+        it "accepts course on first day of relevant period" do
+          add_course(training_days: 0.5, start_at: Date.new(2023, 6, 15))
+          expect(gl_records).to be_present
+        end
       end
 
       describe "qualification specific dates" do

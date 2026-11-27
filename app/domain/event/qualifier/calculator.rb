@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
@@ -10,11 +10,13 @@ class Event::Qualifier::Calculator
     :training_days,
     :summed_training_days)
 
-  def initialize(courses, end_date, role: :participant, qualification_dates: {})
+  def initialize(courses, end_date, role: :participant, qualification_dates: {},
+    exact_period: false)
     @courses = courses
     @end_date = end_date
     @role = role
     @qualification_dates = qualification_dates
+    @exact_period = exact_period
     @days = Hash.new(0)
   end
 
@@ -67,7 +69,8 @@ class Event::Qualifier::Calculator
   end
 
   def start_of_relevant_period(qualification_kind)
-    start_of_period = (@end_date - qualification_kind.validity.years).beginning_of_year
+    start_of_period = @end_date - qualification_kind.validity.years
+    start_of_period = start_of_period.beginning_of_year unless @exact_period
     start_of_qualification = @qualification_dates[qualification_kind.id]
     if start_of_qualification
       # @qualification_dates are only present for open_training_days calculation,

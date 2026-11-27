@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
 #  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 #  or at https://github.com/hitobito/hitobito.
 
@@ -55,8 +55,8 @@ describe QualificationDecorator do
       expect(qualification).to be_active
       expect(dom).to have_css("span", text: "1.5")
       expect(dom).to have_css "i.fas.fa-info-circle"
-      expect(tooltip).to eq "Damit die Qualifikation am 23.03.2024 nicht abläuft, bitten wir " \
-                            "dich bis spätestens dahin 1.5 Fortbildungstage zu absolvieren."
+      expect(tooltip).to eq "Damit die Qualifikation aktiv bleibt, bitten wir dich 1.5 " \
+                            "Fortbildungstage bis am 23.03.2024 zu absolvieren."
     end
 
     it "includes open training days with icon informing about how to reactivate" do
@@ -65,7 +65,7 @@ describe QualificationDecorator do
       expect(qualification).to be_reactivateable
       expect(dom).to have_css "i.fas.fa-info-circle"
       expect(tooltip).to eq "Um deine Qualifikation zu reaktivieren, bitten wir dich 1.5 " \
-                            "Fortbildungstage bis spätestens 21.03.2028 zu absolvieren."
+                            "Fortbildungstage bis am 21.03.2028 zu absolvieren."
     end
   end
 end

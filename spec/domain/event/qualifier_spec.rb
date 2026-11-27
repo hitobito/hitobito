@@ -154,9 +154,9 @@ describe Event::Qualifier do
       person.qualifications.find_by(origin: origin, qualification_kind: kind)
     end
 
-    def create_course_participation(start_at:, training_days: nil)
+    def create_course_participation(start_at:, training_days: nil, finish_at: nil)
       course = Fabricate.build(:course, name: "Kurs #{start_at.year}", kind: event_kind, training_days: training_days)
-      course.dates.build(start_at: start_at)
+      course.dates.build(start_at: start_at, finish_at: finish_at)
       course.save!
       Fabricate(:event_participation, event: course, participant: participant, qualified: true)
     end
@@ -258,6 +258,23 @@ describe Event::Qualifier do
       qualification = obtained_qualification(participant, participation.event.name, gl)
       expect(qualification.start_at).to eq Date.new(2012, 6, 1)
       expect(qualification.qualified_at).to eq Date.new(2018, 4, 1)
+    end
+
+    it "noops if previous course was exactly one day more than validity before current course" do
+      create_course_participation(start_at: Date.new(2013, 3, 1), training_days: 1)
+      create_course_participation(start_at: Date.new(2014, 6, 1), training_days: 1)
+      participation = create_course_participation(start_at: Date.new(2019, 3, 2), training_days: 1)
+      expect { Event::Qualifier.for(participation).issue }.not_to change { participant.qualifications.count }
+    end
+
+    it "prolongs if previous course was exactly validity before current course" do
+      create_course_participation(start_at: Date.new(2013, 3, 2), training_days: 1)
+      create_course_participation(start_at: Date.new(2014, 6, 1), training_days: 1)
+      participation = create_course_participation(start_at: Date.new(2019, 3, 2), training_days: 1)
+
+      expect { Event::Qualifier.for(participation).issue }.to change { participant.qualifications.count }.by(1)
+      qualification = obtained_qualification(participant, participation.event.name, gl)
+      expect(qualification.start_at).to eq Date.new(2013, 3, 2)
     end
 
     it "noop if current and existing courses combined do not have required training days in validity period" do
@@ -440,6 +457,41 @@ describe Event::Qualifier do
         qualification = obtained_qualification(participant, participation.event.name, gl)
         expect(qualification.start_at).to eq Date.new(2012, 1, 1)
         expect(qualification.qualified_at).to eq Date.new(2012, 9, 1)
+      end
+    end
+
+    context "with qualification valid until 2029 and courses in different years" do
+      before do
+        create_qualification(participant, Date.new(2023, 6, 5), :gl)
+        create_course_participation(start_at: Date.new(2023, 6, 5), training_days: 0.5)
+        create_course_participation(start_at: Date.new(2024, 10, 7), finish_at: Date.new(2024, 10, 8),
+          training_days: 2)
+        create_course_participation(start_at: Date.new(2026, 1, 5), training_days: 0.5)
+      end
+
+      it "prolongs until 2030 with course in 2028 counting courses of 2024 and 2026" do
+        participation = create_course_participation(start_at: Date.new(2028, 9, 1), training_days: 1)
+
+        expect { Event::Qualifier.for(participation).issue }.to change { participant.qualifications.count }.by(1)
+        qualification = participant.qualifications.order(:start_at).last
+        expect(qualification.start_at).to eq Date.new(2024, 10, 8)
+        expect(qualification.finish_at).to eq Date.new(2030, 12, 31)
+      end
+    end
+
+    context "with qualification valid until 2029 and courses in qualification year" do
+      before do
+        create_qualification(participant, Date.new(2023, 10, 7), :gl)
+        create_course_participation(start_at: Date.new(2023, 6, 5), training_days: 0.5)
+        create_course_participation(start_at: Date.new(2023, 10, 7), training_days: 2)
+        create_course_participation(start_at: Date.new(2026, 1, 1), training_days: 0.5)
+      end
+
+      it "noops with course in 2029 reaching back to qualification date" do
+        participation = create_course_participation(start_at: Date.new(2029, 10, 6), training_days: 0.5)
+
+        expect { Event::Qualifier.for(participation).issue }.not_to change { participant.qualifications.count }
+        expect(participant.qualifications.maximum(:finish_at)).to eq Date.new(2029, 12, 31)
       end
     end
   end

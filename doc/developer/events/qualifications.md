@@ -38,3 +38,7 @@ Die Qualifikationsart der betrachteten Qualifikation definiert eine Gültigkeits
 - 5. Kurs mit 2 Ausbildungstagen im Jahr 2019 verlängert die Qualifikation von 2018-2024, da mit diesem und dem Kurs von 2018 die 3 Ausbildungstage erreicht wurden. Das Datum des ersten Kurses dieser Ausbildungstage, also demjenigen von 2018, wird als Startdatum der Qualifikation verwendet. Da die Qualifikation bis 2020 reaktivierbar ist, ist diese Verlängerung noch möglich.
 
 Weitere Beispiele siehe [Specs](../../../spec/domain/event/qualifier_spec.rb).
+
+### Offene Ausbildungstage
+
+In der Personen-Historie wird pro Qualifikationsart angezeigt, wie viele Ausbildungstage noch fehlen. Stichtag ist bei aktiven Qualifikationen das Ablaufdatum, bei reaktivierbaren das Ende der Reaktivierbarkeit. Gezählt werden die Kurse der Gültigkeitsdauer (taggenau) vor diesem Stichtag, frühestens jedoch ab dem Jahr nach dem Startdatum der Qualifikation. Bei reaktivierbaren Qualifikationen entspricht dies dem Bedarf, wenn die Kurse erst ganz am Ende der Reaktivierbarkeit besucht werden.

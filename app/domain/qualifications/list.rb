@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -48,19 +48,20 @@ module Qualifications
     end
 
     def calculate_open_training_days(item)
-      item.open_training_days = calculator.open_training_days(item.qualification_kind)
+      Event::Qualifier::Calculator.new(
+        courses,
+        reference_date(item),
+        qualification_dates: maximum_qualification_dates_per_kind,
+        exact_period: true
+      ).open_training_days(item.qualification_kind)
     end
 
-    def calculator
-      @calculator ||= Event::Qualifier::Calculator.new(
-        courses,
-        today,
-        qualification_dates: maximum_qualification_dates_per_kind
-      )
+    def reference_date(quali)
+      (quali.active? ? quali.finish_at : quali.reactivateable_until) || today
     end
 
     def courses
-      Event::TrainingDays::CoursesLoader.new(
+      @courses ||= Event::TrainingDays::CoursesLoader.new(
         @person,
         :participant,
         ordered_qualifications.pluck(:qualification_kind_id).uniq,

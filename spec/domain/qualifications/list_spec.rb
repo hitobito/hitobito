@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -115,11 +115,105 @@ describe Qualifications::List do
         expect(qualifications[0].open_training_days).to eq 0.5
         expect(qualifications[1].open_training_days).to be_nil
       end
+
+      context "with validity of six years and reactivateable for four years" do
+        before { gl.update!(required_training_days: 3, validity: 6, reactivateable: 4) }
+
+        subject(:tooltip) { qualifications[0].decorate.open_training_days_info[/title="(.*?)"/, 1] }
+
+        context "with courses in different years" do
+          before do
+            Fabricate(:qualification, person: person, qualification_kind: gl,
+              start_at: Date.new(2023, 6, 5))
+            create_course_participation(training_days: 0.5, start_at: Date.new(2023, 6, 5))
+            create_course_participation(training_days: 2, start_at: Date.new(2024, 10, 7),
+              finish_at: Date.new(2024, 10, 8))
+            create_course_participation(training_days: 0.5, start_at: Date.new(2026, 1, 5))
+          end
+
+          it "counts courses after qualification year until expiry" do
+            travel_to(Date.new(2026, 11, 26))
+            expect(qualifications[0].open_training_days).to eq 0.5
+            expect(tooltip).to eq "Damit die Qualifikation aktiv bleibt, bitten wir dich 0.5 " \
+              "Fortbildungstage bis am 31.12.2029 zu absolvieren."
+          end
+
+          it "counts courses within exact validity before end of reactivateable period" do
+            travel_to(Date.new(2030, 1, 1))
+            expect(qualifications[0].open_training_days).to eq 3
+            expect(tooltip).to eq "Um deine Qualifikation zu reaktivieren, bitten wir dich 3 " \
+              "Fortbildungstage bis am 31.12.2033 zu absolvieren."
+          end
+
+          it "counts course in reactivateable period" do
+            create_course_participation(training_days: 1, start_at: Date.new(2031, 1, 1))
+            travel_to(Date.new(2031, 1, 1))
+            expect(qualifications[0].open_training_days).to eq 2
+            expect(tooltip).to eq "Um deine Qualifikation zu reaktivieren, bitten wir dich 2 " \
+              "Fortbildungstage bis am 31.12.2033 zu absolvieren."
+          end
+
+          it "counts course on first day of exact validity before end of reactivateable period" do
+            create_course_participation(training_days: 1, start_at: Date.new(2027, 12, 31))
+            travel_to(Date.new(2030, 1, 1))
+            expect(qualifications[0].open_training_days).to eq 2
+            expect(tooltip).to eq "Um deine Qualifikation zu reaktivieren, bitten wir dich 2 " \
+              "Fortbildungstage bis am 31.12.2033 zu absolvieren."
+          end
+
+          context "when prolonged by course in 2028" do
+            before do
+              create_course_participation(training_days: 1, start_at: Date.new(2028, 9, 1))
+              Fabricate(:qualification, person: person, qualification_kind: gl,
+                start_at: Date.new(2024, 10, 8))
+            end
+
+            it "counts courses after new qualification year until new expiry" do
+              travel_to(Date.new(2028, 9, 2))
+              expect(qualifications[0].open_training_days).to eq 1.5
+              expect(tooltip).to eq "Damit die Qualifikation aktiv bleibt, bitten wir dich 1.5 " \
+                "Fortbildungstage bis am 31.12.2030 zu absolvieren."
+            end
+
+            it "counts no course before end of new reactivateable period" do
+              travel_to(Date.new(2031, 1, 1))
+              expect(qualifications[0].open_training_days).to eq 3
+              expect(tooltip).to eq "Um deine Qualifikation zu reaktivieren, bitten wir dich 3 " \
+                "Fortbildungstage bis am 31.12.2034 zu absolvieren."
+            end
+          end
+        end
+
+        context "with courses in qualification year" do
+          before do
+            Fabricate(:qualification, person: person, qualification_kind: gl,
+              start_at: Date.new(2023, 10, 7))
+            create_course_participation(training_days: 0.5, start_at: Date.new(2023, 6, 5))
+            create_course_participation(training_days: 2, start_at: Date.new(2023, 10, 7))
+            create_course_participation(training_days: 0.5, start_at: Date.new(2026, 1, 1))
+          end
+
+          it "ignores courses in qualification year until expiry" do
+            travel_to(Date.new(2026, 11, 26))
+            expect(qualifications[0].open_training_days).to eq 2.5
+            expect(tooltip).to eq "Damit die Qualifikation aktiv bleibt, bitten wir dich 2.5 " \
+              "Fortbildungstage bis am 31.12.2029 zu absolvieren."
+          end
+
+          it "counts no course before end of reactivateable period" do
+            travel_to(Date.new(2030, 1, 1))
+            expect(qualifications[0].open_training_days).to eq 3
+            expect(tooltip).to eq "Um deine Qualifikation zu reaktivieren, bitten wir dich 3 " \
+              "Fortbildungstage bis am 31.12.2033 zu absolvieren."
+          end
+        end
+      end
     end
 
-    def create_course_participation(start_at:, kind: slk, qualified: true, training_days: nil)
+    def create_course_participation(start_at:, finish_at: nil, kind: slk, qualified: true,
+      training_days: nil)
       course = Fabricate.build(:course, kind: kind, training_days: training_days)
-      course.dates.build(start_at: start_at)
+      course.dates.build(start_at: start_at, finish_at: finish_at)
       course.save!
       Fabricate(:event_participation, event: course, participant: person, qualified: qualified)
     end

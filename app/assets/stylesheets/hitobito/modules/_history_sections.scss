@@ -1,0 +1,32 @@
+.history-section {
+  h2 {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.history-section-toggle {
+  flex-grow: 1;
+  padding: 4px 0 4px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+
+  .fa-chevron-right {
+    margin-right: 0.25rem;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  &[aria-expanded="true"] .fa-chevron-right {
+    transform: rotate(90deg);
+  }
+
+  &.collapsed ~ .history-section-actions {
+    display: none;
+  }
+}
+
+.history-section-actions .btn-group {
+  margin-bottom: 0;
+}

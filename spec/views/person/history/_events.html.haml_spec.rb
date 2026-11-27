@@ -17,6 +17,7 @@ describe "person/history/_events.html.haml" do
 
   before do
     allow(controller).to receive_messages(current_user: current_user)
+    allow(view).to receive(:history_sections_collapsed?).and_return(false)
     assign(:participations_by_event_type, {"Events" => [participation.decorate]})
   end
 

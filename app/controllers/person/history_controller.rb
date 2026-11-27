@@ -1,24 +1,49 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
 class Person::HistoryController < ApplicationController
+  COLLAPSE_SECTIONS_ABOVE_COUNT = 2
+  COLLAPSE_SECTIONS_ABOVE_ENTRIES = 10
+
   class_attribute :event_type_order, default: [Event, Event::Course]
 
   before_action :authorize_action
 
   decorates :group, :person
 
+  helper_method :history_sections_collapsed?
+
   def index
     @roles = fetch_roles(:active)
     @future_roles = fetch_roles(:future)
     @ended_or_archived_roles = fetch_roles(:ended_or_archived)
-    @qualifications = Qualifications::List.new(entry).qualifications
+    @current_qualifications, @expired_qualifications =
+      Qualifications::List.new(entry).qualifications.partition(&:first_reactivateable?)
     @participations_by_event_type = participations_by_event_type
   end
 
   private
+
+  def history_sections_collapsed?
+    return @history_sections_collapsed if defined?(@history_sections_collapsed)
+
+    sizes = history_section_sizes
+    @history_sections_collapsed = sizes.size > COLLAPSE_SECTIONS_ABOVE_COUNT &&
+      sizes.sum > COLLAPSE_SECTIONS_ABOVE_ENTRIES
+  end
+
+  def history_section_sizes
+    [
+      @roles,
+      @future_roles,
+      @ended_or_archived_roles,
+      *@participations_by_event_type.values,
+      @current_qualifications,
+      @expired_qualifications
+    ].map(&:size).select(&:positive?)
+  end
 
   def roles_scope
     Person::PreloadGroups.for([entry]).first.roles.includes(:group)

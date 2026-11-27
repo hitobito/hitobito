@@ -1,0 +1,21 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- expanded = !history_sections_collapsed?
+- content_id = "#{id}_content"
+
+%section.history-section.mt-4{ id: id }
+  %h2.d-flex.align-items-center
+    %button.history-section-toggle{ type: :button,
+                                    class: ("collapsed" unless expanded),
+                                    data: { bs_toggle: :collapse, bs_target: "##{content_id}" },
+                                    aria: { expanded: expanded.to_s, controls: content_id } }
+      = icon(:"chevron-right", class: "muted small")
+      = title
+    - if local_assigns[:actions].present?
+      %span.history-section-actions= actions
+
+  .collapse{ id: content_id, class: ("show" if expanded) }
+    = yield

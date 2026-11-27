@@ -52,6 +52,15 @@ describe PeopleController, js: true do
     expect(page).to have_no_selector(".table-striped tbody tr")
   end
 
+  it "marks filter panels as collapsed until they are opened" do
+    sign_in
+    visit new_group_people_filter_path(group)
+
+    expect(page).to have_css(".accordion-button.collapsed[aria-expanded='false']", text: "Rollen")
+    find(".accordion-button", text: "Rollen").click
+    expect(page).to have_css(".accordion-button:not(.collapsed)[aria-expanded='true']", text: "Rollen")
+  end
+
   context "toggling roles" do
     it "toggles roles when clicking layer" do
       sign_in_and_create_filter

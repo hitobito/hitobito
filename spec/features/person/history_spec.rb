@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
@@ -30,6 +30,31 @@ describe :person_history, js: true do
 
       expect(page).to have_link("Austritt",
         href: new_group_role_termination_path(role.group_id, role.id))
+    end
+  end
+
+  context "sections" do
+    before do
+      Fabricate(Group::TopGroup::Member.name.to_sym, group: role.group, person: person,
+        start_on: 3.years.ago, end_on: 2.years.ago)
+      visit history_group_person_path(group_id: role.group_id, id: person.id)
+    end
+
+    it "toggles each section independently by clicking its title" do
+      active = find("section#roles")
+      inactive = find("section#inactive_roles")
+      expect(active).to have_css("button[aria-expanded='true']", text: "Rollen")
+      expect(active).to have_css("td", text: role.group.name)
+
+      active.click_button("Rollen")
+      expect(active).to have_css("button.collapsed[aria-expanded='false']", text: "Rollen")
+      expect(active).to have_css(".collapse:not(.show)", visible: :hidden)
+      expect(active).to have_no_css("td")
+      expect(inactive).to have_css("td")
+
+      active.click_button("Rollen")
+      expect(active).to have_css("button[aria-expanded='true']", text: "Rollen")
+      expect(active).to have_css("td", text: role.group.name)
     end
   end
 end

@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2015, Jungwacht Blauring Schweiz. This file is part of
+#  Copyright (c) 2012-2026, Jungwacht Blauring Schweiz. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -43,7 +43,7 @@ describe Person::HistoryController, type: :controller do
 
       get :index, params: params
       expect(dom.all("table tbody tr").size).to eq 2
-      role_row = dom.find("div.table-responsive:nth-of-type(2) table tbody tr")
+      role_row = dom.find("#inactive_roles table tbody tr")
       expect(role_row.find("td:eq(1) a:eq(2)").text).to eq "Group 11"
       expect(role_row.find("td:eq(2)").text.strip).to eq "Member"
       expect(role_row.find("td:eq(3)").text).to be_present
@@ -68,7 +68,7 @@ describe Person::HistoryController, type: :controller do
 
       get :index, params: params
       expect(dom.all("table tbody tr").size).to eq 2
-      role_row = dom.find("div.table-responsive:nth-of-type(2) table tbody tr")
+      role_row = dom.find("#inactive_roles table tbody tr")
       expect(role_row.find("td:eq(1) a:eq(2)").text).to eq "TopGroup"
       expect(role_row.find("td:eq(4)").text).to be_present
     end

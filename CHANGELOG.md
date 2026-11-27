@@ -1,5 +1,9 @@
 # Hitobito Changelog
 
+## unreleased
+
+- Die Ansicht Verlauf auf der Person wurde neu strukturiert. Einzelne Bereich können neu auf- und zugeklappt werden (hitobito_sac_cas#2687)
+
 ## Version 2.11
 
 - Die Zahlungsliste einer Ebene und deren Export sind nur noch mit Finanzberechtigung auf dieser Ebene zugänglich

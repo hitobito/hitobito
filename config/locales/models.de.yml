@@ -58,6 +58,8 @@ de:
         blank: "muss ausgefüllt werden"
         record_invalid: 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
       models:
+        event/api_registration:
+          not_allowed: ist für diesen Anlass nicht vorgesehen
         event/participation_contact_datas/managed:
           attributes:
             base:

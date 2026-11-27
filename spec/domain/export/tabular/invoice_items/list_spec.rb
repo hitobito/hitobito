@@ -17,7 +17,7 @@ describe Export::Tabular::InvoiceItems::List do
     expect(list.attributes).to eq [
       :name, :account, :cost_center, :count, :unit_cost, :cost, :vat_rate, :vat, :total,
       :title, :sequence_number, :state, :esr_number, :description,
-      :recipient_email, :recipient_address, :sent_at, :due_at,
+      :recipient_id, :recipient_email, :recipient_address, :issued_at, :sent_at, :due_at,
       :recipient_company_name, :recipient_name, :recipient_first_name, :recipient_last_name,
       :recipient_address_care_of, :recipient_address_addition, :recipient_street,
       :recipient_housenumber,
@@ -35,9 +35,9 @@ describe Export::Tabular::InvoiceItems::List do
   end
 
   it "labels the remaining attributes with the invoice translations" do
-    expect(list.labels[9, 9]).to eq [
-      "Titel", "Nummer", "Status", "Referenz Nummer", "Text", "Empfänger E-Mail",
-      "Empfänger Adresse", "Verschickt am", "Fällig am"
+    expect(list.labels[9, 11]).to eq [
+      "Titel", "Nummer", "Status", "Referenz Nummer", "Text", "Empfängernummer",
+      "Empfänger E-Mail", "Empfänger Adresse", "Gestellt am", "Verschickt am", "Fällig am"
     ]
     expect(list.labels.last(6)).to eq [
       "Zahlungsempfänger Name", "Zahlungsempfänger Strasse", "Zahlungsempfänger Hausnummer",
@@ -64,6 +64,7 @@ describe Export::Tabular::InvoiceItems::List do
       expect(csv.pluck("Titel").uniq).to eq [invoice.title]
       expect(csv.pluck("Nummer").uniq).to eq [invoice.sequence_number]
       expect(csv.pluck("Empfänger E-Mail").uniq).to eq [invoice.recipient_email]
+      expect(csv.pluck("Empfängernummer").uniq).to eq [invoice.recipient_id.to_s]
     end
 
     it "writes the amounts of the individual item" do
@@ -85,6 +86,35 @@ describe Export::Tabular::InvoiceItems::List do
       invoice.update_columns(recipient_id: nil, recipient_type: nil)
 
       expect(csv.pluck(0)).to include "pens"
+    end
+  end
+
+  describe "xlsx" do
+    let(:worksheet) do
+      sheet = nil
+      allow_any_instance_of(Axlsx::Workbook).to receive(:add_worksheet)
+        .and_wrap_original do |m, *args, &block|
+          m.call(*args) do |s|
+            block.call(s)
+            sheet = s
+          end
+        end
+      described_class.xlsx([item])
+      sheet
+    end
+
+    it "writes the invoice dates as date cells" do
+      invoice.update_columns(issued_at: Date.new(2026, 1, 15), sent_at: Date.new(2026, 1, 16),
+        due_at: Date.new(2026, 2, 15))
+      date_num_fmt_id = 14
+      data_row = worksheet.rows.last
+
+      {issued_at: Date.new(2026, 1, 15), sent_at: Date.new(2026, 1, 16),
+       due_at: Date.new(2026, 2, 15)}.each do |attr, date|
+        cell = data_row.cells[list.attributes.index(attr)]
+        expect(cell.value).to eq date
+        expect(worksheet.workbook.styles.cellXfs[cell.style].numFmtId).to eq date_num_fmt_id
+      end
     end
   end
 end

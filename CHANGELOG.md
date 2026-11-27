@@ -2,6 +2,8 @@
 
 ## unreleased
 
+- Der Rechnungsposten-Export enthält neu die Empfänger-ID sowie das Rechnungsdatum (hitobito_florist#20)
+- Die Datums-Spalten im Rechnungen- und Rechnungsposten-Export werden als Datum formatiert (hitobito_florist#20)
 - Die Zahlungsliste einer Ebene und deren Export sind nur noch mit Finanzberechtigung auf dieser Ebene zugänglich
 - Zahlungen ohne Rechnung werden der Ebene zugeordnet, die sie importiert hat, und nur noch dort in der Zahlungsliste und im Export angezeigt. Früher importierte Zahlungen ohne Rechnung erscheinen auf der obersten Ebene (#4684)
 - Rechnungen werden auch für Empfänger\*innen erstellt, in deren Sprache die Rechnungsposten nicht übersetzt sind. Es wird die vorhandene Übersetzung verwendet (#4667)

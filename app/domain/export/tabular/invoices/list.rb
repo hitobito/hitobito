@@ -19,6 +19,9 @@ module Export::Tabular::Invoices
 
     self.model_class = Invoice
     self.row_class = Export::Tabular::Invoices::Row
+    self.styled_attrs = {
+      date: [:sent_at, :due_at]
+    }
 
     def attributes
       (INCLUDED_ATTRS + CUSTOM_METHODS + ADDRESS_ATTRS).collect(&:to_sym)

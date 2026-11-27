@@ -1345,6 +1345,7 @@ de:
           reminded: Gemahnt
           cancelled: Storniert
         recipient: Empfänger
+        recipient_id: Empfängernummer
         recipient_email: Empfänger E-Mail
         recipient_company_name: Firmenname
         recipient_name: Name

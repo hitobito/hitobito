@@ -242,6 +242,14 @@ describe GroupDetailsReadables do
     end
   end
 
+  context "without group permissions" do
+    let_it_be(:role) { Fabricate(Group::BottomGroup::NoPermissions.sti_name, group: groups(:bottom_group_one_one)) }
+
+    it "can not index any group" do
+      is_expected.to be_empty
+    end
+  end
+
   context :root do
     let(:user) { people(:root) }
 

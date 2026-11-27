@@ -12,17 +12,29 @@ module MailRelay
       @labels = labels
     end
 
-    def entries
-      people.flat_map do |person|
-        preferred_emails(person).presence || default_emails(person)
-      end.compact_blank.uniq
+    def emails
+      compose_people_emails.values.flatten.uniq
+    end
+
+    def person_emails
+      compose_people_emails.flat_map do |person, emails|
+        emails.map { |email| {person_id: person.id, email:} }
+      end
     end
 
     private
 
+    def emails_for(person)
+      (preferred_emails(person).presence || default_emails(person)).compact_blank.uniq
+    end
+
+    def compose_people_emails
+      people.index_with { |person| emails_for(person) }
+    end
+
     def people
       if FeatureGate.enabled? "people.people_managers"
-        return people_and_their_managers
+        return @people_and_their_managers ||= people_and_their_managers
       end
 
       @people

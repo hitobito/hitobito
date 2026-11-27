@@ -39,7 +39,7 @@ class Event::ParticipationNotificationJob < BaseJob
   def notify_contact?(event)
     event.notify_contact_on_participations? &&
       event.contact.present? &&
-      MailRelay::AddressList.new(event.contact).entries.any?
+      MailRelay::AddressList.new(event.contact).emails.any?
   end
 
   def participation

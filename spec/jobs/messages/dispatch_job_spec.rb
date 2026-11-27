@@ -82,7 +82,7 @@ describe Messages::DispatchJob do
     subject { Messages::DispatchJob.new(message) }
 
     before do
-      expect(Messages::BulkMail::AddressList).to receive_message_chain(:new, :entries)
+      expect(MailRelay::AddressList).to receive_message_chain(:new, :person_emails)
         .and_return([{person_id: top_leader.id, email: "recipient@example.com"}])
 
       # Simulate all mails being correctly sent

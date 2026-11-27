@@ -412,7 +412,7 @@ class Person < ActiveRecord::Base # rubocop:disable Metrics/ClassLength
     end
 
     def mailing_emails_for(people, labels = [])
-      MailRelay::AddressList.new(people, labels).entries
+      MailRelay::AddressList.new(people, labels).emails
     end
 
     def filter_attrs

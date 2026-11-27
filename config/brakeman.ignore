@@ -76,7 +76,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/models/concerns/globalized.rb",
-      "line": 122,
+      "line": 118,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "joins(\"          LEFT JOIN #{translations_table_name} ON\\n          #{translations_table_name}.#{reflect_on_association(:translations).foreign_key} = #{table_name}.id\\n          AND #{translations_table_name}.locale = #{connection.quote(I18n.locale)}\\n\")",
       "render_path": null,
@@ -356,25 +356,6 @@
       "note": "All input values are ensured to be integer and thus not dangerous"
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 120,
-      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
-      "check_name": "EOLRails",
-      "message": "Support for Rails 8.0.5.1 ended on 2026-11-07",
-      "file": "Gemfile.lock",
-      "line": 572,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        1104
-      ],
-      "note": "Ignoring that for now"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "f01681cc519400d5ecf1a9daa5fff0deceb0d7540d558c889452271597a7436f",
@@ -421,5 +402,5 @@
       "note": "The command can only be executed in an authenticated context or locally, some parameters are checked against a whitelist"
     }
   ],
-  "brakeman_version": "8.1.0"
+  "brakeman_version": "8.1.1"
 }

@@ -857,6 +857,36 @@
           "writable": false,
           "description": null
         },
+        "required_contact_attrs": {
+          "type": "array_of_strings",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "hidden_contact_attrs": {
+          "type": "array_of_strings",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "places_available": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "waiting_list_available": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "external_application_possible": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "state": {
           "type": "string",
           "readable": true,
@@ -906,7 +936,13 @@
           "description": null
         }
       },
-      "extra_attributes": {},
+      "extra_attributes": {
+        "privacy_policies": {
+          "type": "array",
+          "readable": true,
+          "description": null
+        }
+      },
       "sorts": {
         "id": {}
       },
@@ -1871,9 +1907,45 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "required_contact_attrs": {
+          "type": "array_of_strings",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "hidden_contact_attrs": {
+          "type": "array_of_strings",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "places_available": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "waiting_list_available": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "external_application_possible": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
-      "extra_attributes": {},
+      "extra_attributes": {
+        "privacy_policies": {
+          "type": "array",
+          "readable": true,
+          "description": null
+        }
+      },
       "sorts": {
         "id": {}
       },

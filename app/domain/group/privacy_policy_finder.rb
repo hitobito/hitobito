@@ -24,9 +24,9 @@ class Group::PrivacyPolicyFinder
   end
 
   def groups
-    @groups ||= @group.layer_hierarchy(includes: [:privacy_policy_attachment]).select do |g|
-      g.privacy_policy.present?
-    end
+    @groups ||= @group
+      .layer_hierarchy(includes: [:translations, {privacy_policy_attachment: :blob}])
+      .select { |g| g.privacy_policy.present? }
   end
 
   def all

@@ -47,6 +47,32 @@ class EventResource < ApplicationResource
     attribute :updated_at, :datetime, filterable: true
   end
 
+  attribute :required_contact_attrs, :array_of_strings,
+    writable: false, filterable: false, sortable: false do
+    (@object.class.mandatory_contact_attrs + @object.required_contact_attrs.map(&:to_sym))
+      .uniq.map(&:to_s)
+  end
+  attribute :hidden_contact_attrs, :array_of_strings,
+    writable: false, filterable: false, sortable: false do
+    @object.hidden_contact_attrs.map(&:to_s)
+  end
+  attribute :places_available, :boolean,
+    writable: false, filterable: false, sortable: false do
+    @object.places_available?
+  end
+  attribute :waiting_list_available, :boolean,
+    writable: false, filterable: false, sortable: false do
+    @object.waiting_list_available?
+  end
+  attribute :external_application_possible, :boolean,
+    writable: false, filterable: false, sortable: false do
+    @object.external_applications? && @object.application_possible?
+  end
+
+  extra_attribute :privacy_policies, :array do
+    privacy_policies_of(@object.groups.first)
+  end
+
   belongs_to :contact, resource: PersonResource, writable: false,
     base_scope: ::Person.all # hitobito/hitobito_pbs#466
   has_one :contact_details, resource: Event::ContactDetailsResource, writable: false,
@@ -97,5 +123,20 @@ class EventResource < ApplicationResource
 
   def base_scope
     super.includes(:groups, :translations)
+  end
+
+  private
+
+  def privacy_policies_of(group)
+    @privacy_policies ||= {}
+    @privacy_policies[group.layer_group_id] ||=
+      Group::PrivacyPolicyFinder.for(group:).all.map do |policy|
+        {
+          group_id: policy[:group].id,
+          group_name: policy[:group].to_s,
+          title: policy[:title],
+          url: context.rails_storage_proxy_url(policy[:group].privacy_policy.blob)
+        }
+      end
   end
 end

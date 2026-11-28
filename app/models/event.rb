@@ -213,7 +213,7 @@ class Event < ActiveRecord::Base # rubocop:disable Metrics/ClassLength:
 
   has_many :invitations, dependent: :destroy
 
-  has_many :participations, dependent: :destroy
+  has_many :participations, dependent: :destroy, inverse_of: :event
   has_many :people, through: :participations, source: :participant, source_type: Person.sti_name
 
   has_many :subscriptions, as: :subscriber, dependent: :destroy

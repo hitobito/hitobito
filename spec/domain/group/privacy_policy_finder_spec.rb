@@ -21,6 +21,10 @@ describe Group::PrivacyPolicyFinder do
     it "#acceptance_needed? is false" do
       expect(policy_finder).not_to be_acceptance_needed
     end
+
+    it "#accepted? is true without acceptance" do
+      expect(policy_finder.accepted?(false)).to be true
+    end
   end
 
   context "with privacy policy" do
@@ -61,6 +65,23 @@ describe Group::PrivacyPolicyFinder do
         it "is true if person is accepting" do
           person.privacy_policy_accepted = true
           expect(policy_finder).to be_acceptance_needed
+        end
+      end
+    end
+
+    describe "#accepted?" do
+      let(:person) { Fabricate.build(:person) }
+
+      it "is true only if given" do
+        expect(policy_finder.accepted?(true)).to be true
+        expect(policy_finder.accepted?(false)).to be false
+      end
+
+      context "when the person has already accepted" do
+        let(:person) { people(:top_leader).tap { |p| p.update!(privacy_policy_accepted: true) } }
+
+        it "is true even if not given again" do
+          expect(policy_finder.accepted?(false)).to be true
         end
       end
     end

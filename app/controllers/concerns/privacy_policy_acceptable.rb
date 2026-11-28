@@ -28,9 +28,7 @@ module PrivacyPolicyAcceptable
   end
 
   def privacy_policy_accepted?
-    return true unless policy_finder.acceptance_needed?
-
-    true?(privacy_policy_param)
+    !policy_finder.acceptance_needed? || policy_finder.accepted?(true?(privacy_policy_param))
   end
 
   def add_privacy_policy_not_accepted_error(e = person)

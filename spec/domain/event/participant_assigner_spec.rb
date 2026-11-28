@@ -25,7 +25,60 @@ describe Event::ParticipantAssigner do
 
   let(:pending_jobs) { Delayed::Job.where(locked_at: nil, failed_at: nil).map(&:payload_object) }
 
-  subject { Event::ParticipantAssigner.new(event, participation) }
+  subject { Event::ParticipantAssigner.new(participation, target_event: event) }
+
+  describe "#assign_directly?" do
+    it "is true with automatic assignment and places available" do
+      course.update!(maximum_participants: 2, automatic_assignment: true)
+
+      expect(subject).to be_assign_directly
+    end
+
+    it "is false without automatic assignment" do
+      expect(subject).not_to be_assign_directly
+    end
+
+    it "decides with the counts of the given event" do
+      course.update!(maximum_participants: 1, automatic_assignment: true)
+      given_event = Event.find(course.id)
+      given_event.participant_count = 1
+
+      expect(described_class.new(participation, target_event: given_event)).not_to be_assign_directly
+    end
+  end
+
+  describe "#assign_directly" do
+    before do
+      participation.update!(active: false)
+      course.update!(maximum_participants: 2, automatic_assignment: true)
+    end
+
+    it "adds the participant" do
+      expect(subject.assign_directly).to be true
+      expect(participation.reload).to be_active
+    end
+
+    it "does not assign without automatic assignment" do
+      course.update!(automatic_assignment: false)
+
+      expect(subject.assign_directly).to be false
+      expect(participation.reload).not_to be_active
+    end
+
+    it "assigns without automatic assignment if the caller wants it" do
+      course.update!(automatic_assignment: false)
+
+      expect(subject.assign_directly(true)).to be true
+      expect(participation.reload).to be_active
+    end
+
+    it "does nothing for events without applications" do
+      event = Fabricate(:event, groups: [groups(:top_layer)])
+
+      expect(described_class.new(participation, target_event: event).assign_directly(true)).to be false
+      expect(participation.reload).not_to be_active
+    end
+  end
 
   describe "#add_participant" do
     before do
@@ -163,8 +216,8 @@ describe Event::ParticipantAssigner do
       Event::Course.create!(name: "Event 2", group_ids: event1.group_ids,
         dates: event1.dates, kind: event_kinds(:slk))
     }
-    let(:assigner1) { Event::ParticipantAssigner.new(event1, participation) }
-    let(:assigner2) { Event::ParticipantAssigner.new(event2, participation) }
+    let(:assigner1) { Event::ParticipantAssigner.new(participation, target_event: event1) }
+    let(:assigner2) { Event::ParticipantAssigner.new(participation, target_event: event2) }
 
     let(:participation) do
       p = Fabricate(:event_participation, event: event1, active: false)
@@ -189,6 +242,13 @@ describe Event::ParticipantAssigner do
       it "is false for assigner1 when already assigned to event2" do
         assigner2.add_participant
         expect(assigner1).not_to be_createable
+      end
+
+      it "assigns no place directly when not createable" do
+        assigner1.add_participant
+
+        expect(assigner2.assign_directly(true)).to be false
+        expect(participation.reload.event).to eq(event1)
       end
 
       context "waiting list duplicate" do

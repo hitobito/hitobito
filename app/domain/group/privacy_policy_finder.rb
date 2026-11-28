@@ -19,6 +19,10 @@ class Group::PrivacyPolicyFinder
     groups.any? && !already_accepted?
   end
 
+  def accepted?(given)
+    !acceptance_needed? || given == true
+  end
+
   def groups
     @groups ||= @group.layer_hierarchy(includes: [:privacy_policy_attachment]).select do |g|
       g.privacy_policy.present?

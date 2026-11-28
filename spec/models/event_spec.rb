@@ -716,7 +716,7 @@ describe Event do
       Fabricate(event.participant_types.first.name.to_sym, participation: participation)
       participation.save!
 
-      Event::ParticipantAssigner.new(event, participation).add_participant if attrs[:active]
+      Event::ParticipantAssigner.new(participation, target_event: event).add_participant if attrs[:active]
       participation
     end
 
@@ -783,7 +783,7 @@ describe Event do
         assert_counts(participant: 1, applicant: 1)
 
         # in courses, participant roles are removed like that
-        Event::ParticipantAssigner.new(event, p).remove_participant
+        Event::ParticipantAssigner.new(p, target_event: event).remove_participant
         assert_counts(participant: 0, applicant: 1)
 
         p.destroy!

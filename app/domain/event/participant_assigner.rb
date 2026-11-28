@@ -6,80 +6,102 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::ParticipantAssigner
-  attr_reader :event, :participation, :send_email, :user
+  attr_reader :target_event, :participation, :send_email, :user
 
   delegate :application, to: :participation
 
-  def initialize(event, participation, send_email = true, user = nil)
-    @event = event
+  def initialize(participation, target_event: participation.event, send_email: true, user: nil)
     @participation = participation
+    @target_event = target_event
     @send_email = send_email
     @user = user
   end
 
   def createable?
-    participation.event.id == event.id ||
-      !(applied?(event) || participating?(participation.event))
+    !moving? || !(applied_to?(target_event) || participant_of?(current_event))
+  end
+
+  def assign_directly?
+    target_event.places_available? &&
+      target_event.attr_used?(:automatic_assignment) && target_event.automatic_assignment?
+  end
+
+  # Returns whether a place was assigned, including its confirmation.
+  def assign_directly(wanted = assign_directly?)
+    return false unless wanted && target_event.supports_applications? && createable?
+
+    add_participant
+    true
   end
 
   def add_participant
     Event::Participation.transaction do
-      unless participation.event_id == event.id
-        update_participation_event(event)
-        update_answers
+      if moving?
+        move_participation_to(target_event)
+        copy_answers_to_target_questions
       end
 
       set_active(true)
       remove_from_waiting_list if application&.waiting_list?
       create_participant_role
-      event.refresh_participant_counts!
+      target_event.refresh_participant_counts!
       send_confirmation if send_email
     end
-    event.reload
+    target_event.reload
   end
 
-  def remove_participant # rubocop:todo Metrics/AbcSize
+  def remove_participant
     Event::Participation.transaction do
       set_active(false)
-      # destroy all other roles when removing a participant
-      participation.roles.where.not(type: event.participant_types.collect(&:sti_name)).destroy_all
-      original_event = participation.application.priority_1 || participation.event
-      update_participation_event(original_event)
-      original_event.refresh_participant_counts!
+      destroy_roles_other_than_participant
+      first_priority_event = application.priority_1 || current_event
+      move_participation_to(first_priority_event)
+      first_priority_event.refresh_participant_counts!
       send_confirmation if send_email
     end
-    event.reload
+    target_event.reload
   end
 
   private
 
-  def participating?(event)
-    event.participations
-      .active # only active/assigned participations are relevant
-      .joins(:roles)
-      .where(event_roles: {type: event.participant_types.map(&:sti_name)})
-      .where(participant: participation.participant)
-      .exists?
+  # Read live, since moving the participation changes it.
+  def current_event
+    participation.event
   end
 
-  def applied?(event)
+  def moving?
+    current_event.id != target_event.id
+  end
+
+  def participant_of?(event)
+    participations_with_participant_role(event).active.exists?
+  end
+
+  def applied_to?(event)
+    participations_with_participant_role(event).exists?
+  end
+
+  def participations_with_participant_role(event)
     event.participations
       .joins(:roles)
       .where(event_roles: {type: event.participant_types.map(&:sti_name)})
       .where(participant: participation.participant)
-      .exists?
   end
 
   def create_participant_role
     unless participation.roles.exists?
-      role = event.participant_types.first.new
+      role = target_event.participant_types.first.new
       role.participation = participation
       role.save!
     end
   end
 
-  def update_participation_event(new_event)
-    old_event = participation.event
+  def destroy_roles_other_than_participant
+    participation.roles.where.not(type: target_event.participant_types.map(&:sti_name)).destroy_all
+  end
+
+  def move_participation_to(new_event)
+    old_event = current_event
     unless old_event.id == new_event.id
       participation.event = new_event
       participation.update_column(:event_id, new_event.id)
@@ -95,21 +117,22 @@ class Event::ParticipantAssigner
     application.update_column(:waiting_list, false)
   end
 
-  # update the existing set of answers so that one exists for every question of event.
-  def update_answers # rubocop:todo Metrics/AbcSize
-    current_answers = participation.answers.includes(:question)
-    event.questions.each do |q|
-      existing = current_answers.find do |a|
-        a.question.question == q.question &&
-          a.question.choices == q.choices &&
-          a.question.multiple_choices? == q.multiple_choices?
-      end
-      if existing
-        existing.update(question: q)
+  def copy_answers_to_target_questions
+    answers = participation.answers.includes(:question)
+    target_event.questions.each do |question|
+      answer = answers.find { |a| same_question?(a.question, question) }
+      if answer
+        answer.update(question: question)
       else
-        participation.answers.create(question_id: q.id)
+        participation.answers.create(question_id: question.id)
       end
     end
+  end
+
+  def same_question?(one, other)
+    one.question == other.question &&
+      one.choices == other.choices &&
+      one.multiple_choices? == other.multiple_choices?
   end
 
   def send_confirmation

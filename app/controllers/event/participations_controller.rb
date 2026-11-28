@@ -403,7 +403,7 @@ class Event::ParticipationsController < CrudController # rubocop:disable Metrics
   end
 
   def directly_assign_place
-    assigner = Event::ParticipantAssigner.new(event, @participation)
+    assigner = Event::ParticipantAssigner.new(@participation)
     assigner.add_participant if assigner.createable?
   end
 

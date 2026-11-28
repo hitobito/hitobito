@@ -25,7 +25,7 @@ describe Event::ParticipantAssigner do
 
   let(:pending_jobs) { Delayed::Job.where(locked_at: nil, failed_at: nil).map(&:payload_object) }
 
-  subject { Event::ParticipantAssigner.new(event, participation) }
+  subject { Event::ParticipantAssigner.new(participation, target_event: event) }
 
   describe "#add_participant" do
     before do
@@ -163,8 +163,8 @@ describe Event::ParticipantAssigner do
       Event::Course.create!(name: "Event 2", group_ids: event1.group_ids,
         dates: event1.dates, kind: event_kinds(:slk))
     }
-    let(:assigner1) { Event::ParticipantAssigner.new(event1, participation) }
-    let(:assigner2) { Event::ParticipantAssigner.new(event2, participation) }
+    let(:assigner1) { Event::ParticipantAssigner.new(participation, target_event: event1) }
+    let(:assigner2) { Event::ParticipantAssigner.new(participation, target_event: event2) }
 
     let(:participation) do
       p = Fabricate(:event_participation, event: event1, active: false)

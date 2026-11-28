@@ -244,6 +244,13 @@ describe Event::ParticipantAssigner do
         expect(assigner1).not_to be_createable
       end
 
+      it "assigns no place directly when not createable" do
+        assigner1.add_participant
+
+        expect(assigner2.assign_directly(true)).to be false
+        expect(participation.reload.event).to eq(event1)
+      end
+
       context "waiting list duplicate" do
         before do
           participation.application.update!(waiting_list: true, priority_2: nil)

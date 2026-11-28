@@ -26,11 +26,11 @@ class Event::ParticipantAssigner
       target_event.attr_used?(:automatic_assignment) && target_event.automatic_assignment?
   end
 
-  # Returns whether the place was handled here, including its confirmation.
+  # Returns whether a place was assigned, including its confirmation.
   def assign_directly(wanted = assign_directly?)
-    return false unless wanted && target_event.supports_applications?
+    return false unless wanted && target_event.supports_applications? && createable?
 
-    add_participant if createable?
+    add_participant
     true
   end
 

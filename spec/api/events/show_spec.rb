@@ -38,6 +38,25 @@ RSpec.describe "events#show", type: :request do
       end
     end
 
+    describe "questions" do
+      let(:params) { {include: "questions"} }
+
+      it "includes application questions" do
+        question = Fabricate(:event_question, event:, question: "Essen?", choices: "Vegi,Fleisch")
+        Fabricate(:event_question, event:, question: "Intern?", admin: true)
+
+        make_request
+
+        expect(response.status).to eq(200), response.body
+        expect(json["data"]["relationships"]["questions"]["data"])
+          .to eq [{"type" => "event_questions", "id" => question.id.to_s}]
+        included = json["included"].find { |inc| inc["type"] == "event_questions" }
+        expect(included["attributes"]).to include(
+          "question" => "Essen?", "choices" => %w[Vegi Fleisch]
+        )
+      end
+    end
+
     describe "course" do
       let(:event) { events(:top_course) }
       let(:params) { {include: "leaders,contact"} }

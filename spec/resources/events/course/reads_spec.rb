@@ -28,6 +28,7 @@ describe Event::CourseResource, type: :resource do
         :description,
         :description_html,
         :display_booking_info,
+        :external_applications,
         :external_application_link,
         :group_ids,
         :kind_id,

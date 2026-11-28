@@ -2,6 +2,8 @@
 
 ## Version 2.11
 
+- JSON:API: Anlässe können mit `filter[application_open]` auf jene eingeschränkt werden, die externe Anmeldungen erlauben und deren Anmeldefrist heute läuft; neues Attribut `external_applications` (#4699)
+- JSON:API: Die Anmeldefragen eines Anlasses können über `include=questions` mitgeladen werden, mit Fragetext und Auswahlmöglichkeiten in der angefragten Sprache (#4699)
 - Die Zahlungsliste einer Ebene und deren Export sind nur noch mit Finanzberechtigung auf dieser Ebene zugänglich
 - Zahlungen ohne Rechnung werden der Ebene zugeordnet, die sie importiert hat, und nur noch dort in der Zahlungsliste und im Export angezeigt. Früher importierte Zahlungen ohne Rechnung erscheinen auf der obersten Ebene (#4684)
 - Rechnungen werden auch für Empfänger\*innen erstellt, in deren Sprache die Rechnungsposten nicht übersetzt sind. Es wird die vorhandene Übersetzung verwendet (#4667)

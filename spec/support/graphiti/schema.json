@@ -821,6 +821,12 @@
           "writable": false,
           "description": null
         },
+        "external_applications": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "external_application_link": {
           "type": "string",
           "readable": true,
@@ -965,6 +971,13 @@
           ],
           "single": true
         },
+        "application_open": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
         "kind_category_id": {
           "type": "integer",
           "operators": [
@@ -1027,6 +1040,11 @@
           "type": "has_many",
           "description": null,
           "resource": "Event::ParticipationResource"
+        },
+        "questions": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::QuestionResource"
         },
         "leaders": {
           "type": "has_many",
@@ -1540,6 +1558,90 @@
       }
     },
     {
+      "name": "Event::QuestionResource",
+      "type": "event_questions",
+      "graphql_entrypoint": "questions",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "event_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "question": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "choices": {
+          "type": "array_of_strings",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "multiple_choices": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "required": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "event_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "event": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "EventResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "Event::RoleResource",
       "type": "event_roles",
       "graphql_entrypoint": "roles",
@@ -1734,6 +1836,12 @@
           "writable": false,
           "description": null
         },
+        "external_applications": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "external_application_link": {
           "type": "string",
           "readable": true,
@@ -1830,6 +1938,13 @@
           ],
           "single": true
         },
+        "application_open": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
         "kind_category_id": {
           "type": "integer",
           "operators": [
@@ -1862,6 +1977,11 @@
           "type": "has_many",
           "description": null,
           "resource": "Event::ParticipationResource"
+        },
+        "questions": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::QuestionResource"
         }
       },
       "stats": {
